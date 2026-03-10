@@ -1,8 +1,8 @@
-# Video Production Agent (MVP) v4.0
+# Video Production Agent v5.1
 
-Автономный видео-агент на базе Claude Code CLI + fal.ai + FFmpeg. Создаёт короткие вертикальные видео (1080×1920) для игровых каналов в соцсетях.
+Автономный видео-агент на базе Claude Code CLI + SJinn AI + FFmpeg. Создаёт короткие вертикальные видео (1080×1920, 9:16) для игровых каналов в соцсетях.
 
-> Исправленная версия v3.2 — учтены все 14 проблем из аудита.
+> **v5.1** — обновлённые правила промптинга: действие+фраза, покадровый план, dual-style генерация, gaze_direction.
 
 ---
 
@@ -34,11 +34,12 @@
 
 | Компонент | Назначение |
 |-----------|-----------|
-| Claude Code CLI | Ядро агента (`claude -p` non-interactive) |
-| fal.ai | Генерация изображений (FLUX.2 Pro), видео (Kling, Veo 3.1) |
-| FFmpeg Cloud API | Сборка: Ken Burns, concat, audio overlay (api.ffmpeg-api.com) |
-| Supabase | БД (логи) + Storage (видео, музыка) |
-| Google Sheets | Control Center (конфиги игр, TOV) |
+| Claude Code CLI | Ядро агента (`claude -p` non-interactive или interactive) |
+| SJinn AI | Основной провайдер: Nano Banana Pro (images), Veo3/Grok (I2V, T2V) |
+| fal.ai | Альтернативный провайдер: FLUX, Kling, Veo, Kokoro TTS |
+| FFmpeg (локальный) | Масштабирование, concat, сборка финального видео |
+| FFmpeg Cloud API | Cloud FFmpeg (опциональный, api.ffmpeg-api.com) |
+| Supabase | Storage (видео, ассеты, музыка) |
 
 ---
 
