@@ -1,0 +1,66 @@
+{
+  "title": "The Underdog Raider — Ark Riders Emotional Story",
+  "game_tag": "ARK",
+  "approach": 2,
+  "duration_target_sec": 32,
+  "concept": "Viral emotional story: a struggling raider gets mocked by others, but finds legendary loot and saves the same people who laughed at him. Moral: don't judge people by their gear.",
+  "hero_reference": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/Cosplay%20sources/Chap.png",
+  "visual_identity": {
+    "character_description": "male post-apocalyptic raider from Ark Riders, white pilot helmet with goggles pushed up on forehead, heavy gray-blue utility jacket with many pockets and pouches, worn backpack with straps, camouflage military pants, rugged combat boots, tired weary face with dirt smudges",
+    "style_tags": "Ark Riders game style, post-apocalyptic survival aesthetic, gritty realistic 3D render, cinematic quality, dramatic moody lighting, dystopian atmosphere",
+    "color_palette": "muted military gray-blue, rust brown, sickly amber lighting, cold steel, warm firelight accents",
+    "lighting": "dramatic moody side-lighting, dusty atmospheric haze, warm amber highlights on cold blue shadows"
+  },
+  "narrative_arc": {
+    "hook": "Раider один, уставший, с базовым снаряжением — сидит один в тёмном углу",
+    "development_1": "Группа крутых рейдеров смеётся над ним, указывает пальцами",
+    "development_2": "Он находит легендарный лут в заброшенном бункере — поворотный момент",
+    "climax": "Возвращается к тем же рейдерам, делится лутом, те в шоке — мораль"
+  },
+  "scenes": [
+    {
+      "index": 1,
+      "beat": "hook",
+      "duration_sec": 8,
+      "character_state": "sitting alone on a broken crate in a dark corner of a ruined shelter, head down, holding a rusty basic weapon, looking defeated and exhausted, shoulders slumped",
+      "character_speech": null,
+      "environment_state": "dark abandoned ruined shelter interior, crumbling concrete walls, dusty air, single flickering light bulb hanging, debris scattered, lonely desolate atmosphere",
+      "camera_angle": "medium shot, eye level, slightly dark and shadowy framing",
+      "image_prompt": "Ark Riders game style, post-apocalyptic survival aesthetic, gritty realistic 3D render, cinematic quality, dramatic moody lighting, dystopian atmosphere, male post-apocalyptic raider from Ark Riders, white pilot helmet with goggles pushed up on forehead, heavy gray-blue utility jacket with many pockets and pouches, worn backpack, camouflage military pants, rugged combat boots, tired weary face with dirt smudges, sitting alone on a broken wooden crate in a dark corner of a ruined concrete shelter, head hanging down, holding a rusty basic pipe weapon, looking defeated and exhausted, shoulders slumped, dark abandoned ruined shelter interior, crumbling concrete walls, dusty hazy air, single flickering bare light bulb hanging, debris and rubble scattered, lonely desolate atmosphere, muted military gray-blue and rust brown tones, sickly amber light from the bulb, cold blue shadows, dramatic moody side-lighting, medium shot eye level, vertical composition, 9:16 aspect ratio, mobile-first framing",
+      "motion_prompt": "Camera holds steady at medium shot, eye level. The raider sits alone on the crate, barely moving. He slowly lifts his head and looks at his rusty weapon, then drops it again in defeat. The flickering light casts moving shadows on the crumbling walls. Dust particles float in the air. Quiet, lonely, sad atmosphere. No speech. Smooth cinematic motion, maintain vertical composition."
+    },
+    {
+      "index": 2,
+      "beat": "development",
+      "duration_sec": 8,
+      "character_state": "standing alone near a wall, looking small and vulnerable, while three heavily armed raiders in expensive gear point at him and laugh mockingly",
+      "character_speech": null,
+      "environment_state": "outdoor post-apocalyptic camp area, makeshift structures, burning barrel fire, dusty wasteland, the three mockers are confident and well-equipped",
+      "camera_angle": "wide shot from behind the raider, showing him small in frame with the three mockers large and dominant",
+      "image_prompt": "Ark Riders game style, post-apocalyptic survival aesthetic, gritty realistic 3D render, cinematic quality, dramatic moody lighting, dystopian atmosphere, male post-apocalyptic raider from Ark Riders, white pilot helmet with goggles pushed up on forehead, heavy gray-blue utility jacket with many pockets, worn backpack, camouflage military pants, standing alone near a rusty wall looking small and vulnerable, three heavily armed raiders in expensive tactical gear and heavy armor standing opposite him pointing and laughing mockingly at him, the three mockers are tall confident and well-equipped with glowing weapons, outdoor post-apocalyptic camp area, makeshift corrugated metal structures, burning barrel fire casting orange glow, dusty wasteland ground, muted gray-blue and rust brown tones, warm firelight accents, dramatic moody lighting, wide shot from behind the lone raider showing him small with mockers large and dominant, vertical composition, 9:16 aspect ratio, mobile-first framing",
+      "motion_prompt": "Camera at wide shot from slightly behind the lone raider. Three heavily armed raiders point at him and laugh, gesturing mockingly. The lone raider shrinks back slightly, looking down at his basic gear. The burning barrel flickers. Dust blows across the ground. The mockers high-five each other. Cruel, humiliating atmosphere. No speech. Smooth cinematic motion, maintain vertical composition."
+    },
+    {
+      "index": 3,
+      "beat": "development",
+      "duration_sec": 8,
+      "character_state": "crouching in front of a glowing open vault or chest, face illuminated by bright golden light from inside, eyes wide with amazement and hope, reaching one hand toward the legendary loot",
+      "character_speech": null,
+      "environment_state": "dark underground bunker corridor, the vault or chest emits bright warm golden light that illuminates everything, dust particles sparkle in the golden beam, mysterious ancient military bunker",
+      "camera_angle": "close-up low angle, looking up at the raider's face lit by golden glow from below",
+      "image_prompt": "Ark Riders game style, post-apocalyptic survival aesthetic, gritty realistic 3D render, cinematic quality, dramatic moody lighting, dystopian atmosphere, male post-apocalyptic raider from Ark Riders, white pilot helmet with goggles pushed up on forehead, heavy gray-blue utility jacket with many pockets, worn backpack, camouflage military pants, crouching in front of a glowing open ancient military vault, face beautifully illuminated by bright warm golden light from inside the vault, eyes wide with amazement and hope and wonder, reaching one hand toward the legendary glowing loot inside, dark underground bunker corridor, ancient concrete walls with pipes, the vault emits bright warm golden light that illuminates the entire scene, dust particles sparkle like stars in the golden beam, mysterious powerful atmosphere, golden warm light from below contrasting with dark cold bunker, close-up low angle looking up at raider face lit by golden glow from below, vertical composition, 9:16 aspect ratio, mobile-first framing",
+      "motion_prompt": "Camera at close-up low angle, slowly pushing in toward the raider's face. Bright golden light from the vault illuminates his face from below. His eyes widen with amazement. He slowly reaches his hand toward the glowing loot. Dust particles sparkle and dance in the golden light beam. The golden glow intensifies slightly. Magical, hopeful, turning-point atmosphere. No speech. Smooth cinematic motion, maintain vertical composition."
+    },
+    {
+      "index": 4,
+      "beat": "climax",
+      "duration_sec": 8,
+      "character_state": "standing tall and confident now, extending legendary glowing weapons and gear toward the same three raiders who mocked him, offering to share, calm dignified expression, forgiving posture",
+      "character_speech": null,
+      "environment_state": "same outdoor camp area, golden sunset light, the three former mockers look stunned and ashamed, emotional powerful moment",
+      "camera_angle": "dynamic medium shot from the side, showing the raider giving loot to the stunned mockers, golden backlight",
+      "image_prompt": "Ark Riders game style, post-apocalyptic survival aesthetic, gritty realistic 3D render, cinematic quality, dramatic moody lighting, dystopian atmosphere, male post-apocalyptic raider from Ark Riders, white pilot helmet with goggles pushed up on forehead, heavy gray-blue utility jacket with many pockets, worn backpack, camouflage military pants, now standing tall and confident, extending legendary glowing golden weapons and rare gear toward the same three raiders who mocked him before, offering to share generously, calm dignified forgiving expression on his face, the three former mockers look stunned ashamed and grateful, same outdoor post-apocalyptic camp area, beautiful golden sunset light streaming from behind the raider creating a heroic silhouette backlight, warm golden hour atmosphere, emotional powerful redemption moment, golden sunset amber warm tones, dramatic heroic backlight from sunset behind raider, dynamic medium shot from the side showing raider giving loot to stunned mockers, vertical composition, 9:16 aspect ratio, mobile-first framing",
+      "motion_prompt": "Camera at dynamic medium shot from the side with beautiful golden sunset backlight. The raider stands tall and extends glowing legendary gear toward the three former mockers. They look stunned and ashamed, slowly reaching out to accept. The sunset light creates a heroic golden silhouette around the raider. Dust particles glow golden in the sunset. Emotional, powerful, redemption moment. The raider nods calmly and forgivingly. No speech. Smooth cinematic motion, maintain vertical composition."
+    }
+  ]
+}

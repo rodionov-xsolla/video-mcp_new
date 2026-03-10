@@ -1,0 +1,73 @@
+{
+  "title": "Game vs Reality: Meet Your Character",
+  "game_tag": "Kekele",
+  "approach": 2,
+  "duration_target_sec": 24,
+  "visual_identity": {
+    "characters": {
+      "Pirate_cartoon": "cartoon chibi pirate character with bold black outlines, bright flat saturated colors, exaggerated proportions, large head, muscular stocky build, pink bandana on head, massive thick ginger beard, bare hairy chest, blue baggy pants, confident cocky grin",
+      "Pirate_real": "photorealistic muscular stocky man, pink bandana tied on head, thick ginger beard, bare tanned hairy chest, blue linen pants, brown leather belt, weathered sun-darkened skin, confident cocky grin",
+      "Demon_cartoon": "cartoon chibi demon character with bold black outlines, bright flat saturated colors, exaggerated proportions, very large head tiny body, wild spiky crimson red hair, pointed ears, small sharp fangs, angry scowling face, reddish skin, gold chain necklace, dark vest",
+      "Demon_real": "photorealistic young man with wild spiky crimson dyed hair, pointed prosthetic ear tips, sharp canine teeth in snarl, reddish face paint, gold thick chain necklace, dark leather vest over bare chest, fierce eyes with red contact lenses, lean wiry build",
+      "Knight_cartoon": "cartoon chibi knight character with bold black outlines, bright flat saturated colors, exaggerated proportions, large head, full gray steel plate armor, helmet with visor, orange messy hair sticking out, holding large sword, menacing wide grin",
+      "Knight_real": "photorealistic tall man in full medieval gray steel plate armor with scratches and dents, open-faced helmet with orange messy hair, strong jaw, menacing confident grin, gauntleted hands gripping steel longsword, broad athletic build"
+    },
+    "environment_description": "medieval fantasy world, stone paths, lush green landscapes, warm atmospheric lighting",
+    "style_tags": "Kakele Online MMORPG fantasy style, dual art style split, cartoon chibi character next to photorealistic human, vibrant colors, medieval fantasy setting",
+    "color_palette": "forest green (#2d7a3a), sky blue (#4da6e0), warm gold (#e8b840), crimson red (#c43030)",
+    "lighting": "warm golden fantasy lighting, soft ambient glow, magical atmosphere",
+    "camera_style": "cinematic fantasy film feel"
+  },
+  "narrative_arc": {
+    "hook": "Pirate meets his real-world self — they vibe together",
+    "development": "Demon duo shows off intimidating presence",
+    "climax": "Knight duo marches toward castle — epic heroic finale"
+  },
+  "scenes": [
+    {
+      "index": 1,
+      "beats": ["hook"],
+      "duration_sec": 8,
+      "hero": "Pirate",
+      "character_state": "cartoon pirate on the left and realistic pirate on the right, both walking forward together side by side down a medieval village street",
+      "facial_expression": "both grinning confidently, cocky swagger",
+      "gaze_direction": "both looking forward toward camera, occasionally glancing at each other",
+      "character_speech": null,
+      "environment_state": "medieval village cobblestone street, wooden tavern with hanging sign in background, warm afternoon sunlight, barrels and crates along the street",
+      "camera_angle": "medium shot, eye level, tracking backward as they walk forward",
+      "frame_plan": "0-3s: both walk forward in sync, cartoon pirate bounces with exaggerated steps. 3-6s: real pirate strokes his beard, cartoon copies the gesture with oversized hand. 6-8s: both turn to face each other, cartoon pirate flexes muscles comically",
+      "image_prompt": "Medieval fantasy village cobblestone street with wooden tavern in background, on the left side a cartoon chibi pirate character with bold black outlines bright flat saturated colors exaggerated large head muscular stocky build pink bandana massive thick ginger beard bare hairy chest blue baggy pants confident cocky grin, on the right side a photorealistic muscular stocky man pink bandana thick ginger beard bare tanned hairy chest blue linen pants brown leather belt weathered sun-darkened skin cocky grin, both standing side by side facing forward matching pose, warm golden afternoon sunlight, medium shot eye level, vertical composition, 9:16 aspect ratio",
+      "motion_prompt": "Camera tracks backward smoothly at eye level as both characters walk forward in sync. The cartoon pirate on the left bounces with exaggerated chibi steps, arms swinging wide. The realistic pirate on the right walks with heavy confident swagger. Real pirate strokes his thick beard thoughtfully, cartoon pirate copies the gesture with oversized cartoon hand. Both glance at each other and grin. Cartoon pirate flexes muscles in an exaggerated pose. Warm village atmosphere, dust particles in sunlight."
+    },
+    {
+      "index": 2,
+      "beats": ["development"],
+      "duration_sec": 8,
+      "hero": "Demon",
+      "character_state": "cartoon demon on the left and realistic demon on the right, standing back to back with arms crossed in a dark mystical forest",
+      "facial_expression": "both scowling menacingly, fierce intimidating glare",
+      "gaze_direction": "both looking straight at camera with piercing eyes",
+      "character_speech": null,
+      "environment_state": "dark mystical forest, glowing red magical orbs floating between twisted trees, eerie fog at ground level, crimson light filtering through canopy",
+      "camera_angle": "close-up, slightly low angle looking up",
+      "frame_plan": "0-3s: both stand back to back, arms crossed, camera slowly pushes in. 3-5s: both spin around to face camera, demon cartoon bares fangs. 5-8s: real demon leans toward camera with intense snarl, cartoon demon jumps up behind him with fists raised",
+      "image_prompt": "Dark mystical forest with glowing red magical orbs floating between twisted trees eerie fog, on the left a cartoon chibi demon character with bold black outlines bright flat saturated colors exaggerated very large head tiny body wild spiky crimson red hair pointed ears sharp fangs angry scowling face reddish skin gold chain necklace dark vest clenched fists, on the right a photorealistic young man with wild spiky crimson dyed hair pointed ear tips sharp canine teeth snarl reddish face paint gold thick chain necklace dark leather vest bare chest fierce red eyes lean wiry build, both standing back to back arms crossed menacing pose, crimson red mystical lighting from below, close-up slightly low angle, vertical composition, 9:16 aspect ratio",
+      "motion_prompt": "Camera slowly pushes in from slightly low angle. Both characters stand back to back with arms crossed, perfectly still, menacing. Then both spin around to face the camera simultaneously. Cartoon demon on the left bares tiny sharp fangs with an exaggerated snarl. Real demon on the right leans toward camera with an intense fierce snarl. Cartoon demon jumps up behind him with fists raised in tiny rage. Red magical orbs pulse brighter. Eerie fog swirls at their feet. Intense dark energy."
+    },
+    {
+      "index": 3,
+      "beats": ["climax"],
+      "duration_sec": 8,
+      "hero": "Knight",
+      "character_state": "cartoon knight on the left and realistic knight on the right, marching side by side along a stone road toward a hilltop castle at sunset",
+      "facial_expression": "both with determined heroic expressions, jaws set",
+      "gaze_direction": "both looking ahead toward the castle on the horizon",
+      "character_speech": null,
+      "environment_state": "stone road leading up a green hill toward a medieval castle silhouette, dramatic orange and gold sunset sky, banners fluttering on castle towers, epic panoramic vista",
+      "camera_angle": "wide shot, low angle looking up heroically",
+      "frame_plan": "0-3s: both march forward in heavy armor, camera low angle tracking. 3-6s: cartoon knight points forward at the castle with oversized arm, real knight nods. 6-8s: both raise swords high above their heads in triumphant salute, sunset blazing behind them",
+      "image_prompt": "Stone road leading up green hill toward medieval castle silhouette dramatic orange gold sunset sky banners fluttering, on the left a cartoon chibi knight character with bold black outlines bright flat saturated colors exaggerated large head full gray steel plate armor helmet with orange messy hair sticking out holding large sword marching determined, on the right a photorealistic tall man in full medieval gray steel plate armor with scratches and dents open-faced helmet orange messy hair strong jaw determined grin gauntleted hands gripping steel longsword marching, both side by side marching forward, dramatic golden sunset backlighting, wide shot low angle looking up heroically, vertical composition, 9:16 aspect ratio",
+      "motion_prompt": "Camera holds at low angle looking up heroically as both characters march forward side by side. Heavy armor clanks with each step. Cartoon knight on the left marches with bouncy exaggerated steps, then points forward at the castle with oversized gauntlet. Real knight on the right nods firmly. Both slow their march, then raise their swords high above their heads in triumphant salute. Sunset blazes behind them, golden light silhouettes their raised weapons. Wind catches hair and banners. Epic heroic finale energy."
+    }
+  ]
+}
