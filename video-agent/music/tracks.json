@@ -1,0 +1,40 @@
+{
+  "tracks": [
+    {
+      "name": "epic-gaming-beat",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/epic-gaming-beat.mp3",
+      "duration_sec": 120,
+      "mood": "epic",
+      "bpm": 140,
+      "license": "pixabay",
+      "games": ["MLBB", "PUBG Mobile", "DELTA FORCE"]
+    },
+    {
+      "name": "chill-strategy",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/chill-strategy.mp3",
+      "duration_sec": 90,
+      "mood": "chill",
+      "bpm": 100,
+      "license": "pixabay",
+      "games": ["POKEMON GO", "MTG ARENA", "MONOPOLY"]
+    },
+    {
+      "name": "cinematic-dark",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/cinematic-dark.mp3",
+      "duration_sec": 150,
+      "mood": "cinematic",
+      "bpm": 90,
+      "license": "pixabay",
+      "games": ["GENSHIN IMPACT", "GAME OF THRONES", "ARC RAIDERS"]
+    },
+    {
+      "name": "upbeat-action",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/upbeat-action.mp3",
+      "duration_sec": 100,
+      "mood": "energetic",
+      "bpm": 160,
+      "license": "pixabay",
+      "games": ["ROBLOX", "HERO WARS", "MARVEL GAMES"]
+    }
+  ]
+}

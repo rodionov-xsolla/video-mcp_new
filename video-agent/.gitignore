@@ -1,0 +1,19 @@
+# Secrets
+.env
+
+# Media files (generated, heavy)
+*.mp4
+*.mp3
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.wav
+
+# Temp
+temp/
+.DS_Store
+concat-list.txt
+
+# Keep config and text files
+!music/tracks.json

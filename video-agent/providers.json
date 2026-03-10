@@ -1,0 +1,75 @@
+{
+  "active": {
+    "image_gen": "sjinn",
+    "video_gen": "sjinn",
+    "tts": "fal-ai",
+    "ffmpeg": "ffmpeg-api"
+  },
+  "providers": {
+    "sjinn": {
+      "name": "SJinn.ai",
+      "auth_env": "SJINN_API_KEY",
+      "tools_file": "tools/sjinn.md",
+      "capabilities": ["image_gen", "video_gen"],
+      "models": {
+        "image_gen": "nano-banana-image-pro-api",
+        "image_gen_basic": "nano-banana-image-api",
+        "video_gen_i2v": "grok-image-to-video-api",
+        "video_gen_t2v": "veo3-text-to-video-fast-api",
+        "video_gen_i2v_premium": "veo3-image-to-video-fast-api"
+      },
+      "pricing": {
+        "image_gen": "150 credits",
+        "image_gen_basic": "50 credits",
+        "video_gen_i2v": "duration × 50 credits",
+        "video_gen_t2v": "420 credits",
+        "video_gen_i2v_premium": "420 credits"
+      }
+    },
+    "fal-ai": {
+      "name": "fal.ai",
+      "auth_env": "FAL_KEY",
+      "tools_file": "tools/fal-ai.md",
+      "capabilities": ["image_gen", "video_gen", "tts"],
+      "models": {
+        "image_gen": "fal-ai/flux-pro/v1.1-ultra",
+        "video_gen_i2v": "fal-ai/kling-video/v2.6/pro/image-to-video",
+        "video_gen_t2v": "fal-ai/veo3",
+        "tts": "fal-ai/kokoro/american-english"
+      },
+      "pricing": {
+        "image_gen": "$0.045/image (9:16)",
+        "video_gen_i2v": "$0.07/sec (audio off)",
+        "video_gen_t2v": "$0.20/sec (audio off)",
+        "tts": "$0.02/1000 chars"
+      }
+    },
+    "kling-direct": {
+      "name": "Kling Direct API",
+      "auth_env": "KLING_API_KEY",
+      "tools_file": "tools/kling-direct.md",
+      "capabilities": ["video_gen"],
+      "models": {
+        "video_gen_i2v": "kling-v2.6-pro"
+      },
+      "status": "planned"
+    },
+    "google-veo": {
+      "name": "Google Veo (Vertex AI)",
+      "auth_env": "GOOGLE_API_KEY",
+      "tools_file": "tools/google-veo.md",
+      "capabilities": ["video_gen"],
+      "models": {
+        "video_gen_t2v": "veo-3"
+      },
+      "status": "planned"
+    },
+    "ffmpeg-api": {
+      "name": "FFmpeg Cloud API",
+      "auth_env": "FFMPEG_API_KEY",
+      "tools_file": "tools/ffmpeg-api.md",
+      "capabilities": ["ffmpeg"],
+      "base_url": "https://api.ffmpeg-api.com"
+    }
+  }
+}

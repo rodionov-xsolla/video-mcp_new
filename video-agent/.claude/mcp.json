@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "google-sheets": {
+      "command": "npx",
+      "args": ["-y", "mcp-gsheets@latest"],
+      "env": {
+        "GOOGLE_SERVICE_ACCOUNT_KEY": "/path/to/service-account.json"
+      }
+    },
+    "supabase": {
+      "transport": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=txckerrkubbvmzlionjf&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching%2Cstorage"
+    }
+  }
+}
