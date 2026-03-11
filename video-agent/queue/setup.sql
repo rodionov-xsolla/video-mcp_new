@@ -33,3 +33,38 @@ CREATE POLICY "Allow anon full access"
   FOR ALL
   USING (true)
   WITH CHECK (true);
+
+-- ============================================
+-- Video Agent Runs — лог всех генераций
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS video_agent_runs (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  created_at timestamptz DEFAULT now(),
+  game_tag text NOT NULL,
+  input_idea text NOT NULL,
+  agent_plan text,
+  approach_used integer,
+  model_used text,
+  total_cost_usd numeric(8,4),
+  output_video_url text,
+  status text DEFAULT 'running'
+    CHECK (status IN ('running','completed','failed')),
+  error_message text,
+  video_duration_seconds integer,
+  run_duration_seconds integer,
+  scenes jsonb
+);
+
+ALTER TABLE video_agent_runs ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow anon full access on runs"
+  ON video_agent_runs
+  FOR ALL
+  USING (true)
+  WITH CHECK (true);
+
+-- ============================================
+-- Supabase Storage: создай bucket вручную
+-- Dashboard → Storage → New Bucket → Name: "videos" → Public: ON
+-- ============================================

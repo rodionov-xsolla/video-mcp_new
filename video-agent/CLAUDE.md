@@ -60,6 +60,22 @@ output/{TIMESTAMP}_{Game}_{slug}/
 └── final.mp4             # Финальное видео
 ```
 
+## Очередь задач
+
+Система автоматической обработки задач через Supabase.
+
+**Таблица:** `video_tasks` (Supabase) — статусы: pending → running → completed/failed
+
+**Скрипты:**
+- `queue/worker.sh` — автоворкер, проверяет очередь каждые 30 сек, вызывает `claude -p`
+- `queue/check-queue.sh` — проверка + атомарный claim задачи
+- `queue/update-task.sh` — обновление статуса: `./update-task.sh <task_id> completed <url>`
+- `queue/add-task.sh` — добавление задачи: `./add-task.sh "Game" "Idea" [priority]`
+
+**Google Sheets:** задачи добавляются через таблицу, Apps Script отправляет в Supabase. Инструкция в `queue/google-sheets-setup.md`.
+
+**Supabase Storage:** bucket `videos` (public), путь: `videos/{GAME_TAG}/{TIMESTAMP}_final.mp4`
+
 ## Добавление игры
 
 Создай `games/{tag}.md` с секциями:
