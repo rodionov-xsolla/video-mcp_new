@@ -4,21 +4,21 @@
 
 ---
 
-## Async polling (fal.ai)
+## Async polling (SJinn)
 
-Генерация видео (Kling, Veo) — асинхронная. После отправки запроса:
+Генерация видео/изображений через SJinn — асинхронная. После отправки запроса:
 
-1. Получи `request_id` из ответа
-2. Каждые **15 секунд** проверяй статус: `GET /requests/{request_id}/status`
-3. Максимальное время ожидания: **10 минут**
+1. Получи `task_id` из ответа
+2. Каждые **10-15 секунд** проверяй статус: `POST /api/un-api/query_tool_task_status`
+3. Максимальное время ожидания одной генерации: **10 минут**
 
 ### Статусы и действия
 
 | Статус | Действие |
 |--------|----------|
-| `IN_QUEUE` / `IN_PROGRESS` | Продолжай polling |
-| `COMPLETED` | Скачай результат, продолжи pipeline |
-| `FAILED` | Retry 1 раз. Если снова FAILED → fallback |
+| `pending` / `processing` | Продолжай polling |
+| `finished` | Скачай результат, продолжи pipeline |
+| `failed` | Retry 1 раз. Если снова failed → fallback |
 | Таймаут 10 мин | Отменить задачу, fallback |
 | Нет обновлений 3 мин | Считать зависшей, fallback |
 
@@ -26,13 +26,15 @@
 
 ## Каскад fallback
 
-При ошибке генерации — спускайся на подход ниже:
+При ошибке генерации — спускайся по моделям SJinn:
 
 ```
-Approach 3 (Veo) ──FAIL──→ retry 1 раз ──FAIL──→ Approach 2 (Kling)
-Approach 2 (Kling) ──FAIL──→ retry 1 раз ──FAIL──→ Approach 1 (Ken Burns)
-Approach 1 (Ken Burns) ──FAIL──→ retry 1 раз ──FAIL──→ статус 'failed', записать ошибку
+Veo3 I2V ──FAIL──→ retry 1 раз ──FAIL──→ Grok I2V
+Grok I2V ──FAIL──→ retry 1 раз ──FAIL──→ Ken Burns (FFmpeg zoompan)
+Ken Burns ──FAIL──→ retry 1 раз ──FAIL──→ статус 'failed', записать ошибку
 ```
+
+<!-- TODO: После перехода на fal.ai — добавить Kling 2.6 Pro в каскад -->
 
 При fallback:
 - Перепланируй сцены под новый подход
@@ -41,15 +43,15 @@ Approach 1 (Ken Burns) ──FAIL──→ retry 1 раз ──FAIL──→ с
 
 ---
 
-## Ошибки fal.ai
+## Ошибки SJinn API
 
 | Ошибка | Действие |
 |--------|----------|
 | **Rate limited (429)** | Подожди 30 секунд, retry |
 | **Invalid input (400)** | Проверь и исправь промпт, retry |
 | **Server error (500)** | Подожди 60 секунд, retry 1 раз |
-| **Model unavailable (503)** | Fallback на следующий подход |
-| **Timeout** | Fallback на следующий подход |
+| **Model unavailable (503)** | Fallback на следующую модель |
+| **Timeout** | Fallback на следующую модель |
 
 Максимум **1 retry** на каждую генерацию. Не зацикливайся.
 
@@ -64,9 +66,9 @@ Approach 1 (Ken Burns) ──FAIL──→ retry 1 раз ──FAIL──→ с
 | HTTP 403 (квота) | Подожди или используй AI endpoint вместо стандартного |
 | HTTP 500 (обработка) | Retry 1 раз через 30 сек |
 | Concat fails | Проверь что все URL клипов доступны. Используй AI endpoint с описанием задачи |
-| Audio overlay fails | Попробуй без музыки (только voiceover). Если и это не работает — выдай видео без аудио |
+| Audio overlay fails | Попробуй без музыки. Если и это не работает — выдай видео без аудио |
 | Ken Burns fails | Проверь размеры изображения через `/ffprobe/analyze`. Убедись что ширина ≥ 1080px |
-| Файл 0 байт | Перегенерируй через fal.ai |
+| Файл 0 байт | Перегенерируй |
 
 ---
 
@@ -76,7 +78,7 @@ Approach 1 (Ken Burns) ──FAIL──→ retry 1 раз ──FAIL──→ с
 |--------|----------|
 | curl вернул ошибку | Retry через 10 секунд, максимум 3 попытки |
 | Файл 0 байт | Удали и перегенерируй |
-| URL истёк | Запроси результат заново через fal.ai status endpoint |
+| URL истёк | Запроси результат заново через SJinn status endpoint |
 
 После каждого скачивания проверяй размер файла:
 ```bash
@@ -92,6 +94,7 @@ fi
 
 При любой ошибке, которая приводит к `status='failed'`:
 
+<!-- TODO: реализовать INSERT в video_agent_runs -->
 1. Запиши в `video_agent_runs`:
    - `status`: 'failed'
    - `error_message`: описание ошибки (какой подход, какой шаг, что пошло не так)
@@ -106,9 +109,9 @@ fi
 
 | Операция | Таймаут |
 |----------|---------|
-| Генерация изображения (FLUX.2 Pro) | 60 секунд |
-| Генерация видео (Kling I2V) | 10 минут |
-| Генерация видео (Veo 3) | 10 минут |
-| Генерация TTS | 60 секунд |
+| Генерация изображения (Nano Banana Pro) | 120 секунд |
+| Генерация видео (Veo3 I2V) | 10 минут |
+| Генерация видео (Grok I2V) | 10 минут |
 | Скачивание файла (curl) | 120 секунд |
 | FFmpeg операция | 5 минут |
+| **Весь pipeline (worker.sh)** | **25 минут** |

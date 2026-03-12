@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 AGENT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 LOG_FILE="$SCRIPT_DIR/worker.log"
 POLL_INTERVAL=30        # секунд между проверками очереди
-TASK_TIMEOUT=900        # 15 минут максимум на одну задачу
+TASK_TIMEOUT=1500       # 25 минут максимум на одну задачу
 COOLDOWN_AFTER_TASK=5   # секунд после завершения задачи
 
 # Загружаем .env

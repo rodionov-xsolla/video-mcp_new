@@ -65,6 +65,34 @@ CREATE POLICY "Allow anon full access on runs"
   WITH CHECK (true);
 
 -- ============================================
--- Supabase Storage: создай bucket вручную
+-- Game Assets — каталог персонажей и ассетов
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS game_assets (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  created_at timestamptz DEFAULT now(),
+  game_tag text NOT NULL,
+  character_name text,
+  asset_type text NOT NULL
+    CHECK (asset_type IN ('reference_image','character_card','screenshot','promo_art','generated_ref')),
+  url text,
+  prompt_block text,
+  tags text[],
+  metadata jsonb DEFAULT '{}'
+);
+
+CREATE INDEX idx_game_assets_game_tag ON game_assets (game_tag);
+
+ALTER TABLE game_assets ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow anon full access on game_assets"
+  ON game_assets
+  FOR ALL
+  USING (true)
+  WITH CHECK (true);
+
+-- ============================================
+-- Supabase Storage: создай buckets вручную
 -- Dashboard → Storage → New Bucket → Name: "videos" → Public: ON
+-- Dashboard → Storage → New Bucket → Name: "assets" → Public: ON
 -- ============================================

@@ -19,6 +19,11 @@
 4. Прочитай `rules/consistency.md` — правила визуальной консистентности
 5. Прочитай `rules/fallback.md` — обработка ошибок
 6. *(опционально)* Прочитай `music/tracks.json` — если музыка нужна
+7. <!-- TODO: автоматический запрос game_assets пока не реализован в worker.sh — агент выполняет вручную -->
+   **Запроси ассеты из Supabase:** `GET /rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*`
+   - Если есть `reference_image` → используй его URL вместо генерации character-ref (пропусти ФАЗУ 2)
+   - Если есть `prompt_block` → используй как `character_description` в visual_identity
+   - Если идея общая и не указан конкретный персонаж → выбери случайного из доступных
 
 ---
 
@@ -72,7 +77,7 @@ clear detailed character design, vertical composition, 9:16 aspect ratio
 
 - Сохрани как `character-ref.png`
 - Запомни URL для использования в `image_list`
-- Стоимость: +50 кредитов
+- Стоимость: +150 кредитов (nano-banana-image-pro-api)
 
 ---
 
@@ -173,7 +178,8 @@ $FFMPEG -y -f concat -safe 0 -i concat-list.txt -c copy final.mp4
    - Путь: `videos/{GAME_TAG}/{TIMESTAMP}_final.mp4`
    - Получи публичный URL
 
-2. Запиши лог в `video_agent_runs`:
+2. <!-- TODO: логирование в video_agent_runs пока не реализовано -->
+   Запиши лог в `video_agent_runs`:
 ```sql
 INSERT INTO video_agent_runs (
   game_tag, input_idea, agent_plan, approach_used, model_used,
