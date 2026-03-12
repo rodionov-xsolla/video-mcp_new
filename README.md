@@ -27,9 +27,30 @@ cp .env.example .env
 | `FFMPEG_API_KEY` | [ffmpeg-api.com](https://api.ffmpeg-api.com) | Cloud FFmpeg (опционально) |
 | `FAL_KEY` | [fal.ai](https://fal.ai) | Альтернативный провайдер (опционально) |
 
-### 2. Запуск
+### 2. Supabase (для очереди задач)
 
-**Автоматический (через run.sh):**
+```bash
+# Выполни queue/setup.sql в Supabase SQL Editor
+# Создай Storage bucket "videos" (public) через Dashboard
+```
+
+### 3. Запуск
+
+**Автоматический воркер (рекомендуемый):**
+```bash
+cd video-agent/queue
+./worker.sh          # Ctrl+C для остановки
+# или в фоне:
+nohup ./worker.sh > /dev/null 2>&1 &
+```
+
+Воркер сам проверяет очередь каждые 30 сек, подхватывает задачи и запускает `claude -p`.
+
+**Добавление задач:**
+- Через **Google Sheet** (настройка: `queue/google-sheets-setup.md`)
+- Через **CLI**: `./queue/add-task.sh "Oxide" "История нуба на острове"`
+
+**Разовый запуск (без очереди):**
 ```bash
 ./run.sh "Oxide" "История нуба на острове"
 ```
@@ -76,6 +97,14 @@ video-agent/
 │   ├── sjinn.md                # SJinn AI: Nano Banana, Veo3, Grok
 │   ├── fal-ai.md               # fal.ai: FLUX, Kling, Veo, Kokoro TTS
 │   └── ffmpeg-api.md           # FFmpeg Cloud API
+│
+├── queue/                      # Система очереди задач
+│   ├── worker.sh               # Автономный воркер (бесконечный цикл)
+│   ├── check-queue.sh          # Проверка и атомарный claim задачи
+│   ├── update-task.sh          # Обновление статуса задачи
+│   ├── add-task.sh             # Добавление задачи через CLI
+│   ├── setup.sql               # DDL для таблицы video_tasks
+│   └── google-sheets-setup.md  # Инструкция по интеграции с Google Sheets
 │
 ├── music/                      # Фоновая музыка
 │   └── tracks.json             # Royalty-free треки (Supabase Storage)

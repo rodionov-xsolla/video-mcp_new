@@ -1,0 +1,76 @@
+{
+  "title": "MLBB Characters vs Reality",
+  "game_tag": "MLBB",
+  "approach": 2,
+  "duration_target_sec": 24,
+  "task_id": "425c1460-76df-44c0-a8d8-58a1a2766917",
+  "visual_identity": {
+    "characters": {
+      "Lancelot": {
+        "cartoon": "cartoon chibi assassin warrior with bold black outlines, bright flat saturated colors, exaggerated proportions, large head small body, silver armor with blue engravings, flowing tiny royal blue cape, oversized gleaming rapier, spiky silver-blue hair, big confident eyes",
+        "realistic": "photorealistic young athletic man, silver plate armor with intricate blue engravings, royal blue cape over one shoulder, steel rapier at his side, styled silver-blue hair, fair skin with light stubble, sharp jaw, piercing blue eyes, real skin textures"
+      },
+      "Kagura": {
+        "cartoon": "cartoon chibi mage girl with bold black outlines, bright flat saturated colors, exaggerated proportions, large head small body, pink and white kimono with cherry blossom pattern, oversized magical pink umbrella, long dark hair with flower ornaments, big gentle eyes",
+        "realistic": "photorealistic young Japanese woman, elegant pink and white silk kimono with cherry blossom embroidery, ornate pink parasol, long straight dark hair with real flower pins, porcelain skin, soft brown eyes, delicate features, real fabric textures"
+      },
+      "Chou": {
+        "cartoon": "cartoon chibi martial artist with bold black outlines, bright flat saturated colors, exaggerated proportions, large head small body, white and gold gi with dragon motifs, red headband, oversized fists in fighting stance, spiky black hair, big fierce eyes",
+        "realistic": "photorealistic muscular young Asian man, white and gold martial arts uniform with dragon embroidery, red fabric headband, wrapped knuckles, tanned weathered skin, defined muscles, black spiky hair, intense dark eyes, real skin textures with sweat"
+      }
+    },
+    "environment_description": "modern city street at golden hour, warm sunlight, urban buildings in soft focus background",
+    "style_tags": "split-style dual character art, cartoon meets reality, vibrant colors, cinematic lighting, high detail",
+    "color_palette": "warm golden (#ffd700), deep blue (#1a237e), soft pink (#ff69b4), white, urban grey",
+    "lighting": "warm golden hour sunlight from the side, soft ambient fill, gentle lens flare"
+  },
+  "narrative_arc": {
+    "hook": "Lancelot cartoon and real version walk together confidently down the street",
+    "development": "Kagura cartoon and real version stroll together gracefully",
+    "climax": "Chou cartoon and real version walk together and strike a fighting pose"
+  },
+  "scenes": [
+    {
+      "index": 1,
+      "beats": ["hook"],
+      "duration_sec": 8,
+      "hero": "Lancelot",
+      "character_state": "walking side by side down a city street, cartoon bouncing with exaggerated steps on the left, realistic version walking with confident swagger on the right",
+      "facial_expression": "cartoon: big cheerful grin with sparkling eyes; realistic: confident smirk with raised eyebrow",
+      "gaze_direction": "both looking forward down the street, occasionally glancing at each other",
+      "character_speech": null,
+      "environment_state": "busy city street at golden hour, pedestrians turning heads in amazement, warm sunlight casting long shadows",
+      "camera_angle": "medium shot, straight on, tracking forward",
+      "image_prompt": "split-style dual character art, cartoon meets reality, vibrant colors, cinematic lighting, modern city street at golden hour, warm sunlight, on the left a cartoon chibi assassin warrior with bold black outlines bright flat saturated colors exaggerated proportions large head silver armor with blue engravings tiny royal blue cape oversized rapier spiky silver-blue hair big cheerful grin, on the right a photorealistic young athletic man silver plate armor with blue engravings royal blue cape steel rapier styled silver-blue hair fair skin sharp jaw confident smirk, both walking forward side by side, warm golden hour sunlight from the side, medium shot tracking, vertical composition, 9:16 aspect ratio",
+      "motion_prompt": "Camera tracks forward following both characters walking down a sunny city street. The cartoon chibi Lancelot on the left bounces with exaggerated springy steps, his tiny cape flapping wildly, oversized rapier wobbling. The realistic Lancelot on the right walks with smooth confident swagger, cape flowing naturally in the breeze. Pedestrians in the background turn their heads in shock. Golden hour light streams between buildings. Smooth cinematic tracking shot."
+    },
+    {
+      "index": 2,
+      "beats": ["development"],
+      "duration_sec": 8,
+      "hero": "Kagura",
+      "character_state": "strolling together through a park path, cartoon twirling her oversized umbrella on the left, realistic version holding parasol elegantly on the right",
+      "facial_expression": "cartoon: wide sparkling eyes with cute smile; realistic: gentle mysterious smile with soft gaze",
+      "gaze_direction": "cartoon looking up at cherry blossoms, realistic looking gracefully ahead",
+      "character_speech": null,
+      "environment_state": "sunlit park path with cherry blossom trees, petals falling gently, dappled light through branches",
+      "camera_angle": "wide shot, slight high angle, showing the tree-lined path",
+      "image_prompt": "split-style dual character art, cartoon meets reality, vibrant colors, cinematic lighting, sunlit park path with cherry blossom trees petals falling, on the left a cartoon chibi mage girl with bold black outlines bright flat saturated colors exaggerated proportions pink and white kimono cherry blossom pattern oversized magical pink umbrella long dark hair flower ornaments wide sparkling eyes, on the right a photorealistic young Japanese woman elegant pink silk kimono cherry blossom embroidery ornate pink parasol long dark hair flower pins porcelain skin gentle smile, both strolling forward, warm dappled sunlight through branches, wide shot slight high angle, vertical composition, 9:16 aspect ratio",
+      "motion_prompt": "Camera drifts gently from a slight high angle showing a cherry blossom tree-lined path. The cartoon chibi Kagura on the left skips along twirling her oversized umbrella in circles, petals sticking to her big hair. The realistic Kagura on the right walks gracefully, parasol resting on her shoulder, real cherry petals landing softly on her kimono. A gust of wind sends a wave of petals between them. Dreamy gentle motion with floating petals."
+    },
+    {
+      "index": 3,
+      "beats": ["climax"],
+      "duration_sec": 8,
+      "hero": "Chou",
+      "character_state": "walking together then both stop and strike a synchronized fighting pose, cartoon with exaggerated kick pose on the left, realistic with precise martial arts stance on the right",
+      "facial_expression": "cartoon: fierce determined squint with gritted teeth; realistic: intense focused stare with clenched jaw",
+      "gaze_direction": "both facing forward toward camera",
+      "character_speech": null,
+      "environment_state": "urban rooftop at sunset, dramatic sky with orange and purple clouds, city skyline behind",
+      "camera_angle": "dynamic low angle, looking up at both characters against the sky",
+      "image_prompt": "split-style dual character art, cartoon meets reality, vibrant colors, cinematic lighting, urban rooftop at sunset dramatic orange purple sky city skyline, on the left a cartoon chibi martial artist with bold black outlines bright flat colors exaggerated proportions white gold gi dragon motifs red headband oversized fists fighting stance spiky black hair fierce squint, on the right a photorealistic muscular young Asian man white gold martial arts uniform dragon embroidery red headband wrapped knuckles tanned skin defined muscles intense stare, both in fighting stance facing camera, dramatic sunset rim lighting from behind, dynamic low angle, vertical composition, 9:16 aspect ratio",
+      "motion_prompt": "Camera pushes in from low angle against a dramatic sunset sky. Both characters walk forward on a rooftop. The cartoon chibi Chou on the left suddenly stops and throws an exaggerated spinning kick, his oversized fist punching the air with cartoon impact lines. The realistic Chou on the right stops simultaneously and snaps into a precise Bruce Lee fighting stance, muscles tensing, headband fluttering. They hold their poses as the sun blazes behind them. Dramatic push-in with epic energy."
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "active": {
     "image_gen": "sjinn",
     "video_gen": "sjinn",
-    "tts": "fal-ai",
+    "tts": null,
     "ffmpeg": "ffmpeg-api"
   },
   "providers": {
