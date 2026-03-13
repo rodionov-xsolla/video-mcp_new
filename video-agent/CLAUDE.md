@@ -124,5 +124,5 @@ GET /rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*
 - [ ] **fal.ai + Kling:** переход с SJinn на fal.ai как основной I2V провайдер
 - [ ] **Game configs:** создать `games/ark.md` и `games/pubg.md`
 - [ ] **Dual-style для MLBB:** добавить cartoon + realistic блоки персонажей
-- [ ] **SUPABASE_SERVICE_ROLE_KEY:** добавить в `.env` для `upload-asset.sh`
+- [x] **SUPABASE_SERVICE_ROLE_KEY:** добавлен в `.env`
 - [ ] **Cost tracking:** персистентный подсчёт стоимости генераций
