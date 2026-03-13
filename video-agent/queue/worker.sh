@@ -8,8 +8,18 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 AGENT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 LOG_FILE="$SCRIPT_DIR/worker.log"
 POLL_INTERVAL=30        # секунд между проверками очереди
-TASK_TIMEOUT=1500       # 25 минут максимум на одну задачу
+TASK_TIMEOUT=2400       # 40 минут максимум на одну задачу
 COOLDOWN_AFTER_TASK=5   # секунд после завершения задачи
+
+# macOS не имеет timeout — используем gtimeout из coreutils
+if command -v timeout &>/dev/null; then
+  TIMEOUT_CMD="timeout"
+elif command -v gtimeout &>/dev/null; then
+  TIMEOUT_CMD="gtimeout"
+else
+  echo "ERROR: timeout/gtimeout not found. Install: brew install coreutils"
+  exit 1
+fi
 
 # Загружаем .env
 if [ -f "$AGENT_DIR/.env" ]; then
@@ -102,7 +112,10 @@ while $RUNNING; do
 - camera_angle РАЗНЫЙ для соседних сцен
 - Склейка через hard cut (concat), НЕ crossfade
 - Минимум 2 действия в каждом 8-сек клипе
-- Последовательная генерация I2V с валидацией размера файла"
+- Последовательная генерация I2V с валидацией размера файла
+- СТРОГИЙ ТАЙМАУТ POLLING: при polling SJinn считай elapsed время. Если прошло больше 600 секунд (10 мин) для одной генерации — ПРЕКРАТИ polling, считай задачу failed и переходи к fallback модели (Veo3→Grok→Ken Burns)
+- Если polling не даёт обновлений 3 минуты подряд — считай задачу зависшей и переходи к fallback
+- НЕ ЗАЦИКЛИВАЙСЯ на polling — максимум 1 retry на генерацию"
 
   # Переходим в директорию агента (claude -p использует относительные пути)
   cd "$AGENT_DIR"
@@ -111,10 +124,12 @@ while $RUNNING; do
   log "    Launching Claude pipeline..."
   START_TIME=$(date +%s)
 
-  if timeout "$TASK_TIMEOUT" claude -p "$PROMPT" --verbose 2>&1 | tee -a "$LOG_FILE"; then
+  CLAUDE_LOG="$OUTPUT_DIR/claude.log"
+  if env -u CLAUDECODE stdbuf -oL $TIMEOUT_CMD "$TASK_TIMEOUT" claude -p "$PROMPT" --allowedTools '*' --permission-mode bypassPermissions --verbose < /dev/null >> "$CLAUDE_LOG" 2>&1; then
     END_TIME=$(date +%s)
     DURATION=$(( END_TIME - START_TIME ))
     log "<<< TASK COMPLETED in ${DURATION}s: $TASK_ID"
+    log "    Claude log: $CLAUDE_LOG"
   else
     EXIT_CODE=$?
     END_TIME=$(date +%s)
@@ -122,11 +137,12 @@ while $RUNNING; do
 
     if [ "$EXIT_CODE" = "124" ]; then
       log "!!! TASK TIMEOUT after ${TASK_TIMEOUT}s: $TASK_ID"
-      "$SCRIPT_DIR/update-task.sh" "$TASK_ID" failed "Worker timeout after ${TASK_TIMEOUT}s" 2>&1 | tee -a "$LOG_FILE"
+      "$SCRIPT_DIR/update-task.sh" "$TASK_ID" failed "Worker timeout after ${TASK_TIMEOUT}s" >> "$LOG_FILE" 2>&1
     else
       log "!!! TASK FAILED (exit $EXIT_CODE) after ${DURATION}s: $TASK_ID"
-      "$SCRIPT_DIR/update-task.sh" "$TASK_ID" failed "Claude process exited with code $EXIT_CODE" 2>&1 | tee -a "$LOG_FILE"
+      "$SCRIPT_DIR/update-task.sh" "$TASK_ID" failed "Claude process exited with code $EXIT_CODE" >> "$LOG_FILE" 2>&1
     fi
+    log "    Claude log: $CLAUDE_LOG"
   fi
 
   log "--- Cooling down ${COOLDOWN_AFTER_TASK}s ---"
