@@ -1,7 +1,7 @@
 {
   "active": {
-    "image_gen": "sjinn",
-    "video_gen": "sjinn",
+    "image_gen": "fal-ai",
+    "video_gen": "fal-ai",
     "tts": null,
     "ffmpeg": "ffmpeg-api"
   },
@@ -11,6 +11,7 @@
       "auth_env": "SJINN_API_KEY",
       "tools_file": "tools/sjinn.md",
       "capabilities": ["image_gen", "video_gen"],
+      "status": "fallback",
       "models": {
         "image_gen": "nano-banana-image-pro-api",
         "image_gen_basic": "nano-banana-image-api",
@@ -32,13 +33,15 @@
       "tools_file": "tools/fal-ai.md",
       "capabilities": ["image_gen", "video_gen", "tts"],
       "models": {
-        "image_gen": "fal-ai/flux-pro/v1.1-ultra",
+        "image_gen": "fal-ai/nano-banana-2/edit",
+        "image_gen_fallback": "fal-ai/gpt-image-1/text-to-image",
         "video_gen_i2v": "fal-ai/kling-video/v2.6/pro/image-to-video",
         "video_gen_t2v": "fal-ai/veo3",
         "tts": "fal-ai/kokoro/american-english"
       },
       "pricing": {
-        "image_gen": "$0.045/image (9:16)",
+        "image_gen": "~$0.04/image",
+        "image_gen_fallback": "~$0.02/image (GPT Image 1)",
         "video_gen_i2v": "$0.07/sec (audio off)",
         "video_gen_t2v": "$0.20/sec (audio off)",
         "tts": "$0.02/1000 chars"
