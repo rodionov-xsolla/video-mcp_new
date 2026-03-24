@@ -11,8 +11,7 @@
 ### ФАЗА 0: ИНИЦИАЛИЗАЦИЯ
 
 1. Прочитай `providers.json` → определи активных провайдеров:
-   - `active.image_gen` → загрузи tools-файл провайдера
-   - `active.video_gen` → загрузи tools-файл (если другой провайдер)
+   - Загрузи `tools/fal-ai.md` — основной tools-файл (изображения + видео)
    - `active.ffmpeg` → загрузи tools-файл
 2. Прочитай конфиг игры: `games/{GAME_TAG}.md`
 3. Прочитай `rules/storyboard.md` — правила написания сторибоарда
@@ -36,10 +35,12 @@
 | Тип контента | Подход | Модели |
 |-------------|--------|--------|
 | Списки, рейтинги, советы, гайды, "Top N" | **Approach 1** (Ken Burns) | Image → FFmpeg zoompan |
-| Динамичный контент, экшен, стендап, комбо | **Approach 2** (I2V) | Image → Grok/Veo3 I2V |
+| Динамичный контент, экшен, стендап, комбо | **Approach 2** (I2V/T2V) | Image → Kling 2.6 Pro I2V (без речи) / Veo3 T2V (с речью) |
 | Кинематограф, трейлеры, атмосферные видео | **Approach 3** (T2V) | Veo3 T2V |
 
 По умолчанию: Approach 1 (дешевле). Если пользователь указал подход — используй его.
+
+> **Правило выбора модели в Approach 2:** если `character_speech` ≠ null → используй Veo3 T2V (генерирует голос + липсинк). Если `character_speech` = null → используй Kling 2.6 Pro I2V (без озвучки).
 
 > **Один approach на всё видео.** Не смешивай подходы внутри одного ролика — это осознанное ограничение для консистентности визуального стиля.
 
@@ -52,7 +53,8 @@
 
 4. **Определи пейсинг** — сколько клипов нужно (по умолч. 3). Объедини beats с малым действием
 5. **Напиши клипы** — для каждого:
-   - `beats` (массив), `duration_sec: 8`, `character_state`, `facial_expression`, `character_speech`, `environment_state`
+   - `beats` (массив), `duration_sec: 5 or 10`, `character_state`, `facial_expression`, `character_speech`, `environment_state`
+   - **Выбор длительности:** hook/CTA = 5 сек, development/climax = 10 сек (Kling поддерживает только 5 или 10 сек)
    - `camera_angle` — ОБЯЗАТЕЛЬНО разный для соседних клипов (close-up → wide → low angle)
    - `motion_prompt` — уникальное движение камеры для каждого клипа (НЕ шаблонное). Если 2 beats — опиши оба этапа: `"First 4 seconds: ... Then: ..."`
    - `hero` — (опционально) имя персонажа для мульти-персонажных видео
@@ -76,8 +78,8 @@ clear detailed character design, vertical composition, 9:16 aspect ratio
 ```
 
 - Сохрани как `character-ref.png`
-- Запомни URL для использования в `image_list`
-- Стоимость: +150 кредитов (nano-banana-image-pro-api)
+- Запомни URL для использования в `image_urls`
+- Стоимость: +~$0.04 (fal-ai/nano-banana-2/edit)
 
 ---
 
@@ -86,19 +88,19 @@ clear detailed character design, vertical composition, 9:16 aspect ratio
 Генерируй **последовательно** (каждая сцена зависит от предыдущей).
 
 Для каждой сцены K:
-1. Собери `image_list`:
+1. Собери `image_urls`:
    - Сцена 1: `[character-ref-url]`
    - Сцена 2+: `[character-ref-url, scene-(K-1)-url]`
-2. Вызови image gen с `image_prompt` из storyboard + `image_list`
+2. Вызови image gen с `image_prompt` из storyboard + `image_urls`
 3. Скачай `scene-K.png`, сохрани URL для следующей сцены
-4. Запиши стоимость
+4. Запиши стоимость (в USD)
 
 **Количество клипов:**
 
 | Подход | Клипов | Длительность каждого | Итого |
 |--------|--------|---------------------|-------|
 | Approach 1 (Ken Burns) | 4–6 | 4–5 сек | 20-30 сек |
-| Approach 2 (I2V) | **3** (по умолч.) | **8 сек** (фикс) | **~24 сек** |
+| Approach 2 (I2V/T2V) | **3** (по умолч.) | **5–10 сек** | **15–30 сек** |
 | Approach 3 (T2V) | 2–3 | 5–8 сек | 16-24 сек |
 
 **I2V правило:** По умолчанию 3 клипа. 4 клипа — ТОЛЬКО если каждый содержит достаточно действия и уникального движения. Объединяй beats с малым действием (грусть, ожидание) в один клип. См. `rules/storyboard.md` → раздел Пейсинг.
@@ -116,30 +118,46 @@ clear detailed character design, vertical composition, 9:16 aspect ratio
   - Pan right: `zoompan=z=1.3:x=on*4:y=ih/2-(ih/zoom/2)`
 - Скачай каждый `scene-K.mp4` локально
 
-#### Approach 2 — I2V
+#### Approach 2 — Kling 2.6 Pro (без речи) / Veo3 T2V (с речью)
 
-**ВАЖНО:** Используй ОДНУ модель для ВСЕХ сцен. Если модель падает — повтори ту же модель (до 3 попыток), только потом переключайся на fallback. Разные модели дают разный визуальный стиль, что ломает консистентность.
+**ВАЖНО:** Используй ОДНУ модель для ВСЕХ сцен одного типа. Если модель падает — повтори ту же модель (до 3 попыток), только потом переключайся на fallback. Разные модели дают разный визуальный стиль, что ломает консистентность.
 
-**Порядок приоритета моделей:** Veo3 I2V → Grok I2V
+**Правило выбора модели:** `character_speech` ≠ null → Veo3 T2V, иначе → Kling 2.6 Pro I2V.
 
-Для каждой сцены K:
-- `image` = scene-K.png
-- `prompt` = `motion_prompt` из storyboard (ОБЯЗАТЕЛЬНО содержит текст `character_speech`)
+##### Без речи — Kling 2.6 Pro I2V
+
+Для каждой сцены K (где `character_speech` = null):
+- `start_image_url` = scene-K.png URL
+- `prompt` = `motion_prompt` из storyboard (НЕ включай `character_speech` — модель не генерирует голос)
+- `duration` = `"5"` или `"10"` (согласно storyboard)
+- `generate_audio` = `true` (Kling генерирует звуковые эффекты — шаги, удары, амбиент)
 - `aspect_ratio` = `"9:16"`
-- Без `end_image_url` — переходы через каты с разными планами, а не через плавные переходы
+- Без `end_image_url` — переходы через каты с разными планами
+
+**Polling:** fal.ai статусы: IN_QUEUE → IN_PROGRESS → COMPLETED / FAILED. Проверяй каждые 15 сек.
+
+##### С речью — Veo3 T2V
+
+Для каждой сцены K (где `character_speech` ≠ null):
+- `prompt` = `image_prompt` + `motion_prompt` объединённые (ОБЯЗАТЕЛЬНО включи текст `character_speech` — модель генерирует голос + липсинк)
+- `generate_audio` = `true`
+- `duration` = `"8s"`
+- `aspect_ratio` = `"9:16"`
+
+**Polling:** fal.ai статусы: IN_QUEUE → IN_PROGRESS → COMPLETED / FAILED. Проверяй каждые 15 сек.
 
 Скачай каждый `scene-K.mp4` локально. Проверь файл > 1000 bytes.
 
 #### Approach 3 — T2V
 
-Используй T2V модель (Veo3 / Grok) с промптом из storyboard.
+Используй T2V модель (Veo3) с промптом из storyboard.
 `prompt` = полный `image_prompt` + `motion_prompt` объединённые.
 
 ---
 
 ### ФАЗА 5: СБОРКА
 
-> **TTS не используется.** Голос и липсинк генерируются I2V моделью на основе текста в `motion_prompt`.
+> **Голос генерируется Veo3 T2V моделью.** Kling I2V клипы без озвучки. TTS не используется отдельно.
 
 Используй **локальный ffmpeg**: `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
 
@@ -167,8 +185,27 @@ $FFMPEG -y -f concat -safe 0 -i concat-list.txt -c copy final.mp4
 
 **НЕ используй crossfade/xfade.** Разные планы камеры (close-up → wide → low angle) делают каты профессиональными без эффектов перехода.
 
-> Аудио берётся из I2V клипов (модель сама генерирует голос по тексту в motion_prompt).
-> Музыка пока не используется (низкий приоритет).
+#### 5.3 Фоновая музыка (опционально)
+
+Если видео выиграет от фоновой музыки — наложи трек из `music/tracks.json`:
+
+1. Выбери трек по mood/game из `music/tracks.json`
+2. Скачай трек: `curl -s -o bg-music.mp3 "$TRACK_URL"`
+3. Миксуй с видео (музыка тише, звуковые эффекты громче):
+```bash
+$FFMPEG -y -i final.mp4 -i bg-music.mp3 \
+  -filter_complex "[1:a]volume=0.15[music];[0:a][music]amix=inputs=2:duration=first[aout]" \
+  -map 0:v -map "[aout]" -c:v copy -c:a aac -shortest final-with-music.mp4
+```
+4. Если видео без аудиодорожки (Approach 1 Ken Burns), просто наложи музыку:
+```bash
+$FFMPEG -y -i final.mp4 -i bg-music.mp3 \
+  -filter_complex "[1:a]volume=0.3[music]" \
+  -map 0:v -map "[music]" -c:v copy -c:a aac -shortest final-with-music.mp4
+```
+
+> Аудио: Veo3 T2V генерирует голос + липсинк. Kling I2V генерирует звуковые эффекты (generate_audio=true).
+> Музыка: опционально наложить фоновый трек из `music/tracks.json` (см. шаг 5.3).
 
 ---
 
@@ -203,18 +240,29 @@ INSERT INTO video_agent_runs (
 
 Трекинг: после каждой генерации записывай стоимость. Перед следующей — проверяй лимит.
 
+**ОБЯЗАТЕЛЬНО: отчёт о стоимости.** После завершения генерации видео ВСЕГДА показывай пользователю детальную разбивку:
+
+```
+=== Стоимость генерации ===
+Изображения: N × $X.XX = $X.XX
+Видео (модель, длительность): N × $X.XX = $X.XX
+---
+ИТОГО: $X.XX
+```
+
+Никогда не пропускай этот отчёт — пользователь должен видеть стоимость каждой генерации.
+
 ---
 
-## Стоимость по моделям (SJinn кредиты)
+## Стоимость по моделям (fal.ai, USD)
 
-| Модель | tool_type | Кредиты |
-|--------|-----------|---------|
-| Nano Banana (image) | nano-banana-image-api | 50 |
-| Nano Banana Pro (image) | nano-banana-image-pro-api | 150 |
-| Veo3 I2V | veo3-image-to-video-fast-api | 420 |
-| Veo3 T2V | veo3-text-to-video-fast-api | 420 |
-| Grok I2V | grok-image-to-video-api | duration × 50 |
-| Grok T2V | grok-text-to-video-api | duration × 50 |
+| Модель | Endpoint | Стоимость |
+|--------|----------|-----------|
+| Nano Banana 2 (image) | fal-ai/nano-banana-2/edit | ~$0.04 |
+| GPT Image 1 (fallback image) | fal-ai/gpt-image-1/text-to-image | ~$0.02 |
+| Kling 2.6 Pro I2V 5s (с аудио) | fal-ai/kling-video/v2.6/pro/image-to-video | $0.70 |
+| Kling 2.6 Pro I2V 10s (с аудио) | fal-ai/kling-video/v2.6/pro/image-to-video | $1.40 |
+| Veo3 T2V 8s | fal-ai/veo3 | $1.60 |
 
 ---
 

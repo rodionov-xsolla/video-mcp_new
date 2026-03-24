@@ -4,37 +4,49 @@
 
 ---
 
-## Async polling (SJinn)
+## Async polling (fal.ai)
 
-Генерация видео/изображений через SJinn — асинхронная. После отправки запроса:
+Генерация видео/изображений через fal.ai — асинхронная. После отправки запроса:
 
-1. Получи `task_id` из ответа
-2. Каждые **10-15 секунд** проверяй статус: `POST /api/un-api/query_tool_task_status`
-3. Максимальное время ожидания одной генерации: **10 минут**
+1. Получи `request_id` из ответа
+2. Каждые **15 секунд** проверяй статус: `GET /requests/{REQUEST_ID}/status`
+3. Результат забирай по: `GET /requests/{REQUEST_ID}`
+4. Максимальное время ожидания одной генерации: **10 минут**
 
 ### Статусы и действия
 
 | Статус | Действие |
 |--------|----------|
-| `pending` / `processing` | Продолжай polling |
-| `finished` | Скачай результат, продолжи pipeline |
-| `failed` | Retry 1 раз. Если снова failed → fallback |
+| `IN_QUEUE` / `IN_PROGRESS` | Продолжай polling |
+| `COMPLETED` | Забери результат через GET /requests/{REQUEST_ID}, продолжи pipeline |
+| `FAILED` | Retry 1 раз. Если снова FAILED → fallback |
 | Таймаут 10 мин | Отменить задачу, fallback |
-| Нет обновлений 3 мин | Считать зависшей, fallback |
 
 ---
 
 ## Каскад fallback
 
-При ошибке генерации — спускайся по моделям SJinn:
+### Изображения
 
 ```
-Veo3 I2V ──FAIL──→ retry 1 раз ──FAIL──→ Grok I2V
-Grok I2V ──FAIL──→ retry 1 раз ──FAIL──→ Ken Burns (FFmpeg zoompan)
-Ken Burns ──FAIL──→ retry 1 раз ──FAIL──→ статус 'failed', записать ошибку
+Nano Banana 2 ──FAIL──→ retry 1 раз ──FAIL──→ GPT Image 1 (fal-ai/gpt-image-1/text-to-image) ──FAIL──→ статус 'failed'
 ```
 
-<!-- TODO: После перехода на fal.ai — добавить Kling 2.6 Pro в каскад -->
+**Nano Banana 2 — основная модель.** Для первой сцены (нет референса) — сначала сгенерируй character-ref через Nano Banana 2 с нейтральным промптом, используй его URL как `image_urls[0]`. НЕ переключайся на flux-pro или другие модели без явной ошибки.
+
+**GPT Image 1 — fallback.** Доступен через fal.ai (тот же FAL_KEY). Endpoint: `fal-ai/gpt-image-1/text-to-image`. Размеры: `1024x1536` (вертикальный). Не поддерживает `image_urls` — используй подробный промпт с описанием персонажа для консистентности.
+
+**Если `fal.run` sync endpoint не отвечает** — используй `queue.fal.run` async endpoint с polling.
+
+### Видео
+
+При ошибке генерации — спускайся по каскаду:
+
+```
+Kling I2V ──FAIL──→ retry 1 раз ──FAIL──→ Ken Burns (FFmpeg zoompan)
+Veo3 T2V  ──FAIL──→ retry 1 раз ──FAIL──→ Kling I2V (без речи) ──FAIL──→ Ken Burns
+Ken Burns  ──FAIL──→ retry 1 раз ──FAIL──→ статус 'failed', записать ошибку
+```
 
 При fallback:
 - Перепланируй сцены под новый подход
@@ -43,12 +55,12 @@ Ken Burns ──FAIL──→ retry 1 раз ──FAIL──→ статус 'f
 
 ---
 
-## Ошибки SJinn API
+## Ошибки fal.ai API
 
 | Ошибка | Действие |
 |--------|----------|
 | **Rate limited (429)** | Подожди 30 секунд, retry |
-| **Invalid input (400)** | Проверь и исправь промпт, retry |
+| **Invalid input (400/422)** | Проверь промпт и параметры, retry |
 | **Server error (500)** | Подожди 60 секунд, retry 1 раз |
 | **Model unavailable (503)** | Fallback на следующую модель |
 | **Timeout** | Fallback на следующую модель |
@@ -78,7 +90,7 @@ Ken Burns ──FAIL──→ retry 1 раз ──FAIL──→ статус 'f
 |--------|----------|
 | curl вернул ошибку | Retry через 10 секунд, максимум 3 попытки |
 | Файл 0 байт | Удали и перегенерируй |
-| URL истёк | Запроси результат заново через SJinn status endpoint |
+| URL истёк | fal.ai URLs are temporary — always download immediately after generation |
 
 После каждого скачивания проверяй размер файла:
 ```bash
@@ -109,9 +121,9 @@ fi
 
 | Операция | Таймаут |
 |----------|---------|
-| Генерация изображения (Nano Banana Pro) | 120 секунд |
-| Генерация видео (Veo3 I2V) | 10 минут |
-| Генерация видео (Grok I2V) | 10 минут |
+| Генерация изображения (Nano Banana 2) | 120 секунд |
+| Генерация видео (Kling 2.6 Pro I2V) | 10 минут |
+| Генерация видео (Veo3 T2V) | 10 минут |
 | Скачивание файла (curl) | 120 секунд |
 | FFmpeg операция | 5 минут |
 | **Весь pipeline (worker.sh)** | **40 минут** |

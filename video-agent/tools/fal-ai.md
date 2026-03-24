@@ -15,23 +15,24 @@ Authorization: Key $FAL_KEY
 
 ---
 
-## 1. FLUX.2 Pro — генерация изображений
+## 1. Nano Banana 2 — генерация изображений
 
-**Endpoint:** `https://queue.fal.run/fal-ai/flux-pro/v1.1-ultra`
+**Endpoint:** `https://queue.fal.run/fal-ai/nano-banana-2/edit`
 **Метод:** POST (синхронный — ответ приходит сразу)
-**Стоимость:** ~$0.045 за изображение 9:16
+**Стоимость:** ~$0.04 за изображение
 
 ### Запрос
 
 ```bash
-curl -s -X POST "https://queue.fal.run/fal-ai/flux-pro/v1.1-ultra" \
+curl -s -X POST "https://queue.fal.run/fal-ai/nano-banana-2/edit" \
   -H "Authorization: Key $FAL_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "prompt": "MLBB hero Lancelot in dynamic sword pose, vertical composition, 9:16 aspect ratio, anime style, dramatic lighting",
+    "image_urls": ["https://fal.media/files/abc123/character-ref.png"],
     "aspect_ratio": "9:16",
-    "num_images": 1,
     "output_format": "png",
+    "resolution": "1K",
     "safety_tolerance": "5"
   }'
 ```
@@ -40,13 +41,14 @@ curl -s -X POST "https://queue.fal.run/fal-ai/flux-pro/v1.1-ultra" \
 
 | Параметр | Тип | Обязательный | Описание |
 |----------|-----|-------------|----------|
-| `prompt` | string | Да | Текстовое описание изображения |
-| `aspect_ratio` | enum | Нет | `"9:16"` для вертикального видео. Варианты: "1:1", "16:9", "9:16", "4:3", "3:4" |
+| `prompt` | string | Да | Текстовое описание (мин 3 символа, макс 50000) |
+| `image_urls` | array of strings | Нет | URL-ы референсных изображений для chain reference консистентности. Сцена 1: [character-ref-url], Сцена N: [character-ref-url, scene-(N-1)-url] |
+| `aspect_ratio` | enum | Нет | `"9:16"` для вертикального видео. Варианты: "1:1", "16:9", "9:16", "4:3", "3:4" и др. По умолчанию: "auto" |
 | `num_images` | integer | Нет | 1-4, по умолчанию 1 |
-| `output_format` | enum | Нет | "jpeg" или "png", по умолчанию "jpeg" |
-| `safety_tolerance` | string | Нет | "1"-"6", по умолчанию "2". Для игрового контента ставь "5" |
+| `output_format` | enum | Нет | "jpeg", "png", "webp". По умолчанию "png" |
+| `resolution` | enum | Нет | "0.5K", "1K", "2K", "4K". По умолчанию "1K" |
+| `safety_tolerance` | enum | Нет | "1"-"6", по умолчанию "4". Для игрового контента ставь "5" |
 | `seed` | integer | Нет | Для воспроизводимости результатов |
-| `enhance_prompt` | boolean | Нет | Улучшает интерпретацию промпта |
 
 ### Ответ
 
@@ -59,10 +61,7 @@ curl -s -X POST "https://queue.fal.run/fal-ai/flux-pro/v1.1-ultra" \
       "height": 1920,
       "content_type": "image/png"
     }
-  ],
-  "seed": 12345,
-  "prompt": "...",
-  "has_nsfw_concepts": [false]
+  ]
 }
 ```
 
@@ -74,6 +73,77 @@ curl -s -o scene-1.png "$IMAGE_URL"
 
 # Проверь что файл скачался
 ls -la scene-1.png
+```
+
+### Chain Reference Usage
+
+```bash
+# Сцена 1 (только референс персонажа):
+"image_urls": ["$CHARACTER_REF_URL"]
+
+# Сцена 2+ (референс персонажа + предыдущая сцена):
+"image_urls": ["$CHARACTER_REF_URL", "$PREV_SCENE_URL"]
+```
+
+---
+
+## 1b. GPT Image 1 — fallback генерация изображений
+
+**Endpoint:** `https://queue.fal.run/fal-ai/gpt-image-1/text-to-image`
+**Метод:** POST (асинхронный — нужен polling)
+**Стоимость:** ~$0.02 за изображение
+
+> **Используй ТОЛЬКО как fallback**, если Nano Banana 2 не работает. GPT Image 1 не поддерживает `image_urls` (нет chain reference), поэтому консистентность персонажа хуже.
+
+### Запрос
+
+```bash
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/gpt-image-1/text-to-image" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "MLBB hero Lancelot in dynamic sword pose, vertical composition, detailed character design, dramatic lighting",
+    "image_size": "1024x1536"
+  }')
+
+REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
+```
+
+### Параметры
+
+| Параметр | Тип | Обязательный | Описание |
+|----------|-----|-------------|----------|
+| `prompt` | string | Да | Текстовое описание |
+| `image_size` | enum | Нет | `"auto"`, `"1024x1024"`, `"1536x1024"`, `"1024x1536"`. Для 9:16 используй `"1024x1536"` |
+
+### Polling и получение результата
+
+```bash
+# Проверяй каждые 10 секунд
+STATUS=$(curl -s "https://queue.fal.run/fal-ai/gpt-image-1/requests/$REQUEST_ID/status" \
+  -H "Authorization: Key $FAL_KEY" | jq -r '.status')
+
+# Результат:
+RESULT=$(curl -s "https://queue.fal.run/fal-ai/gpt-image-1/requests/$REQUEST_ID" \
+  -H "Authorization: Key $FAL_KEY")
+
+IMAGE_URL=$(echo "$RESULT" | jq -r '.images[0].url')
+curl -s -o scene-1.png "$IMAGE_URL"
+```
+
+### Ответ
+
+```json
+{
+  "images": [
+    {
+      "url": "https://v3b.fal.media/files/...",
+      "content_type": "image/png",
+      "width": 1024,
+      "height": 1536
+    }
+  ]
+}
 ```
 
 ---
@@ -94,7 +164,7 @@ RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/kling-video/v2.6/pro/im
     "prompt": "The hero swings his sword with dynamic motion, camera follows the action",
     "start_image_url": "https://fal.media/files/abc123/scene-1.png",
     "duration": "5",
-    "generate_audio": false,
+    "generate_audio": true,
     "negative_prompt": "blur, distort, low quality, static"
   }')
 
@@ -108,11 +178,11 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 | `prompt` | string | Да | Описание анимации |
 | `start_image_url` | string | Да | URL исходного изображения |
 | `duration` | enum | Нет | `"5"` или `"10"` секунд, по умолчанию "5" |
-| `generate_audio` | boolean | Нет | **Ставь `false`!** По умолчанию true. Аудио заменяется через FFmpeg |
+| `generate_audio` | boolean | Нет | **Ставь `true`** (по умолчанию). Kling генерирует звуковые эффекты (шаги, звон, амбиент). $0.14/сек с аудио, $0.07/сек без |
 | `negative_prompt` | string | Нет | Что исключить. По умолчанию "blur, distort, and low quality" |
 | `end_image_url` | string | Нет | Изображение для концовки |
 
-> **ВАЖНО:** Используй `"generate_audio": false` чтобы платить $0.07/сек вместо $0.14/сек.
+> **По умолчанию:** `"generate_audio": true` — Kling генерирует звуковые эффекты (шаги, удары, амбиент). Стоимость $0.14/сек. Если нужно сэкономить — `false` ($0.07/сек).
 
 ### Polling статуса
 
@@ -288,6 +358,6 @@ curl -s -o voiceover.wav "$AUDIO_URL"
 
 1. **Всегда скачивай файлы** после генерации. fal.ai URL-ы временные.
 2. **Проверяй размер** скачанного файла (>1000 байт для изображений, >10000 для видео).
-3. **`generate_audio: false`** для Kling и Veo — экономит 50% стоимости.
+3. **`generate_audio: true`** для Kling (звуковые эффекты по умолчанию), **`false`** для Veo — экономит 50%.
 4. **Не отправляй больше 3 параллельных запросов** — rate limiting.
 5. **Сохраняй request_id** — нужен для polling и отмены задач.

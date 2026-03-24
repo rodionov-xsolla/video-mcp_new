@@ -2,7 +2,7 @@
 
 ## Что это
 
-AI Video Production Agent — автономный pipeline для создания коротких вертикальных видео (1080×1920) для игровых каналов. Работает через SJinn AI API + FFmpeg.
+AI Video Production Agent — автономный pipeline для создания коротких вертикальных видео (1080×1920) для игровых каналов. Работает через fal.ai API + FFmpeg.
 
 ## Обязательный порядок работы
 
@@ -20,36 +20,41 @@ AI Video Production Agent — автономный pipeline для создан�
 
 ## Критические правила
 
-- **Действие + фраза вместе** в motion_prompt: `[действие] and says: "[реплика]"` — НЕ выноси речь в конец отдельным блоком
+- **Действие + фраза вместе** в motion_prompt: `[действие] and says: "[реплика]"` — НЕ выноси речь в конец отдельным блоком (только для Veo3 T2V)
 - **Максимум 2 фокусные точки** в одном 9:16 кадре
 - **camera_angle РАЗНЫЙ** для каждого соседнего клипа
-- **Минимум 2 действия** в каждом 8-сек клипе
+- **Минимум 2 действия** в каждом клипе (5 или 10 сек)
 - **gaze_direction обязателен** при 2+ персонажах в кадре
-- **Одна I2V модель** для всех сцен видео (не смешивай Grok и Veo3)
+- **Одна модель анимации** для всех сцен видео (не смешивай Kling и Veo3 в одном ролике)
 - **Живые описания персонажей** — кожа, шрамы, борода, грязь (не абстрактные "armored man")
-- **Последовательная генерация I2V** — по одному клипу, с валидацией размера файла на дубли
+- **Последовательная генерация** — по одному клипу, с валидацией размера файла на дубли
+- **Речь → Veo3 T2V**, без речи → Kling I2V
 
-## Текущий стек (MVP)
+## Текущий стек
 
-- **Провайдер изображений:** SJinn (Nano Banana Pro) — 150 кредитов/изображение
-- **Провайдер видео:** SJinn (Veo3 I2V → Grok I2V fallback)
+- **Провайдер изображений:** fal.ai (Nano Banana 2) — ~$0.04/изображение
+- **Провайдер видео I2V (без речи):** fal.ai (Kling 2.6 Pro) — $0.14/сек (с аудио, generate_audio=true по умолчанию)
+- **Провайдер видео T2V (с речью):** fal.ai (Veo3) — $0.20/сек — модель сама генерит голос и липсинк
 - **FFmpeg:** локальный `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
-- **TTS:** не используется — голос генерируется I2V моделью через motion_prompt
+- **TTS:** не используется отдельно — Veo3 T2V генерирует голос из текста в промпте
+- **Fallback:** SJinn сохранён в providers.json, но не используется по умолчанию
 
 ## API
 
-### SJinn AI (основной)
-- Создание: `POST https://sjinn.ai/api/un-api/create_tool_task`
-- Статус: `POST https://sjinn.ai/api/un-api/query_tool_task_status`
-- Auth: `Authorization: Bearer $SJINN_API_KEY`
-- **Внимание:** SJinn возвращает невалидный JSON с `\!` и `\?` — используй grep вместо jq для парсинга
+### fal.ai (основной)
+- Auth: `Authorization: Key $FAL_KEY`
+- Base URL: `https://queue.fal.run/`
+- Изображения: `POST /fal-ai/nano-banana-2/edit` (синхронный, `image_urls` для референсов)
+- Видео I2V: `POST /fal-ai/kling-video/v2.6/pro/image-to-video` (асинхронный, polling)
+- Видео T2V: `POST /fal-ai/veo3` (асинхронный, polling)
+- fal.ai возвращает валидный JSON — используй jq для парсинга
 
 ### Модели
-| Модель | tool_type | Кредиты |
-|--------|-----------|---------|
-| Nano Banana Pro (image) | `nano-banana-image-pro-api` | 150 |
-| Veo3 I2V (video) | `veo3-image-to-video-fast-api` | 420 |
-| Grok I2V (video) | `grok-image-to-video-api` | duration × 50 |
+| Модель | Endpoint | Стоимость |
+|--------|----------|-----------|
+| Nano Banana 2 (image) | `fal-ai/nano-banana-2/edit` | ~$0.04 |
+| Kling 2.6 Pro I2V (video+audio) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.14/сек |
+| Veo3 T2V (video + voice) | `fal-ai/veo3` | $0.20/сек |
 
 ### FFmpeg
 - Локальный: `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
@@ -121,7 +126,7 @@ GET /rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*
 
 - [ ] **Фаза 0:** автоматический запрос game_assets в pipeline (сейчас описан в rules, но не реализован в worker)
 - [ ] **Фаза 6:** логирование в `video_agent_runs` (таблица создана, INSERT не реализован)
-- [ ] **fal.ai + Kling:** переход с SJinn на fal.ai как основной I2V провайдер
+- [x] **fal.ai + Kling:** переход с SJinn на fal.ai как основной провайдер (изображения + видео)
 - [ ] **Game configs:** создать `games/ark.md` и `games/pubg.md`
 - [ ] **Dual-style для MLBB:** добавить cartoon + realistic блоки персонажей
 - [x] **SUPABASE_SERVICE_ROLE_KEY:** добавлен в `.env`
