@@ -48,6 +48,13 @@ claude --permission-mode bypassPermissions -p "
 - Прочитай games/${GAME_TAG}.md (если есть) или возьми данные из Google Sheets
 - ОБЯЗАТЕЛЬНО: сначала напиши полный сторибоард (storyboard.json), потом генерируй
 
+ФОРМАТ НОВОСТЕЙ:
+- Если идея содержит 'новости', 'news', 'game news', 'weekly news', 'patch recap' — это формат News
+- Прочитай rules/news.md — правила новостного формата
+- ФАЗА 0.5: Используй WebSearch для поиска 3 актуальных новостей об игре. Сохрани research.json
+- 3 сцены: студия (ведущий) → поле (репортёр) → студия (ведущий). Все 8s Veo3 T2V
+- Два character reference: anchor + reporter. Бюджет: \$10
+
 КРИТИЧЕСКИЕ ПРАВИЛА:
 - Речь → Veo3 T2V (включи ТОЧНЫЙ текст character_speech в prompt — модель генерирует голос + липсинк)
 - Без речи → Kling 2.6 Pro I2V (НЕ включай текст речи в prompt)

@@ -13,6 +13,7 @@ AI Video Production Agent — автономный pipeline для создан�
 3. `rules/consistency.md` — визуальная консистентность, chain reference
 4. `rules/fallback.md` — обработка ошибок
 5. `rules/dual-style.md` — правила dual-style видео (если применимо)
+5b. `rules/news.md` — правила новостного формата (если идея — новости)
 6. `providers.json` — активные провайдеры и модели
 7. `games/{GAME_TAG}.md` — конфиг конкретной игры
 
@@ -38,6 +39,14 @@ AI Video Production Agent — автономный pipeline для создан�
 - **FFmpeg:** локальный `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
 - **TTS:** не используется отдельно — Veo3 T2V генерирует голос из текста в промпте
 - **Fallback:** SJinn сохранён в providers.json, но не используется по умолчанию
+
+### Форматы видео
+
+| Формат | Описание | Модель | Бюджет |
+|--------|----------|--------|--------|
+| Стандартный | Списки, экшен, стендап | Approach 1/2/3 | $2-$10 |
+| Dual-style | Cartoon + realistic рядом | Approach 2 | $5 |
+| **News** | Новости игры: ведущий в студии + репортёр с места событий | Veo3 T2V (3 × 8s) | $10 |
 
 ## API
 
@@ -129,5 +138,6 @@ GET /rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*
 - [x] **fal.ai + Kling:** переход с SJinn на fal.ai как основной провайдер (изображения + видео)
 - [ ] **Game configs:** создать `games/ark.md` и `games/pubg.md`
 - [ ] **Dual-style для MLBB:** добавить cartoon + realistic блоки персонажей
+- [x] **News format:** правила, сторибоард, MLBB конфиг (anchor: Lancelot, reporter: Fanny)
 - [x] **SUPABASE_SERVICE_ROLE_KEY:** добавлен в `.env`
 - [ ] **Cost tracking:** персистентный подсчёт стоимости генераций
