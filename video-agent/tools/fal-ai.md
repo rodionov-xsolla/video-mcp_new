@@ -42,7 +42,7 @@ curl -s -X POST "https://queue.fal.run/fal-ai/nano-banana-2/edit" \
 | Параметр | Тип | Обязательный | Описание |
 |----------|-----|-------------|----------|
 | `prompt` | string | Да | Текстовое описание (мин 3 символа, макс 50000) |
-| `image_urls` | array of strings | Нет | URL-ы референсных изображений для chain reference консистентности. Сцена 1: [character-ref-url], Сцена N: [character-ref-url, scene-(N-1)-url] |
+| `image_urls` | array of strings | Нет | URL-ы референсных изображений для chain reference консистентности. Сцена 1: [character-ref-url], Сцена N: [character-ref-url, scene-(N-1)-url]. **Не передавай поле вообще** если нет референса (пустой массив `[]` вызывает ошибку) |
 | `aspect_ratio` | enum | Нет | `"9:16"` для вертикального видео. Варианты: "1:1", "16:9", "9:16", "4:3", "3:4" и др. По умолчанию: "auto" |
 | `num_images` | integer | Нет | 1-4, по умолчанию 1 |
 | `output_format` | enum | Нет | "jpeg", "png", "webp". По умолчанию "png" |
