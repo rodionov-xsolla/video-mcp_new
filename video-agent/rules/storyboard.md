@@ -346,6 +346,14 @@ Aggressive forward push through chaos.
 - ❌ Абстрактные описания вторичных персонажей: "armored man" (→ робот/киборг). Описывай ЖИВЫЕ детали: кожа, шрамы, борода, грязь, пот
 - ❌ "First/Then" в motion_prompt со сменой локации, фона или состава персонажей — модель не сменит обстановку. "First/Then" работает ТОЛЬКО для смены ДЕЙСТВИЯ в ОДНОЙ локации
 - ❌ Вся речь в конце motion_prompt одним блоком: `"...actions... The character says: 'вся речь здесь'"` — модель не знает когда какую фразу произносить. Привязывай каждую реплику к действию: `"[действие] and says: '[фраза]'"`
+- ❌ **Активные/резкие действия персонажей** — Kling I2V плохо генерирует: размахивание оружием, удары, прыжки, бег, броски, взмахи руками, борьбу. Результат: смазанные конечности, деформация тела, артефакты. Вместо этого используй **статичные позы с минимальным движением**: поворот головы, смена выражения лица, жест рукой, наклон корпуса, перевод взгляда, лёгкое покачивание
+
+**Правило motion_prompt для Kling I2V:**
+- ✅ Микро-движения: "turns head slowly", "shifts weight", "raises eyebrow", "leans forward slightly", "crosses arms", "nods"
+- ✅ Окружение двигается: "wind blows cape", "particles drift", "light pulses", "mist swirls"
+- ✅ Камера двигается: "camera slowly pushes in", "camera drifts sideways"
+- ❌ Макро-движения: "swings sword", "charges forward", "jumps", "throws daggers", "punches", "runs", "slams fist"
+- ❌ Сложные взаимодействия: "grabs object and throws it", "catches weapon mid-air", "flips backward"
 
 **ДЕЛАЙ:**
 - ✅ Конкретные визуальные детали: "silver armor with blue engravings" вместо "cool armor"
@@ -442,6 +450,37 @@ Aggressive forward push through chaos.
 - [ ] "First/Then" в motion_prompt — только смена действия, НЕ смена локации/персонажей
 - [ ] Бюджет не превышен (посчитай: N изображений + 1 ref + N анимаций)
 - [ ] `image_prompt` собран по шаблону для каждого клипа
+
+### Дополнительная валидация для формата "serial-drama"
+
+- [ ] `format: "serial-drama"` присутствует
+- [ ] `series_id`, `episode_number`, `retention_strategy`, `cliffhanger` заполнены
+- [ ] Первый клип — HOOK (визуальный парадокс + хук-фраза)
+- [ ] Последний клип — CLIFFHANGER (обрыв на пике)
+- [ ] Каждый клип содержит реплику (TTS через Kokoro, `character_speech: null` в storyboard)
+- [ ] Анимация — ТОЛЬКО микродвижения (нет ходьбы, бега, ударов, прыжков)
+- [ ] Длительность клипов адаптивная: 5s (≤10 слов реплики) или 10s (>10 слов)
+- [ ] Brainrot лексика в диалогах (rizz, sigma, cooked, mogging, negative aura)
+- [ ] Anti-repetition check пройден (нет повторов из последних 8 эпизодов)
+- [ ] Story bible загружена (episode > 1) и будет обновлена после генерации
+- [ ] "TO BE CONTINUED..." overlay запланирован на последние 2 секунды
+
+#### Motion prompt для serial-drama (Kling I2V, микродвижения)
+
+Шаблон:
+```
+Camera [slight push-in / holds steady / drifts slowly].
+[Character] [micro-action: turns head slowly, raises eyebrow, clenches fist].
+[Second micro-action: glances sideways, smirks, eyes widen].
+[Environment: ambient particles drift, neon signs pulse, light shifts].
+Preserve character appearance from reference image.
+```
+
+Примеры:
+- ✅ `Camera holds steady at medium shot. Character turns head slowly to face the viewer, eyebrows raise in surprise, mouth drops slightly open. Background neon signs flicker. Tense stillness.`
+- ✅ `Camera pushes in gently. Character's expression shifts from calm to anger — jaw clenches, fists tighten at sides. Golden particles drift in background. Dramatic tension building.`
+- ❌ `Character walks up to the other player and pushes him` — перемещение + физический контакт
+- ❌ `Character runs across the room and jumps onto the table` — активное движение
 
 ### Дополнительная валидация для формата "news"
 

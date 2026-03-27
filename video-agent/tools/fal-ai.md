@@ -17,9 +17,21 @@ Authorization: Key $FAL_KEY
 
 ## 1. Nano Banana 2 — генерация изображений
 
-**Endpoint:** `https://queue.fal.run/fal-ai/nano-banana-2/edit`
-**Метод:** POST (синхронный — ответ приходит сразу)
+### Text-to-Image (без референса — для character references)
+
+**Endpoint:** `https://queue.fal.run/fal-ai/nano-banana-2`
+**Метод:** POST (асинхронный — нужен polling)
 **Стоимость:** ~$0.04 за изображение
+
+> **Используй этот endpoint для генерации character references** (нет входного изображения). Поле `image_urls` НЕ передаётся.
+
+### Image-to-Image / Edit (с референсом — для сцен)
+
+**Endpoint:** `https://queue.fal.run/fal-ai/nano-banana-2/edit`
+**Метод:** POST (асинхронный — нужен polling)
+**Стоимость:** ~$0.04 за изображение
+
+> **Используй этот endpoint для генерации сцен** с chain reference (image_urls обязателен).
 
 ### Запрос
 
@@ -65,15 +77,36 @@ curl -s -X POST "https://queue.fal.run/fal-ai/nano-banana-2/edit" \
 }
 ```
 
-### Скачивание (ОБЯЗАТЕЛЬНО)
+### Polling и скачивание (ОБЯЗАТЕЛЬНО)
+
+Оба endpoint'а (с `/edit` и без) — **асинхронные**. Нужен polling.
 
 ```bash
-IMAGE_URL=$(echo "$RESPONSE" | jq -r '.images[0].url')
+# 1. Отправь запрос → получи request_id
+REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
+
+# 2. Polling каждые 10 секунд
+while true; do
+  STATUS=$(curl -s "https://queue.fal.run/fal-ai/nano-banana-2/requests/$REQUEST_ID/status" \
+    -H "Authorization: Key $FAL_KEY" | jq -r '.status')
+  case "$STATUS" in
+    "COMPLETED") break ;;
+    "FAILED") echo "FAILED"; exit 1 ;;
+    *) sleep 10 ;;
+  esac
+done
+
+# 3. Получи результат
+RESULT=$(curl -s "https://queue.fal.run/fal-ai/nano-banana-2/requests/$REQUEST_ID" \
+  -H "Authorization: Key $FAL_KEY")
+IMAGE_URL=$(echo "$RESULT" | jq -r '.images[0].url')
 curl -s -o scene-1.png "$IMAGE_URL"
 
-# Проверь что файл скачался
+# 4. Проверь что файл скачался (>1000 bytes)
 ls -la scene-1.png
 ```
+
+> **ВАЖНО:** URL для polling/результата всегда `fal-ai/nano-banana-2/requests/{ID}` — без `/edit`, даже если запрос был на `/edit` endpoint.
 
 ### Chain Reference Usage
 
@@ -351,6 +384,63 @@ curl -s -o voiceover.wav "$AUDIO_URL"
 4. Таймаут: 10 минут максимум
 5. При таймауте: fallback на Approach 1
 ```
+
+---
+
+## 5. Kling Lipsync — Audio-to-Video (липсинк)
+
+**Endpoint:** `https://queue.fal.run/fal-ai/kling-video/lipsync/audio-to-video`
+**Метод:** POST (асинхронный — нужен polling)
+**Стоимость:** ~$0.10/сек
+
+> Принимает видео + аудио, генерирует липсинк (движение губ синхронно с речью).
+
+### Запрос
+
+```bash
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/kling-video/lipsync/audio-to-video" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "video_url": "https://fal.media/files/abc123/scene-1.mp4",
+    "audio_url": "https://fal.media/files/abc123/voiceover.wav"
+  }')
+
+REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
+```
+
+### Параметры
+
+| Параметр | Тип | Обязательный | Описание |
+|----------|-----|-------------|----------|
+| `video_url` | string | Да | URL исходного видео (из Kling I2V) |
+| `audio_url` | string | Да | URL аудиофайла с речью (из Kokoro TTS) |
+
+### Polling и получение результата
+
+```
+Status: https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}/status
+Result: https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
+```
+
+### Ответ
+
+```json
+{
+  "video": {
+    "url": "https://fal.media/files/abc123/output.mp4",
+    "content_type": "video/mp4"
+  }
+}
+```
+
+### Пайплайн с липсинком
+
+```
+Image → Kling I2V (анимация + SFX) → Kokoro TTS (голос) → Kling Lipsync (видео + аудио → липсинк) → FFmpeg (склейка)
+```
+
+**ВАЖНО:** `audio_url` должен быть публичным URL. Kokoro TTS возвращает URL с fal.media — используй его напрямую, не скачивая.
 
 ---
 
