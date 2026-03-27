@@ -14,6 +14,8 @@ AI Video Production Agent — автономный pipeline для создан�
 4. `rules/fallback.md` — обработка ошибок
 5. `rules/dual-style.md` — правила dual-style видео (если применимо)
 5b. `rules/news.md` — правила новостного формата (если идея — новости)
+5c. `rules/object-character.md` — правила формата Object Character (антропоморфные объекты)
+5d. `rules/serial-drama.md` — правила формата Serial Drama (сериальные микро-драмы)
 6. `providers.json` — активные провайдеры и модели
 7. `games/{GAME_TAG}.md` — конфиг конкретной игры
 
@@ -29,7 +31,8 @@ AI Video Production Agent — автономный pipeline для создан�
 - **Одна модель анимации** для всех сцен видео (не смешивай Kling и Veo3 в одном ролике)
 - **Живые описания персонажей** — кожа, шрамы, борода, грязь (не абстрактные "armored man")
 - **Последовательная генерация** — по одному клипу, с валидацией размера файла на дубли
-- **Речь → Veo3 T2V**, без речи → Kling I2V
+- **Речь → Veo3 T2V**, без речи → Kling I2V (исключение: Serial Drama формат использует Kling I2V + Kokoro TTS + Lipsync для всех сцен)
+- **НЕТ активных действий в Kling I2V** — никаких ударов, прыжков, бросков, взмахов оружием, бега. Только микро-движения: поворот головы, жест рукой, наклон, смена выражения лица. Активные действия = артефакты и деформация
 
 ## Текущий стек
 
@@ -47,6 +50,8 @@ AI Video Production Agent — автономный pipeline для создан�
 | Стандартный | Списки, экшен, стендап | Approach 1/2/3 | $2-$10 |
 | Dual-style | Cartoon + realistic рядом | Approach 2 | $5 |
 | **News** | Новости игры: ведущий в студии + репортёр с места событий | Veo3 T2V (3 × 8s) | $10 |
+| **Object Character** | Антропоморфные объекты с монологом (вилка, кружка, тапок) | Kling I2V 10s + Kokoro TTS | $1.50 (single) / $7.50 (series×5) |
+| **Serial Drama** | Сериальные микро-драмы с brainrot эстетикой, cliffhanger-ы, бесконечный сюжет | Kling I2V (5-10s) + Kokoro TTS + Lipsync | $4-$10/эпизод |
 
 ## API
 
@@ -64,11 +69,14 @@ AI Video Production Agent — автономный pipeline для создан�
 | Nano Banana 2 (image) | `fal-ai/nano-banana-2/edit` | ~$0.04 |
 | Kling 2.6 Pro I2V (video+audio) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.14/сек |
 | Veo3 T2V (video + voice) | `fal-ai/veo3` | $0.20/сек |
+| Kokoro TTS (voice) | `fal-ai/kokoro/american-english` | ~$0.02/запрос |
+| Kling Lipsync (lip sync) | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/сек |
 
 ### FFmpeg
 - Локальный: `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
-- Масштабирование: `scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2`
-- Склейка: hard cut через `concat`, без crossfade
+- Масштабирование: `scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2` + `-r 30 -preset slow -crf 10 -ar 44100 -ac 2 -c:a aac -b:a 128k`
+- Склейка: hard cut через `concat` с **re-encode** (не `-c copy`), без crossfade
+- Обрезка клипов по TTS: `clip_duration = 0.5s (delay) + TTS_duration + 1.0s (пауза)` — никаких стоп-кадров
 
 ## Структура output
 

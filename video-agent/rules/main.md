@@ -26,6 +26,46 @@
 
 ---
 
+### ФАЗА 0.5a: OBJECT CHARACTER (только для формата "object-character")
+
+**Условие:** идея содержит бытовой объект как персонаж, "object character", "антропоморф", "talking object", или описывает предмет с эмоциями/речью.
+
+Если формат — object character:
+1. Загрузи `rules/object-character.md` — правила формата
+2. Определи объект, эмоцию, контекст, конфликт
+3. Напиши character_description (8+ деталей) и скрипт (≤25 слов, от первого лица)
+4. **Модель:** строго Kling 2.6 Pro I2V + Kokoro TTS. НЕ Veo3.
+5. Перейди к Фазе 1 с данными персонажа
+
+Подробности — в `rules/object-character.md`.
+
+---
+
+### ФАЗА 0.5c: SERIAL DRAMA (только для формата "serial-drama")
+
+**Условие:** идея содержит "serial", "episode", "series", "ep1", "ep2", "сериал", или указан `series_id` существующего сериала.
+
+Если формат — serial drama:
+1. Загрузи `rules/serial-drama.md` — правила формата
+2. **Episode 1 (новый сериал):**
+   - Создай папку `output/{series_id}/`
+   - Инициализируй `story_bible.json` (персонажи, петли, мир)
+   - Сгенерируй character references для всех ключевых персонажей
+3. **Episode N+1 (продолжение):**
+   - Загрузи `output/{series_id}/story_bible.json`
+   - Выполни State Analysis (статусы персонажей, активные петли, anti-repetition)
+   - Выполни Loop Management (каждые 5 эпизодов: закрой 1 малую петлю, открой 2 новых)
+4. Перейди к Фазе 1 с контекстом Story Bible
+5. **После генерации:** обнови story_bible.json (State Transition)
+   - Обнови characters status, aura_points, relationships
+   - Обнови active_loops / closed_loops
+   - Добавь episode_summary + cliffhanger
+   - Обнови anti_repetition (фразы, хуки, клиффхэнгеры)
+
+Подробности — в `rules/serial-drama.md`.
+
+---
+
 ### ФАЗА 0.5: ИССЛЕДОВАНИЕ (только для формата "news")
 
 **Условие:** идея содержит "новости", "news", "game news", "weekly news", "patch recap", "обновление".
@@ -53,6 +93,8 @@
 | Динамичный контент, экшен, стендап, комбо | **Approach 2** (I2V/T2V) | Image → Kling 2.6 Pro I2V (без речи) / Veo3 T2V (с речью) |
 | Кинематограф, трейлеры, атмосферные видео | **Approach 3** (T2V) | Veo3 T2V |
 | Новости игры, обновления, патч-ноты | **News** (Veo3 T2V) | 3 сцены × 8s, студия + репортаж. См. `rules/news.md` |
+| Антропоморфные объекты, talking objects | **Object Character** (Kling I2V + Kokoro TTS) | 1 клип × 10s + TTS overlay. См. `rules/object-character.md` |
+| Сериальная микро-драма, brainrot | **Serial Drama** (Kling I2V + Kokoro TTS + Lipsync) | 3-5 клипов × 5-10s, Pixar 3D стиль. См. `rules/serial-drama.md` |
 
 По умолчанию: Approach 1 (дешевле). Если пользователь указал подход — используй его.
 
@@ -188,8 +230,17 @@ clear detailed character design, vertical composition, 9:16 aspect ratio
 ```bash
 $FFMPEG -y -i scene-K.mp4 \
   -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2" \
-  -r 25 -c:v libx264 -pix_fmt yuv420p scene-K-scaled.mp4
+  -r 30 -c:v libx264 -preset slow -crf 10 -pix_fmt yuv420p \
+  -ar 44100 -ac 2 -c:a aac -b:a 128k \
+  scene-K-scaled.mp4
 ```
+
+**Обязательные параметры масштабирования:**
+- `-r 30` — 30 fps (все клипы в одном fps перед склейкой)
+- `-preset slow -crf 10` — высокое качество, без потери битрейта
+- `-ar 44100 -ac 2 -c:a aac -b:a 128k` — нормализация аудио (44100Hz, stereo, AAC 128k)
+
+**КРИТИЧНО:** Все клипы ДОЛЖНЫ иметь одинаковый fps и аудиоформат перед склейкой. Разный fps (24 vs 30) или разный sample rate (24000 vs 44100) вызывает глитчи и зависания.
 
 #### 5.2 Склейка
 
@@ -201,8 +252,13 @@ file 'scene-2-scaled.mp4'
 ...
 EOF
 
-$FFMPEG -y -f concat -safe 0 -i concat-list.txt -c copy final.mp4
+$FFMPEG -y -f concat -safe 0 -i concat-list.txt \
+  -r 30 -c:v libx264 -preset slow -crf 10 \
+  -ar 44100 -ac 2 -c:a aac -b:a 128k \
+  final.mp4
 ```
+
+**ВАЖНО:** Concat с re-encode (`-c:v libx264`), НЕ stream copy (`-c copy`). Stream copy вызывает non-monotonic DTS и наложение кадров между клипами.
 
 **НЕ используй crossfade/xfade.** Разные планы камеры (close-up → wide → low angle) делают каты профессиональными без эффектов перехода.
 
@@ -216,14 +272,16 @@ $FFMPEG -y -f concat -safe 0 -i concat-list.txt -c copy final.mp4
 ```bash
 $FFMPEG -y -i final.mp4 -i bg-music.mp3 \
   -filter_complex "[1:a]volume=0.15[music];[0:a][music]amix=inputs=2:duration=first[aout]" \
-  -map 0:v -map "[aout]" -c:v copy -c:a aac -shortest final-with-music.mp4
+  -map 0:v -map "[aout]" -c:v copy -c:a aac -b:a 128k final-with-music.mp4
 ```
 4. Если видео без аудиодорожки (Approach 1 Ken Burns), просто наложи музыку:
 ```bash
 $FFMPEG -y -i final.mp4 -i bg-music.mp3 \
   -filter_complex "[1:a]volume=0.3[music]" \
-  -map 0:v -map "[music]" -c:v copy -c:a aac -shortest final-with-music.mp4
+  -map 0:v -map "[music]" -c:v copy -c:a aac -b:a 128k final-with-music.mp4
 ```
+
+**НИКОГДА не используй `-shortest`** — обрезает видео до длины аудио.
 
 > Аудио: Veo3 T2V генерирует голос + липсинк. Kling I2V генерирует звуковые эффекты (generate_audio=true).
 > Музыка: опционально наложить фоновый трек из `music/tracks.json` (см. шаг 5.3).
@@ -259,6 +317,7 @@ INSERT INTO video_agent_runs (
 | Approach 2 (I2V) | **$5.00** | Расход > $4.50 |
 | Approach 3 (T2V) | **$10.00** | Расход > $9.00 |
 | News (Veo3 T2V) | **$10.00** | Расход > $9.00 |
+| Serial Drama | **$10.00** | Расход > $9.00 |
 
 Трекинг: после каждой генерации записывай стоимость. Перед следующей — проверяй лимит.
 
