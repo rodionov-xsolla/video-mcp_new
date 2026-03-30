@@ -294,11 +294,11 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 | `aspect_ratio` | enum | Нет | `"9:16"` или `"16:9"`, по умолчанию "16:9" |
 | `duration` | enum | Нет | `"4s"`, `"6s"` или `"8s"`, по умолчанию "8s" |
 | `resolution` | enum | Нет | `"720p"` или `"1080p"`, по умолчанию "720p" |
-| `generate_audio` | boolean | Нет | **Ставь `false`!** По умолчанию true |
+| `generate_audio` | boolean | Нет | По умолчанию true. `true` = голос + звук ($0.40/сек), `false` = только видео ($0.20/сек). Решение определяется файлом формата |
 | `negative_prompt` | string | Нет | Что исключить |
 | `seed` | integer | Нет | Для воспроизводимости |
 
-> **ВАЖНО:** `generate_audio: false` снижает цену вдвое: $0.20/сек вместо $0.40/сек.
+> **generate_audio:** `true` — когда в промпте есть речь (Veo3 генерит голос + липсинк из текста). `false` — чисто визуальный T2V без диалога (экономия 50%). Решение определяется файлом формата.
 
 ### Polling и получение результата
 
@@ -419,8 +419,8 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 ### Polling и получение результата
 
 ```
-Status: https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}/status
-Result: https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
+Status: https://queue.fal.run/fal-ai/kling-video/lipsync/audio-to-video/requests/{REQUEST_ID}/status
+Result: https://queue.fal.run/fal-ai/kling-video/lipsync/audio-to-video/requests/{REQUEST_ID}
 ```
 
 ### Ответ

@@ -22,7 +22,7 @@
 ```
 
 **Правила:**
-- `character_description` берётся из `games/{GAME_TAG}.md` → секция "Character Prompt Blocks"
+- `character_description` берётся из `games/{GAME_TAG}/{GAME_TAG}.md` → секция "Character Prompt Blocks"
 - Если блока нет — напиши сам, максимально детально (8+ визуальных деталей)
 - `environment_description` — конкретная локация из игры, не абстрактная
 - Не используй расплывчатые слова ("красивый", "крутой"). Только конкретика ("silver armor with blue engravings")
@@ -451,46 +451,95 @@ Aggressive forward push through chaos.
 - [ ] Бюджет не превышен (посчитай: N изображений + 1 ref + N анимаций)
 - [ ] `image_prompt` собран по шаблону для каждого клипа
 
-### Дополнительная валидация для формата "serial-drama"
+---
 
-- [ ] `format: "serial-drama"` присутствует
-- [ ] `series_id`, `episode_number`, `retention_strategy`, `cliffhanger` заполнены
-- [ ] Первый клип — HOOK (визуальный парадокс + хук-фраза)
-- [ ] Последний клип — CLIFFHANGER (обрыв на пике)
-- [ ] Каждый клип содержит реплику (TTS через Kokoro, `character_speech: null` в storyboard)
-- [ ] Анимация — ТОЛЬКО микродвижения (нет ходьбы, бега, ударов, прыжков)
-- [ ] Длительность клипов адаптивная: 5s (≤10 слов реплики) или 10s (>10 слов)
-- [ ] Brainrot лексика в диалогах (rizz, sigma, cooked, mogging, negative aura)
-- [ ] Anti-repetition check пройден (нет повторов из последних 8 эпизодов)
-- [ ] Story bible загружена (episode > 1) и будет обновлена после генерации
-- [ ] "TO BE CONTINUED..." overlay запланирован на последние 2 секунды
+## 8. Prompt Consistency (визуальная консистентность через промпты)
 
-#### Motion prompt для serial-drama (Kling I2V, микродвижения)
+**Это главный механизм консистентности.** `image_urls` — слабая подсказка. Промпт — главный инструмент.
 
-Шаблон:
+**Правила:**
+1. `character_description` — **дословно одинаковый** во всех сценах (копируй из visual_identity)
+2. `environment_description` (базовый) — **дословно одинаковый** (копируй из visual_identity)
+3. `style_tags` — **дословно одинаковые** (копируй из visual_identity)
+4. `lighting` и `color_palette` — **дословно одинаковые**
+
+**Что МЕНЯЕТСЯ между сценами:**
+- `character_state` — действие персонажа (стоит → бежит → атакует)
+- `environment_state` — состояние окружения (спокойно → битва → взрыв)
+- `camera_style` — ракурс камеры (low angle → medium shot → close-up)
+
+---
+
+## 9. Мульти-персонажные видео
+
+Если в видео несколько героев (каждый герой = отдельная сцена):
+
+**Reference images:**
+- Генерируй (или используй предоставленный) отдельный reference для КАЖДОГО героя
+- `image_urls` в каждой сцене содержит reference ТОЛЬКО текущего героя сцены
+
+**Visual identity:**
+```json
+{
+  "visual_identity": {
+    "characters": {
+      "Saber": "futuristic cyber warrior, blue-black mech armor...",
+      "Nana": "cute small cat-girl, pink hair, fox ears...",
+      "Alice": "demon queen, crimson bat wings, dark horns..."
+    },
+    "style_tags": "единые для всех",
+    "color_palette": "единые для всех",
+    "lighting": "единые для всех"
+  }
+}
 ```
-Camera [slight push-in / holds steady / drifts slowly].
-[Character] [micro-action: turns head slowly, raises eyebrow, clenches fist].
-[Second micro-action: glances sideways, smirks, eyes widen].
-[Environment: ambient particles drift, neon signs pulse, light shifts].
-Preserve character appearance from reference image.
-```
 
-Примеры:
-- ✅ `Camera holds steady at medium shot. Character turns head slowly to face the viewer, eyebrows raise in surprise, mouth drops slightly open. Background neon signs flicker. Tense stillness.`
-- ✅ `Camera pushes in gently. Character's expression shifts from calm to anger — jaw clenches, fists tighten at sides. Golden particles drift in background. Dramatic tension building.`
-- ❌ `Character walks up to the other player and pushes him` — перемещение + физический контакт
-- ❌ `Character runs across the room and jumps onto the table` — активное движение
+**Правила:**
+- `style_tags`, `lighting`, `color_palette` — **одинаковые** для всех сцен (единство стиля)
+- `character_description` — **разный** для каждой сцены (разные герои)
+- В storyboard каждый клип имеет поле `hero` с именем текущего персонажа
+- Chain reference НЕ используется между сценами разных героев (нет смысла)
 
-### Дополнительная валидация для формата "news"
+### Второстепенные персонажи (на заднем плане)
 
-- [ ] `format: "news"` присутствует
-- [ ] `research.json` сохранён с 3 новостями и источниками
-- [ ] Ровно 3 сцены (студия → поле → студия)
-- [ ] Сцены 1, 3: `role: "anchor"`, сцена 2: `role: "field_reporter"`
-- [ ] `character_speech` ≠ null во ВСЕХ сценах (Veo3 T2V обязателен)
-- [ ] Речь ≤ 25 слов на сцену (8 секунд)
-- [ ] Сцена 2 — другой персонаж (не ведущий)
-- [ ] Два character reference (anchor + reporter)
-- [ ] Chain reference: сцена 3 → сцена 1, сцена 2 без chain
-- [ ] Локация сцены 2 соответствует теме новости #2
+Когда в кадре видны другие персонажи кроме ГГ:
+
+1. **Всегда** включай их описание из `visual_identity.characters` в `image_prompt`
+2. Описание должно быть **КОНКРЕТНЫМ и ЖИВЫМ** — человеческие детали:
+   - ✅ "weathered leather vest, scarred bearded face, sun-darkened skin, tribal tattoos"
+   - ❌ "metal armor, helmet" (модель интерпретирует как робота/киборга)
+3. Минимум 3 "живые" детали: кожа, шрамы, грязь, пот, борода, татуировки
+4. Указывай **их действие:** "stands with arms crossed, smirking menacingly"
+5. Указывай **позицию в кадре:** "in the background, slightly blurred" / "in mid-ground"
+
+### Визуальная логика кадра
+
+При мульти-персонажных сценах:
+
+**В image_prompt:**
+
+| Указание | Зачем | Пример |
+|----------|-------|--------|
+| Позиция персонажа | Модель знает масштаб | "in foreground" / "in background" |
+| Направление тела ГГ | Модель знает ориентацию | "body turned toward the girl, back to the raider" |
+| Действие вторичного | Модель знает что рисовать | "girl walks away with her back to camera" |
+
+**В motion_prompt:**
+
+| Указание | Пример |
+|----------|--------|
+| Направление взгляда | "character's eyes follow the girl leaving" |
+| Кого НЕ смотрит (при неоднозначности) | "ignoring the raider behind" |
+| Направление жеста/руки | "reaches toward the girl with right hand" |
+
+---
+
+## 10. Чеклист перед генерацией
+
+- [ ] Character reference изображение сгенерировано и URL сохранён
+- [ ] Каждая сцена имеет `image_urls` с character-ref + предыдущей сценой
+- [ ] `character_description` идентичен во всех промптах (проверь копипастом)
+- [ ] `environment_description` базовый идентичен во всех промптах
+- [ ] `style_tags`, `lighting`, `color_palette` идентичны
+- [ ] ОДНА модель анимации для всех сцен (не смешивай модели в одном ролике)
+- [ ] `camera_angle` РАЗНЫЙ для каждой соседней сцены

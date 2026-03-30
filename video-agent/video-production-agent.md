@@ -351,9 +351,9 @@ claude -p "
 Идея: ${IDEA}
 
 Правила:
-- Прочитай rules/main.md и rules/fallback.md
-- Прочитай tools/fal-ai.md и tools/ffmpeg.md
-- Прочитай games/${GAME_TAG}.md (если есть) или возьми данные из Google Sheets
+- Прочитай rules/main/workflow.md, rules/main/storyboard.md, rules/main/budgets.md, rules/main/fallback.md
+- Прочитай tools/fal-ai.md и tools/ffmpeg-api.md
+- Прочитай games/${GAME_TAG}/${GAME_TAG}.md
 - Прочитай music/tracks.json для выбора фоновой музыки
 - Сохрани все файлы в ${OUTPUT_DIR}/
 - Залей финальное видео в Supabase Storage
@@ -414,7 +414,7 @@ claude -p "Прочитай данные из Google Sheets Control Center"
 claude -p "Выполни SELECT 1 через Supabase MCP"
 
 # 4. Чтение файлов работает
-claude -p "Прочитай rules/main.md и выведи первую строку"
+claude -p "Прочитай rules/main/workflow.md и выведи первую строку"
 
 # 5. FFmpeg установлен
 ffmpeg -version

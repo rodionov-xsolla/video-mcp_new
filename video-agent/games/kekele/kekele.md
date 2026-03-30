@@ -51,16 +51,6 @@ Kakele Online MMORPG style, colorful cartoon fantasy, vibrant chibi character ar
 
 ---
 
-## Идеи контента
-
-### Approach 2 (I2V)
-- "Game vs Reality: Meet your character IRL" — cartoon + real human side by side
-- "When your RPG character comes to life"
-- "POV: You meet your main in real life"
-- "Which class are you?" — showcase different classes
-
----
-
 ## Character Prompt Blocks
 
 ### Pirate (cartoon)

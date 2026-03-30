@@ -1,3 +1,29 @@
+## Phase Trigger (добавляется к Phase 0)
+
+**Условие:** идея содержит "serial", "episode", "series", "ep1", "ep2", "сериал", или указан `series_id` существующего сериала.
+
+Если формат — serial drama:
+1. Загрузи этот файл (`rules/formats/serial-drama.md`)
+2. Если есть `games/{GAME_TAG}/serial-drama_special.md` → загрузи его тоже
+3. **Episode 1 (новый сериал):**
+   - Инициализируй `games/{GAME_TAG}/serial-drama_story_bible.json` (персонажи, петли, мир)
+   - Сгенерируй character references для всех ключевых персонажей
+4. **Episode N+1 (продолжение):**
+   - Загрузи `games/{GAME_TAG}/serial-drama_story_bible.json`
+   - Выполни State Analysis (статусы персонажей, активные петли, anti-repetition)
+   - Выполни Loop Management (каждые 5 эпизодов: закрой 1 малую петлю, открой 2 новых)
+5. Перейди к Фазе 1 с контекстом Story Bible
+6. **После генерации:** обнови story_bible.json (State Transition)
+   - Обнови characters status, aura_points, relationships
+   - Обнови active_loops / closed_loops
+   - Добавь episode_summary + cliffhanger
+   - Обнови anti_repetition (фразы, хуки, клиффхэнгеры)
+
+**story_bible.json** хранится в `games/{GAME_TAG}/serial-drama_story_bible.json` (персистентный, не в output).
+Эпизоды сохраняются в стандартный output: `output/YYYY-MM-DD/{GAME_TAG}/serial-drama/`
+
+---
+
 # Формат: Serial Drama (Infinite Micro-Drama)
 
 Сериальные микро-драмы с brainrot эстетикой и бесконечным сюжетом. Каждый эпизод — 25-40 секунд, 3-5 клипов, cliffhanger в конце.
@@ -440,7 +466,7 @@ $FFMPEG -y -i final.mp4 \
 
 ## Валидация serial-drama storyboard
 
-Помимо стандартной валидации (из `rules/storyboard.md`), проверь:
+Помимо стандартной валидации (из `rules/main/storyboard.md`), проверь:
 
 - [ ] `format: "serial-drama"` присутствует
 - [ ] `series_id` заполнен
@@ -457,3 +483,42 @@ $FFMPEG -y -i final.mp4 \
 - [ ] `character_speech: null` во ВСЕХ сценах (Kling I2V, голос через TTS)
 - [ ] Story bible загружена (если episode > 1) и будет обновлена после генерации
 - [ ] Anti-repetition check пройден (нет повторов из последних 8 эпизодов)
+
+---
+
+## Consistency
+
+Serial Drama использует стандартные слои консистентности:
+- **Layer 1:** Character Reference — отдельный ref для каждого персонажа
+- **Layer 2:** Chain Reference — стандартные правила (см. workflow.md Phase 3)
+- **Layer 3:** Prompt Consistency — `style_tags`, `lighting`, `color_palette` одинаковые для всех сцен
+
+---
+
+## Валидация (serial-drama specific)
+
+- [ ] `format: "serial-drama"` присутствует
+- [ ] `series_id`, `episode_number`, `retention_strategy`, `cliffhanger` заполнены
+- [ ] Первый клип — HOOK (визуальный парадокс + хук-фраза)
+- [ ] Последний клип — CLIFFHANGER (обрыв на пике)
+- [ ] Каждый клип содержит реплику (TTS через Kokoro, `character_speech: null` в storyboard)
+- [ ] Анимация — ТОЛЬКО микродвижения (нет ходьбы, бега, ударов, прыжков)
+- [ ] Длительность клипов адаптивная: 5s (≤10 слов реплики) или 10s (>10 слов)
+- [ ] Anti-repetition check пройден
+- [ ] Story bible загружена (episode > 1) и будет обновлена после генерации
+- [ ] "TO BE CONTINUED..." overlay запланирован на последние 2 секунды
+
+### Motion prompt для serial-drama (Kling I2V, микродвижения)
+
+Шаблон:
+```
+Camera [slight push-in / holds steady / drifts slowly].
+[Character] [micro-action: turns head slowly, raises eyebrow, clenches fist].
+[Second micro-action: glances sideways, smirks, eyes widen].
+[Environment: ambient particles drift, neon signs pulse, light shifts].
+Preserve character appearance from reference image.
+```
+
+Примеры:
+- ✅ `Camera holds steady at medium shot. Character turns head slowly to face the viewer, eyebrows raise in surprise, mouth drops slightly open. Background neon signs flicker. Tense stillness.`
+- ❌ `Character walks up to the other player and pushes him` — перемещение + физический контакт

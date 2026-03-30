@@ -29,7 +29,7 @@ if [ -f "$AGENT_DIR/.env" ]; then
 fi
 
 # Проверяем обязательные переменные
-for VAR in SJINN_API_KEY SUPABASE_URL SUPABASE_ANON_KEY; do
+for VAR in FAL_KEY SUPABASE_URL SUPABASE_ANON_KEY; do
   if [ -z "${!VAR:-}" ]; then
     echo "ERROR: $VAR is not set in .env"
     exit 1
@@ -75,11 +75,24 @@ while $RUNNING; do
   log "    Game: $GAME_TAG"
   log "    Idea: $IDEA"
 
+  # Определяем формат по ключевым словам
+  IDEA_LOWER=$(echo "$IDEA" | tr '[:upper:]' '[:lower:]')
+  if echo "$IDEA_LOWER" | grep -qE 'news|новости|game news|patch recap|обновление'; then
+    FORMAT="news"
+  elif echo "$IDEA_LOWER" | grep -qE 'serial|episode|series|сериал|ep[0-9]'; then
+    FORMAT="serial-drama"
+  elif echo "$IDEA_LOWER" | grep -qE 'object character|talking object|антропоморф'; then
+    FORMAT="object-character"
+  elif echo "$IDEA_LOWER" | grep -qE 'dual-style|game vs reality|cartoon.*realistic'; then
+    FORMAT="dual-style"
+  else
+    FORMAT="standard"
+  fi
+
   # Создаём output директорию
-  TIMESTAMP=$(date +%Y-%m-%d_%H-%M)
-  SLUG=$(echo "$IDEA" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-' | head -c 30)
-  OUTPUT_DIR="$AGENT_DIR/output/${TIMESTAMP}_${GAME_TAG}_${SLUG}"
-  mkdir -p "$OUTPUT_DIR"
+  DATE_DIR=$(date +%Y-%m-%d)
+  OUTPUT_DIR="$AGENT_DIR/output/${DATE_DIR}/${GAME_TAG}/${FORMAT}"
+  mkdir -p "$OUTPUT_DIR/scenes/refs"
 
   log "    Output: $OUTPUT_DIR"
 
@@ -90,32 +103,35 @@ while $RUNNING; do
 - task_id: ${TASK_ID}
 - game_tag: ${GAME_TAG}
 - idea: ${IDEA}
+- format: ${FORMAT}
 - output_dir: ${OUTPUT_DIR}
 
 ОБЯЗАТЕЛЬНЫЙ ПОРЯДОК:
-1. Прочитай ВСЕ правила: rules/main.md, rules/storyboard.md, rules/consistency.md, rules/fallback.md
+1. Прочитай rules/main/workflow.md, rules/main/storyboard.md, rules/main/budgets.md, rules/main/fallback.md
 2. Прочитай providers.json
-3. Прочитай games/${GAME_TAG}.md (если есть)
-4. Если видео dual-style — прочитай rules/dual-style.md
-5. Создай storyboard.json в ${OUTPUT_DIR}/
-6. Выполни все 6 фаз pipeline (image gen → I2V → FFmpeg assembly)
-7. Загрузи final.mp4 в Supabase Storage (bucket: videos, path: videos/${GAME_TAG}/${TIMESTAMP}_final.mp4)
-8. Обнови статус задачи: bash ${SCRIPT_DIR}/update-task.sh ${TASK_ID} completed <VIDEO_URL>
+3. Прочитай tools-файлы активных провайдеров (tools/fal-ai.md, tools/ffmpeg-api.md)
+4. Прочитай games/${GAME_TAG}/${GAME_TAG}.md
+5. Прочитай rules/formats/${FORMAT}.md — правила формата
+6. Если есть games/${GAME_TAG}/${FORMAT}_special.md — прочитай его тоже
+7. Создай storyboard.json в ${OUTPUT_DIR}/
+8. Выполни все 6 фаз pipeline
+9. Загрузи final.mp4 в Supabase Storage (bucket: videos, path: videos/${GAME_TAG}/${DATE_DIR}_final.mp4)
+10. Обнови статус задачи: bash ${SCRIPT_DIR}/update-task.sh ${TASK_ID} completed <VIDEO_URL>
 
 ПРИ ОШИБКЕ:
 - bash ${SCRIPT_DIR}/update-task.sh ${TASK_ID} failed \"описание ошибки\"
 
 КРИТИЧЕСКИЕ ПРАВИЛА:
+- Модель генерации определяется файлом формата (rules/formats/${FORMAT}.md)
 - СНАЧАЛА storyboard.json, ПОТОМ генерация
-- В motion_prompt ОБЯЗАТЕЛЬНО включи ТОЧНЫЙ текст character_speech
-- Используй ОДНУ I2V модель для ВСЕХ сцен
+- Используй ОДНУ модель анимации для ВСЕХ сцен видео
 - camera_angle РАЗНЫЙ для соседних сцен
 - Склейка через hard cut (concat), НЕ crossfade
-- Минимум 2 действия в каждом 8-сек клипе
-- Последовательная генерация I2V с валидацией размера файла
-- СТРОГИЙ ТАЙМАУТ POLLING: при polling SJinn считай elapsed время. Если прошло больше 600 секунд (10 мин) для одной генерации — ПРЕКРАТИ polling, считай задачу failed и переходи к fallback модели (Veo3→Grok→Ken Burns)
-- Если polling не даёт обновлений 3 минуты подряд — считай задачу зависшей и переходи к fallback
-- НЕ ЗАЦИКЛИВАЙСЯ на polling — максимум 1 retry на генерацию"
+- Минимум 2 действия в каждом клипе
+- Последовательная генерация с валидацией размера файла
+- Сохрани все файлы в ${OUTPUT_DIR}/ (сцены в scenes/scene-N/, refs в scenes/refs/)
+- Финальное видео: ${OUTPUT_DIR}/final.mp4
+- ОБЯЗАТЕЛЬНО покажи отчёт о стоимости после генерации"
 
   # Переходим в директорию агента (claude -p использует относительные пути)
   cd "$AGENT_DIR"
