@@ -1,4 +1,4 @@
-# Правила dual-style генерации (Cartoon + Realistic)
+# Формат "Dual-Style" — Cartoon + Realistic
 
 Концепт: в одном кадре — cartoon/chibi игровой персонаж рядом с его фотореалистичной человеческой "копией".
 
@@ -10,6 +10,28 @@
 - Сравнение игрового персонажа с реальным человеком
 - Cosplay-контент
 - "Which character are you?"
+
+---
+
+## Обзор формата
+
+- **Концепт:** cartoon + realistic версия одного персонажа рядом в кадре
+- **Модель:** Kling 2.6 Pro I2V (`generate_audio: true`)
+- **Аудио:** Kling SFX (звуковые эффекты)
+- **Речь:** нет (`character_speech: null`)
+- **Длительность:** 15-30 сек (3 клипа × 5-10s)
+- **Бюджет:** $5 максимум
+
+---
+
+## ФАЗА 0: ИНИЦИАЛИЗАЦИЯ
+
+1. Загрузить `tools/fal-ai.md` — API reference
+2. Загрузить `rules/main/storyboard.md` — правила промптинга + консистентность
+3. Загрузить `rules/main/fallback.md` — обработка ошибок
+4. Загрузить `games/{GAME_TAG}/{GAME_TAG}.md` — конфиг игры
+5. Проверить наличие dual-style Character Prompt Blocks в game config (cartoon + realistic версии)
+6. Определить персонажей для каждого клипа
 
 ---
 
@@ -68,7 +90,7 @@ Cartoon-версия ОБЯЗАНА содержать маркеры стиля
 
 - Используй **игровой ассет** (скриншот, character card) как `image_urls[0]`
 - Это помогает AI модели "увидеть" cartoon-стиль персонажа
-- **НЕ используй chain reference** между клипами разных персонажей (per consistency.md)
+- **НЕ используй chain reference** между клипами разных персонажей
 
 ---
 
@@ -104,7 +126,7 @@ Cartoon-версия ОБЯЗАНА содержать маркеры стиля
 
 ## Character Prompt Blocks для dual-style
 
-В `games/{game}.md` описывай ДВЕ версии каждого персонажа:
+В `games/{GAME_TAG}/{GAME_TAG}.md` описывай ДВЕ версии каждого персонажа:
 
 ```markdown
 ### Hero Name (cartoon)
@@ -116,6 +138,35 @@ Cartoon-версия ОБЯЗАНА содержать маркеры стиля
 
 ---
 
+## Бюджет
+
+| Компонент | Стоимость |
+|-----------|-----------|
+| Character reference (game asset или Nano Banana 2) | $0.04/шт |
+| Scene images (3 × Nano Banana 2) | $0.12 |
+| Kling I2V (3 × 5-10s, с аудио) | 15-30s × $0.14 = $2.10-$4.20 |
+| FFmpeg (локальный) | $0.00 |
+| **Итого** | **~$2.50-$4.50** |
+
+**Лимит:** $5.00. Остановись если расход > $4.50.
+
+---
+
+## Валидация
+
+- [ ] Cartoon маркеры присутствуют в image_prompt (bold outlines, flat colors, exaggerated proportions)
+- [ ] Realistic маркеры присутствуют в image_prompt (photorealistic, real skin textures)
+- [ ] Костюм/поза/детали совпадают между cartoon и realistic версиями
+- [ ] Позиционирование: cartoon на одной стороне, realistic на другой (фиксировано)
+- [ ] `character_speech: null` для всех клипов
+- [ ] `camera_angle` разный для каждого соседнего клипа
+- [ ] `style_tags` включают оба стиля (cartoon + realistic)
+- [ ] `lighting` и `color_palette` одинаковые для всех сцен
+- [ ] Chain reference между клипами разных персонажей НЕ используется
+- [ ] Бюджет не превышен ($5.00)
+
+---
+
 ## Анти-паттерны
 
 - ❌ Только "cartoon style" без конкретных маркеров (bold outlines, flat colors) — AI сделает semi-realistic
@@ -123,6 +174,27 @@ Cartoon-версия ОБЯЗАНА содержать маркеры стиля
 - ❌ Реалистичная версия без "живых" деталей (кожа, текстуры) — получится 3D рендер, не человек
 - ❌ Chain reference между клипами разных персонажей — сломает внешность
 - ❌ Попытка сделать cartoon и realistic одинакового размера в промпте — пусть chibi будет меньше
+
+---
+
+## Выходные файлы
+
+```
+OUTPUT_DIR/
+├── storyboard.json
+├── scenes/
+│   ├── refs/
+│   │   └── character-ref.png      # Game asset или сгенерированный ref
+│   ├── scene-1/
+│   │   ├── scene-1.png
+│   │   ├── scene-1.mp4
+│   │   └── scene-1-scaled.mp4
+│   ├── scene-2/
+│   │   └── ...
+│   └── scene-3/
+│       └── ...
+└── final.mp4
+```
 
 ---
 
