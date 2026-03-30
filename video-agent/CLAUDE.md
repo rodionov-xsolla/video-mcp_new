@@ -25,6 +25,8 @@ AI Video Production Agent — автономный pipeline для создан�
 | "serial", "episode", "series", "сериал" | Serial Drama | `rules/formats/serial-drama.md` |
 | "object character", "talking object", "антропоморф" | Object Character | `rules/formats/object-character.md` |
 | "dual-style", "game vs reality" | Dual-style | `rules/formats/dual-style.md` |
+| "gameplay ai avatar", "ai avatar", "talking head", "offerwall", "offer", "оффер" | Gameplay AI Avatar | `rules/formats/gameplay-ai-avatar.md` |
+| "dance battle", "dance", "танцевальный батл", "танец", "dance off" | Dance Battle | `rules/formats/dance-battle.md` |
 | Всё остальное | Standard | `rules/formats/standard.md` |
 
 Если есть game-specific файл для формата: `games/{GAME_TAG}/{format}_special.md` → загрузи его тоже.
@@ -65,6 +67,8 @@ AI Video Production Agent — автономный pipeline для создан�
 | News | Новости: ведущий в студии + репортёр | `rules/formats/news.md` |
 | Object Character | Антропоморфные объекты с монологом | `rules/formats/object-character.md` |
 | Serial Drama | Сериальные микро-драмы с brainrot | `rules/formats/serial-drama.md` |
+| Gameplay AI Avatar | Говорящая голова + геймплей, продвижение офферов | `rules/formats/gameplay-ai-avatar.md` |
+| Dance Battle | Комедийные танцевальные батлы двух персонажей | `rules/formats/dance-battle.md` |
 
 ## API
 
@@ -81,6 +85,8 @@ AI Video Production Agent — автономный pipeline для создан�
 | Veo3 T2V (video + voice) | `fal-ai/veo3` | $0.20-$0.40/сек |
 | Kokoro TTS (voice) | `fal-ai/kokoro/american-english` | ~$0.02/запрос |
 | Kling Lipsync (lip sync) | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/сек |
+| HeyGen Avatar IV (avatar+voice) | `fal-ai/heygen/avatar4/image-to-video` | $0.10/сек |
+| Kling Avatar v2 Standard (avatar) | `fal-ai/kling-video/ai-avatar/v2/standard` | $0.056/сек |
 
 ### FFmpeg
 - Локальный: `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`

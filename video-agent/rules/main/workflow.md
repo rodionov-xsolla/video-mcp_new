@@ -31,6 +31,8 @@
    - "serial", "episode", "series", "ep1", "ep2", "сериал" → загрузи `rules/formats/serial-drama.md`
    - "object character", "антропоморф", "talking object", предмет с эмоциями → загрузи `rules/formats/object-character.md`
    - "dual-style", "game vs reality", "cartoon + realistic" → загрузи `rules/formats/dual-style.md`
+   - "gameplay ai avatar", "ai avatar", "talking head", "offerwall", "offer", "оффер", "бонус", "free diamonds" → загрузи `rules/formats/gameplay-ai-avatar.md`
+   - "dance battle", "dance", "танцевальный батл", "танец", "dance off", "dance competition" → загрузи `rules/formats/dance-battle.md`
    - Иначе → загрузи `rules/formats/standard.md`
 
    Если есть game-specific файл для формата (`games/{GAME_TAG}/{format}_special.md`) → загрузи его тоже.

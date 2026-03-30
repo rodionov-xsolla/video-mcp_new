@@ -444,6 +444,132 @@ Image → Kling I2V (анимация + SFX) → Kokoro TTS (голос) → Kli
 
 ---
 
+## 6. HeyGen Avatar IV — Text-to-Avatar Video (голос + видео в одном)
+
+**Endpoint:** `https://queue.fal.run/fal-ai/heygen/avatar4/image-to-video`
+**Метод:** POST (асинхронный — нужен polling)
+**Стоимость:** $0.10/сек
+
+> Принимает изображение + текст скрипта → генерирует talking head видео с голосом, lipsync, мимикой и жестами рук. Голос генерируется внутри модели — отдельный TTS не нужен.
+
+### Запрос
+
+```bash
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/heygen/avatar4/image-to-video" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "image_url": "https://fal.media/files/abc123/avatar-ref.png",
+    "script": "Yo, why is nobody talking about this? They are literally giving away 500 free diamonds right now! All you gotta do is download the game through the link in my bio and reach level 10.",
+    "voice_id": "...",
+    "custom_motion_prompt": "energetic gaming blogger speaking to camera, natural hand gestures, nodding"
+  }')
+
+REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
+```
+
+### Параметры
+
+| Параметр | Тип | Обязательный | Описание |
+|----------|-----|-------------|----------|
+| `image_url` | string | Да | URL изображения аватара (portrait, upper body, смотрит в камеру) |
+| `script` | string | Да | Текст, который аватар произнесёт. Модель сама генерирует голос и lipsync |
+| `voice_id` | string | Нет | Имя голоса из списка HeyGen (300+ голосов, 175+ языков). EN рекомендации: `Chill Brian`, `Bold Blake`, `Ivy`, `Cute Chloe - Friendly` |
+| `custom_motion_prompt` | string | Нет | Описание жестов и движений ("energetic blogger, hand gestures"). **Именно `custom_motion_prompt`**, НЕ `motion_prompt` |
+
+### Polling и получение результата
+
+```bash
+# Проверяй каждые 15 секунд
+while true; do
+  STATUS=$(curl -s "https://queue.fal.run/fal-ai/heygen/avatar4/image-to-video/requests/$REQUEST_ID/status" \
+    -H "Authorization: Key $FAL_KEY" | jq -r '.status')
+  case "$STATUS" in
+    "COMPLETED") break ;;
+    "FAILED") echo "FAILED"; exit 1 ;;
+    *) sleep 15 ;;
+  esac
+done
+
+RESULT=$(curl -s "https://queue.fal.run/fal-ai/heygen/avatar4/image-to-video/requests/$REQUEST_ID" \
+  -H "Authorization: Key $FAL_KEY")
+VIDEO_URL=$(echo "$RESULT" | jq -r '.video.url')
+curl -s -o avatar.mp4 "$VIDEO_URL"
+```
+
+### Ответ
+
+```json
+{
+  "video": {
+    "url": "https://fal.media/files/abc123/output.mp4",
+    "content_type": "video/mp4"
+  }
+}
+```
+
+### Доступные голоса (примеры)
+
+300+ голосов на 175+ языках. Популярные для gaming-контента:
+
+**EN мужские:** `Chill Brian`, `Andrew Rizz`, `Bold Blake`, `Jack Sterling - Broadcaster`, `Expressive Evan`, `Mellow Marcus`
+**EN женские:** `Ivy`, `Cute Chloe - Friendly`, `Feisty Fiona - Excited`, `Ellie Faye - Excited`, `Willow`
+**Универсальные:** `Warm Pro Narrator`, `Professor Dean`, `Radio Rick`
+
+> Полный список голосов: проверь через fal.ai playground на странице модели.
+
+> **Используется для формата Gameplay AI Avatar.** Один вызов = голос + lipsync + мимика + жесты. Отдельный TTS не нужен.
+
+---
+
+## 7. Kling Avatar v2 — Image + Audio to Avatar Video (fallback)
+
+**Endpoint (Standard):** `https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/standard`
+**Endpoint (Pro):** `https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/pro`
+**Метод:** POST (асинхронный — нужен polling)
+**Стоимость:** $0.056/сек (Standard), $0.115/сек (Pro)
+
+> Принимает изображение + аудио → генерирует talking head с lipsync. В отличие от HeyGen, требует отдельный TTS для генерации аудио.
+
+### Запрос
+
+```bash
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/standard" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "image_url": "https://fal.media/files/abc123/avatar-ref.png",
+    "audio_url": "https://fal.media/files/abc123/speech.wav"
+  }')
+
+REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
+```
+
+### Параметры
+
+| Параметр | Тип | Обязательный | Описание |
+|----------|-----|-------------|----------|
+| `image_url` | string | Да | URL изображения аватара |
+| `audio_url` | string | Да | URL аудиофайла (WAV/MP3) — из Kokoro TTS или другого TTS |
+
+### Polling
+
+Аналогично другим Kling endpoints:
+```
+Status: https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/standard/requests/{REQUEST_ID}/status
+Result: https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/standard/requests/{REQUEST_ID}
+```
+
+### Пайплайн с Kling Avatar v2 (fallback для Gameplay AI Avatar)
+
+```
+Nano Banana 2 (avatar ref) → Kokoro TTS (speech.wav) → Kling Avatar v2 (image + audio → avatar.mp4) → FFmpeg split-screen
+```
+
+> **Используй как fallback**, если HeyGen Avatar IV не работает. Дешевле ($0.056/сек vs $0.10/сек), но требует отдельный TTS.
+
+---
+
 ## Важные правила
 
 1. **Всегда скачивай файлы** после генерации. fal.ai URL-ы временные.
