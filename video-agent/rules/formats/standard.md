@@ -1,16 +1,39 @@
-# Формат: Standard (I2V / T2V)
+# Формат "Standard" — I2V / T2V
 
-Стандартный формат видео. Используется по умолчанию, если идея не соответствует специальным форматам (news, serial-drama, object-character, dual-style).
+Стандартный формат видео. Используется по умолчанию, если идея не соответствует специальным форматам (news, serial-drama, object-character, dual-style, gameplay-ai-avatar, dance-battle).
 
 ---
 
-## Детекция формата
+## Когда использовать
 
 Формат "standard" активируется если IDEA НЕ содержит ключевых слов других форматов:
 - Не "news/новости/patch recap" (→ news)
 - Не "serial/episode/сериал" (→ serial-drama)
 - Не "object character/talking object" (→ object-character)
 - Не "dual-style/game vs reality" (→ dual-style)
+- Не "gameplay ai avatar/offerwall/offer" (→ gameplay-ai-avatar)
+- Не "dance battle/танцевальный батл" (→ dance-battle)
+
+---
+
+## Обзор формата
+
+- **Концепт:** универсальный формат для экшена, стендапов, гайдов, рейтингов, трейлеров
+- **Модель (без речи):** Kling 2.6 Pro I2V (`generate_audio: true`)
+- **Модель (с речью):** Veo3 T2V (`generate_audio: true`)
+- **Длительность:** 15-30 сек (3 клипа × 5-10s)
+- **Бюджет:** $5 (I2V) / $10 (T2V)
+
+---
+
+## ФАЗА 0: ИНИЦИАЛИЗАЦИЯ
+
+1. Загрузить `tools/fal-ai.md` — API reference
+2. Загрузить `rules/main/storyboard.md` — правила промптинга + консистентность
+3. Загрузить `rules/main/fallback.md` — обработка ошибок
+4. Загрузить `games/{GAME_TAG}/{GAME_TAG}.md` — конфиг игры
+5. *(опционально)* Загрузить `music/tracks.json` — фоновая музыка
+6. Определить наличие речи в идее → выбор модели (Kling I2V или Veo3 T2V)
 
 ---
 
@@ -83,9 +106,58 @@
 
 ---
 
+## Валидация
+
+- [ ] `format: "standard"` присутствует в storyboard
+- [ ] Подход (approach) соответствует типу контента
+- [ ] `character_speech` ≠ null → модель Veo3 T2V; `character_speech` = null → Kling I2V
+- [ ] Одна модель на все сцены (не миксовать Kling + Veo3)
+- [ ] `camera_angle` разный для каждого соседнего клипа
+- [ ] `motion_prompt` содержит минимум 2 действия
+- [ ] `image_prompt` содержит "vertical composition, 9:16 aspect ratio"
+- [ ] Если речь → текст включён в `motion_prompt` (Veo3)
+- [ ] Если без речи → `motion_prompt` НЕ содержит текст речи
+- [ ] Бюджет не превышен ($5 I2V / $10 T2V)
+- [ ] Character Reference → chain reference для консистентности (см. `rules/main/storyboard.md`)
+
+---
+
+## Анти-паттерны
+
+**НЕ делай:**
+- Не миксуй Kling I2V и Veo3 T2V в одном видео — разная пластика и цветовая температура
+- Не передавай `character_speech` в Kling I2V — модель не генерирует голос
+- Не делай больше 4 клипов без обоснования — каждый клип должен нести уникальное действие
+- Не используй абстрактные термины в промптах для Kling: "nice background", "good lighting", "dynamic pose"
+- Не используй `end_image_url` — только hard cut между разными планами камеры
+- Не используй `-shortest` в FFmpeg — обрезает видео до длины аудио
+
+---
+
+## Выходные файлы
+
+```
+OUTPUT_DIR/
+├── storyboard.json
+├── scenes/
+│   ├── refs/
+│   │   └── character-ref.png
+│   ├── scene-1/
+│   │   ├── scene-1.png
+│   │   ├── scene-1.mp4
+│   │   └── scene-1-scaled.mp4
+│   ├── scene-2/
+│   │   └── ...
+│   └── scene-3/
+│       └── ...
+└── final.mp4
+```
+
+---
+
 ## Consistency
 
 Стандартный формат использует все три слоя консистентности:
-- **Layer 1:** Character Reference (anchor image) — см. workflow.md Phase 2
-- **Layer 2:** Chain Reference (предыдущая сцена) — см. workflow.md Phase 3
-- **Layer 3:** Prompt Consistency — см. storyboard.md секция 8
+- **Layer 1:** Character Reference (anchor image) — см. `rules/main/storyboard.md`
+- **Layer 2:** Chain Reference (предыдущая сцена) — см. `rules/main/storyboard.md`
+- **Layer 3:** Prompt Consistency — единый стиль через все клипы

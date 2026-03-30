@@ -1,19 +1,43 @@
-## Phase Trigger (добавляется к Phase 0)
+# Формат "Serial Drama" — Сериальные микро-драмы
 
-**Условие:** идея содержит "serial", "episode", "series", "ep1", "ep2", "сериал", или указан `series_id` существующего сериала.
+Сериальные микро-драмы с brainrot эстетикой и бесконечным сюжетом. Каждый эпизод — 25-40 секунд, 3-5 клипов, cliffhanger в конце.
 
-Если формат — serial drama:
-1. Загрузи этот файл (`rules/formats/serial-drama.md`)
-2. Если есть `games/{GAME_TAG}/serial-drama_special.md` → загрузи его тоже
-3. **Episode 1 (новый сериал):**
+---
+
+## Когда использовать
+
+Идея содержит ключевые слова: "serial", "episode", "series", "ep1", "ep2", "сериал", или указан `series_id` существующего сериала.
+
+---
+
+## Обзор формата
+
+- **Концепт:** бесконечные микро-драмы с brainrot эстетикой, cliffhanger-ы, петли сюжета
+- **Модель:** Kling 2.6 Pro I2V (`generate_audio: false`)
+- **Аудио:** Kokoro TTS (озвучка) + Kling Lipsync (опционально для крупных планов)
+- **Речь:** через TTS overlay, `character_speech: null` в storyboard
+- **Длительность:** 25-40 сек (3-5 клипов × 5-10s)
+- **Бюджет:** $10 максимум на эпизод
+- **Стиль:** Pixar/Disney 3D render
+
+---
+
+## ФАЗА 0: ИНИЦИАЛИЗАЦИЯ
+
+1. Загрузить `tools/fal-ai.md` — API reference
+2. Загрузить `rules/main/storyboard.md` — правила промптинга + консистентность
+3. Загрузить `rules/main/fallback.md` — обработка ошибок
+4. Загрузить `games/{GAME_TAG}/{GAME_TAG}.md` — конфиг игры
+5. Если есть `games/{GAME_TAG}/serial-drama_special.md` → загрузить
+6. **Episode 1 (новый сериал):**
    - Инициализируй `games/{GAME_TAG}/serial-drama_story_bible.json` (персонажи, петли, мир)
    - Сгенерируй character references для всех ключевых персонажей
-4. **Episode N+1 (продолжение):**
+7. **Episode N+1 (продолжение):**
    - Загрузи `games/{GAME_TAG}/serial-drama_story_bible.json`
    - Выполни State Analysis (статусы персонажей, активные петли, anti-repetition)
    - Выполни Loop Management (каждые 5 эпизодов: закрой 1 малую петлю, открой 2 новых)
-5. Перейди к Фазе 1 с контекстом Story Bible
-6. **После генерации:** обнови story_bible.json (State Transition)
+8. Перейди к Фазе 1 с контекстом Story Bible
+9. **После генерации:** обнови story_bible.json (State Transition)
    - Обнови characters status, aura_points, relationships
    - Обнови active_loops / closed_loops
    - Добавь episode_summary + cliffhanger
@@ -21,20 +45,6 @@
 
 **story_bible.json** хранится в `games/{GAME_TAG}/serial-drama_story_bible.json` (персистентный, не в output).
 Эпизоды сохраняются в стандартный output: `output/YYYY-MM-DD/{GAME_TAG}/serial-drama/`
-
----
-
-# Формат: Serial Drama (Infinite Micro-Drama)
-
-Сериальные микро-драмы с brainrot эстетикой и бесконечным сюжетом. Каждый эпизод — 25-40 секунд, 3-5 клипов, cliffhanger в конце.
-
----
-
-## Детекция формата
-
-Формат "serial-drama" активируется если IDEA содержит:
-- "serial", "episode", "series", "ep1", "ep2", "сериал"
-- ИЛИ указан `series_id` существующего сериала
 
 ---
 
@@ -507,6 +517,46 @@ Serial Drama использует стандартные слои консист
 - [ ] Anti-repetition check пройден
 - [ ] Story bible загружена (episode > 1) и будет обновлена после генерации
 - [ ] "TO BE CONTINUED..." overlay запланирован на последние 2 секунды
+
+---
+
+## Анти-паттерны
+
+**НЕ делай:**
+- Не используй `generate_audio: true` — Kling-генерированный голос плохого качества, речь только через Kokoro TTS
+- Не используй Veo3 T2V для этого формата — только Kling I2V
+- Не давай персонажам активных действий (ходьба, бег, прыжки, удары) — только микро-движения
+- Не превышай 25 слов на реплику TTS — не уложится в 10 сек
+- Не используй `-shortest` в FFmpeg — обрезает видео до длины аудио
+- Не закрывай все сюжетные петли — всегда должен оставаться открытый cliffhanger
+- Не повторяй хуки/клиффхэнгеры из последних 8 эпизодов (anti-repetition)
+
+---
+
+## Выходные файлы
+
+```
+OUTPUT_DIR/
+├── storyboard.json
+├── scenes/
+│   ├── refs/
+│   │   ├── character-ref-{name}.png
+│   │   └── ...
+│   ├── scene-1/
+│   │   ├── scene-1.png
+│   │   ├── scene-1.mp4
+│   │   ├── scene-1-scaled.mp4
+│   │   └── tts-1.wav
+│   ├── scene-2/
+│   │   └── ...
+│   └── scene-N/
+│       └── ...
+└── final.mp4
+```
+
+**Также:** `games/{GAME_TAG}/serial-drama_story_bible.json` — персистентный, обновляется после каждого эпизода.
+
+---
 
 ### Motion prompt для serial-drama (Kling I2V, микродвижения)
 

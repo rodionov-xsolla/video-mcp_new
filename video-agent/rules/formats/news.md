@@ -1,12 +1,11 @@
-## Phase Trigger (добавляется к Phase 0)
+## ФАЗА 0: ИНИЦИАЛИЗАЦИЯ
 
-**Условие:** идея содержит "новости", "news", "game news", "weekly news", "patch recap", "обновление".
-
-Если формат — новости:
-1. Загрузи этот файл (`rules/formats/news.md`)
-2. Если есть `games/{GAME_TAG}/news_special.md` → загрузи его тоже
-3. Выполни ФАЗУ 0.5 (Исследование) описанную ниже
-4. Перейди к Фазе 1 с данными исследования
+1. Загрузить `tools/fal-ai.md` — API reference
+2. Загрузить `rules/main/storyboard.md` — правила промптинга + консистентность
+3. Загрузить `rules/main/fallback.md` — обработка ошибок
+4. Загрузить `games/{GAME_TAG}/{GAME_TAG}.md` — конфиг игры
+5. Если есть `games/{GAME_TAG}/news_special.md` → загрузить
+6. Перейти к ФАЗЕ 0.5 (Исследование) описанной ниже
 
 ---
 
@@ -397,16 +396,38 @@ $FFMPEG -y -loop 1 -i title-card.png -vf "zoompan=z=zoom+0.003:x=iw/2-(iw/zoom/2
 - [ ] `image_urls` не передаётся как пустой массив (либо с URL, либо без поля)
 - [ ] `show_name` из конфига игры
 
-### Дополнительная валидация (news-specific)
+---
 
-- [ ] `format: "news"` присутствует
-- [ ] `research.json` сохранён с 3 новостями и источниками
-- [ ] Ровно 3 основные сцены + title card (студия → поле → студия)
-- [ ] Сцены 1, 3: `role: "anchor"`, сцена 2: `role: "field_reporter"`
-- [ ] `character_speech` ≠ null во ВСЕХ сценах
-- [ ] Речь ≤ 25 слов на сцену (8 секунд)
-- [ ] Сцена 2 — другой персонаж (не ведущий)
-- [ ] Два character reference (anchor + reporter)
-- [ ] Chain reference: сцена 3 → сцена 1, сцена 2 без chain
-- [ ] Локация сцены 2 соответствует теме новости #2
-- [ ] Стилистика character ref совпадает со стилистикой видео
+## Анти-паттерны
+
+**НЕ делай:**
+- Не используй Kling I2V для этого формата — только Veo3 T2V (персонажи говорят)
+- Не превышай 25 слов на сцену — Veo3 не уложит длинную речь в 8 секунд
+- Не используй chain reference между сценами anchor и reporter — это разные персонажи
+- Не делай локацию репортажа (сцена 2) generic ("game world") — привязывай к конкретной новости
+- Не используй одинаковый `camera_angle` для соседних сцен
+- Не пропускай фазу исследования (ФАЗА 0.5) — новости должны быть реальными и актуальными
+
+---
+
+## Выходные файлы
+
+```
+OUTPUT_DIR/
+├── storyboard.json
+├── research.json
+├── scenes/
+│   ├── refs/
+│   │   ├── character-ref-anchor.png
+│   │   └── character-ref-reporter.png
+│   ├── title-card/
+│   │   ├── title-card.png
+│   │   └── title-card.mp4
+│   ├── scene-1/
+│   │   └── scene-1.mp4
+│   ├── scene-2/
+│   │   └── scene-2.mp4
+│   └── scene-3/
+│       └── scene-3.mp4
+└── final.mp4
+```
