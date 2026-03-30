@@ -59,25 +59,6 @@ Oxide Survival Island game style, semi-realistic 3D graphics, tropical island su
 
 ---
 
-## Идеи контента по подходам
-
-### Approach 1 (Ken Burns)
-- "Top 5 mistakes every Oxide noob makes"
-- "Best starter base designs"
-- "How to survive your first day"
-
-### Approach 2 (I2V)
-- "Day 1 as a noob — comedy survival story"
-- "The raider who lost everything"
-- "From noob to pro — the journey"
-- "When you hear C4 at 3 AM"
-
-### Approach 3 (T2V)
-- "Cinematic island survival trailer"
-- "Epic raid defense montage"
-
----
-
 ## Character Prompt Blocks
 
 ### Noob (main character for comedy stories)

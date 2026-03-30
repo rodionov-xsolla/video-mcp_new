@@ -68,28 +68,6 @@ Roblox-inspired Pixar-style 3D animation, blocky stylized characters, smooth pla
 
 ---
 
-## Идеи контента
-
-### Serial Drama (основной формат)
-- "The Secret Millionaire Noob" — нуб оказывается богачом, месть буллерам
-- "Bacon Hair Revenge Arc" — бекон-хейр прокачивается и возвращается
-- "Slender vs Noob: Server War" — война между группировками
-- "The Preppy Who Scammed Everyone" — девочка-скамер раскрыта
-- "Sigma Grindset: From Nothing to Legend" — путь от нуба до сигмы
-- "Love Triangle in Adopt Me" — драма между тремя персонажами
-- "The Hacker Who Changed Everything" — хакер ломает сервер, последствия
-
-### Approach 2 (I2V Kling) — если нужны отдельные видео
-- "Types of Roblox players"
-- "POV: You meet a hacker"
-- "When the noob turns out to be a pro"
-
-### Approach 1 (Ken Burns)
-- "Top 5 rarest items in Roblox"
-- "Best Roblox games 2026"
-
----
-
 ## Character Prompt Blocks
 
 Готовые `character_description` для вставки в visual_identity. Копируй дословно.
@@ -114,25 +92,3 @@ Roblox-inspired Pixar-style 3D animation, blocky stylized characters, smooth pla
 
 ### Builder
 `Roblox-style blocky humanoid wearing bright orange safety vest over blue work shirt, yellow hard hat with scratches, tool belt with hammer and wrench, brown work boots, determined focused expression, slightly dusty texture, practical sturdy build proportions`
-
----
-
-## Serial Drama Config
-
-### Стиль для serial-drama формата
-```
-Roblox-inspired Pixar-style 3D animation, blocky stylized characters, smooth plastic-like skin texture, expressive exaggerated cartoon faces, vibrant saturated colors, soft ambient lighting, cinematic depth of field, toy-like proportions, dramatic emotional expressions
-```
-
-### Типичные локации
-- **Server Lobby:** открытое пространство с неоновыми вывесками, спаун-поинт, floating UI elements
-- **Rich Player's Mansion:** гигантский дом из золотых блоков, фонтан, luxury cars на подъезде
-- **Dark Alley:** узкий проход между блочными зданиями, неоновые вывески, тени, мусорные блоки
-- **Adopt Me Playground:** яркая детская площадка, питомцы, радуга, пастельные цвета
-- **Battle Arena:** каменная арена с трибунами, факелы, драматичное освещение
-- **School Hallway:** блочный школьный коридор, локеры, флуоресцентное освещение
-
-### Музыка
-- **Mood:** dramatic, emotional, comedic
-- **BPM:** 100-130
-- **Рекомендуемые жанры:** lo-fi beats (грустные моменты), trap beats (драматичные), comedy stings (повороты сюжета)

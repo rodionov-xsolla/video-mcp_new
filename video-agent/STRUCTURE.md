@@ -1,0 +1,152 @@
+# Структура проекта Video Production Agent
+
+Правила организации файлов и директорий.
+
+---
+
+## Директории
+
+| Директория | Назначение |
+|---|---|
+| `rules/main/` | Основные правила pipeline: workflow, storyboard, budgets, fallback. Универсальные для ВСЕХ форматов. |
+| `rules/formats/` | Правила форматов видео. Каждый формат — отдельный самодостаточный файл. |
+| `games/{tag}/` | Конфиги игр. Каждая игра — отдельная папка. |
+| `tools/` | API-документация внешних сервисов (fal.ai, FFmpeg, Sjinn). |
+| `music/` | Фоновая музыка (tracks.json). |
+| `queue/` | Система очередей задач (worker, scripts, Supabase интеграция). |
+| `output/` | Сгенерированные видео (вложенная структура). |
+
+---
+
+## Принципы организации
+
+### 1. Один файл — одна зона ответственности
+
+- **Main rules** содержат ТОЛЬКО универсальную логику pipeline (фазы 0-6)
+- **Format files** содержат ВСЁ специфичное для формата: детекцию, модели, фазы, консистентность, валидацию
+- **Game configs** содержат ТОЛЬКО идентичность игры: стиль, персонажи, tone of voice, музыка
+
+### 2. Нет дублирования
+
+- Consistency rules живут ВНУТРИ format files (не в отдельном документе)
+- Main rules НИКОГДА не содержат format-specific логику
+- Game configs НИКОГДА не содержат workflow/format логику
+
+### 3. Модель определяется форматом
+
+Workflow.md не диктует модель генерации. Каждый format file сам указывает какие модели использовать.
+
+---
+
+## Как добавить новый формат
+
+1. Создай `rules/formats/{format-name}.md`
+2. Включи секции: детекция, модели, фазы, анимация, консистентность, валидация, бюджет
+3. Обнови CLAUDE.md — добавь формат в таблицу загрузки
+
+---
+
+## Как добавить новую игру
+
+1. Создай `games/{tag}/{tag}.md` с секциями:
+   - Метаданные (жанр, платформа, аудитория)
+   - Visual Style Guide (палитра, освещение, prompt prefix)
+   - Герои для промптов (таблица)
+   - Tone of Voice
+   - Character Prompt Blocks (готовые описания для промптов)
+   - Музыка
+
+2. **НЕ добавляй** в game config: идеи контента, workflow правила, format-specific логику
+
+---
+
+## Как добавить game-specific format override
+
+Если для конкретной игры нужны особые настройки формата:
+
+1. Создай `games/{tag}/{format}_special.md`
+   - Например: `games/mlbb/news_special.md` — настройки News для MLBB
+   - Например: `games/roblox/serial-drama_special.md` — настройки Serial Drama для Roblox
+
+2. Этот файл загружается АВТОМАТИЧЕСКИ в Phase 0, если существует
+
+---
+
+## Структура output
+
+```
+output/
+└── YYYY-MM-DD/                  # Дата генерации
+    └── {GAME_TAG}/              # Тег игры (MLBB, Roblox, Oxide...)
+        └── {format_slug}/       # Формат (standard, news, serial-drama...)
+            ├── storyboard.json  # Сценарий
+            ├── research.json    # (только news формат)
+            ├── scenes/
+            │   ├── refs/        # Character references
+            │   │   └── character-ref.png
+            │   ├── scene-1/     # Артефакты сцены 1
+            │   │   ├── scene-1.png
+            │   │   ├── scene-1.mp4
+            │   │   └── scene-1-scaled.mp4
+            │   └── scene-2/
+            │       └── ...
+            └── final.mp4        # Финальное видео (ТОЛЬКО финал в корне)
+```
+
+**Правила:**
+- Каждая сцена — в своей подпапке внутри `scenes/`
+- Character references — в `scenes/refs/`
+- Только `final.mp4` лежит в корне output-директории формата
+- `storyboard.json` — в корне (нужен для воспроизводимости)
+
+---
+
+## Файлы проекта
+
+```
+video-agent/
+├── CLAUDE.md                    # Entry point агента
+├── STRUCTURE.md                 # Этот файл
+├── providers.json               # Активные API-провайдеры
+├── run.sh                       # Запуск генерации
+│
+├── rules/
+│   ├── main/
+│   │   ├── workflow.md          # 6 фаз pipeline
+│   │   ├── storyboard.md       # Правила сторибоарда + консистентность
+│   │   ├── budgets.md          # Бюджеты и прайсинг
+│   │   └── fallback.md         # Обработка ошибок
+│   └── formats/
+│       ├── standard.md          # I2V / T2V (по умолчанию)
+│       ├── news.md              # Новости (ведущий + репортёр)
+│       ├── serial-drama.md      # Сериальные микро-драмы
+│       ├── object-character.md  # Антропоморфные объекты
+│       └── dual-style.md        # Cartoon + realistic
+│
+├── games/
+│   ├── mlbb/
+│   │   ├── mlbb.md             # Конфиг игры
+│   │   └── news_special.md     # News overrides для MLBB
+│   ├── roblox/
+│   │   ├── roblox.md
+│   │   └── serial-drama_special.md
+│   ├── oxide/
+│   │   └── oxide.md
+│   └── kekele/
+│       └── kekele.md
+│
+├── tools/
+│   ├── fal-ai.md               # fal.ai API reference
+│   ├── ffmpeg-api.md           # FFmpeg API reference
+│   └── sjinn.md                # Sjinn TTS (legacy)
+│
+├── music/
+│   └── tracks.json
+│
+└── queue/
+    ├── worker.sh
+    ├── add-task.sh
+    ├── check-queue.sh
+    ├── update-task.sh
+    └── upload-asset.sh
+```

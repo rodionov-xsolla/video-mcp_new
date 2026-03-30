@@ -9,8 +9,8 @@
 1. **Проверь очередь**: запусти `./video-agent/queue/check-queue.sh`
 2. **Если `NO_PENDING_TASKS`** — ничего не делай, жди следующую итерацию
 3. **Если `TASK_FOUND`** — выполни полный pipeline:
-   a. Прочитай game config: `video-agent/games/{game_tag}.md`
-   b. Прочитай все rules: `video-agent/rules/main.md`, `storyboard.md`, `consistency.md`, `fallback.md`
+   a. Прочитай game config: `video-agent/games/{game_tag}/{game_tag}.md`
+   b. Прочитай все rules: `video-agent/rules/main/workflow.md`, `storyboard.md`, `budgets.md`, `fallback.md`
    c. Сгенерируй `storyboard.json` на основе idea и game config
    d. Выполни все 6 фаз pipeline (image gen → I2V → FFmpeg assembly)
    e. Загрузи `final.mp4` в Supabase Storage или получи URL
