@@ -451,37 +451,6 @@ Aggressive forward push through chaos.
 - [ ] Бюджет не превышен (посчитай: N изображений + 1 ref + N анимаций)
 - [ ] `image_prompt` собран по шаблону для каждого клипа
 
-### Дополнительная валидация для формата "serial-drama"
-
-- [ ] `format: "serial-drama"` присутствует
-- [ ] `series_id`, `episode_number`, `retention_strategy`, `cliffhanger` заполнены
-- [ ] Первый клип — HOOK (визуальный парадокс + хук-фраза)
-- [ ] Последний клип — CLIFFHANGER (обрыв на пике)
-- [ ] Каждый клип содержит реплику (TTS через Kokoro, `character_speech: null` в storyboard)
-- [ ] Анимация — ТОЛЬКО микродвижения (нет ходьбы, бега, ударов, прыжков)
-- [ ] Длительность клипов адаптивная: 5s (≤10 слов реплики) или 10s (>10 слов)
-- [ ] Brainrot лексика в диалогах (rizz, sigma, cooked, mogging, negative aura)
-- [ ] Anti-repetition check пройден (нет повторов из последних 8 эпизодов)
-- [ ] Story bible загружена (episode > 1) и будет обновлена после генерации
-- [ ] "TO BE CONTINUED..." overlay запланирован на последние 2 секунды
-
-#### Motion prompt для serial-drama (Kling I2V, микродвижения)
-
-Шаблон:
-```
-Camera [slight push-in / holds steady / drifts slowly].
-[Character] [micro-action: turns head slowly, raises eyebrow, clenches fist].
-[Second micro-action: glances sideways, smirks, eyes widen].
-[Environment: ambient particles drift, neon signs pulse, light shifts].
-Preserve character appearance from reference image.
-```
-
-Примеры:
-- ✅ `Camera holds steady at medium shot. Character turns head slowly to face the viewer, eyebrows raise in surprise, mouth drops slightly open. Background neon signs flicker. Tense stillness.`
-- ✅ `Camera pushes in gently. Character's expression shifts from calm to anger — jaw clenches, fists tighten at sides. Golden particles drift in background. Dramatic tension building.`
-- ❌ `Character walks up to the other player and pushes him` — перемещение + физический контакт
-- ❌ `Character runs across the room and jumps onto the table` — активное движение
-
 ### Дополнительная валидация для формата "news"
 
 - [ ] `format: "news"` присутствует
