@@ -121,7 +121,9 @@ video-agent/
 │       ├── news.md              # Новости (ведущий + репортёр)
 │       ├── serial-drama.md      # Сериальные микро-драмы
 │       ├── object-character.md  # Антропоморфные объекты
-│       └── dual-style.md        # Cartoon + realistic
+│       ├── dual-style.md        # Cartoon + realistic
+│       ├── gameplay-ai-avatar.md # Говорящая голова + геймплей
+│       └── dance-battle.md      # Комедийные танцевальные батлы
 │
 ├── games/
 │   ├── mlbb/

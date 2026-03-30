@@ -11,6 +11,8 @@
 | Object Character (single) | **$1.50** | Расход > $1.30 |
 | Object Character (series×5) | **$7.50** | Расход > $7.00 |
 | Dual-style | **$5.00** | Расход > $4.50 |
+| Gameplay AI Avatar | **$5.00** | Расход > $4.50 |
+| Dance Battle | **$5.00** | Расход > $4.50 |
 
 Трекинг: после каждой генерации записывай стоимость. Перед следующей — проверяй лимит.
 
@@ -28,6 +30,8 @@
 | Veo3 T2V 8s (без аудио) | fal-ai/veo3 | $1.60 |
 | Kokoro TTS | fal-ai/kokoro/american-english | ~$0.02/запрос |
 | Kling Lipsync | fal-ai/kling-video/lipsync/audio-to-video | ~$0.10/сек |
+| HeyGen Avatar IV | fal-ai/heygen/avatar4/image-to-video | $0.10/сек |
+| Kling Avatar v2 Standard | fal-ai/kling-video/ai-avatar/v2/standard | $0.056/сек |
 
 ---
 
