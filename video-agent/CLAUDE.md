@@ -27,6 +27,7 @@ AI Video Production Agent — автономный pipeline для создан�
 | "dual-style", "game vs reality" | Dual-style | `rules/formats/dual-style.md` |
 | "gameplay ai avatar", "ai avatar", "talking head", "offerwall", "offer", "оффер" | Gameplay AI Avatar | `rules/formats/gameplay-ai-avatar.md` |
 | "dance battle", "dance", "танцевальный батл", "танец", "dance off" | Dance Battle | `rules/formats/dance-battle.md` |
+| "reddit story", "storytime", "история игрока", "personal story", "narrated gameplay" | Reddit Story | `rules/formats/reddit-story.md` |
 | Всё остальное | Standard | `rules/formats/standard.md` |
 
 Если есть game-specific файл для формата: `games/{GAME_TAG}/{format}_special.md` → загрузи его тоже.
@@ -56,6 +57,7 @@ AI Video Production Agent — автономный pipeline для создан�
 - **Провайдер видео T2V:** fal.ai (Veo3) — $0.20-$0.40/сек
 - **FFmpeg:** локальный `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
 - **TTS:** Kokoro TTS (fal.ai) — для форматов, использующих отдельную озвучку
+- **TTS (экспрессивный):** ElevenLabs — для Reddit Story формата (~$0.30/мин, 29 языков)
 - **Lipsync:** Kling Lipsync (fal.ai) — синхронизация речи с видео
 
 ### Форматы видео
@@ -69,6 +71,7 @@ AI Video Production Agent — автономный pipeline для создан�
 | Serial Drama | Сериальные микро-драмы с brainrot | `rules/formats/serial-drama.md` |
 | Gameplay AI Avatar | Говорящая голова + геймплей, продвижение офферов | `rules/formats/gameplay-ai-avatar.md` |
 | Dance Battle | Комедийные танцевальные батлы двух персонажей | `rules/formats/dance-battle.md` |
+| Reddit Story | Нарратив поверх рандомного геймплея с субтитрами | `rules/formats/reddit-story.md` |
 
 ## API
 
@@ -87,6 +90,7 @@ AI Video Production Agent — автономный pipeline для создан�
 | Kling Lipsync (lip sync) | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/сек |
 | HeyGen Avatar IV (avatar+voice) | `fal-ai/heygen/avatar4/image-to-video` | $0.10/сек |
 | Kling Avatar v2 Standard (avatar) | `fal-ai/kling-video/ai-avatar/v2/standard` | $0.056/сек |
+| ElevenLabs TTS (voice) | `api.elevenlabs.io/v1/text-to-speech` | ~$0.30/мин |
 
 ### FFmpeg
 - Локальный: `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
@@ -120,18 +124,85 @@ output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/
 - `queue/update-task.sh` — обновление статуса
 - `queue/add-task.sh` — добавление задачи
 
-**Supabase Storage:** bucket `videos` (public), путь: `videos/{GAME_TAG}/{TIMESTAMP}_final.mp4`
+## Supabase Storage
 
-## Ассеты персонажей (game_assets)
+### Бакет `assets` (медиа-ассеты, зеркало локальной `games/`)
+
+```
+assets/{GAME_TAG}/gameplay/{filename}.mp4     # Записи геймплея
+assets/{GAME_TAG}/refs/{character-name}.png   # Character references
+assets/{GAME_TAG}/avatars/{avatar-name}.png   # AI-аватары
+```
+
+**НЕ в storage:** story bibles (JSON) — только локально.
+
+### Бакет `videos` (финальные видео по датам)
+
+```
+videos/{GAME_TAG}/{YYYY-MM-DD}/{format_slug}_final.mp4
+```
+
+Пример: `videos/Roblox/2026-03-31/reddit-story_final.mp4`
+
+### Бакет `music` (фоновые треки)
+
+```
+music/{track-name}.mp3
+```
+
+## Ассеты (game_assets)
 
 **Таблица:** `game_assets` (Supabase)
 - `game_tag`, `character_name`, `asset_type`, `url`, `prompt_block`, `tags`
 - **UNIQUE constraint:** `(game_tag, character_name, asset_type)`
 
+**Типы ассетов (`asset_type`):**
+
+| Тип | Описание | Subfolder в storage |
+|-----|----------|---------------------|
+| `reference_image` | Character ref (PNG) | `refs/` |
+| `character_card` | Promo card | `refs/` |
+| `screenshot` | In-game screenshot | `refs/` |
+| `promo_art` | Official art | `refs/` |
+| `generated_ref` | AI-generated ref | `refs/` |
+| `avatar_ref` | AI avatar (gameplay-ai-avatar) | `avatars/` |
+| `gameplay_clip` | Gameplay recording (MP4) | `gameplay/` |
+
 **Использование в pipeline (Фаза 0):**
 ```
 GET /rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*
 ```
+
+**Загрузка:** `queue/upload-asset.sh "GAME_TAG" "Name" "asset_type" ./file.png`
+
+## Структура games/ (storage per game)
+
+Каждая игра хранит ВСЁ в одной папке: конфиг, геймплей, ассеты, story bibles.
+
+```
+games/{GAME_TAG}/
+├── {GAME_TAG}.md                       # Конфиг игры (обязательный)
+├── {format}_special.md                 # Спецправила формата (опционально)
+├── serial-drama_story_bible.json       # Story bible: serial drama (персистентный)
+├── reddit-story_bible.json             # Story bible: reddit story (персистентный)
+├── gameplay/                           # Записи геймплея (.mp4)
+│   ├── obby-parkour-01.mp4
+│   ├── trading-session-01.mp4
+│   └── ...
+└── assets/                             # Локальные ассеты
+    ├── refs/                           # Character references (PNG)
+    │   ├── noob-dave.png
+    │   └── king-rex.png
+    └── avatars/                        # AI-аватары для gameplay-ai-avatar
+        └── avatar-ref.png
+```
+
+**Правила:**
+- `gameplay/` — готовые .mp4 клипы для форматов Reddit Story и Gameplay AI Avatar
+- `assets/refs/` — character reference images (генерируются один раз, переиспользуются)
+- `assets/avatars/` — AI-аватар для формата Gameplay AI Avatar (один на игру)
+- Story bibles — JSON файлы, обновляются автоматически после каждого ролика
+- Ассеты также дублируются в Supabase (`game_assets` таблица) для доступа через API
 
 ## Добавление игры
 
@@ -140,6 +211,8 @@ GET /rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*
 - Character Prompt Blocks (минимум 8 визуальных деталей на персонажа)
 - Tone of Voice
 - Музыка
+
+Создай подпапки: `gameplay/`, `assets/refs/`, `assets/avatars/`.
 
 Если нужны специальные настройки формата — создай `games/{tag}/{format}_special.md`.
 
