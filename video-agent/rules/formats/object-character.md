@@ -25,8 +25,8 @@
 ## ФАЗА 0: ИНИЦИАЛИЗАЦИЯ
 
 1. Загрузить `tools/fal-ai.md` — API reference
-2. Загрузить `rules/main/storyboard.md` — правила промптинга + консистентность
-3. Загрузить `rules/main/fallback.md` — обработка ошибок
+2. Загрузить `rules/main/fallback.md` — обработка ошибок
+3. Получить game_assets из Supabase: `GET /rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*`
 4. Определить из идеи: объект, эмоцию, контекст, конфликт
 5. Написать `character_description` (8+ деталей) и скрипт (≤25 слов, от первого лица)
 6. Определить формат: `single` (1 ролик) или `series` (5 роликов)
@@ -272,6 +272,19 @@ $FFMPEG -y -i scene-1-scaled.mp4 -i voiceover.wav \
 
 ---
 
+## ФАЗА 6: UPLOAD & LOG
+
+1. Загрузи `final.mp4` в Supabase Storage:
+   - Путь: `videos/{GAME_TAG}/{YYYY-MM-DD}/object-character_final.mp4`
+   - Получи публичный URL
+
+2. Запиши лог в `video_agent_runs`:
+   - game_tag, input_idea, approach_used, model_used, total_cost_usd, output_video_url, status, video_duration_seconds, scenes
+
+3. Покажи отчёт о стоимости пользователю.
+
+---
+
 ## Формат "Series" (5 роликов)
 
 Если `format: "series"` — генерируй main + 4 related объекта-персонажа.
@@ -408,11 +421,3 @@ OUTPUT_DIR/
 
 Для series: каждый эпизод в отдельной OUTPUT_DIR.
 
----
-
-## Consistency
-
-Object Character использует стандартные слои консистентности:
-- **Layer 1:** Character Reference — один ref для объекта-персонажа
-- **Layer 2:** Chain Reference — стандартные правила
-- **Layer 3:** Prompt Consistency — единый стиль через все клипы

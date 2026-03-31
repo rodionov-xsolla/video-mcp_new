@@ -41,9 +41,9 @@ Dance Battle идеально подходит для серии: новые п�
 ## ФАЗА 0: ИНИЦИАЛИЗАЦИЯ
 
 1. Загрузить `tools/fal-ai.md` — API reference (Kling 2.6 Pro I2V)
-2. Загрузить `rules/main/storyboard.md` — правила промптинга + консистентность
-3. Загрузить `rules/main/fallback.md` — обработка ошибок
-4. *(опционально)* Загрузить game config `games/{GAME_TAG}/{GAME_TAG}.md` — если персонажи из конкретной игры
+2. Загрузить `rules/main/fallback.md` — обработка ошибок
+3. *(опционально)* Загрузить game config `games/{GAME_TAG}/{GAME_TAG}.md` — если персонажи из конкретной игры
+4. Получить game_assets из Supabase: `GET /rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*`
 6. *(опционально)* Загрузить `music/tracks.json` — фоновая музыка
 7. Определить из идеи:
    - Двух персонажей (или одного — тогда подобрать оппонента из той же вселенной)
@@ -315,9 +315,16 @@ $FFMPEG -y -i assembled.mp4 -i bg-music.mp3 \
 
 ## ФАЗА 6: UPLOAD & LOG
 
-1. Загрузи `final.mp4` в Supabase Storage: `videos/{GAME_TAG}/{TIMESTAMP}_final.mp4`
-2. Покажи отчёт о стоимости
-3. Покажи итоговую длительность
+1. Загрузи `final.mp4` в Supabase Storage:
+   - Путь: `videos/{GAME_TAG}/{YYYY-MM-DD}/dance-battle_final.mp4`
+   - Получи публичный URL
+
+2. Запиши лог в `video_agent_runs`:
+   - game_tag, input_idea, approach_used, model_used, total_cost_usd, output_video_url, status, video_duration_seconds, scenes
+
+3. Покажи отчёт о стоимости пользователю.
+
+4. Для серий: обнови Anti-Drift Layer трекинг (какие стили/эмоции/победители использовались).
 
 ---
 

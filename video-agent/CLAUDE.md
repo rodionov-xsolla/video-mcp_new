@@ -8,12 +8,13 @@ AI Video Production Agent — автономный pipeline для создан�
 
 ### Всегда загружай (core rules):
 
-1. `rules/main/workflow.md` — workflow, 6 фаз pipeline
-2. `rules/main/storyboard.md` — правила сценария, промптинг, анти-паттерны, консистентность
-3. `rules/main/budgets.md` — бюджеты и прайсинг
-4. `rules/main/fallback.md` — обработка ошибок
-5. `providers.json` — активные провайдеры и модели
-6. `games/{GAME_TAG}/{GAME_TAG}.md` — конфиг конкретной игры
+1. `rules/main/workflow.md` — роутер форматов, определение GAME_TAG
+2. `rules/main/budgets.md` — прайсинг моделей и отчёт о стоимости
+3. `rules/main/fallback.md` — обработка ошибок
+4. `providers.json` — активные провайдеры и модели
+5. `games/{GAME_TAG}/{GAME_TAG}.md` — конфиг конкретной игры
+
+**Файл формата содержит ВСЁ:** все фазы pipeline (0-6), правила промптинга, сборки, upload. Не нужно загружать `storyboard.md` отдельно.
 
 ### Загрузка формата (ТОЛЬКО релевантный):
 
