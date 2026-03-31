@@ -63,7 +63,7 @@ AI-аватар (talking head) внизу экрана рассказывает 
    - `bonus` — что дают (diamonds, gems, coins, skin)
    - `condition` — что нужно сделать (reach level 10, complete tutorial)
    - `language` — язык скрипта и голоса
-5. **Валидация gameplay клипов:** проверить `gameplay/{GAME_TAG}/`:
+5. **Валидация gameplay клипов:** проверить `games/{GAME_TAG}/gameplay/`:
    - Папка должна существовать и содержать хотя бы 1 `.mp4` файл
    - Если папка пуста → статус `failed`, сообщить пользователю
 6. *(опционально)* Загрузить `music/tracks.json` — фоновая музыка
@@ -125,7 +125,7 @@ AI-аватар (talking head) внизу экрана рассказывает 
     "proof": "I already got mine yesterday, look — spent them all on the new Lancelot skin. This is not a drill, it actually works.",
     "cta": "Link in bio, go go go! But hurry, they could remove this any day now."
   },
-  "gameplay_clips": ["gameplay/MLBB/epic-moment-1.mp4"],
+  "gameplay_clips": ["games/MLBB/gameplay/epic-moment-1.mp4"],
   "total_duration_sec": 30
 }
 ```
@@ -240,7 +240,7 @@ HeyGen Avatar IV ──FAIL──→ retry 1 раз ──FAIL──→ Kling Av
 
 ### Требования к gameplay клипам
 
-Клипы в `gameplay/{GAME_TAG}/` должны соответствовать:
+Клипы в `games/{GAME_TAG}/gameplay/` должны соответствовать:
 
 | Параметр | Требование |
 |----------|-----------|
@@ -252,7 +252,7 @@ HeyGen Avatar IV ──FAIL──→ retry 1 раз ──FAIL──→ Kling Av
 
 ### Подготовка
 
-1. Проверь папку `gameplay/{GAME_TAG}/` — должен быть хотя бы 1 `.mp4`
+1. Проверь папку `games/{GAME_TAG}/gameplay/` — должен быть хотя бы 1 `.mp4`
 2. Если клипов несколько — выбери наиболее эпичные моменты
 3. Нормализуй fps до 30 и обрежь по длительности `avatar.mp4`:
 
@@ -263,7 +263,7 @@ FFMPEG=/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg
 AVATAR_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 avatar.mp4)
 
 # Обрезать и нормализовать геймплей
-$FFMPEG -y -i gameplay/MLBB/clip1.mp4 -t $AVATAR_DUR \
+$FFMPEG -y -i games/MLBB/gameplay/clip1.mp4 -t $AVATAR_DUR \
   -vf "fps=30" \
   -c:v libx264 -preset slow -crf 10 -r 30 -pix_fmt yuv420p \
   -an \
@@ -275,8 +275,8 @@ $FFMPEG -y -i gameplay/MLBB/clip1.mp4 -t $AVATAR_DUR \
 Если несколько клипов — concat перед обрезкой:
 ```bash
 cat > gameplay-list.txt << EOF
-file 'gameplay/MLBB/clip1.mp4'
-file 'gameplay/MLBB/clip2.mp4'
+file 'games/MLBB/gameplay/clip1.mp4'
+file 'games/MLBB/gameplay/clip2.mp4'
 EOF
 
 $FFMPEG -y -f concat -safe 0 -i gameplay-list.txt \
@@ -375,7 +375,7 @@ $FFMPEG -y -i assembled.mp4 -i bg-music.mp3 \
 
 Перед запуском ФАЗЫ 3 проверь:
 
-- [ ] `gameplay/{GAME_TAG}/` содержит хотя бы 1 `.mp4` файл
+- [ ] `games/{GAME_TAG}/gameplay/` содержит хотя бы 1 `.mp4` файл
 - [ ] Скрипт содержит все 4 секции: hook, offer, proof, cta
 - [ ] Hook ≤ 20 слов, содержит вопрос или парадокс
 - [ ] Каждая секция ≤ 20 слов

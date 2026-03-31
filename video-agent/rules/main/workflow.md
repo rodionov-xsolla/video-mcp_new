@@ -23,6 +23,8 @@
    - Если есть `reference_image` → используй его URL вместо генерации character-ref (пропусти ФАЗУ 2)
    - Если есть `prompt_block` → используй как `character_description` в visual_identity
    - Если идея общая и не указан конкретный персонаж → выбери случайного из доступных
+   - Если есть `gameplay_clip` → скачай в `games/{GAME_TAG}/gameplay/` (для форматов Reddit Story, Gameplay AI Avatar)
+   - Если есть `avatar_ref` → скачай в `games/{GAME_TAG}/assets/avatars/`
 
 8. **Определи формат и загрузи правила формата:**
 
@@ -210,7 +212,8 @@ $FFMPEG -y -i final.mp4 -i bg-music.mp3 \
 ### ФАЗА 6: UPLOAD & LOG
 
 1. Загрузи `final.mp4` в Supabase Storage (bucket `videos`):
-   - Путь: `videos/{GAME_TAG}/{TIMESTAMP}_final.mp4`
+   - Путь: `videos/{GAME_TAG}/{YYYY-MM-DD}/{format_slug}_final.mp4`
+   - Пример: `videos/Roblox/2026-03-31/reddit-story_final.mp4`
    - Получи публичный URL
 
 2. Запиши лог в `video_agent_runs`:

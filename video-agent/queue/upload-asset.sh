@@ -23,7 +23,7 @@ done
 
 GAME_TAG="${1:?Usage: ./upload-asset.sh GAME_TAG CharacterName asset_type ./file.png [--prompt-block '...'] [--tags 'tag1,tag2']}"
 CHARACTER="${2:?Missing CharacterName}"
-ASSET_TYPE="${3:?Missing asset_type (reference_image|character_card|screenshot|promo_art|generated_ref)}"
+ASSET_TYPE="${3:?Missing asset_type (reference_image|character_card|screenshot|promo_art|generated_ref|avatar_ref|gameplay_clip)}"
 FILE_PATH="${4:?Missing file path}"
 
 PROMPT_BLOCK=""
@@ -41,7 +41,7 @@ done
 
 # Validate asset_type
 case "$ASSET_TYPE" in
-  reference_image|character_card|screenshot|promo_art|generated_ref) ;;
+  reference_image|character_card|screenshot|promo_art|generated_ref|avatar_ref|gameplay_clip) ;;
   *) echo "ERROR: Invalid asset_type: $ASSET_TYPE"; exit 1 ;;
 esac
 
@@ -53,15 +53,25 @@ fi
 
 # Determine file extension and content type
 EXT="${FILE_PATH##*.}"
+FILENAME=$(basename "$FILE_PATH")
 case "$EXT" in
   png) CONTENT_TYPE="image/png" ;;
   jpg|jpeg) CONTENT_TYPE="image/jpeg" ;;
   webp) CONTENT_TYPE="image/webp" ;;
+  mp4) CONTENT_TYPE="video/mp4" ;;
   *) CONTENT_TYPE="application/octet-stream" ;;
 esac
 
+# Determine storage subfolder based on asset_type
+# Mirrors local games/{GAME_TAG}/ structure
+case "$ASSET_TYPE" in
+  avatar_ref) SUBFOLDER="avatars" ;;
+  gameplay_clip) SUBFOLDER="gameplay" ;;
+  *) SUBFOLDER="refs" ;;
+esac
+
 # Upload to Supabase Storage
-STORAGE_PATH="assets/${GAME_TAG}/${CHARACTER}/${ASSET_TYPE}.${EXT}"
+STORAGE_PATH="${GAME_TAG}/${SUBFOLDER}/${FILENAME}"
 echo "Uploading to Storage: $STORAGE_PATH"
 
 UPLOAD_RESULT=$(curl -s -w "\n%{http_code}" -X POST \
