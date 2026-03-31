@@ -1,0 +1,57 @@
+{
+  "title": "Day One: Noob on the Island",
+  "game_tag": "Oxide",
+  "approach": 2,
+  "duration_target_sec": 24,
+  "visual_identity": {
+    "character_description": "young male survivor noob, torn gray t-shirt, worn khaki shorts, barefoot, messy brown hair, thin scrawny build, holding a crude stone tool, sunburned skin, no armor",
+    "environment_description": "tropical survival island with palm trees, sandy beach, dense jungle, wooden player-built structures in the distance, scattered rocks and debris",
+    "style_tags": "Oxide Survival Island game style, semi-realistic 3D graphics, tropical island survival atmosphere, gritty post-apocalyptic aesthetic, warm natural lighting",
+    "color_palette": "jungle green (#2d5a27), sand beige (#d4b896), ocean blue (#1a6b8a), rust orange (#c45a2c)",
+    "lighting": "warm golden hour tropical sunlight, volumetric light rays through palm tree leaves, soft natural shadows",
+    "camera_style": "cinematic, handheld survival documentary feel"
+  },
+  "narrative_arc": {
+    "hook": "Noob spawns on the beach, confused and alone",
+    "development": "Gets chased by aggressive armed naked players through jungle",
+    "climax": "Builds a tiny shack, proud moment — then gets raided instantly"
+  },
+  "scenes": [
+    {
+      "index": 1,
+      "beats": ["hook"],
+      "duration_sec": 8,
+      "character_state": "standing alone on sandy beach, looking around confused, stone tool hanging loosely in right hand",
+      "facial_expression": "wide-eyed bewilderment, mouth slightly open in confusion, raised eyebrows",
+      "character_speech": "Okay I just spawned on this island. Where is everyone? This place looks... friendly enough.",
+      "environment_state": "calm ocean waves, empty peaceful beach, palm trees swaying, distant smoke from a player base",
+      "camera_angle": "medium close-up, slightly low angle looking up at character",
+      "image_prompt": "Oxide Survival Island game style, semi-realistic 3D graphics, tropical island survival atmosphere, gritty post-apocalyptic aesthetic, warm natural lighting, young male survivor noob, torn gray t-shirt, worn khaki shorts, barefoot, messy brown hair, thin scrawny build, holding a crude stone tool, sunburned skin, no armor, standing alone on sandy beach looking around confused, wide-eyed bewilderment mouth slightly open, tropical survival island with palm trees sandy beach dense jungle, calm ocean waves distant smoke from base, warm golden hour tropical sunlight volumetric rays through palms, jungle green and sand beige tones, medium close-up slightly low angle, vertical composition, 9:16 aspect ratio",
+      "motion_prompt": "Camera slowly pushes in toward the character's confused face. Character looks left then right, squinting into the distance, stone tool swinging loosely in hand. Ocean waves crash softly behind, palm leaves sway. The character speaks clearly and nervously says: \"Okay I just spawned on this island. Where is everyone? This place looks... friendly enough.\" Slow deliberate push-in building unease."
+    },
+    {
+      "index": 2,
+      "beats": ["development"],
+      "duration_sec": 8,
+      "character_state": "sprinting through dense jungle in panic, looking over shoulder, tripping on roots",
+      "facial_expression": "terrified wide eyes, mouth open screaming, sweat on forehead",
+      "character_speech": "Why is everyone NAKED and ANGRY?! I literally JUST got here!! HELP!",
+      "environment_state": "dense jungle with vines, blurred armed players chasing behind, dust and leaves flying",
+      "camera_angle": "wide shot, dynamic tracking from the side",
+      "image_prompt": "Oxide Survival Island game style, semi-realistic 3D graphics, tropical island survival atmosphere, gritty post-apocalyptic aesthetic, warm natural lighting, young male survivor noob, torn gray t-shirt, worn khaki shorts, barefoot, messy brown hair, thin scrawny build, holding a crude stone tool, sunburned skin, no armor, sprinting through jungle in panic looking over shoulder, terrified wide eyes mouth open screaming, tropical survival island dense jungle with vines and palm trees, armed players visible behind in pursuit, warm golden hour tropical sunlight volumetric rays through palms, jungle green and sand beige tones, wide dynamic tracking shot, vertical composition, 9:16 aspect ratio",
+      "motion_prompt": "Camera tracks sideways following the character sprinting through dense jungle. Character stumbles over roots, ducks under vines, looks frantically over shoulder. Behind him two armed players with spears charge through the bushes. Leaves and debris fly everywhere. The character screams in panic and yells: \"Why is everyone NAKED and ANGRY?! I literally JUST got here!! HELP!\" Fast-paced handheld tracking motion with urgency."
+    },
+    {
+      "index": 3,
+      "beats": ["climax"],
+      "duration_sec": 8,
+      "character_state": "standing inside tiny wooden 1x1 shack, arms crossed proudly for first 3 seconds, then shocked and ducking as explosion hits",
+      "facial_expression": "proud satisfied smirk transitioning to shocked horror with jaw dropped",
+      "character_speech": "Finally! Home sweet ho— ...WHAT WAS THAT?! NO NO NO!",
+      "environment_state": "tiny crude wooden shack with single door, then fire and explosion debris, wall breaking apart",
+      "camera_angle": "low angle wide shot, looking up at character inside shack",
+      "image_prompt": "Oxide Survival Island game style, semi-realistic 3D graphics, tropical island survival atmosphere, gritty post-apocalyptic aesthetic, warm natural lighting, young male survivor noob, torn gray t-shirt, worn khaki shorts, barefoot, messy brown hair, thin scrawny build, sunburned skin, no armor, standing proudly inside tiny wooden shack arms crossed confident smirk, proud satisfied smirk with chin up, tropical survival island crude wooden walls small doorway, tiny makeshift shelter with torchlight inside, warm golden hour tropical sunlight volumetric rays through palms, jungle green and sand beige tones with orange firelight, low angle wide shot looking up, vertical composition, 9:16 aspect ratio"    ,
+      "motion_prompt": "Camera holds steady at low angle looking up at character inside tiny wooden shack. First 3 seconds: character stands with arms crossed, chin up, proud smirk, nodding approvingly at his creation. Then: loud explosion sound, wall cracks and splinters fly, fire flashes outside. Character's expression shifts to pure terror, he ducks and covers head with hands. The character proudly says: \"Finally! Home sweet ho—\" then screams: \"WHAT WAS THAT?! NO NO NO!\" Dynamic shift from calm pride to chaotic panic."
+    }
+  ]
+}

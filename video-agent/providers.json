@@ -2,7 +2,7 @@
   "active": {
     "image_gen": "fal-ai",
     "video_gen": "fal-ai",
-    "tts": "elevenlabs",
+    "tts": null,
     "ffmpeg": "ffmpeg-api"
   },
   "providers": {
@@ -70,18 +70,6 @@
         "video_gen_t2v": "veo-3"
       },
       "status": "planned"
-    },
-    "elevenlabs": {
-      "name": "ElevenLabs",
-      "auth_env": "ELEVENLABS_API_KEY",
-      "tools_file": "tools/elevenlabs.md",
-      "capabilities": ["tts"],
-      "models": {
-        "tts": "eleven_multilingual_v2"
-      },
-      "pricing": {
-        "tts": "~$0.30/min"
-      }
     },
     "ffmpeg-api": {
       "name": "FFmpeg Cloud API",
