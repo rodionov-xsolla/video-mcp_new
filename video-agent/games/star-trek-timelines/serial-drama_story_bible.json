@@ -1,0 +1,71 @@
+{
+  "series_id": "star-trek-airlock",
+  "game_tag": "star-trek-timelines",
+  "title": "Воздушный шлюз",
+  "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
+  "created_at": "2026-04-06",
+  "last_episode": 0,
+
+  "characters": [
+    {
+      "name": "Kirk",
+      "role": "protagonist",
+      "character_description": "semi-realistic Pixar 3D Captain James T. Kirk, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
+      "voice": "Daniel",
+      "elevenlabs_voice": "Daniel",
+      "status": "Captain of Enterprise, refusing to execute airlock order",
+      "aura_points": 800,
+      "relationships": {
+        "Worf": "ally but in conflict",
+        "Chekov": "crew member he trusts unconditionally"
+      }
+    },
+    {
+      "name": "Worf",
+      "role": "antagonist_temporary",
+      "character_description": "semi-realistic Pixar 3D Commander Worf, imposing Klingon-Human, prominent forehead ridges, dark skin, fierce disciplined expression, TNG Starfleet command red uniform with lieutenant commander pips, broad shoulders, intense dark eyes",
+      "voice": "Daniel",
+      "elevenlabs_voice": "Daniel",
+      "status": "Following fleet admiral orders — conflicted but duty-bound",
+      "aura_points": 600,
+      "relationships": {
+        "Kirk": "respects but must obey higher command",
+        "Chekov": "believes evidence"
+      }
+    },
+    {
+      "name": "Chekov",
+      "role": "victim",
+      "character_description": "semi-realistic Pixar 3D Ensign Pavel Chekov, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
+      "voice": "Daniel",
+      "elevenlabs_voice": "Daniel",
+      "status": "Accused of being an enemy agent — behind the airlock door",
+      "aura_points": 200,
+      "relationships": {
+        "Kirk": "trusts captain completely",
+        "Worf": "fears"
+      }
+    }
+  ],
+
+  "active_loops": [
+    "minor: Is Chekov really a traitor? Who planted the evidence?",
+    "major: Who is the real enemy agent on the Enterprise?",
+    "eternal: Kirk always fights for his crew against the system"
+  ],
+  "closed_loops": [],
+
+  "world_state": {
+    "location": "Enterprise Bridge + Airlock Corridor",
+    "important_items": ["incriminating evidence against Chekov", "fleet admiral's sealed order"],
+    "key_events": []
+  },
+
+  "anti_repetition": {
+    "recent_phrases": [],
+    "recent_hooks": [],
+    "recent_cliffhangers": []
+  },
+
+  "episode_summaries": []
+}

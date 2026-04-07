@@ -1,40 +1,154 @@
 {
   "tracks": [
     {
-      "name": "epic-gaming-beat",
-      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/epic-gaming-beat.mp3",
-      "duration_sec": 120,
-      "mood": "epic",
+      "name": "badass-alucinante",
+      "file": "Badass/badass-alucinante.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/badass-alucinante.mp3",
+      "duration_sec": 93,
+      "mood": "badass",
+      "bpm": 130,
+      "use_for": ["gameplay-ai-avatar", "standard"],
+      "description": "Brazilian funk instrumental, aggressive confident energy"
+    },
+    {
+      "name": "badass-brodyaga-phonk",
+      "file": "Badass/badass-brodyaga-phonk.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/badass-brodyaga-phonk.mp3",
+      "duration_sec": 135,
+      "mood": "badass",
       "bpm": 140,
-      "license": "pixabay",
-      "games": ["MLBB", "PUBG Mobile", "DELTA FORCE"]
+      "use_for": ["serial-drama", "standard"],
+      "description": "Phonk beat, sigma/raid vibes, Roblox/Oxide climax scenes"
     },
     {
-      "name": "chill-strategy",
-      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/chill-strategy.mp3",
-      "duration_sec": 90,
-      "mood": "chill",
-      "bpm": 100,
-      "license": "pixabay",
-      "games": ["POKEMON GO", "MTG ARENA", "MONOPOLY"]
+      "name": "dark-28-days-later",
+      "file": "Dark/dark-28-days-later.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/dark-28-days-later.mp3",
+      "duration_sec": 390,
+      "mood": "dark",
+      "bpm": 80,
+      "use_for": ["serial-drama", "standard"],
+      "description": "Slow horror tension, 28 Days Later theme slowed. Borg scenes, horror drama"
     },
     {
-      "name": "cinematic-dark",
-      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/cinematic-dark.mp3",
-      "duration_sec": 150,
-      "mood": "cinematic",
+      "name": "dark-gesaffelstein-night-tower",
+      "file": "Dark/dark-gesaffelstein-night-tower.m4a",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/dark-gesaffelstein-night-tower.m4a",
+      "duration_sec": 157,
+      "mood": "dark",
+      "bpm": 120,
+      "use_for": ["serial-drama", "dual-style", "standard"],
+      "description": "Dark electronic, villain reveals, Mirror Universe, sinister energy"
+    },
+    {
+      "name": "dark-crystal-castles",
+      "file": "Dark/dark-crystal-castles.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/dark-crystal-castles.mp3",
+      "duration_sec": 184,
+      "mood": "dark",
+      "bpm": 110,
+      "use_for": ["dual-style", "serial-drama"],
+      "description": "Dark aesthetic electronic, moody atmosphere, game vs reality dark edits"
+    },
+    {
+      "name": "emotional-u-kamina",
+      "file": "Emotional sad/emotional-u-kamina.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/emotional-u-kamina.mp3",
+      "duration_sec": 289,
+      "mood": "emotional",
       "bpm": 90,
-      "license": "pixabay",
-      "games": ["GENSHIN IMPACT", "GAME OF THRONES", "ARC RAIDERS"]
+      "use_for": ["serial-drama", "reddit-story"],
+      "description": "Melancholic Russian lo-fi, loss/grief scenes, sad serial drama moments"
     },
     {
-      "name": "upbeat-action",
-      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/upbeat-action.mp3",
-      "duration_sec": 100,
+      "name": "emotional-3am-walk",
+      "file": "Emotional sad/emotional-3am-walk.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/emotional-3am-walk.mp3",
+      "duration_sec": 199,
+      "mood": "emotional",
+      "bpm": 85,
+      "use_for": ["serial-drama", "reddit-story"],
+      "description": "Slowed reverb, lonely night walk vibe, solitude/reflection scenes"
+    },
+    {
+      "name": "emotional-after-dark-sweater",
+      "file": "Emotional sad/emotional-after-dark-sweater.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/emotional-after-dark-sweater.mp3",
+      "duration_sec": 353,
+      "mood": "emotional",
+      "bpm": 100,
+      "use_for": ["serial-drama", "reddit-story"],
+      "description": "After Dark x Sweater Weather slowed, romance/nostalgia, aesthetic edits"
+    },
+    {
+      "name": "energetic-she-knows",
+      "file": "Energetic/energetic-she-knows.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/energetic-she-knows.mp3",
+      "duration_sec": 271,
       "mood": "energetic",
-      "bpm": 160,
-      "license": "pixabay",
-      "games": ["ROBLOX", "HERO WARS", "MARVEL GAMES"]
+      "bpm": 150,
+      "use_for": ["dance-battle", "standard"],
+      "description": "J. Cole sped up, high energy, dance/action content"
+    },
+    {
+      "name": "energetic-simulacao",
+      "file": "Energetic/energetic-simulacao.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/energetic-simulacao.mp3",
+      "duration_sec": 144,
+      "mood": "energetic",
+      "bpm": 130,
+      "use_for": ["gameplay-ai-avatar", "reddit-story", "news"],
+      "description": "Brazilian beat, upbeat rhythm, versatile energy for any format"
+    },
+    {
+      "name": "energetic-kompa-pasion",
+      "file": "Energetic/energetic-kompa-pasion.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/energetic-kompa-pasion.mp3",
+      "duration_sec": 127,
+      "mood": "energetic",
+      "bpm": 135,
+      "use_for": ["dance-battle", "standard", "object-character"],
+      "description": "Kompa sped up, catchy rhythm, fun Roblox/dance content"
+    },
+    {
+      "name": "fun-central-cee-doja",
+      "file": "Fun/fun-central-cee-doja.m4a",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/fun-central-cee-doja.m4a",
+      "duration_sec": 97,
+      "mood": "fun",
+      "bpm": 120,
+      "use_for": ["gameplay-ai-avatar", "reddit-story"],
+      "description": "Central Cee x Doja instrumental, chill-fun, light offer/story content"
+    },
+    {
+      "name": "fun-robot-rock-funk",
+      "file": "Fun/fun-robot-rock-funk.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/fun-robot-rock-funk.mp3",
+      "duration_sec": 142,
+      "mood": "fun",
+      "bpm": 130,
+      "use_for": ["dance-battle", "object-character", "standard"],
+      "description": "Robot Rock Brazilian funk remix, party energy, comedy content"
+    },
+    {
+      "name": "heroic-neptune",
+      "file": "Heroic/heroic-neptune.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/heroic-neptune.mp3",
+      "duration_sec": 193,
+      "mood": "heroic",
+      "bpm": 100,
+      "use_for": ["serial-drama", "news", "standard"],
+      "description": "Epic orchestral, 2WEI Neptune, heroic moments, Star Trek epic, climax"
+    },
+    {
+      "name": "heroic-royalty-slowed",
+      "file": "Heroic/heroic-royalty-slowed.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/heroic-royalty-slowed.mp3",
+      "duration_sec": 263,
+      "mood": "heroic",
+      "bpm": 90,
+      "use_for": ["serial-drama", "standard"],
+      "description": "Royalty slowed reverb, triumphant season finale, victory scenes"
     }
   ]
 }

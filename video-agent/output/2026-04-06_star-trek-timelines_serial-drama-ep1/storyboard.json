@@ -1,0 +1,254 @@
+{
+  "format": "serial-drama",
+  "series_id": "star-trek-airlock",
+  "game_tag": "star-trek-timelines",
+  "episode_number": 1,
+  "title": "Воздушный шлюз",
+  "total_duration_sec": 32,
+
+  "retention_strategy": "Ворф опускает глаза — он что-то скрывает. Зритель ДОЛЖЕН узнать кто реально дал приказ.",
+  "active_loops": [
+    "minor: Чехов — агент или жертва подставы?",
+    "major: Кто настоящий агент на Enterprise?",
+    "eternal: Кирк всегда идёт против системы ради своих людей"
+  ],
+  "cliffhanger": "Кирк спрашивает — Ворф молчит и опускает глаза. Обрыв.",
+
+  "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
+
+  "image_count_note": "Action clips (I2V): 2 NB images each (start + end). Dialogue clips (Avatar): 1 NB image each (1:1 character ref in scene). Refs Phase 2: Worf + Chekov (new). Total NB: 4×2 + 5×1 + 2 refs = 15 images = $0.60",
+
+  "clips": [
+
+    {
+      "id": 1,
+      "type": "hook",
+      "clip_role": "action",
+      "model": "kling-i2v",
+      "duration_sec": 5,
+      "nb_images": 2,
+      "speaker": null,
+      "tts": null,
+      "brainrot_overlay": "ЧЕХОВ. АГЕНТ ВРАГА. AURA: −9999 💀",
+      "camera_angle": "wide shot",
+
+      "image_start": {
+        "path": "scenes/scene-1/scene-1-start.png",
+        "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, Enterprise bridge wide establishing shot, normal operations, Captain Kirk focused at command chair reviewing data, Commander Worf at tactical station behind and to the right, Ensign Chekov at navigation console in foreground, soft blue LCARS glow, calm professional atmosphere, no alerts, deep space through main viewscreen, cinematic depth of field, 9:16 vertical composition"
+      },
+      "image_end": {
+        "path": "scenes/scene-1/scene-1-end.png",
+        "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, Enterprise bridge wide shot transformed — red alert lights flood everything crimson, Commander Worf and two security officers have moved to flank Ensign Chekov at his station, Chekov frozen in his chair looking up at them with wide shocked eyes, Captain Kirk rising from command chair in the background his expression hardening, LCARS panels flashing red warnings, the bridge crew frozen in shock, 9:16 vertical composition"
+      },
+      "motion_prompt": "Camera holds wide on the bridge. Everything normal — then the red alert klaxon erupts. Worf moves with sudden purpose toward Chekov's station, two security officers flanking. Chekov spins in his chair — confusion turning to horror. Kirk rises from his command chair slowly, jaw setting. The crew freezes. LCARS panels flood with red. Camera drift left to capture the full weight of the moment."
+    },
+
+    {
+      "id": 2,
+      "type": "climax",
+      "clip_role": "dialogue",
+      "model": "kling-avatar",
+      "duration_sec": 2,
+      "nb_images": 1,
+      "speaker": "Kirk",
+      "tts": "Ворф. Стоп.",
+      "tts_voice": "Daniel",
+      "tts_stability": 0.10,
+      "tts_speed": 1.10,
+      "camera_angle": "medium close-up",
+      "avatar_ref": "scenes/refs/kirk-ref.png",
+
+      "motion_prompt": "Sudden sharp command. Kirk's jaw snaps shut after speaking — no hesitation, no explanation. Eyes narrow slightly, brow lowers. One micro-tilt of the head forward — the posture of absolute authority. Lips barely move. Every muscle controlled.",
+
+      "image_start": {
+        "path": "scenes/scene-2/scene-2.png",
+        "aspect": "1:1",
+        "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar 3D Captain James T. Kirk, athletic build, light brown hair swept to side, strong jaw locked with authority, gold-yellow TOS command tunic with delta badge, medium close-up, red alert crimson light sculpting his face, slight opening of mouth showing teeth, eyes burning with controlled command, 1:1 square composition"
+      }
+    },
+
+    {
+      "id": 3,
+      "type": "climax",
+      "clip_role": "dialogue",
+      "model": "kling-avatar",
+      "duration_sec": 3,
+      "nb_images": 1,
+      "speaker": "Worf",
+      "tts": "Капитан. Чехов — агент врага. Улики получены час назад.",
+      "tts_voice": "George",
+      "tts_stability": 0.20,
+      "tts_speed": 0.95,
+      "camera_angle": "low angle close-up",
+      "avatar_ref": "scenes/refs/worf-ref.png",
+
+      "motion_prompt": "Worf reports without emotion — a soldier delivering facts. Head slightly bowed in duty, not shame. Jaw barely moves. Eyes direct and unflinching. When he says 'час назад' — a single beat of pause, brow lowering just slightly — the weight of how recently this happened.",
+
+      "image_start": {
+        "path": "scenes/scene-3/scene-3.png",
+        "aspect": "1:1",
+        "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar 3D Commander Worf, imposing Klingon-Human, prominent forehead ridges, dark skin, fierce certain expression, TNG command red uniform, broad shoulders, low angle looking up at his imposing figure, holding Starfleet PADD, red alert atmosphere, LCARS tactical panels behind him, slight opening of mouth showing teeth for lipsync, 1:1 square composition"
+      }
+    },
+
+    {
+      "id": 4,
+      "type": "climax",
+      "clip_role": "action",
+      "model": "kling-i2v",
+      "duration_sec": 5,
+      "nb_images": 2,
+      "speaker": "Chekov",
+      "tts": "Капитан!! Это подстава — я клянусь вам!!",
+      "tts_voice": "Charlie",
+      "tts_stability": 0.05,
+      "tts_speed": 1.45,
+      "tts_note": "TTS overlay only — muffled through airlock glass. No lipsync.",
+      "camera_angle": "close-up through porthole",
+
+      "image_start": {
+        "path": "scenes/scene-4/scene-4-start.png",
+        "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar 3D Ensign Pavel Chekov, young face, bowl-cut dark hair, TOS gold Starfleet uniform, pressed against thick airlock porthole glass from inside, both hands flat on the glass, face close to the surface, his breath beginning to fog the cold metal, viewed from outside — Kirk's POV, red warning indicator above the door unlit yet, desperate wide eyes locked on camera, 9:16 vertical composition"
+      },
+      "image_end": {
+        "path": "scenes/scene-4/scene-4-end.png",
+        "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar 3D Ensign Chekov, same porthole perspective, frost now crystallizing on the inner glass edges, Chekov's hands sliding slowly down the surface, tears on his face, the red SEALED indicator on the wall behind him inside the airlock now blinking on, his image beginning to dim as the outer pressure door starts to descend from above, 9:16 vertical composition"
+      },
+      "motion_prompt": "Camera holds steady at the porthole glass in close-up. Chekov's breath fogs the surface in slow waves. His hands press harder — then begin to slide. Frost crystallizes at the glass edges. The SEALED indicator behind him blinks on — once, twice — then stays red. The outer pressure door begins to descend from the top of frame, millimeter by millimeter, cutting off the light. His eyes never leave the camera."
+    },
+
+    {
+      "id": 5,
+      "type": "climax",
+      "clip_role": "dialogue",
+      "model": "kling-avatar",
+      "duration_sec": 2,
+      "nb_images": 1,
+      "speaker": "Kirk",
+      "tts": "Отмените процедуру. Это приказ.",
+      "tts_voice": "Daniel",
+      "tts_stability": 0.05,
+      "tts_speed": 1.05,
+      "tts_note": "Quieter than before. The most dangerous Kirk — not shouting.",
+      "camera_angle": "extreme close-up",
+      "avatar_ref": "scenes/refs/kirk-ref.png",
+
+      "motion_prompt": "The quietest and most dangerous Kirk. Lips barely part — words come out flat, no inflection, no anger. Eyes absolutely still, locked like targeting sensors. A single slow exhale visible in the chest. When he finishes speaking — zero reaction, zero wait. He already expects to be obeyed.",
+
+      "image_start": {
+        "path": "scenes/scene-5/scene-5.png",
+        "aspect": "1:1",
+        "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar 3D Captain Kirk, extreme close-up face only, jaw locked with absolute command, eyes burning cold and certain, barely parted lips showing teeth, red alert light from the side casting deep shadow across half his face, the weight of a captain who will not negotiate, 1:1 square composition"
+      }
+    },
+
+    {
+      "id": 6,
+      "type": "climax",
+      "clip_role": "dialogue",
+      "model": "kling-avatar",
+      "duration_sec": 3,
+      "nb_images": 1,
+      "speaker": "Worf",
+      "tts": "Не могу, капитан. Приказ подписан флот-адмиралом. Лично.",
+      "tts_voice": "George",
+      "tts_stability": 0.40,
+      "tts_speed": 0.88,
+      "tts_note": "Slower. The bombshell. Worf hates saying this.",
+      "camera_angle": "medium shot, three-quarter",
+      "avatar_ref": "scenes/refs/worf-ref.png",
+
+      "motion_prompt": "Worf speaks slowly — each word costing him something. Body rigid, eyes not fully meeting Kirk. 'Не могу' — jaw tightens. 'флот-адмиралом' — a micro-pause, brow creasing with internal conflict. 'Лично' — delivered with a weight that says he knows exactly how wrong this is. After speaking — lips press together. He does not look up.",
+
+      "image_start": {
+        "path": "scenes/scene-6/scene-6.png",
+        "aspect": "1:1",
+        "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar 3D Commander Worf, medium shot, body turned three-quarters — the posture of a soldier caught between two loyalties, eyes not fully meeting camera, PADD lowered at his side, jaw set with the weight of the order, slight opening of mouth showing teeth for lipsync, dim red atmosphere, 1:1 square composition"
+      }
+    },
+
+    {
+      "id": 7,
+      "type": "climax",
+      "clip_role": "action",
+      "model": "kling-i2v",
+      "duration_sec": 5,
+      "nb_images": 2,
+      "speaker": null,
+      "tts": null,
+      "tts_note": "No dialogue. Pure visual. Music only.",
+      "camera_angle": "wide corridor, over-shoulder",
+
+      "image_start": {
+        "path": "scenes/scene-7/scene-7-start.png",
+        "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, Enterprise airlock corridor wide shot, viewed from behind Kirk's shoulder, Kirk and Worf standing side by side facing the airlock door, the porthole still lit from inside — Chekov's silhouette faintly visible through the glass, the corridor narrow and cold, red emergency lighting, deep shadow between the two men, 9:16 vertical composition"
+      },
+      "image_end": {
+        "path": "scenes/scene-7/scene-7-end.png",
+        "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, same corridor, same perspective — but the porthole is now dark and empty, the outer door fully sealed, SEALED indicator burning red above it, Chekov is gone, Kirk's fist clenched at his side, Worf standing rigid, their two reflections ghostly in the black sealed door, absolute silence rendered in steel and shadow, 9:16 vertical composition"
+      },
+      "motion_prompt": "Camera holds over Kirk's shoulder. The porthole light dims. Chekov's silhouette fades. The outer pressure door descends the final inch and seals with a heavy resonant clunk. The SEALED indicator locks on. Silence. Kirk and Worf stand motionless. Their ghostly reflections appear in the dark sealed door. Kirk's fist slowly clenches at his side. Nobody moves. Camera holds the stillness."
+    },
+
+    {
+      "id": 8,
+      "type": "climax",
+      "clip_role": "dialogue",
+      "model": "kling-avatar",
+      "duration_sec": 2,
+      "nb_images": 1,
+      "speaker": "Kirk",
+      "tts": "Ворф. Кто на самом деле дал тебе этот приказ.",
+      "tts_voice": "Daniel",
+      "tts_stability": 0.55,
+      "tts_speed": 0.85,
+      "tts_note": "Quiet. Ice cold. Not a question — a statement. Kirk already knows the answer.",
+      "camera_angle": "profile close-up",
+      "avatar_ref": "scenes/refs/kirk-ref.png",
+
+      "motion_prompt": "Kirk speaks in profile, gaze fixed on Worf. Ice cold. Not a question — a statement. Lips part just enough for the words, then close like a vault. Eyes never blink, never shift. He already knows the answer. He is giving Worf exactly one chance to say it himself. After the last word — total stillness.",
+
+      "image_start": {
+        "path": "scenes/scene-8/scene-8.png",
+        "aspect": "1:1",
+        "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar 3D Captain Kirk, profile close-up — side view, jaw set like iron, eyes looking slightly off camera toward Worf, the sealed airlock door reflected as a tiny red light in his eye, gold uniform collar edge visible, deep shadow, the face of a man who already knows the truth and is giving Worf one chance, slight parting of lips showing teeth, 1:1 square composition"
+      }
+    },
+
+    {
+      "id": 9,
+      "type": "cliffhanger",
+      "clip_role": "action",
+      "model": "kling-i2v",
+      "duration_sec": 5,
+      "nb_images": 2,
+      "speaker": null,
+      "tts": null,
+      "tts_note": "No dialogue. The silence IS the answer. Music swells and cuts.",
+      "camera_angle": "push-in on Worf face",
+      "overlay": "TO BE CONTINUED...",
+
+      "image_start": {
+        "path": "scenes/scene-9/scene-9-start.png",
+        "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar 3D Commander Worf, medium close-up facing camera directly, meeting Kirk's gaze, eyes carrying the full weight of a secret he cannot speak, jaw locked, the red sealed door glowing behind him, one beat before the answer — the last moment of his silence being a choice, 9:16 vertical composition"
+      },
+      "image_end": {
+        "path": "scenes/scene-9/scene-9-end.png",
+        "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar 3D Commander Worf, same close-up — but his eyes have dropped to the floor, chin barely lowered, the weight of it pulling his gaze down, jaw tightening with what he cannot say, the sealed door still burning red behind him, the silence stretching into something terrible, 9:16 vertical composition"
+      },
+      "motion_prompt": "Camera pushes in slowly on Worf's face. His eyes hold Kirk's gaze for one beat. Two beats. The red SEALED light pulses behind him. Three beats. Then — almost imperceptibly — his eyes drop. Not a blink. A surrender. His jaw tightens. He says nothing. Camera holds on the downward gaze. The sealed door pulses red once more. Cut to black."
+    }
+
+  ],
+
+  "budget_estimate": {
+    "refs_phase2_new": "2 (Worf + Chekov) × $0.04 = $0.08",
+    "images_action_clips": "4 clips × 2 images × $0.04 = $0.32",
+    "images_dialogue_clips": "5 clips × 1 image × $0.04 = $0.20",
+    "total_nb_images": "15 × $0.04 = $0.60",
+    "tts_elevenlabs": "~$0.17",
+    "kling_i2v_4x5s_no_audio": "4 × $0.35 = $1.40",
+    "kling_avatar_dialogue": "12s × $0.056 = $0.67",
+    "total": "$2.84"
+  }
+}

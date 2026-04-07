@@ -187,6 +187,8 @@ full body character pose, front-facing view, neutral dark background,
 clear detailed character design, vertical composition, 9:16 aspect ratio
 ```
 
+**Рот персонажа на референсе:** генерируй с лёгкой улыбкой, чтобы были видны зубы. Это улучшает качество липсинка на последующих этапах.
+
 Сохрани как `character-ref.png`. Стоимость: ~$0.04.
 
 ---
@@ -196,6 +198,10 @@ clear detailed character design, vertical composition, 9:16 aspect ratio
 1 сцена = 1 изображение (Nano Banana 2).
 - `image_urls`: `[character-ref-url]`
 - `image_prompt` из storyboard
+
+**Рот персонажа на изображениях сцен:**
+- **Сцены с липсинком** (персонаж говорит, будет применяться lipsync) — генерируй персонажа с лёгкой улыбкой / приоткрытым ртом, видны зубы. Это критично для качества липсинка.
+- **Сцены без липсинка** (нет речи, или речь за кадром) — генерируй рот в нужном настроении сцены.
 
 ---
 
