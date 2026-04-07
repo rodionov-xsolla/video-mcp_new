@@ -16,8 +16,8 @@
 
 - **Концепт:** бесконечные микро-драмы с brainrot эстетикой, cliffhanger-ы, петли сюжета
 - **Модель:** Kling 2.6 Pro I2V (`generate_audio: false`)
-- **Аудио:** Kokoro TTS (озвучка) + Kling Lipsync (опционально для крупных планов)
-- **Речь:** через TTS overlay, `character_speech: null` в storyboard
+- **Аудио:** ElevenLabs TTS (озвучка) + Kling Avatar v2 (липсинк для dialogue клипов)
+- **Речь:** ElevenLabs → Kling Avatar v2 для dialogue клипов; TTS overlay (aecho) для I2V «за стеклом»
 - **Длительность:** 25-40 сек (3-5 клипов × 5-10s)
 - **Бюджет:** $10 максимум на эпизод
 - **Стиль:** Pixar/Disney 3D render
@@ -337,36 +337,45 @@ Preserve character appearance from reference image.
 
 ## ФАЗА 5: СБОРКА
 
-### 5.1 TTS
+### 5.1 TTS (ElevenLabs)
 
-Сгенерировать озвучку для каждого клипа через Kokoro TTS.
+Сгенерировать озвучку через ElevenLabs TTS для всех dialogue клипов.
 
 - Текст берётся из поля `tts` в storyboard (не из `character_speech`)
 - Голос выбирается по типу персонажа и зафиксирован в story_bible.json
+- Параметр: `voice` (имя, не `voice_id`), `language_code`, `stability`
 
-#### Выбор голоса Kokoro TTS
+**Эндпоинт:** `POST https://api.elevenlabs.io/v1/text-to-speech/{voice_id}`
+**Auth:** `xi-api-key: $ELEVENLABS_API_KEY`
+**Стоимость:** ~$0.30/мин (~$0.10 за типичную фразу 5-15 сек)
 
-| Тип персонажа | Голос | Когда |
-|---------------|-------|-------|
-| Уверенный мужской (sigma, chad) | `am_adam` или `am_eric` | Сарказм, уверенность, угрозы |
-| Паника / страх | `af_bella` или `am_puck` | Шок, испуг, отчаяние |
-| Усталость / грусть | `am_michael` или `af_river` | Разочарование, усталость |
-| Гордость / хвастовство | `am_onyx` или `af_heart` | Флекс, победа |
-| Женский (preppy, девочки) | `af_bella` или `af_jessica` | Любой женский персонаж |
-| Нуб / невинный | `am_puck` или `af_nova` | Наивность, непонимание |
+#### Выбор голоса ElevenLabs
 
-**Фиксируй голос для каждого персонажа в story_bible.json** — один персонаж = один голос на весь сериал.
+| Тип персонажа | Голос | Параметры |
+|---------------|-------|-----------|
+| Мужской (уверенный, авторитетный) | `Daniel` | stability 0.10, style 0.8 |
+| Мужской (нейтральный, рассказчик) | `George` | stability 0.30 |
+| Мужской (молодой, энергичный) | `Charlie` | stability 0.20 |
+| Женский (уверенный) | `Charlotte` | stability 0.25 |
+| Женский (нейтральный) | `Rachel` | stability 0.35 |
 
-**Сохранение:** `scenes/scene-{N}/tts-{N}.wav`
+**Фиксируй голос для каждого персонажа в story_bible.json** — один персонаж = один голос на весь сериал. Поле `voice` = имя голоса (строка), НЕ voice_id хеш.
 
-### 5.2 Lipsync (опционально)
+**Сохранение:** `scenes/scene-{N}/tts-{N}.mp3`
 
-Применять Kling Lipsync только для клипов с крупным планом (close-up, medium close-up).
+### 5.2 Kling Avatar v2 (lip sync для dialogue клипов)
 
-- На wide shot / low angle — TTS overlay без lipsync (губы не видны)
-- Стоимость: $0.50/5s или $1.00/10s
+Для каждого **dialogue клипа**: ElevenLabs TTS → Kling Avatar v2 Standard.
 
-**Сохранение:** `scenes/scene-{N}/scene-{N}-lipsync.mp4`
+- Загрузить `tts-{N}.mp3` в Supabase Storage → получить URL
+- Вызвать `fal-ai/kling-video/ai-avatar/v2/standard` с `image_url` (9:16 сцена) + `audio_url` + `motion_prompt`
+- `motion_prompt` обязателен: описывать мимику ДО, ВО ВРЕМЯ и ПОСЛЕ реплики
+- Стоимость: ~$0.056/сек (billing по длине видео)
+- Kling Avatar добавляет молчащий хвост — обрезать по `audio_dur + 1.0s` (см. 5.3)
+
+**Сохранение:** `scenes/scene-{N}/scene-{N}.mp4`
+
+⚠️ **НЕ используй Kling Lipsync (`fal-ai/kling-video/lipsync/audio-to-video`)** — он стоит $0.10/сек и не подходит по бюджету. Используй только Kling Avatar v2.
 
 ### 5.3 Масштабирование — разные правила для I2V и Avatar
 
@@ -414,7 +423,7 @@ ffmpeg -y -i scene-N-scaled.mp4 -i tts-N.mp3 \
   scene-N-final.mp4
 ```
 
-#### Правило обрезки по TTS (только для I2V с TTS / Kokoro overlay):
+#### Правило обрезки по TTS (только для I2V с TTS overlay — сцена «за стеклом»):
 
 ```
 clip_duration = 0.5 (pre-delay) + TTS_duration + 1.0 (post-silence)
@@ -488,7 +497,7 @@ $FFMPEG -y -i final.mp4 \
       "name": "Noob Dave",
       "role": "protagonist",
       "character_description": "Roblox-style blocky humanoid...",
-      "voice": "am_puck",
+      "voice": "Charlie",
       "status": "new to the server, secretly rich",
       "aura_points": 0,
       "relationships": {}
@@ -589,10 +598,10 @@ $FFMPEG -y -i final.mp4 \
 |-----------|---------|----------|
 | Image (Nano Banana 2) | $0.04 | $0.04 |
 | Kling I2V (no audio) | $0.70 | $1.40 |
-| Kokoro TTS | $0.02 | $0.02 |
-| Lipsync (если face detected) | $0.50 | $1.00 |
-| **Итого с lipsync** | **$0.91** | **$1.76** |
-| **Итого без lipsync** | **$0.41** | **$0.76** |
+| ElevenLabs TTS (5-15 сек реплика) | ~$0.05 | ~$0.07 |
+| Kling Avatar v2 (dialogue клип) | $0.056/сек | $0.056/сек |
+| **Итого I2V (action)** | **$0.74** | **$1.47** |
+| **Итого Avatar (dialogue)** | **~$0.32** | **~$0.63** |
 
 > **1×10s выгоднее чем 2×5s** — та же цена за Kling, но 1 image вместо 2, 1 lipsync вместо 2.
 
@@ -626,7 +635,7 @@ $FFMPEG -y -i final.mp4 \
       "name": "Noob Dave",
       "role": "protagonist",
       "character_description": "Roblox-style blocky humanoid character, bright yellow smooth plastic skin, simple blue torso shirt with no details, bright green pants, round head with wide innocent eyes, small curved mouth, stubby short limbs, toy-like proportions with oversized head, matte plastic texture",
-      "voice": "am_puck",
+      "voice": "Charlie",
       "status": "just joined the server",
       "aura_points": 0,
       "relationships": {}
@@ -689,7 +698,7 @@ $FFMPEG -y -i final.mp4 \
 - [ ] `cliffhanger` описан
 - [ ] Первый клип — HOOK (визуальный парадокс + хук-фраза)
 - [ ] Последний клип — CLIFFHANGER (обрыв на пике)
-- [ ] Каждый клип содержит реплику (TTS через Kokoro, `character_speech: null` в storyboard)
+- [ ] Dialogue клипы имеют TTS через ElevenLabs + Kling Avatar v2 (не Kokoro, не Kling Lipsync)
 - [ ] Brainrot лексика присутствует в диалогах
 - [ ] Анимация — ТОЛЬКО микродвижения (нет ходьбы, бега, ударов, прыжков)
 - [ ] Длительность клипов адаптивная: 5s (≤10 слов реплики) или 10s (>10 слов)
@@ -705,7 +714,10 @@ $FFMPEG -y -i final.mp4 \
 ## Анти-паттерны
 
 **НЕ делай:**
-- Не используй `generate_audio: true` — Kling-генерированный голос плохого качества, речь только через Kokoro TTS
+- Не используй `generate_audio: true` — Kling-генерированный голос плохого качества
+- **Не используй Kokoro TTS** — только ElevenLabs TTS (`api.elevenlabs.io/v1/text-to-speech`)
+- **Не используй Kling Lipsync** (`fal-ai/kling-video/lipsync`) — используй Kling Avatar v2 Standard
+- Не передавай `voice_id` хеш в ElevenLabs fal.ai — используй параметр `voice` (имя строкой)
 - Не используй Veo3 T2V для этого формата — только Kling I2V
 - Не давай персонажам активных действий (ходьба, бег, прыжки, удары) — только микро-движения
 - Не превышай 25 слов на реплику TTS — не уложится в 10 сек

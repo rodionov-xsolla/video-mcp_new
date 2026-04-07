@@ -65,9 +65,9 @@ AI Video Production Agent — автономный pipeline для создан�
 - **Провайдер видео I2V:** fal.ai (Kling 2.6 Pro) — $0.14/сек (с аудио)
 - **Провайдер видео T2V:** fal.ai (Veo3) — $0.20-$0.40/сек
 - **FFmpeg:** локальный `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
-- **TTS:** Kokoro TTS (fal.ai) — для форматов, использующих отдельную озвучку
-- **TTS (экспрессивный):** ElevenLabs — для Reddit Story формата (~$0.30/мин, 29 языков)
-- **Lipsync:** Kling Lipsync (fal.ai) — синхронизация речи с видео
+- **TTS:** ElevenLabs — основной TTS для Serial Drama и Gameplay AI Avatar (~$0.30/мин, 29 языков)
+- **TTS (Kokoro):** fal.ai Kokoro — устаревший, только для форматов, не требующих лица (Standard, News)
+- **Lipsync:** Kling Avatar v2 Standard — для dialogue клипов (ElevenLabs audio → avatar video, $0.056/сек)
 
 ### Форматы видео
 
