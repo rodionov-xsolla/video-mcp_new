@@ -18,8 +18,9 @@ AI-аватар (talking head) внизу экрана рассказывает 
 - **Геймплей (gameplay):** готовые клипы сверху экрана
 - **Пропорции:** 60% геймплей (1080×1152) / 40% аватар (1080×768)
 - **Длительность:** 25-40 сек
-- **Модель аватара:** HeyGen Avatar IV через fal.ai (text → voice + avatar в одном вызове)
-- **Языки:** 175+ языков (HeyGen поддерживает мультиязычность из коробки)
+- **TTS:** ElevenLabs через fal.ai (`fal-ai/elevenlabs/tts/eleven-v3`) — экспрессивный, мультиязычный
+- **Модель аватара:** Kling Avatar v2 Standard через fal.ai (`fal-ai/kling-video/ai-avatar/v2/standard`)
+- **Языки:** 29 языков (ElevenLabs multilingual v2)
 - **Бюджет:** $5 максимум (~$3 типичный)
 
 ### Визуальная раскладка (1080×1920, 9:16)
@@ -117,8 +118,8 @@ AI-аватар (talking head) внизу экрана рассказывает 
   "avatar": {
     "ref_url": "https://supabase.../avatars/MLBB/avatar-ref.png",
     "character_description": "Young male gamer, 20s, wearing headphones around neck, casual hoodie, friendly smile, well-lit room background",
-    "voice_id": "Chill Brian",
-    "custom_motion_prompt": "energetic gaming blogger speaking to camera, natural hand gestures, nodding",
+    "voice": "George",
+    "prompt": "energetic gaming blogger speaking to camera, natural hand gestures, nodding",
     "source": "asset_bank"
   },
   "script": {
@@ -161,6 +162,7 @@ semi-realistic style, 3:4 aspect ratio
 - Стиль: **полуреалистичный** — не мультяшный, но и не фотореалистичный
 - Поза: верхняя часть тела, смотрит в камеру
 - Фон: уютная комната с геймерским сетапом
+- **Рот:** генерируй с лёгкой улыбкой, чтобы были видны зубы. Это улучшает качество липсинка.
 - Сохрани как `avatar-ref.png`
 
 ### Сохранение в asset bank (обязательно после генерации)
@@ -180,61 +182,85 @@ VALUES ('{GAME_TAG}', 'avatar', 'avatar_ref', '{PUBLIC_URL}', '{PROMPT_USED}', '
 
 ## ФАЗА 3: AVATAR VIDEO
 
-Генерация аватара с голосом в одном вызове через HeyGen Avatar IV:
+Двухэтапный процесс: **сначала TTS → согласование голоса → затем lipsync-видео.**
 
-**Endpoint:** `POST https://queue.fal.run/fal-ai/heygen/avatar4/image-to-video`
+**ВАЖНО:** НЕ генерируй avatar video пока голос не одобрен. TTS стоит ~$0.17, avatar ~$1.90 — не трать деньги на lipsync с неутверждённым голосом.
+
+### 3.1 Генерация голоса (ElevenLabs через fal.ai)
+
+**НЕ используй Kokoro TTS — только ElevenLabs.**
+
+**Endpoint:** `POST https://queue.fal.run/fal-ai/elevenlabs/tts/eleven-v3` (async) или `POST https://fal.run/fal-ai/elevenlabs/tts/eleven-v3` (sync)
 
 ```bash
-RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/heygen/avatar4/image-to-video" \
+curl -s -X POST "https://fal.run/fal-ai/elevenlabs/tts/eleven-v3" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "text": "'"$FULL_SCRIPT"'",
+    "voice": "George",
+    "stability": 0.3,
+    "language_code": "ru"
+  }'
+```
+
+**ВНИМАНИЕ — параметры fal.ai обёртки НЕ совпадают с прямым ElevenLabs API:**
+
+| Параметр fal.ai | Описание | НЕ путать с |
+|---|---|---|
+| `voice` | **Имя голоса** строкой ("George", "Daniel") | ~~`voice_id`~~ (хеш) |
+| `stability` | Float 0-1, top-level | ~~`voice_settings.stability`~~ |
+| `language_code` | ISO 639-1 ("ru", "en") | — |
+
+При передаче неправильных параметров (например `voice_id` вместо `voice`) API **молча** использует дефолтный женский голос Rachel.
+
+**Доступные мужские голоса (глубокие):** `George`, `Daniel`, `Adam`, `Brian`, `Chris`
+
+**Настройки по тону:**
+
+| Тон | stability |
+|-----|-----------|
+| Energetic / Funny | 0.25 |
+| Drama / Authoritative | 0.30 |
+| Calm / Narrative | 0.50 |
+
+**Стоимость:** ~$0.30/мин (~$0.17 за 30 сек)
+
+**После генерации — предоставь аудио на согласование.** Не переходи к 3.2 без одобрения.
+
+### 3.2 Генерация avatar video (Kling Avatar v2)
+
+**Endpoint:** `POST https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/standard`
+
+```bash
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/standard" \
   -H "Authorization: Key $FAL_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "image_url": "'$AVATAR_REF_URL'",
-    "script": "'"$FULL_SCRIPT"'",
-    "voice_id": "Chill Brian",
-    "custom_motion_prompt": "energetic gaming blogger, natural hand gestures, nodding, looking at camera"
+    "audio_url": "'$TTS_AUDIO_URL'",
+    "prompt": "confident character speaking to camera, subtle head movements, slight hand gestures"
   }')
 
 REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 ```
 
-**Polling:** стандартный fal.ai паттерн (каждые 15 сек)
-
+**Polling:** стандартный fal.ai паттерн (каждые 15 сек). **Важно:** polling через BASE путь модели:
 ```
-Status: https://queue.fal.run/fal-ai/heygen/avatar4/image-to-video/requests/{REQUEST_ID}/status
-Result: https://queue.fal.run/fal-ai/heygen/avatar4/image-to-video/requests/{REQUEST_ID}
-```
-
-Результат: `avatar.mp4` — видео с голосом, lipsync, мимикой и жестами.
-
-**Стоимость:** $0.10/сек → 30 сек = $3.00
-
-### Выбор голоса (voice_id)
-
-HeyGen Avatar IV поддерживает 300+ голосов на 175+ языках. Рекомендации по выбору:
-
-**EN (мужские, энергичные):** `Chill Brian`, `Andrew Rizz`, `Bold Blake`, `Jack Sterling - Broadcaster`, `Expressive Evan`
-**EN (женские, энергичные):** `Ivy`, `Cute Chloe - Friendly`, `Feisty Fiona - Excited`, `Ellie Faye - Excited`
-**RU:** выбрать русский голос из списка (HeyGen поддерживает русский)
-**Другие языки:** HeyGen поддерживает 175+ языков — выбрать голос, соответствующий `language`
-
-> Полный список голосов можно получить через fal.ai playground или HeyGen List Voices API.
-
-### Fallback: Kling Avatar v2 + Kokoro TTS
-
-Если HeyGen Avatar IV вернул ошибку (FAILED после retry):
-
-```
-HeyGen Avatar IV ──FAIL──→ retry 1 раз ──FAIL──→ Kling Avatar v2 pipeline
+Status: https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}/status
+Result: https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
 ```
 
-**Pipeline fallback (Kling Avatar v2):**
-1. Генерация голоса: Kokoro TTS (`fal-ai/kokoro/american-english`) → `speech.wav` (~$0.02)
-2. Генерация аватара: Kling Avatar v2 Standard (`fal-ai/kling-video/ai-avatar/v2/standard`) + `avatar-ref.png` + `speech.wav` → `avatar.mp4` ($0.056/сек)
-3. **Итого fallback (30s):** ~$1.70 (дешевле, но без жестов рук и менее реалистичная мимика)
-4. Если Kling Avatar v2 тоже FAILED → статус `failed`, записать ошибку
+`audio_url` должен быть публично доступным (загрузи в Supabase Storage перед отправкой).
 
-> **Ограничение fallback:** Kokoro TTS поддерживает только английский. Для других языков fallback невозможен — только HeyGen.
+**Параметры:**
+- `image_url` — URL аватар-картинки (из asset bank или загруженный в Supabase)
+- `audio_url` — URL аудио (TTS из шага 3.1, загруженный в Supabase)
+- `prompt` — описание движений (жесты, повороты головы, настроение)
+
+**Стоимость:** $0.056/сек → 30 сек = ~$1.68
+
+Результат: `avatar.mp4` — видео с lipsync и движениями.
 
 ---
 
@@ -255,24 +281,30 @@ HeyGen Avatar IV ──FAIL──→ retry 1 раз ──FAIL──→ Kling Av
 ### Подготовка
 
 1. Проверь папку `games/{GAME_TAG}/gameplay/` — должен быть хотя бы 1 `.mp4`
-2. Если клипов несколько — выбери наиболее эпичные моменты
-3. Нормализуй fps до 30 и обрежь по длительности `avatar.mp4`:
+2. **Проверь разрешение каждого клипа перед использованием:**
+```bash
+ffprobe -v error -select_streams v -show_entries stream=width,height -of csv=p=0 clip.mp4
+```
+   - **Минимум 720p по ширине (≥720px).** Клипы ниже 720px — **отбраковать**, не использовать.
+   - При `scale=1080:-2` клип 286px растянется в 4x — это мыло. Только 720p+ даёт приемлемое качество.
+3. Если клипов несколько — выбери наиболее эпичные моменты из тех, что прошли проверку
+4. Нормализуй fps до 30 и обрежь по длительности `avatar.mp4`. **Сохраняй аудио** геймплея:
 
 ```bash
-FFMPEG=/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg
+FFMPEG=/usr/local/bin/ffmpeg-full/ffmpeg
 
 # Получить длительность аватара
 AVATAR_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 avatar.mp4)
 
-# Обрезать и нормализовать геймплей
+# Обрезать и нормализовать геймплей (С аудио)
 $FFMPEG -y -i games/MLBB/gameplay/clip1.mp4 -t $AVATAR_DUR \
   -vf "fps=30" \
   -c:v libx264 -preset slow -crf 10 -r 30 -pix_fmt yuv420p \
-  -an \
+  -ar 44100 -ac 2 -c:a aac -b:a 128k \
   gameplay-trimmed.mp4
 ```
 
-**ВАЖНО:** геймплей без аудио (`-an`) — звук идёт только от аватара.
+**ВАЖНО:** аудио геймплея **сохраняется** — оно будет подмешано на ~25% громкости при сборке.
 
 Если несколько клипов — concat перед обрезкой:
 ```bash
@@ -283,7 +315,8 @@ EOF
 
 $FFMPEG -y -f concat -safe 0 -i gameplay-list.txt \
   -vf "fps=30" \
-  -c:v libx264 -preset slow -crf 10 -r 30 -pix_fmt yuv420p -an \
+  -c:v libx264 -preset slow -crf 10 -r 30 -pix_fmt yuv420p \
+  -ar 44100 -ac 2 -c:a aac -b:a 128k \
   -t $AVATAR_DUR \
   gameplay-trimmed.mp4
 ```
@@ -305,37 +338,74 @@ $FFMPEG -y -i avatar.mp4 -vf "fps=30" -c:v libx264 -preset slow -crf 10 -r 30 \
 
 ### 5.2 Split-screen: геймплей сверху + аватар снизу
 
+**НИКОГДА не используй `pad` — только `crop`.** Чёрные поля по бокам недопустимы. Финал строго 1080×1920.
+
 ```bash
 $FFMPEG -y -i gameplay-trimmed.mp4 -i avatar.mp4 \
   -filter_complex "
-    [0:v]scale=1080:1152:force_original_aspect_ratio=decrease,pad=1080:1152:(ow-iw)/2:(oh-ih)/2[top];
-    [1:v]scale=1080:768:force_original_aspect_ratio=decrease,pad=1080:768:(ow-iw)/2:(oh-ih)/2[bot];
+    [0:v]fps=30,scale=1080:-2,crop=1080:1152:0:(ih-1152)/2[top];
+    [1:v]fps=30,scale=1080:-2,crop=1080:768:0:0[bot];
     [top][bot]vstack=inputs=2[v];
-    [1:a]volume=1.0[a]
+    [0:a]volume=0.25[gameplay_audio];
+    [1:a]volume=1.0[avatar_audio];
+    [avatar_audio][gameplay_audio]amix=inputs=2:duration=first[a]
   " \
   -map "[v]" -map "[a]" \
-  -r 30 -c:v libx264 -preset slow -crf 10 -pix_fmt yuv420p \
+  -r 30 -c:v libx264 -preset medium -crf 14 -pix_fmt yuv420p \
   -ar 44100 -ac 2 -c:a aac -b:a 128k \
+  -shortest \
   assembled.mp4
 ```
 
+**Правила масштабирования (scale + crop, НЕ pad):**
+- `scale=1080:-2` — масштабируем по ширине до 1080, высота пропорционально
+- `crop=1080:HEIGHT:0:Y` — обрезаем до нужной высоты
+- **Геймплей (top):** crop по центру `(ih-1152)/2` — убирает UI сверху и снизу
+- **Аватар (bottom):** crop сверху `0:0` — лицо остаётся, обрезается только низ
+- Итого: top=1080×1152 + bottom=1080×768 = **1080×1920**
+
+**Аудио-микс:**
+- **Голос аватара** (`[1:a]`): `volume=1.0` — основной, доминирует
+- **Звук геймплея** (`[0:a]`): `volume=0.25` — фоновый, ~25% громкости для атмосферы
+- `amix=inputs=2:duration=first` — длительность по голосу аватара
+- Если у геймплея нет аудио-дорожки — используй только `[1:a]` как раньше
+
 **Ключевые моменты:**
-- Аудио берётся ТОЛЬКО из `avatar.mp4` (`[1:a]`) — геймплей без звука
-- Пропорции: top=1080×1152 (60%), bottom=1080×768 (40%), итого 1080×1920
-- `force_original_aspect_ratio=decrease` + `pad` — без растяжения
 - `-r 30` и единый fps — предотвращает рассинхронизацию
+- Разрешение финала **строго 1080×1920** — проверяй через `ffprobe`
+
+### 5.3 Субтитры на границе экранов
+
+Субтитры размещаются на стыке геймплея и аватара — непрозрачная чёрная плашка, Montserrat Bold.
+
+```bash
+$FFMPEG -y -i assembled.mp4 \
+  -vf "
+    drawbox=x=0:y=1100:w=iw:h=104:color=black@1.0:t=fill:enable='between(t,0,$TTS_DUR)',
+    drawtext=text='segment 1':fontsize=42:fontcolor=white:fontfile=/Users/admin/Library/Fonts/Montserrat-Bold.ttf:x=(w-text_w)/2:y=1122:enable='between(t,0.0,1.5)',
+    drawtext=text='segment 2':fontsize=42:fontcolor=yellow:fontfile=/Users/admin/Library/Fonts/Montserrat-Bold.ttf:x=(w-text_w)/2:y=1122:enable='between(t,1.5,3.0)'
+  " \
+  -c:a copy subtitled.mp4
+```
+
+**Параметры субтитров:**
+- Шрифт: **Montserrat Bold** (`/Users/admin/Library/Fonts/Montserrat-Bold.ttf`), 42px
+- Позиция: `y=1122` (на границе top/bottom зон)
+- Фон: непрозрачная чёрная полоса `y=1100, h=104`
+- Акцент: каждый 5-й сегмент жёлтый, остальные белые
+- Сегменты: 3-4 слова, равномерно по длительности TTS
 
 ### 5.3 Фоновая музыка (опционально)
 
 ```bash
 $FFMPEG -y -i assembled.mp4 -i bg-music.mp3 \
-  -filter_complex "[1:a]volume=0.10[music];[0:a]volume=1.0[voice];[voice][music]amix=inputs=2:duration=first[aout]" \
+  -filter_complex "[1:a]volume=0.10[music];[0:a]volume=1.0[mix];[mix][music]amix=inputs=2:duration=first[aout]" \
   -map 0:v -map "[aout]" -c:v copy -c:a aac -b:a 128k \
   final.mp4
 ```
 
-- Голос аватара: `volume=1.0` (доминирует)
-- Музыка: `volume=0.10` (едва слышна, фоновая)
+- Микс голос+геймплей из assembled: `volume=1.0` (уже содержит баланс 100% голос / 25% геймплей)
+- Музыка: `volume=0.10` (едва слышна, дополнительный фон)
 - Если без музыки: `cp assembled.mp4 final.mp4`
 
 **НИКОГДА не используй `-shortest`.**
@@ -354,20 +424,13 @@ $FFMPEG -y -i assembled.mp4 -i bg-music.mp3 \
 
 | Статья | Стоимость |
 |--------|-----------|
-| Avatar ref (Nano Banana 2) | $0.04 (или $0 из asset bank) |
-| HeyGen Avatar IV (30s) | $3.00 |
+| Avatar ref (Nano Banana 2) | $0.04 (или $0 из asset bank/user provided) |
+| ElevenLabs TTS (~30 сек) | ~$0.17 |
+| Kling Avatar v2 Standard (30s) | ~$1.68 |
 | Gameplay (готовые клипы) | $0.00 |
 | FFmpeg (локальный) | $0.00 |
 | Музыка (локальная) | $0.00 |
-| **Итого** | **~$3.00** |
-
-**Fallback бюджет (Kling Avatar v2):**
-
-| Статья | Стоимость |
-|--------|-----------|
-| Kokoro TTS | $0.02 |
-| Kling Avatar v2 Standard (30s) | $1.68 |
-| **Итого fallback** | **~$1.74** |
+| **Типичный** | **~$1.90** |
 
 **Лимит:** $5.00. Остановись если расход > $4.50.
 
@@ -385,8 +448,8 @@ $FFMPEG -y -i assembled.mp4 -i bg-music.mp3 \
 - [ ] Есть urgency/дедлайн
 - [ ] Есть social proof
 - [ ] Нет корпоративного тона / прямой рекламы
-- [ ] `voice_id` выбран и соответствует `language`
-- [ ] `custom_motion_prompt` заполнен (НЕ `motion_prompt`)
+- [ ] `voice` (имя, НЕ voice_id хеш) выбран и соответствует `language`
+- [ ] `prompt` для Kling Avatar v2 заполнен (описание движений)
 - [ ] Avatar ref проверен в asset bank (или сгенерирован новый)
 - [ ] Общая длительность скрипта 25-40 сек (оценка: ~2.5 слова/сек)
 - [ ] Бюджет не превысит $5.00
@@ -396,9 +459,12 @@ $FFMPEG -y -i assembled.mp4 -i bg-music.mp3 \
 ## Анти-паттерны
 
 **НЕ делай:**
+- **НЕ используй Kokoro TTS** — только ElevenLabs для этого формата
+- **НЕ передавай `voice_id`** (хеш) в fal.ai ElevenLabs — используй `voice` (имя строкой)
+- **НЕ генерируй avatar video без одобренного голоса** — сначала TTS, согласование, потом lipsync
+- **НЕ используй `pad`** в split-screen — только `scale + crop`, никаких чёрных полей
+- **НЕ обрезай аватар по центру** — crop снизу (`crop=W:H:0:0`), чтобы не задеть лицо
 - Не генерируй новый аватар если он уже есть в asset bank
-- Не используй отдельный TTS когда HeyGen Avatar IV включает голос
-- Не используй `motion_prompt` в API — правильное поле: `custom_motion_prompt`
 - Не сжимай gameplay ниже 720p — потеря качества заметна в split-screen
 - Не забывай нормализовать fps до 30 перед split-screen
 - Не используй `-shortest` при наложении музыки
@@ -408,13 +474,17 @@ $FFMPEG -y -i assembled.mp4 -i bg-music.mp3 \
 ## Выходные файлы
 
 ```
-OUTPUT_DIR/
-├── storyboard.json       # Сценарий (ФАЗА 1)
-├── avatar-ref.png        # Референс аватара (ФАЗА 2, если генерировался)
-├── avatar.mp4            # Аватар с голосом (ФАЗА 3)
-├── gameplay-trimmed.mp4  # Обрезанный геймплей (ФАЗА 4)
-├── assembled.mp4         # Split-screen без музыки (ФАЗА 5)
-└── final.mp4             # Финальное видео (ФАЗА 5)
+output/YYYY-MM-DD/{GAME_TAG}/gameplay-ai-avatar/
+├── storyboard.json              # Сценарий (ФАЗА 1)
+├── scenes/
+│   └── refs/
+│       └── avatar-ref.png       # Референс аватара (ФАЗА 2, если генерировался)
+├── tts-output.mp3               # Голос ElevenLabs (ФАЗА 3.1)
+├── avatar.mp4                   # Аватар с lipsync (ФАЗА 3.2)
+├── gameplay-trimmed.mp4         # Обрезанный геймплей (ФАЗА 4)
+├── assembled.mp4                # Split-screen без субтитров (ФАЗА 5.2)
+├── subtitled.mp4                # С субтитрами (ФАЗА 5.3)
+└── final.mp4                    # Финальное видео (ФАЗА 5.4/5.5)
 ```
 
 ---

@@ -308,6 +308,8 @@ clear detailed character design, vertical composition, 9:16 aspect ratio
 - Не передавай `image_urls: []` — если нет референсных URL, **omit the field entirely**
 - Стиль ref ОБЯЗАН совпадать со стилем видео (photorealistic → photorealistic, anime → anime)
 
+**Рот персонажа на референсе:** генерируй с лёгкой улыбкой, чтобы были видны зубы. Это улучшает качество липсинка на последующих этапах.
+
 **Сохранить:** `scenes/refs/character-ref.png`
 
 **Стоимость:** ~$0.04
@@ -323,6 +325,10 @@ clear detailed character design, vertical composition, 9:16 aspect ratio
 | 1 | `[character-ref-url]` |
 | 2 | `[character-ref-url, scene-1-url]` |
 | N | `[character-ref-url, scene-(N-1)-url]` |
+
+**Рот персонажа на изображениях сцен:**
+- **Сцены с липсинком** (персонаж говорит, будет применяться lipsync) — генерируй персонажа с лёгкой улыбкой / приоткрытым ртом, видны зубы. Это критично для качества липсинка.
+- **Сцены без липсинка** (нет речи, или речь за кадром) — генерируй рот в нужном настроении сцены (злость, удивление, грусть и т.д.).
 
 **Правила:**
 - Всегда 2 референса: anchor + предыдущая сцена

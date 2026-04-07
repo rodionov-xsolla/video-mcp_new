@@ -194,6 +194,7 @@
 - Стиль: Pixar/Disney 3D, совпадает с `style_tags` из game config
 - Если в `game_assets` есть `reference_image` для персонажа → использовать его вместо генерации
 - Для multi-character сцен: `image_urls` включает refs обоих персонажей
+- **Рот персонажа на референсе:** генерируй с лёгкой улыбкой, чтобы были видны зубы. Это улучшает качество липсинка на последующих этапах.
 
 **Сохранение:** `scenes/refs/character-ref-{name}.png`
 
@@ -203,11 +204,38 @@
 
 Генерировать изображения последовательно, по одному клипу за раз.
 
+### Ассеты локации (обязательно для I2V консистентности):
+
+Перед генерацией сцен — сгенерировать **location asset** (фон без персонажей) для каждой уникальной локации эпизода.
+
+- Один background image на локацию (коридор, мостик, каюта и т.д.)
+- Стиль совпадает с `style_tags` из game config
+- Сохранить в `scenes/refs/bg-{location-name}.png`
+- Использовать как реф в `image_urls` при генерации всех сцен в этой локации
+
+**Почему:** Без единого background ref фон меняется между клипами → I2V выглядит рваной, теряется визуальная связность эпизода.
+
 ### Chain reference (стандартный паттерн):
 
-- `image_urls`: [character-ref.png] — для первой сцены
-- `image_urls`: [character-ref.png, предыдущая-сцена.png] — для последующих сцен (chain)
-- Для multi-character сцен: `image_urls` включает refs обоих персонажей
+- `image_urls`: [character-ref.png, bg-{location}.png] — для первой сцены в локации
+- `image_urls`: [character-ref.png, bg-{location}.png, предыдущая-сцена.png] — для последующих сцен (chain)
+- Для multi-character сцен: `image_urls` включает refs обоих персонажей + фон
+
+### Формат изображений сцен:
+
+**Все сцены — вертикальный формат 9:16** (608×1080 в NB2).
+
+Квадратный формат (1:1) не используется в serial-drama — это сериал, все кадры вертикальные.
+
+| Тип сцены | Формат NB2 | Примечание |
+|-----------|-----------|------------|
+| I2V action | 608×1080 (9:16) | Kling I2V нативный формат |
+| Avatar/dialogue | 608×1080 (9:16) | Вертикальный портрет, НЕ квадрат |
+| Background asset | 608×1080 (9:16) | Фон для локации |
+
+### Рот персонажа на изображениях сцен:
+- **Сцены с липсинком** (персонаж говорит, будет применяться lipsync) — генерируй персонажа с лёгкой улыбкой / приоткрытым ртом, видны зубы. Это критично для качества липсинка.
+- **Сцены без липсинка** (нет речи, или речь за кадром) — генерируй рот в нужном настроении сцены (злость, удивление, грусть и т.д.).
 
 ### Параметры:
 
@@ -284,10 +312,24 @@ Preserve character appearance from reference image.
 - ✅ `Camera holds steady at medium shot. Character turns head slowly to face the viewer, eyebrows raise in surprise, mouth drops slightly open. Background neon signs flicker. Tense stillness.`
 - ❌ `Character walks up to the other player and pushes him` — перемещение + физический контакт
 
-### Hard cut:
+### Старт + эндфрейм для I2V клипов (обязательно):
 
-- Без `end_image_url`
-- Хард-кат между клипами (нет freeze frame на последнем кадре)
+Для каждого **I2V action клипа** генерировать два изображения:
+- `scene-{N}-start.png` — начальное состояние сцены
+- `scene-{N}-end.png` — конечное состояние (куда движется анимация)
+
+Передавать в Kling: `start_image_url` + `end_image_url`. Это даёт направление анимации.
+
+Для **Avatar/dialogue клипов** — только одно изображение (Kling Avatar сам управляет движением через audio).
+
+### motion_prompt (обязателен для Avatar клипов):
+
+`motion_prompt` **обязателен** для каждого Avatar клипа — без него мимика нейтральная.
+
+Что описывать:
+- Конкретные физические маркеры эмоций ("jaw tightens", "eyes narrow" — не "angry")
+- Поведение ДО речи, ВО ВРЕМЯ и ПОСЛЕ
+- Направление взгляда (прямо в камеру / в сторону)
 
 **Сохранение:** `scenes/scene-{N}/scene-{N}.mp4`
 
@@ -326,47 +368,59 @@ Preserve character appearance from reference image.
 
 **Сохранение:** `scenes/scene-{N}/scene-{N}-lipsync.mp4`
 
-### 5.3 Масштабирование
+### 5.3 Масштабирование — разные правила для I2V и Avatar
 
-Все клипы привести к единому формату перед склейкой:
-- Разрешение: 1080×1920
-- FPS: 30
-- CRF: 10
-- Аудио: AAC 44100 Hz stereo
-
-**Сохранение:** `scenes/scene-{N}/scene-{N}-scaled.mp4`
-
-### 5.4 TTS overlay per clip
-
+**I2V action клипы** (`generate_audio=false` → нет аудио в файле):
 ```bash
-TTS_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 tts.wav)
-CLIP_DUR=$(echo "0.5 + $TTS_DUR + 1.0" | bc)
-ffmpeg -y -i scene.mp4 -i tts.wav \
-  -filter_complex "[1:a]adelay=500|500[tts];[0:a][tts]amix=inputs=2:duration=first[a]" \
-  -map 0:v -map "[a]" -t $CLIP_DUR \
-  -ar 44100 -ac 2 -c:a aac -b:a 128k scene-final.mp4
+VID_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 scene-N.mp4)
+ffmpeg -y -i scene-N.mp4 \
+  -f lavfi -i "anullsrc=r=44100:cl=stereo" \
+  -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2" \
+  -map 0:v -map 1:a -t "$VID_DUR" \
+  -r 30 -c:v libx264 -crf 18 -preset fast \
+  -ar 44100 -ac 2 -c:a aac -b:a 128k \
+  scene-N-scaled.mp4
+```
+⚠️ Kling I2V с `generate_audio=false` выдаёт видео **без аудиодорожки**. Без явного `anullsrc` concat сломается.
+
+**Avatar/dialogue клипы** (Kling Avatar добавляет молчащий хвост: video_dur > audio_dur):
+```bash
+AUDIO_DUR=$(ffprobe -v error -show_entries stream=duration -select_streams a:0 -of csv=p=0 scene-N.mp4)
+TARGET=$(python3 -c "print(round($AUDIO_DUR + 1.0, 3))")
+ffmpeg -y -i scene-N.mp4 \
+  -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,tpad=stop_mode=clone:stop_duration=1.0" \
+  -af "apad=pad_dur=1.0" \
+  -t "$TARGET" \
+  -r 30 -c:v libx264 -crf 18 -preset fast \
+  -ar 44100 -ac 2 -c:a aac -b:a 128k \
+  scene-N-final.mp4
+```
+⚠️ Kling Avatar добавляет 0.25–1.79s тишины в конец. При concat хвосты суммируются и сдвигают весь тайминг. Всегда обрезать до `audio_dur + 1.0s` через `tpad + apad + -t TARGET`.
+
+### 5.4 Аудио: I2V = тишина, Avatar = lipsync, исключения
+
+**I2V action клипы** — **NO TTS overlay**. Только тихая дорожка (anullsrc из шага 5.3).
+
+**Avatar/dialogue клипы** — аудио уже встроено Kling Avatar (lipsync). Не накладывать TTS поверх.
+
+**Исключение — сцена «за стеклом/дверью»**: персонаж виден через преграду, лицо не видно → TTS накладывается на I2V с muffled эффектом:
+```bash
+TTS_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 tts.mp3)
+CLIP_DUR=$(python3 -c "print(round(0.5 + $TTS_DUR + 1.0, 3))")
+ffmpeg -y -i scene-N-scaled.mp4 -i tts-N.mp3 \
+  -filter_complex "[1:a]adelay=500|500,aecho=0.8:0.9:10:0.3[tts];[0:a][tts]amix=inputs=2:duration=first,apad[a]" \
+  -map 0:v -map "[a]" -t "$CLIP_DUR" \
+  -c:v libx264 -crf 18 -ar 44100 -ac 2 -c:a aac -b:a 128k \
+  scene-N-final.mp4
 ```
 
-#### Правило обрезки по TTS:
+#### Правило обрезки по TTS (только для I2V с TTS / Kokoro overlay):
 
 ```
 clip_duration = 0.5 (pre-delay) + TTS_duration + 1.0 (post-silence)
 ```
 
-- 0.5s — пауза перед речью (зритель успевает увидеть кадр)
-- TTS_duration — длина озвучки
-- 1.0s — пауза после речи (зритель осмысляет)
-- Если clip_duration > video_duration → обрезать по видео
-
-#### Для lipsync клипов (аудио уже в видео):
-
-```bash
-ffmpeg -y -i scene-lipsync.mp4 -t $CLIP_DUR \
-  -ar 44100 -ac 2 -c:a aac -b:a 128k \
-  scene-final.mp4
-```
-
-**КРИТИЧНО: НИКОГДА не используй `-shortest`** — это обрежет видео до длины аудио.
+**КРИТИЧНО: НИКОГДА не используй `-shortest`** — обрежет видео до длины аудио.
 
 ### 5.5 Склейка клипов
 
@@ -534,7 +588,7 @@ $FFMPEG -y -i final.mp4 \
 | Компонент | 5s клип | 10s клип |
 |-----------|---------|----------|
 | Image (Nano Banana 2) | $0.04 | $0.04 |
-| Kling I2V (no audio) | $0.35 | $0.70 |
+| Kling I2V (no audio) | $0.70 | $1.40 |
 | Kokoro TTS | $0.02 | $0.02 |
 | Lipsync (если face detected) | $0.50 | $1.00 |
 | **Итого с lipsync** | **$0.91** | **$1.76** |
@@ -551,9 +605,10 @@ $FFMPEG -y -i final.mp4 \
 **Лимит:** $10.00 на эпизод. Остановись если расход > $9.00.
 
 **Оптимизация:**
-- `generate_audio = false` — экономит 50% на Kling ($0.07/s вместо $0.14/s)
+- `generate_audio = false` — **ВСЕГДА** в serial-drama. Kling-голос плохого качества
 - Lipsync только на крупных планах с выраженными чертами лица
 - Предпочитай 10s клипы вместо 2×5s
+- ⚠️ Kling I2V 5s = **$0.70** (не занижать до $0.35 при планировании)
 
 ---
 
