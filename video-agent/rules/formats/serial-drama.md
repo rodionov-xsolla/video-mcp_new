@@ -274,9 +274,22 @@
 - Модель: `fal-ai/kling-video/v2.6/pro/image-to-video`
 - `generate_audio` = `false` — **ВСЕГДА**. Kling НЕ генерирует звук. Вся озвучка через TTS
 - `character_speech` = `null`
-- `duration`: `"5"` или `"10"` (адаптивно, согласно стoryboard)
-- Polling: каждые 15 секунд
+- `duration`: `"5"` или `"10"` (адаптивно, согласно storyboard)
 - Валидация: файл > 1000 байт
+
+#### Polling (fal.ai async):
+```bash
+# Submit:
+POST https://queue.fal.run/fal-ai/kling-video/v2.6/pro/image-to-video
+# → получаем request_id
+
+# Status (ВАЖНО — base path = fal-ai/kling-video, НЕ полный endpoint):
+GET https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}/status
+
+# Result:
+GET https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
+```
+Polling каждые 15 сек, таймаут 10 мин. См. `rules/main/fallback.md` для таблицы base paths всех моделей.
 
 ### Разрешённые действия (ТОЛЬКО микродвижения):
 
@@ -400,6 +413,19 @@ Preserve character appearance from reference image.
 - `motion_prompt` обязателен: описывать мимику ДО, ВО ВРЕМЯ и ПОСЛЕ реплики
 - Стоимость: ~$0.056/сек (billing по длине видео)
 - Kling Avatar добавляет молчащий хвост — обрезать по `audio_dur + 1.0s` (см. 5.3)
+
+#### Polling (fal.ai async):
+```bash
+# Submit:
+POST https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/standard
+# → request_id
+
+# Status (base = fal-ai/kling-video, НЕ полный путь):
+GET https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}/status
+
+# Result:
+GET https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
+```
 
 **Сохранение:** `scenes/scene-{N}/scene-{N}.mp4`
 
