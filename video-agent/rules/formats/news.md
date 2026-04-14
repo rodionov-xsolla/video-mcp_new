@@ -413,7 +413,7 @@ Veo3 T2V генерирует видео напрямую из текстово�
 ### 4.1 Title Card — Ken Burns (FFmpeg)
 
 ```bash
-/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg -y \
+/usr/local/bin/ffmpeg -y \
   -loop 1 -i title-card.png \
   -vf "zoompan=z=zoom+0.003:x=iw/2-(iw/zoom/2):y=ih/2-(ih/zoom/2):d=75:s=1080x1920:fps=25" \
   -t 3 -c:v libx264 -pix_fmt yuv420p title-card.mp4
@@ -453,14 +453,14 @@ Veo3 T2V генерирует видео напрямую из текстово�
 
 ## ФАЗА 5: СБОРКА (FFmpeg)
 
-FFmpeg: `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
+FFmpeg: `/usr/local/bin/ffmpeg`
 
 ### 5.1 Масштабирование клипов
 
 Масштабировать все клипы (включая title card) к 1080×1920, 30fps, CRF 10, AAC 44100Hz стерео:
 
 ```bash
-/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg -y \
+/usr/local/bin/ffmpeg -y \
   -i INPUT.mp4 \
   -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2" \
   -r 30 -c:v libx264 -crf 10 \
@@ -481,7 +481,7 @@ file 'scene-1-scaled.mp4'
 file 'scene-2-scaled.mp4'
 file 'scene-3-scaled.mp4'" > concat_list.txt
 
-/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg -y \
+/usr/local/bin/ffmpeg -y \
   -f concat -safe 0 -i concat_list.txt \
   -c:v libx264 -crf 10 -r 30 \
   -c:a aac -ar 44100 -ac 2 \
@@ -493,7 +493,7 @@ file 'scene-3-scaled.mp4'" > concat_list.txt
 Если требуется фоновая музыка (volume=0.15):
 
 ```bash
-/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg -y \
+/usr/local/bin/ffmpeg -y \
   -i news_concat.mp4 \
   -i MUSIC_TRACK.mp3 \
   -filter_complex "[1:a]volume=0.15[bg];[0:a][bg]amix=inputs=2:duration=first:dropout_transition=2[aout]" \

@@ -16,8 +16,8 @@
 
 - **Концепт:** бесконечные микро-драмы с brainrot эстетикой, cliffhanger-ы, петли сюжета
 - **Модель:** Kling 2.6 Pro I2V (`generate_audio: false`)
-- **Аудио:** Kokoro TTS (озвучка) + Kling Lipsync (опционально для крупных планов)
-- **Речь:** через TTS overlay, `character_speech: null` в storyboard
+- **Аудио:** ElevenLabs TTS (озвучка) + Kling Avatar v2 (липсинк для dialogue клипов)
+- **Речь:** ElevenLabs → Kling Avatar v2 для dialogue клипов; TTS overlay (aecho) для I2V «за стеклом»
 - **Длительность:** 25-40 сек (3-5 клипов × 5-10s)
 - **Бюджет:** $10 максимум на эпизод
 - **Стиль:** Pixar/Disney 3D render
@@ -80,23 +80,42 @@
 | **CLIMAX** | 5-30s | Диалог, конфронтация, нарастающий темп | 2-3 clips (5-10s каждый) |
 | **CLIFFHANGER** | Последние 5s | Обрыв на пике. Шок, reveal, mid-sentence stop | 1 clip (5s) |
 
-### Правила нарратива
+### Правила нарратива — ПРИНЦИПЫ СЦЕНАРИЯ
 
-1. **HOOK (первый клип):**
-   - Визуальный контраст: бедный нуб рядом с роскошным домом / спокойная сцена перед хаосом
-   - Хук-фраза: провокация, вопрос, шокирующее заявление
-   - Пример: *"Everybody laughed at the bacon hair... they had NO idea what was coming"*
+#### Что работает (TikTok/Reels аудитория):
+- **Конфликт с первой секунды.** Не «жил-был», а «Ворф ведёт Чехова к шлюзу». Зритель попадает в середину действия.
+- **Конкретные, визуальные ставки.** Кто-то умрёт, будет предан, потеряет всё. Не абстрактные эмоции — конкретная угроза в кадре.
+- **Короткие, панчевые реплики.** 2-5 секунд на фразу. Не монологи, не речи — удар за ударом.
+- **Баланс ACTION / DIALOGUE ~50/50.** Не все клипы — говорящие головы. Action-клипы (I2V) дают визуальный ритм, атмосферу, напряжение. Dialogue (Avatar) двигают сюжет.
+- **Каждая сцена двигает сюжет.** Ноль филлера. Если клип убрать и ничего не потеряется — он не нужен.
+- **Драма через действия, не слова.** «Ворф опускает глаза» говорит больше, чем монолог на 10 секунд.
 
-2. **CLIMAX (середина):**
-   - Плотный диалог, каждый клип содержит реплику
-   - Нарастание конфликта: от разговора → к конфронтации → к reveal
+#### Что НЕ работает (избегать):
+- ❌ Философские/сентиментальные сюжеты («Что Спок никогда не скажет», «вопросы идентичности»)
+- ❌ Театральные речи, длинные монологи, пафосные заявления
+- ❌ Медленный buildup без конфликта в первых 5 секундах
+- ❌ Нелогичные переходы (персонаж вспоминает кого-то без контекста или причины)
+- ❌ Все клипы — dialogue (7 из 7 войсоверов = монотонно, дорого, скучно)
+- ❌ Путаница форматов (Reddit Story ≠ Serial Drama ≠ Gameplay AI Avatar — каждый формат имеет свою интонацию)
+
+#### Структура:
+
+1. **HOOK (первый клип, ACTION/I2V):**
+   - Зритель попадает В СЕРЕДИНУ КОНФЛИКТА — не в начало, не в экспозицию
+   - Визуальный удар: кто-то ведёт кого-то к шлюзу / красная тревога / персонаж стоит перед выбором
+   - Brainrot overlay текст для остановки скролла
+   - Пример: *Ворф ведёт Чехова по коридору. Чехов оглядывается на Кирка.*
+
+2. **CLIMAX (середина, чередование ACTION + DIALOGUE):**
+   - Конфликт раскрывается через диалог (Avatar, 2-3 сек каждый) + реакции (I2V, 5 сек)
    - Минимум 2 разных персонажа должны говорить за эпизод
-   - Brainrot лексика в диалогах (rizz, sigma, cooked, negative aura)
+   - Нарастание: первая реплика — вопрос, последняя — невозможный выбор
+   - Brainrot лексика в диалогах где уместно (rizz, sigma, cooked, negative aura)
 
-3. **CLIFFHANGER (последний клип):**
-   - Обрыв на самом интересном месте
-   - Варианты: mid-sentence, reveal нового персонажа, неожиданный поворот
-   - Последняя реплика ОБЯЗАТЕЛЬНО обрывается или заканчивается шоком
+3. **CLIFFHANGER (последний клип, ACTION/I2V):**
+   - Обрыв на ВИЗУАЛЬНОМ ДЕЙСТВИИ, не на словах
+   - Зритель видит ЧТО произойдёт дальше и хочет узнать КАК
+   - Тишина + действие сильнее любой реплики (Ворф опускает глаза, дверь запечатывается, свет гаснет)
    - "TO BE CONTINUED..." overlay на последние 2 секунды
 
 ### Длительность клипа — адаптивная
@@ -125,13 +144,13 @@
   "active_loops": ["..."],
   "cliffhanger": "...",
   "character_speech": null,
-  "tts": "Реплика персонажа идёт сюда (текст для Kokoro TTS)",
+  "tts": "Реплика персонажа (текст для ElevenLabs TTS)",
   "camera_angle": "close-up"
 }
 ```
 
-- `character_speech` = `null` — голос ТОЛЬКО через Kokoro TTS overlay
-- `tts` — текст реплики, отдельное поле от storyboard (передаётся в Kokoro TTS в Фазе 5)
+- `character_speech` = `null` — голос через ElevenLabs TTS → Kling Avatar v2
+- `tts` — текст реплики для ElevenLabs TTS (dialogue клипы) или TTS overlay с aecho (I2V «за стеклом»)
 - `camera_angle` ОБЯЗАН отличаться от соседних клипов
 
 ### image_prompt
@@ -221,6 +240,15 @@
 - `image_urls`: [character-ref.png, bg-{location}.png, предыдущая-сцена.png] — для последующих сцен (chain)
 - Для multi-character сцен: `image_urls` включает refs обоих персонажей + фон
 
+#### ⚠️ Ограничение количества refs в NB2 (POV / over-shoulder кадры):
+
+**Максимум 2 ref-изображения в `image_urls`** для сцен с обзорным ракурсом (коридор, мостик, POV).
+
+- Если передать 3+ refs (char1 + char2 + bg), NB2 пытается «разместить» каждый ref как отдельную сущность → **персонажи удваиваются** (4 фигуры вместо 2)
+- **Для POV / over-shoulder / wide кадров:** `[bg-ref, previous-scene-chain]` — без character refs
+- **Для кадров с одним персонажем:** `[character-ref, bg-ref]` — максимум
+- **Для multi-character I2V:** `[character-ref-1, bg-ref]` — второго персонажа описать словами в промпте, НЕ добавлять его ref
+
 ### Формат изображений сцен:
 
 **Все сцены — вертикальный формат 9:16** (608×1080 в NB2).
@@ -255,9 +283,22 @@
 - Модель: `fal-ai/kling-video/v2.6/pro/image-to-video`
 - `generate_audio` = `false` — **ВСЕГДА**. Kling НЕ генерирует звук. Вся озвучка через TTS
 - `character_speech` = `null`
-- `duration`: `"5"` или `"10"` (адаптивно, согласно стoryboard)
-- Polling: каждые 15 секунд
+- `duration`: `"5"` или `"10"` (адаптивно, согласно storyboard)
 - Валидация: файл > 1000 байт
+
+#### Polling (fal.ai async):
+```bash
+# Submit:
+POST https://queue.fal.run/fal-ai/kling-video/v2.6/pro/image-to-video
+# → получаем request_id
+
+# Status (ВАЖНО — base path = fal-ai/kling-video, НЕ полный endpoint):
+GET https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}/status
+
+# Result:
+GET https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
+```
+Polling каждые 15 сек, таймаут 10 мин. См. `rules/main/fallback.md` для таблицы base paths всех моделей.
 
 ### Разрешённые действия (ТОЛЬКО микродвижения):
 
@@ -300,16 +341,38 @@ Camera holds steady at medium shot. Foreground character turns head slowly towar
 
 ### Motion prompt шаблон
 
+#### ⚠️ Motion prompt = ТЕХНИЧЕСКАЯ РЕЖИССУРА, не литература (КРИТИЧНО):
+
+Kling **не понимает** имена персонажей, мотивации, эмоции. Он понимает только:
+- **Камера:** куда двигается, какой план, какой ракурс
+- **Позиции в кадре:** «figure on the left», «person in foreground»
+- **Физические действия:** «turns head right», «hand rises slowly», «jaw tightens»
+- **Окружение:** «light on the panel shifts from red to green», «particles drift»
+
+**ЗАПРЕЩЕНО в motion prompt:**
+- ❌ Имена персонажей: «Worf turns», «Kirk reacts» → Kling не знает кто это
+- ❌ Настроения: «tension fills the room», «dramatic moment» → не конвертируется в движение
+- ❌ Мотивации: «realizing the truth», «betrayed by his captain» → абстракция
+- ❌ Литературные описания: «the weight of command presses on his shoulders» → ноль визуала
+
+**ОБЯЗАТЕЛЬНО в motion prompt:**
+- ✅ «Camera slow push-in from medium to close-up»
+- ✅ «Figure on the right slowly turns head left toward the other figure»
+- ✅ «Hand rises from waist to chest level, fingers spread»
+- ✅ «Indicator light on the wall panel changes from red to green»
+- ✅ «Both figures shift weight, the one on the left leans slightly toward the door»
+
 ```
 Camera [slight push-in / holds steady / drifts slowly].
-[Character] [micro-action: turns head slowly, raises eyebrow, clenches fist].
+[Figure position] [micro-action: turns head slowly, raises eyebrow, clenches fist].
 [Second micro-action: glances sideways, smirks, eyes widen].
-[Environment: ambient particles drift, neon signs pulse, light shifts].
-Preserve character appearance from reference image.
+[Environment: ambient particles drift, panel lights pulse, light shifts].
 ```
 
 Примеры:
-- ✅ `Camera holds steady at medium shot. Character turns head slowly to face the viewer, eyebrows raise in surprise, mouth drops slightly open. Background neon signs flicker. Tense stillness.`
+- ✅ `Camera holds steady at medium shot. Figure in center turns head slowly to face the viewer, eyebrows raise, mouth drops slightly open. Background panel lights flicker. Tense stillness.`
+- ✅ `Slow push-in. Figure on the left extends arm holding a tablet toward figure on the right. Right figure's eyes widen, head pulls back slightly. Overhead light flickers.`
+- ❌ `Worf shows Kirk the sealed order with his authorization code, Kirk is shocked` — имена + мотивации + нет физических действий
 - ❌ `Character walks up to the other player and pushes him` — перемещение + физический контакт
 
 ### Старт + эндфрейм для I2V клипов (обязательно):
@@ -319,6 +382,40 @@ Preserve character appearance from reference image.
 - `scene-{N}-end.png` — конечное состояние (куда движется анимация)
 
 Передавать в Kling: `start_image_url` + `end_image_url`. Это даёт направление анимации.
+
+#### ⚠️ Консистентность фона между фреймами — ОБЯЗАТЕЛЬНОЕ ПРАВИЛО:
+
+**Оба фрейма генерировать с одним и тем же `bg-{location}.png` в `image_urls`.** НЕ чейнить эндфрейм от стартфрейма.
+
+- Стартфрейм: `image_urls: [character-ref, bg-{location}]`
+- Эндфрейм: `image_urls: [character-ref, bg-{location}]` (другой промпт персонажа — иная поза/выражение)
+
+**Почему не чейн:** При генерации эндфрейма от стартфрейма фон дрейфует — меняется освещение, угол, цвет. Единый `bg-asset` как anchor гарантирует идентичный фон в обоих кадрах и минимизирует артефакты анимации.
+
+#### ⚠️ Консистентность персонажей между фреймами:
+- **Один и тот же персонаж** должен быть на старт-фрейме И на энд-фрейме
+- **Не менять** угол камеры или локацию между start и end
+- Энд-фрейм = продолжение той же сцены (другое выражение лица / другой жест), НЕ другая сцена
+
+**Неправильно:** Кирк на старт-фрейме, Ворф на энд-фрейме → Kling перемешает персонажей в анимации.
+**Правильно:** Кирк (удивлён) → Кирк (шокирован), тот же фон, та же камера.
+
+#### ⚠️ Минимальное изменение композиции между start и end (КРИТИЧНО):
+
+Start и end фреймы **ОБЯЗАНЫ быть почти идентичны** по композиции, перспективе и масштабу кадра.
+
+- **Разрешено менять:** выражение лица, цвет индикатора, жест руки, поворот головы, мелкие детали окружения
+- **ЗАПРЕЩЕНО менять:** глубину/перспективу (дальний план → крупный), масштаб кадра (зум), угол камеры (фронтально → со спины), расстояние до объекта
+
+**Почему:** Если start = далёкий конец коридора, а end = крупный план у двери, Kling пытается «зумировать» между ними, **деформируя и растягивая фон**. Это выглядит как артефакт, а не как анимация.
+
+**Пример правильно:**
+- Start: Кирк и Ворф стоят у двери шлюза, индикатор красный (SEALED)
+- End: Кирк и Ворф стоят у двери шлюза, индикатор зелёный (UNLOCKED), повернули головы друг к другу
+
+**Пример НЕПРАВИЛЬНО:**
+- Start: Кирк и Ворф в начале длинного коридора, далёкий план
+- End: Кирк и Ворф стоят у двери, крупный план ← **ДЕФОРМАЦИЯ**
 
 Для **Avatar/dialogue клипов** — только одно изображение (Kling Avatar сам управляет движением через audio).
 
@@ -337,36 +434,58 @@ Preserve character appearance from reference image.
 
 ## ФАЗА 5: СБОРКА
 
-### 5.1 TTS
+### 5.1 TTS (ElevenLabs)
 
-Сгенерировать озвучку для каждого клипа через Kokoro TTS.
+Сгенерировать озвучку через ElevenLabs TTS для всех dialogue клипов.
 
 - Текст берётся из поля `tts` в storyboard (не из `character_speech`)
 - Голос выбирается по типу персонажа и зафиксирован в story_bible.json
+- Параметр: `voice` (имя, не `voice_id`), `language_code`, `stability`
 
-#### Выбор голоса Kokoro TTS
+**Эндпоинт:** `POST https://api.elevenlabs.io/v1/text-to-speech/{voice_id}`
+**Auth:** `xi-api-key: $ELEVENLABS_API_KEY`
+**Стоимость:** ~$0.30/мин (~$0.10 за типичную фразу 5-15 сек)
 
-| Тип персонажа | Голос | Когда |
-|---------------|-------|-------|
-| Уверенный мужской (sigma, chad) | `am_adam` или `am_eric` | Сарказм, уверенность, угрозы |
-| Паника / страх | `af_bella` или `am_puck` | Шок, испуг, отчаяние |
-| Усталость / грусть | `am_michael` или `af_river` | Разочарование, усталость |
-| Гордость / хвастовство | `am_onyx` или `af_heart` | Флекс, победа |
-| Женский (preppy, девочки) | `af_bella` или `af_jessica` | Любой женский персонаж |
-| Нуб / невинный | `am_puck` или `af_nova` | Наивность, непонимание |
+#### Выбор голоса ElevenLabs
 
-**Фиксируй голос для каждого персонажа в story_bible.json** — один персонаж = один голос на весь сериал.
+| Тип персонажа | Голос | Параметры |
+|---------------|-------|-----------|
+| Мужской (уверенный, авторитетный) | `Daniel` | stability 0.10, style 0.8 |
+| Мужской (нейтральный, рассказчик) | `George` | stability 0.30 |
+| Мужской (молодой, энергичный) | `Charlie` | stability 0.20 |
+| Женский (уверенный) | `Charlotte` | stability 0.25 |
+| Женский (нейтральный) | `Rachel` | stability 0.35 |
 
-**Сохранение:** `scenes/scene-{N}/tts-{N}.wav`
+**Фиксируй голос для каждого персонажа в story_bible.json** — один персонаж = один голос на весь сериал. Поле `voice` = имя голоса (строка), НЕ voice_id хеш.
 
-### 5.2 Lipsync (опционально)
+**Сохранение:** `scenes/scene-{N}/tts-{N}.mp3`
 
-Применять Kling Lipsync только для клипов с крупным планом (close-up, medium close-up).
+### 5.2 Kling Avatar v2 (lip sync для dialogue клипов)
 
-- На wide shot / low angle — TTS overlay без lipsync (губы не видны)
-- Стоимость: $0.50/5s или $1.00/10s
+Для каждого **dialogue клипа**: ElevenLabs TTS → Kling Avatar v2 Standard.
 
-**Сохранение:** `scenes/scene-{N}/scene-{N}-lipsync.mp4`
+- Загрузить `tts-{N}.mp3` в Supabase Storage → получить URL
+- Вызвать `fal-ai/kling-video/ai-avatar/v2/standard` с `image_url` (9:16 сцена) + `audio_url` + `motion_prompt`
+- `motion_prompt` обязателен: описывать мимику ДО, ВО ВРЕМЯ и ПОСЛЕ реплики
+- Стоимость: ~$0.056/сек (billing по длине видео)
+- Kling Avatar добавляет молчащий хвост — обрезать по `audio_dur + 1.0s` (см. 5.3)
+
+#### Polling (fal.ai async):
+```bash
+# Submit:
+POST https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/standard
+# → request_id
+
+# Status (base = fal-ai/kling-video, НЕ полный путь):
+GET https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}/status
+
+# Result:
+GET https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
+```
+
+**Сохранение:** `scenes/scene-{N}/scene-{N}.mp4`
+
+⚠️ **НЕ используй Kling Lipsync (`fal-ai/kling-video/lipsync/audio-to-video`)** — он стоит $0.10/сек и не подходит по бюджету. Используй только Kling Avatar v2.
 
 ### 5.3 Масштабирование — разные правила для I2V и Avatar
 
@@ -414,7 +533,7 @@ ffmpeg -y -i scene-N-scaled.mp4 -i tts-N.mp3 \
   scene-N-final.mp4
 ```
 
-#### Правило обрезки по TTS (только для I2V с TTS / Kokoro overlay):
+#### Правило обрезки по TTS (только для I2V с TTS overlay — сцена «за стеклом»):
 
 ```
 clip_duration = 0.5 (pre-delay) + TTS_duration + 1.0 (post-silence)
@@ -426,31 +545,126 @@ clip_duration = 0.5 (pre-delay) + TTS_duration + 1.0 (post-silence)
 
 Concat всех клипов с re-encode (не stream copy):
 
-**ВСЕ клипы** перед склейкой должны иметь одинаковый аудио формат:
+#### ⚠️ Нормализация FPS перед concat (КРИТИЧНО):
+
+Kling I2V выдаёт **24fps**, Kling Avatar выдаёт **30fps**. При concat без нормализации ffmpeg дропает кадры (до 109 штук), ломая хронометраж — клипы пролетают за 1 секунду или зависают на месте.
+
+**Перед concat обязательно перекодировать ВСЕ I2V клипы в 30fps:**
+```bash
+ffmpeg -y -i scene-N-scaled.mp4 \
+  -vf "fps=30" \
+  -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p \
+  -c:a aac -b:a 128k -ar 44100 \
+  scene-N-30fps.mp4
+```
+
+**Проверить после concat:** в выводе ffmpeg должно быть `dup=0 drop=0`. Если есть dropped frames — FPS не нормализован.
+
+**ВСЕ клипы** перед склейкой должны иметь одинаковый формат:
+- **FPS: 30** (нормализовать I2V из 24fps)
 - Sample rate: 44100 Hz
 - Channels: stereo (2)
 - Codec: AAC 128kbps
 
 Без нормализации concat даёт глитчи/тишину при смене формата между клипами.
 
-### 5.6 "TO BE CONTINUED..." Overlay
+#### ⚠️ Верификация тайминга перед concat (обязательно):
 
-На последний клип финального видео — FFmpeg drawtext:
+Перед финальной склейкой — вывести тайминг всех клипов и убедиться что всё корректно:
 
 ```bash
-$FFMPEG -y -i final.mp4 \
-  -vf "drawtext=text='TO BE CONTINUED...':fontsize=48:fontcolor=white:borderw=3:bordercolor=black:x=(w-text_w)/2:y=h-120:enable='between(t,duration-2,duration)'" \
-  -c:a copy final-overlay.mp4
+# Вывести продолжительность каждого клипа и кумулятивный тайминг
+CUMULATIVE=0
+for clip in scene-1-final.mp4 scene-2-final.mp4 ...; do
+  DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 $clip)
+  echo "$clip: ${DUR}s → cumulative: ${CUMULATIVE}s"
+  CUMULATIVE=$(python3 -c "print(round($CUMULATIVE + $DUR, 3))")
+done
 ```
+
+Ожидаемая структура:
+- I2V action клипы: фиксированная длительность (5.0-5.1s)
+- Avatar dialogue клипы: audio_dur + 1.0s (убедись что хвост обрезан)
+- Пауза между репликами: 1.0s встроена в обрезку Avatar
+
+**Не приступай к concat если тайминг не сходится** — пересчитай и пересобери проблемный клип.
+
+### 5.6 Субтитры для dialogue клипов
+
+**Обязательно.** Наложить субтитры поверх финального видео через FFmpeg drawtext.
+
+#### Формат субтитров:
+
+- Шрифт: Montserrat Bold (или Arial Bold если нет)
+- Размер: 42px
+- Цвет: белый с чёрной обводкой (`borderw=3:bordercolor=black`)
+- Позиция: нижняя треть экрана (y=1550 для 1080×1920)
+- Тайминг: точно по TTS аудио каждого dialogue клипа
+
+#### Сборка субтитров:
+
+1. Определить точное время начала каждого dialogue клипа в финальном видео (из тайминга 5.5)
+2. Построить drawtext фильтр:
+
+```bash
+$FFMPEG -y -i concat.mp4 \
+  -vf "
+    drawtext=text='Реплика 1':fontsize=42:fontcolor=white:borderw=3:bordercolor=black:fontfile=/Users/admin/Library/Fonts/Montserrat-Bold.ttf:x=(w-text_w)/2:y=1550:enable='between(t,START_1,END_1)',
+    drawtext=text='Реплика 2':fontsize=42:fontcolor=white:borderw=3:bordercolor=black:fontfile=/Users/admin/Library/Fonts/Montserrat-Bold.ttf:x=(w-text_w)/2:y=1550:enable='between(t,START_2,END_2)'
+  " \
+  -c:a copy subtitled.mp4
+```
+
+- `START_N` = время начала dialogue клипа N в финальном видео
+- `END_N` = START_N + TTS_DUR (без паузы хвоста)
+- Длинные реплики (>40 символов) — разбить на 2 строки через `\n`
+- I2V action клипы — субтитров нет (тишина)
+
+**Сохранение:** `subtitled.mp4` (до TBC overlay)
+
+### 5.7 Финальная сборка — ОДИН ffmpeg pipeline (КРИТИЧНО)
+
+**Собирать финал в ОДНОМ вызове ffmpeg:** concat + музыка + субтитры + TBC overlay + пауза + fade.
+
+**НЕ делать послойно** (сначала concat+музыка → потом tpad+fade поверх → потом overlay). При послойном подходе музыка обрезается на границе оригинала, apad добавляет тишину вместо продолжения музыки.
+
+**Шаблон финальной сборки:**
+```bash
+ffmpeg -y \
+  -i concat.mp4 -i music.mp3 \
+  -i subtitle1.png -i subtitle2.png ... -i tbc.png \
+  -filter_complex "
+    [0:v][2:v]overlay=0:0:enable='between(t,SUB1_START,SUB1_END)'[v1];
+    [v1][3:v]overlay=0:0:enable='between(t,SUB2_START,SUB2_END)'[v2];
+    ...
+    [vN][M:v]overlay=0:0:enable='between(t,TBC_START,TBC_END)'[vfinal];
+    [vfinal]tpad=stop_mode=clone:stop_duration=PAUSE,fade=t=out:st=FADE_START:d=FADE_DUR[vout];
+    [0:a][1:a]amix=inputs=2:weights='1 0.15':normalize=0,afade=t=out:st=FADE_START:d=FADE_DUR[aout]
+  " \
+  -map "[vout]" -map "[aout]" \
+  -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p \
+  -c:a aac -b:a 128k -ar 44100 -ac 2 \
+  -t TOTAL_DURATION \
+  final.mp4
+```
+
+**Ключевые моменты:**
+- Музыка подмешивается `amix` на ВСЮ длину финала (включая паузу и fade)
+- `afade` применяется к уже смикшированному аудио
+- Субтитры = PNG overlays через Pillow (если drawtext недоступен из-за отсутствия libfreetype)
+- `-t TOTAL_DURATION` = concat_duration + pause + fade
+- **Brainrot overlay** — только по согласованию, НЕ добавлять автоматически
+
+### 5.8 "TO BE CONTINUED..." Overlay
 
 - Текст: белый с чёрной обводкой
 - Позиция: по центру, нижняя часть экрана
-- Появляется: за 2 секунды до конца видео
-- Заменить `duration` на реальную длительность видео (получить через `ffprobe`)
+- Появляется: за 2 секунды до конца видео (до fade)
+- Реализация: PNG overlay через Pillow (см. 5.7 шаблон)
 
-### 5.7 Фоновая музыка (опционально)
+### 5.9 Фоновая музыка
 
-Наложить фоновую музыку с `volume=0.15`.
+Наложить фоновую музыку с `volume=0.15`. Музыка встраивается в единый pipeline (см. 5.7).
 
 **NEVER `-shortest`.**
 
@@ -488,7 +702,7 @@ $FFMPEG -y -i final.mp4 \
       "name": "Noob Dave",
       "role": "protagonist",
       "character_description": "Roblox-style blocky humanoid...",
-      "voice": "am_puck",
+      "voice": "Charlie",
       "status": "new to the server, secretly rich",
       "aura_points": 0,
       "relationships": {}
@@ -589,10 +803,10 @@ $FFMPEG -y -i final.mp4 \
 |-----------|---------|----------|
 | Image (Nano Banana 2) | $0.04 | $0.04 |
 | Kling I2V (no audio) | $0.70 | $1.40 |
-| Kokoro TTS | $0.02 | $0.02 |
-| Lipsync (если face detected) | $0.50 | $1.00 |
-| **Итого с lipsync** | **$0.91** | **$1.76** |
-| **Итого без lipsync** | **$0.41** | **$0.76** |
+| ElevenLabs TTS (5-15 сек реплика) | ~$0.05 | ~$0.07 |
+| Kling Avatar v2 (dialogue клип) | $0.056/сек | $0.056/сек |
+| **Итого I2V (action)** | **$0.74** | **$1.47** |
+| **Итого Avatar (dialogue)** | **~$0.32** | **~$0.63** |
 
 > **1×10s выгоднее чем 2×5s** — та же цена за Kling, но 1 image вместо 2, 1 lipsync вместо 2.
 
@@ -626,7 +840,7 @@ $FFMPEG -y -i final.mp4 \
       "name": "Noob Dave",
       "role": "protagonist",
       "character_description": "Roblox-style blocky humanoid character, bright yellow smooth plastic skin, simple blue torso shirt with no details, bright green pants, round head with wide innocent eyes, small curved mouth, stubby short limbs, toy-like proportions with oversized head, matte plastic texture",
-      "voice": "am_puck",
+      "voice": "Charlie",
       "status": "just joined the server",
       "aura_points": 0,
       "relationships": {}
@@ -689,7 +903,14 @@ $FFMPEG -y -i final.mp4 \
 - [ ] `cliffhanger` описан
 - [ ] Первый клип — HOOK (визуальный парадокс + хук-фраза)
 - [ ] Последний клип — CLIFFHANGER (обрыв на пике)
-- [ ] Каждый клип содержит реплику (TTS через Kokoro, `character_speech: null` в storyboard)
+- [ ] Dialogue клипы имеют TTS через ElevenLabs + Kling Avatar v2 (не Kokoro, не Kling Lipsync)
+- [ ] **Все изображения — 608×1080 (9:16)**, включая Avatar dialogue клипы (НЕ квадрат 1:1)
+- [ ] **Каждый клип имеет отдельно сгенерированное scene image** (Фаза 3) — нельзя использовать character ref как кадр
+- [ ] **Location assets сгенерированы** для каждой уникальной локации и включены в `image_urls`
+- [ ] **Старт- и энд-фреймы I2V содержат одного и того же персонажа** — нет перестановок между фреймами
+- [ ] **motion_prompt прописан** для всех Avatar клипов (мимика до/во время/после реплики)
+- [ ] **Верификация тайминга** пройдена перед concat (Фаза 5.5) — длительности всех клипов проверены
+- [ ] **Субтитры наложены** (Фаза 5.6) — drawtext на все dialogue клипы с точным таймингом
 - [ ] Brainrot лексика присутствует в диалогах
 - [ ] Анимация — ТОЛЬКО микродвижения (нет ходьбы, бега, ударов, прыжков)
 - [ ] Длительность клипов адаптивная: 5s (≤10 слов реплики) или 10s (>10 слов)
@@ -699,19 +920,70 @@ $FFMPEG -y -i final.mp4 \
 - [ ] "TO BE CONTINUED..." overlay запланирован на последние 2 секунды
 - [ ] Chain reference использован для всех изображений (Фаза 3)
 - [ ] `generate_audio: false` во всех Kling запросах
+- [ ] **Cost log ведётся** с первого API-вызова (не считать по памяти)
+- [ ] **Промпты проверены** — не пустые, пути абсолютные
+- [ ] **FPS нормализован** — все I2V клипы перекодированы в 30fps перед concat
+- [ ] **Motion prompts технические** — позиции в кадре, камера, физические действия (не имена, не эмоции)
+- [ ] **NB2 refs ≤ 2** для POV/wide кадров (избежать дублирования персонажей)
 
 ---
 
 ## Анти-паттерны
 
 **НЕ делай:**
-- Не используй `generate_audio: true` — Kling-генерированный голос плохого качества, речь только через Kokoro TTS
+- Не используй `generate_audio: true` — Kling-генерированный голос плохого качества
+- **Не используй Kokoro TTS** — только ElevenLabs TTS (`api.elevenlabs.io/v1/text-to-speech`)
+- **Не используй Kling Lipsync** (`fal-ai/kling-video/lipsync`) — используй Kling Avatar v2 Standard
+- Не передавай `voice_id` хеш в ElevenLabs fal.ai — используй параметр `voice` (имя строкой)
+- **Не используй квадратный формат (1:1) для Avatar клипов** — serial-drama строго 9:16 (608×1080). Квадрат даёт неправильное кадрирование и не соответствует финальному 1080×1920
+- **Не пропускай генерацию scene images** (Фаза 3) — нельзя использовать character ref напрямую как кадр видео. Каждый клип требует отдельного сгенерированного изображения сцены с правильным фоном и позой персонажа
+- **Не менять персонажа между старт- и энд-фреймом** I2V клипа — оба фрейма должны содержать одного и того же персонажа, один и тот же фон, одну и ту же камеру
+- **Не пропускай верификацию тайминга** перед concat (Фаза 5.5) — проверь длительность каждого клипа и кумулятивный тайминг перед склейкой
+- **Не пропускай субтитры** (Фаза 5.6) — drawtext обязателен для всех dialogue клипов
 - Не используй Veo3 T2V для этого формата — только Kling I2V
 - Не давай персонажам активных действий (ходьба, бег, прыжки, удары) — только микро-движения
 - Не превышай 25 слов на реплику TTS — не уложится в 10 сек
 - Не используй `-shortest` в FFmpeg — обрезает видео до длины аудио
 - Не закрывай все сюжетные петли — всегда должен оставаться открытый cliffhanger
 - Не повторяй хуки/клиффхэнгеры из последних 8 эпизодов (anti-repetition)
+- **Не переделывай клипы, которые работают** — если клип выглядит хорошо, не трогай его. Спроси перед переделкой. Каждая лишняя генерация = $0.70+ и риск получить хуже
+- **Не собирай финал послойно** — только один ffmpeg pipeline (см. 5.7). Послойная сборка ломает музыку и тайминг
+
+---
+
+## Правила процесса (ОБЯЗАТЕЛЬНО)
+
+### Лог API-вызовов (cost tracking в реальном времени)
+
+**Вести лог КАЖДОГО API-вызова** прямо во время работы — не считать по памяти в конце.
+
+Формат лога (в `{OUTPUT_DIR}/cost_log.txt`):
+```
+NB2  | scene-1-start.png  | $0.04 | OK
+NB2  | scene-1-end.png    | $0.04 | OK
+NB2  | scene-5-start.png  | $0.04 | WASTED (empty prompt)
+I2V  | scene-2.mp4        | $0.70 | OK
+AVT  | scene-3.mp4        | $0.28 | OK (5s)
+TTS  | tts-3.mp3          | $0.05 | OK
+```
+
+**После каждой фазы** — показать промежуточный итог расходов.
+**В финальном отчёте** — точная сумма из лога, не приблизительная оценка.
+
+### Валидация данных перед API-вызовом
+
+Перед отправкой запроса в любой API:
+1. **Проверить что промпт не пустой** — вывести первые 50 символов промпта в лог
+2. **Проверить что файлы/URL существуют** — если `image_url` из локального файла, убедиться что файл > 0 байт
+3. **Проверить абсолютные пути** — `storyboard.json` читать только по полному пути `${OUTPUT_DIR}/storyboard.json`
+
+**Почему:** Пустой промпт = потраченные $0.04-$0.70 впустую. Неправильный путь = пустой промпт.
+
+### Не переделывать без согласования
+
+- Если клип уже сгенерирован и выглядит приемлемо — **НЕ перегенерировать** без явного запроса
+- Если хочешь что-то улучшить — **спроси**, показав что именно не нравится и почему
+- Лишняя переделка I2V = $0.70, Avatar = $0.28-0.56 — деньги, которые можно было потратить на качество других сцен
 
 ---
 

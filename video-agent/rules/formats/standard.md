@@ -379,9 +379,9 @@ clear detailed character design, vertical composition, 9:16 aspect ratio
 
 ## ФАЗА 5: СБОРКА (FFmpeg)
 
-**Локальный FFmpeg:** `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
+**Локальный FFmpeg:** `/usr/local/bin/ffmpeg`
 
-Задай переменную: `FFMPEG=/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
+Задай переменную: `FFMPEG=/usr/local/bin/ffmpeg`
 
 ### 5.1 Масштабирование (каждая сцена)
 

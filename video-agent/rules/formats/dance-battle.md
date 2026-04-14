@@ -277,7 +277,7 @@ clear detailed character design, vertical composition, 9:16 aspect ratio
 ### 5.1 Масштабирование
 
 ```bash
-FFMPEG=/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg
+FFMPEG=/usr/local/bin/ffmpeg
 
 $FFMPEG -y -i scene-K.mp4 \
   -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2" \

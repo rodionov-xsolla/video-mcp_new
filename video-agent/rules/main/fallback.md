@@ -9,9 +9,30 @@
 Генерация видео/изображений через fal.ai — асинхронная. После отправки запроса:
 
 1. Получи `request_id` из ответа
-2. Каждые **15 секунд** проверяй статус: `GET /requests/{REQUEST_ID}/status`
-3. Результат забирай по: `GET /requests/{REQUEST_ID}`
-4. Максимальное время ожидания одной генерации: **10 минут**
+2. Каждые **15 секунд** проверяй статус
+3. Максимальное время ожидания одной генерации: **10 минут**
+
+### ⚠️ КРИТИЧНО: Base URL для status/result
+
+Submit идёт на **полный** endpoint, но status и result — только по **2-сегментному base path**.
+
+```python
+# Правило: base = первые 2 сегмента endpoint
+base = "/".join(endpoint.split("/")[:2])
+
+# Status:  https://queue.fal.run/{base}/requests/{request_id}/status
+# Result:  https://queue.fal.run/{base}/requests/{request_id}
+```
+
+| Модель | Submit endpoint | Status/Result base |
+|--------|-----------------|-------------------|
+| NB2 edit | `fal-ai/nano-banana-2/edit` | `fal-ai/nano-banana-2` |
+| Kling I2V | `fal-ai/kling-video/v2.6/pro/image-to-video` | `fal-ai/kling-video` |
+| Kling Avatar v2 | `fal-ai/kling-video/ai-avatar/v2/standard` | `fal-ai/kling-video` |
+| ElevenLabs TTS | `fal-ai/elevenlabs/tts/eleven-v3` | `fal-ai/elevenlabs` |
+| Kokoro TTS | `fal-ai/kokoro/american-english` | `fal-ai/kokoro` |
+
+**Если использовать полный путь** → fal.ai возвращает пустой body или 404, задача «теряется».
 
 ### Статусы и действия
 
@@ -91,6 +112,7 @@ Ken Burns  ──FAIL──→ retry 1 раз ──FAIL──→ статус '
 | curl вернул ошибку | Retry через 10 секунд, максимум 3 попытки |
 | Файл 0 байт | Удали и перегенерируй |
 | URL истёк | fal.ai URLs are temporary — always download immediately after generation |
+| Повторный запрос URL | **НИКОГДА** не перезапрашивать fal.ai result URL для передачи между этапами. Скачать локально → загрузить в Supabase → использовать постоянный URL |
 
 После каждого скачивания проверяй размер файла:
 ```bash
