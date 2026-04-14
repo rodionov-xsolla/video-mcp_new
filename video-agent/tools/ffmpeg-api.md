@@ -124,7 +124,7 @@ curl -s -X POST "https://api.ffmpeg-api.com/ffmpeg/process" \
 ### Решение: локальный ffmpeg
 
 ```bash
-FFMPEG="/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg"
+FFMPEG="/usr/local/bin/ffmpeg"
 
 # 1. Скачай каждую сцену после Ken Burns
 curl -s -o output/scene-1.mp4 "$DOWNLOAD_URL_1"
@@ -144,7 +144,7 @@ EOF
 $FFMPEG -y -f concat -safe 0 -i output/concat-list.txt -c copy output/final.mp4
 ```
 
-> Если ffmpeg не в PATH, используй полный путь: `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
+> Если ffmpeg не в PATH, используй полный путь: `/usr/local/bin/ffmpeg`
 
 ---
 
@@ -153,7 +153,7 @@ $FFMPEG -y -f concat -safe 0 -i output/concat-list.txt -c copy output/final.mp4
 Аналогично concat, audio overlay требует filter_complex и должен выполняться локально.
 
 ```bash
-FFMPEG="/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg"
+FFMPEG="/usr/local/bin/ffmpeg"
 
 $FFMPEG -y \
   -i output/joined.mp4 \

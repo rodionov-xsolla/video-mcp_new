@@ -240,6 +240,15 @@
 - `image_urls`: [character-ref.png, bg-{location}.png, предыдущая-сцена.png] — для последующих сцен (chain)
 - Для multi-character сцен: `image_urls` включает refs обоих персонажей + фон
 
+#### ⚠️ Ограничение количества refs в NB2 (POV / over-shoulder кадры):
+
+**Максимум 2 ref-изображения в `image_urls`** для сцен с обзорным ракурсом (коридор, мостик, POV).
+
+- Если передать 3+ refs (char1 + char2 + bg), NB2 пытается «разместить» каждый ref как отдельную сущность → **персонажи удваиваются** (4 фигуры вместо 2)
+- **Для POV / over-shoulder / wide кадров:** `[bg-ref, previous-scene-chain]` — без character refs
+- **Для кадров с одним персонажем:** `[character-ref, bg-ref]` — максимум
+- **Для multi-character I2V:** `[character-ref-1, bg-ref]` — второго персонажа описать словами в промпте, НЕ добавлять его ref
+
 ### Формат изображений сцен:
 
 **Все сцены — вертикальный формат 9:16** (608×1080 в NB2).
@@ -332,16 +341,38 @@ Camera holds steady at medium shot. Foreground character turns head slowly towar
 
 ### Motion prompt шаблон
 
+#### ⚠️ Motion prompt = ТЕХНИЧЕСКАЯ РЕЖИССУРА, не литература (КРИТИЧНО):
+
+Kling **не понимает** имена персонажей, мотивации, эмоции. Он понимает только:
+- **Камера:** куда двигается, какой план, какой ракурс
+- **Позиции в кадре:** «figure on the left», «person in foreground»
+- **Физические действия:** «turns head right», «hand rises slowly», «jaw tightens»
+- **Окружение:** «light on the panel shifts from red to green», «particles drift»
+
+**ЗАПРЕЩЕНО в motion prompt:**
+- ❌ Имена персонажей: «Worf turns», «Kirk reacts» → Kling не знает кто это
+- ❌ Настроения: «tension fills the room», «dramatic moment» → не конвертируется в движение
+- ❌ Мотивации: «realizing the truth», «betrayed by his captain» → абстракция
+- ❌ Литературные описания: «the weight of command presses on his shoulders» → ноль визуала
+
+**ОБЯЗАТЕЛЬНО в motion prompt:**
+- ✅ «Camera slow push-in from medium to close-up»
+- ✅ «Figure on the right slowly turns head left toward the other figure»
+- ✅ «Hand rises from waist to chest level, fingers spread»
+- ✅ «Indicator light on the wall panel changes from red to green»
+- ✅ «Both figures shift weight, the one on the left leans slightly toward the door»
+
 ```
 Camera [slight push-in / holds steady / drifts slowly].
-[Character] [micro-action: turns head slowly, raises eyebrow, clenches fist].
+[Figure position] [micro-action: turns head slowly, raises eyebrow, clenches fist].
 [Second micro-action: glances sideways, smirks, eyes widen].
-[Environment: ambient particles drift, neon signs pulse, light shifts].
-Preserve character appearance from reference image.
+[Environment: ambient particles drift, panel lights pulse, light shifts].
 ```
 
 Примеры:
-- ✅ `Camera holds steady at medium shot. Character turns head slowly to face the viewer, eyebrows raise in surprise, mouth drops slightly open. Background neon signs flicker. Tense stillness.`
+- ✅ `Camera holds steady at medium shot. Figure in center turns head slowly to face the viewer, eyebrows raise, mouth drops slightly open. Background panel lights flicker. Tense stillness.`
+- ✅ `Slow push-in. Figure on the left extends arm holding a tablet toward figure on the right. Right figure's eyes widen, head pulls back slightly. Overhead light flickers.`
+- ❌ `Worf shows Kirk the sealed order with his authorization code, Kirk is shocked` — имена + мотивации + нет физических действий
 - ❌ `Character walks up to the other player and pushes him` — перемещение + физический контакт
 
 ### Старт + эндфрейм для I2V клипов (обязательно):
@@ -352,14 +383,39 @@ Preserve character appearance from reference image.
 
 Передавать в Kling: `start_image_url` + `end_image_url`. Это даёт направление анимации.
 
+#### ⚠️ Консистентность фона между фреймами — ОБЯЗАТЕЛЬНОЕ ПРАВИЛО:
+
+**Оба фрейма генерировать с одним и тем же `bg-{location}.png` в `image_urls`.** НЕ чейнить эндфрейм от стартфрейма.
+
+- Стартфрейм: `image_urls: [character-ref, bg-{location}]`
+- Эндфрейм: `image_urls: [character-ref, bg-{location}]` (другой промпт персонажа — иная поза/выражение)
+
+**Почему не чейн:** При генерации эндфрейма от стартфрейма фон дрейфует — меняется освещение, угол, цвет. Единый `bg-asset` как anchor гарантирует идентичный фон в обоих кадрах и минимизирует артефакты анимации.
+
 #### ⚠️ Консистентность персонажей между фреймами:
 - **Один и тот же персонаж** должен быть на старт-фрейме И на энд-фрейме
-- **Не менять** персонажа, позу, угол камеры или локацию между start и end
-- Оба фрейма: одинаковый `character-ref`, одинаковый `bg-{location}` в `image_urls`
+- **Не менять** угол камеры или локацию между start и end
 - Энд-фрейм = продолжение той же сцены (другое выражение лица / другой жест), НЕ другая сцена
 
 **Неправильно:** Кирк на старт-фрейме, Ворф на энд-фрейме → Kling перемешает персонажей в анимации.
 **Правильно:** Кирк (удивлён) → Кирк (шокирован), тот же фон, та же камера.
+
+#### ⚠️ Минимальное изменение композиции между start и end (КРИТИЧНО):
+
+Start и end фреймы **ОБЯЗАНЫ быть почти идентичны** по композиции, перспективе и масштабу кадра.
+
+- **Разрешено менять:** выражение лица, цвет индикатора, жест руки, поворот головы, мелкие детали окружения
+- **ЗАПРЕЩЕНО менять:** глубину/перспективу (дальний план → крупный), масштаб кадра (зум), угол камеры (фронтально → со спины), расстояние до объекта
+
+**Почему:** Если start = далёкий конец коридора, а end = крупный план у двери, Kling пытается «зумировать» между ними, **деформируя и растягивая фон**. Это выглядит как артефакт, а не как анимация.
+
+**Пример правильно:**
+- Start: Кирк и Ворф стоят у двери шлюза, индикатор красный (SEALED)
+- End: Кирк и Ворф стоят у двери шлюза, индикатор зелёный (UNLOCKED), повернули головы друг к другу
+
+**Пример НЕПРАВИЛЬНО:**
+- Start: Кирк и Ворф в начале длинного коридора, далёкий план
+- End: Кирк и Ворф стоят у двери, крупный план ← **ДЕФОРМАЦИЯ**
 
 Для **Avatar/dialogue клипов** — только одно изображение (Kling Avatar сам управляет движением через audio).
 
@@ -489,7 +545,23 @@ clip_duration = 0.5 (pre-delay) + TTS_duration + 1.0 (post-silence)
 
 Concat всех клипов с re-encode (не stream copy):
 
-**ВСЕ клипы** перед склейкой должны иметь одинаковый аудио формат:
+#### ⚠️ Нормализация FPS перед concat (КРИТИЧНО):
+
+Kling I2V выдаёт **24fps**, Kling Avatar выдаёт **30fps**. При concat без нормализации ffmpeg дропает кадры (до 109 штук), ломая хронометраж — клипы пролетают за 1 секунду или зависают на месте.
+
+**Перед concat обязательно перекодировать ВСЕ I2V клипы в 30fps:**
+```bash
+ffmpeg -y -i scene-N-scaled.mp4 \
+  -vf "fps=30" \
+  -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p \
+  -c:a aac -b:a 128k -ar 44100 \
+  scene-N-30fps.mp4
+```
+
+**Проверить после concat:** в выводе ffmpeg должно быть `dup=0 drop=0`. Если есть dropped frames — FPS не нормализован.
+
+**ВСЕ клипы** перед склейкой должны иметь одинаковый формат:
+- **FPS: 30** (нормализовать I2V из 24fps)
 - Sample rate: 44100 Hz
 - Channels: stereo (2)
 - Codec: AAC 128kbps
@@ -550,24 +622,49 @@ $FFMPEG -y -i concat.mp4 \
 
 **Сохранение:** `subtitled.mp4` (до TBC overlay)
 
-### 5.7 "TO BE CONTINUED..." Overlay
+### 5.7 Финальная сборка — ОДИН ffmpeg pipeline (КРИТИЧНО)
 
-На последний клип финального видео — FFmpeg drawtext:
+**Собирать финал в ОДНОМ вызове ffmpeg:** concat + музыка + субтитры + TBC overlay + пауза + fade.
 
+**НЕ делать послойно** (сначала concat+музыка → потом tpad+fade поверх → потом overlay). При послойном подходе музыка обрезается на границе оригинала, apad добавляет тишину вместо продолжения музыки.
+
+**Шаблон финальной сборки:**
 ```bash
-$FFMPEG -y -i final.mp4 \
-  -vf "drawtext=text='TO BE CONTINUED...':fontsize=48:fontcolor=white:borderw=3:bordercolor=black:x=(w-text_w)/2:y=h-120:enable='between(t,duration-2,duration)'" \
-  -c:a copy final-overlay.mp4
+ffmpeg -y \
+  -i concat.mp4 -i music.mp3 \
+  -i subtitle1.png -i subtitle2.png ... -i tbc.png \
+  -filter_complex "
+    [0:v][2:v]overlay=0:0:enable='between(t,SUB1_START,SUB1_END)'[v1];
+    [v1][3:v]overlay=0:0:enable='between(t,SUB2_START,SUB2_END)'[v2];
+    ...
+    [vN][M:v]overlay=0:0:enable='between(t,TBC_START,TBC_END)'[vfinal];
+    [vfinal]tpad=stop_mode=clone:stop_duration=PAUSE,fade=t=out:st=FADE_START:d=FADE_DUR[vout];
+    [0:a][1:a]amix=inputs=2:weights='1 0.15':normalize=0,afade=t=out:st=FADE_START:d=FADE_DUR[aout]
+  " \
+  -map "[vout]" -map "[aout]" \
+  -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p \
+  -c:a aac -b:a 128k -ar 44100 -ac 2 \
+  -t TOTAL_DURATION \
+  final.mp4
 ```
+
+**Ключевые моменты:**
+- Музыка подмешивается `amix` на ВСЮ длину финала (включая паузу и fade)
+- `afade` применяется к уже смикшированному аудио
+- Субтитры = PNG overlays через Pillow (если drawtext недоступен из-за отсутствия libfreetype)
+- `-t TOTAL_DURATION` = concat_duration + pause + fade
+- **Brainrot overlay** — только по согласованию, НЕ добавлять автоматически
+
+### 5.8 "TO BE CONTINUED..." Overlay
 
 - Текст: белый с чёрной обводкой
 - Позиция: по центру, нижняя часть экрана
-- Появляется: за 2 секунды до конца видео
-- Заменить `duration` на реальную длительность видео (получить через `ffprobe`)
+- Появляется: за 2 секунды до конца видео (до fade)
+- Реализация: PNG overlay через Pillow (см. 5.7 шаблон)
 
-### 5.8 Фоновая музыка (опционально)
+### 5.9 Фоновая музыка
 
-Наложить фоновую музыку с `volume=0.15`.
+Наложить фоновую музыку с `volume=0.15`. Музыка встраивается в единый pipeline (см. 5.7).
 
 **NEVER `-shortest`.**
 
@@ -823,6 +920,11 @@ $FFMPEG -y -i final.mp4 \
 - [ ] "TO BE CONTINUED..." overlay запланирован на последние 2 секунды
 - [ ] Chain reference использован для всех изображений (Фаза 3)
 - [ ] `generate_audio: false` во всех Kling запросах
+- [ ] **Cost log ведётся** с первого API-вызова (не считать по памяти)
+- [ ] **Промпты проверены** — не пустые, пути абсолютные
+- [ ] **FPS нормализован** — все I2V клипы перекодированы в 30fps перед concat
+- [ ] **Motion prompts технические** — позиции в кадре, камера, физические действия (не имена, не эмоции)
+- [ ] **NB2 refs ≤ 2** для POV/wide кадров (избежать дублирования персонажей)
 
 ---
 
@@ -844,6 +946,44 @@ $FFMPEG -y -i final.mp4 \
 - Не используй `-shortest` в FFmpeg — обрезает видео до длины аудио
 - Не закрывай все сюжетные петли — всегда должен оставаться открытый cliffhanger
 - Не повторяй хуки/клиффхэнгеры из последних 8 эпизодов (anti-repetition)
+- **Не переделывай клипы, которые работают** — если клип выглядит хорошо, не трогай его. Спроси перед переделкой. Каждая лишняя генерация = $0.70+ и риск получить хуже
+- **Не собирай финал послойно** — только один ffmpeg pipeline (см. 5.7). Послойная сборка ломает музыку и тайминг
+
+---
+
+## Правила процесса (ОБЯЗАТЕЛЬНО)
+
+### Лог API-вызовов (cost tracking в реальном времени)
+
+**Вести лог КАЖДОГО API-вызова** прямо во время работы — не считать по памяти в конце.
+
+Формат лога (в `{OUTPUT_DIR}/cost_log.txt`):
+```
+NB2  | scene-1-start.png  | $0.04 | OK
+NB2  | scene-1-end.png    | $0.04 | OK
+NB2  | scene-5-start.png  | $0.04 | WASTED (empty prompt)
+I2V  | scene-2.mp4        | $0.70 | OK
+AVT  | scene-3.mp4        | $0.28 | OK (5s)
+TTS  | tts-3.mp3          | $0.05 | OK
+```
+
+**После каждой фазы** — показать промежуточный итог расходов.
+**В финальном отчёте** — точная сумма из лога, не приблизительная оценка.
+
+### Валидация данных перед API-вызовом
+
+Перед отправкой запроса в любой API:
+1. **Проверить что промпт не пустой** — вывести первые 50 символов промпта в лог
+2. **Проверить что файлы/URL существуют** — если `image_url` из локального файла, убедиться что файл > 0 байт
+3. **Проверить абсолютные пути** — `storyboard.json` читать только по полному пути `${OUTPUT_DIR}/storyboard.json`
+
+**Почему:** Пустой промпт = потраченные $0.04-$0.70 впустую. Неправильный путь = пустой промпт.
+
+### Не переделывать без согласования
+
+- Если клип уже сгенерирован и выглядит приемлемо — **НЕ перегенерировать** без явного запроса
+- Если хочешь что-то улучшить — **спроси**, показав что именно не нравится и почему
+- Лишняя переделка I2V = $0.70, Avatar = $0.28-0.56 — деньги, которые можно было потратить на качество других сцен
 
 ---
 

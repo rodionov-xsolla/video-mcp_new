@@ -64,7 +64,7 @@ AI Video Production Agent — автономный pipeline для создан�
 - **Провайдер изображений:** fal.ai (Nano Banana 2) — ~$0.04/изображение
 - **Провайдер видео I2V:** fal.ai (Kling 2.6 Pro) — $0.14/сек (с аудио)
 - **Провайдер видео T2V:** fal.ai (Veo3) — $0.20-$0.40/сек
-- **FFmpeg:** локальный `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
+- **FFmpeg:** локальный `/usr/local/bin/ffmpeg`
 - **TTS:** ElevenLabs — основной TTS для Serial Drama и Gameplay AI Avatar (~$0.30/мин, 29 языков)
 - **TTS (Kokoro):** fal.ai Kokoro — устаревший, только для форматов, не требующих лица (Standard, News)
 - **Lipsync:** Kling Avatar v2 Standard — для dialogue клипов (ElevenLabs audio → avatar video, $0.056/сек)
@@ -102,7 +102,7 @@ AI Video Production Agent — автономный pipeline для создан�
 | ElevenLabs TTS (voice) | `api.elevenlabs.io/v1/text-to-speech` | ~$0.30/мин |
 
 ### FFmpeg
-- Локальный: `/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg`
+- Локальный: `/usr/local/bin/ffmpeg`
 - Подробности: `tools/ffmpeg-api.md`
 
 ## Структура output

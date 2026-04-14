@@ -253,6 +253,17 @@ Result: https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
 
 `audio_url` должен быть публично доступным (загрузи в Supabase Storage перед отправкой).
 
+**КРИТИЧНО: Передача TTS → Kling Avatar.**
+1. Сгенерировать TTS → скачать `.mp3` локально
+2. Загрузить локальный файл в Supabase Storage (`assets/{game}/tts/clip-N.mp3`)
+3. Использовать **Supabase public URL** для `audio_url` в Kling Avatar
+4. **НИКОГДА** не перезапрашивать fal.ai result URL — они временные и ненадёжные при повторном запросе
+5. **Перед отправкой** — вывести таблицу маппинга и проверить уникальность всех URL:
+```
+Clip 1: image=kirk.png | audio=supabase.co/.../clip-1.mp3 | text="Captain's log..."
+Clip 2: image=worf.png | audio=supabase.co/.../clip-2.mp3 | text="This is..."
+```
+
 **Параметры:**
 - `image_url` — URL аватар-картинки (из asset bank или загруженный в Supabase)
 - `audio_url` — URL аудио (TTS из шага 3.1, загруженный в Supabase)

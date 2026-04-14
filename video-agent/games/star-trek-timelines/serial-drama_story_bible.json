@@ -4,7 +4,7 @@
   "title": "Воздушный шлюз",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-06",
-  "last_episode": 0,
+  "last_episode": 2,
 
   "characters": [
     {
@@ -13,37 +13,52 @@
       "character_description": "semi-realistic Pixar 3D Captain James T. Kirk, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
       "voice": "Daniel",
       "elevenlabs_voice": "Daniel",
-      "status": "Captain of Enterprise, refusing to execute airlock order",
-      "aura_points": 800,
+      "status": "Discovered his own authorization code was used to sign the airlock order — someone forged his command codes. Now knows the real Chekov is still alive and a Mirror Universe double was planted aboard.",
+      "aura_points": 850,
       "relationships": {
-        "Worf": "ally but in conflict",
-        "Chekov": "crew member he trusts unconditionally"
+        "Worf": "ally under pressure — working together to find who forged the order",
+        "Chekov": "believes real Chekov is still alive somewhere on the ship",
+        "Mirror Chekov": "enemy — the double who impersonated Chekov"
       }
     },
     {
       "name": "Worf",
-      "role": "antagonist_temporary",
+      "role": "ally",
       "character_description": "semi-realistic Pixar 3D Commander Worf, imposing Klingon-Human, prominent forehead ridges, dark skin, fierce disciplined expression, TNG Starfleet command red uniform with lieutenant commander pips, broad shoulders, intense dark eyes",
-      "voice": "Daniel",
-      "elevenlabs_voice": "Daniel",
-      "status": "Following fleet admiral orders — conflicted but duty-bound",
-      "aura_points": 600,
+      "voice": "George",
+      "elevenlabs_voice": "George",
+      "status": "Showed Kirk the PADD with the forged authorization code. Confirmed outer airlock door never opened — Chekov is alive inside. Stood with Kirk when Mirror Chekov revealed himself.",
+      "aura_points": 680,
       "relationships": {
-        "Kirk": "respects but must obey higher command",
-        "Chekov": "believes evidence"
+        "Kirk": "fully committed ally — showed him the evidence",
+        "Mirror Chekov": "threat to be neutralized"
       }
     },
     {
       "name": "Chekov",
       "role": "victim",
       "character_description": "semi-realistic Pixar 3D Ensign Pavel Chekov, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
-      "voice": "Daniel",
-      "elevenlabs_voice": "Daniel",
-      "status": "Accused of being an enemy agent — behind the airlock door",
+      "voice": "Charlie",
+      "elevenlabs_voice": "Charlie",
+      "status": "Real Chekov — location unknown. Outer airlock door confirmed never opened, so he is alive somewhere on the Enterprise. Has not appeared since EP1.",
       "aura_points": 200,
       "relationships": {
         "Kirk": "trusts captain completely",
-        "Worf": "fears"
+        "Mirror Chekov": "was replaced by his double — doesn't know it"
+      }
+    },
+    {
+      "name": "Mirror Chekov",
+      "role": "antagonist",
+      "character_description": "semi-realistic Pixar 3D Ensign Pavel Chekov — same face, same distinctive bowl-cut dark hair, pale skin — but in MIRROR UNIVERSE Terran Empire dark uniform with metallic gold Imperial sash across chest, ISS imperial delta badge, and thin dark goatee beard on chin. Cold calculated expression, amused smile.",
+      "voice": "Charlie",
+      "elevenlabs_voice": "Charlie",
+      "elevenlabs_stability": 0.50,
+      "status": "Revealed inside the airlock — was never the real Chekov. A Terran Empire infiltrator who impersonated Chekov and orchestrated the airlock frame-up. Whereabouts now: in Kirk's custody or escaped?",
+      "aura_points": 900,
+      "relationships": {
+        "Kirk": "views him as an obstacle — outmaneuvered him for two episodes",
+        "real Chekov": "replaced him — knows where the real Chekov is"
       }
     }
   ],
@@ -51,21 +66,56 @@
   "active_loops": [
     "minor: Is Chekov really a traitor? Who planted the evidence?",
     "major: Who is the real enemy agent on the Enterprise?",
-    "eternal: Kirk always fights for his crew against the system"
+    "eternal: Kirk always fights for his crew against the system",
+    "new-major: Mirror Universe infiltration — how many doubles are aboard the Enterprise?",
+    "new-minor: Where is the real Chekov? Is he still alive on the ship?"
   ],
   "closed_loops": [],
 
   "world_state": {
-    "location": "Enterprise Bridge + Airlock Corridor",
-    "important_items": ["incriminating evidence against Chekov", "fleet admiral's sealed order"],
-    "key_events": []
+    "location": "Enterprise Airlock Interior",
+    "important_items": [
+      "PADD with Kirk's forged authorization code highlighted in gold",
+      "Mirror Chekov in Terran Empire uniform — revealed in airlock",
+      "Real Chekov — location unknown, confirmed alive (outer door never opened)",
+      "Mirror Universe infiltration — scale unknown"
+    ],
+    "key_events": [
+      "EP1: Worf executed sealed airlock order on Chekov on orders from fleet admiral",
+      "EP1: Kirk refused to authorize but was overruled by higher command",
+      "EP1: Kirk asked Worf who really gave the order — Worf dropped his eyes and said nothing",
+      "EP2: Worf showed Kirk PADD — airlock order signed with Kirk's own command code (forged)",
+      "EP2: Kirk: 'Это не я. Я этого не подписывал.'",
+      "EP2: Airlock confirmed — outer door never opened, Chekov is alive inside",
+      "EP2: Airlock door unlocked itself without anyone touching the panel",
+      "EP2: Inside: figure with back turned, unnervingly still. Turned to reveal Mirror Universe Chekov — Terran Empire uniform, goatee, cold smile",
+      "EP2: Mirror Chekov: 'Не того Чехова вы искали, капитан.'"
+    ]
   },
 
   "anti_repetition": {
-    "recent_phrases": [],
-    "recent_hooks": [],
-    "recent_cliffhangers": []
+    "recent_phrases": [
+      "Ворф. Стоп.", "Это приказ", "флот-адмирал", "Отмените процедуру",
+      "Кто на самом деле дал тебе этот приказ",
+      "Капитан. Приказ подписан вашим кодом.",
+      "Это не я. Я этого не подписывал.",
+      "Наружная дверь не открывалась. Чехов внутри.",
+      "Не того Чехова вы искали, капитан."
+    ],
+    "recent_hooks": ["red-alert-chaos-visual", "dialogue-bomb-forged-code"],
+    "recent_cliffhangers": ["character-silence-reveal", "mirror-universe-identity-twist"]
   },
 
-  "episode_summaries": []
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "summary": "Ворф ведёт Чехова к воздушному шлюзу по приказу флот-адмирала. Кирк требует остановить процедуру — Ворф не может, приказ подписан лично адмиралом. Шлюз запечатывается. Кирк смотрит в иллюминатор и спрашивает: «Ворф. Кто на самом деле дал тебе этот приказ.» Ворф опускает глаза. Молчание.",
+      "cliffhanger": "Ворф знает кто отдал приказ — и это не флот-адмирал"
+    },
+    {
+      "episode": 2,
+      "summary": "Ворф показывает Кирку PADD: приказ о шлюзе подписан его собственным кодом авторизации — кто-то подделал подпись капитана. Кирк в шоке. Выясняется: внешняя дверь шлюза никогда не открывалась — Чехов жив. Бегут к шлюзу. Дверь открывается сама. Внутри: Чехов стоит спиной, не двигается. Поворачивается — на нём тёмная форма Терранской Империи с золотым сашем. Улыбается: «Не того Чехова вы искали, капитан.»",
+      "cliffhanger": "Mirror Universe двойник Чехова на борту. Где настоящий Чехов? Сколько ещё двойников?"
+    }
+  ]
 }

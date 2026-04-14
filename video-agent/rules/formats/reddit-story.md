@@ -178,7 +178,7 @@ curl -s -X POST "https://api.elevenlabs.io/v1/text-to-speech/$VOICE_ID" \
 ### Получить длительность:
 
 ```bash
-FFMPEG=/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg
+FFMPEG=/usr/local/bin/ffmpeg
 TTS_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 tts-output.mp3)
 echo "TTS duration: ${TTS_DUR}s"
 ```
@@ -196,7 +196,7 @@ echo "TTS duration: ${TTS_DUR}s"
 ## ФАЗА 5: FFmpeg СБОРКА
 
 ```bash
-FFMPEG=/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg
+FFMPEG=/usr/local/bin/ffmpeg
 ```
 
 ### 5.1 Подготовка gameplay

@@ -112,6 +112,7 @@ Ken Burns  ──FAIL──→ retry 1 раз ──FAIL──→ статус '
 | curl вернул ошибку | Retry через 10 секунд, максимум 3 попытки |
 | Файл 0 байт | Удали и перегенерируй |
 | URL истёк | fal.ai URLs are temporary — always download immediately after generation |
+| Повторный запрос URL | **НИКОГДА** не перезапрашивать fal.ai result URL для передачи между этапами. Скачать локально → загрузить в Supabase → использовать постоянный URL |
 
 После каждого скачивания проверяй размер файла:
 ```bash

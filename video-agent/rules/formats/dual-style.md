@@ -286,7 +286,7 @@ Cartoon-версия ОБЯЗАНА содержать маркеры стиля
 ## ФАЗА 5: СБОРКА (FFmpeg)
 
 ```bash
-FFMPEG=/usr/local/Cellar/ffmpeg/8.0.1_4/bin/ffmpeg
+FFMPEG=/usr/local/bin/ffmpeg
 ```
 
 ### 5.1 Масштабирование
