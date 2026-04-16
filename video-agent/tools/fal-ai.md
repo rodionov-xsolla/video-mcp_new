@@ -372,6 +372,76 @@ curl -s -o voiceover.wav "$AUDIO_URL"
 
 ---
 
+## 5. ElevenLabs TTS (через fal.ai) — основной TTS для Serial Drama
+
+**Endpoint:** `https://queue.fal.run/fal-ai/elevenlabs/tts/eleven-v3`
+**Метод:** POST (async, polling через `fal-ai/elevenlabs`)
+**Стоимость:** ~$0.30/мин (~$0.05–0.10 за фразу 2–6 сек)
+
+⚠️ **Это fal.ai wrapper, НЕ прямой ElevenLabs API.** Параметры отличаются от `elevenlabs.md`!
+
+### Запрос
+
+```bash
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/elevenlabs/tts/eleven-v3" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "text": "Stand down, Worf. That is an order.",
+    "voice": "Daniel",
+    "language_code": "en",
+    "stability": 0.10,
+    "style": 0.8
+  }')
+
+REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
+```
+
+### Параметры
+
+| Параметр | Тип | Обязательный | Описание |
+|----------|-----|-------------|----------|
+| `text` | string | Да | Текст для озвучки |
+| `voice` | string | Да | **Имя голоса** (строка): `Daniel`, `George`, `Charlie`, `Charlotte`, `Rachel`. **НЕ voice_id хеш!** |
+| `language_code` | string | Нет | Код языка: `en`, `ru`, `es`, `de`, `fr` и др. (29 языков) |
+| `stability` | float | Нет | 0.0–1.0. Низкое = экспрессивнее (0.10 для Captain Kirk), высокое = стабильнее |
+| `style` | float | Нет | 0.0–1.0. Стиль подачи (0.8 для выразительной речи) |
+
+### Голоса для Serial Drama
+
+| Тип персонажа | Голос | stability | style |
+|---------------|-------|-----------|-------|
+| Мужской (уверенный, авторитетный) | `Daniel` | 0.10 | 0.8 |
+| Мужской (нейтральный, рассказчик) | `George` | 0.30 | — |
+| Мужской (молодой, энергичный) | `Charlie` | 0.20 | — |
+| Женский (уверенный) | `Charlotte` | 0.25 | — |
+| Женский (нейтральный) | `Rachel` | 0.35 | — |
+
+### Polling
+
+```bash
+# Base path для polling = fal-ai/elevenlabs (первые 2 сегмента, НЕ полный endpoint)
+STATUS_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}/status"
+RESULT_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}"
+```
+
+### Ответ
+
+```json
+{
+  "audio": {
+    "url": "https://fal.media/files/abc123/audio.mp3",
+    "content_type": "audio/mpeg"
+  }
+}
+```
+
+Выходной формат: MP3 (готов для FFmpeg, конвертация не нужна).
+
+⚠️ **КРИТИЧНО:** Параметр `voice` = **имя** (`"Daniel"`), НЕ `voice_id` хеш (`"pNInz6obpgDQGcFmaJgB"`). Если передать хеш — fal.ai wrapper откатится на дефолтный голос (женский), и все персонажи будут говорить одним голосом.
+
+---
+
 ## Общий паттерн polling (для Kling и Veo)
 
 ```

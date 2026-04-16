@@ -99,7 +99,7 @@ AI Video Production Agent — автономный pipeline для создан�
 | Kling Lipsync (lip sync) | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/сек |
 | HeyGen Avatar IV (avatar+voice) | `fal-ai/heygen/avatar4/image-to-video` | $0.10/сек |
 | Kling Avatar v2 Standard (avatar) | `fal-ai/kling-video/ai-avatar/v2/standard` | $0.056/сек |
-| ElevenLabs TTS (voice) | `api.elevenlabs.io/v1/text-to-speech` | ~$0.30/мин |
+| ElevenLabs TTS (voice, via fal.ai) | `fal-ai/elevenlabs/tts/eleven-v3` | ~$0.30/мин. **voice = имя (Daniel), НЕ voice_id хеш** |
 
 ### FFmpeg
 - Локальный: `/usr/local/bin/ffmpeg`
