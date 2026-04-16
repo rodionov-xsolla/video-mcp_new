@@ -713,7 +713,11 @@ ffmpeg -y \
 
 После `final.mp4` **обязательно** приклеить CTA-ролик в конец видео (после TBC overlay и fade).
 
-**CTA-ассет:** готовый видеофайл ~5s, хранится в Supabase или в одном из предыдущих output dirs. Искать по имени `cta-normalized.mp4` или `cta-with-audio.mp4`.
+**CTA-ассет:** готовый видеофайл ~5s в Supabase:
+```
+https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/shared/cta-normalized.mp4
+```
+Скачать перед сборкой: `curl -o cta.mp4 "URL"`
 
 **Склейка:**
 ```bash
