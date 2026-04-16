@@ -96,6 +96,7 @@
 - ❌ Медленный buildup без конфликта в первых 5 секундах
 - ❌ Нелогичные переходы (персонаж вспоминает кого-то без контекста или причины)
 - ❌ Все клипы — dialogue (7 из 7 войсоверов = монотонно, дорого, скучно)
+- ❌ Два подряд Avatar-клипа разных персонажей на ОДНОМ фоне в анфас (одинаковая композиция → выглядит как копипаст)
 - ❌ Путаница форматов (Reddit Story ≠ Serial Drama ≠ Gameplay AI Avatar — каждый формат имеет свою интонацию)
 
 #### Структура:
@@ -152,6 +153,16 @@
 - `character_speech` = `null` — голос через ElevenLabs TTS → Kling Avatar v2
 - `tts` — текст реплики для ElevenLabs TTS (dialogue клипы) или TTS overlay с aecho (I2V «за стеклом»)
 - `camera_angle` ОБЯЗАН отличаться от соседних клипов
+
+#### ⚠️ Правило последовательных Avatar-клипов:
+
+Если два dialogue (Avatar) клипа идут подряд, особенно с разными персонажами — **запрещено** делать оба на одном фоне в анфас (лицом к камере). Это выглядит как одинаковые кадры с подставленным лицом.
+
+**Варианты решения:**
+1. **Профиль:** развернуть персонажей в профиль друг напротив друга (один смотрит влево, другой вправо)
+2. **Разный план в той же локации:** один — close-up, другой — medium shot; или сменить ракурс (over-shoulder, low angle)
+3. **Другой фон в рамках локации:** один стоит у консоли, другой — у входа; один в свете, другой в тени
+4. **Вставить I2V action клип между ними:** разбить два dialogue перебивкой (реакция, жест, обстановка)
 
 ### image_prompt
 
@@ -234,6 +245,12 @@
 
 **Почему:** Без единого background ref фон меняется между клипами → I2V выглядит рваной, теряется визуальная связность эпизода.
 
+#### Варианты bg (red alert, night, damaged):
+
+При создании цветового/освещённого варианта bg (например, мостик с красной тревогой) — **обязательно передавать оригинальный bg в `image_urls`** как reference. Промпт: "same layout, only lighting changed to red alert".
+
+⚠️ Без оригинала как ref мебель, консоли, объекты меняют расположение → при нарезке I2V сцены одной локации выглядят как разные комнаты.
+
 ### Chain reference (стандартный паттерн):
 
 - `image_urls`: [character-ref.png, bg-{location}.png] — для первой сцены в локации
@@ -264,6 +281,12 @@
 ### Рот персонажа на изображениях сцен:
 - **Сцены с липсинком** (персонаж говорит, будет применяться lipsync) — генерируй персонажа с лёгкой улыбкой / приоткрытым ртом, видны зубы. Это критично для качества липсинка.
 - **Сцены без липсинка** (нет речи, или речь за кадром) — генерируй рот в нужном настроении сцены (злость, удивление, грусть и т.д.).
+
+### Пропорции фигуры в constrained frames:
+
+Когда персонаж виден через окно, иллюминатор, дверной проём, решётку — в промпте NB2 **явно указывать пропорции фигуры**: "figure occupies roughly one-third of the porthole circle, full airlock door visible".
+
+⚠️ Без указания пропорций NB2 заполняет весь проём крупным планом лица — получается непропорциональный персонаж.
 
 ### Параметры:
 
@@ -468,7 +491,7 @@ Start и end фреймы **ОБЯЗАНЫ быть почти идентичн�
 - Вызвать `fal-ai/kling-video/ai-avatar/v2/standard` с `image_url` (9:16 сцена) + `audio_url` + `motion_prompt`
 - `motion_prompt` обязателен: описывать мимику ДО, ВО ВРЕМЯ и ПОСЛЕ реплики
 - Стоимость: ~$0.056/сек (billing по длине видео)
-- Kling Avatar добавляет молчащий хвост — обрезать по `audio_dur + 1.0s` (см. 5.3)
+- Kling Avatar добавляет молчащий хвост — обрезать по `TTS_dur + 0.3s` + `apad=whole_dur` (см. 5.3)
 
 #### Polling (fal.ai async):
 ```bash
@@ -502,19 +525,42 @@ ffmpeg -y -i scene-N.mp4 \
 ```
 ⚠️ Kling I2V с `generate_audio=false` выдаёт видео **без аудиодорожки**. Без явного `anullsrc` concat сломается.
 
-**Avatar/dialogue клипы** (Kling Avatar добавляет молчащий хвост: video_dur > audio_dur):
+**Avatar/dialogue клипы** (Kling Avatar: video_dur > audio_dur, аудиопоток = TTS_dur):
+
+⚠️ **Два критических момента:**
+1. Kling Avatar добавляет 0.25–1.79s молчащего хвоста (видео продолжается после окончания речи). Обрезать до **TTS_dur + 0.3s** (не +1.0 — вызывает видимый freeze).
+2. Аудиопоток Avatar клипа = TTS_dur (короче видео на 0.1–0.3s). Если использовать `apad=pad_dur`, аудио не дотянется до TARGET → **AV desync** до 0.293s, накапливается в concat → lip sync дрейфит. Использовать **`apad=whole_dur=${TARGET}`**.
+
 ```bash
-AUDIO_DUR=$(ffprobe -v error -show_entries stream=duration -select_streams a:0 -of csv=p=0 scene-N.mp4)
-TARGET=$(python3 -c "print(round($AUDIO_DUR + 1.0, 3))")
+TTS_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 tts-N.mp3)
+TARGET=$(python3 -c "print(round($TTS_DUR + 0.3, 3))")
+VID_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 scene-N.mp4)
+
+# TRIM case (TARGET <= VID_DUR):
 ffmpeg -y -i scene-N.mp4 \
-  -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,tpad=stop_mode=clone:stop_duration=1.0" \
-  -af "apad=pad_dur=1.0" \
+  -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2" \
+  -af "atrim=duration=${TARGET},apad=whole_dur=${TARGET}" \
+  -t "$TARGET" \
+  -r 30 -c:v libx264 -crf 18 -preset fast \
+  -ar 44100 -ac 2 -c:a aac -b:a 128k \
+  scene-N-final.mp4
+
+# EXTEND case (TARGET > VID_DUR):
+EXTEND=$(python3 -c "print(round($TARGET - $VID_DUR + 0.1, 3))")
+ffmpeg -y -i scene-N.mp4 \
+  -vf "scale=...,tpad=stop_mode=clone:stop_duration=${EXTEND}" \
+  -af "apad=whole_dur=${TARGET}" \
   -t "$TARGET" \
   -r 30 -c:v libx264 -crf 18 -preset fast \
   -ar 44100 -ac 2 -c:a aac -b:a 128k \
   scene-N-final.mp4
 ```
-⚠️ Kling Avatar добавляет 0.25–1.79s тишины в конец. При concat хвосты суммируются и сдвигают весь тайминг. Всегда обрезать до `audio_dur + 1.0s` через `tpad + apad + -t TARGET`.
+
+**Верификация AV sync:** После масштабирования проверить что gap между video и audio stream < 0.025s:
+```bash
+ffprobe -v error -select_streams v:0 -show_entries stream=duration -of csv=p=0 scene-N-final.mp4
+ffprobe -v error -select_streams a:0 -show_entries stream=duration -of csv=p=0 scene-N-final.mp4
+```
 
 ### 5.4 Аудио: I2V = тишина, Avatar = lipsync, исключения
 
@@ -525,7 +571,7 @@ ffmpeg -y -i scene-N.mp4 \
 **Исключение — сцена «за стеклом/дверью»**: персонаж виден через преграду, лицо не видно → TTS накладывается на I2V с muffled эффектом:
 ```bash
 TTS_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 tts.mp3)
-CLIP_DUR=$(python3 -c "print(round(0.5 + $TTS_DUR + 1.0, 3))")
+CLIP_DUR=$(python3 -c "print(round(0.5 + $TTS_DUR + 0.3, 3))")
 ffmpeg -y -i scene-N-scaled.mp4 -i tts-N.mp3 \
   -filter_complex "[1:a]adelay=500|500,aecho=0.8:0.9:10:0.3[tts];[0:a][tts]amix=inputs=2:duration=first,apad[a]" \
   -map 0:v -map "[a]" -t "$CLIP_DUR" \
@@ -584,43 +630,38 @@ done
 
 Ожидаемая структура:
 - I2V action клипы: фиксированная длительность (5.0-5.1s)
-- Avatar dialogue клипы: audio_dur + 1.0s (убедись что хвост обрезан)
-- Пауза между репликами: 1.0s встроена в обрезку Avatar
+- Avatar dialogue клипы: TTS_dur + 0.3s (убедись что хвост обрезан и AV gap < 0.025s)
+- Пауза между репликами: 0.3s встроена в обрезку Avatar — короткая естественная пауза
 
 **Не приступай к concat если тайминг не сходится** — пересчитай и пересобери проблемный клип.
 
 ### 5.6 Субтитры для dialogue клипов
 
-**Обязательно.** Наложить субтитры поверх финального видео через FFmpeg drawtext.
+**Обязательно.** Наложить субтитры поверх финального видео через PIL PNG overlay.
 
-#### Формат субтитров:
+⚠️ Локальный ffmpeg 8.1 собран **без libfreetype** — фильтр `drawtext` не работает (`Filter not found`). Использовать Python PIL для генерации PNG + ffmpeg `overlay` фильтр.
 
-- Шрифт: Montserrat Bold (или Arial Bold если нет)
-- Размер: 42px
-- Цвет: белый с чёрной обводкой (`borderw=3:bordercolor=black`)
-- Позиция: нижняя треть экрана (y=1550 для 1080×1920)
-- Тайминг: точно по TTS аудио каждого dialogue клипа
+#### Метод: PIL PNG overlays
 
-#### Сборка субтитров:
+**Шаг 1 — gen_subtitles.py:** Генерирует 1080×1920 RGBA PNG на каждый dialogue клип:
+- Шрифт: Arial Bold (или Helvetica Bold) 38-48px в зависимости от длины текста
+- Цвет: белый с чёрной обводкой (stroke 3px)
+- Word-wrap с max_width=900px
+- Позиция: нижняя треть экрана (y = H - 220 - total_text_height)
+- Сохранение: `subs/sub-{N}.png`
+- I2V action клипы — субтитров нет (тишина)
 
-1. Определить точное время начала каждого dialogue клипа в финальном видео (из тайминга 5.5)
-2. Построить drawtext фильтр:
-
-```bash
-$FFMPEG -y -i concat.mp4 \
-  -vf "
-    drawtext=text='Реплика 1':fontsize=42:fontcolor=white:borderw=3:bordercolor=black:fontfile=/Users/admin/Library/Fonts/Montserrat-Bold.ttf:x=(w-text_w)/2:y=1550:enable='between(t,START_1,END_1)',
-    drawtext=text='Реплика 2':fontsize=42:fontcolor=white:borderw=3:bordercolor=black:fontfile=/Users/admin/Library/Fonts/Montserrat-Bold.ttf:x=(w-text_w)/2:y=1550:enable='between(t,START_2,END_2)'
-  " \
-  -c:a copy subtitled.mp4
+**Шаг 2 — assemble_final.py:** Overlay chain в filter_complex:
+```
+[0:v][2:v]overlay=0:0:enable='between(t,START_1,END_1)'[v1];
+[v1][3:v]overlay=0:0:enable='between(t,START_2,END_2)'[v2]; ...
 ```
 
 - `START_N` = время начала dialogue клипа N в финальном видео
 - `END_N` = START_N + TTS_DUR (без паузы хвоста)
-- Длинные реплики (>40 символов) — разбить на 2 строки через `\n`
-- I2V action клипы — субтитров нет (тишина)
+- Длинные реплики (>40 символов) — word-wrap автоматический в PIL
 
-**Сохранение:** `subtitled.mp4` (до TBC overlay)
+**Сохранение:** `final.mp4` (единый pipeline, см. 5.7)
 
 ### 5.7 Финальная сборка — ОДИН ffmpeg pipeline (КРИТИЧНО)
 
@@ -802,10 +843,10 @@ ffmpeg -y \
 | Компонент | 5s клип | 10s клип |
 |-----------|---------|----------|
 | Image (Nano Banana 2) | $0.04 | $0.04 |
-| Kling I2V (no audio) | $0.70 | $1.40 |
+| Kling I2V (no audio, $0.07/s) | $0.35 | $0.70 |
 | ElevenLabs TTS (5-15 сек реплика) | ~$0.05 | ~$0.07 |
 | Kling Avatar v2 (dialogue клип) | $0.056/сек | $0.056/сек |
-| **Итого I2V (action)** | **$0.74** | **$1.47** |
+| **Итого I2V (action)** | **$0.39** | **$0.74** |
 | **Итого Avatar (dialogue)** | **~$0.32** | **~$0.63** |
 
 > **1×10s выгоднее чем 2×5s** — та же цена за Kling, но 1 image вместо 2, 1 lipsync вместо 2.
@@ -822,7 +863,7 @@ ffmpeg -y \
 - `generate_audio = false` — **ВСЕГДА** в serial-drama. Kling-голос плохого качества
 - Lipsync только на крупных планах с выраженными чертами лица
 - Предпочитай 10s клипы вместо 2×5s
-- ⚠️ Kling I2V 5s = **$0.70** (не занижать до $0.35 при планировании)
+- ⚠️ Kling I2V 5s с `generate_audio=false` = **$0.35** ($0.07/s). С аудио = $0.70 ($0.14/s)
 
 ---
 
@@ -946,7 +987,7 @@ ffmpeg -y \
 - Не используй `-shortest` в FFmpeg — обрезает видео до длины аудио
 - Не закрывай все сюжетные петли — всегда должен оставаться открытый cliffhanger
 - Не повторяй хуки/клиффхэнгеры из последних 8 эпизодов (anti-repetition)
-- **Не переделывай клипы, которые работают** — если клип выглядит хорошо, не трогай его. Спроси перед переделкой. Каждая лишняя генерация = $0.70+ и риск получить хуже
+- **Не переделывай клипы, которые работают** — если клип выглядит хорошо, не трогай его. Спроси перед переделкой. Каждая лишняя генерация = $0.35+ и риск получить хуже
 - **Не собирай финал послойно** — только один ffmpeg pipeline (см. 5.7). Послойная сборка ломает музыку и тайминг
 
 ---
@@ -962,13 +1003,26 @@ ffmpeg -y \
 NB2  | scene-1-start.png  | $0.04 | OK
 NB2  | scene-1-end.png    | $0.04 | OK
 NB2  | scene-5-start.png  | $0.04 | WASTED (empty prompt)
-I2V  | scene-2.mp4        | $0.70 | OK
+I2V  | scene-2.mp4        | $0.35 | OK
 AVT  | scene-3.mp4        | $0.28 | OK (5s)
 TTS  | tts-3.mp3          | $0.05 | OK
 ```
 
 **После каждой фазы** — показать промежуточный итог расходов.
 **В финальном отчёте** — точная сумма из лога, не приблизительная оценка.
+
+### Shell-скрипты: stderr для логов, stdout для URL
+
+В zsh-скриптах генерации (gen_scenes.sh, gen_images.sh) все echo/tee → `>&2` (stderr). В stdout — **только** финальный URL. Иначе `$()` capture захватывает весь лог вместе с URL и ломает последующие API-вызовы (image_urls).
+
+```bash
+gen_scene() {
+  echo "Generating scene..." >&2       # log → stderr
+  curl ... | tee /dev/stderr           # API output → stderr
+  echo "$SUPABASE_URL"                 # ONLY this goes to stdout
+}
+URL=$(gen_scene)  # captures clean URL
+```
 
 ### Валидация данных перед API-вызовом
 
@@ -977,13 +1031,13 @@ TTS  | tts-3.mp3          | $0.05 | OK
 2. **Проверить что файлы/URL существуют** — если `image_url` из локального файла, убедиться что файл > 0 байт
 3. **Проверить абсолютные пути** — `storyboard.json` читать только по полному пути `${OUTPUT_DIR}/storyboard.json`
 
-**Почему:** Пустой промпт = потраченные $0.04-$0.70 впустую. Неправильный путь = пустой промпт.
+**Почему:** Пустой промпт = потраченные $0.04-$0.35 впустую. Неправильный путь = пустой промпт.
 
 ### Не переделывать без согласования
 
 - Если клип уже сгенерирован и выглядит приемлемо — **НЕ перегенерировать** без явного запроса
 - Если хочешь что-то улучшить — **спроси**, показав что именно не нравится и почему
-- Лишняя переделка I2V = $0.70, Avatar = $0.28-0.56 — деньги, которые можно было потратить на качество других сцен
+- Лишняя переделка I2V = $0.35, Avatar = $0.28-0.56 — деньги, которые можно было потратить на качество других сцен
 
 ---
 
