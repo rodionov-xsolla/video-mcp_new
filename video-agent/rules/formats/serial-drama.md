@@ -709,6 +709,28 @@ ffmpeg -y \
 
 **NEVER `-shortest`.**
 
+### 5.10 CTA (Call to Action) — ОБЯЗАТЕЛЬНО
+
+После `final.mp4` **обязательно** приклеить CTA-ролик в конец видео (после TBC overlay и fade).
+
+**CTA-ассет:** готовый видеофайл ~5s, хранится в Supabase или в одном из предыдущих output dirs. Искать по имени `cta-normalized.mp4` или `cta-with-audio.mp4`.
+
+**Склейка:**
+```bash
+# concat-final-cta.txt:
+file 'final.mp4'
+file 'cta-with-audio.mp4'
+
+ffmpeg -y -f concat -safe 0 -i concat-final-cta.txt \
+  -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p \
+  -c:a aac -b:a 128k -ar 44100 -ac 2 \
+  final-with-cta.mp4
+```
+
+⚠️ CTA нормализуется до тех же параметров что и основное видео (1080×1920, 30fps, aac 44100Hz stereo) ПЕРЕД concat. Если CTA-ассет имеет другой формат — перекодировать.
+
+**Финальный файл = `final-with-cta.mp4`**, НЕ `final.mp4`.
+
 ---
 
 ## ФАЗА 6: UPLOAD & LOG
