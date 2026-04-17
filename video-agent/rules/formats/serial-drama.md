@@ -261,7 +261,7 @@ Serial drama — это короткий формат с быстрой смен
 
 - `image_urls`: [character-ref.png, bg-{location}.png] — для первой сцены в локации
 - `image_urls`: [character-ref.png, bg-{location}.png, предыдущая-сцена.png] — для последующих сцен (chain)
-- Для multi-character сцен: `image_urls` включает refs обоих персонажей + фон
+- Для multi-character сцен: **НЕ** включать refs обоих персонажей — см. ограничение ниже
 
 #### ⚠️ Ограничение количества refs в NB2 (POV / over-shoulder кадры):
 
@@ -270,7 +270,16 @@ Serial drama — это короткий формат с быстрой смен
 - Если передать 3+ refs (char1 + char2 + bg), NB2 пытается «разместить» каждый ref как отдельную сущность → **персонажи удваиваются** (4 фигуры вместо 2)
 - **Для POV / over-shoulder / wide кадров:** `[bg-ref, previous-scene-chain]` — без character refs
 - **Для кадров с одним персонажем:** `[character-ref, bg-ref]` — максимум
-- **Для multi-character I2V:** `[character-ref-1, bg-ref]` — второго персонажа описать словами в промпте, НЕ добавлять его ref
+- **Для multi-character I2V:** `[character-ref-1, bg-ref]` — второго персонажа описать словами в промпте, НЕ добавлять его ref. НЕ убирать character ref совсем — без него NB2 генерирует случайных персонажей.
+
+#### ⚠️ Выбор anchor-ref для multi-character сцен (КРИТИЧНО):
+
+Неправильный anchor-ref может сгенерировать **не того персонажа**:
+
+- **Проблема:** worf-ref как anchor + "prominent ridged forehead" в промпте → NB2 генерирует Spock (Vulcan), а не Worf (Klingon)
+- **Правило:** выбирать anchor менее этнически специфичного персонажа (Kirk-ref) — второго описывать текстом
+- **Для Klingon в тексте:** явно писать `"Klingon warrior, NOT Vulcan, dark brown skin, prominent ridged forehead"` — слово «NOT Vulcan» исключает ошибочную интерпретацию
+- **Одинаковый anchor** для start и end фрейма одного I2V клипа — не менять ref между фреймами
 
 ### Формат изображений сцен:
 
@@ -659,6 +668,12 @@ done
 - Сохранение: `subs/sub-{N}.png`
 - I2V action клипы — субтитров нет (тишина)
 
+⚠️ **Запрещённые overlays:** gen_subtitles.py генерирует ТОЛЬКО субтитры диалогов и TBC. Никаких:
+- Названий серии / эпизода (title card)
+- Brainrot-тегов ("AURA: -9999", "COOKED", etc.)
+- Имён персонажей поверх кадра
+- Любых текстовых оверлеев, кроме dialogue subs + TBC
+
 **Шаг 2 — assemble_final.py:** Overlay chain в filter_complex:
 ```
 [0:v][2:v]overlay=0:0:enable='between(t,START_1,END_1)'[v1];
@@ -725,9 +740,11 @@ ffmpeg -y \
 ```
 https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/cta-link-in-bio.mp4
 ```
-Скачать перед сборкой: `curl -o cta.mp4 "URL"`
+Скачать перед сборкой: `curl -L -s -o cta-raw.mp4 "URL"` — **ТОЛЬКО curl**, не urllib (urllib падает с SSLCertVerificationError).
 
 ⚠️ CTA без аудиодорожки — при нормализации добавить silent audio (`-f lavfi -i anullsrc=r=44100:cl=stereo`).
+
+⚠️ **moov atom corruption:** если ffmpeg убили в процессе нормализации CTA — файл будет невалиден ("moov atom not found"). Перед использованием проверять через ffprobe. Если файл уже валиден — не пересобирать заново.
 
 **Склейка:**
 ```bash
