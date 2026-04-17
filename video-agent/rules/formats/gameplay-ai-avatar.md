@@ -362,7 +362,7 @@ $FFMPEG -y -i gameplay-trimmed.mp4 -i avatar.mp4 \
   -map "[v]" -map "[a]" \
   -r 30 -c:v libx264 -preset medium -crf 14 -pix_fmt yuv420p \
   -ar 44100 -ac 2 -c:a aac -b:a 128k \
-  -shortest \
+  -t $TOTAL_DUR \
   assembled.mp4
 ```
 
