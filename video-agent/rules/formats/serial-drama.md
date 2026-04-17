@@ -721,11 +721,13 @@ ffmpeg -y \
 
 После `final.mp4` **обязательно** приклеить CTA-ролик в конец видео (после TBC overlay и fade).
 
-**CTA-ассет:** готовый видеофайл ~5s в Supabase:
+**CTA-ассет (Star Trek Timelines):** готовый видеофайл ~5s в Supabase:
 ```
-https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/shared/cta-normalized.mp4
+https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/cta-link-in-bio.mp4
 ```
 Скачать перед сборкой: `curl -o cta.mp4 "URL"`
+
+⚠️ CTA без аудиодорожки — при нормализации добавить silent audio (`-f lavfi -i anullsrc=r=44100:cl=stereo`).
 
 **Склейка:**
 ```bash
