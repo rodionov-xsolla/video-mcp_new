@@ -188,8 +188,6 @@ VALUES ('{GAME_TAG}', 'avatar', 'avatar_ref', '{PUBLIC_URL}', '{PROMPT_USED}', '
 
 ### 3.1 Генерация голоса (ElevenLabs через fal.ai)
 
-**НЕ используй Kokoro TTS — только ElevenLabs.**
-
 **Endpoint:** `POST https://queue.fal.run/fal-ai/elevenlabs/tts/eleven-v3` (async) или `POST https://fal.run/fal-ai/elevenlabs/tts/eleven-v3` (sync)
 
 ```bash
@@ -470,7 +468,7 @@ $FFMPEG -y -i assembled.mp4 -i bg-music.mp3 \
 ## Анти-паттерны
 
 **НЕ делай:**
-- **НЕ используй Kokoro TTS** — только ElevenLabs для этого формата
+- **НЕ используй Kokoro TTS** — только ElevenLabs через fal.ai
 - **НЕ передавай `voice_id`** (хеш) в fal.ai ElevenLabs — используй `voice` (имя строкой)
 - **НЕ генерируй avatar video без одобренного голоса** — сначала TTS, согласование, потом lipsync
 - **НЕ используй `pad`** в split-screen — только `scale + crop`, никаких чёрных полей

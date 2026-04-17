@@ -323,56 +323,7 @@ Result: https://queue.fal.run/fal-ai/veo3/requests/{REQUEST_ID}
 
 ---
 
-## 4. Kokoro TTS — озвучка
-
-**Endpoint:** `https://queue.fal.run/fal-ai/kokoro/american-english`
-**Метод:** POST (синхронный)
-**Стоимость:** $0.02 за 1000 символов
-
-### Запрос
-
-```bash
-RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/kokoro/american-english" \
-  -H "Authorization: Key $FAL_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prompt": "Top 5 heroes that will carry you to Mythic rank! Number five: Lancelot, the ultimate assassin!",
-    "voice": "af_heart",
-    "speed": 1.1
-  }')
-
-AUDIO_URL=$(echo "$RESPONSE" | jq -r '.audio.url')
-curl -s -o voiceover.wav "$AUDIO_URL"
-```
-
-### Параметры
-
-| Параметр | Тип | Обязательный | Описание |
-|----------|-----|-------------|----------|
-| `prompt` | string | Да | Текст для озвучки |
-| `voice` | enum | Нет | Голос. По умолчанию "af_heart" |
-| `speed` | float | Нет | 0.1–5.0, по умолчанию 1.0. Для энергичного контента: 1.1–1.2 |
-
-### Доступные голоса
-
-**Женские:** af_heart, af_alloy, af_bella, af_jessica, af_nova, af_river, af_sarah, af_sky
-**Мужские:** am_adam, am_echo, am_eric, am_liam, am_michael, am_onyx, am_puck
-
-### Ответ
-
-```json
-{
-  "audio": {
-    "url": "https://fal.media/files/abc123/audio.wav"
-  }
-}
-```
-
-> Выходной формат: WAV. Если нужен MP3 для FFmpeg, конвертируй: `ffmpeg -i voiceover.wav -codec:a libmp3lame voiceover.mp3`
-
----
-
-## 5. ElevenLabs TTS (через fal.ai) — основной TTS для Serial Drama
+## 4. ElevenLabs TTS (через fal.ai) — основной TTS для ВСЕХ форматов
 
 **Endpoint:** `https://queue.fal.run/fal-ai/elevenlabs/tts/eleven-v3`
 **Метод:** POST (async, polling через `fal-ai/elevenlabs`)
@@ -484,7 +435,7 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 | Параметр | Тип | Обязательный | Описание |
 |----------|-----|-------------|----------|
 | `video_url` | string | Да | URL исходного видео (из Kling I2V) |
-| `audio_url` | string | Да | URL аудиофайла с речью (из Kokoro TTS) |
+| `audio_url` | string | Да | URL аудиофайла с речью (из ElevenLabs TTS через fal.ai) |
 
 ### Polling и получение результата
 
@@ -507,10 +458,10 @@ Result: https://queue.fal.run/fal-ai/kling-video/lipsync/audio-to-video/requests
 ### Пайплайн с липсинком
 
 ```
-Image → Kling I2V (анимация + SFX) → Kokoro TTS (голос) → Kling Lipsync (видео + аудио → липсинк) → FFmpeg (склейка)
+Image → Kling I2V (анимация + SFX) → ElevenLabs TTS (голос, через fal.ai) → Kling Lipsync (видео + аудио → липсинк) → FFmpeg (склейка)
 ```
 
-**ВАЖНО:** `audio_url` должен быть публичным URL. Kokoro TTS возвращает URL с fal.media — используй его напрямую, не скачивая.
+**ВАЖНО:** `audio_url` должен быть публичным URL. ElevenLabs TTS через fal.ai возвращает URL с fal.media — скачай локально и залей в Supabase для стабильного URL.
 
 ---
 
@@ -620,7 +571,7 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 | Параметр | Тип | Обязательный | Описание |
 |----------|-----|-------------|----------|
 | `image_url` | string | Да | URL изображения аватара |
-| `audio_url` | string | Да | URL аудиофайла (WAV/MP3) — из Kokoro TTS или другого TTS |
+| `audio_url` | string | Да | URL аудиофайла (WAV/MP3) — из ElevenLabs TTS через fal.ai |
 
 ### Polling
 
@@ -633,7 +584,7 @@ Result: https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/standard/requests/
 ### Пайплайн с Kling Avatar v2 (fallback для Gameplay AI Avatar)
 
 ```
-Nano Banana 2 (avatar ref) → Kokoro TTS (speech.wav) → Kling Avatar v2 (image + audio → avatar.mp4) → FFmpeg split-screen
+Nano Banana 2 (avatar ref) → ElevenLabs TTS (speech.wav, через fal.ai) → Kling Avatar v2 (image + audio → avatar.mp4) → FFmpeg split-screen
 ```
 
 > **Используй как fallback**, если HeyGen Avatar IV не работает. Дешевле ($0.056/сек vs $0.10/сек), но требует отдельный TTS.

@@ -30,7 +30,7 @@ base = "/".join(endpoint.split("/")[:2])
 | Kling I2V | `fal-ai/kling-video/v2.6/pro/image-to-video` | `fal-ai/kling-video` |
 | Kling Avatar v2 | `fal-ai/kling-video/ai-avatar/v2/standard` | `fal-ai/kling-video` |
 | ElevenLabs TTS | `fal-ai/elevenlabs/tts/eleven-v3` | `fal-ai/elevenlabs` |
-| Kokoro TTS | `fal-ai/kokoro/american-english` | `fal-ai/kokoro` |
+| ElevenLabs TTS (fal.ai) | `fal-ai/elevenlabs/tts/eleven-v3` | `fal-ai/elevenlabs` |
 
 **Если использовать полный путь** → fal.ai возвращает пустой body или 404, задача «теряется».
 

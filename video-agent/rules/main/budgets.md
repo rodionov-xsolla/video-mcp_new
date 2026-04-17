@@ -31,7 +31,7 @@
 | Kling 2.6 Pro I2V 10s (без аудио) | fal-ai/kling-video/v2.6/pro/image-to-video | $0.70 |
 | Veo3 T2V 8s (с аудио) | fal-ai/veo3 | $3.20 |
 | Veo3 T2V 8s (без аудио) | fal-ai/veo3 | $1.60 |
-| Kokoro TTS | fal-ai/kokoro/american-english | ~$0.02/запрос |
+| ElevenLabs TTS (via fal.ai) | fal-ai/elevenlabs/tts/eleven-v3 | ~$0.30/мин (~$0.05–0.10/фраза). **voice = имя, НЕ voice_id** |
 | Kling Lipsync | fal-ai/kling-video/lipsync/audio-to-video | ~$0.10/сек |
 | HeyGen Avatar IV | fal-ai/heygen/avatar4/image-to-video | $0.10/сек |
 | Kling Avatar v2 Standard | fal-ai/kling-video/ai-avatar/v2/standard | $0.056/сек |

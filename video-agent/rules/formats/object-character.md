@@ -16,7 +16,7 @@
 
 - **Концепт:** бытовой объект с эмоцией произносит 10-секундный монолог от первого лица
 - **Модель:** строго Kling 2.6 Pro I2V (`generate_audio: true`)
-- **Аудио:** Kokoro TTS (озвучка) + Kling SFX (фоновые звуки)
+- **Аудио:** ElevenLabs TTS через fal.ai (озвучка) + Kling SFX (фоновые звуки)
 - **Речь:** через TTS overlay, `character_speech: null` в storyboard
 - **Длительность:** 10 сек (single) / 5 × 10 сек (series)
 - **Бюджет:** $1.50 (single) / $7.50 (series)
@@ -173,7 +173,7 @@
 ```
 
 **ВАЖНО — `character_speech: null`:**
-Kling I2V НЕ генерирует голос. Речь накладывается через Kokoro TTS в фазе сборки. Поэтому `character_speech` в storyboard = `null`, а текст монолога хранится в секции `tts`.
+Kling I2V НЕ генерирует голос. Речь накладывается через ElevenLabs TTS (fal.ai) в фазе сборки. Поэтому `character_speech` в storyboard = `null`, а текст монолога хранится в секции `tts`.
 
 ---
 
@@ -220,30 +220,36 @@ clear detailed character design, vertical composition, 9:16 aspect ratio
 
 ## ФАЗА 5: Сборка — TTS + FFmpeg
 
-### 5.1 Генерация озвучки (Kokoro TTS)
+### 5.1 Генерация озвучки (ElevenLabs TTS через fal.ai)
 
 ```bash
-curl -s -X POST "https://queue.fal.run/fal-ai/kokoro/american-english" \
+RESPONSE=$(curl -s -X POST "https://fal.run/fal-ai/elevenlabs/tts/eleven-v3" \
   -H "Authorization: Key $FAL_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "prompt": "Every single dinner party — spoons in the spotlight, knives get respect, and me? I am the one they drop on the floor.",
-    "voice": "am_adam",
-    "speed": 1.1
-  }'
+    "text": "Every single dinner party — spoons in the spotlight, knives get respect, and me? I am the one they drop on the floor.",
+    "voice": "Charlie",
+    "stability": 0.25,
+    "style": 0.8
+  }')
+
+AUDIO_URL=$(echo "$RESPONSE" | jq -r '.audio.url')
+curl -s -o voiceover.wav "$AUDIO_URL"
 ```
 
-Параметры из `tts` секции storyboard. Стоимость: ~$0.02.
+Параметры из `tts` секции storyboard. Стоимость: ~$0.05–0.10/фраза.
+
+⚠️ **`voice` = имя голоса (строка), НЕ voice_id хеш!**
 
 **Выбор голоса по эмоции:**
 
-| Эмоция | Голос | Скорость |
-|--------|-------|----------|
-| Раздражение, сарказм | `am_adam` или `am_eric` | 1.1 |
-| Паника, тревога | `af_bella` или `am_puck` | 1.2 |
-| Усталость, грусть | `am_michael` или `af_river` | 0.95 |
-| Гордость, самоуверенность | `am_onyx` или `af_heart` | 1.0 |
-| Отвращение | `am_echo` | 1.05 |
+| Эмоция | Голос | stability | style |
+|--------|-------|-----------|-------|
+| Раздражение, сарказм | `Daniel` или `George` | 0.20 | 0.8 |
+| Паника, тревога | `Charlie` | 0.15 | 0.9 |
+| Усталость, грусть | `George` | 0.35 | 0.6 |
+| Гордость, самоуверенность | `Daniel` | 0.10 | 0.8 |
+| Женский (уверенный) | `Charlotte` | 0.25 | 0.7 |
 
 ### 5.2 Масштабирование видео
 
@@ -274,7 +280,7 @@ $FFMPEG -y -i scene-1-scaled.mp4 -i voiceover.wav \
 
 **Логика миксования:**
 - Kling SFX (звуковые эффекты) — `volume=0.4` (фоновые)
-- Kokoro TTS (голос) — `volume=1.0` (основной), `adelay=500|500` (задержка 0.5s)
+- ElevenLabs TTS (голос) — `volume=1.0` (основной), `adelay=500|500` (задержка 0.5s)
 - `-t $CLIP_DUR` — обрезка: 0.5s + TTS + 1s пауза. **НИКАКИХ стоп-кадров после речи**
 - **НИКОГДА не используй `-shortest`** — обрезает видео до длины аудио
 
@@ -370,7 +376,7 @@ $FFMPEG -y -i scene-1-scaled.mp4 -i voiceover.wav \
 | Character reference (Nano Banana 2) | $0.04 |
 | Scene image (Nano Banana 2) | $0.04 |
 | Animation 10s (Kling 2.6 Pro + audio) | $1.40 |
-| TTS (Kokoro) | $0.02 |
+| TTS (ElevenLabs via fal.ai) | ~$0.07 |
 | **Итого 1 ролик** | **~$1.50** |
 | **Итого series (5 роликов)** | **~$7.50** |
 
