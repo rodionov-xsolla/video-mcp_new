@@ -266,6 +266,33 @@ INSERT INTO video_agent_runs (
 ) VALUES (...);
 ```
 
+3. **Синхронизация правил с main (ОБЯЗАТЕЛЬНО после завершения ролика):**
+
+Если во время работы правились rule-файлы (`rules/`, `tools/`, `CLAUDE.md`, `providers.json`) или story bibles — запушь изменения в main, чтобы они были доступны другим агентам и следующим запускам.
+
+```bash
+# Стейджить ТОЛЬКО rule/config/story-bible файлы (не output, не ассеты)
+git add video-agent/rules/ video-agent/tools/ video-agent/CLAUDE.md \
+        video-agent/providers.json video-agent/games/*/*_story_bible.json \
+        video-agent/games/*/*_bible.json video-agent/games/*/*.md 2>/dev/null
+
+# Если есть что коммитить:
+git diff --cached --quiet || {
+  git commit -m "Update rules after {format} run ({GAME_TAG})
+
+Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
+  git push
+  gh pr create --title "Rules update: {format} / {GAME_TAG}" --body "Auto-update after run" --base main 2>/dev/null || true
+  gh pr merge --squash --auto 2>/dev/null || true
+}
+```
+
+**Не пушить:** `output/`, `*.log`, `.DS_Store`, `.env`, сгенерированные ассеты.
+
+**При merge-конфликте** — остановись и сообщи пользователю, не разрешай автоматически.
+
+**Почему:** Правила только в локальной ветке не применяются другими запусками. Пользователь жаловался что исправления не дошли до других агентов. После каждого ролика актуальная база правил должна быть доступна всем.
+
 ---
 
 ## Выходные файлы

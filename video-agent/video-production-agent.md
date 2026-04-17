@@ -36,7 +36,7 @@
 |-----------|-----------|
 | Claude Code CLI | Ядро агента (`claude -p` non-interactive или interactive) |
 | SJinn AI | Основной провайдер: Nano Banana Pro (images), Veo3/Grok (I2V, T2V) |
-| fal.ai | Альтернативный провайдер: FLUX, Kling, Veo, Kokoro TTS |
+| fal.ai | Альтернативный провайдер: FLUX, Kling, Veo, ElevenLabs TTS |
 | FFmpeg (локальный) | Масштабирование, concat, сборка финального видео |
 | FFmpeg Cloud API | Cloud FFmpeg (опциональный, api.ffmpeg-api.com) |
 | Supabase | Storage (видео, ассеты, музыка) |
@@ -56,7 +56,7 @@ video-agent/
 │   ├── main.md                  ← правила агента (выбор подхода, бюджет)
 │   └── fallback.md              ← таймауты, retry, fallback
 ├── tools/
-│   ├── fal-ai.md                ← API fal.ai: FLUX, Kling, Veo, Kokoro TTS
+│   ├── fal-ai.md                ← API fal.ai: FLUX, Kling, Veo, ElevenLabs TTS
 │   ├── ffmpeg-api.md            ← FFmpeg Cloud API (api.ffmpeg-api.com)
 │   ├── kling-direct.md          ← (planned) Kling API напрямую
 │   └── google-veo.md            ← (planned) Google Veo через Vertex AI
@@ -379,7 +379,7 @@ claude -p "
 | Kling 2.6 Pro I2V (с аудио) | $0.14/сек | НЕ ИСПОЛЬЗУЕМ |
 | Veo 3 T2V (generate_audio: false) | $0.20/сек | Без аудио — вдвое дешевле |
 | Veo 3 T2V (с аудио) | $0.40/сек | НЕ ИСПОЛЬЗУЕМ |
-| Kokoro TTS | $0.02/1000 символов | fal.ai, ~$0.01 за 30 сек озвучки |
+| ElevenLabs TTS (via fal.ai) | ~$0.30/мин | fal.ai wrapper, ~$0.05-0.10 за фразу. **voice = имя, НЕ voice_id** |
 
 ### Стоимость за видео
 

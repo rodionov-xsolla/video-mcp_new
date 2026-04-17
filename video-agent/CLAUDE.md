@@ -65,8 +65,7 @@ AI Video Production Agent — автономный pipeline для создан�
 - **Провайдер видео I2V:** fal.ai (Kling 2.6 Pro) — $0.14/сек (с аудио)
 - **Провайдер видео T2V:** fal.ai (Veo3) — $0.20-$0.40/сек
 - **FFmpeg:** локальный `/usr/local/bin/ffmpeg`
-- **TTS:** ElevenLabs — основной TTS для Serial Drama и Gameplay AI Avatar (~$0.30/мин, 29 языков)
-- **TTS (Kokoro):** fal.ai Kokoro — устаревший, только для форматов, не требующих лица (Standard, News)
+- **TTS:** ElevenLabs через fal.ai — основной TTS для ВСЕХ форматов (~$0.30/мин, 29 языков)
 - **Lipsync:** Kling Avatar v2 Standard — для dialogue клипов (ElevenLabs audio → avatar video, $0.056/сек)
 
 ### Форматы видео
@@ -95,11 +94,10 @@ AI Video Production Agent — автономный pipeline для создан�
 | Nano Banana 2 (image) | `fal-ai/nano-banana-2/edit` | ~$0.04 |
 | Kling 2.6 Pro I2V (video+audio) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.14/сек |
 | Veo3 T2V (video + voice) | `fal-ai/veo3` | $0.20-$0.40/сек |
-| Kokoro TTS (voice) | `fal-ai/kokoro/american-english` | ~$0.02/запрос |
+| ElevenLabs TTS (voice, via fal.ai) | `fal-ai/elevenlabs/tts/eleven-v3` | ~$0.30/мин. **voice = имя (Daniel), НЕ voice_id хеш** |
 | Kling Lipsync (lip sync) | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/сек |
 | HeyGen Avatar IV (avatar+voice) | `fal-ai/heygen/avatar4/image-to-video` | $0.10/сек |
 | Kling Avatar v2 Standard (avatar) | `fal-ai/kling-video/ai-avatar/v2/standard` | $0.056/сек |
-| ElevenLabs TTS (voice) | `api.elevenlabs.io/v1/text-to-speech` | ~$0.30/мин |
 
 ### FFmpeg
 - Локальный: `/usr/local/bin/ffmpeg`

@@ -66,7 +66,7 @@ HEADLINE (саммари) → HOOK (завязка) → ПРОБЛЕМА → О�
 ## ФАЗА 0: ИНИЦИАЛИЗАЦИЯ
 
 1. Загрузить game config: `games/{GAME_TAG}/{GAME_TAG}.md`
-2. Загрузить `tools/elevenlabs.md` — ElevenLabs TTS API reference
+2. Загрузить `tools/fal-ai.md` — API fal.ai (включает ElevenLabs TTS wrapper)
 3. Загрузить `rules/main/fallback.md` — обработка ошибок
 4. **Валидация gameplay клипов:** проверить `games/{GAME_TAG}/gameplay/`:
    - Папка должна существовать и содержать хотя бы 1 `.mp4` файл
@@ -143,11 +143,11 @@ HEADLINE (саммари) → HOOK (завязка) → ПРОБЛЕМА → О�
 
 ---
 
-## ФАЗА 3: TTS (ElevenLabs)
+## ФАЗА 3: TTS (ElevenLabs через fal.ai)
 
-Генерация экспрессивной озвучки через ElevenLabs API.
+Генерация экспрессивной озвучки через ElevenLabs TTS wrapper на fal.ai.
 
-**Полная документация:** `tools/elevenlabs.md`
+**Полная документация:** `tools/fal-ai.md` (секция 4 — ElevenLabs TTS)
 
 ### Запрос
 
@@ -155,24 +155,25 @@ HEADLINE (саммари) → HOOK (завязка) → ПРОБЛЕМА → О�
 # Озвучиваем headline + narrative_text как единый текст
 FULL_TEXT="$HEADLINE. $NARRATIVE_TEXT"
 
-curl -s -X POST "https://api.elevenlabs.io/v1/text-to-speech/$VOICE_ID" \
-  -H "xi-api-key: $ELEVENLABS_API_KEY" \
+RESPONSE=$(curl -s -X POST "https://fal.run/fal-ai/elevenlabs/tts/eleven-v3" \
+  -H "Authorization: Key $FAL_KEY" \
   -H "Content-Type: application/json" \
-  -o tts-output.mp3 \
   -d '{
     "text": "'"$FULL_TEXT"'",
-    "model_id": "eleven_multilingual_v2",
-    "voice_settings": {
-      "stability": 0.3,
-      "similarity_boost": 0.8,
-      "style": 0.7
-    }
-  }'
+    "voice": "Daniel",
+    "language_code": "en",
+    "stability": 0.3,
+    "style": 0.7
+  }')
+
+AUDIO_URL=$(echo "$RESPONSE" | jq -r '.audio.url')
+curl -s -o tts-output.mp3 "$AUDIO_URL"
 ```
+
+⚠️ **Параметр `voice` = имя голоса (строка), НЕ `voice_id` хеш!**
 
 ### Настройки голоса для storytelling:
 - `stability: 0.3` — низкая стабильность = более экспрессивный, эмоциональный
-- `similarity_boost: 0.8` — высокое сходство с оригинальным голосом
 - `style: 0.7` — усиленная стилизация (экспрессия, драма)
 
 ### Получить длительность:
@@ -399,7 +400,7 @@ $FFMPEG -y -i final-cta.mp4 -i bg-music.mp3 \
 
 **НЕ делай:**
 - Не привязывай кадры геймплея к тексту — это рандомный визуал
-- Не используй Kokoro TTS — только ElevenLabs для этого формата
+- Не используй Kokoro TTS и не используй direct ElevenLabs API — только ElevenLabs через fal.ai (`fal-ai/elevenlabs/tts/eleven-v3`)
 - Не начинай историю с покупки/офферволла — сначала цепляющая завязка
 - Не используй `-shortest` в FFmpeg — используй `apad` + `-t`
 - Не повторяй темы/хуки из последних 10 историй (проверь bible)

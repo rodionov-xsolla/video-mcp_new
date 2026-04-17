@@ -37,7 +37,7 @@
         "image_gen_fallback": "fal-ai/gpt-image-1/text-to-image",
         "video_gen_i2v": "fal-ai/kling-video/v2.6/pro/image-to-video",
         "video_gen_t2v": "fal-ai/veo3",
-        "tts": "fal-ai/kokoro/american-english",
+        "tts": "fal-ai/elevenlabs/tts/eleven-v3",
         "avatar": "fal-ai/heygen/avatar4/image-to-video",
         "avatar_fallback": "fal-ai/kling-video/ai-avatar/v2/standard"
       },
@@ -48,7 +48,7 @@
         "avatar_fallback": "$0.056/sec (Kling Avatar v2)",
         "video_gen_i2v": "$0.07/sec (audio off)",
         "video_gen_t2v": "$0.20/sec (audio off)",
-        "tts": "$0.02/1000 chars"
+        "tts": "~$0.30/min (~$0.05-0.10/phrase, ElevenLabs via fal.ai)"
       }
     },
     "kling-direct": {
@@ -72,16 +72,18 @@
       "status": "planned"
     },
     "elevenlabs": {
-      "name": "ElevenLabs",
-      "auth_env": "ELEVENLABS_API_KEY",
-      "tools_file": "tools/elevenlabs.md",
+      "name": "ElevenLabs (через fal.ai)",
+      "auth_env": "FAL_KEY",
+      "tools_file": "tools/fal-ai.md",
       "capabilities": ["tts"],
+      "status": "active — используется через fal.ai wrapper, НЕ напрямую",
       "models": {
-        "tts": "eleven_multilingual_v2"
+        "tts": "fal-ai/elevenlabs/tts/eleven-v3"
       },
       "pricing": {
-        "tts": "~$0.30/min"
-      }
+        "tts": "~$0.30/min (~$0.05-0.10/phrase)"
+      },
+      "notes": "voice = имя (Daniel, Charlotte), НЕ voice_id хеш"
     },
     "ffmpeg-api": {
       "name": "FFmpeg Cloud API",
