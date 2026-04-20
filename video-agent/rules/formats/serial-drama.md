@@ -80,6 +80,19 @@
 | **CLIMAX** | 5-30s | Диалог, конфронтация, нарастающий темп | 2-3 clips (5-10s каждый) |
 | **CLIFFHANGER** | Последние 5s | Обрыв на пике. Шок, reveal, mid-sentence stop | 1 clip (5s) |
 
+### ⚠️ СЦЕНАРИЙ СТРОИТСЯ ОТ ОГРАНИЧЕНИЙ МОДЕЛИ
+
+Прежде чем писать сюжет — помни технические рамки. Каждый клип в storyboard ОБЯЗАН проходить эту проверку ДО финализации:
+
+| Ограничение | Правило | Что делать если не помещается |
+|-------------|---------|-------------------------------|
+| Max 2 персонажа в кадре (9:16) | NB2 не может рендерить 3+ фигур из текста — генерирует рандомных людей | Разбей на 2 клипа: close-up одного → cut → close-up другого. Или over-shoulder (силуэт + 1 лицо) |
+| I2V = только микро-движения | Kling не может: ходьба, бег, присед, замах, перемещение A→B | Покажи РЕЗУЛЬТАТ действия, не процесс. Не «Кирк идёт к Чехову», а «Кирк стоит над Чеховым» (уже пришёл). Движение = монтажный переход между клипами, не анимация внутри одного |
+| Start ≈ end для I2V | Если start и end сильно отличаются — Kling деформирует фон, растягивает фигуры | Разница только: жест руки, поворот головы, выражение лица, цвет индикатора. Поза тела, масштаб кадра, камера — ИДЕНТИЧНЫ |
+| Max 2 refs в image_urls | 3+ refs → NB2 удваивает персонажей | [char-ref, bg-ref] максимум. Второй персонаж — в тексте промпта |
+
+**Не придумывай эпичные сцены с 3 фигурами и потом пытайся впихнуть их в NB2.** Сначала рамки, потом сюжет внутри них. Предательство Ворфа = close-up руки на фазере → cut → лицо Кирка. Тот же эффект, 2 клипа по 1 персонажу.
+
 ### Правила нарратива — ПРИНЦИПЫ СЦЕНАРИЯ
 
 #### Что работает (TikTok/Reels аудитория):
@@ -309,6 +322,26 @@ Serial drama — это короткий формат с быстрой смен
 - Стоимость: $0.04 за изображение
 
 **Сохранение:** `scenes/scene-{N}/scene-{N}.png`
+
+### ⚠️ ВИЗУАЛЬНАЯ ВАЛИДАЦИЯ — ОБЯЗАТЕЛЬНЫЙ ШАГ МЕЖДУ ФАЗОЙ 3 И ФАЗОЙ 4
+
+После генерации КАЖДОГО изображения — **ОТКРОЙ ЕГО И ПРОВЕРЬ ГЛАЗАМИ**. Не переходи к Фазе 4 (анимация), пока все изображения не прошли визуальную проверку. `filesize > 1000 bytes` — это проверка что файл скачался, НЕ проверка качества.
+
+**Чеклист на каждое изображение:**
+
+1. **Персонаж = тот, кого заказывали?** Лицо, борода/отсутствие бороды, форма одежды, цвет формы — совпадают с character_description в Story Bible и с ref-изображением. Если ref = Mirror Chekov с goatee, а на картинке мальчик без бороды — ПЕРЕГЕНЕРИРУЙ.
+
+2. **Стиль единый?** Все кадры эпизода должны быть в одном визуальном стиле (Pixar 3D / фотореализм / аниме — как указано в style_tags). Если один кадр вышел фотореалистичным, а остальные Pixar — при склейке будет разрыв стиля. ПЕРЕГЕНЕРИРУЙ отклоняющийся кадр.
+
+3. **Количество фигур = запрошенное?** Если в промпте 2 персонажа — на картинке должно быть ровно 2. Если NB2 сгенерировал 3, 4, или добавил рандомного человека — промпт перегружен или refs конфликтуют. ПЕРЕГЕНЕРИРУЙ с упрощённым промптом или смени anchor.
+
+4. **Для I2V пар (start + end): композиция почти идентична?** Положи start и end рядом. Те же фигуры, та же камера, тот же масштаб. Разница только: выражение лица, жест руки, цвет индикатора, поворот головы. Если на start персонаж стоит, а на end сидит — это СЛИШКОМ БОЛЬШАЯ разница, Kling деформирует фон. ПЕРЕГЕНЕРИРУЙ end ближе к start.
+
+5. **Нет ли лишних/посторонних персонажей?** NB2 при 3+ refs или сложных текстовых описаниях может добавить несуществующих персонажей (женщину, дубликат, случайную фигуру). Если есть посторонний — упрости промпт, убери лишние описания.
+
+**Почему это критично:** Перегенерация изображения стоит $0.04. Перегенерация I2V клипа с битого изображения стоит $0.35. Перегенерация Avatar стоит $0.17+. Визуальная проверка на этапе изображений экономит 5-10x от стоимости переделки на этапе анимации.
+
+**Процесс:** генерируй изображения ПО ОДНОМУ (не пакетом), после каждого — открой (Read tool для .png), проверь по чеклисту, если ОК — следующее, если нет — перегенерируй с исправленным промптом. Только когда ВСЕ изображения прошли проверку — переходи к Фазе 4.
 
 ---
 
@@ -692,8 +725,17 @@ done
 
 **НЕ делать послойно** (сначала concat+музыка → потом tpad+fade поверх → потом overlay). При послойном подходе музыка обрезается на границе оригинала, apad добавляет тишину вместо продолжения музыки.
 
-**Шаблон финальной сборки:**
+**Шаблон финальной сборки (включает CTA в одном проходе):**
+
+concat.mp4 уже содержит CTA как последний клип (см. 5.10). Тайминги overlays/музыки/fade считаются от MAIN_DUR (без CTA), а `-t` от TOTAL_DUR (с CTA).
+
 ```bash
+MAIN_DUR=...    # длительность основных клипов (без CTA)
+CTA_DUR=...     # длительность CTA (~5s)
+TOTAL_DUR=...   # MAIN_DUR + CTA_DUR
+FADE_START=...  # MAIN_DUR - 1.0
+TBC_START=...   # MAIN_DUR - 2.5
+
 ffmpeg -y \
   -i concat.mp4 -i music.mp3 \
   -i subtitle1.png -i subtitle2.png ... -i tbc.png \
@@ -702,22 +744,25 @@ ffmpeg -y \
     [v1][3:v]overlay=0:0:enable='between(t,SUB2_START,SUB2_END)'[v2];
     ...
     [vN][M:v]overlay=0:0:enable='between(t,TBC_START,TBC_END)'[vfinal];
-    [vfinal]tpad=stop_mode=clone:stop_duration=PAUSE,fade=t=out:st=FADE_START:d=FADE_DUR[vout];
-    [0:a][1:a]amix=inputs=2:weights='1 0.15':normalize=0,afade=t=out:st=FADE_START:d=FADE_DUR[aout]
+    [vfinal]fade=t=out:st=FADE_START:d=1.0[vout];
+    [1:a]volume=0.15,afade=t=out:st=FADE_START:d=1.0[music];
+    [0:a][music]amix=inputs=2:weights='1 0.15':normalize=0,afade=t=out:st=FADE_START:d=1.0[aout]
   " \
   -map "[vout]" -map "[aout]" \
   -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p \
   -c:a aac -b:a 128k -ar 44100 -ac 2 \
-  -t TOTAL_DURATION \
+  -t TOTAL_DUR \
   final.mp4
 ```
 
 **Ключевые моменты:**
-- Музыка подмешивается `amix` на ВСЮ длину финала (включая паузу и fade)
-- `afade` применяется к уже смикшированному аудио
-- Субтитры = PNG overlays через Pillow (если drawtext недоступен из-за отсутствия libfreetype)
-- `-t TOTAL_DURATION` = concat_duration + pause + fade
+- **Один ffmpeg pass** на весь финал (concat + overlays + music + fade + CTA)
+- Музыка подмешивается на MAIN_DUR, fade заканчивается до CTA
+- CTA идёт после fade в тишине (silent audio из concat)
+- Субтитры = PNG overlays через Pillow (drawtext недоступен — нет libfreetype)
+- `-t TOTAL_DUR` включает CTA
 - **Brainrot overlay** — только по согласованию, НЕ добавлять автоматически
+- **НЕ делать отдельный «final.mp4 → download CTA → normalize CTA → concat → final-with-cta.mp4»** — это 3 re-encode вместо 1
 
 ### 5.8 "TO BE CONTINUED..." Overlay
 
@@ -732,35 +777,54 @@ ffmpeg -y \
 
 **NEVER `-shortest`.**
 
-### 5.10 CTA (Call to Action) — ОБЯЗАТЕЛЬНО
+### 5.10 CTA (Call to Action) — ЧАСТЬ ОСНОВНОГО ПАЙПЛАЙНА
 
-После `final.mp4` **обязательно** приклеить CTA-ролик в конец видео (после TBC overlay и fade).
+CTA-ролик (~5s) приклеивается ВНУТРИ основной сборки, а не как отдельный re-encode после.
 
-**CTA-ассет (Star Trek Timelines):** готовый видеофайл ~5s в Supabase:
-```
-https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/cta-link-in-bio.mp4
-```
-Скачать перед сборкой: `curl -L -s -o cta-raw.mp4 "URL"` — **ТОЛЬКО curl**, не urllib (urllib падает с SSLCertVerificationError).
+#### Подготовка CTA (один раз на игру, не каждый эпизод):
 
-⚠️ CTA без аудиодорожки — при нормализации добавить silent audio (`-f lavfi -i anullsrc=r=44100:cl=stereo`).
+CTA нормализуется ДО начала Фазы 5 и сохраняется локально в `games/{GAME_TAG}/assets/cta-normalized.mp4`. Если файл уже существует и валиден (ffprobe возвращает duration) — не перекачивать и не перекодировать.
 
-⚠️ **moov atom corruption:** если ffmpeg убили в процессе нормализации CTA — файл будет невалиден ("moov atom not found"). Перед использованием проверять через ffprobe. Если файл уже валиден — не пересобирать заново.
-
-**Склейка:**
 ```bash
-# concat-final-cta.txt:
-file 'final.mp4'
-file 'cta-with-audio.mp4'
-
-ffmpeg -y -f concat -safe 0 -i concat-final-cta.txt \
-  -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p \
-  -c:a aac -b:a 128k -ar 44100 -ac 2 \
-  final-with-cta.mp4
+# Один раз: скачать и нормализовать CTA
+CTA_CACHE="games/{GAME_TAG}/assets/cta-normalized.mp4"
+if ! ffprobe -v error -show_entries format=duration -of csv=p=0 "$CTA_CACHE" 2>/dev/null | grep -q .; then
+  curl -L -s -o cta-raw.mp4 "CTA_SUPABASE_URL"
+  ffmpeg -y -i cta-raw.mp4 -f lavfi -i "anullsrc=r=44100:cl=stereo" \
+    -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30" \
+    -map 0:v -map 1:a \
+    -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p \
+    -c:a aac -b:a 128k -ar 44100 -ac 2 \
+    "$CTA_CACHE"
+fi
 ```
 
-⚠️ CTA нормализуется до тех же параметров что и основное видео (1080×1920, 30fps, aac 44100Hz stereo) ПЕРЕД concat. Если CTA-ассет имеет другой формат — перекодировать.
+⚠️ CTA скачивать **ТОЛЬКО curl**, не urllib (SSLCertVerificationError).
 
-**Финальный файл = `final-with-cta.mp4`**, НЕ `final.mp4`.
+#### Сборка: CTA входит в concat-list.txt
+
+CTA-клип добавляется **в concat-list.txt как последний файл** ПЕРЕД финальной сборкой:
+
+```
+file 'scenes/scene-1/scene-1-final.mp4'
+...
+file 'scenes/scene-7/scene-7-final.mp4'
+file '/path/to/games/{GAME_TAG}/assets/cta-normalized.mp4'
+```
+
+#### Тайминги в filter_complex учитывают CTA:
+
+- `MAIN_DUR` = длительность основного контента (без CTA)
+- `CTA_DUR` = длительность CTA (~5s)
+- `TOTAL_DUR` = MAIN_DUR + CTA_DUR
+- Музыка: `amix` на MAIN_DUR, CTA идёт в тишине
+- Fade: `afade` на MAIN_DUR (fade заканчивается до CTA)
+- Субтитры/TBC: в пределах MAIN_DUR
+- `-t TOTAL_DUR` включает CTA
+
+**Результат: один ffmpeg pass вместо трёх.** Нет отдельного «скачай → нормализуй → concat final+cta → re-encode всё заново».
+
+**Финальный файл = `final.mp4`** (уже содержит CTA).
 
 ---
 
