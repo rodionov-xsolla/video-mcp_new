@@ -271,6 +271,24 @@ Clip 2: image=worf.png | audio=supabase.co/.../clip-2.mp3 | text="This is..."
 
 Результат: `avatar.mp4` — видео с lipsync и движениями.
 
+### 3.3 Ускорение аватара (обязательно)
+
+Kling Avatar звучит вяло на нативной скорости. **Всегда применяй 1.3x speedup** перед сборкой:
+
+```bash
+$FFMPEG -y -i avatar.mp4 \
+  -filter_complex "[0:v]setpts=PTS/1.3[v];[0:a]atempo=1.3[a]" \
+  -map "[v]" -map "[a]" \
+  -r 30 -c:v libx264 -preset medium -crf 14 -pix_fmt yuv420p \
+  -ar 44100 -ac 2 -c:a aac -b:a 128k \
+  avatar-fast.mp4
+
+AVATAR_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 avatar-fast.mp4)
+```
+
+После этого используй `avatar-fast.mp4` и `AVATAR_DUR` во всех последующих шагах.
+Субтитры: все faster_whisper timestamps делить на 1.3.
+
 ---
 
 ## ФАЗА 4: GAMEPLAY PREP
@@ -403,6 +421,15 @@ $FFMPEG -y -i assembled.mp4 \
 - Фон: непрозрачная чёрная полоса `y=1100, h=104`
 - Акцент: каждый 5-й сегмент жёлтый, остальные белые
 - Сегменты: 3-4 слова, равномерно по длительности TTS
+
+**ВАЖНО — предотвращение наложения субтитров:**
+При группировке слов в чанки `start` каждого чанка должен быть `≥ end` предыдущего:
+```python
+start[N] = max(end[N-1], original_start_of_word[N])
+```
+Без этого два соседних чанка могут перекрыться если слово начинается раньше окончания предыдущего чанка.
+
+**Timestamps после ускорения 1.3x:** делить все faster_whisper timestamps на 1.3 перед построением drawtext filter.
 
 ### 5.3 Фоновая музыка (опционально)
 
