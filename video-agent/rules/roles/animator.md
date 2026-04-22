@@ -51,18 +51,19 @@ Body (минимум):
 ```json
 {
   "prompt": "{motion_prompt}",
-  "image_url": "{start_frame_supabase_url}",
-  "tail_image_url": "{end_frame_supabase_url}",
+  "start_image_url": "{start_frame_supabase_url}",
+  "end_image_url": "{end_frame_supabase_url}",
   "duration": "5",
+  "generate_audio": false,
   "negative_prompt": "blur, distort, deformed, extra limbs, extra fingers, morphing face, smoothing facial features, changing skin color, altering proportions"
 }
 ```
 
 Обязательные:
+- `start_image_url` — start frame, **публичный Supabase URL** (не fal.ai temp). ⚠️ НЕ `image_url` — это устаревший алиас.
+- `end_image_url` — end frame (опционально). ⚠️ НЕ `tail_image_url` — этот параметр НЕ СУЩЕСТВУЕТ в API v2.6, будет проигнорирован.
 - `generate_audio: false` — **ВСЕГДА**. Kling НЕ умеет в звук. Если поставить `true`, получишь невнятный шум вместо тишины.
 - `duration` — `"5"` или `"10"` (строка, не число). Согласно `storyboard.json`.
-- `image_url` — start frame, **публичный Supabase URL** (не fal.ai temp).
-- `tail_image_url` — end frame (название параметра именно `tail_image_url`, не `end_image_url`).
 
 ### Polling — base path
 
