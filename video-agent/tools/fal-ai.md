@@ -219,10 +219,15 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 
 ### Polling статуса
 
+> ⚠️ **КРИТИЧНО:** Polling и результат — по **базовому 2-сегментному пути** `fal-ai/kling-video`, НЕ по полному пути submit endpoint.
+
 ```bash
-# Проверяй каждые 15 секунд
+# Base для polling = первые 2 сегмента endpoint
+# Submit: fal-ai/kling-video/v2.6/pro/image-to-video
+# Polling: fal-ai/kling-video
+
 while true; do
-  STATUS_RESPONSE=$(curl -s "https://queue.fal.run/fal-ai/kling-video/v2.6/pro/image-to-video/requests/$REQUEST_ID/status" \
+  STATUS_RESPONSE=$(curl -s "https://queue.fal.run/fal-ai/kling-video/requests/$REQUEST_ID/status" \
     -H "Authorization: Key $FAL_KEY")
 
   STATUS=$(echo "$STATUS_RESPONSE" | jq -r '.status')
@@ -238,7 +243,8 @@ done
 ### Получение результата
 
 ```bash
-RESULT=$(curl -s "https://queue.fal.run/fal-ai/kling-video/v2.6/pro/image-to-video/requests/$REQUEST_ID" \
+# Тот же базовый путь fal-ai/kling-video
+RESULT=$(curl -s "https://queue.fal.run/fal-ai/kling-video/requests/$REQUEST_ID" \
   -H "Authorization: Key $FAL_KEY")
 
 VIDEO_URL=$(echo "$RESULT" | jq -r '.video.url')
@@ -302,7 +308,7 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 
 ### Polling и получение результата
 
-Аналогично Kling (см. выше), но endpoint:
+Аналогично Kling — базовый 2-сегментный путь `fal-ai/veo3`:
 ```
 Status: https://queue.fal.run/fal-ai/veo3/requests/{REQUEST_ID}/status
 Result: https://queue.fal.run/fal-ai/veo3/requests/{REQUEST_ID}
@@ -393,18 +399,35 @@ RESULT_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}"
 
 ---
 
-## Общий паттерн polling (для Kling и Veo)
+## Общий паттерн polling (для ВСЕХ fal.ai endpoints)
+
+> ⚠️ **КРИТИЧНО:** Polling ВСЕГДА по **базовому 2-сегментному пути**, НЕ по полному submit endpoint.
+
+| Submit endpoint | Polling base |
+|-----------------|-------------|
+| `fal-ai/nano-banana-2/edit` | `fal-ai/nano-banana-2` |
+| `fal-ai/kling-video/v2.6/pro/image-to-video` | `fal-ai/kling-video` |
+| `fal-ai/kling-video/ai-avatar/v2/standard` | `fal-ai/kling-video` |
+| `fal-ai/kling-video/lipsync/audio-to-video` | `fal-ai/kling-video` |
+| `fal-ai/elevenlabs/tts/eleven-v3` | `fal-ai/elevenlabs` |
+| `fal-ai/veo3` | `fal-ai/veo3` |
+| `fal-ai/gpt-image-1/text-to-image` | `fal-ai/gpt-image-1` |
+| `fal-ai/heygen/avatar4/image-to-video` | `fal-ai/heygen` |
+
+**Правило:** `base = "/".join(endpoint.split("/")[:2])`
 
 ```
-1. POST запрос → получить request_id
-2. Каждые 15 секунд: GET /requests/{request_id}/status
+1. POST запрос на полный endpoint → получить request_id
+2. Каждые 15 секунд: GET https://queue.fal.run/{BASE}/requests/{request_id}/status
 3. Проверить статус:
-   - "IN_QUEUE" или "IN_PROGRESS" → продолжить polling
-   - "COMPLETED" → GET /requests/{request_id} → скачать результат
+   - "IN_QUEUE" / "IN_PROGRESS" → продолжить polling
+   - "COMPLETED" → GET https://queue.fal.run/{BASE}/requests/{request_id} → скачать результат
    - "FAILED" → обработать ошибку (см. rules/fallback.md)
 4. Таймаут: 10 минут максимум
-5. При таймауте: fallback на Approach 1
+5. При таймауте: fallback
 ```
+
+**Если использовать полный путь вместо base — fal.ai вернёт пустой body, 404 или 405. Деньги за генерацию будут потрачены, результат не скачается.**
 
 ---
 
@@ -440,8 +463,9 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 ### Polling и получение результата
 
 ```
-Status: https://queue.fal.run/fal-ai/kling-video/lipsync/audio-to-video/requests/{REQUEST_ID}/status
-Result: https://queue.fal.run/fal-ai/kling-video/lipsync/audio-to-video/requests/{REQUEST_ID}
+# Base = fal-ai/kling-video (НЕ полный путь lipsync/audio-to-video)
+Status: https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}/status
+Result: https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
 ```
 
 ### Ответ
@@ -575,10 +599,11 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 
 ### Polling
 
-Аналогично другим Kling endpoints:
+Аналогично другим Kling endpoints — base `fal-ai/kling-video`:
 ```
-Status: https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/standard/requests/{REQUEST_ID}/status
-Result: https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/standard/requests/{REQUEST_ID}
+# Base = fal-ai/kling-video (НЕ полный путь ai-avatar/v2/standard)
+Status: https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}/status
+Result: https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
 ```
 
 ### Пайплайн с Kling Avatar v2 (fallback для Gameplay AI Avatar)
@@ -593,8 +618,28 @@ Nano Banana 2 (avatar ref) → ElevenLabs TTS (speech.wav, через fal.ai) �
 
 ## Важные правила
 
-1. **Всегда скачивай файлы** после генерации. fal.ai URL-ы временные.
-2. **Проверяй размер** скачанного файла (>1000 байт для изображений, >10000 для видео).
-3. **`generate_audio: true`** для Kling (звуковые эффекты по умолчанию), **`false`** для Veo — экономит 50%.
-4. **Не отправляй больше 3 параллельных запросов** — rate limiting.
-5. **Сохраняй request_id** — нужен для polling и отмены задач.
+1. **fal.ai URL-ы ВРЕМЕННЫЕ.** Скачивай файлы сразу после генерации. Не рассчитывай на повторный доступ.
+2. **Перед дорогой генерацией (Kling I2V, Avatar, Veo3) — загрузи ВСЕ входные файлы в Supabase Storage.** Используй ТОЛЬКО постоянные Supabase URL как `start_image_url`, `end_image_url`, `audio_url`. Временные fal.ai URL протухают → генерация стоимостью $0.35–$3.20 пропадает.
+3. **Polling — по 2-сегментному base пути.** НЕ по полному submit endpoint. См. таблицу в "Общий паттерн polling".
+4. **Проверяй размер** скачанного файла (>1000 байт для изображений, >10000 для видео).
+5. **`generate_audio: true`** для Kling (SFX по умолчанию), решение по `false` определяется файлом формата.
+6. **Не отправляй больше 3 параллельных запросов** — rate limiting.
+7. **Сохраняй request_id** — нужен для polling и отмены задач.
+
+### Пайплайн загрузки в Supabase перед дорогой генерацией
+
+```bash
+# 1. Генерируй изображение через NB2 → скачай локально
+# 2. Загрузи в Supabase Storage
+curl -s -X POST "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/assets/${GAME_TAG}/scenes/${FILENAME}" \
+  -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+  -H "Content-Type: image/png" \
+  --data-binary @"$LOCAL_FILE"
+
+# 3. Получи постоянный URL
+PERMANENT_URL="https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/${GAME_TAG}/scenes/${FILENAME}"
+
+# 4. Используй PERMANENT_URL как start_image_url в Kling I2V
+```
+
+**Никогда не передавай `fal.media` URL в `start_image_url` / `end_image_url` / `audio_url`.**

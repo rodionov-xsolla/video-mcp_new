@@ -5,7 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 1,
+  "last_episode": 2,
 
   "characters": [
     {
@@ -14,7 +14,7 @@
       "character_description": "semi-realistic Pixar 3D Captain James T. Kirk, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
       "voice": "Daniel",
       "elevenlabs_voice": "Daniel",
-      "status": "Gave Worf a direct order to cancel the airlock procedure — overruled by Fleet Admiral. Watched Chekov disappear behind the sealed door. Now confronting Worf with one last question.",
+      "status": "Physically overrode Worf at the emergency release panel. Pulled the lever. Found the airlock completely empty — no Chekov, only frost boot prints tracking to the sealed outer door. Standing at the threshold, unable to explain what he is looking at.",
       "aura_points": 850,
       "relationships": {
         "Worf": "ally under pressure — but something is wrong",
@@ -27,7 +27,7 @@
       "character_description": "semi-realistic Pixar 3D Commander Worf, imposing Klingon-Human, prominent forehead ridges, dark skin, fierce disciplined expression, TNG Starfleet command red uniform with lieutenant commander pips, broad shoulders, intense dark eyes",
       "voice": "George",
       "elevenlabs_voice": "George",
-      "status": "Executed the airlock order despite Kirk's direct counter-order. Claimed Fleet Admiral signed personally. When Kirk asked who really gave the order — dropped his eyes and said nothing.",
+      "status": "Blocked Kirk's path to the emergency release. Gave his final warning — 'Command will arrest us both.' Stepped aside when Kirk said 'Move. Worf.' Witnessed the empty airlock alongside Kirk. Now both of them have no explanation.",
       "aura_points": 680,
       "relationships": {
         "Kirk": "loyal but hiding something critical",
@@ -40,7 +40,7 @@
       "character_description": "semi-realistic Pixar 3D Ensign Pavel Chekov, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
       "voice": "Charlie",
       "elevenlabs_voice": "Charlie",
-      "status": "Sealed in airlock. Last seen pressing hands against porthole glass, frost forming. Claims setup. Fate unknown.",
+      "status": "VANISHED. Airlock was empty when Kirk opened the door. Only frost boot prints remain on the grated floor, tracking toward the sealed outer door — which was never opened. No body, no explanation.",
       "aura_points": 200,
       "relationships": {
         "Kirk": "trusts captain completely — begged for help"
@@ -49,11 +49,13 @@
   ],
 
   "active_loops": [
-    "minor: Is Chekov really a traitor or was he framed?",
     "major: Who is the real enemy agent on the Enterprise?",
+    "major: How did Chekov vanish from a sealed airlock — outer door was never opened?",
     "eternal: Kirk always fights for his crew against the system"
   ],
-  "closed_loops": [],
+  "closed_loops": [
+    "minor: Is Chekov really a traitor or was he framed? — SUSPENDED: Chekov has disappeared, question cannot be answered yet"
+  ],
 
   "world_state": {
     "location": "Enterprise Airlock Corridor",
@@ -66,7 +68,12 @@
       "EP1: Worf executed airlock procedure on Chekov on Fleet Admiral's orders",
       "EP1: Kirk ordered 'Cancel the procedure' — Worf refused, claimed Fleet Admiral signed personally",
       "EP1: Kirk and Worf watched airlock seal. Kirk's fist clenched.",
-      "EP1: Kirk asked 'Worf. Who really gave you that order.' — Worf dropped his eyes and said nothing"
+      "EP1: Kirk asked 'Worf. Who really gave you that order.' — Worf dropped his eyes and said nothing",
+      "EP2: Kirk physically moved toward emergency release panel — Worf stepped in his path",
+      "EP2: Worf's final warning: 'Captain. If you open that door — Command will arrest us both.'",
+      "EP2: Kirk: 'Move. Worf.' — Worf stepped aside",
+      "EP2: Kirk pulled the emergency release lever — SEALED became OPEN",
+      "EP2: Airlock was empty. Only frost boot prints tracking to the sealed outer door — which was never opened"
     ]
   },
 
@@ -77,13 +84,23 @@
       "The order was signed by the Fleet Admiral. Personally.",
       "Captain. Chekov is an enemy agent. Evidence was received one hour ago.",
       "Captain!! This is a setup — I swear to you!!",
-      "Worf. Who really gave you that order."
+      "Worf. Who really gave you that order.",
+      "Captain. If you open that door — Command will arrest us both.",
+      "Move. Worf."
     ],
-    "recent_hooks": ["red-alert-chaos-wide-shot"],
-    "recent_cliffhangers": ["character-silence-eyes-drop"]
+    "recent_hooks": ["red-alert-chaos-wide-shot", "blocked-path-standoff"],
+    "recent_cliffhangers": ["character-silence-eyes-drop", "empty-room-mystery"]
   },
 
   "episode_summaries": [
+    {
+      "episode": 2,
+      "language": "en",
+      "summary": "Kirk moves on the emergency release panel. Worf steps into his path and warns him: 'Captain. If you open that door — Command will arrest us both.' Kirk says 'Move. Worf.' — and Worf steps aside. Kirk pulls the lever. The airlock opens. The chamber is completely empty. On the grated floor: frost boot prints tracking toward the sealed outer door — which was never opened.",
+      "cliffhanger": "The airlock is empty. Chekov vanished from a sealed room. The outer door was never opened — and there is no explanation.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-04-17/serial-drama-en-ep2_final.mp4",
+      "duration_sec": 25
+    },
     {
       "episode": 1,
       "language": "en",
