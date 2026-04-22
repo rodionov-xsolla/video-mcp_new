@@ -14,6 +14,7 @@ NB2 (Gemini 3.1 Flash Image) — мультимодальный LLM, не диф
 - **Порядок важен:** первые детали влияют сильнее → персонаж и поза в начале, декорации в конце.
 - **Пространственные отношения работают:** `"behind the table"`, `"slightly above and to the left"`, `"one step from the doorframe"` — NB2 разместит правильно.
 - **Позитивный фрейминг:** NB2 плохо обрабатывает отрицания (`no watermark` часто → добавит watermark). Описывай что хочешь, не что НЕ хочешь: `not smiling` → `neutral closed-mouth expression`, `no extra characters` → `single figure, alone in frame`.
+- **JSON-шаблоны для серий:** NB2 как LLM корректно парсит JSON внутри промпта. Для серий из 5+ изображений JSON-шаблон даёт ~92% точность цвета/композиции vs ~68% у чистого текста. Паттерны — см. секцию 2.1.
 
 ---
 
@@ -85,6 +86,134 @@ cinematic low angle shot, vertical composition, 9:16 aspect ratio, mobile-first 
 
 ---
 
+### 2.1 JSON-шаблон в storyboard.json — фиксация консистентности
+
+JSON в `visual_identity` — **не промпт для NB2**, а внутренний шаблон для агента. Стратегия: хранить персонажа / стиль / свет как структурированные поля, конвертировать в текстовый `image_prompt` при генерации каждой сцены.
+
+**Зачем:** JSON изолирует атрибуты → предотвращает "concept bleeding" (когда `"dark skin"` одного персонажа перетекает к другому в текстовом промпте). Метрики: ~92% точность цвета/композиции у JSON vs ~68% у чистого текста при серии из 5+ изображений.
+
+#### Character lock (фиксация персонажа)
+
+В `visual_identity` каждый персонаж — отдельный блок. Блок копируется без изменений во все сцены этого персонажа.
+
+```json
+{
+  "visual_identity": {
+    "style": "semi-realistic sci-fi, cinematic, LCARS aesthetic",
+    "lighting": "dramatic three-point, amber key, cool blue fill",
+    "color_palette": "deep black, LCARS orange, federation blue",
+    "characters": {
+      "Worf": {
+        "species": "Klingon",
+        "build": "strong muscular",
+        "skin": "dark brown",
+        "face": "prominent triangular cranial ridges, groomed goatee",
+        "hair": "long dark, warrior ponytail",
+        "outfit": "gold-black TNG uniform, diagonal metal baldric",
+        "expression_default": "fierce honorable"
+      },
+      "Kirk": {
+        "species": "human",
+        "build": "athletic",
+        "skin": "fair, light tan",
+        "face": "strong jaw, confident features",
+        "hair": "light brown, swept to side",
+        "outfit": "gold command tunic, Starfleet delta badge, black trousers",
+        "expression_default": "charming confident smirk"
+      }
+    }
+  }
+}
+```
+
+**Правило:** при сборке `image_prompt` — бери `characters.{name}` дословно, конкатенируй значения полей в строку. Не перефразируй и не сокращай между сценами.
+
+#### Два персонажа — изоляция атрибутов
+
+Текстовый промпт `"dark skin, cranial ridges, gold uniform, fair skin, auburn hair"` → NB2 может перемешать атрибуты. JSON-шаблон решает это:
+
+```json
+{
+  "scene_K": {
+    "character_A": {
+      "who": "Worf",
+      "position": "foreground left",
+      "action": "arms crossed, jaw tightened",
+      "gaze": "looking right toward Kirk"
+    },
+    "character_B": {
+      "who": "Kirk",
+      "position": "mid-ground right",
+      "action": "hand extended in calming gesture",
+      "gaze": "looking left toward Worf"
+    }
+  }
+}
+```
+
+При конвертации в `image_prompt` описывай каждого персонажа **одним непрерывным блоком**, не чередуя атрибуты:
+
+```
+✅ "[Worf full description], in foreground left, arms crossed, looking right toward the other figure,
+[Kirk full description], in mid-ground right, hand extended, looking left toward the first figure"
+
+❌ "Klingon warrior and human captain, both in gold uniforms, dark skin and fair skin, 
+one with ridges other without..." — атрибуты перемешаются
+```
+
+#### Start/End frame pair — shared vs variable
+
+Для I2V клипов: JSON явно декларирует что общее, что меняется.
+
+```json
+{
+  "frame_pair": {
+    "shared": {
+      "character": "Worf (из character lock)",
+      "background": "bg-bridge.png",
+      "camera": "medium close-up, eye level",
+      "lighting": "amber three-point"
+    },
+    "start": {
+      "expression": "neutral, mouth closed",
+      "gaze": "looking forward",
+      "hand": "arms at sides",
+      "env_detail": "panel indicator red"
+    },
+    "end": {
+      "expression": "alert, eyebrow raised",
+      "gaze": "looking slightly left",
+      "hand": "right hand at chest level",
+      "env_detail": "panel indicator green"
+    }
+  }
+}
+```
+
+**Правило:** всё из `shared` — дословно одинаково в обоих промптах. Различия — только из `start` / `end`. Если поле не указано в `end` — копируй из `start`.
+
+#### Edit operations — preserve / change
+
+Для bg-вариантов и end-фреймов через edit-endpoint:
+
+```json
+{
+  "edit": {
+    "preserve": ["character face", "uniform", "body proportions", "camera angle"],
+    "change": {
+      "background": "corridor → transporter room",
+      "lighting": "amber → cool blue transporter glow",
+      "expression": "neutral → alert"
+    },
+    "do_not_change": ["skin tone", "hair", "outfit details"]
+  }
+}
+```
+
+Конвертация в промпт: `"Keep: [preserve]. Change: [change values]. Do not alter: [do_not_change]."` (см. секция 9, edit-endpoint).
+
+---
+
 ### 3. Camera angle по типу beat
 
 Выбирай угол под настроение, не используй одно и то же во всех сценах:
@@ -131,12 +260,23 @@ cinematic low angle shot, vertical composition, 9:16 aspect ratio, mobile-first 
 
 **Правило:** `gaze_direction` совпадает с адресатом речи. Если Kirk говорит Worf — он смотрит на Worf.
 
+**Anti-bleeding:** при 2 персонажах описывай каждого одним непрерывным блоком в промпте, не чередуя атрибуты. JSON-шаблон изоляции — см. секцию 2.1 «Два персонажа».
+
 ---
 
 ### 6. Рот персонажа
 
 - **Сцены с липсинком** (Avatar / Veo3 T2V) — лёгкая улыбка / приоткрытый рот, видны зубы: `"mouth slightly open with teeth visible"`. Критично для качества липсинка.
 - **Сцены без липсинка** (I2V action) — рот в настроении сцены: злость, удивление, грусть.
+
+### 6.1 Avatar клипы — запрет close-up
+
+Kling Avatar на крупном плане лица даёт uncanny valley: дешёвая, пугающая мимика. **Для всех Avatar/dialogue клипов минимальный план — medium close-up** (голова + плечи + верх груди). Close-up и extreme close-up запрещены.
+
+| clip_type | Допустимые планы |
+|---|---|
+| Avatar / dialogue | medium close-up, medium shot, medium wide |
+| I2V action | любой (включая close-up) |
 
 ---
 
@@ -148,6 +288,24 @@ cinematic low angle shot, vertical composition, 9:16 aspect ratio, mobile-first 
 - ❌ Дублирование `style_tags` в `character_state`
 - ❌ Абстрактные второстепенные: `"armored man"` → NB2 генерирует робота. Описывай: `"weathered leather vest, scarred bearded face, sun-darkened skin"`
 - ❌ Без `gaze_direction` при 2+ персонажах → случайные взгляды
+- ❌ Абстрактные действия вместо конкретной физики (см. 7.3)
+
+---
+
+### 7.3 Action-промпты — конкретная физика, не абстракция
+
+NB2 не понимает масштаб и намерение абстрактных описаний. "Steps closer" может дать +1px сдвига. "Hand on chest" = романтика, не угроза. Описывай через измеримые физические параметры:
+
+| ❌ Абстрактно | ✅ Конкретная физика |
+|---|---|
+| `steps closer` | `gap between figures reduced from one arm-length to half, leading shoulder squared forward, weight on front foot` |
+| `hand on chest` (угроза) | `fist gripping uniform fabric at collar level, knuckles white, pulling target forward` |
+| `hand on chest` (остановка) | `open palm pressing flat against center of chest, arm fully extended, blocking movement` |
+| `reaches for lever` | `right hand extended forward, fingers wrapping around lever handle at shoulder height, body square to wall panel` |
+| `looks scared` | `eyes wide with visible whites above iris, mouth open and jaw dropped, shoulders hunched inward, body leaning away` |
+| `stands guard` | `feet shoulder-width apart, arms crossed over chest, chin level, body centered in doorway blocking passage` |
+
+**Правило:** если промпт можно интерпретировать двумя способами (романтика vs угроза, грусть vs усталость) — NB2 выберет более нейтральный. Убирай двусмысленность конкретными физическими деталями.
 
 ---
 
@@ -211,13 +369,7 @@ vertical composition, 9:16 aspect ratio
 
 **Варианты bg (red alert, night, damaged):** обязательно передавай оригинальный bg в `image_urls` как reference. Промпт: `"same layout, only lighting changed to red alert"`. Без оригинала мебель/консоли меняют расположение.
 
-**Edit-endpoint: "сохрани → измени".** NB2 edit лучше работает когда сначала описано что сохранить, потом что изменить:
-
-```
-Keep: room layout, furniture positions, wall textures.
-Change: lighting to red alert mode, add emergency glow.
-How: same camera angle, same framing, matching shadows to new light source.
-```
+**Edit-endpoint: "сохрани → измени".** NB2 edit лучше работает когда сначала описано что сохранить, потом что изменить. Формат: `"Keep: [что сохранить]. Change: [что изменить]. Do not alter: [гарантии]."` JSON-шаблон для edit-операций — см. секцию 2.1 «Edit operations».
 
 Применимо к: bg-вариантам, end-фреймам, restyling локаций.
 
@@ -303,9 +455,18 @@ URL-ы fal.ai временные → скачивай локально сраз�
 
 Стоимость: 2 × $0.04 = $0.08 на клип.
 
-**Консистентность фона:** оба фрейма с **одним и тем же `bg-{location}.png`** в `image_urls`. НЕ чейни эндфрейм от стартфрейма — фон дрейфует.
+**Ref-стратегия для end-frame:**
 
-**Консистентность персонажей:** один и тот же персонаж на старте И конце. Перестановка → Kling морфирует.
+| Фрейм | `image_urls` |
+|---|---|
+| Start | `[character-ref, bg-ref]` (стандартная chain-логика из секции 10) |
+| End | `[scene-K-start.png, bg-ref]` — якорь на START того же клипа |
+
+**Почему start-frame как ref для end:** end-frame должен повторять композицию start-frame с минимальными отличиями. Если якорить end на предыдущий клип или только на character-ref — композиция дрейфует (персонаж уезжает от нужного объекта, меняется крупность). Start-frame того же клипа = лучший anchor для сохранения позиции.
+
+**Консистентность персонажей:** все объекты и персонажи из start-frame ОБЯЗАНЫ присутствовать в end-frame. Kling интерполирует между двумя кадрами — если объект есть в одном и отсутствует в другом, Kling растворит его как призрак.
+
+Исключение: персонаж может исчезнуть между start и end **только если** в `storyboard.json` для этого клипа есть явное обоснование (например `"action_description": "фигура уходит за дверь"`). В этом случае на end-frame персонаж частично за краем кадра / за дверью — не просто удалён из сцены.
 
 **Минимальное изменение (КРИТИЧНО):** start и end почти идентичны по композиции, перспективе, масштабу.
 
@@ -313,15 +474,32 @@ URL-ы fal.ai временные → скачивай локально сраз�
 
 **ЗАПРЕЩЕНО менять:** глубину/перспективу, масштаб кадра, угол камеры, расстояние до объекта.
 
+**NB2 НЕ умеет менять ракурс камеры через промпт.** Попытка описать low-angle / tilt / dolly в тексте промпта → модель искажает перспективу (поднимает пол, растягивает стены), а не двигает камеру. Камерные движения — задача Kling через `motion_prompt`, НЕ разница между start и end кадрами. End-frame ОБЯЗАН иметь тот же ракурс что start-frame.
+
 ✅ Правильно: Кирк и Ворф у двери шлюза, индикатор красный → те же у двери, индикатор зелёный, головы повёрнуты.
 
 ❌ Неправильно: Кирк и Ворф в начале коридора (далёкий план) → у двери (крупный план) — деформация.
+❌ Неправильно: start eye-level → end low-angle — NB2 исказит геометрию, не сдвинет камеру.
+❌ Неправильно: два персонажа в start → пустая комната в end — Kling растворит фигуры.
 
 **Avatar/dialogue клипы:** только одно изображение (start). End frame не нужен.
 
 ---
 
-### 17. Sequential generation, НЕ batch
+### 17. Workspace hygiene — архивация перед перегенерацией
+
+Перед перегенерацией любого PNG — перенеси предыдущую версию в `_archive/`:
+
+```bash
+mkdir -p "${OUTPUT}/_archive"
+mv "${OUTPUT}/scenes/scene-K/scene-K.png" "${OUTPUT}/_archive/scene-K_$(date +%H%M).png"
+```
+
+Output-папка должна содержать только актуальные файлы. Пользователь не должен разбираться какой из пяти `scene-5.png` правильный.
+
+---
+
+### 18. Sequential generation, НЕ batch
 
 Генерируй **по одному PNG за раз**. После каждого:
 1. Скачай локально
@@ -333,7 +511,7 @@ URL-ы fal.ai временные → скачивай локально сраз�
 
 ---
 
-### 18. Визуальная валидация — ОБЯЗАТЕЛЬНЫЙ ШАГ
+### 19. Визуальная валидация — ОБЯЗАТЕЛЬНЫЙ ШАГ
 
 `filesize > 1000 bytes` = файл скачался, НЕ проверка качества. Открой изображение глазами:
 
@@ -344,6 +522,8 @@ URL-ы fal.ai временные → скачивай локально сраз�
 5. **Нет лишних/посторонних персонажей?** При сложных промптах NB2 может добавить рандомную фигуру.
 6. **Пропорции в constrained frames?** Через иллюминатор — фигура занимает указанную долю, не заполняет весь проём.
 7. **Рот?** Lipsync клип → улыбка с зубами; non-dialogue → настроение сцены.
+8. **Фон совпадает с bg-ref?** Открой `bg-{location}.png` и сравни визуально: стиль двери, цвет стен, расположение панелей, форма окон. NB2 может «придумать» другую дверь/комнату если промпт расходится с ref.
+9. **Кожа / артефакты?** Зелёные пятна, неестественный цвет кожи, фингалы — NB2 иногда добавляет цветовые артефакты на лица.
 
 **Стоимость переделки:** $0.04 за PNG vs $0.35 за I2V. Визуальная проверка экономит 5–10x.
 

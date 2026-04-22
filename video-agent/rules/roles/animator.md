@@ -192,6 +192,24 @@ Camera [slight push-in / holds steady / drifts slowly].
 
 Если motion_prompt в storyboard.json содержит имена/настроения — перепиши на технический язык перед отправкой в Kling. **Не отправляй литературный prompt в надежде что «модель поймёт».**
 
+### Темп движений — по характеру сцены
+
+Темп motion_prompt подбирай под настроение сцены. Не «всегда медленно» и не «всегда быстро» — в меру.
+
+| Настроение сцены | Темп | Слова-маркеры |
+|---|---|---|
+| Драма, грусть, прощание | Плавнее, но не статично | `turns head`, `lowers chin`, `shifts gaze`, `settles` |
+| Экшен, злость, конфликт | Динамично, резко | `snaps head`, `thrusts hand`, `drives in`, `strikes`, `whips` |
+| Напряжение, тайна | Средний, с паузами | `tilts head`, `narrows eyes`, `tightens jaw`, `pulses` |
+| Комедия, энергия | Быстро, контрастно | `shoots up`, `jolts`, `bounces`, `flicks` |
+
+**Запрещено:**
+- ❌ `slowly` / `subtle` / `barely` / `gently` / `holds steady` в каждом промпте — убивает динамику
+- ❌ Один микро-жест на весь 5s клип — скучно, нужно минимум 2-3 действия
+- ❌ `camera holds` без второго действия — статика
+
+**Правило:** Каждый 5s клип содержит минимум 2-3 отдельных действия (камера + персонаж + окружение). Камера двигается в каждом клипе (push in, track, drift, pan — не holds steady).
+
 ### Multi-character motion
 
 Если на сцене 2 персонажа — опиши микродвижения **каждого отдельно**. Пример:
@@ -329,7 +347,21 @@ GET https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
 
 ---
 
-## 7. Avatar motion_prompt — пишешь из facial_expression и action_description
+## 7. Avatar — кадрирование и motion_prompt
+
+### Avatar: ЗАПРЕЩЁН close-up
+
+Kling Avatar на close-up даёт «uncanny valley»: крупное лицо выглядит дешёво, пугающе, мимика неестественная. Допустимые планы:
+
+| ✅ Допустимо | ❌ Запрещено |
+|---|---|
+| Medium close-up (голова + плечи + верх груди) | Close-up (только лицо) |
+| Medium shot (по пояс) | Extreme close-up (глаза/рот) |
+| Medium wide (по колено, редко) | |
+
+**Если Storyboarder прислал close-up start frame для Avatar клипа — верни на перегенерацию.** Допустимый минимум: medium close-up (видны плечи и верх груди).
+
+### Avatar motion_prompt — пишешь из facial_expression и action_description
 
 Без motion_prompt мимика нейтральная (палка), при этом стоимость та же.
 
@@ -401,7 +433,7 @@ Animator не делает trim сам — просто отдаёт сырой 
 $FFMPEG -y -i avatar.mp4 \
   -filter_complex "[0:v]setpts=PTS/1.3[v];[0:a]atempo=1.3[a]" \
   -map "[v]" -map "[a]" \
-  -r 30 -c:v libx264 -preset medium -crf 14 -pix_fmt yuv420p \
+  -r 30 -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p \
   -ar 44100 -ac 2 -c:a aac -b:a 128k \
   avatar-fast.mp4
 ```

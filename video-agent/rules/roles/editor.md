@@ -37,14 +37,14 @@ I2V (Kling) идёт в 24fps, Avatar (Kling Avatar) в 30fps → нормали
 ```bash
 $FFMPEG -y -i scenes/scene-K/scene-K.mp4 \
   -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2" \
-  -r 30 -c:v libx264 -preset slow -crf 10 -pix_fmt yuv420p \
+  -r 30 -c:v libx264 -preset slow -crf 20 -pix_fmt yuv420p \
   -ar 44100 -ac 2 -c:a aac -b:a 128k \
   scenes/scene-K/scene-K-scaled.mp4
 ```
 
 Обязательные параметры:
 - `-r 30` — 30 fps
-- `-preset slow -crf 10` — высокое качество
+- `-preset slow -crf 20` — высокое качество
 - `-ar 44100 -ac 2 -c:a aac -b:a 128k` — нормализованное аудио
 
 ---
@@ -61,7 +61,7 @@ file 'scenes/scene-3/scene-3-scaled.mp4'
 EOF
 
 $FFMPEG -y -f concat -safe 0 -i concat-list.txt \
-  -r 30 -c:v libx264 -preset slow -crf 10 \
+  -r 30 -c:v libx264 -preset slow -crf 20 \
   -ar 44100 -ac 2 -c:a aac -b:a 128k \
   final-base.mp4
 ```
@@ -87,6 +87,30 @@ $FFMPEG -y -i scenes/scene-K/scene-K-scaled.mp4 -i scenes/scene-K/scene-K.mp3 \
 
 ---
 
+## 3b. TTS подгонка по длительности (atempo)
+
+Когда TTS (полный монолог) не совпадает по длительности с видео:
+
+| Ситуация | Решение |
+|---|---|
+| TTS > видео | Ускорить TTS: `atempo=VIDEO_DUR/TTS_DUR` (обычно 1.1–1.3x) |
+| TTS < видео | Добить тишиной: `apad=whole_dur=VIDEO_DUR` |
+| TTS ≈ видео (±1s) | Оставить как есть, `apad` закроет разницу |
+
+```bash
+# Пример: TTS 43s, видео 35s → ускорить 1.23x
+TTS_DUR=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 tts-output.mp3)
+VIDEO_DUR=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 video-concat.mp4)
+SPEED=$(echo "$TTS_DUR / $VIDEO_DUR" | bc -l)
+$FFMPEG -y -i tts-output.mp3 -filter:a "atempo=$SPEED" tts-fast.mp3
+```
+
+**Ограничения atempo:** 0.5–100.0. Для ускорения >2x — цепочка: `atempo=2.0,atempo=1.5` = 3x.
+
+**Правило:** Голос не обрезать (`-t`). Либо ускорить (atempo), либо добить тишиной (apad). Обрезка = потеря финальной фразы.
+
+---
+
 ## 4. Фоновая музыка (опционально)
 
 Микс с финальным видео:
@@ -106,7 +130,15 @@ $FFMPEG -y -i final-base.mp4 -i bg-music.mp3 \
 
 ## 5. CTA-overlay (serial-drama, в конце вместе с TBC)
 
-CTA = подготовленный ролик в `games/{GAME_TAG}/assets/cta/cta.mp4`. Конкатенируется в самый конец после всех сцен.
+CTA = подготовленный ролик, конкатенируется в самый конец после всех сцен.
+
+### Поиск CTA — порядок приоритета
+
+1. **Текущий `output/` эпизода** и `_archive/` — если CTA уже был сгенерирован для этого эпизода, используй его
+2. **`games/{GAME_TAG}/assets/cta/cta.mp4`** — общий CTA игры
+3. **CTA предыдущего эпизода** — только как последний fallback
+
+Разные эпизоды могут иметь разные CTA (например "LINK IN BIO" vs "USE THE LINK IN DESCRIPTION"). Не копируй слепо из предыдущего эпизода — проверь содержимое (`ffmpeg -ss 0.5 -frames:v 1` → визуально).
 
 ### Скачивание CTA из Supabase
 
@@ -174,7 +206,7 @@ $FFMPEG -y -i final-base.mp4 \
   -i subs/sub-1.png -i subs/sub-2.png \
   -filter_complex "[0:v][1:v]overlay=enable='between(t,1.0,4.5)':x=(W-w)/2:y=H-h-100[v1]; \
                    [v1][2:v]overlay=enable='between(t,5.0,9.2)':x=(W-w)/2:y=H-h-100[vout]" \
-  -map "[vout]" -map 0:a -c:v libx264 -preset slow -crf 10 -c:a copy \
+  -map "[vout]" -map 0:a -c:v libx264 -preset slow -crf 20 -c:a copy \
   final-with-subs.mp4
 ```
 
@@ -199,7 +231,7 @@ Editor отдаёт `subs.srt` → применяет через `subtitles=`:
 ```bash
 $FFMPEG -y -i final-base.mp4 \
   -vf "subtitles=subs.srt:force_style='FontName=Montserrat Bold,FontSize=42,PrimaryColour=&Hffffff,OutlineColour=&H000000,BorderStyle=3,Outline=3,Shadow=0,Alignment=2,MarginV=200'" \
-  -c:v libx264 -preset slow -crf 10 -c:a copy \
+  -c:v libx264 -preset slow -crf 20 -c:a copy \
   final-with-subs.mp4
 ```
 
@@ -285,7 +317,7 @@ $FFMPEG -y -i avatar-speedup.mp4 -i gameplay-trimmed.mp4 \
     [1:a]volume=0.25[bg];
     [0:a][bg]amix=inputs=2:duration=first[aout]
   " \
-  -map "[v]" -map "[aout]" -c:v libx264 -preset slow -crf 10 -c:a aac -b:a 128k -r 30 \
+  -map "[v]" -map "[aout]" -c:v libx264 -preset slow -crf 20 -c:a aac -b:a 128k -r 30 \
   final-base.mp4
 ```
 
@@ -300,7 +332,7 @@ $FFMPEG -y -i avatar-speedup.mp4 -i gameplay-trimmed.mp4 \
 
 Пример объединения concat + bg music + subtitles в один вызов: используй `[0:v][0:a]` для сцены, `concat` filter, потом `amix`, потом `subtitles` — всё в одном `-filter_complex`. Только если читаемо.
 
-Если многослойно — каждый слой через `-c:v libx264 -preset slow -crf 10`, не `-c copy`.
+Если многослойно — каждый слой через `-c:v libx264 -preset slow -crf 20`, не `-c copy`.
 
 ---
 

@@ -65,6 +65,8 @@
 ### ФАЗА 2 — Character refs + сцены
 Делегируй `rules/roles/storyboarder.md`. Передай: `storyboard.json`, character_description из game config, существующие refs из Supabase.
 
+**Workspace hygiene:** перед перегенерацией любого ассета — перенеси предыдущие файлы в `output/.../_archive/`. Output-папка должна содержать только актуальные файлы.
+
 **Выход:** `scenes/refs/character-ref.png`, `scenes/scene-K/scene-K.png` (+ `scene-K-end.png` для I2V).
 
 ### ФАЗА 3 — Анимация и аудио (параллельно)
@@ -141,6 +143,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 | "gameplay ai avatar", "ai avatar", "talking head", "offerwall", "offer", "оффер", "бонус" | Gameplay AI Avatar | `rules/formats/gameplay-ai-avatar.md` |
 | "dance battle", "dance off", "танцевальный батл", "танец" | Dance Battle | `rules/formats/dance-battle.md` |
 | "reddit story", "storytime", "история игрока", "narrated gameplay" | Reddit Story | `rules/formats/reddit-story.md` |
+| "character story", "история персонажа", "лор", "lore", "backstory", "origin story", "предыстория" | Character Story | `rules/formats/character-story.md` |
 | Всё остальное | Standard | `rules/formats/standard.md` |
 
 **НЕ загружай файлы форматов, не относящихся к задаче.**

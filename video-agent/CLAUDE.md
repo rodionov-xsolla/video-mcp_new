@@ -34,10 +34,12 @@ rules/
 │   └── editor.md              — FFmpeg сборка
 ├── formats/                   ← playbook-и форматов (брифы ролям)
 │   └── {serial-drama, gameplay-ai-avatar, news, standard,
-│       reddit-story, dance-battle, object-character, dual-style}.md
+│       reddit-story, dance-battle, object-character, dual-style,
+│       character-story}.md
 └── main/
     ├── budgets.md             — прайсинг моделей
-    └── fallback.md            — обработка ошибок
+    ├── fallback.md            — обработка ошибок
+    └── new-format-skill.md    — скилл создания нового формата
 
 tools/                         ← API reference (fal-ai, ffmpeg)
 games/                         ← per-game конфиги и story bibles

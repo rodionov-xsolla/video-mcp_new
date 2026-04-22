@@ -104,7 +104,7 @@
 - Общие правила — `rules/roles/sound.md`
 
 ### Editor
-- Scale каждую сцену в 1080×1920, fps=30, `-preset slow -crf 10`
+- Scale каждую сцену в 1080×1920, fps=30, `-preset slow -crf 20`
 - Concat с re-encode (`libx264`), NOT `-c copy`; hard cuts, НЕТ crossfade
 - CTA overlay на последних 2–3s (curl + ffprobe валидация)
 - Музыка через `amix`; **НИКОГДА `-shortest`** — используй `apad`
