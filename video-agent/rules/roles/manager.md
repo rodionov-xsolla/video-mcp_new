@@ -195,7 +195,8 @@ output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/
 | Модель | Endpoint | Стоимость |
 |--------|----------|-----------|
 | GPT Image 2 medium (image) | `fal-ai/gpt-image-2` (уточни через Context7) | ~$0.04 |
-| Kling 2.6 Pro I2V | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.14/сек ($0.35/5s; всегда `generate_audio: false`) |
+| Kling v3 Standard I2V (основная) | `fal-ai/kling-video/v3/standard/image-to-video` | $0.07/сек ($0.35/5s; всегда `generate_audio: false`) |
+| Kling 2.6 Pro I2V (fallback) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.14/сек ($0.70/5s; всегда `generate_audio: false`) |
 | Veo3 T2V | `fal-ai/veo3` | $0.20–$0.40/сек |
 | ElevenLabs TTS (via fal.ai) | `fal-ai/elevenlabs/tts/eleven-v3` | ~$0.30/мин. **`voice` = имя (Daniel), НЕ `voice_id`** |
 | Kling Lipsync | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/сек |

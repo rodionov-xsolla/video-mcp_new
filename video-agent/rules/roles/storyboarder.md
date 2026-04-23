@@ -223,6 +223,7 @@ one with ridges other without..." — атрибуты перемешаются
 | **hook** | close-up / medium close-up | Лицо, эмоция — сразу зацепить |
 | **development** | medium shot / wide shot | Контекст, окружение, масштаб |
 | **climax** | low angle / dynamic angle | Эпичность, мощь, угроза |
+| **confrontation / depth** | over-the-shoulder | Глубина коридора + силуэт + реакция персонажа |
 | **комедия** | medium shot / eye-level | Дать актёру «играть» |
 | **грусть / задумчивость** | medium / slightly above | Уязвимость |
 
@@ -289,6 +290,7 @@ Kling Avatar на крупном плане лица даёт uncanny valley: д
 - ❌ Абстрактные второстепенные: `"armored man"` → NB2 генерирует робота. Описывай: `"weathered leather vest, scarred bearded face, sun-darkened skin"`
 - ❌ Без `gaze_direction` при 2+ персонажах → случайные взгляды
 - ❌ Абстрактные действия вместо конкретной физики (см. 7.3)
+- ❌ Эра-специфичные ключевые слова в промпте (`"TNG"`, `"TOS"`, `"Voyager"`) — модель переопределяет явные описания цвета/стиля дефолтами эпохи. Пиши цвет формы явно (`"gold-yellow uniform"`) без упоминания эры
 
 ---
 
@@ -405,15 +407,15 @@ vertical composition, 9:16 aspect ratio
 
 | Сцена | `image_urls` |
 |---|---|
-| 1-я в локации | `[character-ref, bg-{location}]` |
-| Последующие в локации | `[character-ref, bg-{location}, prev-scene]` |
+| 1-я в локации | `[bg-{location}, character-sheet]` |
+| Последующие в локации | `[bg-{location}, character-sheet, prev-scene]` |
 
 Для форматов без bg-ref (standard, news, gameplay-ai-avatar):
 | Сцена | `image_urls` |
 |---|---|
-| 1 | `[character-ref]` |
-| 2 | `[character-ref, scene-1]` |
-| N | `[character-ref, scene-(N-1)]` |
+| 1 | `[character-sheet]` |
+| 2 | `[character-sheet, scene-1]` |
+| N | `[character-sheet, scene-(N-1)]` |
 
 **Не добавляй ВСЕ предыдущие сцены — только последнюю.**
 
@@ -425,11 +427,13 @@ URL-ы fal.ai временные → скачивай локально сраз�
 
 3+ refs → модель пытается «разместить» каждый ref как отдельную сущность → **персонажи удваиваются**.
 
+**Порядок refs:** bg-ref **всегда первым** в `image_urls`. Белый фон char sheets заливает атмосферу если стоит первым.
+
 | Тип кадра | `image_urls` |
 |---|---|
-| 1 персонаж | `[character-ref, bg-ref]` (макс) |
-| Multi-character (2 в кадре) | `[character-ref-1, character-ref-2]` **если** в промпте явно прописаны позиции обоих: `"[Персонаж А] stands foreground left, [Персонаж Б] stands mid-ground right"` |
-| Multi-character (wide, без позиционирования) | `[character-ref-1, bg-ref]` — второго описывай словами |
+| 1 персонаж | `[bg-ref, character-sheet]` (макс) |
+| Multi-character (2 в кадре) | `[bg-ref, character-sheet-1, character-sheet-2]` — **в промпте обязательно** явные позиции: `"On the LEFT side [Персонаж А]... On the RIGHT side [Персонаж Б]..."` |
+| Multi-character (wide, без позиционирования) | `[bg-ref, character-sheet-1]` — второго описывай словами |
 | POV / over-shoulder / wide | `[bg-ref, prev-scene-chain]` — без character refs |
 
 ---
@@ -484,8 +488,10 @@ URL-ы fal.ai временные → скачивай локально сраз�
 
 | Фрейм | `image_urls` |
 |---|---|
-| Start | `[character-ref, bg-ref]` (стандартная chain-логика из секции 10) |
+| Start | `[bg-ref, character-sheet]` (стандартная chain-логика из секции 10–11) |
 | End | `[scene-K-start.png, bg-ref]` — якорь на START того же клипа |
+
+⚠️ **End-frame: НИКОГДА `[scene-K-start, character-sheet]`** — char sheet вызывает 3-ю руку (модель рисует руки из sheet + руки из scene-start). Только `[scene-K-start, bg-ref]`.
 
 **Почему start-frame как ref для end:** end-frame должен повторять композицию start-frame с минимальными отличиями. Если якорить end на предыдущий клип или только на character-ref — композиция дрейфует (персонаж уезжает от нужного объекта, меняется крупность). Start-frame того же клипа = лучший anchor для сохранения позиции.
 
@@ -497,7 +503,7 @@ URL-ы fal.ai временные → скачивай локально сраз�
 
 Разрешено менять: выражение лица, цвет индикатора, жест руки, поворот головы, мелкие детали.
 
-**ЗАПРЕЩЕНО менять:** глубину/перспективу, масштаб кадра, угол камеры, расстояние до объекта.
+**ЗАПРЕЩЕНО менять:** глубину/перспективу, масштаб кадра, угол камеры, расстояние до объекта, ориентацию/зеркалирование персонажа (если Kirk стоит лицом вправо в start — он стоит лицом вправо в end).
 
 **NB2 НЕ умеет менять ракурс камеры через промпт.** Попытка описать low-angle / tilt / dolly в тексте промпта → модель искажает перспективу (поднимает пол, растягивает стены), а не двигает камеру. Камерные движения — задача Kling через `motion_prompt`, НЕ разница между start и end кадрами. End-frame ОБЯЗАН иметь тот же ракурс что start-frame.
 
@@ -551,7 +557,13 @@ Output-папка должна содержать только актуальн�
 
 ---
 
-### 18. Sequential generation, НЕ batch
+### 18. Итеративная правка промптов
+
+При доработке промпта: **бери рабочую версию и добавляй недостающий элемент**. Не переписывай с нуля — теряешь все удачные решения. Если промпт на 80% правильный — правь 20%, не выбрасывай.
+
+---
+
+### 19. Sequential generation, НЕ batch
 
 Генерируй **по одному PNG за раз**. После каждого:
 1. Скачай локально
