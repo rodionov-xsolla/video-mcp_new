@@ -15,7 +15,52 @@ Authorization: Key $FAL_KEY
 
 ---
 
-## 1. Nano Banana 2 — генерация изображений
+## 1. GPT Image 2 — основная модель генерации изображений
+
+**Endpoint:** `https://queue.fal.run/fal-ai/gpt-image-2` *(уточни через Context7 перед использованием)*
+**Метод:** POST (асинхронный — нужен polling)
+**Стоимость:** ~$0.04 за изображение (medium quality)
+
+> **Основная модель для всех сцен, character refs, bg-assets.** Заменяет Nano Banana 2.
+
+### Запрос
+
+```bash
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/gpt-image-2" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Star Trek cinematic 3D animation, Captain Kirk medium close-up, gold tunic, dramatic lighting, 9:16 vertical",
+    "image_url": "https://supabase.../character-ref.png",
+    "quality": "medium",
+    "image_size": "1024x1536"
+  }')
+
+REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
+```
+
+### Параметры
+
+| Параметр | Тип | Обязательный | Описание |
+|----------|-----|-------------|----------|
+| `prompt` | string | Да | Текстовое описание |
+| `quality` | enum | Нет | `"low"`, `"medium"`, `"high"`. Используй `"medium"` |
+| `image_size` | enum | Нет | `"1024x1536"` для 9:16 вертикального |
+| `image_url` | string | Нет | URL reference image для chain consistency (уточни через Context7) |
+
+> ⚠️ Перед первым вызовом сверься с Context7: `resolve-library-id gpt-image-2` → `get-library-docs`. Параметры (особенно `image_url` vs `image_urls`, polling path) могут отличаться.
+
+### Polling
+
+```bash
+# Polling base path — уточнить через Context7
+STATUS=$(curl -s "https://queue.fal.run/fal-ai/gpt-image-2/requests/$REQUEST_ID/status" \
+  -H "Authorization: Key $FAL_KEY" | jq -r '.status')
+```
+
+---
+
+## 1b. Nano Banana 2 — LEGACY (не использовать для новых проектов)
 
 ### Text-to-Image (без референса — для character references)
 
