@@ -5,7 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 1,
+  "last_episode": 3,
 
   "characters": [
     {
@@ -14,11 +14,11 @@
       "character_description": "semi-realistic Pixar 3D Captain James T. Kirk, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
       "voice": "Daniel",
       "elevenlabs_voice": "Daniel",
-      "status": "Standing at the sealed airlock door, fist clenched. Just asked Worf 'Who really gave you that order.' Waiting for an answer that hasn't come.",
+      "status": "EP3: Walked through the unlocked airlock despite Worf's warning. Found Chekov alive inside the decontamination chamber. Now kneeling beside him. Just heard Chekov say 'it's someone on your crew.' Somewhere behind — Worf spotted a silhouette at the corridor junction pointing a finger at Kirk.",
       "aura_points": 750,
       "relationships": {
-        "Worf": "demanding the truth — trust fractured",
-        "Chekov": "crew member he refused to abandon"
+        "Worf": "uneasy alliance — Worf told the truth at great personal cost",
+        "Chekov": "still fighting for him — refusing to abandon the mission"
       }
     },
     {
@@ -27,11 +27,10 @@
       "character_description": "semi-realistic Pixar 3D Commander Worf, imposing Klingon-Human, prominent forehead ridges, dark skin, fierce disciplined expression, TNG Starfleet command red uniform with lieutenant commander pips, broad shoulders, intense dark eyes",
       "voice": "George",
       "elevenlabs_voice": "George",
-      "status": "Dropped his eyes when Kirk asked who really gave the order. Said nothing. Knows the truth but cannot — or will not — speak it.",
+      "status": "EP3: Tried to stop Kirk from entering the airlock ('Whoever opened that door is watching us right now'). Kirk walked through anyway. Worf drew phaser, held guard at doorway. Spotted silhouette figure at far corridor junction pointing at Kirk. Swung phaser toward the figure — face-off at corridor length. Bridge locked out.",
       "aura_points": 600,
       "relationships": {
-        "Kirk": "loyal but hiding something critical",
-        "Chekov": "executed the order against him"
+        "Kirk": "bound together now — shared knowledge of Section 31 = shared death sentence"
       }
     },
     {
@@ -40,7 +39,7 @@
       "character_description": "semi-realistic Pixar 3D Ensign Pavel Chekov, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
       "voice": "Charlie",
       "elevenlabs_voice": "Charlie",
-      "status": "Sealed behind the airlock door. Screamed 'This is a setup — I swear to you!' through the glass. Fate unknown.",
+      "status": "EP3: Found alive inside the airlock decontamination chamber, slumped against the wall. Exhausted, barely conscious. Delivered critical intel to Kirk: 'it's someone on your crew.' Identity of the mole unknown.",
       "aura_points": 200,
       "relationships": {
         "Kirk": "trusts captain completely — begged for help"
@@ -49,49 +48,75 @@
   ],
 
   "active_loops": [
-    "major: Who is the real enemy agent on the Enterprise?",
+    "major NEW: Who is the mole on Kirk's crew? (Chekov's intel)",
+    "major NEW: Who is the watcher in the corridor — Section 31 agent or ally?",
+    "major NEW: Bridge locked out — who controls the Enterprise now?",
+    "major: Section 31 behind the kill order — how deep does the conspiracy go?",
     "eternal: Kirk always fights for his crew against the system"
   ],
   "closed_loops": [
-    "minor: Is Chekov really a traitor or was he framed? — SUSPENDED: sealed behind airlock door, no answer yet"
+    "minor: Is Worf loyal? — RESOLVED: yes, revealed the truth at cost of his life",
+    "minor: Is Chekov alive? — RESOLVED: yes, found in airlock chamber, exhausted but conscious"
   ],
 
   "world_state": {
     "location": "Enterprise Airlock Corridor",
     "important_items": [
-      "Sealed airlock door — SEALED indicator burning red",
-      "PADD with the Fleet Admiral's signed order",
-      "Chekov behind the sealed door — fate unknown"
+      "Airlock door — just switched SEALED → UNLOCKED by itself, green indicator glowing",
+      "PADD with Fleet Admiral's signed Section 31 kill order — on corridor console",
+      "Chekov behind the unlocked door — fate unknown"
     ],
     "key_events": [
       "EP1: Worf executed airlock procedure on Chekov on Fleet Admiral's orders",
-      "EP1: Kirk ordered 'Cancel the procedure' — Worf refused, claimed Fleet Admiral signed personally",
-      "EP1: Kirk and Worf watched airlock seal. Kirk's fist clenched.",
-      "EP1: Kirk asked 'Worf. Who really gave you that order.' — Worf dropped his eyes and said nothing"
+      "EP1: Kirk ordered 'Cancel the procedure' — Worf refused",
+      "EP1: Kirk asked 'Worf. Who really gave you that order.' — Worf dropped his eyes",
+      "EP2: Worf revealed 'It was Section 31.' Kirk denied it, Worf showed PADD with Fleet Admiral seal",
+      "EP2: Worf said 'Now you see, Captain. We are both dead.'",
+      "EP2: Airlock door SWITCHED from SEALED to UNLOCKED by itself — nobody touched the panel",
+      "EP3: Worf warned Kirk the watcher is still active. Kirk said 'Then they're watching me walk through it.' and entered anyway.",
+      "EP3: Chekov found alive, slumped in decontamination chamber. Told Kirk: 'it's someone on your crew.'",
+      "EP3: Worf spotted silhouette figure at corridor junction pointing at Kirk — drew phaser, standoff across full corridor length"
     ]
   },
 
   "anti_repetition": {
     "recent_phrases": [
-      "Worf. Stand down.",
-      "Cancel the procedure. That's an order.",
-      "The order was signed by the Fleet Admiral. Personally.",
-      "Captain. Chekov is an enemy agent. Evidence was received one hour ago.",
-      "Captain!! This is a setup — I swear to you!!",
-      "Worf. Who really gave you that order."
+      "Whoever opened that door is watching us right now, Captain.",
+      "Then they're watching me walk through it.",
+      "Chekov. I've got you.",
+      "Captain... it's someone on your crew.",
+      "Now you see, Captain. We are both dead.",
+      "The order. Show me.",
+      "It was Section 31."
     ],
-    "recent_hooks": ["red-alert-chaos-wide-shot"],
-    "recent_cliffhangers": ["character-silence-eyes-drop"]
+    "recent_hooks": ["physical-confrontation-action", "watcher-reveal-silhouette"],
+    "recent_cliffhangers": ["autonomous-system-betrayal", "unknown-watcher-reveal"]
   },
 
   "episode_summaries": [
     {
       "episode": 1,
       "language": "en",
-      "summary": "Worf leads Chekov to the airlock on Fleet Admiral's orders. Kirk commands Worf to stand down — refused. Worf claims the order was signed personally by the Fleet Admiral. Kirk and Worf watch the airlock seal. Chekov screams it's a setup from behind the glass. Kirk stares at the sealed door and asks: 'Worf. Who really gave you that order.' Worf drops his eyes. Silence.",
+      "summary": "Worf leads Chekov to the airlock on Fleet Admiral's orders. Kirk commands Worf to stand down — refused. Worf claims the order was signed personally by the Fleet Admiral. Kirk and Worf watch the airlock seal. Chekov screams it's a setup from behind the glass. Kirk asks: 'Worf. Who really gave you that order.' Worf drops his eyes. Silence.",
       "cliffhanger": "Worf knows who really gave the order — and it wasn't the Fleet Admiral",
       "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-04-14/serial-drama-en-ep1_final.mp4",
       "duration_sec": 42
+    },
+    {
+      "episode": 2,
+      "language": "en",
+      "summary": "Worf breaks silence — reveals Section 31 gave the kill order. Kirk denies it ('That's a ghost story'). Worf produces PADD with Fleet Admiral's personal seal. Kirk goes ice-cold: 'The order. Show me.' Worf: 'Now you see, Captain. We are both dead.' The airlock door SWITCHES from SEALED to UNLOCKED by itself — nobody touched it. Kirk and Worf both stare.",
+      "cliffhanger": "Someone has remote control of the ship. Nobody authorized the unlock. The door is open.",
+      "output_url": null,
+      "duration_sec": 55
+    },
+    {
+      "episode": 3,
+      "language": "en",
+      "summary": "Worf grabs Kirk — warns the watcher is still active. Kirk walks through anyway: 'Then they're watching me walk through it.' Worf draws phaser, holds the doorway. Kirk finds Chekov alive inside the airlock chamber, slumped against the wall. Chekov delivers his bombshell: 'it's someone on your crew.' Behind them: Worf spots a silhouette figure at the far corridor junction — motionless, arm raised, pointing at Kirk. Worf's phaser swings toward it. Standoff.",
+      "cliffhanger": "A figure in Starfleet uniform stands at the corridor end pointing at Kirk. It doesn't move. It doesn't run. Who is the mole — and is this figure ally or assassin?",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-04-23/serial-drama-en-ep3_final.mp4",
+      "duration_sec": 44
     }
   ]
 }

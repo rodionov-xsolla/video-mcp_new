@@ -34,6 +34,20 @@ FFmpeg: `/usr/local/bin/ffmpeg`. Shell — `zsh` (macOS), массивы 1-index
 
 I2V (Kling) идёт в 24fps, Avatar (Kling Avatar) в 30fps → нормализуй ВСЁ в 30fps.
 
+### 1.1 I2V клипы — добавить silent audio
+
+I2V клипы **не содержат аудио-стрима**. Перед concat обязательно добавь тишину — иначе ffmpeg concat пропускает пустые аудио-пакеты и все последующие диалоги съезжают влево.
+
+```bash
+$FFMPEG -y -i scene-K-scaled.mp4 \
+  -f lavfi -i anullsrc=r=44100:cl=stereo \
+  -c:v copy -c:a aac -b:a 128k \
+  -map 0:v -map 1:a -shortest \
+  scene-K-scaled-audio.mp4
+```
+
+**Проверка:** после нормализации у каждого клипа `ffprobe -select_streams a:0` должен показывать аудио-стрим. Если нет — добавь `anullsrc`.
+
 ```bash
 $FFMPEG -y -i scenes/scene-K/scene-K.mp4 \
   -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2" \
@@ -111,9 +125,9 @@ $FFMPEG -y -i tts-output.mp3 -filter:a "atempo=$SPEED" tts-fast.mp3
 
 ---
 
-## 4. Фоновая музыка (опционально)
+## 4. Фоновая музыка (ОБЯЗАТЕЛЬНО для всех форматов)
 
-Микс с финальным видео:
+Трек подбирает Sound (см. `sound.md`). Editor получает путь к треку и параметр громкости, микширует с финальным видео:
 
 ```bash
 $FFMPEG -y -i final-base.mp4 -i bg-music.mp3 \
@@ -122,9 +136,10 @@ $FFMPEG -y -i final-base.mp4 -i bg-music.mp3 \
   final-with-music.mp4
 ```
 
-- Музыка громкость 0.15 (тише голоса)
+- Музыка громкость задаёт Sound (serial-drama=0.15, gameplay=0.10, reddit-story=0.05)
 - `apad=whole_dur=$VIDEO_DUR` — заполнить тишиной если музыка короче видео
 - НИКОГДА `-shortest`
+- Если Sound не указал трек — **остановись и запроси у Manager-а**. Музыка обязательна
 
 ---
 
@@ -134,9 +149,10 @@ CTA = подготовленный ролик, конкатенируется в
 
 ### Поиск CTA — порядок приоритета
 
-1. **Текущий `output/` эпизода** и `_archive/` — если CTA уже был сгенерирован для этого эпизода, используй его
-2. **`games/{GAME_TAG}/assets/cta/cta.mp4`** — общий CTA игры
-3. **CTA предыдущего эпизода** — только как последний fallback
+1. **Supabase Storage** — `assets/{GAME_TAG}/cta-*.mp4`. CTA URL прописан в game .md файле (`games/{GAME_TAG}/{GAME_TAG}.md` → секция CTA). Скачай оттуда.
+2. **Текущий `output/` эпизода** и `_archive/` — если CTA уже был сгенерирован для этого эпизода
+3. **`games/{GAME_TAG}/assets/cta/cta.mp4`** — локальный общий CTA игры
+4. **CTA предыдущего эпизода** — только как последний fallback
 
 Разные эпизоды могут иметь разные CTA (например "LINK IN BIO" vs "USE THE LINK IN DESCRIPTION"). Не копируй слепо из предыдущего эпизода — проверь содержимое (`ffmpeg -ss 0.5 -frames:v 1` → визуально).
 
@@ -200,6 +216,8 @@ Editor генерирует PNG через Python PIL-скрипт (`gen_subtitl
 - **TBC:** отдельный `subs/tbc.png` для последнего клипа
 
 Тайминг для overlay: `start` = время начала клипа K в финальном видео, `end` = `start + TTS_DUR` (без хвоста — текст не должен висеть в тишину).
+
+**Recap клипы тоже получают субтитры** — если recap-клип содержал диалог, перенеси его субтитр. Текст бери из `storyboard.json` предыдущего эпизода (`subtitle_plan` или `tts` поле).
 
 ```bash
 $FFMPEG -y -i final-base.mp4 \
@@ -333,6 +351,14 @@ $FFMPEG -y -i avatar-speedup.mp4 -i gameplay-trimmed.mp4 \
 Пример объединения concat + bg music + subtitles в один вызов: используй `[0:v][0:a]` для сцены, `concat` filter, потом `amix`, потом `subtitles` — всё в одном `-filter_complex`. Только если читаемо.
 
 Если многослойно — каждый слой через `-c:v libx264 -preset slow -crf 20`, не `-c copy`.
+
+---
+
+## 8.1 Никогда не подавлять stderr ffmpeg
+
+❌ `$FFMPEG ... 2>/dev/null` — ошибка проглатывается, выходной файл не создаётся, пайплайн молча идёт дальше с битым/пустым результатом.
+
+✅ `$FFMPEG ... 2>&1 | tail -20` — видишь ошибку, можешь диагностировать.
 
 ---
 

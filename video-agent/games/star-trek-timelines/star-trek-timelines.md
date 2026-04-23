@@ -33,10 +33,15 @@
 - Космические бои: яркие вспышки фазеров, торпед, щитов
 
 ### Композиция
-- Персонажи: полуреалистичные портреты, не мультяшные
+- Персонажи: полуреалистичные портреты, **semi-realistic Pixar 3D**, НЕ cartoon/мультяшные
 - Фон: мостик корабля, космос, планеты, станции
 - UI вдохновлён LCARS (закруглённые прямоугольные панели Star Trek)
 - Вертикальная 9:16, mobile-first
+
+### Стилистические ограничения
+- **НЕ cartoon, НЕ chibi, НЕ stylized** — только semi-realistic Pixar-quality 3D
+- Для молодых персонажей (Chekov) — явно указывать `"realistic adult proportions, full-height figure"` в промпте, иначе модель генерирует карикатурные/непропорциональные фигуры
+- Не использовать эра-специфичные слова (`"TNG"`, `"TOS"`) в промптах — модель переопределяет цвет формы. Писать цвет явно: `"gold-yellow uniform"`, `"red uniform"`
 
 ### Prompt prefix
 ```
@@ -224,3 +229,12 @@ Star Trek Timelines style, semi-realistic sci-fi character portrait, LCARS inter
 - **Mood:** epic orchestral sci-fi, dramatic, with touches of wonder
 - **BPM:** 80-120 (медленнее для драмы, быстрее для экшна)
 - **Рекомендуемые:** orchestral space themes, synth-wave с Trek-вайбом, напряжённые Borg-сцены (low brass + electronics)
+
+---
+
+## CTA
+
+- **Supabase URL:** `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/cta-link-in-bio.mp4`
+- **Текст:** "LINK IN BIO"
+- **Формат:** 1080×1920, 30fps, ~5s
+- **Использование:** Editor скачивает, нормализует (scale+pad+30fps+AAC), конкатенирует в конец после всех сцен

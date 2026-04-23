@@ -42,7 +42,9 @@
 
 4. **Определи формат** (см. таблицу ниже) и прочитай `rules/formats/{format}.md`. Если есть `games/{GAME_TAG}/{format}_special.md` — прочитай его тоже.
 
-5. **Запроси ассеты из Supabase** (REST API или MCP):
+5. **Character sheets:** проверь `games/{GAME_TAG}/assets/refs/` на наличие `{slug}-sheet.png` для нужных персонажей. Если отсутствуют — запусти `tools/gen-character-cards.sh {GAME_TAG}` для batch-генерации concept art sheets (~$0.04 за персонажа).
+
+6. **Запроси ассеты из Supabase** (REST API или MCP):
    ```
    GET /rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*
    ```
@@ -51,7 +53,7 @@
    - `gameplay_clip` → скачай в `games/{GAME_TAG}/gameplay/` (для Reddit Story, Gameplay AI Avatar)
    - `avatar_ref` → скачай в `games/{GAME_TAG}/assets/avatars/`
 
-6. **Story bibles** (если формат их использует):
+7. **Story bibles** (если формат их использует):
    - Episode 1 — инициализируй (например `games/{GAME_TAG}/serial-drama_story_bible.json`)
    - Episode N+1 — загрузи существующий, выполни State Analysis (статусы персонажей, активные петли, anti-repetition)
 
@@ -192,8 +194,9 @@ output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/
 
 | Модель | Endpoint | Стоимость |
 |--------|----------|-----------|
-| Nano Banana 2 (image) | `fal-ai/nano-banana-2/edit` | ~$0.04 |
-| Kling 2.6 Pro I2V | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.14/сек ($0.35/5s; всегда `generate_audio: false`) |
+| GPT Image 2 medium (image) | `fal-ai/gpt-image-2` (уточни через Context7) | ~$0.04 |
+| Kling v3 Standard I2V (основная) | `fal-ai/kling-video/v3/standard/image-to-video` | $0.07/сек ($0.35/5s; всегда `generate_audio: false`) |
+| Kling 2.6 Pro I2V (fallback) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.14/сек ($0.70/5s; всегда `generate_audio: false`) |
 | Veo3 T2V | `fal-ai/veo3` | $0.20–$0.40/сек |
 | ElevenLabs TTS (via fal.ai) | `fal-ai/elevenlabs/tts/eleven-v3` | ~$0.30/мин. **`voice` = имя (Daniel), НЕ `voice_id`** |
 | Kling Lipsync | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/сек |
