@@ -8,7 +8,11 @@
 3. **Никогда `-shortest` с TTS overlay** — обрезает видео под аудио. Используй `apad`.
 4. **CTA — это файл, его не нужно пересобирать**, если он уже валиден.
 
-FFmpeg: `/usr/local/bin/ffmpeg`. Shell — `zsh` (macOS), массивы 1-indexed.
+FFmpeg:
+- `/usr/local/bin/ffmpeg` — Homebrew 8.1, **без libfreetype** → drawtext не работает. Используй только для concat/audio/scale.
+- `/usr/local/bin/ffmpeg-full/ffmpeg` — tessus-сборка с libfreetype → **drawtext работает**. Используй для субтитров.
+
+Переменная `$FFMPEG` по умолчанию = `/usr/local/bin/ffmpeg-full/ffmpeg` (если нужен drawtext) или `/usr/local/bin/ffmpeg` (для остальных шагов). Shell — `zsh` (macOS), массивы 1-indexed.
 
 ---
 
@@ -194,39 +198,52 @@ Editor отвечает за весь процесс: берёт текст из
 - Имён персонажей поверх кадра
 - Любых текстовых оверлеев, кроме dialogue subs + TBC + CTA
 
-Три разных подхода по формату — **не смешивай**:
+PIL **запрещён** — только ffmpeg drawtext для всех форматов.
 
-| Формат | Метод | Почему |
-|---|---|---|
-| serial-drama | PIL PNG overlay | Локальный ffmpeg 8.1 без libfreetype → drawtext не работает |
-| gameplay-ai-avatar | drawtext + faster_whisper | ffmpeg-full с libfreetype; точный word-sync |
-| reddit-story | drawtext word-highlight (ручная разбивка) | Нет faster_whisper; тайминг из TTS_DUR |
+| Формат | Метод |
+|---|---|
+| serial-drama | drawtext (белый текст, чёрный stroke) |
+| gameplay-ai-avatar | drawtext + faster_whisper (word-sync) |
+| reddit-story | drawtext word-highlight (ручная разбивка) |
 
 ---
 
-### serial-drama — PIL PNG overlay
+### serial-drama — drawtext (без PIL)
 
-Editor генерирует PNG через Python PIL-скрипт (`gen_subtitles.py`):
+**PIL не использовать.** Субтитры генерирует скрипт `tools/add_subtitles.py` — он автоматически транскрибирует TTS-аудио через faster-whisper, разбивает на чанки по 3 слова с реальными таймингами и рендерит через ffmpeg drawtext.
 
-- **Шрифт:** Arial Bold или Helvetica Bold, 38–48px (адаптивно по длине текста)
-- **Цвет:** белый, чёрная обводка (stroke 3px)
-- **Word-wrap:** max_width=900px
-- **Позиция:** нижняя треть экрана (y = H − 220 − total_text_height)
-- **Сохранение:** `subs/sub-K.png` — по одному на каждый dialogue клип (I2V клипы без субтитров)
-- **TBC:** отдельный `subs/tbc.png` для последнего клипа
-
-Тайминг для overlay: `start` = время начала клипа K в финальном видео, `end` = `start + TTS_DUR` (без хвоста — текст не должен висеть в тишину).
-
-**Recap клипы тоже получают субтитры** — если recap-клип содержал диалог, перенеси его субтитр. Текст бери из `storyboard.json` предыдущего эпизода (`subtitle_plan` или `tts` поле).
+Скрипт бьёт TTS-аудио на чанки по N слов (word timestamps из faster-whisper) и рендерит через ASS. Большинство чанков — просто белый текст. Если сценарист пометил `subtitle_emphasis` — только в тех чанках где встречается фраза она становится жёлтой + italic.
 
 ```bash
-$FFMPEG -y -i final-base.mp4 \
-  -i subs/sub-1.png -i subs/sub-2.png \
-  -filter_complex "[0:v][1:v]overlay=enable='between(t,1.0,4.5)':x=(W-w)/2:y=H-h-100[v1]; \
-                   [v1][2:v]overlay=enable='between(t,5.0,9.2)':x=(W-w)/2:y=H-h-100[vout]" \
-  -map "[vout]" -map 0:a -c:v libx264 -preset slow -crf 20 -c:a copy \
-  final-with-subs.mp4
+# Базовый вызов (без выделения)
+python3 tools/add_subtitles.py \
+  scenes/scene-K/scene-K.mp4 \
+  scenes/scene-K/scene-K.mp3 \
+  scenes/scene-K/scene-K-sub.mp4
+
+# С выделением из storyboard.json → clips[K].subtitle_emphasis
+EMPHASIS=$(python3 -c "
+import json
+clips = json.load(open('storyboard.json'))['clips']
+e = clips[K-1].get('subtitle_emphasis', [])
+print(','.join(e))
+")
+python3 tools/add_subtitles.py scene-K.mp4 scene-K.mp3 scene-K-sub.mp4 \
+  --emphasis "$EMPHASIS"
 ```
+
+Опции:
+- `--chunk N` — слов в чанке (default: 3)
+- `--emphasis "phrase1,phrase2"` — из `subtitle_emphasis` сценариста; пусто = не передавай флаг
+- `--fontsize N` — базовый размер шрифта (default: 72)
+- `--marginv N` — отступ от низа в px (default: 380)
+- `--lang CODE` — язык для whisper (default: `en`)
+- `--no-scale` — не масштабировать в 1080×1920
+- `--tbc` — добавить «TO BE CONTINUED...» после последнего чанка
+
+**Recap клипы тоже получают субтитры** — если recap-клип содержал диалог, передай его mp3 в скрипт.
+
+⚠️ **ffmpeg-full обязателен** — Homebrew ffmpeg без libass. Скрипт использует `/usr/local/bin/ffmpeg-full/ffmpeg` автоматически.
 
 ---
 
@@ -286,39 +303,6 @@ $FFMPEG -y -i assembled.mp4 -filter_complex_script subtitle-filter.txt \
 
 **Правило (все форматы):** субтитры не должны перекрываться (each chunk `start` ≥ previous `end`).
 
-### reddit-story — drawtext word-highlight (ручная разбивка)
-
-Для reddit-story нет faster_whisper — тайминг считается из TTS_DUR, текст берётся из storyboard (`narrative_text`). Sound отдаёт только `tts-output.mp3` без SRT.
-
-Editor сам разбивает текст на сегменты по 3–5 слов и распределяет тайминг равномерно:
-
-```
-TTS_DUR = ffprobe duration of tts-output.mp3
-segment_dur = TTS_DUR / N_segments
-```
-
-Каждый сегмент — отдельный `drawtext`. Акцентный цвет (для keyword слова в сегменте) — из `game config → color_palette`. Позиция: `y=H*0.78`, `x=(w-text_w)/2`, drawbox background `black@0.6`.
-
-Для длинных нарративов (30+ сегментов) — используй `-filter_complex_script`:
-
-```bash
-# Записать все drawtext фильтры в файл
-cat > subtitle-filter.txt << 'EOF'
-[0:v]
-drawbox=x=0:y=ih*0.74:w=iw:h=ih*0.12:color=black@0.6:t=fill:enable='between(t,0,TTS_DUR)',
-drawtext=text='segment 1 words':fontsize=52:fontcolor=white:x=(w-text_w)/2:y=h*0.78:enable='between(t,0.0,1.5)',
-drawtext=text='keyword word':fontsize=52:fontcolor=yellow:x=(w-text_w)/2:y=h*0.78:enable='between(t,1.5,3.0)',
-...
-[vout]
-EOF
-
-$FFMPEG -y -i assembled.mp4 -filter_complex_script subtitle-filter.txt \
-  -map "[vout]" -map 0:a -c:a copy subtitled.mp4
-```
-
-CTA overlay добавляется следующим шагом (`drawtext`, последние 2s).
-
----
 
 ## 7. Split-screen (gameplay-ai-avatar)
 

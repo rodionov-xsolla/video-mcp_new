@@ -129,6 +129,7 @@ Format-specific структуру (serial-drama: hook → climax → cliffhange
   "facial_expression": "конкретное выражение: scared wide eyes, cocky smirk, tearful gaze (НЕ 'sad'/'happy')",
   "character_speech": "реплика" или null,
   "tts": "текст для ElevenLabs TTS (для Avatar клипов)",
+  "subtitle_emphasis": ["слово или фраза для выделения"],
   "environment_state": "что происходит с окружением",
   "action_description": "что происходит в сцене — описание для Storyboarder и Animator"
 }
@@ -138,6 +139,17 @@ Format-specific структуру (serial-drama: hook → climax → cliffhange
 - **Veo3 T2V** (генерирует голос): `character_speech` = реплика; `tts` = null
 - **Kling Avatar v2** (лipsync ElevenLabs TTS): `character_speech` = null; `tts` = текст для ElevenLabs
 - **Kling I2V** (без голоса): оба null
+
+### `subtitle_emphasis`
+Опциональный список слов или фраз, которые Editor выделит в субтитре жёлтым + курсивом. Выбирай драматически важные моменты — не более 1–2 элементов на клип.
+
+```json
+"subtitle_emphasis": ["IN YOUR CREW"]
+"subtitle_emphasis": ["betrayed", "Command"]
+"subtitle_emphasis": ["CHEKOV"]
+```
+
+Если поле отсутствует или пустое — субтитр отображается обычным белым текстом.
 
 ### `clip_type`
 - `action` — I2V клип (без диалога, микро-движения)
