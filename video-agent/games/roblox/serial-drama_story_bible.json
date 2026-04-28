@@ -1,0 +1,109 @@
+{
+  "series_id": "roblox-noob-revenge-en",
+  "game_tag": "roblox",
+  "title": "The Noob Who Was a Secret Millionaire",
+  "language": "en",
+  "style_tags": "Roblox-inspired Pixar-style 3D animation, blocky stylized characters, smooth plastic-like skin texture, expressive exaggerated cartoon faces, vibrant saturated colors, soft ambient lighting, cinematic depth of field, toy-like proportions, dramatic emotional expressions",
+  "created_at": "2026-04-24",
+  "last_episode": 2,
+
+  "synopsis": "Noob Dave arrives at LUXURIA, the most exclusive Roblox trading server where wealth is power. King Rex rules the plaza with an iron crown. Nobody gives Dave a second look — until they do. Because Dave isn't just a noob. He's sitting on the rarest inventory anyone has ever seen. The question isn't IF he'll reveal it. It's WHEN... and what happens after.",
+
+  "characters": [
+    {
+      "name": "Noob Dave",
+      "role": "protagonist",
+      "character_description": "Roblox-style blocky humanoid character, bright yellow smooth plastic skin, simple blue torso shirt with no details, bright green pants, round compact head proportional to body width with wide innocent eyes with tiny black pupils, small curved mouth, stubby short limbs, standard blocky proportions, matte plastic texture, clean simple design",
+      "voice": "Charlie",
+      "speech_pattern": "Hesitant, pauses — then sudden confident sigma drops. 'I... I don't think... actually, nah.'",
+      "status": "not yet arrived at LUXURIA",
+      "aura_points": 0,
+      "personality": "Naive on the surface, secretly calculating. Speaks with hesitation but drops unexpected sigma moments.",
+      "relationships": {}
+    },
+    {
+      "name": "King Rex",
+      "role": "antagonist",
+      "character_description": "Roblox-style blocky humanoid with oversized golden crown with embedded red and blue jewels, thick diamond chain necklace with large dollar sign pendant, white fluffy fur coat draped over gold vest, dark designer sunglasses pushed up on forehead, smug arrogant expression with raised left eyebrow, glossy shiny plastic texture, golden particle shimmer around body, wide power stance",
+      "voice": "Daniel",
+      "speech_pattern": "Short commands, ultimatums. Never explains — orders. 'Get him. Now.' / 'Wrong answer.' / 'You think this is funny?'",
+      "status": "rules LUXURIA plaza, unchallenged",
+      "aura_points": 500,
+      "personality": "Loud, flashy, insecure underneath. Flexes constantly. Terrified of losing status.",
+      "relationships": {}
+    },
+    {
+      "name": "Shadow",
+      "role": "ally / mysterious",
+      "character_description": "Roblox-style tall slim humanoid, jet black emo hair covering left eye with sharp spiky tips, dark black hoodie with glowing purple circuit pattern on chest, ripped dark jeans with chain, one visible glowing cyan eye through hair gap, thin angular face with neutral unreadable expression, elongated limbs, matte dark plastic texture, subtle purple particle aura",
+      "voice": "Liam",
+      "speech_pattern": "Maximum 3-5 words per line. Every word hits. 'You're not ready.' Silence = power.",
+      "status": "lurking in the shadows, not yet introduced",
+      "aura_points": 999,
+      "personality": "Says very little but every word hits. Sigma energy. Knows secrets about everyone.",
+      "relationships": {}
+    },
+    {
+      "name": "Bella",
+      "role": "love interest / wildcard",
+      "character_description": "Roblox-style female blocky humanoid, bright blonde ponytail with large pink satin bow on top, pastel pink crop top with small white heart pattern, white pleated mini skirt, pink heart-shaped sunglasses pushed on top of head, rosy round cheeks with wide cheerful smile showing teeth, small button nose, smooth glossy pink-tinted plastic texture, bubbly energetic pose with hands on hips",
+      "voice": "Charlotte",
+      "speech_pattern": "Fake-naive, questioning intonation, hidden manipulation. 'Wait, like, seriously? That's so... interesting.'",
+      "status": "hangs with Rex's crew, not yet introduced",
+      "aura_points": 300,
+      "personality": "Seems like a basic preppy but is actually manipulative and smart. Plays all sides.",
+      "relationships": {}
+    },
+    {
+      "name": "Bacon Bob",
+      "role": "comic relief / sidekick",
+      "character_description": "Roblox-style default blocky avatar, distinctive orange-brown wavy bacon-strip hair flat on top of round head, plain grey torso shirt with small coffee stain, dark navy blue pants slightly too short, generic default face with small dot eyes, permanently slightly downturned mouth giving tired resigned expression, standard blocky proportions, worn scratched matte plastic texture, slightly slouched posture",
+      "voice": "George",
+      "speech_pattern": "Self-deprecating humor, long rambling phrases, accidental wisdom. 'Man, I've been here six months and I still can't...'",
+      "status": "loitering at spawn, not yet introduced",
+      "aura_points": -50,
+      "personality": "Defeated energy but surprisingly wise. Drops truth bombs wrapped in self-deprecation.",
+      "relationships": {}
+    }
+  ],
+
+  "active_loops": [],
+  "closed_loops": [],
+
+  "world_rules": [
+    {
+      "rule": "Only one Admin Crown exists on the server",
+      "implication": "Whoever holds it controls the server — absolute power, can ban anyone instantly",
+      "status": "active"
+    },
+    {
+      "rule": "Fanum Tax is mandatory — every new player pays 30% of inventory to Rex",
+      "implication": "Refusing = public humiliation + server-wide bounty on your head",
+      "status": "active"
+    },
+    {
+      "rule": "Trade Duels are binding contracts",
+      "implication": "Loser gives up everything wagered. No takebacks, server enforces the deal",
+      "status": "active"
+    },
+    {
+      "rule": "Banned players lose entire inventory permanently",
+      "implication": "Ban = total wipe. Makes the Admin Crown the ultimate threat",
+      "status": "active"
+    }
+  ],
+
+  "world_state": {
+    "location": "Roblox mega-server 'LUXURIA' — a trading/social hub where status is everything",
+    "important_items": [],
+    "key_events": []
+  },
+
+  "anti_repetition": {
+    "recent_phrases": [],
+    "recent_hooks": [],
+    "recent_cliffhangers": []
+  },
+
+  "episode_summaries": []
+}
