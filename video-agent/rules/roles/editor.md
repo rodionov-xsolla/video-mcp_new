@@ -309,6 +309,24 @@ python3 tools/add_subtitles.py scene-K.mp4 scene-K.mp3 scene-K-sub.mp4 \
 
 ⚠️ **ffmpeg-full обязателен** — Homebrew ffmpeg без libass. Скрипт использует `/usr/local/bin/ffmpeg-full/ffmpeg` автоматически.
 
+### 6.1 Audio padding после субтитров (ОБЯЗАТЕЛЬНО перед concat)
+
+`add_subtitles.py` обрезает аудиодорожку после последнего слова речи. Если аудио короче видео — при concat накапливается сдвиг: каждый следующий диалог играет раньше своих кадров.
+
+**После каждого вызова `add_subtitles.py`** — проверь и выровняй:
+
+```bash
+VDUR=$(ffprobe -v quiet -select_streams v:0 -show_entries stream=duration -of csv=p=0 scene-K-sub.mp4)
+ADUR=$(ffprobe -v quiet -select_streams a:0 -show_entries stream=duration -of csv=p=0 scene-K-sub.mp4)
+# Если ADUR < VDUR — добить:
+$FFMPEG -y -i scene-K-sub.mp4 \
+  -filter:a "apad=whole_dur=$VDUR" \
+  -c:v copy -c:a aac -b:a 128k \
+  scene-K-sub-padded.mp4
+```
+
+**Правило:** перед concat audio duration каждого клипа должна совпадать с video duration (допуск ±0.02s). Проверяй ВСЕ клипы, не только subtitle — Avatar хвосты тоже бывают короче видео.
+
 ---
 
 ### gameplay-ai-avatar — drawtext + faster_whisper

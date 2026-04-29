@@ -291,6 +291,12 @@ Kling блокирует безобидные промпты из-за NSFW-фи
 | «уходит прочь» | **Start-only** (без end-frame). Motion с defeated tempo. Negative_prompt: `running, jogging, jumping, fast movement, energetic, happy` |
 | «проходит мимо» | **Start-only**. Проходящий персонаж = статичный blurred foreground element. Главный герой реагирует |
 
+### Multi-character I2V — start-only обязателен
+
+При 2+ персонажах в сложных позициях (силуэты, foreground/background layering, wide shot с разной глубиной) end_image_url вызывает морфинг: персонажи «уезжают» в стороны или растворяются к середине клипа. Kling пытается интерполировать между start и end, но не справляется со сложной многофигурной композицией.
+
+**Правило:** multi-character I2V с depth layering (foreground silhouettes + midground action) → **только start_image_url**, без `end_image_url`. Motion_prompt описывает микро-движения от start frame.
+
 ### Macro-movement workaround — start-only + negative_prompt
 
 Для сцен с macro-движением (ходьба, поворот 180°, проход мимо) Kling с end-frame деформирует/морфит персонажей. Решение:
@@ -387,6 +393,15 @@ Kling Avatar на close-up даёт «uncanny valley»: крупное лицо 
 | Medium wide (по колено, редко) | |
 
 **Если Storyboarder прислал close-up start frame для Avatar клипа — верни на перегенерацию.** Допустимый минимум: medium close-up (видны плечи и верх груди).
+
+### Avatar: ЗАПРЕЩЁН head turn в профиле
+
+Kling Avatar v2 не умеет плавно поворачивать голову в profile shot — лицо/тело деформируются при повороте. Для профильных ракурсов:
+
+- ❌ `head turns slowly toward camera`, `turns to face the other figure`
+- ✅ `No head rotation. No body movement. Only micro-facial: eyes narrow, jaw tightens, brow shifts.`
+
+**Правило:** если start frame — профиль (side-on), motion_prompt содержит ТОЛЬКО мимику (глаза, брови, челюсть). Никаких поворотов головы или корпуса.
 
 ### Avatar motion_prompt — пишешь из facial_expression и action_description
 
