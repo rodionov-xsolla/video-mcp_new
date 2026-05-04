@@ -271,7 +271,7 @@ one with ridges other without..." — атрибуты перемешаются
 
 ### 6. Рот персонажа
 
-- **Сцены с липсинком** (Avatar / Veo3 T2V) — лёгкая улыбка / приоткрытый рот, видны зубы: `"mouth slightly open with teeth visible"`. Критично для качества липсинка.
+- **Сцены с липсинком** (Kling Avatar v2) — лёгкая улыбка / приоткрытый рот, видны зубы: `"mouth slightly open with teeth visible"`. Критично для качества липсинка.
 - **Сцены без липсинка** (I2V action) — рот в СТАТИЧНОМ выражении по настроению сцены: сжатые губы (злость), приоткрытый рот (удивление), нейтральный закрытый (грусть). Рот НЕ должен двигаться при анимации — Animator добавит negative_prompt для подавления анимации рта. Исключение: если `action_description` явно указывает крик, зевок или другое движение рта.
 
 ### 6.1 Avatar клипы — запрет close-up
@@ -369,6 +369,31 @@ horizontal composition, 16:9 aspect ratio
 - `safety_tolerance: "5"`
 
 Сохрани как `games/{GAME_TAG}/assets/refs/{slug}-sheet.png`.
+
+#### 8a.1 Новый персонаж = новый character ref (ВСЕГДА)
+
+Каждый новый персонаж в любом формате требует собственного character sheet (16:9) + avatar ref (9:16 для Kling Avatar). Никогда не переиспользуй ref одного персонажа для другого — стиль, лицо и пропорции поплывут.
+
+Порядок:
+1. Проверь asset bank (`game_assets`) — если ref уже есть, используй URL
+2. Если нет — сгенерируй character sheet (NB2 text-to-image) + avatar ref (NB2 edit с sheet как ref)
+3. **ОБЯЗАТЕЛЬНО загрузи в Supabase** сразу после генерации:
+   ```bash
+   # Character sheet
+   bash queue/upload-asset.sh "{GAME_TAG}" "{char-name}" "generated_ref" ./sheet.png \
+     --tags "{format},character-sheet"
+   # Avatar ref (для форматов с Kling Avatar)
+   bash queue/upload-asset.sh "{GAME_TAG}" "{char-name}" "avatar_ref" ./avatar-ref.png \
+     --tags "{format},avatar"
+   # Character ref (single-figure для I2V chain)
+   bash queue/upload-asset.sh "{GAME_TAG}" "{char-name}" "reference_image" ./character-ref.png \
+     --tags "{format},character-ref"
+   ```
+   **Без загрузки в Supabase генерация считается незавершённой.** Следующий агент не найдёт ассет и сгенерирует заново = деньги в трубу.
+
+Применимо ко ВСЕМ форматам: news (anchor + co-anchor), serial-drama (несколько персонажей), gameplay-ai-avatar (аватар), character-story (герой), standard (персонажи).
+
+---
 
 #### 8b. Chain ref для NB2 (single-figure, 9:16)
 

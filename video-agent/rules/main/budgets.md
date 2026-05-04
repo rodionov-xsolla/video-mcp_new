@@ -4,9 +4,8 @@
 
 | Формат | Максимум | Остановись если |
 |--------|----------|-----------------|
-| Standard (I2V) | **$5.00** | Расход > $4.50 |
-| Standard (T2V) | **$10.00** | Расход > $9.00 |
-| News | **$10.00** | Расход > $9.00 |
+| Standard | **$5.00** | Расход > $4.50 |
+| News | **$4.00** | Расход > $3.50 |
 | Serial Drama | **$10.00** | Расход > $9.00 |
 | Object Character (single) | **$1.50** | Расход > $1.30 |
 | Object Character (series×5) | **$7.50** | Расход > $7.00 |
@@ -34,8 +33,7 @@
 | Kling 2.6 Pro I2V 5s (без аудио, fallback) | fal-ai/kling-video/v2.6/pro/image-to-video | $0.35 |
 | Kling 2.6 Pro I2V 10s (с аудио, fallback) | fal-ai/kling-video/v2.6/pro/image-to-video | $1.40 |
 | Kling 2.6 Pro I2V 10s (без аудио, fallback) | fal-ai/kling-video/v2.6/pro/image-to-video | $0.70 |
-| Veo3 T2V 8s (с аудио) | fal-ai/veo3 | $3.20 |
-| Veo3 T2V 8s (без аудио) | fal-ai/veo3 | $1.60 |
+| ~~Veo3 T2V~~ | ~~fal-ai/veo3~~ | **НЕ ИСПОЛЬЗОВАТЬ** — дорого, нет контроля |
 | ElevenLabs TTS (via fal.ai) | fal-ai/elevenlabs/tts/eleven-v3 | ~$0.30/мин (~$0.05–0.10/фраза). **voice = имя, НЕ voice_id** |
 | Kling Lipsync | fal-ai/kling-video/lipsync/audio-to-video | ~$0.10/сек |
 | HeyGen Avatar IV | fal-ai/heygen/avatar4/image-to-video | $0.10/сек |

@@ -39,6 +39,7 @@ Roblox-inspired Pixar-style 3D animation, blocky stylized characters, smooth pla
 |-------|------|------------------|
 | Noob | Newbie / Protagonist | Жёлтая кожа, синяя рубашка, зелёные штаны, наивные глаза |
 | Slender | Antagonist / Cool kid | Чёрные эмо-волосы, худой, тёмная одежда, красные глаза |
+| Shadow | Ally / Mysterious | Чёрные эмо-волосы, тёмный худи с фиолетовой схемой, светящийся циановый глаз, аура |
 | Rich Player | Flexer / Antagonist | Золотая корона, бриллиантовая цепь, шуба, надменный |
 | Bacon Hair | Underdog / Comic relief | Дефолтный аватар, бекон-волосы, серый торс, грустный |
 | Preppy Girl | Support / Love interest | Блондинка с бантом, пастельный розовый, сердечки |
@@ -73,10 +74,13 @@ Roblox-inspired Pixar-style 3D animation, blocky stylized characters, smooth pla
 Готовые `character_description` для вставки в visual_identity. Копируй дословно.
 
 ### Noob
-`Roblox-style blocky humanoid character, bright yellow smooth plastic skin, simple blue torso shirt with no details, bright green pants, round head with wide innocent eyes, small curved mouth, stubby short limbs, toy-like proportions with oversized head, matte plastic texture, clean simple design`
+`Roblox-style blocky humanoid character, bright yellow smooth plastic skin, simple blue torso shirt with no details, bright green pants, round compact head proportional to body width with wide innocent eyes, small curved mouth, stubby short limbs, standard blocky proportions, matte plastic texture, clean simple design`
 
 ### Slender
 `Roblox-style tall slim humanoid, jet black emo hair covering left eye with sharp spiky tips, dark black hoodie with white skull print on chest, ripped dark jeans, glowing crimson red eyes visible through hair, thin angular face with confident smirk, elongated limbs, matte dark plastic texture, edgy intimidating presence`
+
+### Shadow
+`Roblox-style tall slim humanoid, jet black emo hair covering left eye with sharp spiky tips, dark black hoodie with glowing purple circuit pattern on chest, ripped dark jeans with chain accessory, one visible glowing cyan eye through hair gap, thin angular face with neutral unreadable closed-mouth expression, elongated limbs, matte dark plastic texture, subtle purple particle aura around body`
 
 ### Rich Player
 `Roblox-style blocky humanoid with oversized golden crown with embedded jewels, thick diamond chain necklace with dollar pendant, white fluffy fur coat over gold vest, designer sunglasses pushed up on forehead, smug arrogant expression with raised eyebrow, glossy shiny plastic texture, golden particle effects around body`

@@ -1,4 +1,4 @@
-# Формат "Standard" — универсальный I2V / T2V
+# Формат "Standard" — универсальный I2V
 
 Универсальный формат-по-умолчанию: экшен, стендап, гайды, рейтинги, трейлеры. Выбирается, когда идея не подходит под специализированные форматы.
 
@@ -8,7 +8,7 @@
 
 ## Когда использовать
 
-Ключевые слова: любые, **кроме** «news», «serial/сериал», «object character», «dual-style», «gameplay ai avatar / offerwall», «dance battle», «reddit story».
+Ключевые слова: любые, **кроме** «news», «serial/сериал», «object character», «dual-style», «gameplay ai avatar / offerwall», «dance battle», «reddit story», «character story».
 
 Типичные кейсы: экшен-сцены, стендап-шутки, топ-N рейтинги, гайды, атмосферные трейлеры.
 
@@ -17,22 +17,10 @@
 ## Концепт
 
 - **3 клипа × 5–10s** → 15–30s total (4 клипа — только если каждый содержит уникальное действие)
-- **Модель зависит от речи:**
-  - `character_speech` = null → **Kling 2.6 Pro I2V** ($0.14/s, микро-движения, SFX через `generate_audio: true`)
-  - `character_speech` ≠ null → **Veo3 T2V** ($0.20–0.40/s, генерирует голос + липсинк)
-- **Одна модель на весь ролик.** Не смешивай Kling + Veo3 (разная пластика/температура).
-- **Бюджет:** $5 (I2V) / $10 (T2V)
-
----
-
-## Подходы (approach)
-
-| Тип контента | Approach | Цепочка |
-|---|---|---|
-| Экшен, стендап, комбо, гайды, топ-N | **Approach 2** | NB2 anchor → NB2 scene → Kling I2V / Veo3 T2V |
-| Кинематограф, трейлер, атмосфера | **Approach 3** | Veo3 T2V напрямую (без image chain) |
-
-По умолчанию — Approach 2. Если пользователь указал — используй его.
+- **Модель: Kling I2V** (v3 Standard или 2.6 Pro fallback) — `generate_audio: true` (SFX)
+- **Речь:** `character_speech: null` во всех сценах — голос через TTS overlay, если нужен
+- **Одна модель на весь ролик**
+- **Бюджет:** $5
 
 ---
 
@@ -44,9 +32,9 @@
 | 2 | development | 10s | medium / wide |
 | 3 | climax + CTA overlay | 5–10s | low angle / dynamic |
 
-- CTA — оверлей на последнем клипе, не отдельная сцена.
-- camera_angle **разный** для соседних клипов (обязательно).
-- 4-й клип — только если каждый из 4 несёт уникальное действие.
+- CTA — из Supabase `game_assets` (тег `cta`), нормализованный, в concat-list как последний клип
+- camera_angle **разный** для соседних клипов (обязательно)
+- 4-й клип — только если каждый из 4 несёт уникальное действие
 
 ---
 
@@ -55,7 +43,6 @@
 ```json
 {
   "format": "standard",
-  "approach": "2",
   "visual_identity": {
     "character_description": "8+ визуальных деталей (кожа, шрамы, одежда, оружие)",
     "environment_description": "конкретная локация из игры",
@@ -77,36 +64,33 @@
 
 ### Scenarist
 - 3 клипа × 5–10s; 4 только при полной загрузке уникальным действием
-- Narrative arc: hook → development → climax + CTA overlay
-- `character_speech` определяет модель анимации — зафикси ДО Storyboarder
+- Narrative arc: hook → development → climax
+- `character_speech: null` во всех сценах
 - Минимум 2 РАЗНЫХ действия в каждом motion_prompt (не зацикленное)
 - `character_state` / `camera_angle` меняются между сценами; `character_description` дословно одинаковый
 - Общие правила — `rules/roles/scenarist.md`
 
 ### Storyboarder
-- Approach 2: anchor ref + chain по предыдущей сцене (max 2 refs)
-- Approach 3: визуал пропускается, Veo3 генерирует сам
+- Anchor ref + chain по предыдущей сцене (max 2 refs)
 - Стиль — из `games/{GAME_TAG}/{GAME_TAG}.md` (prompt_prefix, palette, lighting)
-- Для lipsync-сцен: приоткрытый рот / лёгкая улыбка с зубами
+- Персонажи из Supabase `game_assets` — если есть, переиспользуй ref
 - Общие правила — `rules/roles/storyboarder.md`
 
 ### Animator
-- **Kling I2V** для сцен без речи: `generate_audio: true` (SFX), микро-движения, start≈end
-- **Veo3 T2V** для сцен с речью: motion_prompt формата `[действие] and says: "[реплика]"`
-- Одна модель на весь ролик — не миксуй I2V и T2V
+- **Kling I2V** (v3 Standard primary, 2.6 Pro fallback): `generate_audio: true` (SFX), микро-движения, start≈end
 - Polling base path = первые 2 сегмента endpoint
 - Общие правила — `rules/roles/animator.md`
 
 ### Sound
-- Если все сцены Kling I2V → фоновая музыка опционально (volume=0.15)
-- Если Veo3 T2V → голос встроен в клип, ElevenLabs не нужен
+- TTS overlay (ElevenLabs через fal.ai), если нужен голос поверх видео
+- Фоновая музыка опционально (volume=0.15)
 - Субтитры диалогов — опционально; title/brainrot оверлеи запрещены
 - Общие правила — `rules/roles/sound.md`
 
 ### Editor
 - Scale каждую сцену в 1080×1920, fps=30, `-preset slow -crf 20`
 - Concat с re-encode (`libx264`), NOT `-c copy`; hard cuts, НЕТ crossfade
-- CTA overlay на последних 2–3s (curl + ffprobe валидация)
+- CTA из Supabase, нормализовать, в concat-list последним клипом
 - Музыка через `amix`; **НИКОГДА `-shortest`** — используй `apad`
 - Общие правила — `rules/roles/editor.md`
 
@@ -118,7 +102,7 @@
 output/YYYY-MM-DD/{GAME_TAG}/standard/
 ├── storyboard.json
 ├── scenes/
-│   ├── refs/character-ref.png        (Approach 2)
+│   ├── refs/character-ref.png
 │   ├── scene-1/{scene-1.png, scene-1.mp4, scene-1-scaled.mp4}
 │   ├── scene-2/...
 │   └── scene-3/...
@@ -130,12 +114,22 @@ output/YYYY-MM-DD/{GAME_TAG}/standard/
 
 ## Валидация
 
-- [ ] `format: "standard"`, `approach` = "2" или "3"
-- [ ] `character_speech` null → Kling I2V; ≠ null → Veo3 T2V (одна модель на весь ролик)
+- [ ] `format: "standard"`
+- [ ] `character_speech: null` во всех сценах — Kling I2V, не T2V
 - [ ] 3 клипа (или 4 с обоснованием каждого)
 - [ ] `camera_angle` разный для соседних клипов
-- [ ] `motion_prompt` ≥2 разных действия; Veo3 включает точный текст реплики
+- [ ] `motion_prompt` ≥2 разных действия
 - [ ] `visual_identity.character_description` ≥8 визуальных деталей
 - [ ] `gaze_direction` при 2+ персонажах в кадре
-- [ ] Бюджет: $5 (I2V) / $10 (T2V)
+- [ ] CTA из Supabase `game_assets`
+- [ ] Бюджет ≤$5
 - [ ] `final.mp4` 1080×1920, 30fps; hard cuts; нет `-shortest`
+
+---
+
+## ЗАПРЕЩЕНО
+
+- Любые T2V модели (дорого, нет контроля)
+- `character_speech ≠ null` — голос только через TTS overlay
+- `-shortest` в ffmpeg
+- Генерация CTA — берётся из Supabase

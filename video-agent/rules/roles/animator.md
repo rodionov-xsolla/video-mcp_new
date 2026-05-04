@@ -265,6 +265,20 @@ Camera slow push-in. ++Figure in foreground++ turns head slowly left, jaw tighte
 
 Не больше одного `++` на промпт.
 
+### Anti-text negative_prompt (ОБЯЗАТЕЛЬНО при текстовых фонах)
+
+Если avatar ref или scene image содержит текст (вывеска, экран монитора, баннер, логотип) — Kling Avatar v2 галлюцинирует мусорный текст (иероглифы, garbled латиница) в зоне ниже персонажа, особенно при активной жестикуляции.
+
+**Обязательный negative_prompt для ВСЕХ Avatar генераций с текстом на фоне:**
+
+```
+text, subtitles, captions, watermark, letters, characters, words, writing, font, label, title, credits, symbols, hieroglyphs, Chinese characters, Japanese characters, Korean characters, numbers on screen, overlay text, burned-in subtitles, closed captions
+```
+
+Дополнительно в motion_prompt: избегай wave/gesture с руками ниже стола — именно в этой зоне появляются артефакты. Предпочитай `hands remain on desk` для коротких сцен.
+
+---
+
 ### Фильтр контента Kling
 
 Kling блокирует безобидные промпты из-за NSFW-фильтра. Триггерные слова и замены:
@@ -498,7 +512,10 @@ $FFMPEG -y -i avatar.mp4 \
 
 После speedup отдай `avatar-fast.mp4` Editor-у. **Sound должен делить все faster_whisper timestamps на 1.3** при генерации SRT (см. `sound.md`).
 
-Только для gameplay-ai-avatar. Для serial-drama Avatar клипы НЕ ускоряются.
+Speedup по формату:
+- **gameplay-ai-avatar:** 1.3x
+- **news:** 1.18x (разборчивость важнее динамики)
+- **serial-drama:** НЕ ускоряется
 
 ---
 
