@@ -102,6 +102,14 @@ Fallback: если <2 реальных новостей — community highlight 
 - **Сцена 2:** `"Thanks [anchor]! [Новость #2 подробно, 25-35 слов]. [Реакция/оценка]."`
 - **Сцена 3:** `"[Благодарность]. That's [Show] for today. Follow for more, see you next time!"` (15–20 слов)
 
+**Передача слова — обязательно по имени.** Ведущие обращаются друг к другу как в реальном выпуске новостей:
+- Anchor → Co-anchor: `"Sarah, what do you have?"` / `"Over to you, Sarah!"` / `"Sarah, tell us more"`
+- Co-anchor → Anchor: `"Thanks Jake!"` / `"Back to you, Jake"` 
+- Anchor → Репортёр (если есть): `"Let's check in with [имя]"` / `"[Имя], what's the latest?"`
+- Репортёр → Anchor: `"Thanks [anchor]!"` / `"Back to you, [anchor]"`
+
+Это создаёт ощущение живого эфира и связывает сцены. Каждая передача слова содержит **имя** следующего/предыдущего ведущего.
+
 Тон — из game config (Tone of Voice). Каждая dialogue-сцена обязана иметь поле `tts` с текстом для ElevenLabs.
 
 ### Фаза 4: Анимация (только Kling Avatar v2)
