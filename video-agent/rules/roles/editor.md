@@ -488,6 +488,33 @@ $FFMPEG -i scene-3.mp4 ...
 
 ---
 
+## 9.1 Pre-assembly чеклист (serial-drama)
+
+Перед началом concat пройди этот чеклист. Каждый пропущенный пункт = пересборка всего final.mp4.
+
+- [ ] **Recap:** если EP2+ — последние 1-2 клипа предыдущего эпизода включены в начало concat-list
+- [ ] **Recap audio:** Avatar/dialogue клипы из recap сохранили оригинальное аудио (не заменены на anullsrc)
+- [ ] **Recap subtitles:** если recap содержит диалог — субтитры наложены через add_subtitles.py
+- [ ] **Episode number:** overlay ТОЛЬКО на первом клипе (если есть recap — на recap, НЕ на scene-1). Проверь что нет дубля
+- [ ] **Avatar audio при нормализации:** Avatar клипы (dialogue) нормализуются с `-c:a aac` (сохранение оригинального аудио), НЕ через `anullsrc`. `anullsrc` ТОЛЬКО для I2V клипов без аудио
+- [ ] **TTS overlay:** I2V клипы с voiceover за кадром получили TTS через aecho ПЕРЕД субтитрами
+- [ ] **Субтитры:** все dialogue клипы (Avatar + TTS overlay) имеют субтитры
+- [ ] **Audio padding:** после add_subtitles.py — apad каждого клипа до video duration
+- [ ] **Fade-to-black:** на последнем сюжетном клипе (перед CTA)
+- [ ] **CTA:** в concat-list последним
+- [ ] **Music:** накладывается ПОСЛЕ speed boost, volume по формату
+
+### Нормализация по типу клипа
+
+| Тип клипа | Видео | Аудио |
+|---|---|---|
+| I2V (action, без звука) | scale + 30fps + libx264 | `-f lavfi -i anullsrc` → map 1:a |
+| I2V + TTS overlay | сначала нормализуй как I2V, потом amix с TTS через aecho | |
+| Avatar (dialogue, со звуком) | scale + 30fps + libx264 | **Сохрани оригинал:** `-ar 44100 -ac 2 -c:a aac` (НЕ anullsrc) |
+| Recap (из прошлого эпизода) | scale + 30fps + libx264 | Проверь ffprobe: есть audio → сохрани; нет → anullsrc |
+
+---
+
 ## 10. Проверки перед отдачей final.mp4
 
 - [ ] Файл существует, размер > 100 KB
