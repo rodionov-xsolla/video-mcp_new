@@ -8,7 +8,11 @@
 3. **Никогда `-shortest` с TTS overlay** — обрезает видео под аудио. Используй `apad`.
 4. **CTA — это файл, его не нужно пересобирать**, если он уже валиден.
 
-FFmpeg: `/usr/local/bin/ffmpeg`. Shell — `zsh` (macOS), массивы 1-indexed.
+FFmpeg:
+- `/usr/local/bin/ffmpeg` — Homebrew 8.1, **без libfreetype** → drawtext не работает. Используй только для concat/audio/scale.
+- `/usr/local/bin/ffmpeg-full/ffmpeg` — tessus-сборка с libfreetype → **drawtext работает**. Используй для субтитров.
+
+Переменная `$FFMPEG` по умолчанию = `/usr/local/bin/ffmpeg-full/ffmpeg` (если нужен drawtext) или `/usr/local/bin/ffmpeg` (для остальных шагов). Shell — `zsh` (macOS), массивы 1-indexed.
 
 ---
 
@@ -125,6 +129,48 @@ $FFMPEG -y -i tts-output.mp3 -filter:a "atempo=$SPEED" tts-fast.mp3
 
 ---
 
+## 3c. Номер серии на первом клипе (serial-drama)
+
+Для serial-drama: на первый клип видео накладывается номер серии (например `EPISODE 1`, `EPISODE 2`) через drawtext. Текст располагается в верхней трети кадра, белый, с чёрным stroke, появляется на 1-3 секунде клипа.
+
+```bash
+EP_NUM="EPISODE 1"  # из storyboard.json → episode_number
+$FFMPEG_FULL -y -i scenes/scene-1/scene-1-scaled.mp4 \
+  -vf "drawtext=fontfile='$IMPACT':text='$EP_NUM':fontsize=80:fontcolor=white:borderw=4:bordercolor=black:x=(w-text_w)/2:y=h*0.15:enable='between(t,0.5,2.5)'" \
+  -c:v libx264 -preset slow -crf 20 -pix_fmt yuv420p -c:a copy \
+  scenes/scene-1/scene-1-scaled.mp4
+```
+
+Шрифт: Impact или аналог. Используй `$FFMPEG_FULL` (с libfreetype).
+
+---
+
+## 3d. Ускорение ролика (перед музыкой)
+
+**После concat, ПЕРЕД наложением музыки** — ускорить весь ролик на ~1.15x. Это делает видео динамичнее без заметного искажения голоса.
+
+```bash
+$FFMPEG -y -i final-base.mp4 \
+  -filter_complex "[0:v]setpts=PTS/1.15[v];[0:a]atempo=1.15[a]" \
+  -map "[v]" -map "[a]" \
+  -r 30 -c:v libx264 -preset slow -crf 20 -pix_fmt yuv420p \
+  -c:a aac -b:a 128k \
+  final-speed.mp4
+```
+
+**Порядок пайплайна:**
+1. Нормализация клипов (секция 1)
+2. Субтитры на dialogue клипы (секция 6)
+3. Номер серии на первый клип (секция 3c)
+4. TBC на последний клип (секция 5)
+5. Concat (секция 2) → `final-base.mp4`
+6. **Ускорение 1.15x (эта секция)** → `final-speed.mp4`
+7. Музыка (секция 4) → `final.mp4`
+
+Музыка накладывается ПОСЛЕ ускорения — иначе pitch музыки сдвинется.
+
+---
+
 ## 4. Фоновая музыка (ОБЯЗАТЕЛЬНО для всех форматов)
 
 Трек подбирает Sound (см. `sound.md`). Editor получает путь к треку и параметр громкости, микширует с финальным видео:
@@ -143,44 +189,66 @@ $FFMPEG -y -i final-base.mp4 -i bg-music.mp3 \
 
 ---
 
-## 5. CTA-overlay (serial-drama, в конце вместе с TBC)
+## 5. Финал видео: fade-to-black + CTA (ОБЯЗАТЕЛЬНО)
 
-CTA = подготовленный ролик, конкатенируется в самый конец после всех сцен.
+Каждый ролик заканчивается **fade-to-black → CTA текст**. Два варианта:
 
-### Поиск CTA — порядок приоритета
+### 5.1 Кастомный CTA (приоритет)
 
-1. **Supabase Storage** — `assets/{GAME_TAG}/cta-*.mp4`. CTA URL прописан в game .md файле (`games/{GAME_TAG}/{GAME_TAG}.md` → секция CTA). Скачай оттуда.
-2. **Текущий `output/` эпизода** и `_archive/` — если CTA уже был сгенерирован для этого эпизода
+Если существует подготовленный CTA-ролик — конкатенируется в самый конец после всех сцен.
+
+**Поиск CTA — порядок приоритета:**
+1. **Supabase Storage** — `assets/{GAME_TAG}/cta-*.mp4`. CTA URL прописан в game .md файле (`games/{GAME_TAG}/{GAME_TAG}.md` → секция CTA).
+2. **Текущий `output/` эпизода** и `_archive/`
 3. **`games/{GAME_TAG}/assets/cta/cta.mp4`** — локальный общий CTA игры
-4. **CTA предыдущего эпизода** — только как последний fallback
 
-Разные эпизоды могут иметь разные CTA (например "LINK IN BIO" vs "USE THE LINK IN DESCRIPTION"). Не копируй слепо из предыдущего эпизода — проверь содержимое (`ffmpeg -ss 0.5 -frames:v 1` → визуально).
+Разные эпизоды могут иметь разные CTA. Не копируй слепо — проверь содержимое (`ffmpeg -ss 0.5 -frames:v 1` → визуально).
 
-### Скачивание CTA из Supabase
+Скачивание: `curl`, НЕ `urllib`. После скачивания — `ffprobe` валидация. CTA нормализуется через тот же `scale + pad + 30fps + AAC` шаг (секция 1).
 
-- Используй `curl`, НЕ `urllib` (urllib через python даёт битые файлы для крупных mp4)
-- После скачивания — `ffprobe` валидация:
+### 5.2 Fallback CTA: fade-to-black + «FOLLOW FOR MORE»
+
+**Если кастомный CTA не найден** — генерируй CTA программно:
+- 2 секунды чёрного экрана 1080×1920
+- Белый текст по центру: `"FOLLOW FOR MORE"`
+- Fade-in текста из чёрного (0.5s)
 
 ```bash
-curl -sSL -o cta.mp4 "$CTA_URL"
-ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 cta.mp4 || {
-  echo "CTA download corrupt, retrying"; exit 1;
-}
+$FFMPEG_FULL -y \
+  -f lavfi -i color=c=black:s=1080x1920:d=2:r=30 \
+  -f lavfi -i anullsrc=r=44100:cl=stereo \
+  -vf "drawtext=fontfile='$IMPACT':text='FOLLOW FOR MORE':fontsize=72:fontcolor=white:x=(w-text_w)/2:y=(h-text_h)/2:alpha='if(lt(t,0.5),t/0.5,1)'" \
+  -c:v libx264 -preset slow -crf 20 -pix_fmt yuv420p \
+  -map 0:v -map 1:a -c:a aac -b:a 128k -shortest \
+  cta-fallback.mp4
 ```
 
-**Если файл уже скачан и валиден — НЕ пересобирай.** Проверка перед каждой сборкой.
+### 5.3 Fade-to-black перед CTA
 
-### Конкатенация
+Последний клип видео (перед CTA) должен иметь fade-to-black на последнюю 1 секунду:
+
+```bash
+# Применяется к последнему клипу при нормализации
+CLIP_DUR=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 scene-N-scaled.mp4)
+FADE_START=$(echo "$CLIP_DUR - 1.0" | bc -l)
+$FFMPEG -y -i scene-N-scaled.mp4 \
+  -vf "fade=t=out:st=$FADE_START:d=1.0" \
+  -c:v libx264 -preset slow -crf 20 -c:a copy \
+  scene-N-scaled.mp4
+```
+
+### 5.4 Конкатенация с CTA
 
 ```bash
 cat > concat-list.txt << 'EOF'
 file 'scenes/scene-1/scene-1-scaled.mp4'
 ...
+file 'scenes/scene-N/scene-N-scaled.mp4'
 file 'cta-scaled.mp4'
 EOF
 ```
 
-CTA должен быть пройден через тот же `scale + pad + 30fps + AAC` шаг, что и обычные сцены (см. секцию 1).
+CTA (кастомный или fallback) добавляется ПОСЛЕ последнего клипа в concat-list.
 
 ---
 
@@ -194,39 +262,70 @@ Editor отвечает за весь процесс: берёт текст из
 - Имён персонажей поверх кадра
 - Любых текстовых оверлеев, кроме dialogue subs + TBC + CTA
 
-Три разных подхода по формату — **не смешивай**:
+PIL **запрещён** — только ffmpeg drawtext для всех форматов.
 
-| Формат | Метод | Почему |
-|---|---|---|
-| serial-drama | PIL PNG overlay | Локальный ffmpeg 8.1 без libfreetype → drawtext не работает |
-| gameplay-ai-avatar | drawtext + faster_whisper | ffmpeg-full с libfreetype; точный word-sync |
-| reddit-story | drawtext word-highlight (ручная разбивка) | Нет faster_whisper; тайминг из TTS_DUR |
+| Формат | Метод |
+|---|---|
+| serial-drama | drawtext (белый текст, чёрный stroke) |
+| gameplay-ai-avatar | drawtext + faster_whisper (word-sync) |
+| reddit-story | drawtext word-highlight (ручная разбивка) |
 
 ---
 
-### serial-drama — PIL PNG overlay
+### serial-drama — drawtext (без PIL)
 
-Editor генерирует PNG через Python PIL-скрипт (`gen_subtitles.py`):
+**PIL не использовать.** Субтитры генерирует скрипт `tools/add_subtitles.py` — он автоматически транскрибирует TTS-аудио через faster-whisper, разбивает на чанки по 3 слова с реальными таймингами и рендерит через ffmpeg drawtext.
 
-- **Шрифт:** Arial Bold или Helvetica Bold, 38–48px (адаптивно по длине текста)
-- **Цвет:** белый, чёрная обводка (stroke 3px)
-- **Word-wrap:** max_width=900px
-- **Позиция:** нижняя треть экрана (y = H − 220 − total_text_height)
-- **Сохранение:** `subs/sub-K.png` — по одному на каждый dialogue клип (I2V клипы без субтитров)
-- **TBC:** отдельный `subs/tbc.png` для последнего клипа
-
-Тайминг для overlay: `start` = время начала клипа K в финальном видео, `end` = `start + TTS_DUR` (без хвоста — текст не должен висеть в тишину).
-
-**Recap клипы тоже получают субтитры** — если recap-клип содержал диалог, перенеси его субтитр. Текст бери из `storyboard.json` предыдущего эпизода (`subtitle_plan` или `tts` поле).
+Скрипт бьёт TTS-аудио на чанки по N слов (word timestamps из faster-whisper) и рендерит через ASS. Большинство чанков — просто белый текст. Если сценарист пометил `subtitle_emphasis` — только в тех чанках где встречается фраза она становится жёлтой + italic.
 
 ```bash
-$FFMPEG -y -i final-base.mp4 \
-  -i subs/sub-1.png -i subs/sub-2.png \
-  -filter_complex "[0:v][1:v]overlay=enable='between(t,1.0,4.5)':x=(W-w)/2:y=H-h-100[v1]; \
-                   [v1][2:v]overlay=enable='between(t,5.0,9.2)':x=(W-w)/2:y=H-h-100[vout]" \
-  -map "[vout]" -map 0:a -c:v libx264 -preset slow -crf 20 -c:a copy \
-  final-with-subs.mp4
+# Базовый вызов (без выделения)
+python3 tools/add_subtitles.py \
+  scenes/scene-K/scene-K.mp4 \
+  scenes/scene-K/scene-K.mp3 \
+  scenes/scene-K/scene-K-sub.mp4
+
+# С выделением из storyboard.json → clips[K].subtitle_emphasis
+EMPHASIS=$(python3 -c "
+import json
+clips = json.load(open('storyboard.json'))['clips']
+e = clips[K-1].get('subtitle_emphasis', [])
+print(','.join(e))
+")
+python3 tools/add_subtitles.py scene-K.mp4 scene-K.mp3 scene-K-sub.mp4 \
+  --emphasis "$EMPHASIS"
 ```
+
+Опции:
+- `--chunk N` — слов в чанке (default: 3)
+- `--emphasis "phrase1,phrase2"` — из `subtitle_emphasis` сценариста; пусто = не передавай флаг
+- `--fontsize N` — базовый размер шрифта (default: 72)
+- `--marginv N` — отступ от низа в px (default: 380)
+- `--lang CODE` — язык для whisper (default: `en`)
+- `--no-scale` — не масштабировать в 1080×1920
+- `--tbc` — добавить «TO BE CONTINUED...» после последнего чанка
+
+**Recap клипы тоже получают субтитры** — если recap-клип содержал диалог, передай его mp3 в скрипт.
+
+⚠️ **ffmpeg-full обязателен** — Homebrew ffmpeg без libass. Скрипт использует `/usr/local/bin/ffmpeg-full/ffmpeg` автоматически.
+
+### 6.1 Audio padding после субтитров (ОБЯЗАТЕЛЬНО перед concat)
+
+`add_subtitles.py` обрезает аудиодорожку после последнего слова речи. Если аудио короче видео — при concat накапливается сдвиг: каждый следующий диалог играет раньше своих кадров.
+
+**После каждого вызова `add_subtitles.py`** — проверь и выровняй:
+
+```bash
+VDUR=$(ffprobe -v quiet -select_streams v:0 -show_entries stream=duration -of csv=p=0 scene-K-sub.mp4)
+ADUR=$(ffprobe -v quiet -select_streams a:0 -show_entries stream=duration -of csv=p=0 scene-K-sub.mp4)
+# Если ADUR < VDUR — добить:
+$FFMPEG -y -i scene-K-sub.mp4 \
+  -filter:a "apad=whole_dur=$VDUR" \
+  -c:v copy -c:a aac -b:a 128k \
+  scene-K-sub-padded.mp4
+```
+
+**Правило:** перед concat audio duration каждого клипа должна совпадать с video duration (допуск ±0.02s). Проверяй ВСЕ клипы, не только subtitle — Avatar хвосты тоже бывают короче видео.
 
 ---
 
@@ -286,39 +385,6 @@ $FFMPEG -y -i assembled.mp4 -filter_complex_script subtitle-filter.txt \
 
 **Правило (все форматы):** субтитры не должны перекрываться (each chunk `start` ≥ previous `end`).
 
-### reddit-story — drawtext word-highlight (ручная разбивка)
-
-Для reddit-story нет faster_whisper — тайминг считается из TTS_DUR, текст берётся из storyboard (`narrative_text`). Sound отдаёт только `tts-output.mp3` без SRT.
-
-Editor сам разбивает текст на сегменты по 3–5 слов и распределяет тайминг равномерно:
-
-```
-TTS_DUR = ffprobe duration of tts-output.mp3
-segment_dur = TTS_DUR / N_segments
-```
-
-Каждый сегмент — отдельный `drawtext`. Акцентный цвет (для keyword слова в сегменте) — из `game config → color_palette`. Позиция: `y=H*0.78`, `x=(w-text_w)/2`, drawbox background `black@0.6`.
-
-Для длинных нарративов (30+ сегментов) — используй `-filter_complex_script`:
-
-```bash
-# Записать все drawtext фильтры в файл
-cat > subtitle-filter.txt << 'EOF'
-[0:v]
-drawbox=x=0:y=ih*0.74:w=iw:h=ih*0.12:color=black@0.6:t=fill:enable='between(t,0,TTS_DUR)',
-drawtext=text='segment 1 words':fontsize=52:fontcolor=white:x=(w-text_w)/2:y=h*0.78:enable='between(t,0.0,1.5)',
-drawtext=text='keyword word':fontsize=52:fontcolor=yellow:x=(w-text_w)/2:y=h*0.78:enable='between(t,1.5,3.0)',
-...
-[vout]
-EOF
-
-$FFMPEG -y -i assembled.mp4 -filter_complex_script subtitle-filter.txt \
-  -map "[vout]" -map 0:a -c:a copy subtitled.mp4
-```
-
-CTA overlay добавляется следующим шагом (`drawtext`, последние 2s).
-
----
 
 ## 7. Split-screen (gameplay-ai-avatar)
 

@@ -1,0 +1,223 @@
+{
+  "series_id": "roblox-noob-revenge-en",
+  "game_tag": "roblox",
+  "title": "The Noob Who Was a Secret Millionaire",
+  "language": "en",
+  "style_tags": "Roblox-inspired Pixar-style 3D animation, blocky stylized characters, smooth plastic-like skin texture, expressive exaggerated cartoon faces, vibrant saturated colors, soft ambient lighting, cinematic depth of field, toy-like proportions, dramatic emotional expressions",
+  "created_at": "2026-04-24",
+  "last_episode": 2,
+
+  "synopsis": "Noob Dave arrives at LUXURIA, the most exclusive Roblox trading server where wealth is power. King Rex rules the plaza with an iron crown. Nobody gives Dave a second look — until they do. Because Dave isn't just a noob. He's sitting on the rarest inventory anyone has ever seen. The question isn't IF he'll reveal it. It's WHEN... and what happens after.",
+
+  "characters": [
+    {
+      "name": "Noob Dave",
+      "role": "protagonist",
+      "character_description": "Roblox-style blocky humanoid character, bright yellow smooth plastic skin, simple blue torso shirt with no details, bright green pants, round compact head proportional to body width with wide innocent eyes with tiny black pupils, small curved mouth, stubby short limbs, standard blocky proportions, matte plastic texture, clean simple design",
+      "voice": "Charlie",
+      "speech_pattern": "Hesitant, pauses — then sudden confident sigma drops. 'I... I don't think... actually, nah.'",
+      "status": "WANTED across LUXURIA. Knows Rex's crown is fake. Showed first cold sigma moment — no longer naive. Hiding in alcove with Shadow and Bob.",
+      "aura_points": 150,
+      "personality": "Naive on the surface, secretly calculating. Speaks with hesitation but drops unexpected sigma moments.",
+      "relationships": {
+        "Shadow": "uneasy alliance — Shadow revealed the real crown, Dave is intrigued but wary",
+        "King Rex": "enemy — Rex humiliated him, now hunting him with WANTED bounty",
+        "Bella": "crush — tried to talk to her in EP1, got intercepted by Rex. Unresolved.",
+        "Bacon Bob": "accidental witness — Bob stumbled into the alcove, knows about Shadow meeting"
+      }
+    },
+    {
+      "name": "King Rex",
+      "role": "antagonist",
+      "character_description": "Roblox-style blocky humanoid with oversized golden crown with embedded red and blue jewels, thick diamond chain necklace with large dollar sign pendant, white fluffy fur coat draped over gold vest, dark designer sunglasses pushed up on forehead, smug arrogant expression with raised left eyebrow, glossy shiny plastic texture, golden particle shimmer around body, wide power stance",
+      "voice": "Daniel",
+      "speech_pattern": "Short commands, ultimatums. Never explains — orders. 'Get him. Now.' / 'Wrong answer.' / 'You think this is funny?'",
+      "status": "Issued server-wide WANTED for Dave (fanum tax refusal). Doesn't know Dave met Shadow or learned about the fake crown.",
+      "aura_points": 500,
+      "personality": "Loud, flashy, insecure underneath. Flexes constantly. Terrified of losing status.",
+      "relationships": {
+        "Noob Dave": "target — publicly humiliated him, now wants him found for fanum tax",
+        "Shadow": "fearful enemy — Rex knows Shadow is dangerous but doesn't know Shadow has the real crown",
+        "Bella": "arm candy / ally — Bella hangs with Rex's crew"
+      }
+    },
+    {
+      "name": "Shadow",
+      "role": "ally / mysterious",
+      "character_description": "Roblox-style tall slim humanoid, jet black emo hair covering left eye with sharp spiky tips, dark black hoodie with glowing purple circuit pattern on chest, ripped dark jeans with chain, one visible glowing cyan eye through hair gap, thin angular face with neutral unreadable expression, elongated limbs, matte dark plastic texture, subtle purple particle aura",
+      "voice": "Liam",
+      "speech_pattern": "Maximum 3-5 words per line. Every word hits. 'You're not ready.' Silence = power.",
+      "status": "Revealed to Dave that Rex's crown is fake and he holds the real one. Asked Dave 'What are YOU hiding?' — suspects Dave has secrets too.",
+      "aura_points": 999,
+      "personality": "Says very little but every word hits. Sigma energy. Knows secrets about everyone.",
+      "relationships": {
+        "Noob Dave": "chose him deliberately — revealed the crown secret, testing Dave",
+        "King Rex": "hidden rival — holds the real crown that would destroy Rex's power",
+        "Bacon Bob": "history — Bob lost everything in a Trade Duel after being caught talking to Shadow six months ago"
+      }
+    },
+    {
+      "name": "Bella",
+      "role": "love interest / wildcard",
+      "character_description": "Roblox-style female blocky humanoid, bright blonde ponytail with large pink satin bow on top, pastel pink crop top with small white heart pattern, white pleated mini skirt, pink heart-shaped sunglasses pushed on top of head, rosy round cheeks with wide cheerful smile showing teeth, small button nose, smooth glossy pink-tinted plastic texture, bubbly energetic pose with hands on hips",
+      "voice": "Charlotte",
+      "speech_pattern": "Fake-naive, questioning intonation, hidden manipulation. 'Wait, like, seriously? That's so... interesting.'",
+      "status": "Briefly showed genuine interest in Dave (EP1 clip 4 — soft surprised expression) before Rex stepped in. Disappeared into crowd. Loyalties unclear.",
+      "aura_points": 300,
+      "personality": "Seems like a basic preppy but is actually manipulative and smart. Plays all sides.",
+      "relationships": {
+        "King Rex": "public ally — hangs with his crew, but loyalty depth unknown",
+        "Noob Dave": "intrigued — had a genuine moment before Rex interrupted"
+      }
+    },
+    {
+      "name": "Bacon Bob",
+      "role": "comic relief / sidekick",
+      "character_description": "Roblox-style default blocky avatar, distinctive orange-brown wavy bacon-strip hair flat on top of round head, plain grey torso shirt with small coffee stain, dark navy blue pants slightly too short, generic default face with small dot eyes, permanently slightly downturned mouth giving tired resigned expression, standard blocky proportions, worn scratched matte plastic texture, slightly slouched posture",
+      "voice": "George",
+      "speech_pattern": "Self-deprecating humor, long rambling phrases, accidental wisdom. 'Man, I've been here six months and I still can't...'",
+      "status": "Stumbled into the alcove and saw Dave with Shadow. Revealed he lost everything to Shadow in a Trade Duel six months ago. Now a liability — knows too much.",
+      "aura_points": -50,
+      "personality": "Defeated energy but surprisingly wise. Drops truth bombs wrapped in self-deprecation.",
+      "relationships": {
+        "Shadow": "trauma — lost everything after being caught talking to Shadow six months ago",
+        "Noob Dave": "accidental bond — both are underdogs in LUXURIA",
+        "King Rex": "submissive — terrified of Rex, has been paying fanum tax obediently"
+      }
+    }
+  ],
+
+  "active_loops": [
+    {
+      "id": "dave-sigma-awakening",
+      "type": "major",
+      "description": "What is Dave actually planning? When does he go full sigma?",
+      "opened_ep": 2,
+      "status": "active"
+    },
+    {
+      "id": "bob-liability",
+      "type": "minor",
+      "description": "Can Bacon Bob keep his mouth shut about the crown and the Shadow meeting?",
+      "opened_ep": 2,
+      "status": "active"
+    },
+    {
+      "id": "bella-loyalty",
+      "type": "minor",
+      "description": "Does Bella actually like Dave, or is she fully in Rex's camp?",
+      "opened_ep": 1,
+      "status": "active"
+    },
+    {
+      "id": "real-crown",
+      "type": "major",
+      "description": "Shadow holds the real Admin Crown. Rex's is fake. Only Dave, Shadow, and now Bob know.",
+      "opened_ep": 2,
+      "status": "active"
+    },
+    {
+      "id": "dave-secret-inventory",
+      "type": "major",
+      "description": "Shadow asked 'What are YOU hiding?' — Dave has a secret inventory nobody knows about.",
+      "opened_ep": 2,
+      "status": "active"
+    }
+  ],
+
+  "closed_loops": [],
+
+  "world_rules": [
+    {
+      "rule": "Only one Admin Crown exists on the server",
+      "implication": "Whoever holds it controls the server — absolute power, can ban anyone instantly",
+      "status": "active — but Rex's crown is FAKE. Shadow has the real one."
+    },
+    {
+      "rule": "Fanum Tax is mandatory — every new player pays 30% of inventory to Rex",
+      "implication": "Refusing = public humiliation + server-wide bounty on your head",
+      "status": "active — Dave refused, WANTED bounty issued"
+    },
+    {
+      "rule": "Trade Duels are binding contracts",
+      "implication": "Loser gives up everything wagered. No takebacks, server enforces the deal",
+      "status": "active"
+    },
+    {
+      "rule": "Banned players lose entire inventory permanently",
+      "implication": "Ban = total wipe. Makes the Admin Crown the ultimate threat",
+      "status": "active"
+    }
+  ],
+
+  "world_state": {
+    "location": "LUXURIA plaza — Dave is WANTED. Dark alcove at plaza edge is the secret meeting spot.",
+    "important_items": [
+      "Real Admin Crown — hidden inside Shadow's hoodie",
+      "Fake Admin Crown — worn by Rex (nobody except Dave, Shadow, Bob know it's fake)",
+      "Dave's secret inventory — contents unknown, Shadow suspects it exists"
+    ],
+    "key_events": [
+      "EP1: Dave arrived, got humiliated by Rex over Bella, Shadow recruited Dave in the alcove",
+      "EP2: Shadow revealed the real crown, Bob stumbled in and became a witness, Rex issued WANTED"
+    ]
+  },
+
+  "anti_repetition": {
+    "recent_phrases": [
+      "default skin AND no rizz",
+      "negative aura energy fr",
+      "Rex's crown is a fake. This one is real.",
+      "Two people knew. Now three.",
+      "What are YOU hiding?",
+      "Last person Rex caught talking to you lost everything in one Trade Duel. That was me. Six months ago.",
+      "New player. Default skin. Fanum Tax. Find him."
+    ],
+    "recent_hooks": [
+      "EP1: visual contrast — tiny noob arrives at luxury mega-server (contrast hook)",
+      "EP2: dramatic reveal — Shadow shows the real crown (reveal hook)"
+    ],
+    "recent_cliffhangers": [
+      "EP1: mysterious object reveal — Shadow pulls glowing object from hoodie, golden light, cut to black",
+      "EP2: character transformation — Dave smiles cold for the first time, WANTED screen blazes behind"
+    ]
+  },
+
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "title": "Zero Rizz",
+      "date": "2026-04-24",
+      "summary": "Dave arrives at LUXURIA, stunned by the luxury. Sees Bella, tries to talk to her ('your bow is really cool'). Rex steps in, publicly humiliates Dave ('default skin AND no rizz, negative aura'). Crowd laughs. Dave walks away crushed. Shadow beckons him into a dark alcove. Shadow pulls out a glowing object.",
+      "cliffhanger": "Shadow pulls glowing object from hoodie — golden light on Dave's face, eyes go wide, cut to black.",
+      "clips": 8,
+      "new_characters": ["Noob Dave", "Bella", "King Rex", "Shadow"],
+      "cost": "~$3.36"
+    },
+    {
+      "episode": 2,
+      "title": "The Real Crown",
+      "date": "2026-04-28",
+      "summary": "Shadow reveals Rex's crown is fake — he holds the real Admin Crown. Dave's expression transforms from shocked noob to cold calculation for the first time. Shadow asks 'What are YOU hiding?' Bacon Bob stumbles into the alcove, sees everything, reveals he lost everything to Shadow in a Trade Duel six months ago. Rex issues server-wide WANTED for Dave.",
+      "cliffhanger": "Rex's WANTED announcement blazes across plaza screens. Dave smiles cold — first time in the series. Cut to black.",
+      "clips": 7,
+      "new_characters": ["Bacon Bob"],
+      "cost": "~$3.14",
+      "assembly_note": "EP1 clips 7-8 prepended before clip 1"
+    }
+  ],
+
+  "supabase_assets": {
+    "bg_refs": {
+      "luxuria-plaza": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/scenes/ep1/bg-luxuria-plaza.png",
+      "luxuria-alcove": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/scenes/ep1/bg-luxuria-alcove.png"
+    },
+    "char_refs": {
+      "noob-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/noob-sheet.png",
+      "rich-player-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/rich-player-sheet.png",
+      "shadow-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/shadow-sheet.png",
+      "preppy-girl-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/preppy-girl-sheet.png",
+      "bacon-hair-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/bacon-hair-sheet.png"
+    }
+  }
+}
