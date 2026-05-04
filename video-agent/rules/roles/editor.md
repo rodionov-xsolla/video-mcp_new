@@ -190,22 +190,29 @@ $FFMPEG -y -i final-base.mp4 -i bg-music.mp3 \
 
 ---
 
-## 5. Opener + CTA (ОБЯЗАТЕЛЬНО)
+## 5. Финал видео: fade-to-black + CTA (ОБЯЗАТЕЛЬНО)
 
-### 5.0 Источник: Supabase `game_assets`
+Каждый ролик заканчивается **fade-to-black → CTA текст**. Два варианта:
 
-**Manager передаёт Editor-у URL opener и CTA из Supabase** (скачаны в Фазе 0).
+### 5.1 Кастомный CTA (приоритет)
 
-Оба ассета — `.mp4` видео с тегами:
-- **Opener:** тег `opener` + `video` → первый клип в concat
-- **CTA:** тег `cta` + `video` → последний клип в concat
+Если существует подготовленный CTA-ролик — конкатенируется в самый конец после всех сцен.
 
-Скачивание: `curl -o`, НЕ `urllib`. После — `ffprobe` валидация. Нормализовать через `scale + 30fps + AAC 128k` (секция 1).
+**Поиск CTA — порядок приоритета:**
+1. **Supabase Storage** — `assets/{GAME_TAG}/cta-*.mp4`. CTA URL прописан в game .md файле (`games/{GAME_TAG}/{GAME_TAG}.md` → секция CTA).
+2. **Текущий `output/` эпизода** и `_archive/`
+3. **`games/{GAME_TAG}/assets/cta/cta.mp4`** — локальный общий CTA игры
 
-### 5.1 Если opener/CTA не переданы Manager-ом
+Разные эпизоды могут иметь разные CTA. Не копируй слепо — проверь содержимое (`ffmpeg -ss 0.5 -frames:v 1` → визуально).
 
-- **Opener:** пропустить (не все форматы его используют)
-- **CTA fallback:** генерируй программно:
+Скачивание: `curl`, НЕ `urllib`. После скачивания — `ffprobe` валидация. CTA нормализуется через тот же `scale + pad + 30fps + AAC` шаг (секция 1).
+
+### 5.2 Fallback CTA: fade-to-black + «FOLLOW FOR MORE»
+
+**Если кастомный CTA не найден** — генерируй CTA программно:
+- 2 секунды чёрного экрана 1080×1920
+- Белый текст по центру: `"FOLLOW FOR MORE"`
+- Fade-in текста из чёрного (0.5s)
 
 ```bash
 $FFMPEG_FULL -y \
