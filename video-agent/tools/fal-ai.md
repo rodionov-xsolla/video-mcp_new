@@ -15,66 +15,23 @@ Authorization: Key $FAL_KEY
 
 ---
 
-## 1. GPT Image 2 — основная модель генерации изображений
+## 1. Nano Banana 2 — основная модель генерации изображений
 
-**Endpoint:** `https://queue.fal.run/fal-ai/gpt-image-2` *(уточни через Context7 перед использованием)*
-**Метод:** POST (асинхронный — нужен polling)
-**Стоимость:** ~$0.04 за изображение (medium quality)
+**Стоимость:** ~$0.08 за изображение
 
-> **Основная модель для всех сцен, character refs, bg-assets.** Заменяет Nano Banana 2.
+> **Основная модель для всех сцен, character refs, bg-assets.**
 
-### Запрос
-
-```bash
-RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/gpt-image-2" \
-  -H "Authorization: Key $FAL_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prompt": "Star Trek cinematic 3D animation, Captain Kirk medium close-up, gold tunic, dramatic lighting, 9:16 vertical",
-    "image_url": "https://supabase.../character-ref.png",
-    "quality": "medium",
-    "image_size": "1024x1536"
-  }')
-
-REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
-```
-
-### Параметры
-
-| Параметр | Тип | Обязательный | Описание |
-|----------|-----|-------------|----------|
-| `prompt` | string | Да | Текстовое описание |
-| `quality` | enum | Нет | `"low"`, `"medium"`, `"high"`. Используй `"medium"` |
-| `image_size` | enum | Нет | `"1024x1536"` для 9:16 вертикального |
-| `image_url` | string | Нет | URL reference image для chain consistency (уточни через Context7) |
-
-> ⚠️ Перед первым вызовом сверься с Context7: `resolve-library-id gpt-image-2` → `get-library-docs`. Параметры (особенно `image_url` vs `image_urls`, polling path) могут отличаться.
-
-### Polling
-
-```bash
-# Polling base path — уточнить через Context7
-STATUS=$(curl -s "https://queue.fal.run/fal-ai/gpt-image-2/requests/$REQUEST_ID/status" \
-  -H "Authorization: Key $FAL_KEY" | jq -r '.status')
-```
-
----
-
-## 1b. Nano Banana 2 — LEGACY (не использовать для новых проектов)
-
-### Text-to-Image (без референса — для character references)
+### 1a. Text-to-Image (без референса — для character references)
 
 **Endpoint:** `https://queue.fal.run/fal-ai/nano-banana-2`
 **Метод:** POST (асинхронный — нужен polling)
-**Стоимость:** ~$0.04 за изображение
 
 > **Используй этот endpoint для генерации character references** (нет входного изображения). Поле `image_urls` НЕ передаётся.
 
-### Image-to-Image / Edit (с референсом — для сцен)
+### 1b. Image-to-Image / Edit (с референсом — для сцен)
 
 **Endpoint:** `https://queue.fal.run/fal-ai/nano-banana-2/edit`
 **Метод:** POST (асинхронный — нужен polling)
-**Стоимость:** ~$0.04 за изображение
 
 > **Используй этот endpoint для генерации сцен** с chain reference (image_urls обязателен).
 
@@ -85,8 +42,8 @@ curl -s -X POST "https://queue.fal.run/fal-ai/nano-banana-2/edit" \
   -H "Authorization: Key $FAL_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "prompt": "MLBB hero Lancelot in dynamic sword pose, vertical composition, 9:16 aspect ratio, anime style, dramatic lighting",
-    "image_urls": ["https://fal.media/files/abc123/character-ref.png"],
+    "prompt": "Star Trek cinematic 3D animation, Worf in dramatic pose, Klingon warrior armor, dark council chamber, 9:16 vertical",
+    "image_urls": ["https://supabase.../character-ref.png"],
     "aspect_ratio": "9:16",
     "output_format": "png",
     "resolution": "1K",
@@ -165,7 +122,7 @@ ls -la scene-1.png
 
 ---
 
-## 1b. GPT Image 1 — fallback генерация изображений
+## 1c. GPT Image 1 — fallback генерация изображений
 
 **Endpoint:** `https://queue.fal.run/fal-ai/gpt-image-1/text-to-image`
 **Метод:** POST (асинхронный — нужен polling)
@@ -180,7 +137,7 @@ RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/gpt-image-1/text-to-ima
   -H "Authorization: Key $FAL_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "prompt": "MLBB hero Lancelot in dynamic sword pose, vertical composition, detailed character design, dramatic lighting",
+    "prompt": "Star Trek cinematic 3D animation, Worf in dramatic pose, Klingon warrior armor, dark council chamber, 9:16 vertical",
     "image_size": "1024x1536"
   }')
 
@@ -197,11 +154,9 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 ### Polling и получение результата
 
 ```bash
-# Проверяй каждые 10 секунд
 STATUS=$(curl -s "https://queue.fal.run/fal-ai/gpt-image-1/requests/$REQUEST_ID/status" \
   -H "Authorization: Key $FAL_KEY" | jq -r '.status')
 
-# Результат:
 RESULT=$(curl -s "https://queue.fal.run/fal-ai/gpt-image-1/requests/$REQUEST_ID" \
   -H "Authorization: Key $FAL_KEY")
 
@@ -226,24 +181,27 @@ curl -s -o scene-1.png "$IMAGE_URL"
 
 ---
 
-## 2. Kling 2.6 Pro — Image-to-Video
+## 2. Kling v3 Standard — основная I2V модель
 
-**Endpoint:** `https://queue.fal.run/fal-ai/kling-video/v2.6/pro/image-to-video`
+**Endpoint:** `https://queue.fal.run/fal-ai/kling-video/v3/standard/image-to-video`
 **Метод:** POST (асинхронный — нужен polling)
-**Стоимость:** $0.07/сек (без аудио), $0.14/сек (с аудио)
+**Стоимость:** $0.084/сек без аудио (5s = $0.42, 10s = $0.84) | $0.126/сек с аудио (5s = $0.63, 10s = $1.26)
+
+> **Основная модель для I2V.** Всегда используй `generate_audio: false` — звук генерируется отдельно через TTS/anullsrc.
 
 ### Отправка запроса
 
 ```bash
-RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/kling-video/v2.6/pro/image-to-video" \
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/kling-video/v3/standard/image-to-video" \
   -H "Authorization: Key $FAL_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "prompt": "The hero swings his sword with dynamic motion, camera follows the action",
-    "start_image_url": "https://fal.media/files/abc123/scene-1.png",
+    "prompt": "Worf stands at the bridge console, turns slowly toward camera, jaw set with determination, low-angle push-in, dramatic lighting",
+    "start_image_url": "https://supabase.../scene-1-start.png",
+    "end_image_url": "https://supabase.../scene-1-end.png",
     "duration": "5",
-    "generate_audio": true,
-    "negative_prompt": "blur, distort, low quality, static"
+    "generate_audio": false,
+    "negative_prompt": "blur, distort, low quality, static, morphing faces"
   }')
 
 REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
@@ -253,24 +211,18 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 
 | Параметр | Тип | Обязательный | Описание |
 |----------|-----|-------------|----------|
-| `prompt` | string | Да | Описание анимации |
-| `start_image_url` | string | Да | URL исходного изображения |
+| `prompt` | string | Да | Описание анимации: камера, позиции, действия. Технический, не литературный |
+| `start_image_url` | string | Да | URL начального кадра (постоянный Supabase URL) |
+| `end_image_url` | string | Нет | URL конечного кадра (почти идентичен start, с минимальным сдвигом) |
 | `duration` | enum | Нет | `"5"` или `"10"` секунд, по умолчанию "5" |
-| `generate_audio` | boolean | Нет | **Ставь `true`** (по умолчанию). Kling генерирует звуковые эффекты (шаги, звон, амбиент). $0.14/сек с аудио, $0.07/сек без |
-| `negative_prompt` | string | Нет | Что исключить. По умолчанию "blur, distort, and low quality" |
-| `end_image_url` | string | Нет | Изображение для концовки |
-
-> **По умолчанию:** `"generate_audio": true` — Kling генерирует звуковые эффекты (шаги, удары, амбиент). Стоимость $0.14/сек. Если нужно сэкономить — `false` ($0.07/сек).
+| `generate_audio` | boolean | Нет | **Всегда `false`** — anullsrc правило. I2V без аудио |
+| `negative_prompt` | string | Нет | Что исключить |
 
 ### Polling статуса
 
 > ⚠️ **КРИТИЧНО:** Polling и результат — по **базовому 2-сегментному пути** `fal-ai/kling-video`, НЕ по полному пути submit endpoint.
 
 ```bash
-# Base для polling = первые 2 сегмента endpoint
-# Submit: fal-ai/kling-video/v2.6/pro/image-to-video
-# Polling: fal-ai/kling-video
-
 while true; do
   STATUS_RESPONSE=$(curl -s "https://queue.fal.run/fal-ai/kling-video/requests/$REQUEST_ID/status" \
     -H "Authorization: Key $FAL_KEY")
@@ -288,7 +240,85 @@ done
 ### Получение результата
 
 ```bash
-# Тот же базовый путь fal-ai/kling-video
+RESULT=$(curl -s "https://queue.fal.run/fal-ai/kling-video/requests/$REQUEST_ID" \
+  -H "Authorization: Key $FAL_KEY")
+
+VIDEO_URL=$(echo "$RESULT" | jq -r '.video.url')
+curl -s -o scene-1.mp4 "$VIDEO_URL"
+```
+
+### Ответ
+
+```json
+{
+  "video": {
+    "url": "https://fal.media/files/abc123/output.mp4",
+    "content_type": "video/mp4",
+    "file_name": "output.mp4",
+    "file_size": 1234567
+  }
+}
+```
+
+---
+
+## 2b. Kling 2.6 Pro — fallback I2V модель
+
+**Endpoint:** `https://queue.fal.run/fal-ai/kling-video/v2.6/pro/image-to-video`
+**Метод:** POST (асинхронный — нужен polling)
+**Стоимость:** $0.07/сек без аудио (5s = $0.35, 10s = $0.70) | $0.14/сек с аудио (5s = $0.70, 10s = $1.40)
+
+> **Используй ТОЛЬКО как fallback**, если Kling v3 Standard не работает или возвращает ошибки.
+
+### Отправка запроса
+
+```bash
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/kling-video/v2.6/pro/image-to-video" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "The hero swings his sword with dynamic motion, camera follows the action",
+    "start_image_url": "https://fal.media/files/abc123/scene-1.png",
+    "duration": "5",
+    "generate_audio": false,
+    "negative_prompt": "blur, distort, low quality, static"
+  }')
+
+REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
+```
+
+### Параметры
+
+| Параметр | Тип | Обязательный | Описание |
+|----------|-----|-------------|----------|
+| `prompt` | string | Да | Описание анимации |
+| `start_image_url` | string | Да | URL исходного изображения |
+| `duration` | enum | Нет | `"5"` или `"10"` секунд, по умолчанию "5" |
+| `generate_audio` | boolean | Нет | **Всегда `false`** — anullsrc правило |
+| `negative_prompt` | string | Нет | Что исключить |
+| `end_image_url` | string | Нет | Изображение для концовки |
+
+### Polling статуса
+
+```bash
+# Base для polling = fal-ai/kling-video (первые 2 сегмента)
+while true; do
+  STATUS_RESPONSE=$(curl -s "https://queue.fal.run/fal-ai/kling-video/requests/$REQUEST_ID/status" \
+    -H "Authorization: Key $FAL_KEY")
+
+  STATUS=$(echo "$STATUS_RESPONSE" | jq -r '.status')
+
+  case "$STATUS" in
+    "COMPLETED") break ;;
+    "FAILED") echo "FAILED"; exit 1 ;;
+    *) sleep 15 ;;
+  esac
+done
+```
+
+### Получение результата
+
+```bash
 RESULT=$(curl -s "https://queue.fal.run/fal-ai/kling-video/requests/$REQUEST_ID" \
   -H "Authorization: Key $FAL_KEY")
 
@@ -315,7 +345,7 @@ curl -s -o scene-1.mp4 "$VIDEO_URL"
 
 **Endpoint:** `https://queue.fal.run/fal-ai/veo3`
 **Метод:** POST (асинхронный — нужен polling)
-**Стоимость:** $0.20/сек (без аудио), $0.40/сек (с аудио)
+**Стоимость:** $1.60/клип без аудио (8s), $3.20/клип с аудио (8s)
 
 > **ОГРАНИЧЕНИЕ:** Максимум 2 клипа × 8 секунд = $3.20 без аудио. Потолок $10.
 
@@ -345,7 +375,7 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 | `aspect_ratio` | enum | Нет | `"9:16"` или `"16:9"`, по умолчанию "16:9" |
 | `duration` | enum | Нет | `"4s"`, `"6s"` или `"8s"`, по умолчанию "8s" |
 | `resolution` | enum | Нет | `"720p"` или `"1080p"`, по умолчанию "720p" |
-| `generate_audio` | boolean | Нет | По умолчанию true. `true` = голос + звук ($0.40/сек), `false` = только видео ($0.20/сек). Решение определяется файлом формата |
+| `generate_audio` | boolean | Нет | По умолчанию true. `true` = голос + звук ($3.20/8s), `false` = только видео ($1.60/8s). Решение определяется файлом формата |
 | `negative_prompt` | string | Нет | Что исключить |
 | `seed` | integer | Нет | Для воспроизводимости |
 
@@ -450,7 +480,9 @@ RESULT_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}"
 
 | Submit endpoint | Polling base |
 |-----------------|-------------|
+| `fal-ai/nano-banana-2` | `fal-ai/nano-banana-2` |
 | `fal-ai/nano-banana-2/edit` | `fal-ai/nano-banana-2` |
+| `fal-ai/kling-video/v3/standard/image-to-video` | `fal-ai/kling-video` |
 | `fal-ai/kling-video/v2.6/pro/image-to-video` | `fal-ai/kling-video` |
 | `fal-ai/kling-video/ai-avatar/v2/standard` | `fal-ai/kling-video` |
 | `fal-ai/kling-video/lipsync/audio-to-video` | `fal-ai/kling-video` |
@@ -527,7 +559,7 @@ Result: https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
 ### Пайплайн с липсинком
 
 ```
-Image → Kling I2V (анимация + SFX) → ElevenLabs TTS (голос, через fal.ai) → Kling Lipsync (видео + аудио → липсинк) → FFmpeg (склейка)
+Image → Kling I2V (анимация) → ElevenLabs TTS (голос, через fal.ai) → Kling Lipsync (видео + аудио → липсинк) → FFmpeg (склейка)
 ```
 
 **ВАЖНО:** `audio_url` должен быть публичным URL. ElevenLabs TTS через fal.ai возвращает URL с fal.media — скачай локально и залей в Supabase для стабильного URL.
@@ -664,10 +696,10 @@ Nano Banana 2 (avatar ref) → ElevenLabs TTS (speech.wav, через fal.ai) �
 ## Важные правила
 
 1. **fal.ai URL-ы ВРЕМЕННЫЕ.** Скачивай файлы сразу после генерации. Не рассчитывай на повторный доступ.
-2. **Перед дорогой генерацией (Kling I2V, Avatar, Veo3) — загрузи ВСЕ входные файлы в Supabase Storage.** Используй ТОЛЬКО постоянные Supabase URL как `start_image_url`, `end_image_url`, `audio_url`. Временные fal.ai URL протухают → генерация стоимостью $0.35–$3.20 пропадает.
+2. **Перед дорогой генерацией (Kling I2V, Avatar, Veo3) — загрузи ВСЕ входные файлы в Supabase Storage.** Используй ТОЛЬКО постоянные Supabase URL как `start_image_url`, `end_image_url`, `audio_url`. Временные fal.ai URL протухают → генерация стоимостью $0.42–$3.20 пропадает.
 3. **Polling — по 2-сегментному base пути.** НЕ по полному submit endpoint. См. таблицу в "Общий паттерн polling".
 4. **Проверяй размер** скачанного файла (>1000 байт для изображений, >10000 для видео).
-5. **`generate_audio: true`** для Kling (SFX по умолчанию), решение по `false` определяется файлом формата.
+5. **`generate_audio: false`** для всех I2V (anullsrc правило) — звук добавляется на этапе сборки.
 6. **Не отправляй больше 3 параллельных запросов** — rate limiting.
 7. **Сохраняй request_id** — нужен для polling и отмены задач.
 

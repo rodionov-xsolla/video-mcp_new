@@ -188,6 +188,29 @@ ElevenLabs реагирует на пунктуацию:
 
 ---
 
+## 8. Субтитры: per-scene, НЕ на склеенном видео
+
+`faster-whisper` на concat-видео из нескольких Kling Avatar клипов пропускает целые сцены (распознаёт 1 из 3 голосов). Причина: разные голоса + тишина на стыках сбивают VAD.
+
+**Правило:** субтитрировать КАЖДУЮ сцену ОТДЕЛЬНО через `add_subtitles.py`, потом concat субтитрованных клипов.
+
+```bash
+# Для каждой dialogue сцены:
+python3 tools/add_subtitles.py \
+  scenes/scene-K/scene-K-scaled.mp4 \
+  scenes/scene-K/scene-K-fast.mp4 \
+  scenes/scene-K/scene-K-sub.mp4 \
+  --chunk 3 --emphasis "keyword1,keyword2" \
+  --fontsize 72 --marginv 200 --lang en --no-scale
+
+# Потом concat субтитрованных:
+# title-card-scaled.mp4 + scene-1-sub.mp4 + scene-2-sub.mp4 + ...
+```
+
+Применимо ко ВСЕМ форматам с concat нескольких Avatar/dialogue клипов (news, gameplay-ai-avatar с несколькими персонажами).
+
+---
+
 ## Чеклист перед отдачей Manager-у
 
 ### TTS

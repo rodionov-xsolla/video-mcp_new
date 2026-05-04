@@ -39,7 +39,7 @@ HEADLINE → HOOK → ПРОБЛЕМА → ОФФЕРВОЛЛ (решение) �
 - **НЕ начинай с покупки.** Сначала цепляющая история, потом офферволл как естественное решение.
 - Офферволл упоминается КАК ДЕЙСТВИЕ ГЕРОЯ: `"I grinded offerwall tasks"`, `"выполнял задания"`.
 - **НЕ** говори «купите», «скачайте», не называй сервис по имени.
-- CTA = **overlay** `"Link in bio"` в последние 2s. Никогда не озвучивается голосом.
+- CTA = **overlay** `"Subscribe for more"` в последние 2s. Никогда не озвучивается голосом.
 - **ТВИСТ обязателен** — неожиданный поворот.
 
 ### Примеры нативной интеграции
@@ -58,9 +58,11 @@ HEADLINE → HOOK → ПРОБЛЕМА → ОФФЕРВОЛЛ (решение) �
 | **проблема** | Конфликт, который требует решения | 10–15s |
 | **офферволл** | Действие героя как шаг к цели | 5–10s |
 | **твист** | Неожиданная кульминация | 10–15s |
-| **CTA overlay** | `Link in bio` (только текст) | 2s |
+| **CTA** | Fade-to-black → `Subscribe for more` (как в serial-drama) | 2s |
 
 Общая длительность TTS ≤ 58s → финальный MP4 = TTS + 2s CTA ≈ 60s.
+
+CTA берётся из Supabase `game_assets` (тег `cta` + `video`). Manager скачивает в Фазе 0, Editor нормализует и вставляет последним клипом. Если CTA нет — fallback: fade-to-black → `SUBSCRIBE FOR MORE` drawtext (2s).
 
 ---
 
@@ -78,7 +80,7 @@ HEADLINE → HOOK → ПРОБЛЕМА → ОФФЕРВОЛЛ (решение) �
   "offerwall_angle": "grinded offerwall tasks to buy premium building tools for brother",
   "tts": {"voice": "Daniel", "language_code": "en", "stability": 0.3, "style": 0.7},
   "total_duration_sec": 55,
-  "cta_overlay": "Link in bio"
+  "cta_overlay": "Subscribe for more"
 }
 ```
 

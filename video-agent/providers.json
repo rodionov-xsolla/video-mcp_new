@@ -35,19 +35,18 @@
       "models": {
         "image_gen": "fal-ai/nano-banana-2/edit",
         "image_gen_fallback": "fal-ai/gpt-image-1/text-to-image",
-        "video_gen_i2v": "fal-ai/kling-video/v2.6/pro/image-to-video",
-        "video_gen_t2v": "fal-ai/veo3",
+        "video_gen_i2v": "fal-ai/kling-video/v3/standard/image-to-video",
+        "video_gen_i2v_fallback": "fal-ai/kling-video/v2.6/pro/image-to-video",
         "tts": "fal-ai/elevenlabs/tts/eleven-v3",
-        "avatar": "fal-ai/heygen/avatar4/image-to-video",
-        "avatar_fallback": "fal-ai/kling-video/ai-avatar/v2/standard"
+        "avatar": "fal-ai/kling-video/ai-avatar/v2/standard",
+        "NOTE": "Veo3 T2V удалён — дорого, нет контроля голоса. Не использовать."
       },
       "pricing": {
         "image_gen": "~$0.04/image",
         "image_gen_fallback": "~$0.02/image (GPT Image 1)",
-        "avatar": "$0.10/sec (HeyGen Avatar IV)",
-        "avatar_fallback": "$0.056/sec (Kling Avatar v2)",
-        "video_gen_i2v": "$0.07/sec (audio off)",
-        "video_gen_t2v": "$0.20/sec (audio off)",
+        "avatar": "$0.056/sec (Kling Avatar v2)",
+        "video_gen_i2v": "$0.084/sec (Kling v3 Standard, audio off)",
+        "video_gen_i2v_fallback": "$0.07/sec (Kling 2.6 Pro, audio off)",
         "tts": "~$0.30/min (~$0.05-0.10/phrase, ElevenLabs via fal.ai)"
       }
     },

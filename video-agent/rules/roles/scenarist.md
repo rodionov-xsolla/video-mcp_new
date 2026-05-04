@@ -145,8 +145,7 @@ Format-specific структуру (serial-drama: hook → climax → cliffhange
 ```
 
 ### `character_speech` / `tts`
-- **Veo3 T2V** (генерирует голос): `character_speech` = реплика; `tts` = null
-- **Kling Avatar v2** (лipsync ElevenLabs TTS): `character_speech` = null; `tts` = текст для ElevenLabs
+- **Kling Avatar v2** (lipsync ElevenLabs TTS): `character_speech` = null; `tts` = текст для ElevenLabs
 - **Kling I2V** (без голоса): оба null
 
 ### `subtitle_emphasis`

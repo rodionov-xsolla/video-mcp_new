@@ -213,17 +213,7 @@
 
 ## CTA (Call to Action)
 
-CTA-ролик (~5s) добавляется в конец. Ссылка на asset в `games/{GAME_TAG}/assets/cta/cta.mp4` или Supabase URL.
-
-### Подготовка
-
-1. Скачать CTA через `curl` (НЕ urllib)
-2. `ffprobe` валидация: если файл уже валиден — не перекачивать
-3. Нормализовать в `games/{GAME_TAG}/assets/cta-normalized.mp4` (scale 1080×1920, 30fps, AAC 128k)
-
-### Сборка
-
-CTA добавляется в concat-list.txt как последний клип ПЕРЕД финальной сборкой.
+CTA-ролик берётся из Supabase `game_assets` (тег `cta` + `video`). Manager скачивает его в Фазе 0 и передаёт Editor-у. Нормализовать (1080×1920, 30fps, AAC 128k), вставить в concat-list последним клипом.
 
 ---
 

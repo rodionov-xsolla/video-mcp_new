@@ -44,14 +44,33 @@
 
 5. **Character sheets:** проверь `games/{GAME_TAG}/assets/refs/` на наличие `{slug}-sheet.png` для нужных персонажей. Если отсутствуют — запусти `tools/gen-character-cards.sh {GAME_TAG}` для batch-генерации concept art sheets (~$0.04 за персонажа).
 
-6. **Запроси ассеты из Supabase** (REST API или MCP):
+6. **Запроси ВСЕ ассеты из Supabase** (единый запрос для всей игры):
+   ```bash
+   curl -s -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+     -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
+     "${SUPABASE_URL}/rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*"
    ```
-   GET /rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*
-   ```
-   - `reference_image` → используй URL вместо генерации character-ref (пропусти Фазу 2 для этого персонажа)
-   - `prompt_block` → используй как `character_description` в visual_identity
-   - `gameplay_clip` → скачай в `games/{GAME_TAG}/gameplay/` (для Reddit Story, Gameplay AI Avatar)
-   - `avatar_ref` → скачай в `games/{GAME_TAG}/assets/avatars/`
+
+   **Распредели ассеты по ролям:**
+
+   | Тег / тип | Для кого | Что делать |
+   |-----------|----------|------------|
+   | тег `opener` + `video` | **Editor** | Скачать `.mp4`, нормализовать, вставить первым в concat |
+   | тег `cta` + `video` | **Editor** | Скачать `.mp4`, нормализовать, вставить последним в concat |
+   | `asset_type = avatar_ref` | **Animator** | Использовать URL как `image_url` в Kling Avatar |
+   | `asset_type = reference_image` / `generated_ref` | **Storyboarder** | Использовать URL как chain ref (пропустить генерацию) |
+   | `prompt_block` | **Scenarist** | Использовать как `character_description` |
+   | `asset_type = gameplay_clip` | **Editor** | Скачать для reddit-story / gameplay-ai-avatar |
+
+   **Если ассет не найден:**
+   - **Opener / CTA:** СТОП — сообщить пользователю. Эти ассеты должны быть предварительно загружены
+   - **Character refs / avatar refs:** разрешить генерацию в Фазе 2, **обязательно загрузить результат в Supabase** через `queue/upload-asset.sh` с правильными тегами
+   - **Gameplay clips:** СТОП для reddit-story / gameplay-ai-avatar
+
+   **После генерации ЛЮБОГО нового персонажа** — Storyboarder обязан:
+   1. Загрузить в Supabase Storage
+   2. Зарегистрировать в `game_assets` через `queue/upload-asset.sh`
+   3. В следующий раз этот персонаж уже будет в Supabase
 
 7. **Story bibles** (если формат их использует):
    - Episode 1 — инициализируй (например `games/{GAME_TAG}/serial-drama_story_bible.json`)
@@ -197,7 +216,7 @@ output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/
 | GPT Image 2 medium (image) | `fal-ai/gpt-image-2` (уточни через Context7) | ~$0.04 |
 | Kling v3 Standard I2V (основная) | `fal-ai/kling-video/v3/standard/image-to-video` | $0.07/сек ($0.35/5s; всегда `generate_audio: false`) |
 | Kling 2.6 Pro I2V (fallback) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.14/сек ($0.70/5s; всегда `generate_audio: false`) |
-| Veo3 T2V | `fal-ai/veo3` | $0.20–$0.40/сек |
+| ~~Veo3 T2V~~ | ~~`fal-ai/veo3`~~ | ~~$0.20–$0.40/сек~~ — **НЕ ИСПОЛЬЗОВАТЬ** (дорого, нет контроля голоса) |
 | ElevenLabs TTS (via fal.ai) | `fal-ai/elevenlabs/tts/eleven-v3` | ~$0.30/мин. **`voice` = имя (Daniel), НЕ `voice_id`** |
 | Kling Lipsync | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/сек |
 | HeyGen Avatar IV | `fal-ai/heygen/avatar4/image-to-video` | $0.10/сек |
@@ -217,15 +236,17 @@ output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/
 
 Поля: `game_tag`, `character_name`, `asset_type`, `url`, `prompt_block`, `tags`. UNIQUE `(game_tag, character_name, asset_type)`.
 
-| `asset_type` | Описание | Subfolder |
-|---|---|---|
-| `reference_image` | Character ref (PNG) | `refs/` |
-| `character_card` | Promo card | `refs/` |
-| `screenshot` | In-game screenshot | `refs/` |
-| `promo_art` | Official art | `refs/` |
-| `generated_ref` | AI-generated ref | `refs/` |
-| `avatar_ref` | AI avatar (gameplay-ai-avatar) | `avatars/` |
-| `gameplay_clip` | Gameplay recording (MP4) | `gameplay/` |
+| `asset_type` | Описание | Subfolder | Теги (примеры) |
+|---|---|---|---|
+| `reference_image` | Character ref (PNG) | `refs/` | `news`, `serial-drama` |
+| `character_card` | Promo card | `refs/` | |
+| `screenshot` | In-game screenshot | `refs/` | |
+| `promo_art` | Official art | `refs/` | |
+| `generated_ref` | AI-generated ref (sheet, opener, CTA) | `refs/` | `opener,video` / `cta,video` / `news,title-card` |
+| `avatar_ref` | AI avatar ref (PNG) | `avatars/` | `news,avatar` / `gameplay-ai-avatar` |
+| `gameplay_clip` | Gameplay recording (MP4) | `gameplay/` | |
+
+**Теги используются для фильтрации.** Editor ищет CTA/opener по тегу `cta`/`opener` + `video`. Animator ищет avatar ref по тегу формата + `avatar`. Manager проверяет наличие нужных тегов в Фазе 0.
 
 Загрузка: `queue/upload-asset.sh "GAME_TAG" "Name" "asset_type" ./file.png`
 

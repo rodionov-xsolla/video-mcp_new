@@ -185,9 +185,13 @@ def main():
            args.output]
 
     print("  [ffmpeg] rendering ...", file=sys.stderr)
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    log_path = args.output.replace(".mp4", ".ffmpeg.log")
+    with open(log_path, "w") as log_f:
+        result = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=log_f)
     if result.returncode != 0:
-        print(result.stderr[-2000:], file=sys.stderr)
+        with open(log_path) as f:
+            lines = f.readlines()
+        print("".join(lines[-40:]), file=sys.stderr)
         sys.exit(1)
 
     print(args.output)
