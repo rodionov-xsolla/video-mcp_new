@@ -5,7 +5,7 @@
   "language": "en",
   "style_tags": "Roblox-inspired Pixar-style 3D animation, blocky stylized characters, smooth plastic-like skin texture, expressive exaggerated cartoon faces, vibrant saturated colors, soft ambient lighting, cinematic depth of field, toy-like proportions, dramatic emotional expressions",
   "created_at": "2026-04-24",
-  "last_episode": 3,
+  "last_episode": 4,
 
   "synopsis": "Noob Dave arrives at LUXURIA, the most exclusive Roblox trading server where wealth is power. King Rex rules the plaza with an iron crown. Nobody gives Dave a second look — until they do. Because Dave isn't just a noob. He's sitting on the rarest inventory anyone has ever seen. The question isn't IF he'll reveal it. It's WHEN... and what happens after.",
 
@@ -16,13 +16,13 @@
       "character_description": "Roblox-style blocky humanoid character, bright yellow smooth plastic skin, simple blue torso shirt with no details, bright green pants, round compact head proportional to body width with wide innocent eyes with tiny black pupils, small curved mouth, stubby short limbs, standard blocky proportions, matte plastic texture, clean simple design",
       "voice": "Charlie",
       "speech_pattern": "Hesitant, pauses — then sudden confident sigma drops. 'I... I don't think... actually, nah.'",
-      "status": "Walked into LUXURIA plaza on his own terms — rejected Shadow's manipulation AND Bob's fear. Standing in the open under WANTED screens. No longer naive. Made a conscious choice to be seen.",
-      "aura_points": 350,
+      "status": "Challenged Rex directly — called him down from VIP. Rex descended, confronted Dave face to face, and put him on the ground. Rex told him to never show his face again. Dave is beaten but not broken — lying on the plaza tiles, he studied Rex's crown up close and knows it's fake. Bella saw everything.",
+      "aura_points": 200,
       "personality": "Evolving from naive to calculating. EP3 showed the first real autonomous decision — not reacting to others, but choosing his own path.",
       "relationships": {
         "Shadow": "rejected — told Shadow 'I'm not Bob. And I'm not yours.' Doesn't trust Shadow but knows about the real crown",
-        "King Rex": "enemy — Rex still hunting him with WANTED bounty. Dave has not confronted Rex directly yet",
-        "Bella": "unresolved — Bella watched Dave walk into the plaza with 'recognition' expression. Dave doesn't know she was watching",
+        "King Rex": "confronted directly — Dave called Rex down, Rex beat him. Dave is on the ground but saw the crown up close. Knows it's fake. Planning something.",
+        "Bella": "Bella was with Rex during the confrontation. Dave saw her sympathy but can't act on it yet.",
         "Bacon Bob": "bonded through truth — Bob showed Dave what Shadow's tools become. Bob left the alcove separately"
       }
     },
@@ -32,8 +32,8 @@
       "character_description": "Roblox-style blocky humanoid with oversized golden crown with embedded red and blue jewels, thick diamond chain necklace with large dollar sign pendant, white fluffy fur coat draped over gold vest, dark designer sunglasses pushed up on forehead, smug arrogant expression with raised left eyebrow, glossy shiny plastic texture, golden particle shimmer around body, wide power stance",
       "voice": "Daniel",
       "speech_pattern": "Short commands, ultimatums. Never explains — orders. 'Get him. Now.' / 'Wrong answer.' / 'You think this is funny?'",
-      "status": "Issued server-wide WANTED for Dave. Doesn't know Dave met Shadow or learned about the fake crown. Controls LUXURIA from VIP balcony. About to have his dominance challenged publicly.",
-      "aura_points": 500,
+      "status": "Descended from VIP to confront Dave personally. Put Dave on the ground and told him to never show his face again. Public dominance reasserted — but Dave didn't break, and Rex doesn't know why.",
+      "aura_points": 600,
       "personality": "Loud, flashy, insecure underneath. Flexes constantly. Terrified of losing status.",
       "relationships": {
         "Noob Dave": "target — publicly humiliated him, now wants him found for fanum tax",
@@ -62,8 +62,8 @@
       "character_description": "Roblox-style female blocky humanoid, bright blonde ponytail with large pink satin bow on top, pastel pink crop top with small white heart pattern, white pleated mini skirt, pink heart-shaped sunglasses pushed on top of head, rosy round cheeks with wide cheerful smile showing teeth, small button nose, smooth glossy pink-tinted plastic texture, bubbly energetic pose with hands on hips",
       "voice": "Charlotte",
       "speech_pattern": "Fake-naive, questioning intonation, hidden manipulation. 'Wait, like, seriously? That's so... interesting.'",
-      "status": "Seen at the end of EP3 standing alone in the plaza (NOT with Rex's crew), watching Dave emerge from the alcove with an expression of 'recognition' — not shock, not fear. Loyalties shifting.",
-      "aura_points": 300,
+      "status": "Was with Rex when he confronted Dave. Watched Dave get beaten. Showed hidden sympathy — internal monologue: 'Poor guy... wish I could help him.' Still publicly with Rex but emotionally cracking.",
+      "aura_points": 350,
       "personality": "Seems like a basic preppy but is actually manipulative and smart. Plays all sides.",
       "relationships": {
         "King Rex": "public ally — but was seen alone, not with his crew, watching Dave",
@@ -117,18 +117,18 @@
       "status": "active"
     },
     {
-      "id": "dave-self-directed",
+      "id": "dave-revenge-plan",
       "type": "major",
-      "description": "Dave walked into the WANTED plaza voluntarily — not Shadow's plan, not running. He chose to be visible. Why?",
-      "opened_ep": 3,
+      "description": "Dave was beaten by Rex but studied the fake crown up close. His internal monologue: 'This ain't over for me. But it is for you.' What is Dave planning?",
+      "opened_ep": 4,
       "status": "active"
     },
     {
-      "id": "bella-loyalty",
-      "type": "minor",
-      "description": "Bella was seen alone (not with Rex's crew) watching Dave with 'recognition.' Is she switching sides?",
-      "opened_ep": 1,
-      "status": "active — escalated in EP3"
+      "id": "bella-double-agent",
+      "type": "major",
+      "description": "Bella showed hidden sympathy for Dave while standing next to Rex. She's cracking. Will she help Dave or stay loyal to Rex?",
+      "opened_ep": 4,
+      "status": "active — evolved from bella-loyalty"
     },
     {
       "id": "bob-liability",
@@ -165,7 +165,7 @@
   ],
 
   "world_state": {
-    "location": "LUXURIA plaza at night — Dave is in the open under WANTED screens. Rex on VIP balcony. Shadow watching from shadows. Bella somewhere in the crowd, alone.",
+    "location": "LUXURIA plaza at night — Dave beaten on the ground near VIP staircase. Rex walking away triumphant. Bella lingering, not following Rex. Shadow location unknown — watching from shadows.",
     "important_items": [
       "Real Admin Crown — hidden inside Shadow's hoodie",
       "Fake Admin Crown — worn by Rex (nobody except Dave, Shadow, Bob know it's fake)",
@@ -174,7 +174,8 @@
     "key_events": [
       "EP1: Dave arrived, got humiliated by Rex over Bella, Shadow recruited Dave in the alcove",
       "EP2: Shadow revealed the real crown, Bob stumbled in and became a witness, Rex issued WANTED",
-      "EP3: Bob revealed Shadow's pattern (used him same way 6mo ago), Shadow admitted it ('Bob was weak'), Dave rejected both ('I'm not Bob. I'm not yours'), walked into plaza under WANTED screens. Bella watched alone with recognition."
+      "EP3: Bob revealed Shadow's pattern (used him same way 6mo ago), Shadow admitted it ('Bob was weak'), Dave rejected both ('I'm not Bob. I'm not yours'), walked into plaza under WANTED screens. Bella watched alone with recognition.",
+      "EP4: Dave walked through the plaza, called Rex down from VIP. Rex descended, confronted Dave face to face at the staircase. Rex put Dave on the ground. Rex: 'Don't even think about showing your face here again, punk.' Bella showed hidden sympathy. Dave on the ground studied the crown, internal monologue: 'This ain't over for me. But it is for you.'"
     ]
   },
 
@@ -189,17 +190,23 @@
       "New player. Default skin. Fanum Tax. Find him.",
       "Same speech. Six months ago. Look at me.",
       "Bob was weak. You're not.",
-      "I'm not Bob. And I'm not yours."
+      "I'm not Bob. And I'm not yours.",
+      "Come down.",
+      "Don't even think about showing your face here again, punk.",
+      "Poor guy... wish I could help him.",
+      "Just you wait... this ain't over for me. But it is for you."
     ],
     "recent_hooks": [
       "EP1: visual contrast — tiny noob arrives at luxury mega-server (contrast hook)",
       "EP2: dramatic reveal — Shadow shows the real crown (reveal hook)",
-      "EP3: size contrast — tiny scared Dave vs giant WANTED screen (contrast/scale hook)"
+      "EP3: size contrast — tiny scared Dave vs giant WANTED screen (contrast/scale hook)",
+      "EP4: confidence walk — Dave walks through plaza from behind, crowd parts (action/swagger hook)"
     ],
     "recent_cliffhangers": [
       "EP1: mysterious object reveal — Shadow pulls glowing object from hoodie, golden light, cut to black",
       "EP2: character transformation — Dave smiles cold for the first time, WANTED screen blazes behind",
-      "EP3: dramatic entrance — Dave walks into blazing plaza voluntarily, Bella watches with recognition, cut to black"
+      "EP3: dramatic entrance — Dave walks into blazing plaza voluntarily, Bella watches with recognition, cut to black",
+      "EP4: defeated but not broken — Dave on the ground studying the crown, internal monologue 'this ain't over for me but it is for you', cut to black"
     ]
   },
 
@@ -235,6 +242,17 @@
       "new_characters": [],
       "cost": "~$3.17",
       "assembly_note": "EP2 clips 6-7 prepended before clip 1"
+    },
+    {
+      "episode": 4,
+      "title": "All In",
+      "date": "2026-05-04",
+      "summary": "Dave walked through the plaza and called Rex down from VIP. Rex descended the staircase, confronted Dave face to face. Rex put Dave on the ground with one shove. Rex: 'Don't show your face here again, punk.' Bella, standing with Rex, showed hidden sympathy. Dave, beaten on the floor, studied Rex's crown up close and realized it's definitely fake. Internal monologue: 'This ain't over for me. But it is for you.'",
+      "cliffhanger": "Dave lying on the plaza tiles, one eye open studying Rex's retreating back and the fake crown. Internal voice: 'Just you wait... this ain't over for me. But it is for you.' Bella visible in the distance, not following Rex. Cut to black.",
+      "clips": 7,
+      "new_characters": [],
+      "cost": "~$8.69",
+      "assembly_note": "EP3 clips 6-7 prepended as recap. Scene 4b (Rex dialogue over Dave) added between fight and Bella reaction."
     }
   ],
 

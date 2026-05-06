@@ -262,6 +262,87 @@ curl -s -o scene-1.mp4 "$VIDEO_URL"
 
 ---
 
+## 2a. Kling Motion Control — motion transfer с реф-видео
+
+Переносит движения из референсного видео на статичное изображение персонажа.
+
+### Endpoints
+
+| Вариант | Endpoint | Стоимость |
+|---------|----------|-----------|
+| **v2.6 Standard (основной)** | `fal-ai/kling-video/v2.6/standard/motion-control` | $0.07/сек |
+| v3 Standard | `fal-ai/kling-video/v3/standard/motion-control` | $0.126/сек |
+| v3 Pro | `fal-ai/kling-video/v3/pro/motion-control` | $0.168/сек |
+
+### Запрос (v2.6 Standard)
+
+```bash
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/kling-video/v2.6/standard/motion-control" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "A cute Roblox girl dancing energetically",
+    "image_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/motion-test/character.png",
+    "video_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/motion-test/dance-ref.mp4",
+    "character_orientation": "video",
+    "keep_original_sound": true
+  }')
+
+REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
+```
+
+### Параметры
+
+| Параметр | Тип | Обязательный | Описание |
+|----------|-----|:---:|----------|
+| `image_url` | string | Да | URL изображения персонажа (постоянный Supabase URL). Персонаж: чёткие пропорции, >5% площади, голова открыта |
+| `video_url` | string | Да | URL референсного видео с движением (постоянный Supabase URL). Макс 10с (image mode) / 30с (video mode) |
+| `character_orientation` | enum | Да | `"video"` = ориентация по видео (макс 30с, лучше для танцев). `"image"` = по картинке (макс 10с) |
+| `prompt` | string | Нет | Описание |
+| `keep_original_sound` | boolean | Нет | Сохранить звук из реф-видео (default: true) |
+| `elements` | list | Нет | Привязка лица для консистентности (макс 1, только video mode) |
+
+### Polling
+
+```bash
+# Base = fal-ai/kling-video (НЕ полный путь v2.6/standard/motion-control)
+while true; do
+  STATUS=$(curl -s "https://queue.fal.run/fal-ai/kling-video/requests/$REQUEST_ID/status" \
+    -H "Authorization: Key $FAL_KEY" | jq -r '.status')
+  case "$STATUS" in
+    "COMPLETED") break ;;
+    "FAILED") echo "FAILED"; exit 1 ;;
+    *) sleep 15 ;;
+  esac
+done
+
+RESULT=$(curl -s "https://queue.fal.run/fal-ai/kling-video/requests/$REQUEST_ID" \
+  -H "Authorization: Key $FAL_KEY")
+VIDEO_URL=$(echo "$RESULT" | jq -r '.video.url')
+curl -s -o output.mp4 "$VIDEO_URL"
+```
+
+### Ответ
+
+```json
+{
+  "video": {
+    "url": "https://fal.media/files/abc123/output.mp4",
+    "content_type": "video/mp4",
+    "file_name": "output.mp4",
+    "file_size": 19489104
+  }
+}
+```
+
+### Требования к входным файлам
+
+- **Изображение:** персонаж с чёткими пропорциями тела, голова не закрыта, занимает >5% кадра
+- **Видео:** реальные движения человека, макс 30с (video mode) / 10с (image mode)
+- **Оба файла** — постоянные Supabase URL (НЕ fal.media)
+
+---
+
 ## 2b. Kling 2.6 Pro — fallback I2V модель
 
 **Endpoint:** `https://queue.fal.run/fal-ai/kling-video/v2.6/pro/image-to-video`
@@ -486,6 +567,9 @@ RESULT_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}"
 | `fal-ai/kling-video/v2.6/pro/image-to-video` | `fal-ai/kling-video` |
 | `fal-ai/kling-video/ai-avatar/v2/standard` | `fal-ai/kling-video` |
 | `fal-ai/kling-video/lipsync/audio-to-video` | `fal-ai/kling-video` |
+| `fal-ai/kling-video/v2.6/standard/motion-control` | `fal-ai/kling-video` |
+| `fal-ai/kling-video/v3/standard/motion-control` | `fal-ai/kling-video` |
+| `fal-ai/kling-video/v3/pro/motion-control` | `fal-ai/kling-video` |
 | `fal-ai/elevenlabs/tts/eleven-v3` | `fal-ai/elevenlabs` |
 | `fal-ai/veo3` | `fal-ai/veo3` |
 | `fal-ai/gpt-image-1/text-to-image` | `fal-ai/gpt-image-1` |
