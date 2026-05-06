@@ -14,6 +14,7 @@
 | Dance Battle | **$5.00** | Расход > $4.50 |
 | Reddit Story | **$2.00** | Расход > $1.80 |
 | Character Story | **$6.00** | Расход > $5.40 |
+| Motion Dance | **$3.00** | Расход > $2.70 |
 
 Трекинг: после каждой генерации записывай стоимость. Перед следующей — проверяй лимит.
 
@@ -39,6 +40,9 @@
 | Kling Lipsync | fal-ai/kling-video/lipsync/audio-to-video | ~$0.10/сек |
 | HeyGen Avatar IV | fal-ai/heygen/avatar4/image-to-video | $0.10/сек |
 | Kling Avatar v2 Standard | fal-ai/kling-video/ai-avatar/v2/standard | $0.056/сек |
+| Kling Motion Control v2.6 Standard | fal-ai/kling-video/v2.6/standard/motion-control | $0.07/сек |
+| Kling Motion Control v3 Standard | fal-ai/kling-video/v3/standard/motion-control | $0.126/сек |
+| Kling Motion Control v3 Pro | fal-ai/kling-video/v3/pro/motion-control | $0.168/сек |
 
 ---
 

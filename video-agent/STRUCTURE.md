@@ -125,7 +125,8 @@ video-agent/
 │       ├── dual-style.md        # Cartoon + realistic
 │       ├── gameplay-ai-avatar.md # Говорящая голова + геймплей
 │       ├── dance-battle.md      # Комедийные танцевальные батлы
-│       └── character-story.md   # Лор-монолог персонажа
+│       ├── character-story.md   # Лор-монолог персонажа
+│       └── motion-dance.md     # Motion transfer танец с реф-видео
 │
 ├── games/
 │   ├── mlbb/

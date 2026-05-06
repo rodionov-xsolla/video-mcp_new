@@ -35,7 +35,7 @@ rules/
 ├── formats/                   ← playbook-и форматов (брифы ролям)
 │   └── {serial-drama, gameplay-ai-avatar, news, standard,
 │       reddit-story, dance-battle, object-character, dual-style,
-│       character-story}.md
+│       character-story, motion-dance}.md
 └── main/
     ├── budgets.md             — прайсинг моделей
     ├── fallback.md            — обработка ошибок

@@ -165,6 +165,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 | "dance battle", "dance off", "танцевальный батл", "танец" | Dance Battle | `rules/formats/dance-battle.md` |
 | "reddit story", "storytime", "история игрока", "narrated gameplay" | Reddit Story | `rules/formats/reddit-story.md` |
 | "character story", "история персонажа", "лор", "lore", "backstory", "origin story", "предыстория" | Character Story | `rules/formats/character-story.md` |
+| "motion dance", "motion control", "моушн", "motion transfer", "танцует под видео" | Motion Dance | `rules/formats/motion-dance.md` |
 | Всё остальное | Standard | `rules/formats/standard.md` |
 
 **НЕ загружай файлы форматов, не относящихся к задаче.**
