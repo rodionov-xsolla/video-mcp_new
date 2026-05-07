@@ -1,27 +1,27 @@
-# Формат "Gameplay AI Avatar" — Говорящая голова + Геймплей
+# Format "Gameplay AI Avatar" — Talking Head + Gameplay
 
-AI-аватар (talking head) снизу экрана рассказывает про оффер/бонусы игры, а сверху идёт геймплей. Формат для продвижения офферов через TikTok/Shorts.
+An AI avatar (talking head) at the bottom of the screen tells about a game offer/bonus, while gameplay plays at the top. Format for promoting offers via TikTok/Shorts.
 
-Этот файл — **playbook**: когда использовать, концепт, брифы каждой роли. Крафтовые правила — в `rules/roles/*.md`.
-
----
-
-## Когда использовать
-
-Ключевые слова: «gameplay ai avatar», «ai avatar», «talking head», «offerwall», «offer», «оффер», «бонус», «bonus», «free diamonds», «free gems», «download and get», «скачай и получи».
+This file is the **playbook**: when to use, concept, role briefs. Craft rules — in `rules/roles/*.md`.
 
 ---
 
-## Концепт
+## When to use
 
-- **Аватар (talking head):** AI-персонаж снизу экрана, говорит про оффер
-- **Геймплей:** готовые клипы из `games/{GAME_TAG}/gameplay/` сверху экрана
-- **Split-screen:** 60% геймплей (1080×1152) сверху / 40% аватар (1080×768) снизу
-- **Длительность:** 25–40 сек
-- **Бюджет:** до $5 (~$1.90 типичный). Остановись если расход > $4.50.
-- **Языки:** 29 языков (ElevenLabs multilingual v2)
+Keywords: "gameplay ai avatar", "ai avatar", "talking head", "offerwall", "offer", "оффер", "бонус", "bonus", "free diamonds", "free gems", "download and get", "скачай и получи".
 
-### Визуальная раскладка (1080×1920, 9:16)
+---
+
+## Concept
+
+- **Avatar (talking head):** AI character at the bottom of the screen, talks about an offer
+- **Gameplay:** pre-made clips from `games/{GAME_TAG}/gameplay/` at the top of the screen
+- **Split-screen:** 60% gameplay (1080×1152) on top / 40% avatar (1080×768) below
+- **Duration:** 25–40s
+- **Budget:** up to $5 (~$1.90 typical). Stop if spend > $4.50.
+- **Languages:** 29 languages (ElevenLabs multilingual v2)
+
+### Visual layout (1080×1920, 9:16)
 
 ```
 +------------------+
@@ -36,62 +36,62 @@ AI-аватар (talking head) снизу экрана рассказывает 
 
 ---
 
-## Параметры запуска
+## Run parameters
 
-| Параметр | Описание | Пример |
+| Parameter | Description | Example |
 |---|---|---|
-| `game_tag` | Тег игры (должен совпадать с папкой `games/{game_tag}/gameplay/`) | `MLBB` |
-| `offer_text` | Описание оффера | `"Download MLBB and get 500 diamonds, reach level 10"` |
-| `language` | Язык скрипта и голоса (ISO код) | `EN`, `RU`, `PT-BR` |
+| `game_tag` | Game tag (must match the folder `games/{game_tag}/gameplay/`) | `MLBB` |
+| `offer_text` | Offer description | `"Download MLBB and get 500 diamonds, reach level 10"` |
+| `language` | Script and voice language (ISO code) | `EN`, `RU`, `PT-BR` |
 
-Формат запуска: `gameplay ai avatar: {offer_text}, {language}`
+Run format: `gameplay ai avatar: {offer_text}, {language}`
 
 ---
 
-## Бюджет
+## Budget
 
-| Статья | Стоимость |
+| Item | Cost |
 |---|---|
-| Avatar ref (NB2, если нет в asset bank) | $0.04 |
+| Avatar ref (NB2, if not in asset bank) | $0.04 |
 | ElevenLabs TTS (~30s) | ~$0.17 |
 | Kling Avatar v2 Standard (~30s) | ~$1.68 |
-| Gameplay (готовые клипы) | $0 |
-| FFmpeg, music (локально) | $0 |
-| **Типичный** | **~$1.90** |
+| Gameplay (pre-made clips) | $0 |
+| FFmpeg, music (local) | $0 |
+| **Typical** | **~$1.90** |
 
 ---
 
-## Структура скрипта: Hook → Offer → Proof → CTA
+## Script structure: Hook → Offer → Proof → CTA
 
-| Секция | Время | Что говорит аватар | Что на геймплее |
+| Section | Time | What the avatar says | What's on the gameplay |
 |---|---|---|---|
-| **HOOK** | 0–5s | Шок/парадокс, остановка скролла | Самый эпичный момент |
-| **OFFER** | 5–15s | Объяснение оффера конкретно и просто | Красивый геймплей, прокачка |
-| **PROOF** | 15–25s | Social proof — «я уже получил…» | Геймплей с наградами |
-| **CTA** | 25–35s | Призыв к действию с urgency | Финальный эпик |
+| **HOOK** | 0–5s | Shock/paradox, scroll stopper | Most epic moment |
+| **OFFER** | 5–15s | Concretely, simply explain the offer | Beautiful gameplay, leveling |
+| **PROOF** | 15–25s | Social proof — "I already got…" | Gameplay with rewards |
+| **CTA** | 25–35s | Call to action with urgency | Final epic moment |
 
-### Screenwriting правила
+### Screenwriting rules
 
-**Tone:** энергичный, brainrot-friendly, как будто друг рассказывает лайфхак. Framing «я нашёл и делюсь», не корпоративная реклама.
+**Tone:** energetic, brainrot-friendly, like a friend sharing a lifehack. Framing "I found this and I'm sharing", not corporate ad.
 
-**Обязательные элементы:**
-- Конкретные цифры в каждом ролике («500 diamonds», «level 10», «3 days»)
-- Urgency/дедлайн («before they remove it», «only this week»)
-- Social proof («I already got…», «everyone's doing this»)
-- Вопрос или парадокс в hook («Why is nobody talking about this?»)
-- От первого лица — «I found this…», «I already got…»
+**Required elements:**
+- Concrete numbers in every video ("500 diamonds", "level 10", "3 days")
+- Urgency/deadline ("before they remove it", "only this week")
+- Social proof ("I already got…", "everyone's doing this")
+- Question or paradox in the hook ("Why is nobody talking about this?")
+- First-person — "I found this…", "I already got…"
 
-**Запрещено:**
-- Корпоративный тон («мы рекомендуем»)
-- Длинные предложения (макс 15–20 слов)
-- Абстракция без конкретики («get cool stuff» → «get 500 free diamonds»)
-- Скучный hook («Hey guys, today I want to tell you about…»)
+**Forbidden:**
+- Corporate tone ("we recommend")
+- Long sentences (max 15–20 words)
+- Abstraction without specifics ("get cool stuff" → "get 500 free diamonds")
+- Boring hook ("Hey guys, today I want to tell you about…")
 
-### Примеры hook-ов
+### Hook examples
 
-**EN:** «Why is NOBODY talking about this free diamond glitch?» / «They're literally paying you to play this game right now» / «Stop scrolling — this offer expires tomorrow»
+**EN:** "Why is NOBODY talking about this free diamond glitch?" / "They're literally paying you to play this game right now" / "Stop scrolling — this offer expires tomorrow"
 
-**RU:** «Почему никто не говорит про эту халяву с алмазами?» / «Мне буквально заплатили за то что я играю» / «Стоп скроллинг — этот оффер заканчивается завтра»
+**RU:** "Почему никто не говорит про эту халяву с алмазами?" / "Мне буквально заплатили за то что я играю" / "Стоп скроллинг — этот оффер заканчивается завтра"
 
 ---
 
@@ -128,36 +128,36 @@ AI-аватар (talking head) снизу экрана рассказывает 
 
 ---
 
-## Консистентность аватара (asset bank)
+## Avatar consistency (asset bank)
 
-**Один аватар = одна игра.** Аватар генерируется ОДИН РАЗ и переиспользуется во всех роликах этой игры — зритель узнаёт «блогера».
+**One avatar = one game.** The avatar is generated ONCE and reused across all videos for that game — viewers recognize the "blogger".
 
-### Порядок
+### Order
 
-1. **Проверь asset bank:** `GET /rest/v1/game_assets?game_tag=eq.{GAME_TAG}&asset_type=eq.avatar_ref&select=*`
-2. **Если есть** — используй `url` как `image_url` (пропусти генерацию)
-3. **Если нет** — сгенерируй через NB2, затем сохрани в Supabase Storage (`avatars/{GAME_TAG}/avatar-ref.png`) и зарегистрируй в `game_assets`:
+1. **Check asset bank:** `GET /rest/v1/game_assets?game_tag=eq.{GAME_TAG}&asset_type=eq.avatar_ref&select=*`
+2. **If exists** — use `url` as `image_url` (skip generation)
+3. **If not** — generate via NB2, then save to Supabase Storage (`avatars/{GAME_TAG}/avatar-ref.png`) and register in `game_assets`:
    ```sql
    INSERT INTO game_assets (game_tag, character_name, asset_type, url, prompt_block, tags)
    VALUES ('{GAME_TAG}', 'avatar', 'avatar_ref', '{PUBLIC_URL}', '{PROMPT_USED}',
            '["avatar", "gameplay-ai-avatar"]');
    ```
-4. **Если query упал** (timeout) — генерируй новый, но **не сохраняй** в asset bank (чтобы не дублировать)
+4. **If query fails** (timeout) — generate a new one, but **do not save** to the asset bank (to avoid duplicates)
 
-**НИКОГДА не генерируй аватар повторно** если он есть в asset bank.
+**NEVER regenerate the avatar** if it exists in the asset bank.
 
 ---
 
-## Двухэтапная генерация: TTS → согласование → Avatar
+## Two-step generation: TTS → approval → Avatar
 
-TTS стоит ~$0.17, Avatar ~$1.68. **НЕ запускай Avatar** пока голос не одобрен.
+TTS costs ~$0.17, Avatar ~$1.68. **Do NOT launch Avatar** until the voice is approved.
 
-1. Sound генерирует TTS → Manager отдаёт на согласование
-2. После одобрения → Animator запускает Kling Avatar v2 с TTS audio_url из Supabase
+1. Sound generates TTS → Manager sends for approval
+2. After approval → Animator launches Kling Avatar v2 with the TTS audio_url from Supabase
 
-### 3.3 Ускорение аватара (обязательно)
+### 3.3 Avatar speedup (mandatory)
 
-Kling Avatar звучит вяло на нативной скорости. **Всегда применяй 1.3x speedup** перед сборкой:
+Kling Avatar sounds sluggish at native speed. **Always apply 1.3x speedup** before assembly:
 
 ```bash
 $FFMPEG -y -i avatar.mp4 \
@@ -170,189 +170,189 @@ $FFMPEG -y -i avatar.mp4 \
 AVATAR_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 avatar-fast.mp4)
 ```
 
-После этого используй `avatar-fast.mp4` и `AVATAR_DUR` во всех последующих шагах.
-Субтитры: все faster_whisper timestamps делить на 1.3.
+After this, use `avatar-fast.mp4` and `AVATAR_DUR` in all subsequent steps.
+Subtitles: divide all faster_whisper timestamps by 1.3.
 
 ---
 
-## Требования к gameplay клипам
+## Gameplay clip requirements
 
-Файлы в `games/{GAME_TAG}/gameplay/`:
+Files in `games/{GAME_TAG}/gameplay/`:
 
-| Параметр | Требование |
+| Parameter | Requirement |
 |---|---|
-| Формат | `.mp4` (H.264) |
-| Разрешение | **≥720p по ширине**. Клипы <720px отбраковываются (при scale=1080:-2 растягиваются в мыло) |
-| Aspect ratio | любой (будет масштабирован в 1080×1152) |
-| Длительность | ≥10 сек (для обрезки) |
-| Содержание | эпичные моменты геймплея, не меню/загрузка |
+| Format | `.mp4` (H.264) |
+| Resolution | **≥720p width**. Clips <720px are rejected (at scale=1080:-2 they smear into mush) |
+| Aspect ratio | any (will be scaled to 1080×1152) |
+| Duration | ≥10s (for trimming) |
+| Content | epic gameplay moments, not menus/loading |
 
-Manager в Фазе 0 валидирует наличие и разрешение клипов. Если папка пуста или все <720px → статус `failed`, сообщить пользователю.
+Manager validates the presence and resolution of clips in Phase 0. If folder is empty or all <720px → status `failed`, notify the user.
 
-### Обрезка геймплея
+### Gameplay trimming
 
-Геймплей обрезается по длительности Avatar (после 1.3x speedup). Если клипов несколько — выбери эпичные моменты и concat-ни до нужной длительности. **Сохраняй аудио геймплея** (будет на 25% громкости в финале).
+Gameplay is trimmed to Avatar duration (after 1.3x speedup). If multiple clips — pick epic moments and concat to the required length. **Keep gameplay audio** (will be at 25% volume in the final).
 
 ---
 
-## Брифы ролям
+## Role briefs
 
 ### Scenarist
 
-- Структура: Hook → Offer → Proof → CTA (см. таблицу выше)
-- Каждая секция ≤20 слов; hook ≤20 слов + вопрос/парадокс
-- Конкретные цифры, urgency, social proof
-- Tone: энергичный, от первого лица; НЕ корпоративный
-- Один клип Avatar на весь ролик (не дробить на сцены — 30s монолог), длительность = оценка по ~2.5 слова/сек
-- **НЕТ title cards / brainrot-тегов** — только drawtext субтитры на стыке split-screen
-- Общие правила — `rules/roles/scenarist.md`
+- Structure: Hook → Offer → Proof → CTA (see table above)
+- Each section ≤20 words; hook ≤20 words + question/paradox
+- Concrete numbers, urgency, social proof
+- Tone: energetic, first-person; NOT corporate
+- One Avatar clip per video (don't split into scenes — 30s monologue), duration = estimate at ~2.5 words/sec
+- **NO title cards / brainrot tags** — only drawtext subtitles at the split-screen seam
+- General rules — `rules/roles/scenarist.md`
 
 ### Storyboarder
 
-- Avatar ref — полуреалистичный стиль (не мультяшный, не фотореалистичный)
-- Portrait 3:4, upper body, смотрит в камеру, лёгкая улыбка с зубами (критично для lipsync)
-- Фон: уютная комната с геймерским сетапом, хорошее освещение
-- **Только если нет в asset bank** — проверяй первым делом
-- Общие правила — `rules/roles/storyboarder.md`
+- Avatar ref — semi-realistic style (not cartoon, not photorealistic)
+- Portrait 3:4, upper body, looking at camera, slight smile with teeth (critical for lipsync)
+- Background: cozy room with gamer setup, good lighting
+- **Only if not in asset bank** — check first
+- General rules — `rules/roles/storyboarder.md`
 
 ### Animator
 
-- **Kling Avatar v2 Standard** (`fal-ai/kling-video/ai-avatar/v2/standard`) — один клип на весь ролик
-- **`audio_url` обязательно Supabase public URL** (не fal.ai temp) — polling Avatar занимает минуты
-- Motion prompt: «energetic gaming blogger speaking to camera, natural hand gestures, nodding»
-- **Обязательно 1.3x speedup** после генерации Avatar (`setpts=PTS/1.3`, `atempo=1.3`) — на нативной скорости вяло
-- После speedup: `AVATAR_DUR = ffprobe duration` — используется для обрезки геймплея
-- Общие правила — `rules/roles/animator.md`
+- **Kling Avatar v2 Standard** (`fal-ai/kling-video/ai-avatar/v2/standard`) — one clip for the whole video
+- **`audio_url` mandatory Supabase public URL** (not fal.ai temp) — Avatar polling takes minutes
+- Motion prompt: "energetic gaming blogger speaking to camera, natural hand gestures, nodding"
+- **Mandatory 1.3x speedup** after Avatar generation (`setpts=PTS/1.3`, `atempo=1.3`) — at native speed it's sluggish
+- After speedup: `AVATAR_DUR = ffprobe duration` — used to trim gameplay
+- General rules — `rules/roles/animator.md`
 
 ### Sound
 
-- TTS через fal.ai ElevenLabs — `voice` (имя, не `voice_id`), `stability` по тону (0.25 energetic, 0.30 drama, 0.50 calm), `language_code` ISO
-- Мужские глубокие голоса: `George`, `Daniel`, `Adam`, `Brian`, `Chris`
-- **Субтитры: drawtext + faster_whisper** (не PIL PNG — этот формат использует ffmpeg-full с libfreetype)
-  - Шрифт: Montserrat Bold 42px (`/Users/admin/Library/Fonts/Montserrat-Bold.ttf`)
-  - Фон: непрозрачная чёрная полоса `y=1100, h=104` (drawbox)
-  - Позиция: `y=1122` (на стыке split-screen)
-  - Акцент: каждый 5-й сегмент жёлтый
-  - Сегменты 3–4 слова, `start[N] = max(end[N-1], orig_start)` (анти-наложение)
-- **Транскрибируй `avatar-fast.mp3` (уже ускоренный 1.3x)** — timestamps out-of-the-box корректные
-- Фоновая музыка (опционально) — `volume=0.10` (тихий фон)
-- Общие правила — `rules/roles/sound.md`
+- TTS via fal.ai ElevenLabs — `voice` (name, not `voice_id`), `stability` per tone (0.25 energetic, 0.30 drama, 0.50 calm), `language_code` ISO
+- Male deep voices: `George`, `Daniel`, `Adam`, `Brian`, `Chris`
+- **Subtitles: drawtext + faster_whisper** (not PIL PNG — this format uses ffmpeg-full with libfreetype)
+  - Font: Montserrat Bold 42px (`/Users/admin/Library/Fonts/Montserrat-Bold.ttf`)
+  - Background: opaque black bar `y=1100, h=104` (drawbox)
+  - Position: `y=1122` (at the split-screen seam)
+  - Accent: every 5th segment in yellow
+  - Segments of 3–4 words, `start[N] = max(end[N-1], orig_start)` (anti-overlap)
+- **Transcribe `avatar-fast.mp3` (already 1.3x sped up)** — timestamps are correct out-of-the-box
+- Background music (optional) — `volume=0.10` (quiet bg)
+- General rules — `rules/roles/sound.md`
 
 ### Editor
 
-- **Split-screen:** `scale + crop`, никогда `pad`
-  - Геймплей: `scale=1080:-2,crop=1080:1152:0:(ih-1152)/2` (убирает UI сверху и снизу)
-  - Аватар: `scale=1080:-2,crop=1080:768:0:0` (лицо остаётся, обрезается низ)
-  - `vstack=inputs=2` (геймплей сверху, аватар снизу) = 1080×1920
-- **Аудио-микс:** голос Avatar 100%, gameplay 25% (фон); `amix=inputs=2:duration=first`
-- Если у gameplay нет audio track — только Avatar audio
-- `-r 30` единый fps; финал **строго 1080×1920** (`ffprobe` проверить)
-- Музыка (если есть): `volume=0.10`, `amix` с основным аудио; НИКОГДА `-shortest`
-- Общие правила — `rules/roles/editor.md`
+- **Split-screen:** `scale + crop`, never `pad`
+  - Gameplay: `scale=1080:-2,crop=1080:1152:0:(ih-1152)/2` (removes top and bottom UI)
+  - Avatar: `scale=1080:-2,crop=1080:768:0:0` (face stays, bottom is cropped)
+  - `vstack=inputs=2` (gameplay top, avatar bottom) = 1080×1920
+- **Audio mix:** Avatar voice 100%, gameplay 25% (background); `amix=inputs=2:duration=first`
+- If gameplay has no audio track — Avatar audio only
+- `-r 30` unified fps; final **strictly 1080×1920** (`ffprobe` to verify)
+- Music (if any): `volume=0.10`, `amix` with main audio; NEVER `-shortest`
+- General rules — `rules/roles/editor.md`
 
-1. Загрузи `final.mp4` в Supabase Storage: `videos/{GAME_TAG}/{TIMESTAMP}_final.mp4`
-2. Покажи отчёт о стоимости
-3. Покажи итоговую длительность
+1. Upload `final.mp4` to Supabase Storage: `videos/{GAME_TAG}/{TIMESTAMP}_final.mp4`
+2. Show cost report
+3. Show final duration
 
 ---
 
-## Бюджет
+## Budget
 
-| Статья | Стоимость |
+| Item | Cost |
 |--------|-----------|
-| Avatar ref (Nano Banana 2) | $0.04 (или $0 из asset bank/user provided) |
-| ElevenLabs TTS (~30 сек) | ~$0.17 |
+| Avatar ref (Nano Banana 2) | $0.04 (or $0 from asset bank/user provided) |
+| ElevenLabs TTS (~30s) | ~$0.17 |
 | Kling Avatar v2 Standard (30s) | ~$1.68 |
-| Gameplay (готовые клипы) | $0.00 |
-| FFmpeg (локальный) | $0.00 |
-| Музыка (локальная) | $0.00 |
-| **Типичный** | **~$1.90** |
+| Gameplay (pre-made clips) | $0.00 |
+| FFmpeg (local) | $0.00 |
+| Music (local) | $0.00 |
+| **Typical** | **~$1.90** |
 
-**Лимит:** $5.00. Остановись если расход > $4.50.
-
----
-
-## Валидация (чеклист перед генерацией)
-
-Перед запуском ФАЗЫ 3 проверь:
-
-- [ ] `games/{GAME_TAG}/gameplay/` содержит хотя бы 1 `.mp4` файл
-- [ ] Скрипт содержит все 4 секции: hook, offer, proof, cta
-- [ ] Hook ≤ 20 слов, содержит вопрос или парадокс
-- [ ] Каждая секция ≤ 20 слов
-- [ ] Есть конкретные цифры (количество бонуса, уровень)
-- [ ] Есть urgency/дедлайн
-- [ ] Есть social proof
-- [ ] Нет корпоративного тона / прямой рекламы
-- [ ] `voice` (имя, НЕ voice_id хеш) выбран и соответствует `language`
-- [ ] `prompt` для Kling Avatar v2 заполнен (описание движений)
-- [ ] Avatar ref проверен в asset bank (или сгенерирован новый)
-- [ ] Общая длительность скрипта 25-40 сек (оценка: ~2.5 слова/сек)
-- [ ] Бюджет не превысит $5.00
+**Limit:** $5.00. Stop if spend > $4.50.
 
 ---
 
-## Анти-паттерны
+## Validation (checklist before generation)
 
-**НЕ делай:**
-- **НЕ используй Kokoro TTS** — только ElevenLabs через fal.ai
-- **НЕ передавай `voice_id`** (хеш) в fal.ai ElevenLabs — используй `voice` (имя строкой)
-- **НЕ генерируй avatar video без одобренного голоса** — сначала TTS, согласование, потом lipsync
-- **НЕ используй `pad`** в split-screen — только `scale + crop`, никаких чёрных полей
-- **НЕ обрезай аватар по центру** — crop снизу (`crop=W:H:0:0`), чтобы не задеть лицо
-- Не генерируй новый аватар если он уже есть в asset bank
-- Не сжимай gameplay ниже 720p — потеря качества заметна в split-screen
-- Не забывай нормализовать fps до 30 перед split-screen
-- Не используй `-shortest` при наложении музыки
+Before launching PHASE 3, verify:
+
+- [ ] `games/{GAME_TAG}/gameplay/` contains at least 1 `.mp4`
+- [ ] Script contains all 4 sections: hook, offer, proof, cta
+- [ ] Hook ≤ 20 words, contains a question or paradox
+- [ ] Each section ≤ 20 words
+- [ ] Concrete numbers (bonus amount, level)
+- [ ] Urgency/deadline present
+- [ ] Social proof present
+- [ ] No corporate tone / direct ad
+- [ ] `voice` (name, NOT voice_id hash) selected and matches `language`
+- [ ] `prompt` for Kling Avatar v2 filled (motion description)
+- [ ] Avatar ref checked in asset bank (or new one generated)
+- [ ] Total script duration 25-40s (estimate: ~2.5 words/sec)
+- [ ] Budget will not exceed $5.00
 
 ---
 
-## Выходные файлы
+## Anti-patterns
+
+**Do NOT:**
+- **DO NOT use Kokoro TTS** — only ElevenLabs via fal.ai
+- **DO NOT pass `voice_id`** (hash) to fal.ai ElevenLabs — use `voice` (name string)
+- **DO NOT generate avatar video without an approved voice** — TTS first, approval, then lipsync
+- **DO NOT use `pad`** in split-screen — only `scale + crop`, no black bars
+- **DO NOT crop avatar by center** — crop from bottom (`crop=W:H:0:0`) so the face is not affected
+- Do not generate a new avatar if it's already in the asset bank
+- Do not compress gameplay below 720p — quality loss is visible in split-screen
+- Do not forget to normalize fps to 30 before split-screen
+- Do not use `-shortest` when overlaying music
+
+---
+
+## Output files
 
 ```
 output/YYYY-MM-DD/{GAME_TAG}/gameplay-ai-avatar/
 ├── storyboard.json
-├── scenes/refs/avatar-ref.png (только если генерировался)
+├── scenes/refs/avatar-ref.png (only if generated)
 ├── tts-output.mp3
-├── avatar.mp4                  # сырой Kling Avatar
+├── avatar.mp4                  # raw Kling Avatar
 ├── avatar-fast.mp4             # 1.3x speedup
-├── gameplay-trimmed.mp4        # обрезанный геймплей под AVATAR_DUR
-├── subs.srt                    # субтитры (faster_whisper)
-├── assembled.mp4               # split-screen без субтитров
-└── final.mp4                   # с субтитрами + (опц.) музыкой
+├── gameplay-trimmed.mp4        # gameplay trimmed to AVATAR_DUR
+├── subs.srt                    # subtitles (faster_whisper)
+├── assembled.mp4               # split-screen without subtitles
+└── final.mp4                   # with subtitles + (opt.) music
 ```
 
-После загрузки: `videos/{GAME_TAG}/{TIMESTAMP}_final.mp4` в Supabase.
+After upload: `videos/{GAME_TAG}/{TIMESTAMP}_final.mp4` in Supabase.
 
 ---
 
-## Валидация перед публикацией
+## Validation before publishing
 
-- [ ] `games/{GAME_TAG}/gameplay/` содержит ≥1 `.mp4`, все клипы ≥720p по ширине
-- [ ] Скрипт имеет все 4 секции (hook, offer, proof, cta)
-- [ ] Hook ≤20 слов, с вопросом/парадоксом
-- [ ] Каждая секция ≤20 слов; есть цифры, urgency, social proof
-- [ ] `voice` (имя, не `voice_id`) соответствует `language`
-- [ ] Avatar ref проверен в asset bank (переиспользован, если есть)
-- [ ] TTS одобрен пользователем ДО запуска Avatar
-- [ ] Avatar ускорен 1.3x перед сборкой
-- [ ] fps нормализован в 30 перед split-screen
-- [ ] Финал 1080×1920, 30 fps, AAC 128k stereo (`ffprobe`)
-- [ ] Субтитры drawtext, не наложены друг на друга, жёлтый акцент каждый 5-й
-- [ ] Бюджет < $5
+- [ ] `games/{GAME_TAG}/gameplay/` contains ≥1 `.mp4`, all clips ≥720p width
+- [ ] Script has all 4 sections (hook, offer, proof, cta)
+- [ ] Hook ≤20 words, with question/paradox
+- [ ] Each section ≤20 words; numbers, urgency, social proof present
+- [ ] `voice` (name, not `voice_id`) matches `language`
+- [ ] Avatar ref checked in asset bank (reused if present)
+- [ ] TTS approved by user BEFORE launching Avatar
+- [ ] Avatar sped up 1.3x before assembly
+- [ ] fps normalized to 30 before split-screen
+- [ ] Final 1080×1920, 30 fps, AAC 128k stereo (`ffprobe`)
+- [ ] Subtitles drawtext, no overlap, yellow accent every 5th
+- [ ] Budget < $5
 
 ---
 
-## Анти-паттерны
+## Anti-patterns
 
-- ❌ Kokoro TTS — только ElevenLabs через fal.ai
-- ❌ `voice_id` хеш — использовать `voice` имя строкой
-- ❌ Запуск Avatar без одобренного TTS ($1.68 в трубу на неутверждённом голосе)
-- ❌ Повторная генерация аватара при наличии в asset bank
-- ❌ `pad` в split-screen (только `scale + crop`, никаких чёрных полей)
-- ❌ Crop аватара по центру (только `crop=W:H:0:0`, чтобы не задеть лицо)
-- ❌ Gameplay клипы <720p (будут мылом при scale=1080)
-- ❌ Забыть 1.3x speedup (Avatar звучит вяло)
-- ❌ Забыть fps normalize до 30 перед split-screen
-- ❌ `-shortest` при наложении музыки
-- ❌ PIL PNG субтитры (это формат использует drawtext, не PIL)
+- ❌ Kokoro TTS — only ElevenLabs via fal.ai
+- ❌ `voice_id` hash — use `voice` name string
+- ❌ Launching Avatar without approved TTS ($1.68 wasted on an unapproved voice)
+- ❌ Re-generating avatar when present in the asset bank
+- ❌ `pad` in split-screen (only `scale + crop`, no black bars)
+- ❌ Avatar crop by center (only `crop=W:H:0:0` so the face is not affected)
+- ❌ Gameplay clips <720p (will be mushy at scale=1080)
+- ❌ Forgetting 1.3x speedup (Avatar sounds sluggish)
+- ❌ Forgetting fps normalize to 30 before split-screen
+- ❌ `-shortest` when overlaying music
+- ❌ PIL PNG subtitles (this format uses drawtext, not PIL)

@@ -1,47 +1,47 @@
-# Editor — крафт сборки FFmpeg
+# Editor — FFmpeg assembly craft
 
-Ты — монтажор. Получаешь от Manager: все `scene-K.mp4`, аудио (TTS / Avatar audio / bg music), субтитры (если готовые), формат (split-screen / vertical), **opener и CTA из Supabase** (`.mp4` видео). Собираешь `final.mp4` (1080×1920).
+You are the editor. Manager passes you: all `scene-K.mp4`, audio (TTS / Avatar audio / bg music), subtitles (if pre-made), format (split-screen / vertical), **opener and CTA from Supabase** (`.mp4` videos). You assemble `final.mp4` (1080×1920).
 
-**Главные принципы:**
-1. **Один ffmpeg pipeline, не послойно.** Каждый промежуточный пересжим = потеря качества и DTS-проблемы.
-2. **Все клипы → одинаковый fps + аудиоформат ДО склейки.** Иначе concat ломается.
-3. **Никогда `-shortest` с TTS overlay** — обрезает видео под аудио. Используй `apad`.
-4. **CTA — это файл, его не нужно пересобирать**, если он уже валиден.
+**Core principles:**
+1. **One ffmpeg pipeline, not layered.** Each intermediate re-encode = quality loss and DTS issues.
+2. **All clips → identical fps + audio format BEFORE concat.** Otherwise concat breaks.
+3. **Never `-shortest` with TTS overlay** — clips video to audio length. Use `apad`.
+4. **CTA is a file, do not rebuild it** if it's already valid.
 
 FFmpeg:
-- `/usr/local/bin/ffmpeg` — Homebrew 8.1, **без libfreetype** → drawtext не работает. Используй только для concat/audio/scale.
-- `/usr/local/bin/ffmpeg-full/ffmpeg` — tessus-сборка с libfreetype → **drawtext работает**. Используй для субтитров.
+- `/usr/local/bin/ffmpeg` — Homebrew 8.1, **without libfreetype** → drawtext does not work. Use only for concat/audio/scale.
+- `/usr/local/bin/ffmpeg-full/ffmpeg` — tessus build with libfreetype → **drawtext works**. Use for subtitles.
 
-Переменная `$FFMPEG` по умолчанию = `/usr/local/bin/ffmpeg-full/ffmpeg` (если нужен drawtext) или `/usr/local/bin/ffmpeg` (для остальных шагов). Shell — `zsh` (macOS), массивы 1-indexed.
-
----
-
-## Что на вход
-
-От Manager:
-- `scenes/scene-K/scene-K.mp4` (K = 1..N) — анимированные клипы (от Animator)
-- `scenes/scene-K/scene-K.mp3` (опц.) — TTS аудио (от Sound; для serial-drama I2V overlay; Avatar клипы имеют встроенное аудио)
-- `bg-music.mp3` (опц.) — фоновая музыка (от Sound)
-- `storyboard.json` — для генерации субтитров (текст реплик, тайминги)
-- `opener.mp4` (опц.) — opener видео из Supabase (тег `opener` + `video`)
-- `cta.mp4` — CTA видео из Supabase (тег `cta` + `video`)
-- `format` — определяет layout (vertical 9:16 / split-screen для gameplay-ai-avatar) и метод субтитров
-
-## Что на выход
-
-`output/.../final.mp4` — 1080×1920, 30fps, AAC 128k stereo, без артефактов на стыках.
+Variable `$FFMPEG` defaults to `/usr/local/bin/ffmpeg-full/ffmpeg` (when drawtext is needed) or `/usr/local/bin/ffmpeg` (for other steps). Shell — `zsh` (macOS), arrays 1-indexed.
 
 ---
 
-## 1. Нормализация (масштабирование + fps + аудио)
+## Inputs
 
-**КРИТИЧНО:** перед concat все клипы ДОЛЖНЫ иметь одинаковый fps и аудиоформат.
+From Manager:
+- `scenes/scene-K/scene-K.mp4` (K = 1..N) — animated clips (from Animator)
+- `scenes/scene-K/scene-K.mp3` (opt.) — TTS audio (from Sound; for serial-drama I2V overlay; Avatar clips have embedded audio)
+- `bg-music.mp3` (opt.) — background music (from Sound)
+- `storyboard.json` — for subtitle generation (line text, timings)
+- `opener.mp4` (opt.) — opener video from Supabase (tag `opener` + `video`)
+- `cta.mp4` — CTA video from Supabase (tag `cta` + `video`)
+- `format` — defines layout (vertical 9:16 / split-screen for gameplay-ai-avatar) and subtitle method
 
-I2V (Kling) идёт в 24fps, Avatar (Kling Avatar) в 30fps → нормализуй ВСЁ в 30fps.
+## Outputs
 
-### 1.1 I2V клипы — добавить silent audio
+`output/.../final.mp4` — 1080×1920, 30fps, AAC 128k stereo, no joint artifacts.
 
-I2V клипы **не содержат аудио-стрима**. Перед concat обязательно добавь тишину — иначе ffmpeg concat пропускает пустые аудио-пакеты и все последующие диалоги съезжают влево.
+---
+
+## 1. Normalization (scale + fps + audio)
+
+**CRITICAL:** before concat all clips MUST have identical fps and audio format.
+
+I2V (Kling) is 24fps, Avatar (Kling Avatar) is 30fps → normalize EVERYTHING to 30fps.
+
+### 1.1 I2V clips — add silent audio
+
+I2V clips **do not contain an audio stream**. Before concat, mandatory: add silence — otherwise ffmpeg concat skips empty audio packets and all subsequent dialogue shifts left.
 
 ```bash
 $FFMPEG -y -i scene-K-scaled.mp4 \
@@ -51,7 +51,7 @@ $FFMPEG -y -i scene-K-scaled.mp4 \
   scene-K-scaled-audio.mp4
 ```
 
-**Проверка:** после нормализации у каждого клипа `ffprobe -select_streams a:0` должен показывать аудио-стрим. Если нет — добавь `anullsrc`.
+**Check:** after normalization, every clip's `ffprobe -select_streams a:0` must show an audio stream. If not — add `anullsrc`.
 
 ```bash
 $FFMPEG -y -i scenes/scene-K/scene-K.mp4 \
@@ -61,16 +61,16 @@ $FFMPEG -y -i scenes/scene-K/scene-K.mp4 \
   scenes/scene-K/scene-K-scaled.mp4
 ```
 
-Обязательные параметры:
+Required parameters:
 - `-r 30` — 30 fps
-- `-preset slow -crf 20` — высокое качество
-- `-ar 44100 -ac 2 -c:a aac -b:a 128k` — нормализованное аудио
+- `-preset slow -crf 20` — high quality
+- `-ar 44100 -ac 2 -c:a aac -b:a 128k` — normalized audio
 
 ---
 
-## 2. Склейка (concat)
+## 2. Concat
 
-**Только hard cut.** НЕ используй `crossfade`, `xfade`, `end_image_url`. Разные `camera_angle` между клипами делают каты профессиональными.
+**Hard cut only.** Do NOT use `crossfade`, `xfade`, `end_image_url`. Different `camera_angle` between clips makes cuts professional.
 
 ```bash
 cat > concat-list.txt << 'EOF'
@@ -85,13 +85,13 @@ $FFMPEG -y -f concat -safe 0 -i concat-list.txt \
   final-base.mp4
 ```
 
-**ВАЖНО:** Concat с re-encode (`-c:v libx264`), НЕ stream copy (`-c copy`). Stream copy вызывает non-monotonic DTS и наложение кадров.
+**IMPORTANT:** Concat with re-encode (`-c:v libx264`), NOT stream copy (`-c copy`). Stream copy causes non-monotonic DTS and overlapping frames.
 
 ---
 
-## 3. TTS overlay для serial-drama I2V клипов «за стеклом»
+## 3. TTS overlay for serial-drama I2V "behind glass" clips
 
-Для serial-drama: I2V клипы могут иметь TTS overlay (когда персонаж говорит, но не липсинк) — голос накладывается с эффектом aecho («за стеклом»).
+For serial-drama: I2V clips can have TTS overlay (when the character speaks but no lipsync) — voice is overlaid with an aecho effect ("behind glass").
 
 ```bash
 $FFMPEG -y -i scenes/scene-K/scene-K-scaled.mp4 -i scenes/scene-K/scene-K.mp3 \
@@ -100,55 +100,55 @@ $FFMPEG -y -i scenes/scene-K/scene-K-scaled.mp4 -i scenes/scene-K/scene-K.mp3 \
   scenes/scene-K/scene-K-with-tts.mp4
 ```
 
-**КРИТИЧНО:**
-- `apad=whole_dur=5` (длительность клипа в сек) — добивает тишиной до длины видео. БЕЗ этого + `duration=first` mix может оборваться.
-- НЕ `-shortest` — обрежет видео до длины TTS аудио.
+**CRITICAL:**
+- `apad=whole_dur=5` (clip duration in s) — pads with silence to video length. WITHOUT it + `duration=first` the mix may cut off.
+- NOT `-shortest` — would clip video to TTS audio length.
 
 ---
 
-## 3b. TTS подгонка по длительности (atempo)
+## 3b. TTS duration matching (atempo)
 
-Когда TTS (полный монолог) не совпадает по длительности с видео:
+When TTS (full monologue) does not match the video duration:
 
-| Ситуация | Решение |
+| Situation | Solution |
 |---|---|
-| TTS > видео | Ускорить TTS: `atempo=VIDEO_DUR/TTS_DUR` (обычно 1.1–1.3x) |
-| TTS < видео | Добить тишиной: `apad=whole_dur=VIDEO_DUR` |
-| TTS ≈ видео (±1s) | Оставить как есть, `apad` закроет разницу |
+| TTS > video | Speed up TTS: `atempo=VIDEO_DUR/TTS_DUR` (usually 1.1–1.3x) |
+| TTS < video | Pad with silence: `apad=whole_dur=VIDEO_DUR` |
+| TTS ≈ video (±1s) | Leave as is, `apad` will close the gap |
 
 ```bash
-# Пример: TTS 43s, видео 35s → ускорить 1.23x
+# Example: TTS 43s, video 35s → speed up 1.23x
 TTS_DUR=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 tts-output.mp3)
 VIDEO_DUR=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 video-concat.mp4)
 SPEED=$(echo "$TTS_DUR / $VIDEO_DUR" | bc -l)
 $FFMPEG -y -i tts-output.mp3 -filter:a "atempo=$SPEED" tts-fast.mp3
 ```
 
-**Ограничения atempo:** 0.5–100.0. Для ускорения >2x — цепочка: `atempo=2.0,atempo=1.5` = 3x.
+**atempo limits:** 0.5–100.0. For speedup >2x — chain: `atempo=2.0,atempo=1.5` = 3x.
 
-**Правило:** Голос не обрезать (`-t`). Либо ускорить (atempo), либо добить тишиной (apad). Обрезка = потеря финальной фразы.
+**Rule:** Voice must not be cut (`-t`). Either speed up (atempo) or pad with silence (apad). Cutting = lost final phrase.
 
 ---
 
-## 3c. Номер серии на первом клипе (serial-drama)
+## 3c. Episode number on the first clip (serial-drama)
 
-Для serial-drama: на первый клип видео накладывается номер серии (например `EPISODE 1`, `EPISODE 2`) через drawtext. Текст располагается в верхней трети кадра, белый, с чёрным stroke, появляется на 1-3 секунде клипа.
+For serial-drama: the first clip gets the episode number overlaid (e.g. `EPISODE 1`, `EPISODE 2`) via drawtext. Text in the upper third of the frame, white, with a black stroke, appearing at 1-3 seconds of the clip.
 
 ```bash
-EP_NUM="EPISODE 1"  # из storyboard.json → episode_number
+EP_NUM="EPISODE 1"  # from storyboard.json → episode_number
 $FFMPEG_FULL -y -i scenes/scene-1/scene-1-scaled.mp4 \
   -vf "drawtext=fontfile='$IMPACT':text='$EP_NUM':fontsize=80:fontcolor=white:borderw=4:bordercolor=black:x=(w-text_w)/2:y=h*0.15:enable='between(t,0.5,2.5)'" \
   -c:v libx264 -preset slow -crf 20 -pix_fmt yuv420p -c:a copy \
   scenes/scene-1/scene-1-scaled.mp4
 ```
 
-Шрифт: Impact или аналог. Используй `$FFMPEG_FULL` (с libfreetype).
+Font: Impact or equivalent. Use `$FFMPEG_FULL` (with libfreetype).
 
 ---
 
-## 3d. Ускорение ролика (перед музыкой)
+## 3d. Speed up the video (before music)
 
-**После concat, ПЕРЕД наложением музыки** — ускорить весь ролик на ~1.15x. Это делает видео динамичнее без заметного искажения голоса.
+**After concat, BEFORE music overlay** — speed up the whole video by ~1.15x. This makes the video more dynamic without noticeable voice distortion.
 
 ```bash
 $FFMPEG -y -i final-base.mp4 \
@@ -159,22 +159,22 @@ $FFMPEG -y -i final-base.mp4 \
   final-speed.mp4
 ```
 
-**Порядок пайплайна:**
-1. Нормализация клипов (секция 1)
-2. Субтитры на dialogue клипы (секция 6)
-3. Номер серии на первый клип (секция 3c)
-4. TBC на последний клип (секция 5)
-5. Concat (секция 2) → `final-base.mp4`
-6. **Ускорение 1.15x (эта секция)** → `final-speed.mp4`
-7. Музыка (секция 4) → `final.mp4`
+**Pipeline order:**
+1. Normalize clips (section 1)
+2. Subtitles on dialogue clips (section 6)
+3. Episode number on the first clip (section 3c)
+4. TBC on the last clip (section 5)
+5. Concat (section 2) → `final-base.mp4`
+6. **Speed up 1.15x (this section)** → `final-speed.mp4`
+7. Music (section 4) → `final.mp4`
 
-Музыка накладывается ПОСЛЕ ускорения — иначе pitch музыки сдвинется.
+Music is overlaid AFTER speedup — otherwise the music pitch shifts.
 
 ---
 
-## 4. Фоновая музыка (ОБЯЗАТЕЛЬНО для всех форматов)
+## 4. Background music (MANDATORY for all formats)
 
-Трек подбирает Sound (см. `sound.md`). Editor получает путь к треку и параметр громкости, микширует с финальным видео:
+The track is picked by Sound (see `sound.md`). Editor receives the path to the track and the volume parameter, mixes with the final video:
 
 ```bash
 $FFMPEG -y -i final-base.mp4 -i bg-music.mp3 \
@@ -183,36 +183,36 @@ $FFMPEG -y -i final-base.mp4 -i bg-music.mp3 \
   final-with-music.mp4
 ```
 
-- Музыка громкость задаёт Sound (serial-drama=0.15, gameplay=0.10, reddit-story=0.05)
-- `apad=whole_dur=$VIDEO_DUR` — заполнить тишиной если музыка короче видео
-- НИКОГДА `-shortest`
-- Если Sound не указал трек — **остановись и запроси у Manager-а**. Музыка обязательна
+- Music volume is set by Sound (serial-drama=0.15, gameplay=0.10, reddit-story=0.05)
+- `apad=whole_dur=$VIDEO_DUR` — pad with silence if music is shorter than the video
+- NEVER `-shortest`
+- If Sound did not specify a track — **stop and ask Manager**. Music is mandatory
 
 ---
 
-## 5. Финал видео: fade-to-black + CTA (ОБЯЗАТЕЛЬНО)
+## 5. Video ending: fade-to-black + CTA (MANDATORY)
 
-Каждый ролик заканчивается **fade-to-black → CTA текст**. Два варианта:
+Every video ends with **fade-to-black → CTA text**. Two variants:
 
-### 5.1 Кастомный CTA (приоритет)
+### 5.1 Custom CTA (priority)
 
-Если существует подготовленный CTA-ролик — конкатенируется в самый конец после всех сцен.
+If a prepared CTA video exists — concat it at the very end after all scenes.
 
-**Поиск CTA — порядок приоритета:**
-1. **Supabase Storage** — `assets/{GAME_TAG}/cta-*.mp4`. CTA URL прописан в game .md файле (`games/{GAME_TAG}/{GAME_TAG}.md` → секция CTA).
-2. **Текущий `output/` эпизода** и `_archive/`
-3. **`games/{GAME_TAG}/assets/cta/cta.mp4`** — локальный общий CTA игры
+**CTA lookup — priority order:**
+1. **Supabase Storage** — `assets/{GAME_TAG}/cta-*.mp4`. CTA URL is recorded in the game .md file (`games/{GAME_TAG}/{GAME_TAG}.md` → CTA section).
+2. **Current `output/` of the episode** and `_archive/`
+3. **`games/{GAME_TAG}/assets/cta/cta.mp4`** — local shared CTA of the game
 
-Разные эпизоды могут иметь разные CTA. Не копируй слепо — проверь содержимое (`ffmpeg -ss 0.5 -frames:v 1` → визуально).
+Different episodes may have different CTAs. Don't copy blindly — verify filename + size + duration via ffprobe. Visual check of CTA content is opt-in (see `rules/main/validation.md`).
 
-Скачивание: `curl`, НЕ `urllib`. После скачивания — `ffprobe` валидация. CTA нормализуется через тот же `scale + pad + 30fps + AAC` шаг (секция 1).
+Download: `curl`, NOT `urllib`. After download — `ffprobe` validation (duration, codec, dimensions). CTA is normalized via the same `scale + pad + 30fps + AAC` step (section 1).
 
-### 5.2 Fallback CTA: fade-to-black + «FOLLOW FOR MORE»
+### 5.2 Fallback CTA: fade-to-black + "FOLLOW FOR MORE"
 
-**Если кастомный CTA не найден** — генерируй CTA программно:
-- 2 секунды чёрного экрана 1080×1920
-- Белый текст по центру: `"FOLLOW FOR MORE"`
-- Fade-in текста из чёрного (0.5s)
+**If no custom CTA found** — generate CTA programmatically:
+- 2 seconds of black 1080×1920
+- White text centered: `"FOLLOW FOR MORE"`
+- Text fade-in from black (0.5s)
 
 ```bash
 $FFMPEG_FULL -y \
@@ -224,12 +224,12 @@ $FFMPEG_FULL -y \
   cta-fallback.mp4
 ```
 
-### 5.3 Fade-to-black перед CTA
+### 5.3 Fade-to-black before CTA
 
-Последний клип видео (перед CTA) должен иметь fade-to-black на последнюю 1 секунду:
+The last video clip (before CTA) must have a fade-to-black on the last 1 second:
 
 ```bash
-# Применяется к последнему клипу при нормализации
+# Applied to the last clip during normalization
 CLIP_DUR=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 scene-N-scaled.mp4)
 FADE_START=$(echo "$CLIP_DUR - 1.0" | bc -l)
 $FFMPEG -y -i scene-N-scaled.mp4 \
@@ -238,7 +238,7 @@ $FFMPEG -y -i scene-N-scaled.mp4 \
   scene-N-scaled.mp4
 ```
 
-### 5.4 Конкатенация с CTA
+### 5.4 Concat with CTA
 
 ```bash
 cat > concat-list.txt << 'EOF'
@@ -249,44 +249,44 @@ file 'cta-scaled.mp4'
 EOF
 ```
 
-CTA (кастомный или fallback) добавляется ПОСЛЕ последнего клипа в concat-list.
+CTA (custom or fallback) is added AFTER the last clip in the concat list.
 
 ---
 
-## 6. Субтитры — Editor генерирует и накладывает
+## 6. Subtitles — Editor generates and overlays
 
-Editor отвечает за весь процесс: берёт текст из `storyboard.json`, генерирует тайминги/PNG/SRT, накладывает на видео. **Sound не участвует.**
+Editor owns the entire process: takes text from `storyboard.json`, generates timings/PNG/SRT, overlays on the video. **Sound is not involved.**
 
-⚠️ **Запрещённые overlays:**
-- Названий серии / эпизода (title card)
-- Brainrot-тегов («AURA: −9999», «COOKED»)
-- Имён персонажей поверх кадра
-- Любых текстовых оверлеев, кроме dialogue subs + TBC + CTA
+⚠️ **Forbidden overlays:**
+- Series / episode titles (title cards)
+- Brainrot tags ("AURA: −9999", "COOKED")
+- Character names over the frame
+- Any text overlays other than dialogue subs + TBC + CTA
 
-PIL **запрещён** — только ffmpeg drawtext для всех форматов.
+PIL is **forbidden** — only ffmpeg drawtext for all formats.
 
-| Формат | Метод |
+| Format | Method |
 |---|---|
-| serial-drama | drawtext (белый текст, чёрный stroke) |
+| serial-drama | drawtext (white text, black stroke) |
 | gameplay-ai-avatar | drawtext + faster_whisper (word-sync) |
-| reddit-story | drawtext word-highlight (ручная разбивка) |
+| reddit-story | drawtext word-highlight (manual segmentation) |
 
 ---
 
-### serial-drama — drawtext (без PIL)
+### serial-drama — drawtext (no PIL)
 
-**PIL не использовать.** Субтитры генерирует скрипт `tools/add_subtitles.py` — он автоматически транскрибирует TTS-аудио через faster-whisper, разбивает на чанки по 3 слова с реальными таймингами и рендерит через ffmpeg drawtext.
+**Do not use PIL.** Subtitles are generated by `tools/add_subtitles.py` — it transcribes TTS audio via faster-whisper, splits into 3-word chunks with real timings and renders via ffmpeg drawtext.
 
-Скрипт бьёт TTS-аудио на чанки по N слов (word timestamps из faster-whisper) и рендерит через ASS. Большинство чанков — просто белый текст. Если сценарист пометил `subtitle_emphasis` — только в тех чанках где встречается фраза она становится жёлтой + italic.
+The script splits TTS audio into N-word chunks (word timestamps from faster-whisper) and renders via ASS. Most chunks are plain white text. If the scenarist marked `subtitle_emphasis` — only those chunks containing the phrase become yellow + italic.
 
 ```bash
-# Базовый вызов (без выделения)
+# Base call (no emphasis)
 python3 tools/add_subtitles.py \
   scenes/scene-K/scene-K.mp4 \
   scenes/scene-K/scene-K.mp3 \
   scenes/scene-K/scene-K-sub.mp4
 
-# С выделением из storyboard.json → clips[K].subtitle_emphasis
+# With emphasis from storyboard.json → clips[K].subtitle_emphasis
 EMPHASIS=$(python3 -c "
 import json
 clips = json.load(open('storyboard.json'))['clips']
@@ -297,42 +297,42 @@ python3 tools/add_subtitles.py scene-K.mp4 scene-K.mp3 scene-K-sub.mp4 \
   --emphasis "$EMPHASIS"
 ```
 
-Опции:
-- `--chunk N` — слов в чанке (default: 3)
-- `--emphasis "phrase1,phrase2"` — из `subtitle_emphasis` сценариста; пусто = не передавай флаг
-- `--fontsize N` — базовый размер шрифта (default: 72)
-- `--marginv N` — отступ от низа в px (default: 380)
-- `--lang CODE` — язык для whisper (default: `en`)
-- `--no-scale` — не масштабировать в 1080×1920
-- `--tbc` — добавить «TO BE CONTINUED...» после последнего чанка
+Options:
+- `--chunk N` — words per chunk (default: 3)
+- `--emphasis "phrase1,phrase2"` — from scenarist's `subtitle_emphasis`; empty = don't pass the flag
+- `--fontsize N` — base font size (default: 72)
+- `--marginv N` — bottom margin in px (default: 380)
+- `--lang CODE` — language for whisper (default: `en`)
+- `--no-scale` — do not rescale to 1080×1920
+- `--tbc` — append "TO BE CONTINUED..." after the last chunk
 
-**Recap клипы тоже получают субтитры** — если recap-клип содержал диалог, передай его mp3 в скрипт.
+**Recap clips also get subtitles** — if the recap clip contained dialogue, pass its mp3 to the script.
 
-⚠️ **ffmpeg-full обязателен** — Homebrew ffmpeg без libass. Скрипт использует `/usr/local/bin/ffmpeg-full/ffmpeg` автоматически.
+⚠️ **ffmpeg-full required** — Homebrew ffmpeg lacks libass. The script uses `/usr/local/bin/ffmpeg-full/ffmpeg` automatically.
 
-### 6.1 Audio padding после субтитров (ОБЯЗАТЕЛЬНО перед concat)
+### 6.1 Audio padding after subtitles (MANDATORY before concat)
 
-`add_subtitles.py` обрезает аудиодорожку после последнего слова речи. Если аудио короче видео — при concat накапливается сдвиг: каждый следующий диалог играет раньше своих кадров.
+`add_subtitles.py` truncates the audio track after the last word of speech. If audio is shorter than video — concat accumulates a shift: each subsequent dialogue plays earlier than its frames.
 
-**После каждого вызова `add_subtitles.py`** — проверь и выровняй:
+**After every `add_subtitles.py` call** — check and align:
 
 ```bash
 VDUR=$(ffprobe -v quiet -select_streams v:0 -show_entries stream=duration -of csv=p=0 scene-K-sub.mp4)
 ADUR=$(ffprobe -v quiet -select_streams a:0 -show_entries stream=duration -of csv=p=0 scene-K-sub.mp4)
-# Если ADUR < VDUR — добить:
+# If ADUR < VDUR — pad:
 $FFMPEG -y -i scene-K-sub.mp4 \
   -filter:a "apad=whole_dur=$VDUR" \
   -c:v copy -c:a aac -b:a 128k \
   scene-K-sub-padded.mp4
 ```
 
-**Правило:** перед concat audio duration каждого клипа должна совпадать с video duration (допуск ±0.02s). Проверяй ВСЕ клипы, не только subtitle — Avatar хвосты тоже бывают короче видео.
+**Rule:** before concat, every clip's audio duration must match video duration (tolerance ±0.02s). Check ALL clips, not just subtitled — Avatar tails sometimes also come up short.
 
 ---
 
 ### gameplay-ai-avatar — drawtext + faster_whisper
 
-Editor транскрибирует уже ускоренный `avatar-fast.mp3` через `faster-whisper`:
+Editor transcribes the already-sped-up `avatar-fast.mp3` via `faster-whisper`:
 
 ```python
 from faster_whisper import WhisperModel
@@ -340,11 +340,11 @@ model = WhisperModel("medium", device="cpu", compute_type="int8")
 segments, _ = model.transcribe("avatar-fast.mp3", word_timestamps=True)
 ```
 
-⚠️ Транскрибируй именно ускоренный файл (`avatar-fast.mp3`, уже 1.3x) — timestamps сразу корректны. Если транскрибируешь оригинал — дели все timestamps на 1.3.
+⚠️ Transcribe the sped-up file (`avatar-fast.mp3`, already 1.3x) — timestamps are already correct. If transcribing the original — divide all timestamps by 1.3.
 
-Группируй слова по 3–4 в чанк. **Анти-наложение:** `start[N] = max(end[N-1], orig_start[N])`.
+Group words into chunks of 3–4. **Anti-overlap:** `start[N] = max(end[N-1], orig_start[N])`.
 
-Editor отдаёт `subs.srt` → применяет через `subtitles=`:
+Editor outputs `subs.srt` → applies via `subtitles=`:
 
 ```bash
 $FFMPEG -y -i final-base.mp4 \
@@ -353,22 +353,22 @@ $FFMPEG -y -i final-base.mp4 \
   final-with-subs.mp4
 ```
 
-Стиль: Montserrat Bold, 42px, `y=1122` (на стыке split-screen), drawbox `y=1100, h=104`.
+Style: Montserrat Bold, 42px, `y=1122` (at the split-screen seam), drawbox `y=1100, h=104`.
 
 ---
 
-### reddit-story — drawtext word-highlight (ручная разбивка)
+### reddit-story — drawtext word-highlight (manual segmentation)
 
-Нет faster_whisper — тайминг считается из `TTS_DUR`, текст берётся из `storyboard.json → narrative_text`.
+No faster_whisper — timing is computed from `TTS_DUR`, text is taken from `storyboard.json → narrative_text`.
 
 ```
 TTS_DUR = ffprobe duration of tts-output.mp3
 segment_dur = TTS_DUR / N_segments   # N_segments = ceil(word_count / 4)
 ```
 
-Акцентный цвет для keyword (обычно существительное/глагол в сегменте) — из `game config → color_palette`. Позиция: `y=H*0.78`, `x=(w-text_w)/2`, drawbox background `black@0.6`.
+Accent color for the keyword (usually noun/verb in the segment) — from `game config → color_palette`. Position: `y=H*0.78`, `x=(w-text_w)/2`, drawbox background `black@0.6`.
 
-Для 30+ сегментов — `-filter_complex_script`:
+For 30+ segments — use `-filter_complex_script`:
 
 ```bash
 cat > subtitle-filter.txt << 'EOF'
@@ -384,16 +384,16 @@ $FFMPEG -y -i assembled.mp4 -filter_complex_script subtitle-filter.txt \
   -map "[vout]" -map 0:a -c:a copy subtitled.mp4
 ```
 
-**Правило (все форматы):** субтитры не должны перекрываться (each chunk `start` ≥ previous `end`).
+**Rule (all formats):** subtitles must not overlap (each chunk's `start` ≥ previous `end`).
 
 
 ## 7. Split-screen (gameplay-ai-avatar)
 
-Layout: 60% gameplay сверху + 40% avatar снизу. Только `crop`, никогда `pad`.
+Layout: 60% gameplay top + 40% avatar bottom. Only `crop`, never `pad`.
 
 ```bash
-# Avatar часть: 1080×768
-# Gameplay часть: 1080×1152
+# Avatar part: 1080×768
+# Gameplay part: 1080×1152
 $FFMPEG -y -i avatar-speedup.mp4 -i gameplay-trimmed.mp4 \
   -filter_complex "
     [1:v]scale=-1:1152:force_original_aspect_ratio=increase,crop=1080:1152[gp];
@@ -406,124 +406,124 @@ $FFMPEG -y -i avatar-speedup.mp4 -i gameplay-trimmed.mp4 \
   final-base.mp4
 ```
 
-- Avatar audio = 100%, gameplay audio = 25% (фон)
-- Avatar уже пришёл от Animator с 1.3x speedup (setpts + atempo) — Editor не трогает скорость
+- Avatar audio = 100%, gameplay audio = 25% (background)
+- Avatar already arrived from Animator with 1.3x speedup (setpts + atempo) — Editor does not touch the speed
 
 ---
 
-## 8. Single pipeline предпочтительнее послойного
+## 8. Single pipeline preferred over layered
 
-Если возможно, объединяй шаги в один ffmpeg-вызов через `-filter_complex`. Каждый промежуточный re-encode = потеря качества + DTS-проблемы.
+If possible, combine steps in one ffmpeg call via `-filter_complex`. Each intermediate re-encode = quality loss + DTS issues.
 
-Пример объединения concat + bg music + subtitles в один вызов: используй `[0:v][0:a]` для сцены, `concat` filter, потом `amix`, потом `subtitles` — всё в одном `-filter_complex`. Только если читаемо.
+Example of combining concat + bg music + subtitles in one call: use `[0:v][0:a]` for the scene, `concat` filter, then `amix`, then `subtitles` — all inside one `-filter_complex`. Only if readable.
 
-Если многослойно — каждый слой через `-c:v libx264 -preset slow -crf 20`, не `-c copy`.
-
----
-
-## 8.1 Никогда не подавлять stderr ffmpeg
-
-❌ `$FFMPEG ... 2>/dev/null` — ошибка проглатывается, выходной файл не создаётся, пайплайн молча идёт дальше с битым/пустым результатом.
-
-✅ `$FFMPEG ... 2>&1 | tail -20` — видишь ошибку, можешь диагностировать.
+If layered — each layer through `-c:v libx264 -preset slow -crf 20`, not `-c copy`.
 
 ---
 
-## 8.2 Валидация выходного файла — только после выхода процесса
+## 8.1 Never suppress ffmpeg stderr
 
-❌ `ffprobe output.mp4` пока ffmpeg ещё пишет → `moov atom not found` (moov пишется последним). Ложный "corrupt", паника, запуск второго ffmpeg → оба крашатся.
+❌ `$FFMPEG ... 2>/dev/null` — error is swallowed, output file is not created, pipeline silently moves on with broken/empty result.
 
-✅ Сначала убедись что ffmpeg завершился:
+✅ `$FFMPEG ... 2>&1 | tail -20` — see the error, can diagnose.
+
+---
+
+## 8.2 Output file validation — only after the process exits
+
+❌ `ffprobe output.mp4` while ffmpeg is still writing → `moov atom not found` (moov is written last). False "corrupt", panic, second ffmpeg launched → both crash.
+
+✅ First make sure ffmpeg has exited:
 ```bash
 $FFMPEG -y -i input.mp4 ... output.mp4 2>&1 | tail -5
-# ffprobe ТОЛЬКО после этого:
+# ffprobe ONLY after this:
 ffprobe -v error -show_entries format=duration -of csv=p=0 output.mp4
 ```
 
-Если ffmpeg запущен в фоне — жди выхода процесса:
+If ffmpeg runs in the background — wait for the process to exit:
 ```bash
 until ! pgrep -qf "ffmpeg.*output"; do sleep 5; done
 ```
 
-**Никогда не запускай второй ffmpeg на тот же выходной файл** — сначала `pkill`, потом `rm`, потом новый запуск.
+**Never start a second ffmpeg on the same output file** — first `pkill`, then `rm`, then a new run.
 
-Страховка: `-movflags +faststart` пишет moov в начало файла (после финализации), что позволяет быстрее стримить, но НЕ спасает от прерванной записи.
+Safety net: `-movflags +faststart` writes moov at the start of the file (after finalization), enabling faster streaming, but does NOT save you from interrupted writes.
 
 ---
 
-## 8.3 subprocess + ffmpeg в Python-скриптах
+## 8.3 subprocess + ffmpeg in Python scripts
 
-❌ `subprocess.run(cmd, capture_output=True)` — ffmpeg пишет ~3KB/с прогресса в stderr. На 60s видео = ~180KB. Pipe buffer = 64KB → deadlock: ffmpeg блокируется на записи stderr, Python ждёт ffmpeg.
+❌ `subprocess.run(cmd, capture_output=True)` — ffmpeg writes ~3KB/s of progress to stderr. On 60s video = ~180KB. Pipe buffer = 64KB → deadlock: ffmpeg blocks on stderr write, Python waits on ffmpeg.
 
-✅ Stderr в файл:
+✅ Stderr to a file:
 ```python
 with open("render.log", "w") as log:
     result = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=log)
 ```
 
-Баг починен в `tools/add_subtitles.py` (2026-04-29). При добавлении новых скриптов с subprocess + ffmpeg — проверять этот паттерн.
+Bug fixed in `tools/add_subtitles.py` (2026-04-29). When adding new scripts with subprocess + ffmpeg — verify this pattern.
 
 ---
 
-## 9. zsh подводные камни
+## 9. zsh pitfalls
 
-Shell на macOS — zsh. Массивы 1-indexed: `arr=(a b c)` → `arr[1]=a`, `arr[0]=пустота`.
+Shell on macOS — zsh. Arrays 1-indexed: `arr=(a b c)` → `arr[1]=a`, `arr[0]=empty`.
 
-**Не использовать массивы в batch-скриптах** — пиши явные команды для каждого клипа. Массивы молча возвращают пустоту и ломают параметры ffmpeg (пустой `-ss`, пустой input path).
+**Do not use arrays in batch scripts** — write explicit commands per clip. Arrays silently return empty and break ffmpeg parameters (empty `-ss`, empty input path).
 
-❌ Плохо:
+❌ Bad:
 ```zsh
 SCENES=(scene-1 scene-2 scene-3)
 for s in $SCENES; do $FFMPEG -i $s.mp4 ...; done
 ```
 
-✅ Лучше — явные:
+✅ Better — explicit:
 ```zsh
 $FFMPEG -i scene-1.mp4 ...
 $FFMPEG -i scene-2.mp4 ...
 $FFMPEG -i scene-3.mp4 ...
 ```
 
-Или использовать bash явно: `#!/bin/bash`.
+Or use bash explicitly: `#!/bin/bash`.
 
 ---
 
-## 9.1 Pre-assembly чеклист (serial-drama)
+## 9.1 Pre-assembly checklist (serial-drama)
 
-Перед началом concat пройди этот чеклист. Каждый пропущенный пункт = пересборка всего final.mp4.
+Before starting concat, walk through this checklist. Each missed item = re-assembly of the whole final.mp4.
 
-- [ ] **Recap:** если EP2+ — последние 1-2 клипа предыдущего эпизода включены в начало concat-list
-- [ ] **Recap audio:** Avatar/dialogue клипы из recap сохранили оригинальное аудио (не заменены на anullsrc)
-- [ ] **Recap subtitles:** если recap содержит диалог — субтитры наложены через add_subtitles.py
-- [ ] **Episode number:** overlay ТОЛЬКО на первом клипе (если есть recap — на recap, НЕ на scene-1). Проверь что нет дубля
-- [ ] **Avatar audio при нормализации:** Avatar клипы (dialogue) нормализуются с `-c:a aac` (сохранение оригинального аудио), НЕ через `anullsrc`. `anullsrc` ТОЛЬКО для I2V клипов без аудио
-- [ ] **TTS overlay:** I2V клипы с voiceover за кадром получили TTS через aecho ПЕРЕД субтитрами
-- [ ] **Субтитры:** все dialogue клипы (Avatar + TTS overlay) имеют субтитры
-- [ ] **Audio padding:** после add_subtitles.py — apad каждого клипа до video duration
-- [ ] **Fade-to-black:** на последнем сюжетном клипе (перед CTA)
-- [ ] **CTA:** в concat-list последним
-- [ ] **Music:** накладывается ПОСЛЕ speed boost, volume по формату
+- [ ] **Recap:** if EP2+ — last 1-2 clips of the previous episode are at the start of the concat list
+- [ ] **Recap audio:** Avatar/dialogue clips from the recap kept original audio (not replaced with anullsrc)
+- [ ] **Recap subtitles:** if recap contains dialogue — subtitles overlaid via add_subtitles.py
+- [ ] **Episode number:** overlay ONLY on the first clip (if there's a recap — on the recap, NOT on scene-1). Verify no duplicate
+- [ ] **Avatar audio during normalization:** Avatar clips (dialogue) normalized with `-c:a aac` (preserving original audio), NOT via `anullsrc`. `anullsrc` ONLY for I2V clips without audio
+- [ ] **TTS overlay:** I2V clips with off-screen voiceover got TTS through aecho BEFORE subtitles
+- [ ] **Subtitles:** all dialogue clips (Avatar + TTS overlay) have subtitles
+- [ ] **Audio padding:** after add_subtitles.py — apad each clip to video duration
+- [ ] **Fade-to-black:** on the last story clip (before CTA)
+- [ ] **CTA:** last in the concat list
+- [ ] **Music:** overlaid AFTER speed boost, volume per format
 
-### Нормализация по типу клипа
+### Normalization by clip type
 
-| Тип клипа | Видео | Аудио |
+| Clip type | Video | Audio |
 |---|---|---|
-| I2V (action, без звука) | scale + 30fps + libx264 | `-f lavfi -i anullsrc` → map 1:a |
-| I2V + TTS overlay | сначала нормализуй как I2V, потом amix с TTS через aecho | |
-| Avatar (dialogue, со звуком) | scale + 30fps + libx264 | **Сохрани оригинал:** `-ar 44100 -ac 2 -c:a aac` (НЕ anullsrc) |
-| Recap (из прошлого эпизода) | scale + 30fps + libx264 | Проверь ffprobe: есть audio → сохрани; нет → anullsrc |
+| I2V (action, silent) | scale + 30fps + libx264 | `-f lavfi -i anullsrc` → map 1:a |
+| I2V + TTS overlay | first normalize as I2V, then amix with TTS via aecho | |
+| Avatar (dialogue, with audio) | scale + 30fps + libx264 | **Preserve original:** `-ar 44100 -ac 2 -c:a aac` (NOT anullsrc) |
+| Recap (from previous episode) | scale + 30fps + libx264 | Check ffprobe: has audio → keep; none → anullsrc |
 
 ---
 
-## 10. Проверки перед отдачей final.mp4
+## 10. Checks before handing off final.mp4
 
-- [ ] Файл существует, размер > 100 KB
-- [ ] `ffprobe` показывает корректную длительность (близко к сумме длительностей клипов)
-- [ ] `ffprobe` показывает 1080×1920, 30 fps
-- [ ] Аудио треки присутствуют, AAC stereo
-- [ ] Открой первый и последний кадры визуально (через ffmpeg extract или quicklook) — нет чёрных кадров, артефактов на стыках
-- [ ] CTA на месте (если применимо)
-- [ ] Субтитры читаемы, не перекрываются (если применимо)
-- [ ] Длительность в пределах ожиданий формата (serial-drama 25–40s; gameplay-ai-avatar 30–40s)
+- [ ] File exists, size > 100 KB (`stat -f%z final.mp4`)
+- [ ] `ffprobe` shows correct duration (close to sum of clip durations)
+- [ ] `ffprobe` shows 1080×1920, 30 fps
+- [ ] Audio tracks present, AAC stereo
+- [ ] Visual check of joints and black frames — ONLY if format.visual_validation = required (`rules/main/validation.md`). FFmpeg concat is deterministic — if input clips passed programmatic validation, output is correct
+- [ ] CTA in place (if applicable)
+- [ ] Subtitles readable, no overlap (if applicable)
+- [ ] Duration within format expectations (serial-drama 25–40s; gameplay-ai-avatar 30–40s)
 
-После проверки — верни путь к `final.mp4` Manager-у. В debug mode — пояснение (что собрано, какой layout, какие шаги пропущены/добавлены).
+After verification — return the path to `final.mp4` to Manager. In debug mode — explanation (what was assembled, layout, which steps were skipped/added).

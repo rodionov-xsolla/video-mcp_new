@@ -1,40 +1,40 @@
-# Формат "Standard" — универсальный I2V
+# Format "Standard" — universal I2V
 
-Универсальный формат-по-умолчанию: экшен, стендап, гайды, рейтинги, трейлеры. Выбирается, когда идея не подходит под специализированные форматы.
+Universal default format: action, standup, guides, ratings, trailers. Picked when the idea doesn't fit specialized formats.
 
-Этот файл — **playbook**. Крафтовые правила (motion_prompt style, NB2 chain, ffmpeg пайплайн) — в `rules/roles/*.md`.
-
----
-
-## Когда использовать
-
-Ключевые слова: любые, **кроме** «news», «serial/сериал», «object character», «dual-style», «gameplay ai avatar / offerwall», «dance battle», «reddit story», «character story».
-
-Типичные кейсы: экшен-сцены, стендап-шутки, топ-N рейтинги, гайды, атмосферные трейлеры.
+This file is the **playbook**. Craft rules (motion_prompt style, NB2 chain, ffmpeg pipeline) — in `rules/roles/*.md`.
 
 ---
 
-## Концепт
+## When to use
 
-- **3 клипа × 5–10s** → 15–30s total (4 клипа — только если каждый содержит уникальное действие)
-- **Модель: Kling I2V** (v3 Standard или 2.6 Pro fallback) — `generate_audio: true` (SFX)
-- **Речь:** `character_speech: null` во всех сценах — голос через TTS overlay, если нужен
-- **Одна модель на весь ролик**
-- **Бюджет:** $5
+Keywords: any, **except** "news", "serial/сериал", "object character", "dual-style", "gameplay ai avatar / offerwall", "dance battle", "reddit story", "character story".
+
+Typical cases: action scenes, standup jokes, top-N ratings, guides, atmospheric trailers.
 
 ---
 
-## Structure (по умолчанию)
+## Concept
 
-| Клип | Beat | Длит. | camera_angle |
+- **3 clips × 5–10s** → 15–30s total (4 clips — only if each contains a unique action)
+- **Model: Kling I2V** (v3 Standard or 2.6 Pro fallback) — `generate_audio: true` (SFX)
+- **Speech:** `character_speech: null` in all scenes — voice via TTS overlay if needed
+- **One model for the whole video**
+- **Budget:** $5
+
+---
+
+## Structure (default)
+
+| Clip | Beat | Duration | camera_angle |
 |---|---|---|---|
 | 1 | hook | 5s | close-up / medium close-up |
 | 2 | development | 10s | medium / wide |
 | 3 | climax + CTA overlay | 5–10s | low angle / dynamic |
 
-- CTA — из Supabase `game_assets` (тег `cta`), нормализованный, в concat-list как последний клип
-- camera_angle **разный** для соседних клипов (обязательно)
-- 4-й клип — только если каждый из 4 несёт уникальное действие
+- CTA — from Supabase `game_assets` (tag `cta`), normalized, last clip in concat list
+- camera_angle **different** for adjacent clips (mandatory)
+- 4th clip — only if each of 4 carries a unique action
 
 ---
 
@@ -44,11 +44,11 @@
 {
   "format": "standard",
   "visual_identity": {
-    "character_description": "8+ визуальных деталей (кожа, шрамы, одежда, оружие)",
-    "environment_description": "конкретная локация из игры",
-    "style_tags": "из game config prompt_prefix",
-    "color_palette": "из game config",
-    "lighting": "из game config"
+    "character_description": "8+ visual details (skin, scars, clothing, weapon)",
+    "environment_description": "concrete location from the game",
+    "style_tags": "from game config prompt_prefix",
+    "color_palette": "from game config",
+    "lighting": "from game config"
   },
   "scenes": [
     {"index": 1, "beats": ["hook"], "duration_sec": 5, "camera_angle": "close-up", ...}
@@ -56,47 +56,47 @@
 }
 ```
 
-Общие поля сцены (camera_angle, character_state, facial_expression, gaze_direction, character_speech, motion_prompt) — в `rules/roles/scenarist.md`.
+Common scene fields (camera_angle, character_state, facial_expression, gaze_direction, character_speech, motion_prompt) — in `rules/roles/scenarist.md`.
 
 ---
 
-## Брифы ролям
+## Role briefs
 
 ### Scenarist
-- 3 клипа × 5–10s; 4 только при полной загрузке уникальным действием
+- 3 clips × 5–10s; 4 only when fully loaded with unique action
 - Narrative arc: hook → development → climax
-- `character_speech: null` во всех сценах
-- Минимум 2 РАЗНЫХ действия в каждом motion_prompt (не зацикленное)
-- `character_state` / `camera_angle` меняются между сценами; `character_description` дословно одинаковый
-- Общие правила — `rules/roles/scenarist.md`
+- `character_speech: null` in all scenes
+- At least 2 DIFFERENT actions in every motion_prompt (not looped)
+- `character_state` / `camera_angle` change between scenes; `character_description` verbatim identical
+- General rules — `rules/roles/scenarist.md`
 
 ### Storyboarder
-- Anchor ref + chain по предыдущей сцене (max 2 refs)
-- Стиль — из `games/{GAME_TAG}/{GAME_TAG}.md` (prompt_prefix, palette, lighting)
-- Персонажи из Supabase `game_assets` — если есть, переиспользуй ref
-- Общие правила — `rules/roles/storyboarder.md`
+- Anchor ref + chain on previous scene (max 2 refs)
+- Style — from `games/{GAME_TAG}/{GAME_TAG}.md` (prompt_prefix, palette, lighting)
+- Characters from Supabase `game_assets` — if present, reuse the ref
+- General rules — `rules/roles/storyboarder.md`
 
 ### Animator
-- **Kling I2V** (v3 Standard primary, 2.6 Pro fallback): `generate_audio: true` (SFX), микро-движения, start≈end
-- Polling base path = первые 2 сегмента endpoint
-- Общие правила — `rules/roles/animator.md`
+- **Kling I2V** (v3 Standard primary, 2.6 Pro fallback): `generate_audio: true` (SFX), micro motion, start≈end
+- Polling base path = first 2 segments of the endpoint
+- General rules — `rules/roles/animator.md`
 
 ### Sound
-- TTS overlay (ElevenLabs через fal.ai), если нужен голос поверх видео
-- Фоновая музыка опционально (volume=0.15)
-- Субтитры диалогов — опционально; title/brainrot оверлеи запрещены
-- Общие правила — `rules/roles/sound.md`
+- TTS overlay (ElevenLabs via fal.ai) if voice over the video is needed
+- Optional bg music (volume=0.15)
+- Dialogue subtitles — optional; title/brainrot overlays forbidden
+- General rules — `rules/roles/sound.md`
 
 ### Editor
-- Scale каждую сцену в 1080×1920, fps=30, `-preset slow -crf 20`
-- Concat с re-encode (`libx264`), NOT `-c copy`; hard cuts, НЕТ crossfade
-- CTA из Supabase, нормализовать, в concat-list последним клипом
-- Музыка через `amix`; **НИКОГДА `-shortest`** — используй `apad`
-- Общие правила — `rules/roles/editor.md`
+- Scale every scene to 1080×1920, fps=30, `-preset slow -crf 20`
+- Concat with re-encode (`libx264`), NOT `-c copy`; hard cuts, NO crossfade
+- CTA from Supabase, normalized, last clip in concat list
+- Music via `amix`; **NEVER `-shortest`** — use `apad`
+- General rules — `rules/roles/editor.md`
 
 ---
 
-## Выходные файлы
+## Output files
 
 ```
 output/YYYY-MM-DD/{GAME_TAG}/standard/
@@ -112,24 +112,24 @@ output/YYYY-MM-DD/{GAME_TAG}/standard/
 
 ---
 
-## Валидация
+## Validation
 
 - [ ] `format: "standard"`
-- [ ] `character_speech: null` во всех сценах — Kling I2V, не T2V
-- [ ] 3 клипа (или 4 с обоснованием каждого)
-- [ ] `camera_angle` разный для соседних клипов
-- [ ] `motion_prompt` ≥2 разных действия
-- [ ] `visual_identity.character_description` ≥8 визуальных деталей
-- [ ] `gaze_direction` при 2+ персонажах в кадре
-- [ ] CTA из Supabase `game_assets`
-- [ ] Бюджет ≤$5
-- [ ] `final.mp4` 1080×1920, 30fps; hard cuts; нет `-shortest`
+- [ ] `character_speech: null` in all scenes — Kling I2V, not T2V
+- [ ] 3 clips (or 4 with justification for each)
+- [ ] `camera_angle` different for adjacent clips
+- [ ] `motion_prompt` ≥2 different actions
+- [ ] `visual_identity.character_description` ≥8 visual details
+- [ ] `gaze_direction` with 2+ characters in frame
+- [ ] CTA from Supabase `game_assets`
+- [ ] Budget ≤$5
+- [ ] `final.mp4` 1080×1920, 30fps; hard cuts; no `-shortest`
 
 ---
 
-## ЗАПРЕЩЕНО
+## FORBIDDEN
 
-- Любые T2V модели (дорого, нет контроля)
-- `character_speech ≠ null` — голос только через TTS overlay
-- `-shortest` в ffmpeg
-- Генерация CTA — берётся из Supabase
+- Any T2V model (expensive, no control)
+- `character_speech ≠ null` — voice only via TTS overlay
+- `-shortest` in ffmpeg
+- CTA generation — taken from Supabase

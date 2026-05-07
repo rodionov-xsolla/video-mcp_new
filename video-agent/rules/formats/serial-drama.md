@@ -1,97 +1,97 @@
-# Формат "Serial Drama" — Сериальные микро-драмы
+# Format "Serial Drama" — serial micro-dramas
 
-Сериальные микро-драмы с brainrot эстетикой и бесконечным сюжетом. Каждый эпизод — 25–40 секунд, 3–5 клипов, cliffhanger в конце.
+Serial micro-dramas with brainrot aesthetic and an endless plot. Each episode = 25–40 seconds, 3–5 clips, cliffhanger at the end.
 
-Этот файл — **playbook**: когда использовать, концепт, бюджет, состояние сериала (story bible), брифы каждой роли. Крафтовые правила — в `rules/roles/*.md`.
-
----
-
-## Когда использовать
-
-Ключевые слова: «serial», «episode», «series», «ep1», «ep2», «сериал», либо указан `series_id` существующего сериала.
+This file is the **playbook**: when to use, concept, budget, series state (story bible), role briefs. Craft rules — in `rules/roles/*.md`.
 
 ---
 
-## Концепт
+## When to use
 
-- **Жанр:** бесконечные микро-драмы с brainrot эстетикой, cliffhanger-ы, петли сюжета
-- **Стиль:** Pixar/Disney 3D — стилизованные 3D персонажи, пластиковые текстуры, экспрессивные лица, мягкое ambient освещение, cinematic depth of field
-- **Длительность:** 25–40 сек (3–5 клипов × 5–10s)
-- **Бюджет:** до $10 на эпизод. Остановись если расход > $9.00.
-- **Формат кадра:** 9:16 (608×1080) для всех сцен. Квадрат запрещён.
-
-### Состав клипов (балансы)
-
-- **ACTION/DIALOGUE ~ 50/50.** Все-dialogue эпизод = монотонный и дорогой; все-action = нет сюжета.
-- **I2V (Kling 2.6 Pro)** — action/reaction клипы (без звука)
-- **Avatar (Kling Avatar v2)** — dialogue клипы с lipsync (TTS от ElevenLabs)
-- **TTS overlay с aecho** — только для сцен «за стеклом/дверью» (персонаж виден через преграду, лицо не видно)
+Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `series_id` of an existing series is provided.
 
 ---
 
-## Бюджет (ориентиры)
+## Concept
 
-| Компонент | 5s клип | 10s клип |
+- **Genre:** endless micro-dramas with brainrot aesthetic, cliffhangers, plot loops
+- **Style:** Pixar/Disney 3D — stylized 3D characters, plastic textures, expressive faces, soft ambient lighting, cinematic depth of field
+- **Duration:** 25–40s (3–5 clips × 5–10s)
+- **Budget:** up to $10 per episode. Stop if spend > $9.00.
+- **Frame format:** 9:16 (608×1080) for all scenes. Square forbidden.
+
+### Clip mix (balances)
+
+- **ACTION/DIALOGUE ~ 50/50.** All-dialogue episode = monotonous and expensive; all-action = no plot.
+- **I2V (Kling 2.6 Pro)** — action/reaction clips (silent)
+- **Avatar (Kling Avatar v2)** — dialogue clips with lipsync (TTS from ElevenLabs)
+- **TTS overlay with aecho** — only for "behind glass/door" scenes (character is visible through a barrier, face not visible)
+
+---
+
+## Budget (rough estimates)
+
+| Component | 5s clip | 10s clip |
 |---|---|---|
 | Image (NB2) | $0.04 | $0.04 |
 | Kling I2V (generate_audio=false, $0.07/s) | $0.35 | $0.70 |
-| ElevenLabs TTS (реплика 5–15s) | ~$0.05 | ~$0.07 |
+| ElevenLabs TTS (line 5–15s) | ~$0.05 | ~$0.07 |
 | Kling Avatar v2 (dialogue) | ~$0.28 | ~$0.56 |
-| **I2V action клип** | **~$0.39** | **~$0.74** |
-| **Avatar dialogue клип** | **~$0.32** | **~$0.63** |
+| **I2V action clip** | **~$0.39** | **~$0.74** |
+| **Avatar dialogue clip** | **~$0.32** | **~$0.63** |
 
-| Вариант | Клипов | Стоимость |
+| Variant | Clips | Cost |
 |---|---|---|
-| Базовый (рекомендуемый) | 5 × 5s | ~$2.00–3.00 |
-| Расширенный | 6–7 × 5s | ~$2.50–4.00 |
-| Исключение (неделимый монолог) | 4×5s + 1×10s | ~$2.80–3.80 |
+| Base (recommended) | 5 × 5s | ~$2.00–3.00 |
+| Extended | 6–7 × 5s | ~$2.50–4.00 |
+| Exception (undividable monologue) | 4×5s + 1×10s | ~$2.80–3.80 |
 
-⚠️ **Динамика > экономия.** 2×5s почти всегда лучше 1×10s. Смена ракурса / реакция собеседника важнее $0.04 экономии.
+⚠️ **Dynamics > savings.** 2×5s almost always beats 1×10s. Angle change / counterpart reaction matters more than $0.04 saved.
 
 ---
 
-## Структура эпизода (нарратив)
+## Episode structure (narrative)
 
-| Фаза | Тайминг | Цель | Клипов |
+| Phase | Timing | Goal | Clips |
 |---|---|---|---|
-| **HOOK** | 0–5s | Визуальный парадокс + хук-фраза. Остановка скролла | 1 clip (5s, ACTION/I2V) |
-| **CLIMAX** | 5–30s | Диалог, конфронтация, нарастающий темп | 2–3 clips (5–10s каждый) |
-| **CLIFFHANGER** | последние 5s | Обрыв на пике. Шок, reveal, mid-sentence stop | 1 clip (5s, ACTION/I2V) |
+| **HOOK** | 0–5s | Visual paradox + hook line. Stop the scroll | 1 clip (5s, ACTION/I2V) |
+| **CLIMAX** | 5–30s | Dialogue, confrontation, rising tempo | 2–3 clips (5–10s each) |
+| **CLIFFHANGER** | last 5s | Cut at the peak. Shock, reveal, mid-sentence stop | 1 clip (5s, ACTION/I2V) |
 
-### Что работает (TikTok/Reels аудитория)
+### What works (TikTok/Reels audience)
 
-- **Конфликт с первой секунды.** Не «жил-был», а «Ворф ведёт Чехова к шлюзу». Зритель попадает в середину действия.
-- **Конкретные визуальные ставки.** Кто-то умрёт, будет предан, потеряет всё. Не абстрактные эмоции.
-- **Короткие панчевые реплики.** 2–5s на фразу. Не монологи.
-- **Каждая сцена двигает сюжет.** Ноль филлера.
-- **Драма через действия, не слова.** «Ворф опускает глаза» > монолог на 10 секунд.
+- **Conflict from the first second.** Not "once upon a time", but "Worf is leading Chekov to the airlock". Viewer drops into the middle of the action.
+- **Concrete visual stakes.** Someone will die, be betrayed, lose everything. Not abstract emotions.
+- **Short punchy lines.** 2–5s per phrase. Not monologues.
+- **Every scene moves the plot.** Zero filler.
+- **Drama through action, not words.** "Worf lowers his eyes" > a 10-second monologue.
 
-### Что НЕ работает
+### What does NOT work
 
-- ❌ Философские/сентиментальные сюжеты («Что Спок никогда не скажет»)
-- ❌ Театральные речи, длинные монологи
-- ❌ Медленный buildup без конфликта в первых 5 секундах
-- ❌ Все клипы — dialogue (монотонно, дорого, скучно)
-- ❌ Два подряд Avatar-клипа разных персонажей на ОДНОМ фоне в анфас (копипаст)
+- ❌ Philosophical/sentimental plots ("What Spock would never say")
+- ❌ Theatrical speeches, long monologues
+- ❌ Slow buildup without conflict in the first 5 seconds
+- ❌ All clips dialogue (monotonous, expensive, boring)
+- ❌ Two consecutive Avatar clips of different characters on the SAME background, frontal (copy-paste)
 
-### Brainrot лексика
+### Brainrot vocabulary
 
-Уместна в диалогах: `rizz`, `sigma`, `cooked`, `negative aura`, `bro`, `no cap`, `NPC behavior`, `delulu`. Дозированно, не в каждой реплике. Не в нарраторе.
+Appropriate in dialogue: `rizz`, `sigma`, `cooked`, `negative aura`, `bro`, `no cap`, `NPC behavior`, `delulu`. In moderation, not in every line. Not in the narrator.
 
-### Длительность — 5s по умолчанию
+### Duration — 5s by default
 
-- Любая реплика ≤15 слов → **5s**
-- Любое действие/реакция → **5s**
-- 10s dialogue клип = **почти всегда ошибка** (статичная голова 10 секунд = смерть динамики). Разбей на 2×5s с разными ракурсами.
-- 10s клип требует `duration_reason` в storyboard.json.
+- Any line ≤15 words → **5s**
+- Any action/reaction → **5s**
+- 10s dialogue clip = **almost always a mistake** (a static head for 10 seconds = death of dynamics). Split into 2×5s with different angles.
+- 10s clip requires `duration_reason` in storyboard.json.
 
 ---
 
-## Story Bible — персистентное состояние сериала
+## Story Bible — persistent series state
 
-Файл `games/{GAME_TAG}/serial-drama_story_bible.json` хранит состояние вселенной между эпизодами. **Обязателен** для serial-drama.
+File `games/{GAME_TAG}/serial-drama_story_bible.json` stores the universe state between episodes. **Mandatory** for serial-drama.
 
-### Структура
+### Structure
 
 ```json
 {
@@ -133,47 +133,47 @@
 }
 ```
 
-### State Analysis (перед генерацией)
+### State Analysis (before generation)
 
-1. Загрузи story bible из `games/{GAME_TAG}/serial-drama_story_bible.json`
-2. Проанализируй: кто в каком статусе, какие петли активны, какой level ауры
-3. Выполни Anti-Repetition Check (см. ниже)
-4. Определи что произойдёт в этом эпизоде (Loop Management)
+1. Load story bible from `games/{GAME_TAG}/serial-drama_story_bible.json`
+2. Analyze: who is in what status, which loops are active, what is the aura level
+3. Run Anti-Repetition Check (see below)
+4. Decide what happens in this episode (Loop Management)
 
-### State Transition (после генерации, Manager обновляет)
+### State Transition (after generation, Manager updates)
 
-1. Обнови `characters[].status` и `aura_points`
-2. Обнови `relationships` если изменились
-3. Обнови `active_loops` / `closed_loops`
-4. Добавь `episode_summaries[]` с кратким содержанием + cliffhanger
-5. Обнови `anti_repetition` — добавь использованные фразы, хуки, клиффхэнгеры
-6. Обнови `world_state`
-7. Инкрементируй `last_episode`
+1. Update `characters[].status` and `aura_points`
+2. Update `relationships` if changed
+3. Update `active_loops` / `closed_loops`
+4. Add `episode_summaries[]` with a brief summary + cliffhanger
+5. Update `anti_repetition` — add used phrases, hooks, cliffhangers
+6. Update `world_state`
+7. Increment `last_episode`
 
 ---
 
 ## Loop Management (Recursive Continuity)
 
-Петли интриги — нерешённые конфликты, которые удерживают зрителя.
+Intrigue loops — unresolved conflicts that keep viewers engaged.
 
-| Тип | Длительность | Пример |
+| Type | Duration | Example |
 |---|---|---|
-| **Minor** | 2–5 эпизодов | «Кто украл предмет?» |
-| **Major** | 10–20 эпизодов | «Скрытая личность главного героя» |
-| **Eternal** | Не закрывается | «Война серверов» |
+| **Minor** | 2–5 episodes | "Who stole the item?" |
+| **Major** | 10–20 episodes | "The hero's hidden identity" |
+| **Eternal** | Never closed | "The server war" |
 
-### Правила
+### Rules
 
-- Каждые 5 эпизодов **закрой 1 малую петлю**, но **открой 2 новых** более масштабных
-- Минимум 2 активных петли всегда
-- **No Finality:** любая победа — начало новой беды; любое раскрытие — порождает новую тайну
-- Сериал НИКОГДА не заканчивается
+- Every 5 episodes **close 1 minor loop**, but **open 2 new larger ones**
+- At least 2 active loops at all times
+- **No Finality:** any victory begins a new disaster; any reveal generates a new mystery
+- The series NEVER ends
 
 ---
 
-## Retention Strategy (обязательно в storyboard)
+## Retention Strategy (mandatory in storyboard)
 
-Каждый эпизод содержит в storyboard:
+Each episode contains in storyboard:
 
 ```json
 {
@@ -187,93 +187,93 @@
 
 ## Anti-Repetition Check
 
-Перед написанием storyboard проверь `anti_repetition` в story bible:
+Before writing the storyboard, check `anti_repetition` in story bible:
 
-1. **Фразы:** не повторяй из последних 8 эпизодов
-2. **Хуки:** не используй тот же тип (если прошлый «question hook» — используй «contrast» или «statement»)
-3. **Клиффхэнгеры:** не повторяй приём (mid-sentence / reveal / unexpected entrance)
-4. **Метафоры/сравнения:** разнообразие обязательно
+1. **Phrases:** do not repeat from the last 8 episodes
+2. **Hooks:** do not use the same type (if last was a "question hook" — use "contrast" or "statement")
+3. **Cliffhangers:** do not repeat the device (mid-sentence / reveal / unexpected entrance)
+4. **Metaphors/similes:** diversity is mandatory
 
 ---
 
-## Брифы ролям
+## Role briefs
 
 ### Scenarist
 
-- Структура эпизода: HOOK → CLIMAX (2–3 клипа) → CLIFFHANGER
-- **5s дефолт**, 10s dialogue = почти всегда ошибка (разбей на 2×5s)
-- Balance ACTION/DIALOGUE ~ 50/50; минимум 2 разных персонажа говорят за эпизод
-- Читай story bible: характеры, голоса (поле `voice`), активные петли, anti-repetition
-- **`retention_strategy` обязателен** в storyboard — почему клиффхэнгер тянет следующий эпизод
-- Brainrot лексика дозированно, только в диалогах
-- camera_angle отличается для каждого соседнего клипа
-- **НЕТ title cards / brainrot-тегов / имён персонажей оверлеями** — только субтитры диалогов + TBC
-- Общие правила сценария — `rules/roles/scenarist.md`
+- Episode structure: HOOK → CLIMAX (2–3 clips) → CLIFFHANGER
+- **5s default**, 10s dialogue = almost always a mistake (split into 2×5s)
+- Balance ACTION/DIALOGUE ~ 50/50; at least 2 different characters speak per episode
+- Read the story bible: characters, voices (`voice` field), active loops, anti-repetition
+- **`retention_strategy` mandatory** in storyboard — why the cliffhanger pulls the next episode
+- Brainrot vocabulary in moderation, dialogue only
+- camera_angle differs for every adjacent clip
+- **NO title cards / brainrot tags / character names overlays** — only dialogue subtitles + TBC
+- General script rules — `rules/roles/scenarist.md`
 
 ### Storyboarder
 
-- Стиль Pixar/Disney 3D (`style_tags` из story bible)
-- Все кадры 9:16 (608×1080) — квадрат запрещён
-- **bg-reference на каждую локацию** обязателен — без него фон дрейфует между клипами (см. `storyboarder.md` секция 2)
-- Character refs: персонажи из story bible, рот с зубами для lipsync клипов
-- I2V клипы требуют start + end frame (оба с одним bg-ref в `image_urls`)
-- Каждый клип = отдельный scene PNG (не ref напрямую)
-- Визуальная валидация обязательна
-- Общие правила — `rules/roles/storyboarder.md`
+- Pixar/Disney 3D style (`style_tags` from story bible)
+- All frames 9:16 (608×1080) — square forbidden
+- **bg-reference per location** mandatory — without it the background drifts between clips (see `storyboarder.md` section 2)
+- Character refs: characters from story bible, mouth with teeth for lipsync clips
+- I2V clips require start + end frame (both with the same bg-ref in `image_urls`)
+- Each clip = its own scene PNG (not the ref directly)
+- Visual validation mandatory
+- General rules — `rules/roles/storyboarder.md`
 
 ### Animator
 
-- I2V клипы через Kling 2.6 Pro (`generate_audio: false`, всегда) — только микро-движения
-- Avatar клипы через Kling Avatar v2 Standard (с TTS audio_url)
-- Motion prompt = технический (позиции, камера, физические действия), без имён/настроений
-- Один model на весь эпизод — не смешивай Kling I2V v2.6 Pro с Avatar v2
-- Start ≈ end для I2V; persistent character в обоих фреймах
-- **НЕ ускорять Avatar** в serial-drama (1.3x — только для gameplay-ai-avatar)
-- Общие правила — `rules/roles/animator.md`
+- I2V clips via Kling 2.6 Pro (`generate_audio: false`, always) — micro motion only
+- Avatar clips via Kling Avatar v2 Standard (with TTS audio_url)
+- Motion prompt = technical (positions, camera, physical actions), without names/moods
+- One model for the whole episode — do not mix Kling I2V v2.6 Pro with Avatar v2
+- Start ≈ end for I2V; persistent character in both frames
+- **Do NOT speed up Avatar** in serial-drama (1.3x — only for gameplay-ai-avatar)
+- General rules — `rules/roles/animator.md`
 
 ### Sound
 
-- TTS через fal.ai ElevenLabs — `voice` (имя строкой) из story bible, `language_code` ISO 639-1, `stability` по mood
-- Один персонаж = один голос на весь сериал (фиксация в story bible)
-- **Субтитры: PIL PNG overlay** (ffmpeg 8.1 без libfreetype не умеет drawtext)
-  - Шрифт Arial/Helvetica Bold 38–48px, белый + stroke 3px, нижняя треть
-  - ТОЛЬКО dialogue subs + TBC. Никаких title cards, brainrot-тегов, имён персонажей.
-- Фоновая музыка: drama/cinematic, `volume=0.15`
-- Общие правила — `rules/roles/sound.md`
+- TTS via fal.ai ElevenLabs — `voice` (name string) from story bible, `language_code` ISO 639-1, `stability` per mood
+- One character = one voice across the whole series (locked in story bible)
+- **Subtitles: PIL PNG overlay** (ffmpeg 8.1 without libfreetype can't drawtext)
+  - Font Arial/Helvetica Bold 38–48px, white + 3px stroke, lower third
+  - ONLY dialogue subs + TBC. No title cards, brainrot tags, character names.
+- Background music: drama/cinematic, `volume=0.15`
+- General rules — `rules/roles/sound.md`
 
 ### Editor
 
-- **Один ffmpeg pipeline на всю финальную сборку** (concat + overlays + music + fade + CTA). НЕ послойно.
-- I2V клипы: нормализация fps 24 → 30 обязательна перед concat
-- Avatar клипы: trim to TTS_dur + 0.3s, `apad=whole_dur=${TARGET}` (не `pad_dur`)
-- TTS overlay «за стеклом» (редко): `aecho=0.8:0.9:10:0.3`, `adelay=500`
-- Субтитры через PNG overlay chain (filter_complex)
-- **CTA включается в concat-list** как последний клип (не отдельный re-encode)
-- TBC overlay за 2s до конца (до fade)
-- Fade out 1.0s на MAIN_DUR (до CTA); CTA идёт после fade в тишине
-- Общие правила — `rules/roles/editor.md`
+- **One ffmpeg pipeline for the entire final assembly** (concat + overlays + music + fade + CTA). NOT layered.
+- I2V clips: fps normalization 24 → 30 mandatory before concat
+- Avatar clips: trim to TTS_dur + 0.3s, `apad=whole_dur=${TARGET}` (not `pad_dur`)
+- TTS overlay "behind glass" (rare): `aecho=0.8:0.9:10:0.3`, `adelay=500`
+- Subtitles via PNG overlay chain (filter_complex)
+- **CTA included in concat list** as the last clip (not a separate re-encode)
+- TBC overlay 2s before the end (before fade)
+- Fade out 1.0s on MAIN_DUR (before CTA); CTA goes after fade in silence
+- General rules — `rules/roles/editor.md`
 
 ---
 
 ## CTA (Call to Action)
 
-CTA-ролик берётся из Supabase `game_assets` (тег `cta` + `video`). Manager скачивает его в Фазе 0 и передаёт Editor-у.
+The CTA video is taken from Supabase `game_assets` (tag `cta` + `video`). Manager downloads it in Phase 0 and hands it to Editor.
 
-### Сборка
+### Assembly
 
-CTA добавляется в concat-list.txt **как последний клип** ПЕРЕД финальной сборкой. Тайминги:
+CTA is added to concat-list.txt **as the last clip** BEFORE final assembly. Timings:
 
-- `MAIN_DUR` = основной контент без CTA
-- `CTA_DUR` = длительность CTA
+- `MAIN_DUR` = main content without CTA
+- `CTA_DUR` = CTA duration
 - `TOTAL_DUR` = MAIN_DUR + CTA_DUR
-- Музыка `amix` на MAIN_DUR, fade заканчивается до CTA
-- `-t TOTAL_DUR` включает CTA
+- Music `amix` on MAIN_DUR, fade ends before CTA
+- `-t TOTAL_DUR` includes CTA
 
-**Результат:** один ffmpeg pass вместо трёх.
+**Result:** one ffmpeg pass instead of three.
 
 ---
 
-## Выходные файлы
+## Output files
 
 ```
 output/YYYY-MM-DD/{GAME_TAG}/serial-drama/
@@ -284,54 +284,54 @@ output/YYYY-MM-DD/{GAME_TAG}/serial-drama/
 │   │   └── bg-{location}.png
 │   ├── scene-1/
 │   │   ├── scene-1.png
-│   │   ├── scene-1-end.png (только для I2V)
+│   │   ├── scene-1-end.png (for I2V only)
 │   │   ├── scene-1.mp4
 │   │   ├── scene-1-scaled.mp4
-│   │   └── tts-1.mp3 (только для dialogue)
+│   │   └── tts-1.mp3 (for dialogue only)
 │   └── scene-N/...
 ├── subs/sub-N.png
 └── final.mp4
 ```
 
-Также: `games/{GAME_TAG}/serial-drama_story_bible.json` — персистентный, обновляется после каждого эпизода.
+Also: `games/{GAME_TAG}/serial-drama_story_bible.json` — persistent, updated after every episode.
 
-После загрузки: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` в Supabase.
+After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabase.
 
 ---
 
-## Валидация перед публикацией
+## Validation before publishing
 
 - [ ] `format: "serial-drama"`, `series_id`, `episode_number` = story_bible.last_episode + 1
-- [ ] `retention_strategy`, `active_loops`, `cliffhanger` заполнены
-- [ ] Первый клип — HOOK, последний — CLIFFHANGER
-- [ ] ACTION/DIALOGUE ~ 50/50; минимум 2 персонажа говорят
-- [ ] Dialogue клипы = 5s (10s только с `duration_reason`)
-- [ ] Все изображения 608×1080 (9:16)
-- [ ] bg-reference на каждую локацию создан
-- [ ] I2V start + end frames: одинаковый персонаж, одинаковый bg
-- [ ] TTS через fal.ai ElevenLabs (`voice` имя, не `voice_id`)
-- [ ] Субтитры PIL PNG; только dialogue + TBC
-- [ ] fps нормализован в 30 перед concat
-- [ ] Один ffmpeg pipeline, не послойно
-- [ ] CTA включен в concat-list (не отдельный re-encode)
-- [ ] TBC overlay за 2s до конца; fade out 1.0s
-- [ ] Anti-repetition check пройден
-- [ ] Story bible обновлён после генерации
+- [ ] `retention_strategy`, `active_loops`, `cliffhanger` filled
+- [ ] First clip — HOOK, last — CLIFFHANGER
+- [ ] ACTION/DIALOGUE ~ 50/50; at least 2 characters speak
+- [ ] Dialogue clips = 5s (10s only with `duration_reason`)
+- [ ] All images 608×1080 (9:16)
+- [ ] bg-reference per location created
+- [ ] I2V start + end frames: same character, same bg
+- [ ] TTS via fal.ai ElevenLabs (`voice` name, not `voice_id`)
+- [ ] Subtitles PIL PNG; dialogue + TBC only
+- [ ] fps normalized to 30 before concat
+- [ ] One ffmpeg pipeline, not layered
+- [ ] CTA included in concat-list (not a separate re-encode)
+- [ ] TBC overlay 2s before the end; fade out 1.0s
+- [ ] Anti-repetition check passed
+- [ ] Story bible updated after generation
 
 ---
 
-## Анти-паттерны
+## Anti-patterns
 
-- ❌ `generate_audio: true` в Kling (голос плохой)
+- ❌ `generate_audio: true` in Kling (voice is bad)
 - ❌ Kokoro TTS, Kling Lipsync, direct ElevenLabs API
-- ❌ `voice_id` хеш вместо `voice` имени
-- ❌ 1:1 квадрат для Avatar (только 9:16)
-- ❌ character ref напрямую как scene image (каждый клип = отдельный PNG)
-- ❌ Разный персонаж на start/end I2V (Kling перемешает)
-- ❌ `-shortest` в FFmpeg
-- ❌ Закрытие всех петель (минимум 2 активных)
-- ❌ Повторение хуков/клиффхэнгеров из последних 8 эпизодов
-- ❌ Переделка клипов, которые работают (каждая лишняя генерация = $0.35+)
-- ❌ Послойная сборка (ломает музыку и тайминг)
-- ❌ Title cards, brainrot-теги, имена персонажей оверлеями
-- ❌ Длительные дialogue клипы 10s ради экономии $0.04 (убивает динамику)
+- ❌ `voice_id` hash instead of `voice` name
+- ❌ 1:1 square for Avatar (only 9:16)
+- ❌ character ref directly as scene image (each clip = its own PNG)
+- ❌ Different character on start/end I2V (Kling will mix them)
+- ❌ `-shortest` in FFmpeg
+- ❌ Closing all loops (at least 2 active)
+- ❌ Repeating hooks/cliffhangers from the last 8 episodes
+- ❌ Redoing clips that already work (each extra generation = $0.35+)
+- ❌ Layered assembly (breaks music and timing)
+- ❌ Title cards, brainrot tags, character name overlays
+- ❌ Long 10s dialogue clips for $0.04 savings (kills dynamics)
