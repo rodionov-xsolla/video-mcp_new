@@ -82,6 +82,8 @@ Analyze the frames:
 
 This data determines the NB2 prompt — the character must be in the **same shot and scale**, otherwise motion transfer will be incorrect.
 
+> **Framing must match the reference exactly.** If the reference video shows only upper body (legs cropped out of frame), the generated character image must ALSO be cropped to upper body — do NOT generate full-body. Full-body char on an upper-body reference produces wrong scale and wasted screen real estate, and Motion Control will not "zoom in" to compensate. Match the reference crop literally: upper-body ref → upper-body NB2; full-body ref → full-body NB2.
+
 ---
 
 ## Kling Motion Control parameters
