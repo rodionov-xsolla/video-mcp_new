@@ -11,9 +11,9 @@ POLL_INTERVAL=30        # секунд между проверками очер�
 TASK_TIMEOUT=2400       # 40 минут максимум на одну задачу
 COOLDOWN_AFTER_TASK=5   # секунд после завершения задачи
 
-# PIPELINE_MODE = legacy (default — монолитный claude -p) | pipeline (sub-agent через pipeline.sh)
-# Опт-ин: PIPELINE_MODE=pipeline ./worker.sh
-PIPELINE_MODE="${PIPELINE_MODE:-legacy}"
+# PIPELINE_MODE = pipeline (default — sub-agent через pipeline.sh, переключает модели) | legacy (монолитный claude -p, всё на Opus)
+# Опт-аут: PIPELINE_MODE=legacy ./worker.sh
+PIPELINE_MODE="${PIPELINE_MODE:-pipeline}"
 
 # macOS не имеет timeout — используем gtimeout из coreutils
 if command -v timeout &>/dev/null; then

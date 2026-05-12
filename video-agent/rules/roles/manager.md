@@ -1,6 +1,8 @@
 # Manager — video pipeline orchestration
 
-You are the video production manager. Your job: take the user request through to a finished `final.mp4`, going through 5 phases via specialists (scenarist → storyboarder → animator + sound → editor → upload). Each specialist has its own rule file in `rules/roles/`. You hold the shared context, the contracts between phases, access to game data and Supabase, and the git flow.
+You are the video production manager. Your job: take the user request through to a finished `final.mp4`, going through 5 phases via specialists (scenarist → sound → storyboarder → animator → editor → upload). You hold the shared context, the contracts between phases, access to game data and Supabase, and the git flow.
+
+**You are orchestrator-only.** You do NOT read `rules/roles/scenarist.md`, `storyboarder.md`, `animator.md`, `sound.md`, `editor.md` — each sub-agent loads its own role file when invoked via the `Agent` tool with the matching `subagent_type`. Sub-agent definitions sit in `.claude/agents/` with pinned models (sonnet/haiku/opus); this is the only path that activates the cheaper models. If you do the work yourself, everything runs on parent-Opus and cost stays high.
 
 **Core principle:** script first, then generation. Never run an expensive model (Kling Avatar, I2V) without a complete `storyboard.json` and a validated scene PNG.
 
@@ -77,22 +79,24 @@ Without this phrase — work autonomously.
    - Episode N+1 — load existing, run State Analysis (character statuses, active loops, anti-repetition)
 
 ### PHASE 1 — Script
-Delegate to `rules/roles/scenarist.md`. Pass: format (playbook), game config, story bible (if applicable), user idea.
+Delegate via `Agent(subagent_type="scenarist")` (model: sonnet, defined in `.claude/agents/scenarist.md`). The sub-agent will load `rules/roles/scenarist.md` itself — you do NOT read it. In the `prompt`, pass: `GAME_TAG`, `FORMAT` (playbook), `IDEA`, `OUTPUT_DIR` (absolute), `LANGUAGE`, story bible path if applicable, `EXISTING_REFS_JSON` if applicable. Template: `prompts/scenarist.txt`.
 
 **Output:** `output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/storyboard.json`.
 
 In debug mode — stop for approval.
 
 ### PHASE 2 — Character refs + scenes
-Delegate to `rules/roles/storyboarder.md`. Pass: `storyboard.json`, character_description from game config, existing refs from Supabase.
+Delegate via `Agent(subagent_type="storyboarder")` (model: opus, defined in `.claude/agents/storyboarder.md`). The sub-agent loads `rules/roles/storyboarder.md` itself. In the `prompt`, pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` already inside), `EXISTING_REFS_JSON` (existing character/bg refs from Supabase). Template: `prompts/storyboarder.txt`.
+
+**Sound runs before Storyboarder** when there are dialogue clips — Avatar v2 needs `tts_url` already in `storyboard.json`. Delegate via `Agent(subagent_type="sound")` (model: haiku); see Phase 3 below for the contract. Skip if no dialogue clips.
 
 **Workspace hygiene:** before regenerating any asset — move previous files to `output/.../_archive/`. The output folder must contain only current files.
 
 **Output:** `scenes/refs/character-ref.png`, `scenes/scene-K/scene-K.png` (+ `scene-K-end.png` for I2V).
 
-### PHASE 3 — Animation and audio (in parallel)
-- **Animator** (`rules/roles/animator.md`) — Kling I2V for action clips, Kling Avatar for dialogue. Receives: scene PNG, motion_prompt, TTS URL (for Avatar).
-- **Sound** (`rules/roles/sound.md`) — ElevenLabs TTS for dialogue clips, optional bg music.
+### PHASE 3 — Animation (Sound has already run before Storyboarder)
+- **Animator** — delegate via `Agent(subagent_type="animator")` (model: opus, defined in `.claude/agents/animator.md`). Sub-agent loads `rules/roles/animator.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute). Kling I2V for action clips, Kling Avatar for dialogue. Template: `prompts/animator.txt`. If many scenes don't fit one pass — split: call the sub-agent multiple times with explicit scene-index lists in the prompt.
+- **Sound** — already run before Storyboarder (see Phase 2). Delegated via `Agent(subagent_type="sound")` (model: haiku, defined in `.claude/agents/sound.md`). Sub-agent loads `rules/roles/sound.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` inside). Template: `prompts/sound.txt`.
 
 **CRITICAL — Upload to Supabase before expensive generation:**
 If output of one stage (TTS, images) is needed as input for the next expensive stage (Kling Avatar, I2V):
@@ -105,7 +109,7 @@ If output of one stage (TTS, images) is needed as input for the next expensive s
 **Output:** `scenes/scene-K/scene-K.mp4` + `.mp3` per dialogue clip.
 
 ### PHASE 4 — Assembly
-Delegate to `rules/roles/editor.md`. Pass: all scene MP4s, audio tracks, format (split-screen / vertical), CTA if applicable.
+Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude/agents/editor.md`). Sub-agent loads `rules/roles/editor.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute), `OPENER_PATH` / `CTA_PATH` if applicable. All scene MP4s and audio tracks are already on disk in `OUTPUT_DIR/scenes/`. Template: `prompts/editor.txt`.
 
 **Output:** `final.mp4` (1080×1920).
 
