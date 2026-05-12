@@ -31,9 +31,39 @@ From Manager:
 
 `output/.../final.mp4` — 1080×1920, 30fps, AAC 128k stereo, no joint artifacts.
 
+### Workspace layout (MANDATORY)
+
+After your last command, the `OUTPUT_DIR` root must contain ONLY:
+
+- `final.mp4` — the deliverable
+- `storyboard.json` — narrative manifest (written by Scenarist, do not move)
+- `scenes/` — per-scene PNGs/MP4s/MP3s organized by Storyboarder + Animator + Sound (do not touch)
+- `recap/` — only if the format produces one (serial-drama recap clip, etc.)
+- `_archive/` — only if you replaced an earlier `final.mp4`; move the prior version in here, do not delete
+
+**Everything else goes under `OUTPUT_DIR/build/`.** This includes (non-exhaustive):
+
+- ffmpeg concat helpers: `concat-list.txt`, `concat-final.txt`, `concat.mp4`
+- intermediate renders: `final-base.mp4`, `final-speed.mp4`, `final-compressed.mp4`, `video-concat.mp4`, `video-concat-cta.mp4`
+- normalized assets: `cta-normalized.mp4`, `cta-fallback.mp4`, opener-normalized, etc.
+- temp audio: `bg-music.mp3`, `tts-output.mp3`, `tts-fast.mp3`
+- normalization / subtitle staging dirs: `norm/`, `subs/`
+- ad-hoc scripts and logs: `gen_images.sh`, `submit_i2v_clean.sh`, `recover.sh`, `generate.sh`, `pipeline.log`, `recover.log`, `phase3_requests.txt`, `i2v_request_ids.txt`, `i2v_map.txt`, `scene_urls.env`
+
+Operational rules:
+
+1. Create `OUTPUT_DIR/build/` at the start of your work and write every intermediate there from the first command. Do not write to root and "clean up later" — you will forget.
+2. The only files written to the root are `final.mp4` (atomically: write to `build/final.tmp.mp4`, ffprobe-validate, then `mv` to root) and, if regenerating, `_archive/`-rotation of the prior `final.mp4`.
+3. Do NOT delete `build/` after success. It is debug surface for the next run — let `_archive/` rotation or a separate cleanup pass handle it.
+4. If you discover stale intermediates in root from an older run, move them into `build/` before producing your own (do not nuke them).
+
+This rule applies regardless of format. A reader of `OUTPUT_DIR` should see four-to-five items, not twenty.
+
 ---
 
 ## 1. Normalization (scale + fps + audio)
+
+**Path convention for every snippet below.** Run all commands with `OUTPUT_DIR` as cwd. Inputs come from `scenes/scene-K/...` (unchanged). **Every scratch file in the snippets — `concat-list.txt`, `concat-final.txt`, `final-base.mp4`, `final-speed.mp4`, `video-concat.mp4`, `cta-normalized.mp4`, `cta-fallback.mp4`, `bg-music.mp3`, `tts-output.mp3`, `tts-fast.mp3`, etc. — must be written to `build/`, not to the root.** So when a snippet says `final-base.mp4`, you write `build/final-base.mp4` and read it the same way on the next step. The ONLY file that lands in the root is the final deliverable, via `mv build/final-music.mp4 final.mp4` at the very end. Run `mkdir -p build` before your first ffmpeg call. See "Workspace layout (MANDATORY)" above.
 
 **CRITICAL:** before concat all clips MUST have identical fps and audio format.
 
@@ -525,5 +555,6 @@ Before starting concat, walk through this checklist. Each missed item = re-assem
 - [ ] CTA in place (if applicable)
 - [ ] Subtitles readable, no overlap (if applicable)
 - [ ] Duration within format expectations (serial-drama 25–40s; gameplay-ai-avatar 30–40s)
+- [ ] **Workspace layout clean:** `ls OUTPUT_DIR` returns only `final.mp4`, `storyboard.json`, `scenes/`, optional `recap/` and `_archive/`. Anything else (concat lists, intermediate mp4s, temp audio, ad-hoc scripts, logs) is under `build/`. If `ls` shows stray files, move them into `build/` before handing off.
 
 After verification — return the path to `final.mp4` to Manager. In debug mode — explanation (what was assembled, layout, which steps were skipped/added).

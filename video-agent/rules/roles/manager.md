@@ -111,6 +111,8 @@ If output of one stage (TTS, images) is needed as input for the next expensive s
 ### PHASE 4 — Assembly
 Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude/agents/editor.md`). Sub-agent loads `rules/roles/editor.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute), `OPENER_PATH` / `CTA_PATH` if applicable. All scene MP4s and audio tracks are already on disk in `OUTPUT_DIR/scenes/`. Template: `prompts/editor.txt`.
 
+**Post-Editor layout check.** After the sub-agent returns, run `ls "$OUTPUT_DIR"` and verify only `final.mp4`, `storyboard.json`, `scenes/`, optional `recap/` / `_archive/` are at the root. Any other file (concat lists, intermediate renders, temp audio, ad-hoc scripts/logs) must live under `OUTPUT_DIR/build/`. If something leaked to root, move it into `build/` yourself before Phase 5 — do not re-invoke the sub-agent for this.
+
 **Output:** `final.mp4` (1080×1920).
 
 ### PHASE 5 — Upload and logging

@@ -41,6 +41,7 @@ PARAMETERS:
 - Task ID (for status updates): ${TASK_ID:-<none>}
 
 CONSTRAINTS:
+- WORKSPACE LAYOUT: write every scratch file (concat lists, intermediate MP4s, normalized assets, temp audio, ad-hoc scripts/logs) under ${OUTPUT_DIR}/build/. The OUTPUT_DIR root must end up with only final.mp4, storyboard.json, scenes/, and optional recap/_archive/. See editor.md "Workspace layout (MANDATORY)" + final checklist.
 - DO NOT regenerate any scene MP4/MP3 — that work is finished
 - DO NOT call fal.ai / Kling / NB2 / ElevenLabs APIs — your toolset is FFmpeg only
 - DO NOT use Read tool on PNG/MP4/MP3 files — programmatic validation only (see validation.md). Visual check is opt-in per format
