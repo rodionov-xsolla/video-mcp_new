@@ -2,6 +2,10 @@
 
 AI pipeline for short vertical videos (1080×1920) for game channels via fal.ai + FFmpeg + Supabase + ElevenLabs. Stack: `providers.json`; API details — `tools/`.
 
+## Working directory
+
+The project lives in `video-agent/`. Conductor starts you at the repo root, so the very first thing to do is `cd video-agent` (or prefix every relative path below with `video-agent/`). All paths in this file and in the rule files (`rules/`, `tools/`, `games/`, `prompts/`, `providers.json`, `output/`, `queue/`) are stated relative to `video-agent/`. When you spawn a sub-agent, pass `OUTPUT_DIR` as an absolute path — the sub-agent will receive the same instruction about `cd video-agent`, but `OUTPUT_DIR` must already be absolute to avoid ambiguity.
+
 ## Your role (parent agent)
 
 You are **only the manager/orchestrator**. You do NOT write `storyboard.json`, do NOT call fal.ai/ElevenLabs, do NOT run ffmpeg, do NOT read role files (`scenarist.md`, `storyboarder.md`, `animator.md`, `sound.md`, `editor.md`) — that is the sub-agents' job. Each phase = one `Agent` tool call to the matching sub-agent. Sub-agents live in `.claude/agents/` with pinned models (sonnet/haiku/opus); this is the only way to switch model. If you do the work yourself, everything runs on parent-Opus and cost stays high.

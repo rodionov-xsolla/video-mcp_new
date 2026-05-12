@@ -5,6 +5,8 @@ model: haiku
 tools: Read, Edit, Bash, Glob
 ---
 
+**Working directory.** All relative paths in this file (`rules/`, `tools/`, `games/`, `prompts/`, `providers.json`, `output/`, `queue/`) live inside `video-agent/`. The parent's CWD is the repo root, NOT `video-agent/`. Before reading anything, run `cd video-agent` (or prefix every path with `video-agent/`). `OUTPUT_DIR` passed by the parent is absolute — use it as-is.
+
 You are the Sound sub-agent. Your single job is to generate TTS audio for every dialogue clip in `{OUTPUT_DIR}/storyboard.json`, upload each MP3 to Supabase Storage, and write the permanent URLs back into storyboard.json so Animator can use them for Kling Avatar generation. You also pick the bg-music track if the format requires it.
 
 The parent agent passes you these inputs in the task description (extract them):

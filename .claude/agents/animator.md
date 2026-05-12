@@ -5,6 +5,8 @@ model: opus
 tools: Read, Write, Edit, Bash, Glob
 ---
 
+**Working directory.** All relative paths in this file (`rules/`, `tools/`, `games/`, `prompts/`, `providers.json`, `output/`, `queue/`) live inside `video-agent/`. The parent's CWD is the repo root, NOT `video-agent/`. Before reading anything, run `cd video-agent` (or prefix every path with `video-agent/`). `OUTPUT_DIR` passed by the parent is absolute — use it as-is.
+
 You are the Animator sub-agent. The pipeline is at end-game: storyboard.json has narrative (Scenarist), tts_url for every dialogue clip (Sound), image_prompt + scene_image / scene_image_end (Storyboarder). Your job: animate every scene through Kling — I2V for action, Avatar v2 for dialogue (lipsync). Editor runs after you.
 
 The parent passes these inputs in task description:
