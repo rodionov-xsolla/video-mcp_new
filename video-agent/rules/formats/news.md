@@ -1,34 +1,34 @@
-# Формат «Новости игры» (Game News)
+# Format "Game News"
 
-> **Единственная модель для видео — Kling Avatar v2 Standard.** Никаких других видео-моделей. Opener и CTA — готовые из Supabase. Персонажи — из Supabase `game_assets`.
+> **Single video model — Kling Avatar v2 Standard.** No other video models. Opener and CTA — pre-built from Supabase. Characters — from Supabase `game_assets`.
 
-Этот файл — **playbook**: когда использовать, пайплайн, брифы ролям. Крафтовые правила — в `rules/roles/*.md`.
-
----
-
-## Когда использовать
-
-Ключевые слова: «новости», «news», «game news», «weekly news», «patch recap», «обновление», «что нового».
+This file is the **playbook**: when to use, pipeline, role briefs. Craft rules — in `rules/roles/*.md`.
 
 ---
 
-## Концепт
+## When to use
 
-- **Anchor + Co-anchor** — два игровых персонажа за новостным столом
-- **2–3 новости** за выпуск (минимум 2, найденные через веб-поиск)
-- **Только Kling Avatar v2 Standard** + ElevenLabs TTS (lipsync через audio_url)
-- **Opener и CTA — готовые видео из Supabase**, не генерируются заново
-- **Длительность:** 25–40s после speedup (без opener/CTA)
-- **Бюджет:** до $4 (~$2.50 типичный)
+Keywords: "новости", "news", "game news", "weekly news", "patch recap", "обновление", "что нового".
 
 ---
 
-## Пайплайн (строгий порядок)
+## Concept
 
-### Фаза 0: Инициализация
+- **Anchor + Co-anchor** — two game characters at the news desk
+- **2–3 news items** per episode (minimum 2, found via web search)
+- **Only Kling Avatar v2 Standard** + ElevenLabs TTS (lipsync via audio_url)
+- **Opener and CTA — pre-built videos from Supabase**, not regenerated
+- **Duration:** 25–40s after speedup (excluding opener/CTA)
+- **Budget:** up to $4 (~$2.50 typical)
 
-1. Прочитать game config: `games/{GAME_TAG}/{GAME_TAG}.md`
-2. **Запросить ассеты из Supabase** — таблица `game_assets`, фильтр `game_tag = "{GAME_TAG}"`:
+---
+
+## Pipeline (strict order)
+
+### Phase 0: Initialization
+
+1. Read game config: `games/{GAME_TAG}/{GAME_TAG}.md`
+2. **Query Supabase assets** — table `game_assets`, filter `game_tag = "{GAME_TAG}"`:
 
 ```bash
 curl -s -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
@@ -36,32 +36,32 @@ curl -s -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
   "${SUPABASE_URL}/rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*"
 ```
 
-Из результата найти:
-   - **Opener** — запись с тегом `opener` и `video` → скачать **`.mp4` видео** (не картинку!)
-   - **CTA** — запись с тегом `cta` → скачать `.mp4`
-   - **Avatar refs** — записи с тегом `news` и словом `avatar` в `character_name` → скачать `.png`
-3. Если opener или CTA не найдены — **СТОП**, сообщить пользователю
-4. Если avatar refs для anchor/co-anchor не найдены — **СТОП**, сообщить пользователю (персонажи должны быть заранее загружены в Supabase)
+Find from the result:
+   - **Opener** — record with tag `opener` and `video` → download **`.mp4` video** (not the picture!)
+   - **CTA** — record with tag `cta` → download `.mp4`
+   - **Avatar refs** — records with tag `news` and the word `avatar` in `character_name` → download `.png`
+3. If opener or CTA not found — **STOP**, notify the user
+4. If avatar refs for anchor/co-anchor not found — **STOP**, notify the user (characters must be uploaded to Supabase in advance)
 
-### Фаза 1: Исследование новостей
+### Phase 1: News research
 
-Веб-поиск **ДО** написания сценария.
+Web search **BEFORE** writing the script.
 
-**Шаг 1.** Три запроса:
+**Step 1.** Three queries:
 1. `"{game_name}" patch notes {month} {year}`
 2. `"{game_name}" update news {month} {year}`
 3. `"{game_name}" new hero OR new character OR event {year}`
 
-Приоритет: официальные патч-ноты → офиц. соцсети → крупные игровые медиа → сообщества.
+Priority: official patch notes → official socials → major game media → communities.
 
-**Шаг 2.** Отбор 2–3 новостей:
-- Актуальность (7–14 дней)
-- Значимость (влияет на игру)
-- Разнообразие (не 3 нерфа подряд)
+**Step 2.** Pick 2–3 news items:
+- Recency (7–14 days)
+- Significance (impacts the game)
+- Diversity (not 3 nerfs in a row)
 
-Fallback: если <2 реальных новостей — community highlight (мем, мета-сдвиг, рекорд).
+Fallback: if <2 real news items — community highlight (meme, meta shift, record).
 
-**Шаг 3.** Сохранить `research.json`:
+**Step 3.** Save `research.json`:
 
 ```json
 {
@@ -75,53 +75,53 @@ Fallback: если <2 реальных новостей — community highlight 
 }
 ```
 
-### Фаза 2: Персонажи
+### Phase 2: Characters
 
-**Anchor и co-anchor берутся из Supabase `game_assets`.** Использовать URL из Фазы 0.
+**Anchor and co-anchor are taken from Supabase `game_assets`.** Use the URL from Phase 0.
 
-**Репортёр «по теме»:** если новость требует тематического персонажа (например, пират для пиратского ивента), допускается генерация нового:
+**Topic reporter:** if a story needs a topical character (e.g. a pirate for a pirate event), generation of a new one is allowed:
 1. **Character sheet** (NB2 text-to-image, 16:9) — concept art
-2. **Avatar ref** (NB2 edit с sheet как ref, 9:16) — портрет за столом, зубы видны для lipsync
-3. Загрузить оба в Supabase через `queue/upload-asset.sh` с тегами `news,avatar`
-4. В следующих выпусках этот персонаж уже будет в Supabase
+2. **Avatar ref** (NB2 edit with sheet as ref, 9:16) — portrait at the desk, teeth visible for lipsync
+3. Upload both to Supabase via `queue/upload-asset.sh` with tags `news,avatar`
+4. In subsequent issues this character will already be in Supabase
 
-### Фаза 3: Сценарий → `storyboard.json`
+### Phase 3: Script → `storyboard.json`
 
-Структура — **ровно 3 dialogue-сцены** (без title card — opener берётся готовый):
+Structure — **exactly 3 dialogue scenes** (no title card — opener is taken pre-built):
 
-| Сцена | Роль | Камера | Содержание |
+| Scene | Role | Camera | Content |
 |-------|------|--------|------------|
-| 1 | **Anchor** | Фронтально, medium close-up | Приветствие + новость #1 + передача co-anchor |
-| 2 | **Co-anchor** | Три-четверти, medium close-up | Новость #2 + реакция |
-| 3 | **Anchor** | Чуть шире сцены 1 | Благодарность + прощание + CTA |
+| 1 | **Anchor** | Frontal, medium close-up | Greeting + news #1 + handover to co-anchor |
+| 2 | **Co-anchor** | Three-quarter, medium close-up | News #2 + reaction |
+| 3 | **Anchor** | Slightly wider than scene 1 | Thanks + sign-off + CTA |
 
-При 3 новостях — 4 сцены (anchor ведёт #1 и #3, co-anchor — #2).
+With 3 news items — 4 scenes (anchor delivers #1 and #3, co-anchor — #2).
 
-**Скрипты:**
-- **Сцена 1:** `"Welcome to [Show]! [Новость #1 подробно, 25-35 слов]. [Имя co-anchor], what do you have?"`
-- **Сцена 2:** `"Thanks [anchor]! [Новость #2 подробно, 25-35 слов]. [Реакция/оценка]."`
-- **Сцена 3:** `"[Благодарность]. That's [Show] for today. Follow for more, see you next time!"` (15–20 слов)
+**Scripts:**
+- **Scene 1:** `"Welcome to [Show]! [News #1 in detail, 25-35 words]. [Co-anchor name], what do you have?"`
+- **Scene 2:** `"Thanks [anchor]! [News #2 in detail, 25-35 words]. [Reaction/take]."`
+- **Scene 3:** `"[Thanks]. That's [Show] for today. Follow for more, see you next time!"` (15–20 words)
 
-**Передача слова — обязательно по имени.** Ведущие обращаются друг к другу как в реальном выпуске новостей:
+**Handoff — by name, mandatory.** Anchors call each other by name like in a real newscast:
 - Anchor → Co-anchor: `"Sarah, what do you have?"` / `"Over to you, Sarah!"` / `"Sarah, tell us more"`
 - Co-anchor → Anchor: `"Thanks Jake!"` / `"Back to you, Jake"` 
-- Anchor → Репортёр (если есть): `"Let's check in with [имя]"` / `"[Имя], what's the latest?"`
-- Репортёр → Anchor: `"Thanks [anchor]!"` / `"Back to you, [anchor]"`
+- Anchor → Reporter (if any): `"Let's check in with [name]"` / `"[Name], what's the latest?"`
+- Reporter → Anchor: `"Thanks [anchor]!"` / `"Back to you, [anchor]"`
 
-Это создаёт ощущение живого эфира и связывает сцены. Каждая передача слова содержит **имя** следующего/предыдущего ведущего.
+This creates the feeling of a live broadcast and links the scenes. Each handoff contains the **name** of the next/previous anchor.
 
-Тон — из game config (Tone of Voice). Каждая dialogue-сцена обязана иметь поле `tts` с текстом для ElevenLabs.
+Tone — from game config (Tone of Voice). Every dialogue scene must have a `tts` field with the text for ElevenLabs.
 
-### Фаза 4: Анимация (только Kling Avatar v2)
+### Phase 4: Animation (Kling Avatar v2 only)
 
-Для каждой dialogue-сцены:
-1. **ElevenLabs TTS** → `.mp3` → загрузить в Supabase
-2. **Kling Avatar v2** с параметрами:
-   - `image_url` = avatar ref из Supabase (9:16, не квадрат!)
-   - `audio_url` = TTS mp3 из Supabase (не fal.ai temp URL!)
+For each dialogue scene:
+1. **ElevenLabs TTS** → `.mp3` → upload to Supabase
+2. **Kling Avatar v2** with parameters:
+   - `image_url` = avatar ref from Supabase (9:16, not square!)
+   - `audio_url` = TTS mp3 from Supabase (not fal.ai temp URL!)
    - `motion_prompt` = broadcaster energy, hand gestures, head turns
-   - `negative_prompt` обязателен (anti-text набор — avatar ref содержит текст на экране)
-3. **1.18x speedup** после генерации:
+   - `negative_prompt` mandatory (anti-text set — avatar ref has on-screen text)
+3. **1.18x speedup** after generation:
 
 ```bash
 $FFMPEG -y -i avatar.mp4 \
@@ -132,35 +132,35 @@ $FFMPEG -y -i avatar.mp4 \
   avatar-fast.mp4
 ```
 
-1.18x для news — чётко и разборчиво, не торопливо. Не 1.3x.
+1.18x for news — clear and intelligible, not rushed. Not 1.3x.
 
-### Фаза 5: Сборка (FFmpeg)
+### Phase 5: Assembly (FFmpeg)
 
-Строгий порядок:
+Strict order:
 
-1. **Субтитры** — наложить per-scene на каждый `-fast.mp4` (НЕ на concat! whisper пропускает голоса при concat)
-2. **Нормализация** всех клипов: 1080×1920, 30fps, AAC 128k
-3. **Opener** — нормализовать скачанный из Supabase `.mp4` (тот же scale/fps/codec)
+1. **Subtitles** — overlay per-scene on each `-fast.mp4` (NOT on concat! whisper skips voices on concat)
+2. **Normalize** all clips: 1080×1920, 30fps, AAC 128k
+3. **Opener** — normalize the `.mp4` downloaded from Supabase (same scale/fps/codec)
 4. **Concat:** opener → scene-1-sub → scene-2-sub → scene-3-sub
-5. **Музыка:** fun/energetic beat, `volume=0.10`
-6. **Fade-to-black:** последние 1.5s
-7. **CTA:** concat с нормализованным CTA из Supabase
+5. **Music:** fun/energetic beat, `volume=0.10`
+6. **Fade-to-black:** last 1.5s
+7. **CTA:** concat with normalized CTA from Supabase
 8. → `final.mp4`
 
 ---
 
-## Голоса
+## Voices
 
-| Роль | Голос (ElevenLabs) | stability |
+| Role | Voice (ElevenLabs) | stability |
 |------|--------------------|-----------|
-| Anchor (мужской) | George или Daniel | 0.25 |
-| Co-anchor (женский) | Charlotte или Rachel | 0.25 |
+| Anchor (male) | George or Daniel | 0.25 |
+| Co-anchor (female) | Charlotte or Rachel | 0.25 |
 
-`stability: 0.25` = energetic broadcaster tone. Использовать `voice` (имя строкой), не `voice_id` хеш.
+`stability: 0.25` = energetic broadcaster tone. Use `voice` (name string), not `voice_id` hash.
 
 ---
 
-## Storyboard JSON (шаблон)
+## Storyboard JSON (template)
 
 ```json
 {
@@ -190,23 +190,23 @@ $FFMPEG -y -i avatar.mp4 \
 
 ---
 
-## Бюджет
+## Budget
 
-| Статья | Стоимость |
+| Item | Cost |
 |--------|-----------|
-| Opener (из Supabase) | $0 |
-| CTA (из Supabase) | $0 |
-| Avatar refs (из Supabase) | $0 |
-| Новый репортёр «по теме» (sheet + ref, если нужен) | ~$0.12 |
+| Opener (from Supabase) | $0 |
+| CTA (from Supabase) | $0 |
+| Avatar refs (from Supabase) | $0 |
+| New topic reporter (sheet + ref, if needed) | ~$0.12 |
 | ElevenLabs TTS (~25-35s) | ~$0.20 |
-| Kling Avatar v2 (3 сцены, ~25-35s raw) | ~$1.40–2.00 |
-| **Типичный** | **~$1.60–2.20** |
+| Kling Avatar v2 (3 scenes, ~25-35s raw) | ~$1.40–2.00 |
+| **Typical** | **~$1.60–2.20** |
 
-**Лимит: $4.00.** Остановись если расход > $3.50.
+**Limit: $4.00.** Stop if spend > $3.50.
 
 ---
 
-## Выходные файлы
+## Output files
 
 ```
 output/YYYY-MM-DD/{GAME_TAG}/news/
@@ -217,7 +217,7 @@ output/YYYY-MM-DD/{GAME_TAG}/news/
 │   │   ├── scene-1.mp3           # TTS
 │   │   ├── scene-1.mp4           # Kling Avatar raw
 │   │   ├── scene-1-fast.mp4      # 1.18x speedup
-│   │   └── scene-1-sub.mp4       # с субтитрами
+│   │   └── scene-1-sub.mp4       # with subtitles
 │   ├── scene-2/...
 │   └── scene-3/...
 └── final.mp4
@@ -225,62 +225,62 @@ output/YYYY-MM-DD/{GAME_TAG}/news/
 
 ---
 
-## Брифы ролям
+## Role briefs
 
 ### Scenarist
-- 3 dialogue-сцены (opener/CTA — готовые, не в storyboard)
-- 25–35 слов на основные сцены, 15–20 на outro
-- Тон — из game config Tone of Voice
-- Передача слова: "Sarah, what do you have?" → "Thanks Jake!"
-- camera_angle разный для соседних сцен
-- Общие правила — `rules/roles/scenarist.md`
+- 3 dialogue scenes (opener/CTA — pre-built, not in storyboard)
+- 25–35 words for main scenes, 15–20 for outro
+- Tone — from game config Tone of Voice
+- Handoff: "Sarah, what do you have?" → "Thanks Jake!"
+- camera_angle different for adjacent scenes
+- General rules — `rules/roles/scenarist.md`
 
 ### Storyboarder
-- Anchor/co-anchor берутся из Supabase — не генерировать
-- Тематический репортёр (если нужен) — сгенерировать sheet + avatar ref, загрузить в Supabase
-- Общие правила — `rules/roles/storyboarder.md`
+- Anchor/co-anchor are taken from Supabase — do not generate
+- Topic reporter (if needed) — generate sheet + avatar ref, upload to Supabase
+- General rules — `rules/roles/storyboarder.md`
 
 ### Animator
-- **ТОЛЬКО Kling Avatar v2 Standard**
-- `audio_url` и `image_url` — Supabase permanent URLs
-- `negative_prompt` обязателен
-- 1.18x speedup после генерации
-- Общие правила — `rules/roles/animator.md`
+- **ONLY Kling Avatar v2 Standard**
+- `audio_url` and `image_url` — Supabase permanent URLs
+- `negative_prompt` mandatory
+- 1.18x speedup after generation
+- General rules — `rules/roles/animator.md`
 
 ### Sound
-- ElevenLabs TTS для каждой dialogue-сцены
-- Субтитры per-scene (не на concat)
-- Музыка: energetic/fun, `volume=0.10`
-- Общие правила — `rules/roles/sound.md`
+- ElevenLabs TTS for each dialogue scene
+- Subtitles per-scene (not on concat)
+- Music: energetic/fun, `volume=0.10`
+- General rules — `rules/roles/sound.md`
 
 ### Editor
-- Скачать opener + CTA из Supabase, нормализовать
-- Субтитры per-scene → нормализация → concat с opener → музыка → fade → CTA
-- Общие правила — `rules/roles/editor.md`
+- Download opener + CTA from Supabase, normalize
+- Subtitles per-scene → normalization → concat with opener → music → fade → CTA
+- General rules — `rules/roles/editor.md`
 
 ---
 
-## Валидация
+## Validation
 
-- [ ] `research.json` с 2–3 новостями и источниками
-- [ ] Avatar refs для обоих персонажей из Supabase
-- [ ] Opener и CTA скачаны из Supabase (не сгенерированы)
-- [ ] Все dialogue-сцены — Kling Avatar v2, ничего другого
-- [ ] `negative_prompt` на всех Avatar генерациях
-- [ ] 1.18x speedup на всех Avatar клипах
-- [ ] Субтитры per-scene (не на concat)
-- [ ] camera_angle разный для соседних сцен
-- [ ] Финал: 1080×1920, 30fps, 25–40s (без opener/CTA), бюджет < $4
+- [ ] `research.json` with 2–3 news items and sources
+- [ ] Avatar refs for both characters from Supabase
+- [ ] Opener and CTA downloaded from Supabase (not generated)
+- [ ] All dialogue scenes — Kling Avatar v2, nothing else
+- [ ] `negative_prompt` on all Avatar generations
+- [ ] 1.18x speedup on all Avatar clips
+- [ ] Subtitles per-scene (not on concat)
+- [ ] camera_angle different for adjacent scenes
+- [ ] Final: 1080×1920, 30fps, 25–40s (excluding opener/CTA), budget < $4
 
 ---
 
-## ЗАПРЕЩЕНО
+## FORBIDDEN
 
-- Любые видео-модели кроме Kling Avatar v2 Standard
-- Генерация opener/CTA — берутся готовые из Supabase
-- Перегенерация существующих персонажей — anchor/co-anchor берутся из Supabase `game_assets`
-- Субтитры на склеенном видео — whisper пропускает голоса при concat
-- 1.3x speedup — слишком быстро, только 1.18x
-- fal.ai temp URLs для Kling — только Supabase permanent URLs
-- `voice_id` хеш — использовать `voice` имя строкой
-- Один avatar ref на двоих — каждый персонаж = свой ref
+- Any video models other than Kling Avatar v2 Standard
+- Generating opener/CTA — taken from Supabase
+- Regenerating existing characters — anchor/co-anchor are from Supabase `game_assets`
+- Subtitles on a concatenated video — whisper skips voices on concat
+- 1.3x speedup — too fast, only 1.18x
+- fal.ai temp URLs for Kling — only Supabase permanent URLs
+- `voice_id` hash — use `voice` name string
+- One avatar ref for both — each character = its own ref

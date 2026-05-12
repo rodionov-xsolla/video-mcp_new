@@ -11,6 +11,10 @@ POLL_INTERVAL=30        # секунд между проверками очер�
 TASK_TIMEOUT=2400       # 40 минут максимум на одну задачу
 COOLDOWN_AFTER_TASK=5   # секунд после завершения задачи
 
+# PIPELINE_MODE = pipeline (default — sub-agent через pipeline.sh, переключает модели) | legacy (монолитный claude -p, всё на Opus)
+# Опт-аут: PIPELINE_MODE=legacy ./worker.sh
+PIPELINE_MODE="${PIPELINE_MODE:-pipeline}"
+
 # macOS не имеет timeout — используем gtimeout из coreutils
 if command -v timeout &>/dev/null; then
   TIMEOUT_CMD="timeout"
@@ -47,9 +51,14 @@ log() {
 }
 
 log "=== Video Worker Started ==="
-log "Agent dir: $AGENT_DIR"
+log "Agent dir:     $AGENT_DIR"
 log "Poll interval: ${POLL_INTERVAL}s"
-log "Task timeout: ${TASK_TIMEOUT}s"
+log "Task timeout:  ${TASK_TIMEOUT}s"
+log "Pipeline mode: $PIPELINE_MODE"
+if [ "$PIPELINE_MODE" = "pipeline" ] && [ ! -x "$AGENT_DIR/pipeline.sh" ]; then
+  log "ERROR: PIPELINE_MODE=pipeline but $AGENT_DIR/pipeline.sh not found or not executable"
+  exit 1
+fi
 
 while $RUNNING; do
   # Проверяем очередь
@@ -136,29 +145,58 @@ while $RUNNING; do
   # Переходим в директорию агента (claude -p использует относительные пути)
   cd "$AGENT_DIR"
 
-  # Запускаем Claude CLI с таймаутом
-  log "    Launching Claude pipeline..."
+  # Запускаем pipeline (legacy = монолитный claude -p; pipeline = sub-agent через pipeline.sh)
   START_TIME=$(date +%s)
-
   CLAUDE_LOG="$OUTPUT_DIR/claude.log"
-  if env -u CLAUDECODE stdbuf -oL $TIMEOUT_CMD "$TASK_TIMEOUT" claude -p "$PROMPT" --allowedTools '*' --permission-mode bypassPermissions --verbose < /dev/null >> "$CLAUDE_LOG" 2>&1; then
-    END_TIME=$(date +%s)
-    DURATION=$(( END_TIME - START_TIME ))
-    log "<<< TASK COMPLETED in ${DURATION}s: $TASK_ID"
-    log "    Claude log: $CLAUDE_LOG"
-  else
-    EXIT_CODE=$?
-    END_TIME=$(date +%s)
-    DURATION=$(( END_TIME - START_TIME ))
 
-    if [ "$EXIT_CODE" = "124" ]; then
-      log "!!! TASK TIMEOUT after ${TASK_TIMEOUT}s: $TASK_ID"
-      "$SCRIPT_DIR/update-task.sh" "$TASK_ID" failed "Worker timeout after ${TASK_TIMEOUT}s" >> "$LOG_FILE" 2>&1
+  if [ "$PIPELINE_MODE" = "pipeline" ]; then
+    log "    Launching sub-agent pipeline (pipeline.sh)..."
+    if env -u CLAUDECODE stdbuf -oL $TIMEOUT_CMD "$TASK_TIMEOUT" \
+       "$AGENT_DIR/pipeline.sh" "$GAME_TAG" "$IDEA" "$FORMAT" "$OUTPUT_DIR" "$TASK_ID" \
+       < /dev/null >> "$CLAUDE_LOG" 2>&1; then
+      END_TIME=$(date +%s)
+      DURATION=$(( END_TIME - START_TIME ))
+      log "<<< TASK COMPLETED (pipeline mode) in ${DURATION}s: $TASK_ID"
+      log "    Pipeline log: $OUTPUT_DIR/pipeline.log"
+      log "    Claude log:   $CLAUDE_LOG"
     else
-      log "!!! TASK FAILED (exit $EXIT_CODE) after ${DURATION}s: $TASK_ID"
-      "$SCRIPT_DIR/update-task.sh" "$TASK_ID" failed "Claude process exited with code $EXIT_CODE" >> "$LOG_FILE" 2>&1
+      EXIT_CODE=$?
+      END_TIME=$(date +%s)
+      DURATION=$(( END_TIME - START_TIME ))
+      if [ "$EXIT_CODE" = "124" ]; then
+        log "!!! TASK TIMEOUT (pipeline) after ${TASK_TIMEOUT}s: $TASK_ID"
+        # pipeline.sh сам апдейтит задачу при failure внутри фаз;
+        # тут timeout снаружи — отдельный апдейт.
+        "$SCRIPT_DIR/update-task.sh" "$TASK_ID" failed "Worker timeout after ${TASK_TIMEOUT}s" >> "$LOG_FILE" 2>&1 || true
+      else
+        log "!!! TASK FAILED (pipeline, exit $EXIT_CODE) after ${DURATION}s: $TASK_ID"
+        # pipeline.sh уже мог апдейтнуть статус. Если нет — апдейтим здесь.
+        # update-task.sh идемпотентен.
+      fi
+      log "    Pipeline log: $OUTPUT_DIR/pipeline.log"
+      log "    Claude log:   $CLAUDE_LOG"
     fi
-    log "    Claude log: $CLAUDE_LOG"
+  else
+    # Legacy: монолитный claude -p (как раньше)
+    log "    Launching Claude pipeline (legacy monolith)..."
+    if env -u CLAUDECODE stdbuf -oL $TIMEOUT_CMD "$TASK_TIMEOUT" claude -p "$PROMPT" --allowedTools '*' --permission-mode bypassPermissions --verbose < /dev/null >> "$CLAUDE_LOG" 2>&1; then
+      END_TIME=$(date +%s)
+      DURATION=$(( END_TIME - START_TIME ))
+      log "<<< TASK COMPLETED (legacy) in ${DURATION}s: $TASK_ID"
+      log "    Claude log: $CLAUDE_LOG"
+    else
+      EXIT_CODE=$?
+      END_TIME=$(date +%s)
+      DURATION=$(( END_TIME - START_TIME ))
+      if [ "$EXIT_CODE" = "124" ]; then
+        log "!!! TASK TIMEOUT after ${TASK_TIMEOUT}s: $TASK_ID"
+        "$SCRIPT_DIR/update-task.sh" "$TASK_ID" failed "Worker timeout after ${TASK_TIMEOUT}s" >> "$LOG_FILE" 2>&1
+      else
+        log "!!! TASK FAILED (exit $EXIT_CODE) after ${DURATION}s: $TASK_ID"
+        "$SCRIPT_DIR/update-task.sh" "$TASK_ID" failed "Claude process exited with code $EXIT_CODE" >> "$LOG_FILE" 2>&1
+      fi
+      log "    Claude log: $CLAUDE_LOG"
+    fi
   fi
 
   log "--- Cooling down ${COOLDOWN_AFTER_TASK}s ---"

@@ -1,68 +1,68 @@
-# Формат "Reddit Story" — монолог поверх геймплея
+# Format "Reddit Story" — monologue over gameplay
 
-Монолог от первого лица поверх рандомного геймплея с word-highlight субтитрами. Личная история: funny, touching, drama, shock, rage. Офферволл вплетён в сюжет как действие героя.
+A first-person monologue over random gameplay with word-highlight subtitles. Personal story: funny, touching, drama, shock, rage. Offerwall is woven into the plot as the hero's action.
 
-Этот файл — **playbook**. Крафтовые правила (TTS, субтитры, ffmpeg) — в `rules/roles/*.md`.
-
----
-
-## Когда использовать
-
-Ключевые слова: «reddit story», «storytime», «история игрока», «personal story», «narrated gameplay».
-
-Параметры запуска: `game_tag`, `topic` (опционально), `language` (`EN` / `RU` / `PT-BR`).
+This file is the **playbook**. Craft rules (TTS, subtitles, ffmpeg) — in `rules/roles/*.md`.
 
 ---
 
-## Концепт
+## When to use
 
-- **Геймплей:** готовые клипы из `games/{GAME_TAG}/gameplay/`, рандомный шафл, **не привязан к тексту** — чистый фоновый визуал
-- **TTS:** ElevenLabs через fal.ai (экспрессивно, `stability=0.3`, `style=0.7`, 29 языков)
-- **Субтитры:** word-highlight drawtext, обязательны
-- **Длительность:** до 60s (~150–170 слов)
-- **AI-генерация видео отсутствует** — только TTS + ffmpeg сборка
-- **Бюджет:** $2 максимум (типично $0.30–0.50)
+Keywords: "reddit story", "storytime", "история игрока", "personal story", "narrated gameplay".
+
+Run parameters: `game_tag`, `topic` (optional), `language` (`EN` / `RU` / `PT-BR`).
 
 ---
 
-## Офферволл-интеграция (нативная)
+## Concept
 
-Офферволл = ЧАСТЬ СЮЖЕТА, не реклама. Герой использует его как инструмент.
+- **Gameplay:** pre-made clips from `games/{GAME_TAG}/gameplay/`, random shuffle, **not tied to text** — pure background visual
+- **TTS:** ElevenLabs via fal.ai (expressive, `stability=0.3`, `style=0.7`, 29 languages)
+- **Subtitles:** word-highlight drawtext, mandatory
+- **Duration:** up to 60s (~150–170 words)
+- **No AI video generation** — only TTS + ffmpeg assembly
+- **Budget:** $2 max (typical $0.30–0.50)
 
-### Структура нарратива (фиксированная)
+---
+
+## Offerwall integration (native)
+
+Offerwall = PART OF THE PLOT, not an ad. The hero uses it as a tool.
+
+### Narrative structure (fixed)
 
 ```
-HEADLINE → HOOK → ПРОБЛЕМА → ОФФЕРВОЛЛ (решение) → ТВИСТ
+HEADLINE → HOOK → PROBLEM → OFFERWALL (solution) → TWIST
 ```
 
-### Правила
-- **НЕ начинай с покупки.** Сначала цепляющая история, потом офферволл как естественное решение.
-- Офферволл упоминается КАК ДЕЙСТВИЕ ГЕРОЯ: `"I grinded offerwall tasks"`, `"выполнял задания"`.
-- **НЕ** говори «купите», «скачайте», не называй сервис по имени.
-- CTA = **overlay** `"Subscribe for more"` в последние 2s. Никогда не озвучивается голосом.
-- **ТВИСТ обязателен** — неожиданный поворот.
+### Rules
+- **Don't start with the purchase.** First a gripping story, then offerwall as a natural solution.
+- Offerwall is mentioned AS THE HERO'S ACTION: `"I grinded offerwall tasks"`, `"performed tasks"`.
+- **Do NOT** say "buy", "download", do not name the service.
+- CTA = **overlay** `"Subscribe for more"` in the last 2s. Never voiced.
+- **TWIST mandatory** — an unexpected turn.
 
-### Примеры нативной интеграции
-- **Roblox:** сестра мечтала о скине → гриндил задания → подарил → она расплакалась
-- **Oxide:** рейдер уничтожил базу → неделю выполнял задания → собрал gear → отомстил solo
-- **MLBB:** проигрывал → выполнил пару заданий, взял нового героя → 10 игр подряд выиграл
+### Examples of native integration
+- **Roblox:** sister dreamed of a skin → grinded tasks → gifted → she cried
+- **Oxide:** raider destroyed the base → a week of doing tasks → gathered gear → revenge solo
+- **MLBB:** kept losing → did a few tasks, took a new hero → won 10 games in a row
 
 ---
 
 ## Structure
 
-| Элемент | Описание | Длит. |
+| Element | Description | Dur. |
 |---|---|---|
-| **headline** | Кликбейт-саммари в одном предложении | 1–2s |
-| **hook** | Завязка истории (конкретный цепляющий факт) | 3–5s |
-| **проблема** | Конфликт, который требует решения | 10–15s |
-| **офферволл** | Действие героя как шаг к цели | 5–10s |
-| **твист** | Неожиданная кульминация | 10–15s |
-| **CTA** | Fade-to-black → `Subscribe for more` (как в serial-drama) | 2s |
+| **headline** | Clickbait summary in one sentence | 1–2s |
+| **hook** | Story setup (concrete catchy fact) | 3–5s |
+| **problem** | Conflict requiring a solution | 10–15s |
+| **offerwall** | Hero's action as a step toward the goal | 5–10s |
+| **twist** | Unexpected climax | 10–15s |
+| **CTA** | Fade-to-black → `Subscribe for more` (like serial-drama) | 2s |
 
-Общая длительность TTS ≤ 58s → финальный MP4 = TTS + 2s CTA ≈ 60s.
+Total TTS duration ≤ 58s → final MP4 = TTS + 2s CTA ≈ 60s.
 
-CTA берётся из Supabase `game_assets` (тег `cta` + `video`). Manager скачивает в Фазе 0, Editor нормализует и вставляет последним клипом. Если CTA нет — fallback: fade-to-black → `SUBSCRIBE FOR MORE` drawtext (2s).
+CTA is taken from Supabase `game_assets` (tag `cta` + `video`). Manager downloads in Phase 0, Editor normalizes and inserts as the last clip. If no CTA — fallback: fade-to-black → `SUBSCRIBE FOR MORE` drawtext (2s).
 
 ---
 
@@ -84,19 +84,19 @@ CTA берётся из Supabase `game_assets` (тег `cta` + `video`). Manager
 }
 ```
 
-Поле `voice` = **имя**, не хэш voice_id (см. `rules/roles/sound.md`).
+The `voice` field = **name**, not voice_id hash (see `rules/roles/sound.md`).
 
 ---
 
 ## Anti-Repetition Check
 
-Перед сценарием сверь с `games/{GAME_TAG}/reddit-story_bible.json`:
-- **Темы:** не дублируй темы из последних 10 историй
-- **Тон:** не повторяй один и тот же 3 раза подряд
-- **Хуки:** не используй похожий headline/hook
-- **Офферволл-угол:** разнообразь — не всегда «гриндил задания»
+Before scripting, check `games/{GAME_TAG}/reddit-story_bible.json`:
+- **Themes:** do not duplicate themes from the last 10 stories
+- **Tone:** do not repeat the same tone 3 times in a row
+- **Hooks:** do not use a similar headline/hook
+- **Offerwall angle:** vary — not always "grinded tasks"
 
-### Story bible структура
+### Story bible structure
 ```json
 {
   "game_tag": "Roblox",
@@ -111,46 +111,46 @@ CTA берётся из Supabase `game_assets` (тег `cta` + `video`). Manager
 }
 ```
 
-Обновляется после каждого ролика (Manager, Фаза 6). Все списки FIFO, хранить последние 10.
+Updated after each video (Manager, Phase 6). All lists FIFO, keep last 10.
 
 ---
 
-## Брифы ролям
+## Role briefs
 
 ### Scenarist
-- Headline — кликбейтный, провокационный, 1 предложение; произносится голосом + показывается субтитрами
-- `narrative_text` от первого лица, разговорный стиль, предложения ≤15 слов
-- Структура HEADLINE→HOOK→ПРОБЛЕМА→ОФФЕРВОЛЛ→ТВИСТ
-- Конкретика (имена, числа, детали) — не «cool stuff» → «legendary dragon skin»
-- Нет корпоративного тона, имён сервисов, CTA голосом
-- Anti-repetition check по `reddit-story_bible.json`
-- Общие правила — `rules/roles/scenarist.md`
+- Headline — clickbait, provocative, 1 sentence; voiced + shown in subtitles
+- `narrative_text` first-person, conversational style, sentences ≤15 words
+- Structure HEADLINE→HOOK→PROBLEM→OFFERWALL→TWIST
+- Specifics (names, numbers, details) — not "cool stuff" → "legendary dragon skin"
+- No corporate tone, service names, voiced CTA
+- Anti-repetition check via `reddit-story_bible.json`
+- General rules — `rules/roles/scenarist.md`
 
 ### Storyboarder
-- **SKIP** — нет NB2 генерации, используется готовый геймплей
-- Manager проверяет наличие ≥1 `.mp4` в `games/{GAME_TAG}/gameplay/` в Фазе 0
+- **SKIP** — no NB2 generation, ready-made gameplay is used
+- Manager checks for ≥1 `.mp4` in `games/{GAME_TAG}/gameplay/` in Phase 0
 
 ### Animator
-- **SKIP** — нет Kling/Veo3, только рандомный геймплей
+- **SKIP** — no Kling/Veo3, only random gameplay
 
 ### Sound
-- ElevenLabs через fal.ai (`fal-ai/elevenlabs/tts/eleven-v3`); `voice` имя (не хэш)
-- `stability=0.3`, `style=0.7` для storytelling-экспрессии
-- Озвучиваем `headline + narrative_text` как единый текст → `tts-output.mp3`
-- **SRT файл не генерируем** — тайминги считает Editor из TTS_DUR
-- Музыка опционально, `volume=0.05` (тише обычного — нарратив должен быть чётким)
-- Общие правила — `rules/roles/sound.md`
+- ElevenLabs via fal.ai (`fal-ai/elevenlabs/tts/eleven-v3`); `voice` name (not hash)
+- `stability=0.3`, `style=0.7` for storytelling expression
+- Voice `headline + narrative_text` as a single text → `tts-output.mp3`
+- **Do not generate an SRT file** — Editor computes timing from TTS_DUR
+- Music optional, `volume=0.05` (quieter than usual — narration must be clear)
+- General rules — `rules/roles/sound.md`
 
 ### Editor
-- Gameplay: `shuf` клипов → concat → trim to `TTS_DUR + 2s`, `-an` (убрать оригинальный звук)
-- Scale 1080×1920, 30fps; TTS overlay через `apad` (**НИКОГДА `-shortest`**)
-- **Word-highlight субтитры** (drawtext, 3–5 слов на сегмент, равномерный тайминг по TTS_DUR, акцентный цвет из game config) — Editor строит фильтры сам; для 30+ сегментов `-filter_complex_script`. Детали — `rules/roles/editor.md` секция "reddit-story — drawtext word-highlight"
-- CTA overlay последние 2s (`drawtext`, `enable='between(t,CTA_START,TOTAL_DUR)'`)
-- Общие правила — `rules/roles/editor.md`
+- Gameplay: `shuf` clips → concat → trim to `TTS_DUR + 2s`, `-an` (strip original audio)
+- Scale 1080×1920, 30fps; TTS overlay via `apad` (**NEVER `-shortest`**)
+- **Word-highlight subtitles** (drawtext, 3–5 words per segment, even timing across TTS_DUR, accent color from game config) — Editor builds the filters itself; for 30+ segments use `-filter_complex_script`. Details — `rules/roles/editor.md` "reddit-story — drawtext word-highlight" section
+- CTA overlay last 2s (`drawtext`, `enable='between(t,CTA_START,TOTAL_DUR)'`)
+- General rules — `rules/roles/editor.md`
 
 ---
 
-## Выходные файлы
+## Output files
 
 ```
 output/YYYY-MM-DD/{GAME_TAG}/reddit-story/
@@ -162,32 +162,32 @@ output/YYYY-MM-DD/{GAME_TAG}/reddit-story/
 └── final.mp4
 ```
 
-Плюс обновление `games/{GAME_TAG}/reddit-story_bible.json`.
+Plus an update to `games/{GAME_TAG}/reddit-story_bible.json`.
 
 ---
 
-## Валидация
+## Validation
 
-- [ ] `games/{GAME_TAG}/gameplay/` содержит ≥1 `.mp4`
-- [ ] `headline` — кликбейт, 1 предложение
-- [ ] `narrative_text` 150–170 слов; все предложения ≤15 слов; от первого лица
-- [ ] Офферволл вплетён как действие героя; нет прямой рекламы / имени сервиса
-- [ ] Твист присутствует
-- [ ] Anti-repetition: тема/тон/хук не дублируют последние 10 (checked)
-- [ ] `voice` = имя (Daniel/George/...), не хэш
-- [ ] CTA — overlay только, не голосом
-- [ ] Общая длительность ≤60s; бюджет ≤$2
-- [ ] `reddit-story_bible.json` обновлён после ролика
+- [ ] `games/{GAME_TAG}/gameplay/` contains ≥1 `.mp4`
+- [ ] `headline` — clickbait, 1 sentence
+- [ ] `narrative_text` 150–170 words; all sentences ≤15 words; first-person
+- [ ] Offerwall woven as the hero's action; no direct ad / service name
+- [ ] Twist present
+- [ ] Anti-repetition: theme/tone/hook do not duplicate the last 10 (checked)
+- [ ] `voice` = name (Daniel/George/...), not hash
+- [ ] CTA — overlay only, not voiced
+- [ ] Total duration ≤60s; budget ≤$2
+- [ ] `reddit-story_bible.json` updated after the video
 
 ---
 
-## Анти-паттерны
+## Anti-patterns
 
-- ❌ Kokoro TTS или direct ElevenLabs API — только `fal-ai/elevenlabs/tts/eleven-v3`
-- ❌ Привязка геймплея к тексту — должно быть рандомно
-- ❌ Начало с покупки/офферволла — сначала цепляющая история
-- ❌ `-shortest` в ffmpeg — используй `apad + -t`
-- ❌ Повтор тем/хуков из последних 10 (bible)
-- ❌ Предложения >15 слов
-- ❌ Корпоративный тон («мы рекомендуем», «скачайте»)
-- ❌ CTA голосом / название сервиса в тексте
+- ❌ Kokoro TTS or direct ElevenLabs API — only `fal-ai/elevenlabs/tts/eleven-v3`
+- ❌ Tying gameplay to text — must be random
+- ❌ Starting with the purchase/offerwall — first a gripping story
+- ❌ `-shortest` in ffmpeg — use `apad + -t`
+- ❌ Repeating themes/hooks from the last 10 (bible)
+- ❌ Sentences >15 words
+- ❌ Corporate tone ("we recommend", "download")
+- ❌ Voiced CTA / service name in the text

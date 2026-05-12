@@ -1,52 +1,52 @@
-# Формат "Dual-Style" — cartoon + realistic
+# Format "Dual-Style" — cartoon + realistic
 
-В одном кадре: cartoon/chibi игровой персонаж рядом со своей фотореалистичной человеческой «копией». Контраст стилей — главный приём.
+In one frame: cartoon/chibi game character next to its photorealistic human "twin". Style contrast is the main device.
 
-Этот файл — **playbook**. Крафтовые правила (NB2, Kling I2V, ffmpeg) — в `rules/roles/*.md`.
-
----
-
-## Когда использовать
-
-Ключевые слова: «dual-style», «game vs reality», «meet your character IRL», cosplay-контент, «which character are you».
+This file is the **playbook**. Craft rules (NB2, Kling I2V, ffmpeg) — in `rules/roles/*.md`.
 
 ---
 
-## Концепт
+## When to use
 
-- **Cartoon слева + realistic справа** (позиционирование фиксировано на всё видео)
-- **3 клипа × 5–10s** → 15–30s total
-- **Модель:** Kling 2.6 Pro I2V, `generate_audio: true` (SFX)
-- **Речь:** НЕТ, `character_speech: null` везде
-- **Бюджет:** $5 максимум
+Keywords: "dual-style", "game vs reality", "meet your character IRL", cosplay content, "which character are you".
+
+---
+
+## Concept
+
+- **Cartoon left + realistic right** (positioning fixed for the whole video)
+- **3 clips × 5–10s** → 15–30s total
+- **Model:** Kling 2.6 Pro I2V, `generate_audio: true` (SFX)
+- **Speech:** NO, `character_speech: null` everywhere
+- **Budget:** $5 max
 
 ---
 
 ## Structure
 
-| Клип | Beat | Длит. | camera_angle |
+| Clip | Beat | Dur. | camera_angle |
 |---|---|---|---|
-| 1 | hook — оба появляются рядом | 5s | wide low-angle |
-| 2 | development — характер через позу | 5–10s | medium eye-level |
-| 3 | climax — синхронное действие или контрастная реакция | 5–10s | wide pull-back |
+| 1 | hook — both appear together | 5s | wide low-angle |
+| 2 | development — character through pose | 5–10s | medium eye-level |
+| 3 | climax — synchronized action or contrasting reaction | 5–10s | wide pull-back |
 
-`camera_angle` разный для соседних клипов (обязательно).
+`camera_angle` different for adjacent clips (mandatory).
 
-Мульти-персонажное видео: 1 клип = 1 пара (cartoon + realistic одного персонажа), chain reference **не** пересекается между разными персонажами.
+Multi-character video: 1 clip = 1 pair (cartoon + realistic of one character), chain reference does **not** cross between different characters.
 
 ---
 
-## Ключевые правила промптинга
+## Key prompting rules
 
-### 1. Cartoon и realistic маркеры (обязательны)
+### 1. Cartoon and realistic markers (mandatory)
 
-Без этих маркеров AI сделает обоих реалистичными.
+Without these markers AI will make both realistic.
 
 **Cartoon:**
 - `bold black outlines`
 - `bright flat saturated colors`
 - `exaggerated chibi proportions`
-- `large head, small body` (если chibi)
+- `large head, small body` (if chibi)
 
 **Realistic:**
 - `photorealistic`
@@ -54,18 +54,18 @@
 - `natural proportions`
 - `weathered / sun-darkened / tanned`
 
-### 2. Связь между версиями
-- Одинаковый костюм (цвета, тип одежды, аксессуары)
-- Одинаковая поза (`matching pose`, `mirrored stance`)
-- Одинаковые ключевые детали (розовая бандана у cartoon → розовая у realistic)
+### 2. Connection between versions
+- Same costume (colors, type of clothing, accessories)
+- Same pose (`matching pose`, `mirrored stance`)
+- Same key details (pink bandana on cartoon → pink on realistic)
 
-### 3. Позиционирование
-- Cartoon **всегда** слева, realistic **всегда** справа (или фиксировано наоборот — одно решение на весь ролик)
-- `side by side`, не один за другим
+### 3. Positioning
+- Cartoon **always** on the left, realistic **always** on the right (or fixed the other way around — one decision for the whole video)
+- `side by side`, not one behind the other
 
-### 4. Размеры в кадре
-- Cartoon может быть **меньше** (chibi = маленький), realistic крупнее
-- Это усиливает контраст, не пытайся выровнять по высоте
+### 4. Sizes in frame
+- Cartoon may be **smaller** (chibi = small), realistic larger
+- This enhances the contrast, do not try to align by height
 
 ---
 
@@ -77,12 +77,12 @@
   "visual_identity": {
     "character_description": {
       "cartoon": "cartoon chibi [class] with bold black outlines, bright flat saturated colors, exaggerated proportions, [8+ details]",
-      "realistic": "photorealistic [пол] [build], [тот же костюм], real skin textures, [живые детали], [эмоция]"
+      "realistic": "photorealistic [gender] [build], [same costume], real skin textures, [vivid details], [emotion]"
     },
-    "environment_description": "[конкретная локация]",
+    "environment_description": "[concrete location]",
     "style_tags": "cartoon chibi with bold black outlines, photorealistic human counterpart, dual-style side by side",
-    "color_palette": "[одна палитра для обеих версий]",
-    "lighting": "[единое освещение на все сцены]"
+    "color_palette": "[one palette for both versions]",
+    "lighting": "[unified lighting across all scenes]"
   },
   "scenes": [
     {
@@ -96,15 +96,15 @@
 }
 ```
 
-- `style_tags` обязаны включать **оба** стиля
-- `lighting` / `color_palette` одинаковые во всех сценах
-- `image_prompt` 40–80 слов, max 2 фокусные точки
+- `style_tags` must include **both** styles
+- `lighting` / `color_palette` identical across all scenes
+- `image_prompt` 40–80 words, max 2 focal points
 
 ---
 
-## Game config требование
+## Game config requirement
 
-В `games/{GAME_TAG}/{GAME_TAG}.md` должны быть **ДВЕ** версии каждого персонажа:
+`games/{GAME_TAG}/{GAME_TAG}.md` must contain **TWO** versions of each character:
 
 ```markdown
 ### Hero Name (cartoon)
@@ -114,48 +114,48 @@
 `photorealistic [gender] [build], [same costume as cartoon], real skin textures, [skin/scars/dirt], [emotion]`
 ```
 
-Если этих блоков нет — Manager должен флагом остановить до их добавления.
+If these blocks are missing — Manager must flag and stop until they are added.
 
 ---
 
-## Брифы ролям
+## Role briefs
 
 ### Scenarist
-- 3 клипа × 5–10s; `character_speech: null` везде
-- Cartoon и realistic маркеры обязательны в image_prompt (см. выше)
-- Одинаковый костюм/поза/детали между версиями
-- `motion_prompt` описывает действия **обоих** персонажей отдельно
+- 3 clips × 5–10s; `character_speech: null` everywhere
+- Cartoon and realistic markers mandatory in image_prompt (see above)
+- Same costume/pose/details between versions
+- `motion_prompt` describes actions of **both** characters separately
 - `negative_prompt`: `blur, distort, merged characters, single character, text overlay, watermark`
-- Общие правила — `rules/roles/scenarist.md`
+- General rules — `rules/roles/scenarist.md`
 
 ### Storyboarder
-- Source ref: игровой ассет (screenshot / character_card) из `game_assets` Supabase или `games/{GAME_TAG}/assets/refs/`
-- Если нет — сгенерируй cartoon-версию через NB2 как anchor
-- **Мульти-персонаж:** каждый новый персонаж начинает chain заново (НЕ передавай сцену предыдущего персонажа)
-- Для одного персонажа: scene 1 = `[asset]`; scene 2+ = `[asset, scene-(K-1)]`
-- Общие правила — `rules/roles/storyboarder.md`
+- Source ref: game asset (screenshot / character_card) from `game_assets` Supabase or `games/{GAME_TAG}/assets/refs/`
+- If none — generate the cartoon version through NB2 as anchor
+- **Multi-character:** every new character starts the chain anew (do NOT pass the previous character's scene)
+- For one character: scene 1 = `[asset]`; scene 2+ = `[asset, scene-(K-1)]`
+- General rules — `rules/roles/storyboarder.md`
 
 ### Animator
 - **Kling 2.6 Pro I2V**, `generate_audio: true` (SFX), `aspect_ratio: "9:16"`
-- `duration`: "5" или "10"; без `end_image_url`
-- `character_speech: null` → Kling не получает текст речи
-- Одна модель на весь ролик
-- Общие правила — `rules/roles/animator.md`
+- `duration`: "5" or "10"; without `end_image_url`
+- `character_speech: null` → Kling does not receive speech text
+- One model for the whole video
+- General rules — `rules/roles/animator.md`
 
 ### Sound
-- TTS **не нужен** (нет речи)
-- Опциональная музыка: Kling SFX `volume=0.6`, music `volume=0.15`
-- Субтитры не применяются
-- Общие правила — `rules/roles/sound.md`
+- TTS **not needed** (no speech)
+- Optional music: Kling SFX `volume=0.6`, music `volume=0.15`
+- Subtitles do not apply
+- General rules — `rules/roles/sound.md`
 
 ### Editor
-- Scale 1080×1920, 30fps, concat с re-encode, hard cuts (без crossfade)
-- Музыка через `amix`; **НИКОГДА `-shortest`**
-- Общие правила — `rules/roles/editor.md`
+- Scale 1080×1920, 30fps, concat with re-encode, hard cuts (no crossfade)
+- Music via `amix`; **NEVER `-shortest`**
+- General rules — `rules/roles/editor.md`
 
 ---
 
-## Выходные файлы
+## Output files
 
 ```
 output/YYYY-MM-DD/{GAME_TAG}/dual-style/
@@ -171,27 +171,27 @@ output/YYYY-MM-DD/{GAME_TAG}/dual-style/
 
 ---
 
-## Валидация
+## Validation
 
-- [ ] Cartoon маркеры в image_prompt (`bold black outlines`, `bright flat saturated colors`, `exaggerated proportions`)
-- [ ] Realistic маркеры в image_prompt (`photorealistic`, `real skin textures`)
-- [ ] Костюм/поза/детали совпадают между версиями
-- [ ] Cartoon и realistic на фиксированных сторонах (на всё видео)
-- [ ] `character_speech: null` во всех клипах
-- [ ] `camera_angle` разный для соседних клипов
-- [ ] `style_tags` включают оба стиля; `lighting`/`color_palette` единые
-- [ ] Для мульти-персонажа: chain reference не пересекается между разными персонажами
-- [ ] `negative_prompt` заполнен
-- [ ] Бюджет ≤$5
+- [ ] Cartoon markers in image_prompt (`bold black outlines`, `bright flat saturated colors`, `exaggerated proportions`)
+- [ ] Realistic markers in image_prompt (`photorealistic`, `real skin textures`)
+- [ ] Costume/pose/details match between versions
+- [ ] Cartoon and realistic on fixed sides (for the whole video)
+- [ ] `character_speech: null` in all clips
+- [ ] `camera_angle` different for adjacent clips
+- [ ] `style_tags` include both styles; `lighting`/`color_palette` unified
+- [ ] For multi-character: chain reference does not cross between different characters
+- [ ] `negative_prompt` filled
+- [ ] Budget ≤$5
 
 ---
 
-## Анти-паттерны
+## Anti-patterns
 
-- ❌ «cartoon style» без конкретных маркеров (bold outlines, flat colors) — AI сделает semi-realistic
-- ❌ Один промпт без `on the left / on the right` — AI объединит в одного персонажа
-- ❌ Realistic без «живых» деталей (кожа, текстуры) — получится 3D рендер, не человек
-- ❌ Chain reference между разными персонажами — ломает внешность
-- ❌ Попытка выровнять cartoon и realistic по высоте — пусть chibi будет меньше
-- ❌ `character_speech ≠ null` (Kling I2V не генерит голос)
-- ❌ `-shortest` в ffmpeg
+- ❌ "cartoon style" without concrete markers (bold outlines, flat colors) — AI will make semi-realistic
+- ❌ A single prompt without `on the left / on the right` — AI will merge into one character
+- ❌ Realistic without "live" details (skin, textures) — you get a 3D render, not a human
+- ❌ Chain reference between different characters — breaks appearance
+- ❌ Trying to align cartoon and realistic by height — let chibi stay smaller
+- ❌ `character_speech ≠ null` (Kling I2V does not generate voice)
+- ❌ `-shortest` in ffmpeg

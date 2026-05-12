@@ -1,63 +1,63 @@
-# Формат "Dance Battle" — комедийные танцевальные батлы
+# Format "Dance Battle" — comedic dance battles
 
-Два персонажа соревнуются в танцевальном батле на сцене. Контраст между усилием и абсурдом — главный источник юмора. Никакой речи, только SFX + музыка.
+Two characters compete in a dance battle on stage. Contrast between effort and absurdity is the main source of humor. No speech, only SFX + music.
 
-Этот файл — **playbook**. Крафтовые правила (NB2 chain, Kling I2V, ffmpeg) — в `rules/roles/*.md`.
-
----
-
-## Когда использовать
-
-Ключевые слова: «dance battle», «dance», «танцевальный батл», «танец», «dance off», «dance competition», «баттл танцев».
-
-Идеально для серии: новые персонажи каждый выпуск, одна и та же сцена.
+This file is the **playbook**. Craft rules (NB2 chain, Kling I2V, ffmpeg) — in `rules/roles/*.md`.
 
 ---
 
-## Концепт
+## When to use
 
-- **Два персонажа** — визуально различные (размер, стиль, энергия)
-- **Кадр:** wide shot, low angle (~15°), оба танцора в кадре
-- **Стиль:** реалистичный 3D render с комедийной стилизацией
-- **Модель:** Kling 2.6 Pro I2V ($0.14/s), **`generate_audio: true`** (Kling генерирует толпу, музыку, SFX)
-- **Речь:** НЕТ — `character_speech: null` во всех сценах
-- **Длительность:** 3×5s (15s) или 2×10s (20s)
-- **Бюджет:** $5 максимум (~$2.30–$3.00 типично)
+Keywords: "dance battle", "dance", "танцевальный батл", "танец", "dance off", "dance competition", "баттл танцев".
+
+Ideal for series: new characters every episode, the same stage.
+
+---
+
+## Concept
+
+- **Two characters** — visually distinct (size, style, energy)
+- **Frame:** wide shot, low angle (~15°), both dancers in frame
+- **Style:** realistic 3D render with comedic stylization
+- **Model:** Kling 2.6 Pro I2V ($0.14/s), **`generate_audio: true`** (Kling generates crowd, music, SFX)
+- **Speech:** NO — `character_speech: null` in all scenes
+- **Duration:** 3×5s (15s) or 2×10s (20s)
+- **Budget:** $5 max (~$2.30–$3.00 typical)
 
 ---
 
 ## Structure
 
-| Клип | Длит. | Камера | Действие | Комедия |
+| Clip | Dur. | Camera | Action | Comedy |
 |---|---|---|---|---|
-| 1. Вход | 5s | Wide low-angle, slow lateral L→R | Выход на сцену, стартовые позы, толпа | Контраст внешности |
-| 2. Батл | 5–10s | Medium push-in к ведущему | Персонаж A выполняет приём, B реагирует | Серьёзное лицо + абсурд |
-| 3. Финал | 5s | Wide pull-back | Финальные фриз-позы, толпа взрывается | Неожиданный финал |
+| 1. Entrance | 5s | Wide low-angle, slow lateral L→R | Walk on stage, starting poses, crowd | Appearance contrast |
+| 2. Battle | 5–10s | Medium push-in to the lead | Character A executes a move, B reacts | Serious face + absurd |
+| 3. Final | 5s | Wide pull-back | Final freeze poses, crowd erupts | Unexpected ending |
 
-`camera_angle` обязательно разный для соседних клипов.
+`camera_angle` mandatory different between adjacent clips.
 
 ---
 
-## Locked Parameters (одинаковые во всех видео серии)
+## Locked Parameters (identical across all videos in the series)
 
-Включаются в каждый `image_prompt` и `motion_prompt`:
+Included in every `image_prompt` and `motion_prompt`:
 
-- **Камера:** Wide shot from low angle (~15°) at stage-edge level, both characters fully in frame
-- **Локация:** Circular dance arena-stage in a large hall, polished dark wooden floor with reflections, low podium
-- **Толпа:** Dense crowd of spectators — silhouettes and raised hands in soft bokeh, reactive movement
-- **Освещение:** Two contrasting spotlights — warm orange left, cool blue right — central white beam, light haze
-- **Атмосфера:** Micro dust in light cones, energetic, festive, competitive, comedic
+- **Camera:** Wide shot from low angle (~15°) at stage-edge level, both characters fully in frame
+- **Location:** Circular dance arena-stage in a large hall, polished dark wooden floor with reflections, low podium
+- **Crowd:** Dense crowd of spectators — silhouettes and raised hands in soft bokeh, reactive movement
+- **Lighting:** Two contrasting spotlights — warm orange left, cool blue right — central white beam, light haze
+- **Atmosphere:** Micro dust in light cones, energetic, festive, competitive, comedic
 - **Render:** Realistic 3D render, PBR materials, cinematic realism with subtle comedic stylization
 
 ---
 
-## Variable Parameters (меняются между выпусками)
+## Variable Parameters (change between issues)
 
-- **Персонажи** (8+ визуальных деталей каждый, визуально различны)
-- **Стили танца** — breakdance / ballroom / hip-hop / folk / robot / ballet / salsa / moonwalk / floss / headbang
-- **Эмоции** — dead-serious concentration / smug confidence / panicked effort / disgusted determination
-- **Победитель** — левый / правый / оба
-- **Источник комедии** — size mismatch / speed mismatch / style clash / wardrobe malfunction
+- **Characters** (8+ visual details each, visually distinct)
+- **Dance styles** — breakdance / ballroom / hip-hop / folk / robot / ballet / salsa / moonwalk / floss / headbang
+- **Emotions** — dead-serious concentration / smug confidence / panicked effort / disgusted determination
+- **Winner** — left / right / both
+- **Comedy source** — size mismatch / speed mismatch / style clash / wardrobe malfunction
 
 ---
 
@@ -80,72 +80,72 @@
 }
 ```
 
-### 4-Layer prompt structure (для Kling)
+### 4-Layer prompt structure (for Kling)
 ```
-Layer 1 — Camera movement (как камера ведёт себя во времени)
-Layer 2 — Subjects & action physics (кто + конкретная механика тела)
-Layer 3 — Environment & lighting (где + настройка света)
-Layer 4 — Texture & style (качество рендера + материалы)
+Layer 1 — Camera movement (how the camera behaves over time)
+Layer 2 — Subjects & action physics (who + concrete body mechanics)
+Layer 3 — Environment & lighting (where + light setup)
+Layer 4 — Texture & style (render quality + materials)
 ```
 
-`image_prompt` = 60–100 слов, `motion_prompt` = 40–60 слов. Максимум 3–5 основных идей — Kling теряет связность при перегрузке.
+`image_prompt` = 60–100 words, `motion_prompt` = 40–60 words. Max 3–5 main ideas — Kling loses coherence on overload.
 
 ---
 
-## Anti-Drift Layer (для серии)
+## Anti-Drift Layer (for series)
 
-При ≥2 выпусках подряд ротируй:
-- **Стили танца** — не повторять в 5 подряд
-- **Эмоции** — dead-serious / smug / panicked / surprised / disgusted
-- **Победитель** — левый → правый → оба → …
-- **Акцент камеры** — push-in слева → push-in справа → wide
-- **Энергия толпы** — взрыв / шокированная тишина / смешанные реакции / build-up
-- **Источник комедии** — size / speed / style / wardrobe / prop interaction
+When you have ≥2 issues in a row, rotate:
+- **Dance styles** — do not repeat in 5 consecutive
+- **Emotions** — dead-serious / smug / panicked / surprised / disgusted
+- **Winner** — left → right → both → …
+- **Camera accent** — push-in left → push-in right → wide
+- **Crowd energy** — eruption / shocked silence / mixed reactions / build-up
+- **Comedy source** — size / speed / style / wardrobe / prop interaction
 
-Если приём / финал камеры / комедийный механизм идентичен прошлому выпуску — заменить.
+If a move / camera ending / comedy mechanism is identical to the previous issue — replace.
 
 ---
 
-## Брифы ролям
+## Role briefs
 
 ### Scenarist
-- 3 клипа (5/5-10/5) или 2×10s; `character_speech: null` везде
+- 3 clips (5/5-10/5) or 2×10s; `character_speech: null` everywhere
 - 4-layer prompt structure; ≤3-5 ideas per prompt
-- Конкретная механика тела: перенос веса, позиция рук, траектория — не «dancing»
-- Каждое движение имеет чёткое конечное положение
-- Один персонаж действует, второй реагирует (не оба одновременно)
-- Comedy source очевиден без объяснения
-- Общие правила — `rules/roles/scenarist.md`
+- Concrete body mechanics: weight shift, hand position, trajectory — not "dancing"
+- Every move has a clear endpoint position
+- One character acts, the other reacts (not both at once)
+- Comedy source obvious without explanation
+- General rules — `rules/roles/scenarist.md`
 
 ### Storyboarder
-- **Два character refs (A и B)** — генерируются отдельно, оба передаются в каждую сцену
-- image_urls: `[ref-a, ref-b]` для scene 1; `[ref-a, ref-b, scene-(K-1)]` для 2+ (max 3 refs — watch ref duplication)
-- Персонажи визуально РАЗЛИЧНЫ; 8+ деталей каждый
-- Стиль одинаковый для обоих (realistic 3D render)
-- Общие правила — `rules/roles/storyboarder.md`
+- **Two character refs (A and B)** — generated separately, both passed into every scene
+- image_urls: `[ref-a, ref-b]` for scene 1; `[ref-a, ref-b, scene-(K-1)]` for 2+ (max 3 refs — watch ref duplication)
+- Characters visually DISTINCT; 8+ details each
+- Style identical for both (realistic 3D render)
+- General rules — `rules/roles/storyboarder.md`
 
 ### Animator
-- **Kling 2.6 Pro I2V** с `generate_audio: true` (толпа + SFX генерируется моделью)
-- ✅ перенос веса, наклоны, повороты корпуса, фриз-позы, медленные движения с чёткими конечными точками
-- ⚠️ быстрые вращения, прыжки, splits — артефакты, использовать осторожно
-- ❌ одновременные сложные движения обоих — один действует, другой статично реагирует
-- `negative_prompt` обязателен: `blur, distort, extra limbs, merged bodies, split screen, duplicate characters`
-- Общие правила — `rules/roles/animator.md`
+- **Kling 2.6 Pro I2V** with `generate_audio: true` (crowd + SFX generated by the model)
+- ✅ weight shifts, leans, torso turns, freeze poses, slow movements with clear endpoints
+- ⚠️ fast spins, jumps, splits — artifacts, use carefully
+- ❌ simultaneous complex movements of both — one acts, the other statically reacts
+- `negative_prompt` mandatory: `blur, distort, extra limbs, merged bodies, split screen, duplicate characters`
+- General rules — `rules/roles/animator.md`
 
 ### Sound
-- TTS **не нужен** (нет речи)
-- Опциональная музыка track поверх Kling SFX: Kling SFX `volume=0.6`, музыка `volume=0.25`
-- Субтитры не применяются
-- Общие правила — `rules/roles/sound.md`
+- TTS **not needed** (no speech)
+- Optional music track over Kling SFX: Kling SFX `volume=0.6`, music `volume=0.25`
+- Subtitles do not apply
+- General rules — `rules/roles/sound.md`
 
 ### Editor
-- Scale 1080×1920, 30fps, concat с re-encode, hard cuts (crossfade запрещён)
-- Музыка через `amix`; **НИКОГДА `-shortest`**
-- Общие правила — `rules/roles/editor.md`
+- Scale 1080×1920, 30fps, concat with re-encode, hard cuts (crossfade forbidden)
+- Music via `amix`; **NEVER `-shortest`**
+- General rules — `rules/roles/editor.md`
 
 ---
 
-## Banned terms (в промптах Kling)
+## Banned terms (in Kling prompts)
 
 ```
 nice background, good lighting, cool vibe, beautiful atmosphere
@@ -153,12 +153,12 @@ masterpiece, best quality, ultra detailed, 4K, 8K, trending on artstation
 dynamic pose, dynamic scene, dynamic energy
 various, several, multiple
 energetic, lively, vibrant
-dancing (описывай КОНКРЕТНОЕ движение)
+dancing (describe a CONCRETE movement)
 ```
 
 ---
 
-## Выходные файлы
+## Output files
 
 ```
 output/YYYY-MM-DD/{GAME_TAG}/dance-battle/
@@ -174,22 +174,22 @@ output/YYYY-MM-DD/{GAME_TAG}/dance-battle/
 
 ---
 
-## Валидация
+## Validation
 
-- [ ] `format: "dance-battle"`, `character_speech: null` во всех сценах
-- [ ] `generate_audio: true` для всех Kling вызовов
-- [ ] Два character refs сгенерированы, оба переданы в image_urls каждой сцены
-- [ ] 8+ визуальных деталей на каждого персонажа; визуально различны
-- [ ] 4-layer prompt structure; image_prompt 60–100 слов, motion_prompt 40–60 слов
-- [ ] `camera_angle` разный для соседних клипов
-- [ ] Конкретная механика движений (не «dancing»)
-- [ ] `negative_prompt` заполнен
-- [ ] Для серии: Anti-Drift проверен (стили/эмоции/финал не дублируют последний выпуск)
-- [ ] Бюджет ≤$5
+- [ ] `format: "dance-battle"`, `character_speech: null` in all scenes
+- [ ] `generate_audio: true` for all Kling calls
+- [ ] Two character refs generated, both passed into image_urls of every scene
+- [ ] 8+ visual details per character; visually distinct
+- [ ] 4-layer prompt structure; image_prompt 60–100 words, motion_prompt 40–60 words
+- [ ] `camera_angle` different for adjacent clips
+- [ ] Concrete movement mechanics (not "dancing")
+- [ ] `negative_prompt` filled
+- [ ] For series: Anti-Drift verified (styles/emotions/finals don't duplicate the last issue)
+- [ ] Budget ≤$5
 
 ---
 
-## Priority Hierarchy (при конфликте)
+## Priority Hierarchy (on conflict)
 
 1. **Kling technical compliance** — 4-layer, word count, physics
 2. **Character recognizability**

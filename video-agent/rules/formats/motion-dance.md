@@ -1,176 +1,178 @@
-# Формат "Motion Dance" — персонаж танцует под музыку через motion transfer с реф-видео
+# Format "Motion Dance" — character dances to music via motion transfer from reference video
 
-Одиночный персонаж (игровой скин, OC, мем) танцует под музыку. Движения берутся из реального танцевального видео через Kling Motion Control. Ключевая фишка — анализ реф-видео перед генерацией изображения, чтобы план и поза персонажа совпадали с референсом.
+A single character (game skin, OC, meme) dances to music. Movements come from a real dance video via Kling Motion Control. Key feature — analyzing the reference video before image generation so the character's shot and pose match the reference.
 
-Этот файл — **playbook**: когда использовать, концепт, бюджет, брифы каждой роли.
-Крафтовые правила — в `rules/roles/*.md`.
-
----
-
-## Когда использовать
-
-Ключевые слова: «motion dance», «motion control», «моушн», «motion transfer», «танцует под видео».
-
-НЕ путать с Dance Battle (два персонажа батлятся через Kling I2V). Motion Dance = один персонаж + реальное реф-видео.
+This file is the **playbook**: when to use, concept, budget, role briefs.
+Craft rules — in `rules/roles/*.md`.
 
 ---
 
-## Концепт
+## When to use
 
-- **Жанр:** танцевальное видео с motion transfer
-- **Стиль:** Game-specific (Roblox 3D, Pixar, Anime — определяется по игре)
-- **Длительность:** 10–30s (определяется длиной реф-видео)
-- **Клипов:** 1 (= 1 танец с одного реф-видео)
-- **Бюджет:** до $3.00 на видео. Остановись если расход > $2.70.
-- **Формат кадра:** 9:16 (1080×1920)
+Keywords: "motion dance", "motion control", "моушн", "motion transfer", "танцует под видео".
 
-### Модели
-
-- **Image:** Nano Banana 2 (персонаж + фон)
-- **Video:** Kling Motion Control v2.6 Standard ($0.07/сек)
-- **Audio:** `keep_original_sound: true` (музыка из реф-видео)
+Do NOT confuse with Dance Battle (two characters battle via Kling I2V). Motion Dance = one character + a real reference video.
 
 ---
 
-## Бюджет (ориентиры)
+## Concept
 
-| Компонент | Стоимость |
+- **Genre:** dance video with motion transfer
+- **Style:** Game-specific (Roblox 3D, Pixar, Anime — determined by the game)
+- **Duration:** 10–30s (determined by the length of the reference video)
+- **Clips:** 1 (= 1 dance from one reference video)
+- **Budget:** up to $3.00 per video. Stop if spend > $2.70.
+- **Frame format:** 9:16 (1080×1920)
+
+### Models
+
+- **Image:** Nano Banana 2 (character + background)
+- **Video:** Kling Motion Control v2.6 Standard ($0.07/s)
+- **Audio:** `keep_original_sound: true` (music from the reference video)
+
+---
+
+## Budget (rough estimates)
+
+| Component | Cost |
 |---|---|
-| NB2 image (персонаж) | ~$0.08 |
+| NB2 image (character) | ~$0.08 |
 | Kling Motion Control v2.6 10s | $0.70 |
 | Kling Motion Control v2.6 15s | $1.05 |
 | Kling Motion Control v2.6 20s | $1.40 |
 | Kling Motion Control v2.6 30s | $2.10 |
 
-| Вариант | Стоимость |
+| Variant | Cost |
 |---|---|
-| Короткий танец (10s) | ~$0.78 |
-| Средний танец (20s) | ~$1.48 |
-| Длинный танец (30s) | ~$2.18 |
+| Short dance (10s) | ~$0.78 |
+| Medium dance (20s) | ~$1.48 |
+| Long dance (30s) | ~$2.18 |
 
 ---
 
-## Пайплайн
+## Pipeline
 
-| Фаза | Действие | Кто |
+| Phase | Action | Who |
 |---|---|---|
-| 0. Анализ реф-видео | Извлечь первый кадр + кадр из середины → определить план, ракурс, позу | Storyboarder |
-| 1. Генерация изображения | NB2 — персонаж в том же плане/ракурсе что в реф-видео + фон | Storyboarder |
-| 2. Загрузка в Supabase | image + video → постоянные URL | Animator |
-| 3. Motion Control | Kling v2.6 Standard → танцующий персонаж | Animator |
-| 4. Финализация | Скачать, проверить, опционально trim/scale | Editor |
+| 0. Reference video analysis | Extract first frame + middle frame → determine shot, angle, pose | Storyboarder |
+| 1. Image generation | NB2 — character in the same shot/angle as the reference video + background | Storyboarder |
+| 2. Upload to Supabase | image + video → permanent URLs | Animator |
+| 3. Motion Control | Kling v2.6 Standard → dancing character | Animator |
+| 4. Finalization | Download, verify, optionally trim/scale | Editor |
 
-### Фаза 0 — Анализ реф-видео (КРИТИЧНО)
+### Phase 0 — Reference video analysis (CRITICAL)
 
-Перед генерацией изображения персонажа **обязательно** извлеки кадры из реф-видео:
+Before generating the character image, **mandatory** extract frames from the reference video:
 
 ```bash
-# Первый кадр
+# First frame
 ffmpeg -i ref-video.mp4 -vframes 1 -q:v 2 ref-frame-first.jpg
 
-# Кадр из середины
+# Middle frame
 DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 ref-video.mp4)
 MIDPOINT=$(echo "$DURATION / 2" | bc -l)
 ffmpeg -i ref-video.mp4 -ss $MIDPOINT -vframes 1 -q:v 2 ref-frame-mid.jpg
 ```
 
-Проанализируй кадры:
-- **План:** full body / upper body / medium shot?
-- **Ракурс:** фронтальный / слегка сбоку / снизу?
-- **Пропорции:** сколько кадра занимает человек?
-- **Фон:** однотонный / сложный?
+Analyze the frames:
+- **Shot:** full body / upper body / medium shot?
+- **Angle:** frontal / slightly side / from below?
+- **Proportions:** how much of the frame the person occupies?
+- **Background:** flat / complex?
 
-Эти данные определяют промпт для NB2 — персонаж должен быть в **том же плане и масштабе**, иначе motion transfer будет некорректным.
+This data determines the NB2 prompt — the character must be in the **same shot and scale**, otherwise motion transfer will be incorrect.
+
+> **Framing must match the reference exactly.** If the reference video shows only upper body (legs cropped out of frame), the generated character image must ALSO be cropped to upper body — do NOT generate full-body. Full-body char on an upper-body reference produces wrong scale and wasted screen real estate, and Motion Control will not "zoom in" to compensate. Match the reference crop literally: upper-body ref → upper-body NB2; full-body ref → full-body NB2.
 
 ---
 
-## Параметры Kling Motion Control
+## Kling Motion Control parameters
 
-| Параметр | Значение | Пояснение |
+| Parameter | Value | Note |
 |---|---|---|
-| `image_url` | Supabase URL изображения | Постоянный URL, НЕ fal.media |
-| `video_url` | Supabase URL реф-видео | Постоянный URL, НЕ fal.media |
-| `character_orientation` | `"video"` | Движения из видео (макс 30с) |
-| `keep_original_sound` | `true` | Сохраняем музыку из реф-видео |
-| `prompt` | Краткое описание | "A cute Roblox girl dancing" |
+| `image_url` | Supabase URL of the image | Permanent URL, NOT fal.media |
+| `video_url` | Supabase URL of the reference video | Permanent URL, NOT fal.media |
+| `character_orientation` | `"video"` | Movements from video (max 30s) |
+| `keep_original_sound` | `true` | Keep music from the reference video |
+| `prompt` | Brief description | "A cute Roblox girl dancing" |
 
 ### Polling
 
 - Submit: `POST https://queue.fal.run/fal-ai/kling-video/v2.6/standard/motion-control`
-- Polling base: `fal-ai/kling-video` (2-сегментный путь)
-- Интервал: 15 секунд
-- Таймаут: 10 минут
+- Polling base: `fal-ai/kling-video` (2-segment path)
+- Interval: 15 seconds
+- Timeout: 10 minutes
 
 ---
 
-## Брифы ролям
+## Role briefs
 
 ### Scenarist
-- SKIP — формат не использует storyboard.json. Вся "режиссура" — в реф-видео.
-- Пользователь предоставляет: реф-видео + описание персонажа + описание фона.
+- SKIP — format does not use storyboard.json. All "directing" is in the reference video.
+- The user provides: reference video + character description + background description.
 
 ### Storyboarder
-- **Фаза 0 обязательна:** извлеки кадры из реф-видео, определи план/ракурс.
-- Генерируй персонажа через NB2 в том же плане что в реф-видео.
-- Если есть реф фона (карта из игры) — приложи как `image_urls` для консистентности.
-- `image_urls`: `[bg-ref]` если есть фон-референс, иначе без `image_urls`.
-- Персонаж: full body, чёткие пропорции, >5% площади кадра (требование Kling).
-- Голова не должна быть закрыта (требование Motion Control).
-- Общие правила — `rules/roles/storyboarder.md`
+- **Phase 0 mandatory:** extract frames from the reference video, determine shot/angle.
+- Generate the character through NB2 in the same shot as the reference video.
+- If there is a background ref (game map) — pass as `image_urls` for consistency.
+- `image_urls`: `[bg-ref]` if there is a background reference, otherwise no `image_urls`.
+- Character: full body, clear proportions, >5% of frame area (Kling requirement).
+- Head must not be obscured (Motion Control requirement).
+- General rules — `rules/roles/storyboarder.md`
 
 ### Animator
-- **Модель:** Kling Motion Control v2.6 Standard (`fal-ai/kling-video/v2.6/standard/motion-control`)
-- **Перед генерацией:** загрузи image + video в Supabase (постоянные URL).
-- `character_orientation: "video"` (движения из видео).
-- `keep_original_sound: true` (музыка сохраняется).
-- Длительность определяется реф-видео (макс 30с в video mode).
-- Общие правила — `rules/roles/animator.md`
+- **Model:** Kling Motion Control v2.6 Standard (`fal-ai/kling-video/v2.6/standard/motion-control`)
+- **Before generation:** upload image + video to Supabase (permanent URLs).
+- `character_orientation: "video"` (movements from video).
+- `keep_original_sound: true` (music kept).
+- Duration is determined by the reference video (max 30s in video mode).
+- General rules — `rules/roles/animator.md`
 
 ### Sound
-- SKIP — звук берётся из реф-видео (`keep_original_sound: true`).
-- TTS не нужен, субтитры не нужны.
-- Общие правила — `rules/roles/sound.md`
+- SKIP — sound is taken from the reference video (`keep_original_sound: true`).
+- TTS not needed, subtitles not needed.
+- General rules — `rules/roles/sound.md`
 
 ### Editor
-- Минимальная обработка: scale 1080×1920, 30fps если нужно.
-- Опционально: trim начало/конец, fade out последние 1–2s.
-- **НЕ** перекодировать аудио если `keep_original_sound: true`.
-- Общие правила — `rules/roles/editor.md`
+- Minimal processing: scale 1080×1920, 30fps if needed.
+- Optional: trim start/end, fade out the last 1–2s.
+- **Do NOT** re-encode audio if `keep_original_sound: true`.
+- General rules — `rules/roles/editor.md`
 
 ---
 
-## Выходные файлы
+## Output files
 
 ```
 output/YYYY-MM-DD_motion-test/
-├── ref-frame-first.jpg       # Первый кадр реф-видео (анализ)
-├── ref-frame-mid.jpg         # Средний кадр реф-видео (анализ)
-├── character.png             # Сгенерированное изображение персонажа
-├── dance-ref.mp4             # Реф-видео (оригинал)
-└── final.mp4                 # Результат motion control
+├── ref-frame-first.jpg       # First frame of the reference video (analysis)
+├── ref-frame-mid.jpg         # Middle frame of the reference video (analysis)
+├── character.png             # Generated character image
+├── dance-ref.mp4             # Reference video (original)
+└── final.mp4                 # Motion control result
 ```
 
 ---
 
-## Валидация перед публикацией
+## Validation before publishing
 
-- [ ] Фаза 0 выполнена: кадры из реф-видео извлечены и проанализированы
-- [ ] Персонаж в том же плане/масштабе что в реф-видео
-- [ ] Персонаж занимает >5% кадра, голова не закрыта
-- [ ] image + video загружены в Supabase (постоянные URL)
+- [ ] Phase 0 done: reference video frames extracted and analyzed
+- [ ] Character in the same shot/scale as the reference video
+- [ ] Character occupies >5% of the frame, head not obscured
+- [ ] image + video uploaded to Supabase (permanent URLs)
 - [ ] `character_orientation: "video"`
-- [ ] Реф-видео ≤30s
-- [ ] Результат скачан, размер >10KB
-- [ ] Бюджет ≤$3.00
+- [ ] Reference video ≤30s
+- [ ] Result downloaded, size >10KB
+- [ ] Budget ≤$3.00
 
 ---
 
-## Анти-паттерны
+## Anti-patterns
 
-- ❌ Генерировать изображение персонажа БЕЗ анализа реф-видео (план не совпадёт → кривой motion transfer)
-- ❌ Передавать fal.media URL в `image_url` / `video_url` (протухнут)
-- ❌ `character_orientation: "image"` для танцев (ограничение 10с, хуже для сложных движений)
-- ❌ Реф-видео >30s (лимит Kling в video mode)
-- ❌ Персонаж с закрытой головой (Kling не сможет трансферить мимику)
-- ❌ `-shortest` в FFmpeg (универсальный анти-паттерн)
-- ❌ Путать с Dance Battle (тот формат = два персонажа через Kling I2V, без motion transfer)
+- ❌ Generating character image WITHOUT analyzing the reference video (shot won't match → broken motion transfer)
+- ❌ Passing fal.media URL as `image_url` / `video_url` (will expire)
+- ❌ `character_orientation: "image"` for dances (10s limit, worse for complex movements)
+- ❌ Reference video >30s (Kling limit in video mode)
+- ❌ Character with obscured head (Kling can't transfer expression)
+- ❌ `-shortest` in FFmpeg (universal anti-pattern)
+- ❌ Confusing with Dance Battle (that format = two characters via Kling I2V, no motion transfer)

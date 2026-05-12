@@ -1,239 +1,239 @@
-# Скилл: Создание нового формата видео
+# Skill: Creating a new video format
 
-Пошаговая инструкция для агента. Описывает что спросить у пользователя, в каком порядке, какие решения от чего зависят, какие файлы создать и обновить.
+Step-by-step instructions for the agent. Describes what to ask the user, in what order, which decisions depend on what, which files to create and update.
 
-**Когда использовать:** пользователь просит создать новый формат видео, который не покрывается существующими 8 форматами.
-
----
-
-## Шаг 0. Подготовка
-
-Прочитай перед началом:
-1. `rules/roles/manager.md` строки 137–146 — таблица Format detection (существующие keywords)
-2. `rules/main/budgets.md` — существующие бюджеты и цены моделей
-3. 1–2 существующих формата, ближайших по концепции к новому — как reference
+**When to use:** the user asks to create a new video format that is not covered by the existing 8 formats.
 
 ---
 
-## Шаг 1. Сбор обязательных данных (Tier 1)
+## Step 0. Preparation
 
-Спроси у пользователя **одним блоком**:
+Read before starting:
+1. `rules/roles/manager.md` lines 137–146 — Format detection table (existing keywords)
+2. `rules/main/budgets.md` — existing budgets and model prices
+3. 1–2 existing formats closest in concept to the new one — as reference
 
-| # | Поле | Что спросить | Пример |
+---
+
+## Step 1. Collecting required data (Tier 1)
+
+Ask the user **in one block**:
+
+| # | Field | What to ask | Example |
 |---|------|-------------|--------|
-| 1 | `slug` | Имя формата (kebab-case, EN) | `reaction-compilation` |
-| 2 | `display_name` | Человеческое имя (рус) | «Реакция-компиляция» |
-| 3 | `description` | Одно предложение — суть | «Нарезка реакций персонажа на игровые моменты» |
-| 4 | `keywords` | Слова-триггеры (RU + EN, через запятую) | "reaction", "реакция", "compilation" |
-| 5 | `duration` | Целевая длительность (диапазон, сек) | 20–40s |
-| 6 | `clip_count` | Клипы × длительность | 4 × 5s |
-| 7 | `style` | Визуальный стиль | Pixar 3D / Photorealistic / Anime / Game-specific |
-| 8 | `budget_max` | Максимальный бюджет ($) | $5.00 |
+| 1 | `slug` | Format name (kebab-case, EN) | `reaction-compilation` |
+| 2 | `display_name` | Human name | "Reaction Compilation" |
+| 3 | `description` | One sentence — the essence | "Compilation of character reactions to game moments" |
+| 4 | `keywords` | Trigger words (RU + EN, comma-separated) | "reaction", "реакция", "compilation" |
+| 5 | `duration` | Target duration (range, sec) | 20–40s |
+| 6 | `clip_count` | Clips × duration | 4 × 5s |
+| 7 | `style` | Visual style | Pixar 3D / Photorealistic / Anime / Game-specific |
+| 8 | `budget_max` | Maximum budget ($) | $5.00 |
 
-### Валидация Tier 1
+### Tier 1 validation
 
-- [ ] `slug` — kebab-case, не совпадает с: `serial-drama`, `gameplay-ai-avatar`, `reddit-story`, `news`, `standard`, `dance-battle`, `dual-style`, `object-character`
-- [ ] `keywords` — НЕ пересекаются с keywords из `manager.md:137-146`. Проверь каждое слово.
-- [ ] `budget_max` — в диапазоне $1–$20
-- [ ] Рассчитай `budget_stop` = round(`budget_max` × 0.90, 2)
+- [ ] `slug` — kebab-case, doesn't match: `serial-drama`, `gameplay-ai-avatar`, `reddit-story`, `news`, `standard`, `dance-battle`, `dual-style`, `object-character`
+- [ ] `keywords` — DO NOT overlap with keywords in `manager.md:137-146`. Check each word.
+- [ ] `budget_max` — in the range $1–$20
+- [ ] Compute `budget_stop` = round(`budget_max` × 0.90, 2)
 
 ---
 
-## Шаг 2. Дерево решений по моделям (Tier 2)
+## Step 2. Model decision tree (Tier 2)
 
-Задай **ключевой вопрос**: Есть ли речь/диалог в видео?
+Ask the **key question**: Is there speech/dialogue in the video?
 
-### Ветка A: НЕТ речи → Kling I2V
+### Branch A: NO speech → Kling I2V
 
-Спроси:
-- `generate_audio`: true (Kling генерирует SFX) или false (тишина, anullsrc)?
-- Нужны start + end frames для каждого клипа? (да = лучше continuity, +$0.04/клип)
-- `negative_prompt` обязателен? (да если multi-char или dual-style)
-- Количество персонажей в кадре? (1 / 2 / переменное)
+Ask:
+- `generate_audio`: true (Kling generates SFX) or false (silence, anullsrc)?
+- Need start + end frames for each clip? (yes = better continuity, +$0.04/clip)
+- `negative_prompt` mandatory? (yes for multi-char or dual-style)
+- Number of characters in frame? (1 / 2 / variable)
 
-**Результат:** Image: NB2 → Video: Kling I2V → Audio: SFX only или тишина
+**Result:** Image: NB2 → Video: Kling I2V → Audio: SFX only or silence
 
-### Ветка B: ДА речь → выбор источника голоса
+### Branch B: YES speech → choose voice source
 
-Спроси: КТО генерирует голос?
+Ask: WHO generates the voice?
 
-#### B1: Veo3 T2V (голос встроен)
-- motion_prompt включает `and says: "[text]"`
-- `generate_audio: true` всегда
-- NB2 images нужны? (title card only или полные сцены)
+#### B1: Veo3 T2V (voice baked in)
+- motion_prompt includes `and says: "[text]"`
+- `generate_audio: true` always
+- Need NB2 images? (title card only or full scenes)
 
-**Результат:** Image: NB2 (опц.) → Video: Veo3 T2V → Audio: встроен
+**Result:** Image: NB2 (opt.) → Video: Veo3 T2V → Audio: embedded
 
 #### B2: ElevenLabs TTS + Kling Avatar v2 (lipsync)
-Спроси:
-- Ускорение Avatar после генерации? (1.3x для энергичных / 1.0x для драмы)
-- Двухэтапное согласование? (TTS → показать пользователю → затем Avatar)
-- Голос: фиксированный на персонажа в story bible ИЛИ выбирается на каждое видео?
+Ask:
+- Speed up Avatar after generation? (1.3x for energetic / 1.0x for drama)
+- Two-step approval? (TTS → show user → then Avatar)
+- Voice: locked per character in story bible OR chosen per video?
 
-**Результат:** Image: NB2 (avatar ref) → TTS: ElevenLabs → Video: Kling Avatar v2
+**Result:** Image: NB2 (avatar ref) → TTS: ElevenLabs → Video: Kling Avatar v2
 
-#### B3: ElevenLabs TTS overlay на silent video
-Спроси:
+#### B3: ElevenLabs TTS overlay on silent video
+Ask:
 - TTS volume? (default 1.0)
-- SFX volume от Kling? (default 0.4)
-- `adelay` задержка TTS? (default 500ms)
+- SFX volume from Kling? (default 0.4)
+- `adelay` TTS delay? (default 500ms)
 
-**Результат:** Image: NB2 → Video: Kling I2V (SFX) → TTS: ElevenLabs overlay
+**Result:** Image: NB2 → Video: Kling I2V (SFX) → TTS: ElevenLabs overlay
 
-#### B4: MIXED (I2V action + Avatar dialogue в одном видео)
-Спроси:
-- Какие `clip_type` существуют? (action / dialogue / reaction / etc.)
-- Какой clip_type → какая модель?
-- Баланс action/dialogue? (50/50 / 70/30 / etc.)
-- `generate_audio` для I2V клипов: true или false?
+#### B4: MIXED (I2V action + Avatar dialogue in one video)
+Ask:
+- What `clip_type`s exist? (action / dialogue / reaction / etc.)
+- Which clip_type → which model?
+- action/dialogue balance? (50/50 / 70/30 / etc.)
+- `generate_audio` for I2V clips: true or false?
 
-**Результат:** Image: NB2 → Video: Kling I2V + Kling Avatar v2 → TTS: ElevenLabs (для Avatar)
+**Result:** Image: NB2 → Video: Kling I2V + Kling Avatar v2 → TTS: ElevenLabs (for Avatar)
 
-### Ветка C: Нет генерации видео (только монтаж)
+### Branch C: No video generation (assembly only)
 
-Спроси:
-- Откуда клипы? (`games/{TAG}/gameplay/` / пользователь загружает / Supabase)
-- Как выбираются? (shuf random / user-specified / по стортибоарду)
+Ask:
+- Where do clips come from? (`games/{TAG}/gameplay/` / user uploads / Supabase)
+- How are they selected? (shuf random / user-specified / by storyboard)
 - Audio handling: strip (`-an`) / keep (volume=X)?
-- TTS нужен? (narration overlay)
+- TTS needed? (narration overlay)
 
-**Результат:** Video: pre-existing clips → TTS: ElevenLabs (опц.) → Assembly: FFmpeg
+**Result:** Video: pre-existing clips → TTS: ElevenLabs (opt.) → Assembly: FFmpeg
 
 ---
 
-## Шаг 3. Условные вопросы (Tier 3–5)
+## Step 3. Conditional questions (Tier 3–5)
 
-Задавай ТОЛЬКО релевантные секции. Пропускай неприменимые.
+Ask ONLY relevant sections. Skip non-applicable ones.
 
-### 3a. Image Generation (если NB2 используется)
+### 3a. Image Generation (if NB2 is used)
 
-| # | Вопрос | Defaults |
+| # | Question | Defaults |
 |---|--------|----------|
-| 1 | Сколько character refs? | 1 |
-| 2 | bg-reference на локацию обязателен? | нет |
-| 3 | Chain strategy для scene refs? | `[anchor, prev-scene]` |
-| 4 | Aspect ratio images | 608×1080 (9:16) |
-| 5 | Особые требования к image_prompt? | нет |
+| 1 | How many character refs? | 1 |
+| 2 | Bg-reference per location mandatory? | no |
+| 3 | Chain strategy for scene refs? | `[anchor, prev-scene]` |
+| 4 | Image aspect ratio | 608×1080 (9:16) |
+| 5 | Special image_prompt requirements? | no |
 
-### 3b. Episodic / Serial (если формат серийный)
+### 3b. Episodic / Serial (if format is episodic)
 
-| # | Вопрос | Варианты |
+| # | Question | Options |
 |---|--------|----------|
-| 1 | Story bible нужен? | да / нет |
-| 2 | Какие поля в story bible? | characters+status+relationships / themes+tones FIFO / custom |
-| 3 | Anti-repetition: что ротировать? | phrases / hooks / cliffhangers / styles / emotions / custom |
-| 4 | Loop management? | Minor/Major/Eternal / нет |
-| 5 | State transitions после эпизода? | список полей для обновления |
+| 1 | Story bible needed? | yes / no |
+| 2 | What fields in the story bible? | characters+status+relationships / themes+tones FIFO / custom |
+| 3 | Anti-repetition: what to rotate? | phrases / hooks / cliffhangers / styles / emotions / custom |
+| 4 | Loop management? | Minor/Major/Eternal / no |
+| 5 | State transitions after an episode? | list of fields to update |
 
-### 3c. Pre-Production Phase (если есть)
+### 3c. Pre-Production Phase (if any)
 
-| # | Вопрос | Варианты |
+| # | Question | Options |
 |---|--------|----------|
-| 1 | Research phase? | web search → research.json / нет |
-| 2 | Asset bank check? | Supabase game_assets / нет |
-| 3 | State analysis? | story bible / нет |
+| 1 | Research phase? | web search → research.json / no |
+| 2 | Asset bank check? | Supabase game_assets / no |
+| 3 | State analysis? | story bible / no |
 
-### 3d. Субтитры
+### 3d. Subtitles
 
-| # | Вопрос | Варианты |
+| # | Question | Options |
 |---|--------|----------|
-| 1 | Нужны субтитры? | да / нет |
-| 2 | Метод? | PIL PNG overlay / drawtext ffmpeg / нет |
-| 3 | Шрифт/размер? | Arial Bold 38-48px / Montserrat Bold 42px / custom |
-| 4 | Позиция? | нижняя треть / split boundary / custom y= |
-| 5 | Word-highlight? | да (accent color) / нет (plain white) |
+| 1 | Subtitles needed? | yes / no |
+| 2 | Method? | PIL PNG overlay / drawtext ffmpeg / none |
+| 3 | Font/size? | Arial Bold 38-48px / Montserrat Bold 42px / custom |
+| 4 | Position? | lower third / split boundary / custom y= |
+| 5 | Word-highlight? | yes (accent color) / no (plain white) |
 
 ### 3e. CTA / TBC
 
-| # | Вопрос | Варианты |
+| # | Question | Options |
 |---|--------|----------|
-| 1 | CTA нужен? | clip в concat-list / overlay последние 2s / нет |
-| 2 | TBC overlay? | да (за 2s до конца) / нет |
-| 3 | Fade out? | да (1.0s) / нет |
+| 1 | CTA needed? | clip in concat-list / overlay last 2s / none |
+| 2 | TBC overlay? | yes (2s before end) / no |
+| 3 | Fade out? | yes (1.0s) / no |
 
-### 3f. Музыка
+### 3f. Music
 
-| # | Вопрос | Defaults |
+| # | Question | Defaults |
 |---|--------|----------|
-| 1 | Фоновая музыка? | опциональна |
+| 1 | Background music? | optional |
 | 2 | Volume level? | 0.15 |
 | 3 | Mood category? | drama / energetic / comedic / lo-fi |
-| 4 | Kling SFX + музыка одновременно? Volumes? | SFX 0.4, music 0.15 |
+| 4 | Kling SFX + music together? Volumes? | SFX 0.4, music 0.15 |
 
 ### 3g. Layout
 
-| # | Вопрос | Default |
+| # | Question | Default |
 |---|--------|---------|
-| 1 | Standard vertical 9:16 или split-screen? | vertical |
-| 2 | (если split) Пропорции? | 60/40 |
-| 3 | (если split) Что сверху / снизу? | — |
-| 4 | (если split) Scale+crop правила? | `scale=1080:-2,crop=...` |
-| 5 | (если split) Audio mixing volumes? | — |
+| 1 | Standard vertical 9:16 or split-screen? | vertical |
+| 2 | (if split) Proportions? | 60/40 |
+| 3 | (if split) What top / bottom? | — |
+| 4 | (if split) Scale+crop rules? | `scale=1080:-2,crop=...` |
+| 5 | (if split) Audio mixing volumes? | — |
 
 ### 3h. Game-Specific Overrides
 
-| # | Вопрос | Default |
+| # | Question | Default |
 |---|--------|---------|
-| 1 | Нужен `{format}_special.md` на игру? | нет |
-| 2 | Какие поля в special? | style / characters / music mood / search keywords |
+| 1 | Need `{format}_special.md` per game? | no |
+| 2 | Which fields in special? | style / characters / music mood / search keywords |
 
 ---
 
-## Шаг 4. Расчёт бюджета
+## Step 4. Budget calculation
 
-На основе собранных данных рассчитай типичную и максимальную стоимость.
+Based on collected data, compute typical and maximum cost.
 
-### Цены моделей (из `budgets.md`)
+### Model prices (from `budgets.md`)
 
-| Модель | 5s | 10s |
+| Model | 5s | 10s |
 |--------|----|----|
 | NB2 image | $0.04 | $0.04 |
-| Kling I2V (без аудио) | $0.35 | $0.70 |
-| Kling I2V (с аудио) | $0.70 | $1.40 |
+| Kling I2V (no audio) | $0.35 | $0.70 |
+| Kling I2V (with audio) | $0.70 | $1.40 |
 | Kling Avatar v2 | $0.28 | $0.56 |
-| ElevenLabs TTS (фраза) | ~$0.05–0.10 | ~$0.07–0.15 |
-| Veo3 T2V 8s (с аудио) | — | $3.20 |
+| ElevenLabs TTS (line) | ~$0.05–0.10 | ~$0.07–0.15 |
+| Veo3 T2V 8s (with audio) | — | $3.20 |
 
-### Формула
+### Formula
 
 ```
 typical_cost = (clip_count × image_cost) + (clip_count × video_cost) + tts_cost
 ```
 
 - [ ] `typical_cost` ≤ `budget_max`
-- [ ] Если нет — предложи уменьшить clip_count или сменить модель
+- [ ] If not — propose reducing clip_count or switching the model
 
 ---
 
-## Шаг 5. Генерация playbook-файла
+## Step 5. Generating the playbook file
 
-Создай `rules/formats/{slug}.md` по канонической структуре:
+Create `rules/formats/{slug}.md` following the canonical structure:
 
 ```
-# Формат "{display_name}" — {description}
+# Format "{display_name}" — {description}
 
-{описание абзацем: жанр, целевая аудитория, ключевая фишка}
+{paragraph description: genre, target audience, key gimmick}
 
-Этот файл — **playbook**: когда использовать, концепт, бюджет, брифы каждой роли.
-Крафтовые правила — в `rules/roles/*.md`.
-
----
-
-## Когда использовать
-
-Ключевые слова: «{keyword1}», «{keyword2}», ...
+This file is the **playbook**: when to use, concept, budget, role briefs.
+Craft rules — in `rules/roles/*.md`.
 
 ---
 
-## Концепт
+## When to use
 
-- **Жанр:** {style description}
-- **Стиль:** {visual style}
-- **Длительность:** {duration range} ({clip_count} клипов × {clip_duration})
-- **Бюджет:** до ${budget_max} на видео. Остановись если расход > ${budget_stop}.
-- **Формат кадра:** {9:16 (608×1080) / split-screen layout}
+Keywords: "{keyword1}", "{keyword2}", ...
 
-### Модели
+---
+
+## Concept
+
+- **Genre:** {style description}
+- **Style:** {visual style}
+- **Duration:** {duration range} ({clip_count} clips × {clip_duration})
+- **Budget:** up to ${budget_max} per video. Stop if spend > ${budget_stop}.
+- **Frame format:** {9:16 (608×1080) / split-screen layout}
+
+### Models
 
 - **Image:** {NB2 / skip}
 - **Video:** {Kling I2V / Kling Avatar v2 / Veo3 T2V / pre-existing clips}
@@ -241,21 +241,21 @@ typical_cost = (clip_count × image_cost) + (clip_count × video_cost) + tts_cos
 
 ---
 
-## Бюджет (ориентиры)
+## Budget (rough estimates)
 
-| Компонент | 5s клип | 10s клип |
+| Component | 5s clip | 10s clip |
 |---|---|---|
 | {model rows from Step 4} | | |
 
-| Вариант | Клипов | Стоимость |
+| Variant | Clips | Cost |
 |---|---|---|
-| Базовый (рекомендуемый) | {N} × {dur} | ~${typical} |
+| Base (recommended) | {N} × {dur} | ~${typical} |
 
 ---
 
-## Структура {эпизода/видео}
+## Episode / video structure
 
-| Фаза | Тайминг | Цель | Клипов |
+| Phase | Timing | Goal | Clips |
 |---|---|---|---|
 | {beat rows} | | | |
 
@@ -265,105 +265,105 @@ typical_cost = (clip_count × image_cost) + (clip_count × video_cost) + tts_cos
 
 ---
 
-## Брифы ролям
+## Role briefs
 
 ### Scenarist
 {format-specific instructions}
-- Общие правила сценария — `rules/roles/scenarist.md`
+- General script rules — `rules/roles/scenarist.md`
 
 ### Storyboarder
-{format-specific instructions ИЛИ "SKIP — формат не использует NB2 image gen."}
-- Общие правила — `rules/roles/storyboarder.md`
+{format-specific instructions OR "SKIP — format does not use NB2 image gen."}
+- General rules — `rules/roles/storyboarder.md`
 
 ### Animator
-{format-specific instructions ИЛИ "SKIP — формат не использует AI video gen."}
-- Общие правила — `rules/roles/animator.md`
+{format-specific instructions OR "SKIP — format does not use AI video gen."}
+- General rules — `rules/roles/animator.md`
 
 ### Sound
 {format-specific instructions}
-- Общие правила — `rules/roles/sound.md`
+- General rules — `rules/roles/sound.md`
 
 ### Editor
 {format-specific instructions}
-- Общие правила — `rules/roles/editor.md`
+- General rules — `rules/roles/editor.md`
 
 ---
 
-## Выходные файлы
+## Output files
 
-{дерево директорий, output structure}
+{directory tree, output structure}
 
 ---
 
-## Валидация перед публикацией
+## Validation before publishing
 
 - [ ] {checklist items based on format specifics}
 
 ---
 
-## Анти-паттерны
+## Anti-patterns
 
 - ❌ {common mistakes for this format}
-- ❌ `-shortest` в FFmpeg (ВСЕГДА используй `apad`)
-- ❌ `voice_id` хеш вместо `voice` имени в ElevenLabs
-- ❌ character ref напрямую как scene image
+- ❌ `-shortest` in FFmpeg (ALWAYS use `apad`)
+- ❌ `voice_id` hash instead of `voice` name in ElevenLabs
+- ❌ Character ref directly as scene image
 ```
 
-### Обязательные секции (всегда включать)
+### Mandatory sections (always include)
 
-1. Когда использовать
-2. Концепт
-3. Бюджет
-4. Структура
-5. Брифы ролям (все 5 + SKIP где не нужны)
-6. Выходные файлы
-7. Валидация
-8. Анти-паттерны
+1. When to use
+2. Concept
+3. Budget
+4. Structure
+5. Role briefs (all 5 + SKIP where not needed)
+6. Output files
+7. Validation
+8. Anti-patterns
 
-### Условные секции (включать при ответе «да»)
+### Conditional sections (include when answered "yes")
 
-| Секция | Когда |
+| Section | When |
 |--------|-------|
-| Story Bible | формат серийный |
-| Loop Management | формат серийный с петлями интриги |
-| Anti-Repetition Check | формат серийный |
-| Retention Strategy | формат серийный |
-| Pre-Production / Research Phase | есть pre-research |
-| Gameplay Clip Requirements | используются pre-existing clips |
+| Story Bible | format is serial |
+| Loop Management | serial format with intrigue loops |
+| Anti-Repetition Check | serial format |
+| Retention Strategy | serial format |
+| Pre-Production / Research Phase | has pre-research |
+| Gameplay Clip Requirements | uses pre-existing clips |
 | Visual Layout | split-screen |
-| Prompting Rules | особая структура промптов (4-layer, markers) |
-| Voice Mapping | несколько голосов / emotion-based выбор |
-| Locked / Variable Parameters | параметры фиксированы на серию |
-| CTA | есть call to action |
+| Prompting Rules | special prompt structure (4-layer, markers) |
+| Voice Mapping | multiple voices / emotion-based pick |
+| Locked / Variable Parameters | parameters locked across the series |
+| CTA | has a call to action |
 
 ---
 
-## Шаг 6. Обновление cross-cutting файлов
+## Step 6. Updating cross-cutting files
 
-После создания playbook обнови 4 файла:
+After creating the playbook, update 4 files:
 
 ### 6a. `rules/main/budgets.md`
 
-Добавь строку в таблицу «Бюджетные лимиты» (после последней строки):
+Add a row to the "Budget limits" table (after the last row):
 
 ```
-| {Display Name} | **${budget_max}** | Расход > ${budget_stop} |
+| {Display Name} | **${budget_max}** | Spend > ${budget_stop} |
 ```
 
-Если формат имеет варианты (single/series, I2V/T2V), добавь отдельные строки.
+If the format has variants (single/series, I2V/T2V), add separate rows.
 
 ### 6b. `video-agent/CLAUDE.md`
 
-Найди строки 36-37:
+Find lines 36-37:
 ```
 │   └── {serial-drama, gameplay-ai-avatar, news, standard,
 │       reddit-story, dance-battle, object-character, dual-style}.md
 ```
-Добавь `{slug}` в перечисление внутри `{}`.
+Add `{slug}` into the list inside `{}`.
 
 ### 6c. `rules/roles/manager.md`
 
-Найди таблицу Format detection (строки 137-146). Добавь строку **ПЕРЕД** «Всё остальное | Standard»:
+Find the Format detection table (lines 137-146). Add a row **BEFORE** "Anything else | Standard":
 
 ```
 | "{keyword1}", "{keyword2}" | {Display Name} | `rules/formats/{slug}.md` |
@@ -371,7 +371,7 @@ typical_cost = (clip_count × image_cost) + (clip_count × video_cost) + tts_cos
 
 ### 6d. `video-agent/STRUCTURE.md`
 
-Найди listing format files (строки 119-126). Добавь:
+Find the listing of format files (lines 119-126). Add:
 
 ```
 │       ├── {slug}.md           # {display_name}
@@ -379,11 +379,11 @@ typical_cost = (clip_count × image_cost) + (clip_count × video_cost) + tts_cos
 
 ---
 
-## Шаг 7. Auxiliary файлы (если нужны)
+## Step 7. Auxiliary files (if needed)
 
-### Story Bible Template (если формат серийный)
+### Story Bible Template (if format is serial)
 
-Создай `games/{GAME_TAG}/{slug}_story_bible.json`:
+Create `games/{GAME_TAG}/{slug}_story_bible.json`:
 
 ```json
 {
@@ -402,61 +402,61 @@ typical_cost = (clip_count × image_cost) + (clip_count × video_cost) + tts_cos
 }
 ```
 
-Адаптируй поля под ответы из шага 3b.
+Adapt fields per answers from step 3b.
 
-### Game-Specific Special Template (если нужен)
+### Game-Specific Special Template (if needed)
 
-Создай `games/{GAME_TAG}/{slug}_special.md`:
+Create `games/{GAME_TAG}/{slug}_special.md`:
 
 ```markdown
-# {Display Name} — настройки для {Game Name}
+# {Display Name} — settings for {Game Name}
 
-{поля из шага 3h}
+{fields from step 3h}
 ```
 
 ---
 
-## Шаг 8. Финальная валидация
+## Step 8. Final validation
 
-Покажи пользователю чеклист:
+Show the user the checklist:
 
-- [ ] `rules/formats/{slug}.md` создан, содержит все обязательные секции
-- [ ] `budgets.md` содержит строку с новым форматом
-- [ ] `CLAUDE.md` содержит slug в списке форматов
-- [ ] `manager.md` содержит keywords в таблице Format detection
-- [ ] `STRUCTURE.md` содержит файл в listing
-- [ ] Keywords НЕ пересекаются с существующими форматами
-- [ ] Бюджет реалистичен: `typical_cost` ≤ `budget_max`
-- [ ] Все role briefs заполнены или помечены SKIP с причиной
-- [ ] Условные секции включены/исключены корректно
-- [ ] Auxiliary файлы созданы (если нужны)
+- [ ] `rules/formats/{slug}.md` created, contains all required sections
+- [ ] `budgets.md` contains a row with the new format
+- [ ] `CLAUDE.md` has the slug in the format list
+- [ ] `manager.md` has the keywords in the Format detection table
+- [ ] `STRUCTURE.md` has the file in the listing
+- [ ] Keywords DO NOT overlap with existing formats
+- [ ] Budget realistic: `typical_cost` ≤ `budget_max`
+- [ ] All role briefs filled or marked SKIP with a reason
+- [ ] Conditional sections included/excluded correctly
+- [ ] Auxiliary files created (if needed)
 
 ---
 
-## Defaults (авто-заполнение если пользователь не указал)
+## Defaults (auto-fill if user did not specify)
 
-| Поле | Default | Когда менять |
+| Field | Default | When to change |
 |------|---------|-------------|
 | Frame format | 9:16 (1080×1920) | Split-screen layout |
-| Default clip duration | 5s | Формат требует иное |
-| `generate_audio` I2V | true | Если отдельный TTS overlay (false) |
-| Music volume | 0.15 | По формату (0.05–0.25) |
-| Subtitle method | нет | Если есть речь |
-| CTA | нет | Если указано |
-| TBC | нет | Только serial |
-| fps | 30 | Всегда |
-| Codec | libx264, preset slow, crf 20 | Всегда |
-| Audio | AAC 128k stereo | Всегда |
+| Default clip duration | 5s | Format requires otherwise |
+| `generate_audio` I2V | true | If separate TTS overlay (false) |
+| Music volume | 0.15 | Per format (0.05–0.25) |
+| Subtitle method | none | If there is speech |
+| CTA | none | If specified |
+| TBC | none | Only serial |
+| fps | 30 | Always |
+| Codec | libx264, preset slow, crf 20 | Always |
+| Audio | AAC 128k stereo | Always |
 | `budget_stop` | budget_max × 0.90 | — |
-| `-shortest` | **НИКОГДА** | Универсальный анти-паттерн |
+| `-shortest` | **NEVER** | Universal anti-pattern |
 
 ---
 
-## Анти-паттерны скилла
+## Skill anti-patterns
 
-- ❌ Создавать формат без опроса пользователя (не угадывай — спрашивай)
-- ❌ Копировать существующий формат и менять имя (каждый формат уникален)
-- ❌ Пропускать обновление cross-cutting файлов (playbook без detection keywords = мёртвый формат)
-- ❌ Keywords, пересекающиеся с существующими форматами (конфликт детекции)
-- ❌ Бюджет без расчёта по ценам моделей (нереалистичный лимит)
-- ❌ Пустые role briefs без SKIP-пометки (агент не поймёт — делать или нет)
+- ❌ Creating a format without polling the user (don't guess — ask)
+- ❌ Copying an existing format and renaming (each format is unique)
+- ❌ Skipping cross-cutting file updates (playbook without detection keywords = dead format)
+- ❌ Keywords overlapping with existing formats (detection conflict)
+- ❌ Budget without computing per model prices (unrealistic limit)
+- ❌ Empty role briefs without SKIP marker (agent won't know — do or not)

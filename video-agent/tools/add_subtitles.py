@@ -18,6 +18,10 @@ Options:
   --no-scale                 skip scale/pad to 1080x1920
   --tbc                      append TO BE CONTINUED... after last chunk
   --color AABBGGRR           highlight color in ASS hex (default: 0000FFFF = yellow)
+  --atempo N.NN              audio will be sped up by this factor in editor;
+                             whisper runs on the original mp3 but ASS timestamps
+                             are divided by atempo so subs stay in sync after speedup
+                             (cap 1.4× — voice quality degrades above)
 
 Stdout: output file path. Stderr: progress logs.
 FFMPEG: /usr/local/bin/ffmpeg-full/ffmpeg  (tessus build, requires libass)
@@ -155,7 +159,13 @@ def main():
     ap.add_argument("--no-scale", action="store_true")
     ap.add_argument("--tbc", action="store_true")
     ap.add_argument("--color", default="0000FFFF")
+    ap.add_argument("--atempo", type=float, default=1.0,
+                    help="audio speedup factor in editor; ASS timestamps divided by this")
     args = ap.parse_args()
+
+    if args.atempo < 1.0 or args.atempo > 1.5:
+        print(f"ERROR: --atempo must be in [1.0, 1.5], got {args.atempo}", file=sys.stderr)
+        sys.exit(1)
 
     emphasis = [p.strip() for p in args.emphasis.split(",") if p.strip()] if args.emphasis else []
 
@@ -164,6 +174,10 @@ def main():
     if not words:
         print("ERROR: no words detected", file=sys.stderr)
         sys.exit(1)
+
+    if args.atempo != 1.0:
+        words = [(s / args.atempo, e / args.atempo, w) for (s, e, w) in words]
+        print(f"  [atempo] timestamps scaled by 1/{args.atempo:.3f}", file=sys.stderr)
 
     chunks = chunk_words(words, args.chunk, clip_dur)
     print(f"  [subtitles] {len(chunks)} chunks:", file=sys.stderr)
@@ -180,9 +194,10 @@ def main():
         "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,"
     vf = f"{scale_filter}subtitles={ass_path}"
 
+    tmp_output = args.output + ".tmp.mp4"
     cmd = [FFMPEG, "-y", "-i", args.video, "-vf", vf,
            "-c:v", "libx264", "-preset", "fast", "-crf", "20", "-c:a", "copy",
-           args.output]
+           tmp_output]
 
     print("  [ffmpeg] rendering ...", file=sys.stderr)
     log_path = args.output.replace(".mp4", ".ffmpeg.log")
@@ -192,8 +207,23 @@ def main():
         with open(log_path) as f:
             lines = f.readlines()
         print("".join(lines[-40:]), file=sys.stderr)
+        if os.path.exists(tmp_output):
+            os.remove(tmp_output)
         sys.exit(1)
 
+    # Validate: output duration must match input within 0.5s.
+    try:
+        out_dur = get_duration(tmp_output)
+    except Exception as e:
+        print(f"ERROR: ffprobe failed on rendered output ({e}) — likely truncated/no moov", file=sys.stderr)
+        os.remove(tmp_output)
+        sys.exit(1)
+    if abs(out_dur - clip_dur) > 0.5:
+        print(f"ERROR: output duration {out_dur:.2f}s != input {clip_dur:.2f}s — encode was killed mid-stream", file=sys.stderr)
+        os.remove(tmp_output)
+        sys.exit(1)
+
+    os.replace(tmp_output, args.output)
     print(args.output)
 
 
