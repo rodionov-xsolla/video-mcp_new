@@ -144,7 +144,7 @@ This data determines the NB2 prompt — the character must be in the **same shot
 ## Output files
 
 ```
-output/YYYY-MM-DD_motion-test/
+output/YYYY-MM-DD/{GAME_TAG}/motion-dance/
 ├── ref-frame-first.jpg       # First frame of the reference video (analysis)
 ├── ref-frame-mid.jpg         # Middle frame of the reference video (analysis)
 ├── character.png             # Generated character image

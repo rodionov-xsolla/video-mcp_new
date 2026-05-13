@@ -19,7 +19,7 @@ What you personally do:
 2. **Read `rules/roles/manager.md`** — orchestration, contracts between roles, Supabase, git push after episode. This is the only role file you read.
 3. **Detect format** from the user request → read `rules/formats/{format}.md` (only the "Manager" section and overall structure; role briefs you skip — each sub-agent reads its own).
 4. **Read `rules/main/budgets.md` and `rules/main/fallback.md`** — limits and error handling.
-5. **Phase 0 — prep:** create `OUTPUT_DIR` (`output/YYYY-MM-DD_{game}_{format}-{slug}/`), gather `EXISTING_REFS_JSON` from Supabase (if the format uses persisted assets), path to story bible for serial-drama / reddit-story.
+5. **Phase 0 — prep:** create `OUTPUT_DIR` (`output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/`, e.g. `output/2026-05-12/roblox/motion-dance/`), gather `EXISTING_REFS_JSON` from Supabase (if the format uses persisted assets), path to story bible for serial-drama / reddit-story.
 6. **Delegate phases via the `Agent` tool** in this order:
 
    | Phase | subagent_type | Model | Purpose |
