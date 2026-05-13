@@ -114,10 +114,12 @@ This data determines the NB2 prompt — the character must be in the **same shot
 ### Storyboarder
 - **Phase 0 mandatory:** extract frames from the reference video, determine shot/angle.
 - Generate the character through NB2 in the same shot as the reference video.
-- If there is a background ref (game map) — pass as `image_urls` for consistency.
-- `image_urls`: `[bg-ref]` if there is a background reference, otherwise no `image_urls`.
-- Character: full body, clear proportions, >5% of frame area (Kling requirement).
-- Head must not be obscured (Motion Control requirement).
+- **`image_urls` must combine two roles** (identity + composition):
+  1. **Identity ref:** the character's stand-alone char-sheet (tight portrait/turnaround on neutral background) — `games/{GAME_TAG}/assets/refs/{char-slug}-sheet.png`. NEVER a prior wide-shot scene render — NB2 copies the composition of its visual refs, so a wide-shot identity ref produces a wide-shot result regardless of the text prompt.
+  2. **Composition ref:** `ref-frame-mid.jpg` (the middle frame of the reference dance video). This is what locks the framing/scale/angle — text instructions like "hips-up, 60% width" are overridden by visual refs, so the actual ref frame must be in `image_urls`.
+- Final shape: `image_urls: [char-sheet, ref-frame-mid.jpg]` (+ `bg-ref` first if a separate background ref exists).
+- If no char-sheet exists for this character yet — generate one FIRST (16:9, neutral bg, ~$0.04), save to `games/{GAME_TAG}/assets/refs/`, then run the scene generation. See `rules/roles/storyboarder.md` §8a.1.
+- Character: framing must match the ref video frame literally (upper-body ref → upper-body NB2; full-body ref → full-body NB2). >5% of frame area (Kling requirement). Head not obscured (Motion Control requirement).
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
@@ -170,6 +172,8 @@ output/YYYY-MM-DD/{GAME_TAG}/motion-dance/
 ## Anti-patterns
 
 - ❌ Generating character image WITHOUT analyzing the reference video (shot won't match → broken motion transfer)
+- ❌ Using a wide-shot scene render as identity chain-ref. NB2 copies composition from visual refs, so a wide-shot ref → wide-shot output, even with "tight medium shot" in the text prompt. Always use a stand-alone char-sheet (neutral bg, tight portrait) as identity ref.
+- ❌ Omitting `ref-frame-mid.jpg` from `image_urls`. Reading the ref frame in your head and describing it in text is not enough — the actual JPEG must be in `image_urls` so NB2 sees the target composition.
 - ❌ Passing fal.media URL as `image_url` / `video_url` (will expire)
 - ❌ `character_orientation: "image"` for dances (10s limit, worse for complex movements)
 - ❌ Reference video >30s (Kling limit in video mode)

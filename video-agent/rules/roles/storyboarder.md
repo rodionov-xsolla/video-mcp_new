@@ -374,6 +374,8 @@ Save as `games/{GAME_TAG}/assets/refs/{slug}-sheet.png`.
 
 Every new character in any format requires its own character sheet (16:9) + avatar ref (9:16 for Kling Avatar). Never reuse one character's ref for another — style, face, and proportions will drift.
 
+**Sheet is mandatory even for "ad-hoc" characters in single-clip formats** (motion-dance, dance-battle, object-character one-offs). It's tempting to skip the sheet and render the character straight into the scene — DON'T. The next run that wants the same character will only have your wide-shot scene render to chain off, and NB2 will copy its composition (wide shot → wide-shot output, regardless of text prompt). One $0.04 sheet now saves $1+ of mis-framed Kling Motion Control / Avatar calls later. Treat the sheet as the deliverable, the scene render as a downstream artifact.
+
 Order:
 1. Check asset bank (`game_assets`) — if a ref exists, use the URL
 2. If not — generate character sheet (NB2 text-to-image) + avatar ref (NB2 edit with sheet as ref)
