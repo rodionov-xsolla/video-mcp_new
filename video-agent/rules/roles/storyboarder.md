@@ -620,6 +620,40 @@ NB2 with a bg ref does not distinguish "in front of the object" from "behind the
 
 Scenarist specifies narratively correct positions in `action_description` (see `scenarist.md` section 4). Storyboarder **validates** when writing the prompt: do not place characters where they should not be by story. If `action_description` says "Dave OUTSIDE the rope" — verify the prompt actually puts him outside.
 
+#### 14.6 Real-world scale of every object — MANDATORY, always
+
+NB2 does NOT know the real-world size of anything. A character, a fountain, a console, a sword, a window, a vehicle — all of them get scaled to whatever the canvas composition seems to "want", not to physical reality. This is independent of whether the subject is large, small, central, or peripheral. It applies to single-character shots, multi-character shots, object-character formats, environment-only renders, props — everything. Bg ref defines color/atmosphere; **scale of every entity in the frame is determined by the prompt alone**.
+
+Without explicit scale anchors NB2 will pick the size that fills the canvas most pleasantly: a child reads adult-sized, a fountain reads man-sized, a starship console reads phone-sized, a giant reads as a regular person. This is the single most common visual failure across formats.
+
+**Failures observed in production:**
+
+- *Seven of Nine character-story, scene-2* — child Annika in a cramped Federation lab rendered at ~70% of frame height with toy proportions. Fix: explicit pose + head-position-relative-to-workbench + frame-percentage clauses; scale corrected and head-too-big artifact disappeared as a side effect.
+- *Roblox serial-drama, fountain scene* — LUXURIA fountain rendered roughly man-sized instead of monumental; the hero stood at full fountain height instead of reading as small at its base. Fix: scale clause tying character height to a named fountain tier.
+
+**Rule — every scene prompt that contains a subject + bg objects must specify scale by tying entities to each other, not to the canvas:**
+
+1. **Anchor every notable entity to at least one other entity in the frame.** Not "tall fountain", not "small child" — `"fountain three times the character's height"`, `"character's head reaches the lower edge of the porthole"`, `"sword the length of the character's forearm"`, `"console panel taller than the character standing beside it"`. Comparative geometry, not adjectives.
+
+2. **Pick anchor objects that are actually in the bg ref.** Anchoring to "the wall" is useless — anchor to the second tier of the fountain, the upper edge of the viewport, the second shelf of the workbench, the rim of the cockpit canopy. Specific named bg landmarks.
+
+3. **State the frame share when the subject is meant to be visually small or visually dominant** — `"subject occupies LOWER 35% of frame"`, `"figure fills approximately 70% of frame height"`. Skip the percentage when the scale is "normal" (character standing in a normal corridor at chest-to-head framing); state it whenever the shot pushes away from default.
+
+4. **For multi-entity frames, state the size relationship between subjects** — `"Bella roughly half the height of Dave next to her (she is crouched, he stands)"`, `"the drone is the size of the character's torso"`. Without this NB2 averages them to similar heights regardless of the species/age/object difference.
+
+5. **Pose can amplify scale, but cannot replace anchoring.** Crouching, kneeling, sitting reduce a character's vertical footprint and help when the subject should read small — but a standing figure can still read small if anchored to a tall bg object explicitly (`"head reaches the lower rim of the airlock door"`). Conversely, a giant must be anchored to small bg objects (`"foot the length of a parked car"`), or NB2 will draw an average-sized person.
+
+6. **Anti-Pixar / anti-toy clauses for children specifically** — NB2 is biased to render children as Pixar-proportioned regardless of the rest of the prompt. Add `"realistic child anatomy, head-to-body ratio ~1:6 for a 6-year-old / ~1:7 for a 10-year-old, NOT Pixar style, NOT cartoon, NOT toy-like"`. This is on top of the scale anchors, not instead of them.
+
+**Anti-patterns:**
+
+- ❌ Relying on `camera_angle` ("wide-angle medium from above") to force a small subject — angle is a stylistic hint in NB2, not a geometric constraint.
+- ❌ Adjectives without anchors — "tall", "huge", "tiny", "massive", "towering". NB2 reads these but does not act on them at the geometric level.
+- ❌ "Standing next to" without size relation — NB2 will place them at the same height by default.
+- ❌ Anchoring to abstract regions ("upper half of frame") instead of bg objects.
+
+**Sanity check before approval:** for every visible entity, ask "is this entity at the size it would be if a real human were standing in this scene?" If a fountain in a town square looks like garden statuary, or a child looks adult-sized, or a Borg cube alcove looks doll-sized — regenerate with stricter anchors. Do not patch scale problems in Kling or in post; they propagate to motion and break the shot.
+
 ---
 
 ### 14.6 BG ref MUST match shot type — close view for medium/close shots
