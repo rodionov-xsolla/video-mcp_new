@@ -127,7 +127,7 @@ video-agent/
 │       ├── dance-battle.md      # Комедийные танцевальные батлы
 │       ├── character-story.md   # Лор-монолог персонажа
 │       ├── motion-dance.md     # Motion transfer танец с реф-видео
-│       └── comedy-sketch.md   # Deadpan вертикальный скетч (персонаж в банальной работе)
+│       └── what-if-real-life.md # «Что если бы персонаж попал в реальную жизнь» (Spock-бариста, Kratos-воспитатель, ...)
 │
 ├── games/
 │   ├── mlbb/

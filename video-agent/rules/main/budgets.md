@@ -15,7 +15,7 @@
 | Reddit Story | **$2.00** | Spend > $1.80 |
 | Character Story | **$6.00** | Spend > $5.40 |
 | Motion Dance | **$3.00** | Spend > $2.70 |
-| Comedy Sketch | **$6.00** | Spend > $5.40 |
+| What If... Real Life | **$6.00** | Spend > $5.40 |
 
 Tracking: after each generation, record the cost. Before the next one — check the limit.
 

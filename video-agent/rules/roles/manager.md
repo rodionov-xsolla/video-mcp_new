@@ -182,7 +182,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 | "reddit story", "storytime", "история игрока", "narrated gameplay" | Reddit Story | `rules/formats/reddit-story.md` |
 | "character story", "история персонажа", "лор", "lore", "backstory", "origin story", "предыстория" | Character Story | `rules/formats/character-story.md` |
 | "motion dance", "motion control", "моушн", "motion transfer", "танцует под видео" | Motion Dance | `rules/formats/motion-dance.md` |
-| "comedy sketch", "sketch", "deadpan", "barista", "fish out of water", "комедийный скетч", "скетч", "дедпан" | Comedy Sketch | `rules/formats/comedy-sketch.md` |
+| "what if", "real life", "real world", "real-world", "что если", "в реальной жизни", "реальная жизнь", "fish out of water", "cameo", "mundane job", "ordinary life" | What If... Real Life | `rules/formats/what-if-real-life.md` |
 | Anything else | Standard | `rules/formats/standard.md` |
 
 **Do not load format files unrelated to the task.**
