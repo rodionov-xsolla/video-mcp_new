@@ -22,6 +22,16 @@ If the user request contains the phrase **"Debug mode"** (or RU «Отладоч
 4. If asked for edits — apply them and submit again for approval.
 5. Mode applies to ALL phases, including Phase 1 (script).
 
+### Debug-mode safety rules (paid for in real rebuilds)
+
+- **Preview before full rebuild.** When the user requests any visual-burn-in change (subtitle position/size/box, drawbox overlay, masking artifact, music swap, audio mix), extract ONE frame (or one 2s clip) at the problem timestamp with the new setting on a SINGLE scene, show it to the user, and wait for OK. Only then re-encode all remaining scenes. Running 7 scenes through ffmpeg blind, then discovering the user wanted something else, burns time and money for nothing.
+
+- **Don't re-delegate small patches to sub-agents.** If the requested change is a small ffmpeg edit (change MarginV, swap bg-music URL, add an `amix`, adjust speedup factor), do it directly with ffmpeg in the same folder. Spawning Editor/Animator/Sound sub-agents for a 10-line filter edit costs another full context re-read (Opus/Sonnet tokens) for no marginal craft benefit. Sub-agents are for whole-phase work, not patches.
+
+- **One change at a time.** If the user lists 3 fixes, apply and verify ONE, get OK, then the next. Bundling fixes hides which one broke if the result is still wrong.
+
+- **Animator confirm before any Kling clip > $0.30 in Debug mode.** Avatar v2 / I2V with audio at 5–10s is $0.28–$1.40 per attempt. In Debug mode, before launching a batch of ≥ 2 such clips, list the planned clips with per-clip cost and wait for OK.
+
 Without this phrase — work autonomously.
 
 ---
@@ -172,6 +182,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 | "reddit story", "storytime", "история игрока", "narrated gameplay" | Reddit Story | `rules/formats/reddit-story.md` |
 | "character story", "история персонажа", "лор", "lore", "backstory", "origin story", "предыстория" | Character Story | `rules/formats/character-story.md` |
 | "motion dance", "motion control", "моушн", "motion transfer", "танцует под видео" | Motion Dance | `rules/formats/motion-dance.md` |
+| "what if", "real life", "real world", "real-world", "что если", "в реальной жизни", "реальная жизнь", "fish out of water", "cameo", "mundane job", "ordinary life" | What If... Real Life | `rules/formats/what-if-real-life.md` |
 | Anything else | Standard | `rules/formats/standard.md` |
 
 **Do not load format files unrelated to the task.**

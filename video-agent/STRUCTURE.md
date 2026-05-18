@@ -126,7 +126,8 @@ video-agent/
 │       ├── gameplay-ai-avatar.md # Говорящая голова + геймплей
 │       ├── dance-battle.md      # Комедийные танцевальные батлы
 │       ├── character-story.md   # Лор-монолог персонажа
-│       └── motion-dance.md     # Motion transfer танец с реф-видео
+│       ├── motion-dance.md     # Motion transfer танец с реф-видео
+│       └── what-if-real-life.md # «Что если бы персонаж попал в реальную жизнь» (Spock-бариста, Kratos-воспитатель, ...)
 │
 ├── games/
 │   ├── mlbb/
