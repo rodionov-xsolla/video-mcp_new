@@ -61,7 +61,7 @@ rules/
 ├── formats/                   ← format playbooks (briefs per role)
 │   └── {serial-drama, gameplay-ai-avatar, news, standard,
 │       reddit-story, dance-battle, object-character, dual-style,
-│       character-story, motion-dance}.md
+│       character-story, motion-dance, comedy-sketch}.md
 └── main/
     ├── budgets.md             — model pricing
     ├── fallback.md            — error handling
