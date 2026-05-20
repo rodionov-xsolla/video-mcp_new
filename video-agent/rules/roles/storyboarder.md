@@ -377,8 +377,9 @@ Every new character in any format requires its own character sheet (16:9) + avat
 **Sheet is mandatory even for "ad-hoc" characters in single-clip formats** (motion-dance, dance-battle, object-character one-offs). It's tempting to skip the sheet and render the character straight into the scene — DON'T. The next run that wants the same character will only have your wide-shot scene render to chain off, and NB2 will copy its composition (wide shot → wide-shot output, regardless of text prompt). One $0.04 sheet now saves $1+ of mis-framed Kling Motion Control / Avatar calls later. Treat the sheet as the deliverable, the scene render as a downstream artifact.
 
 Order:
-1. Check asset bank (`game_assets`) — if a ref exists, use the URL
-2. If not — generate character sheet (NB2 text-to-image) + avatar ref (NB2 edit with sheet as ref)
+1. **First — check the series story bible** (`games/{GAME_TAG}/{format}_story_bible.json` → `supabase_assets.char_refs`). If a canonical character sheet exists there (e.g. `noob-sheet`, `preppy-girl-sheet`, `shadow-sheet`), **use its Supabase URL as the `image_urls` chain reference for any new per-episode character ref or scene PNG**. The prompt should describe a single full-body front view extracted from the reference sheet. **Never regenerate the character from text alone when a canon sheet exists** — text-only generation drifts (e.g. Roblox-noob arms can render as green instead of yellow, accessories like Bella's sunglasses get dropped). One $0.04 wasted ref is cheap; downstream scene PNGs and Kling clips that drift cost much more.
+2. Then — check the general asset bank (`game_assets`) for any other refs (props, locations) → use the URL
+3. If neither has it — generate character sheet (NB2 text-to-image) + avatar ref (NB2 edit with sheet as ref)
 3. **MANDATORY: upload to Supabase** immediately after generation:
    ```bash
    # Character sheet

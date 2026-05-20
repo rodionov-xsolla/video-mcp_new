@@ -362,6 +362,77 @@ See `storyboarder.md` section 10 for what changes between start/end are allowed.
 
 ---
 
+## 5a. Kling I2V `multi_prompt` — single call, multiple shots
+
+Kling v3 (`standard`, `pro`, `4k`) `image-to-video` supports a `multi_prompt` field that produces one continuous MP4 with N sequential shots from a single `start_image_url`. Use this for **training montages, multi-shot action sequences, dance loops, transformations** — anything that would otherwise require N separate I2V calls with chaining.
+
+### Hard limits (verified against fal.ai schema + Kling 3.0 docs)
+
+- **Total clip duration ≤ 15s per single API call** (top-level `duration` enum is `"3"`–`"15"`).
+- **Max 6 shots** per call.
+- Each shot `duration`: enum string `"1"`–`"15"`. Sum of shot durations must equal top-level `duration`.
+- For sequences > 15s: split into N calls and concat (see "Multi-call chaining" below).
+
+### Body — strict rules
+
+- **Pass ONLY `multi_prompt`. Do NOT include a top-level `prompt`.** fal.ai returns 422 pre-compute if both are present.
+- `start_image_url`: required (one anchor frame for the entire sequence).
+- **`end_image_url`: FORBIDDEN with `multi_prompt`.** Multi-shot mode does not support end-frame anchoring.
+- `shot_type`: `"customize"` (you define the shot list; default) or `"intelligent"` (model picks shot boundaries).
+- `generate_audio: false` (anullsrc rule, same as regular I2V).
+- `negative_prompt`: standard I2V negatives apply.
+
+Example body (5 shots × 3s = 15s):
+
+```json
+{
+  "start_image_url": "https://supabase.../scene-2.png",
+  "multi_prompt": [
+    {"prompt": "Yellow blocky figure throws three jab punches at hanging punching bag, dust puffs", "duration": "3"},
+    {"prompt": "Yellow blocky figure runs along a cracked wall, leaps over a crate, lands in low crouch", "duration": "3"},
+    {"prompt": "Yellow blocky figure drops from a tall obby block into a wide combat stance, dust kicks up", "duration": "3"},
+    {"prompt": "Yellow blocky figure spin-kicks the bag, the bag's seam splits, sand pours from rip", "duration": "3"},
+    {"prompt": "Yellow blocky figure catches the broken bag in his arms, presses his forehead against it", "duration": "3"}
+  ],
+  "shot_type": "customize",
+  "duration": "15",
+  "generate_audio": false,
+  "negative_prompt": "blur, distort, low quality, morphing faces, limbs duplicating, character color drift"
+}
+```
+
+### Multi-call chaining (sequences > 15s)
+
+To produce, say, 25s of multi-shot action:
+
+1. **Call 1** — `multi_prompt` with shots A,B,C, top-level `duration: "15"`, `start_image_url` = scene anchor PNG. Save `scene-N-a.mp4`.
+2. **Bridge** — `ffmpeg -sseof -0.1 -i scene-N-a.mp4 -frames:v 1 scene-N-mid.png`, upload to Supabase, capture URL.
+3. **Call 2** — `multi_prompt` with shots D,E, top-level `duration: "10"`, `start_image_url` = the bridge PNG URL (preserves visual continuity: same Dave, same room, accumulated state like sweat/damage).
+4. **Concat** — `ffmpeg -f concat -safe 0 -i list.txt -c copy scene-N.mp4` (Kling outputs share codec/resolution/fps; no re-encode).
+
+This preserves narrative continuity AND keeps each call within the 15s cap. Total cost = (15 × $0.084) + (10 × $0.084) = $2.10 for 25s on v3 Standard.
+
+### When to use multi_prompt vs separate I2V calls
+
+| Situation | Use |
+|---|---|
+| ≤ 15s sequence of multiple distinct actions from one anchor (montage, combo) | **multi_prompt** (cheaper, smoother shot transitions) |
+| > 15s sequence | **multi_prompt × N calls + bridge** (above) |
+| Different locations / different start anchors per shot | **Separate I2V calls** (multi_prompt is single-anchor only) |
+| One simple action, 5–10s | **Regular I2V** (single `prompt`) |
+
+### Pricing recap
+
+| Endpoint | Per-second |
+|---|---|
+| `kling-video/v3/standard/image-to-video` | $0.084/s (no audio) |
+| `kling-video/v3/pro/image-to-video` | $0.168/s |
+| `kling-video/v3/4k/image-to-video` | $0.42/s |
+
+`multi_prompt` is billed at the same per-second rate as regular I2V on the same model.
+
+---
+
 ## 6. Kling Avatar v2 — parameters and polling
 
 Only for **dialogue clips** with lipsync. For action clips — I2V (see sections 2–5).
