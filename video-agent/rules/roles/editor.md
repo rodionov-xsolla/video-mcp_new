@@ -238,9 +238,9 @@ If a prepared CTA video exists — concat it at the very end after all scenes.
 3. **`games/{GAME_TAG}/assets/cta/cta.mp4`** — local shared CTA of the game.
 4. **Programmatic fallback** (section 5.2) — generate "FOLLOW FOR MORE" on black.
 
-> ⚠️ **NEVER use a generic `cta-*.mp4` from the repo root** (e.g. `video-agent/cta-idle.mp4`) without verifying its branding matches the current `GAME_TAG`. Several root-level CTA files were originally created for `star-trek-timelines` and contain that game's branding (DILITHIUM / QUANTUM / etc.). Using one for Roblox or another game ships the wrong call-to-action. **Always verify by extracting one frame and reading it, or by checking the originating game folder.**
+> ⚠️ **NEVER pick a CTA from a game-agnostic location** (e.g. `video-agent/cta-idle.mp4` at the repo root). Several root-level CTA files were originally created for `star-trek-timelines` and contain that game's branding (DILITHIUM / QUANTUM / etc.). Resolve the CTA strictly from a `GAME_TAG`-scoped path — Supabase URL from the game .md file, the most recent prior episode's `output/.../{GAME_TAG}/...cta-fallback.mp4`, or `games/{GAME_TAG}/assets/cta/cta.mp4`. **The path is the validation** — never Read a frame to confirm branding.
 
-Different episodes may have different CTAs. Don't copy blindly — verify filename + size + duration via ffprobe. **Brand check on CTA content is MANDATORY**, not opt-in — visually confirm the CTA matches the episode's game (extract one frame via ffmpeg and Read it).
+Different episodes may have different CTAs. Don't copy blindly — verify filename + size + duration via ffprobe. Brand correctness is guaranteed by the path, not by visual inspection.
 
 Download: `curl`, NOT `urllib`. After download — `ffprobe` validation (duration, codec, dimensions). CTA is normalized via the same `scale + pad + 30fps + AAC` step (section 1).
 
@@ -564,7 +564,7 @@ Before starting concat, walk through this checklist. Each missed item = re-assem
 - [ ] `ffprobe` shows correct duration (close to sum of clip durations)
 - [ ] `ffprobe` shows 1080×1920, 30 fps
 - [ ] Audio tracks present, AAC stereo
-- [ ] Visual check of joints and black frames — ONLY if format.visual_validation = required (`rules/main/validation.md`). FFmpeg concat is deterministic — if input clips passed programmatic validation, output is correct
+- [ ] FFmpeg concat is deterministic — if input clips passed programmatic validation, the output is correct. Do NOT Read frames from `final.mp4` (`rules/main/validation.md`)
 - [ ] CTA in place (if applicable)
 - [ ] Subtitles readable, no overlap (if applicable)
 - [ ] Duration within format expectations (serial-drama 25–40s; gameplay-ai-avatar 30–40s)

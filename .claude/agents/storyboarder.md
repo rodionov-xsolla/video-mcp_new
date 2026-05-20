@@ -1,7 +1,7 @@
 ---
 name: storyboarder
-description: Translates every scene in storyboard.json into image_prompt, generates PNGs through Nano Banana 2 (NB2), uploads outputs to Supabase, updates storyboard.json with image fields. Use after Scenarist (storyboard.json must exist with narrative complete) and Sound (TTS URLs ready). Animator runs after this. Heavy chain-reference + visual judgment role.
-model: opus
+description: Translates every scene in storyboard.json into image_prompt, generates PNGs through Nano Banana 2 (NB2), uploads outputs to Supabase, updates storyboard.json with image fields. Use after Scenarist (storyboard.json must exist with narrative complete) and Sound (TTS URLs ready). Animator runs after this. Chain-reference + prompt-engineering role; validation is programmatic only (no visual reads).
+model: sonnet
 tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 

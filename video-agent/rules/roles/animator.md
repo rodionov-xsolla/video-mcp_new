@@ -624,21 +624,13 @@ After each Kling generation:
    ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of csv=p=0 scene-1.mp4
    ```
 
-4. **Visual check — ONLY if format.visual_validation = required:**
-   - Extract first/last frame via `ffmpeg -ss 0 -frames:v 1` and `ffmpeg -sseof -0.1 -frames:v 1`
-   - Read PNG and check:
-     - Same character as ordered? Not Spock instead of Worf?
-     - No background deformation / face morphing?
-     - For I2V: motion truly micro (not walking/running)?
-     - For Avatar: mouth opens in sync with audio?
-
-5. **If ffprobe shows problems — diagnose the cause before regenerating:**
+4. **If ffprobe shows problems — diagnose the cause before regenerating:**
    - File < 100KB → generation error in JSON, read Kling response
    - Wrong duration → request body incorrect, check it
    - No video stream → corrupt file, regenerate
    - No audio stream on Avatar → audio_url did not reach Kling
 
-Kling regeneration = $0.28–$1.40. Programmatic validation is sufficient for default formats — real visual errors are visible in the final video.
+**Do NOT Read frames** (no `ffmpeg -ss … -frames:v 1` + Read PNG). Kling regeneration is $0.28–$1.40 — visual post-hoc inspection won't save you that, because if the motion was wrong, you've already burned the call. Programmatic validation is sufficient — real visual errors surface in the final video at human review. See `rules/main/validation.md`.
 
 ---
 
@@ -647,7 +639,6 @@ Kling regeneration = $0.28–$1.40. Programmatic validation is sufficient for de
 - [ ] All scene-K.mp4 generated (one per clip)
 - [ ] All files > 100 KB, ffprobe shows correct duration
 - [ ] All clips passed programmatic validation (filesize > 100KB, ffprobe duration correct, video stream present)
-- [ ] Visual check performed ONLY if format.visual_validation = required
 - [ ] Avatar clips have embedded audio stream (lipsync); I2V clips — without audio (`anullsrc` added by Editor)
 - [ ] For gameplay-ai-avatar: avatar-fast.mp4 sped up 1.3x (setpts+atempo)
 - [ ] All inputs (image, audio) were Supabase URLs, not fal.ai temp

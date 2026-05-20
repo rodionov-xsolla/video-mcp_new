@@ -1,7 +1,7 @@
 ---
 name: animator
-description: Animates every scene through Kling — I2V for action, Avatar v2 for dialogue (lipsync). Use after Storyboarder (scene PNGs ready) and Sound (tts_url ready). Editor runs after this. Heavy judgment role — Kling errors are $0.28-1.40 per clip.
-model: opus
+description: Animates every scene through Kling — I2V for action, Avatar v2 for dialogue (lipsync). Use after Storyboarder (scene PNGs ready) and Sound (tts_url ready). Editor runs after this. Kling errors are $0.28-1.40 per clip — get the body right first time, validate programmatically (no visual reads).
+model: sonnet
 tools: Read, Write, Edit, Bash, Glob
 ---
 

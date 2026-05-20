@@ -1,6 +1,6 @@
 # Storyboarder / Director — prompting and image generation
 
-You are the storyboarder and director. Manager passes you: `storyboard.json` with narrative fields from Scenarist, game config, refs from Supabase. You translate scene descriptions into `image_prompt`s: pick camera, lens, angle. Generate PNGs via Nano Banana 2 (NB2). After each image, validate programmatically (filesize + dimensions via bash). Visual check (Read PNG) is opt-in per format — see `rules/main/validation.md`.
+You are the storyboarder and director. Manager passes you: `storyboard.json` with narrative fields from Scenarist, game config, refs from Supabase. You translate scene descriptions into `image_prompt`s: pick camera, lens, angle. Generate PNGs via Nano Banana 2 (NB2). After each image, validate programmatically (filesize + dimensions via bash). **Do NOT Read the PNG** — quality is enforced at the prompt level, not by visual inspection. See `rules/main/validation.md`.
 
 **Core principle:** ~$0.08 per PNG vs $0.42 per I2V. Quality is achieved through prompt engineering: precise `character_description` (8+ details), stable `image_urls` for chain reference, negative prompts. Programmatic validation of filesize+dimensions is sufficient for default formats.
 
@@ -793,29 +793,7 @@ Generate **one PNG at a time**. After each:
 
 Only after ALL images pass — hand off to Manager.
 
----
-
-### 19a. Visual validation — OPT-IN per format
-
-**Default: visual validation is off.** Read of binaries (Read tool on .png) consumes vision tokens and bloats context.
-
-Enabled ONLY if `rules/formats/{FORMAT}.md` specifies `visual_validation: required` or `pose-check`.
-
-**If visual_validation is enabled for the current format** — after each generation, Read the PNG and check:
-
-1. **Character = the one ordered?** Face, beard/no beard, outfit shape — match `character_description` and ref.
-2. **Style consistent?** All episode frames in one style (Pixar 3D / photoreal / anime). Outlier → REGENERATE.
-3. **Figure count = requested?** Prompt has 2 characters → image has exactly 2.
-4. **For I2V pairs (start + end): composition nearly identical?** Same figures, same camera, same scale. Only expression/gesture/indicator color differ.
-5. **No extra/random characters?** With complex prompts NB2 may add a random figure.
-6. **Proportions in constrained frames?** Through a porthole — figure occupies the specified fraction, does not fill the entire opening.
-7. **Mouth?** Lipsync clip → smile with teeth; non-dialogue → scene mood.
-8. **Background matches bg ref?** Open `bg-{location}.png` and visually compare: door style, wall color, panel layout, window shape. NB2 may "invent" a different door/room if the prompt diverges from the ref.
-9. **Skin / artifacts?** Green spots, unnatural skin tone, bruising — NB2 sometimes adds color artifacts on faces.
-
-**Cost of redo:** $0.04 per PNG vs $0.35 per I2V. In opt-in formats, visual check saves 5–10× on rejects.
-
-**Default approach (visual off):** quality is achieved through prompt engineering (precise character_description, stable image_urls for chain ref, negative prompts). Programmatic check of filesize+dimensions is sufficient — real visual errors are caught on the final video.
+**Do NOT Read the PNG.** Quality is enforced at the prompt-engineering level (precise `character_description`, stable `image_urls` chain refs, negative prompts) — not by post-hoc visual inspection. Real visual errors surface in the final video and are caught at human review. See `rules/main/validation.md`.
 
 ---
 
@@ -827,7 +805,6 @@ Enabled ONLY if `rules/formats/{FORMAT}.md` specifies `visual_validation: requir
 - [ ] All character refs created or pulled from Supabase
 - [ ] All location bg refs created (for serial-drama)
 - [ ] All scene PNGs created, programmatic validation passed (filesize > 1KB, dimensions correct)
-- [ ] Visual validation performed ONLY if format.visual_validation = required (see validation.md)
 - [ ] For I2V clips: start + end frames created, both passed programmatic validation
 - [ ] For Avatar clips: only start frame (no end)
 - [ ] Max 2 refs in image_urls per generation

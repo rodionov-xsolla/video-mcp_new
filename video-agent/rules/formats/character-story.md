@@ -156,7 +156,6 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - Chain: scene-N refs = `[character-ref, bg-ref-for-this-location]`
 - If 2 characters in frame — both via refs, max 2 refs per image
 - `image_prompt` describes the visual action from `action_description`, NOT the monologue text
-- Visual validation of every PNG mandatory
 - I2V start + end frame per clip (both with the same character and bg)
 - General rules — `rules/roles/storyboarder.md`
 
