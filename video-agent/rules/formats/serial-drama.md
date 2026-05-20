@@ -218,7 +218,6 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 - Character refs: characters from story bible, mouth with teeth for lipsync clips
 - I2V clips require start + end frame (both with the same bg-ref in `image_urls`)
 - Each clip = its own scene PNG (not the ref directly)
-- Visual validation mandatory
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
