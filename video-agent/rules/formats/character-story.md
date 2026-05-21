@@ -106,7 +106,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - At least 2 different actions per clip (micro motion)
 - camera_angle differs between adjacent clips
 - Number of characters in frame — per plot (1–2, max 2 in frame)
-- bg-reference for each unique location
+- **No bg-reference generation** — environment goes into `image_prompt` as text only
 - Voice: pick from ElevenLabs by character (Daniel — confident, George — neutral, Charlie — young, Charlotte — female)
 - General script rules — `rules/roles/scenarist.md`
 
@@ -152,11 +152,11 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - Style is taken from `games/{GAME_TAG}/{GAME_TAG}.md` (identical to the game)
 - All frames 9:16 (608×1080)
 - Character ref: create an anchor ref (neutral pose, dark background) from game config
-- bg-reference for each unique location (locations change as the story progresses)
-- Chain: scene-N refs = `[character-ref, bg-ref-for-this-location]`
+- **No bg-reference generation.** Environment is baked into the scene prompt via `image_prompt`. Do NOT generate separate bg PNGs for character-story — use text description of the location in the prompt only.
+- Chain: scene-N refs = `[character-ref]` only (no bg ref)
 - If 2 characters in frame — both via refs, max 2 refs per image
 - `image_prompt` describes the visual action from `action_description`, NOT the monologue text
-- I2V start + end frame per clip (both with the same character and bg)
+- **Start frame only per clip. No end frames** — see storyboarder.md §14.8 and §16.
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
@@ -231,11 +231,9 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 ├── storyboard.json
 ├── scenes/
 │   ├── refs/
-│   │   ├── character-ref.png
-│   │   └── bg-{location}.png
+│   │   └── character-ref.png
 │   ├── scene-1/
 │   │   ├── scene-1.png
-│   │   ├── scene-1-end.png
 │   │   ├── scene-1.mp4
 │   │   └── scene-1-scaled.mp4
 │   └── scene-N/...
@@ -256,8 +254,8 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 - [ ] `tts_segment` filled for each clip
 - [ ] Full monologue = sum of all `tts_segment`
 - [ ] All images 608×1080 (9:16)
-- [ ] bg-reference per unique location
-- [ ] I2V start + end frames: same character, same bg
+- [ ] No bg-reference files (environment in image_prompt only)
+- [ ] I2V start frame only — no end frames (§14.8)
 - [ ] camera_angle differs between adjacent clips
 - [ ] TTS via fal.ai ElevenLabs (`voice` name, not `voice_id`)
 - [ ] Subtitles via `add_subtitles.py` (ASS, chunk 3, fontsize 72, marginv 200) — NOT PIL PNG by `tts_segment`
