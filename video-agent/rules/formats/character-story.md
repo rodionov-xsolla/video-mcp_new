@@ -37,9 +37,9 @@ The character does NOT speak on camera (no lipsync). Video = visualization of wh
 
 | Component | 5s clip |
 |---|---|
-| Image (NB2) | $0.04 |
+| Image (NB2, start frame only — no end frame) | $0.08 |
 | Kling I2V 5s (generate_audio=false) | $0.35 |
-| **Per clip** | **~$0.39** |
+| **Per clip** | **~$0.43** |
 
 | Component | Cost |
 |---|---|
@@ -48,9 +48,8 @@ The character does NOT speak on camera (no lipsync). Video = visualization of wh
 
 | Variant | Clips | Cost |
 |---|---|---|
-| Base (recommended) | 6 × 5s = 30s | ~$2.50 |
-| Extended | 8 × 5s = 40s | ~$3.30 |
-| With extra refs/bg | 8 × 5s + 2–3 bg | ~$3.50 |
+| Base (recommended) | 6 × 5s = 30s + 1 char-ref + 4–6 bg-refs | ~$3.40 |
+| Extended | 8 × 5s = 40s + 1 char-ref + 6–7 bg-refs | ~$4.30 |
 
 ---
 
@@ -103,8 +102,8 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - `character_speech: null` for all clips (voice via TTS overlay, not in video)
 - `tts` field in storyboard.json — monologue text per clip
 - `action_description` — what happens visually, NOT a repeat of the monologue text
-- At least 2 different actions per clip (micro motion)
-- camera_angle differs between adjacent clips
+- **Three motion layers per clip** (mandatory): camera move + environment motion + character action. Each layer continues throughout the full 5s — do NOT write "then settles / then steady / then dissipates" (Kling reads those as freeze cues).
+- camera_angle differs between adjacent clips, AND every clip specifies an active camera move (push-in / pull-back / lateral dolly / low boom / crane up / handheld drift). No "camera holds steady" clips.
 - Number of characters in frame — per plot (1–2, max 2 in frame)
 - bg-reference for each unique location
 - Voice: pick from ElevenLabs by character (Daniel — confident, George — neutral, Charlie — young, Charlotte — female)
@@ -156,15 +155,23 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - Chain: scene-N refs = `[character-ref, bg-ref-for-this-location]`
 - If 2 characters in frame — both via refs, max 2 refs per image
 - `image_prompt` describes the visual action from `action_description`, NOT the monologue text
-- I2V start + end frame per clip (both with the same character and bg)
+- **One PNG per clip — start frame only.** Do NOT generate `scene-K-end.png` for this format. Kling I2V is driven by start frame + motion_prompt; end frames are not used. Generating them wastes $0.08 per clip and biases Kling toward static interpolation.
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
 
 - All clips via **Kling 2.6 Pro I2V** (`generate_audio: false`)
-- Micro motion only: gaze, gesture, head turn, wind, particles, camera
-- Motion prompt = technical: positions, camera, physical actions
-- Start ≈ end for I2V (one character, one bg, minimal difference)
+- **Start frame only.** Do NOT pass `tail_image_url` / end frame. Identity is held by `image_url` (start frame, chain-ref'd by Storyboarder) + the chain consistency Kling already enforces between adjacent frames. End frames make Kling interpolate-then-freeze and produce static clips.
+- **Motion is mandatory, not optional.** Every clip must specify three concurrent layers:
+  1. **Camera move** — pick one per clip: slow push-in, slow pull-back, lateral dolly, low boom up, crane up, parallax handheld drift. Distribute variety across the 6–8 clips. NEVER "camera holds steady".
+  2. **Environment motion** — wind, smoke, sparks, particles, light flicker, distant figures, water/dust, holographic UI motion. Continuous throughout the 5s.
+  3. **Character action** — one gesture or expression beat sustained through the clip (a slow head turn, a hand rising to the brow, a sip, a jaw clenching, a half-smile forming). Sustained, NOT completed mid-clip.
+- **Phrasing rules for `motion_prompt`:**
+  - Use continuous-tense verbs (`is lifting`, `tightens`, `drifts past`) and explicit duration cues (`throughout the shot`, `held for the full 5 seconds`, `continues across the frame`).
+  - **Banned phrases:** `"then settles"`, `"then steady"`, `"then holds"`, `"then dissipates"`, `"then dies"`, `"camera holds steady"`, `"hold position"`, `"no morphing"`, `"maintain exact character appearance"`. These all read to Kling as "freeze".
+  - **Avoid negative listings.** Do not stack `No walking, no running, no fighting, no impact`. Replace with positive instructions ("character remains rooted at the console", "feet planted, weight shifts gently").
+  - Trust Kling to hold identity from the start frame — do not write defensive phrases.
+- Micro vs. macro motion: avoid full-body locomotion (walking across the frame, running, combat hits) because identity drift is visible. BUT motion within the frame (head, hands, torso, breath, sustained gestures, props in motion, environment) MUST be alive.
 - Duration: 5s for all clips
 - Polling: base URL `fal-ai/kling-video`, every 15s, max 10 min
 - Do NOT use: Kling Avatar, Veo3, generate_audio: true
@@ -234,8 +241,7 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 │   │   ├── character-ref.png
 │   │   └── bg-{location}.png
 │   ├── scene-1/
-│   │   ├── scene-1.png
-│   │   ├── scene-1-end.png
+│   │   ├── scene-1.png           (start frame only — no end frame)
 │   │   ├── scene-1.mp4
 │   │   └── scene-1-scaled.mp4
 │   └── scene-N/...
@@ -257,8 +263,10 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 - [ ] Full monologue = sum of all `tts_segment`
 - [ ] All images 608×1080 (9:16)
 - [ ] bg-reference per unique location
-- [ ] I2V start + end frames: same character, same bg
-- [ ] camera_angle differs between adjacent clips
+- [ ] One PNG per scene (start frame only) — NO end-frame PNGs generated
+- [ ] camera_angle differs between adjacent clips, and every clip has an active camera move (no "holds steady")
+- [ ] motion_prompt has three concurrent layers (camera + environment + character) and uses continuous-tense verbs
+- [ ] motion_prompt contains NONE of the banned freeze phrases (then settles / then steady / then holds / hold position / no morphing / camera holds steady)
 - [ ] TTS via fal.ai ElevenLabs (`voice` name, not `voice_id`)
 - [ ] Subtitles via `add_subtitles.py` (ASS, chunk 3, fontsize 72, marginv 200) — NOT PIL PNG by `tts_segment`
 - [ ] If TTS longer than picture timeline: `--atempo` ≤ 1.4× applied in BOTH the script and Editor's audio mix (same value)
@@ -279,8 +287,10 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 - ❌ TTS by fragments (generate the whole monologue in one request)
 - ❌ Monologue text = description of footage (voice complements, doesn't duplicate)
 - ❌ character ref directly as scene image (each clip = its own PNG)
-- ❌ Different character on start/end I2V (Kling will morph)
+- ❌ Generating scene-K-end.png and/or passing `tail_image_url` to Kling — wastes $0.08/clip and biases Kling toward static interpolation
 - ❌ `-shortest` in FFmpeg (use `apad`)
 - ❌ Layered assembly (breaks music and timing)
 - ❌ Monotonous footage (one angle for the whole 40 seconds)
+- ❌ "Camera holds steady" / "then settles" / "then steady" / "hold position" / "no morphing" / "maintain exact character appearance" anywhere in `motion_prompt` (Kling reads these as freeze cues — produces static clips)
+- ❌ Stacked negative listings (`No walking, no running, no fighting, no impact`) — replace with positive grounded actions
 - ❌ Title cards, brainrot tags, character name overlays
