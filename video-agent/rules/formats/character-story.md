@@ -37,7 +37,7 @@ The character does NOT speak on camera (no lipsync). Video = visualization of wh
 
 | Component | 5s clip |
 |---|---|
-| Image (NB2, start frame only — no end frame) | $0.08 |
+| Image (NB2, start frame only — no end frame, no bg-ref) | $0.08 |
 | Kling I2V 5s (generate_audio=false) | $0.35 |
 | **Per clip** | **~$0.43** |
 
@@ -45,11 +45,12 @@ The character does NOT speak on camera (no lipsync). Video = visualization of wh
 |---|---|
 | ElevenLabs TTS (~40s monologue) | ~$0.20 |
 | Music (local) | $0.00 |
+| Character ref (one per age variant — typically 1 or 2) | $0.08 each |
 
 | Variant | Clips | Cost |
 |---|---|---|
-| Base (recommended) | 6 × 5s = 30s + 1 char-ref + 4–6 bg-refs | ~$3.40 |
-| Extended | 8 × 5s = 40s + 1 char-ref + 6–7 bg-refs | ~$4.30 |
+| Base (recommended) | 6 × 5s = 30s + 1–2 char-refs (NO separate bg-refs) | ~$2.80 |
+| Extended | 8 × 5s = 40s + 1–2 char-refs (NO separate bg-refs) | ~$3.60 |
 
 ---
 
@@ -150,11 +151,10 @@ The structure is flexible — the scenarist adapts it to the specific character'
 
 - Style is taken from `games/{GAME_TAG}/{GAME_TAG}.md` (identical to the game)
 - All frames 9:16 (608×1080)
-- Character ref: create an anchor ref (neutral pose, dark background) from game config
-- bg-reference for each unique location (locations change as the story progresses)
-- Chain: scene-N refs = `[character-ref, bg-ref-for-this-location]`
-- If 2 characters in frame — both via refs, max 2 refs per image
-- `image_prompt` describes the visual action from `action_description`, NOT the monologue text
+- Character ref: create an anchor ref (neutral pose, dark background) from game config. If the character appears at two ages (young / mature), make two refs — but max one per age variant.
+- **DO NOT generate separate bg-refs.** Backgrounds are described in detail inside `image_prompt` (location, lighting, props, depth of field) and NB2 paints them inline with the character. Empirically this produces better integration than chaining `[bg-ref, character-ref]` — the character feels part of the scene rather than composited onto it, and lighting/perspective match more reliably.
+- Chain: scene-N refs = `[character-ref-for-this-age-variant]` only (single ref input). For multi-character clips (max 2 characters in frame): refs = `[character-ref-A, character-ref-B]`, max 2 refs per image, and describe both subjects + the background in the prompt.
+- `image_prompt` describes the visual action from `action_description` AND the full background (interior architecture, time of day, props, atmosphere), NOT the monologue text. Be verbose about the environment — that is now where the location quality comes from.
 - **One PNG per clip — start frame only.** Do NOT generate `scene-K-end.png` for this format. Kling I2V is driven by start frame + motion_prompt; end frames are not used. Generating them wastes $0.08 per clip and biases Kling toward static interpolation.
 - General rules — `rules/roles/storyboarder.md`
 
@@ -238,10 +238,9 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 ├── storyboard.json
 ├── scenes/
 │   ├── refs/
-│   │   ├── character-ref.png
-│   │   └── bg-{location}.png
+│   │   ├── character-ref.png        (one per age variant — typically 1 or 2; NO bg-refs)
 │   ├── scene-1/
-│   │   ├── scene-1.png           (start frame only — no end frame)
+│   │   ├── scene-1.png           (start frame only — no end frame; background painted inline by NB2)
 │   │   ├── scene-1.mp4
 │   │   └── scene-1-scaled.mp4
 │   └── scene-N/...
@@ -262,7 +261,8 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 - [ ] `tts_segment` filled for each clip
 - [ ] Full monologue = sum of all `tts_segment`
 - [ ] All images 608×1080 (9:16)
-- [ ] bg-reference per unique location
+- [ ] Single-ref chain — `image_urls` for each scene contains ONLY the character-ref (or two character-refs for two-character clips); NO separate bg-ref files generated
+- [ ] Background is fully described inside each clip's `image_prompt` (architecture, lighting, props, atmosphere)
 - [ ] One PNG per scene (start frame only) — NO end-frame PNGs generated
 - [ ] camera_angle differs between adjacent clips, and every clip has an active camera move (no "holds steady")
 - [ ] motion_prompt has three concurrent layers (camera + environment + character) and uses continuous-tense verbs
@@ -294,3 +294,4 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 - ❌ "Camera holds steady" / "then settles" / "then steady" / "hold position" / "no morphing" / "maintain exact character appearance" anywhere in `motion_prompt` (Kling reads these as freeze cues — produces static clips)
 - ❌ Stacked negative listings (`No walking, no running, no fighting, no impact`) — replace with positive grounded actions
 - ❌ Title cards, brainrot tags, character name overlays
+- ❌ Separate `bg-{location}.png` references generated as a phase before scene PNGs — NB2 paints the background inline with the character; chaining `[bg-ref, character-ref]` produces stiff composite-feel results with mismatched lighting/perspective. Describe the location verbosely in `image_prompt` instead.
