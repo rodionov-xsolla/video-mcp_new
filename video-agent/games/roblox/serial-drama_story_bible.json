@@ -5,7 +5,7 @@
   "language": "en",
   "style_tags": "Roblox-inspired Pixar-style 3D animation, blocky stylized characters, smooth plastic-like skin texture, expressive exaggerated cartoon faces, vibrant saturated colors, soft ambient lighting, cinematic depth of field, toy-like proportions, dramatic emotional expressions",
   "created_at": "2026-04-24",
-  "last_episode": 5,
+  "last_episode": 6,
 
   "synopsis": "Noob Dave arrives at LUXURIA, the most exclusive Roblox trading server where wealth is power. King Rex rules the plaza with an iron crown. Nobody gives Dave a second look — until they do. Because Dave isn't just a noob. He's sitting on the rarest inventory anyone has ever seen. The question isn't IF he'll reveal it. It's WHEN... and what happens after.",
 
@@ -121,21 +121,28 @@
       "type": "major",
       "description": "Dave is physically training in an abandoned room — first concrete action. Plan moving from thought to body. What is the trigger that pulls him out of the room?",
       "opened_ep": 4,
-      "status": "active — escalated in EP5, Dave now physically preparing"
+      "status": "active — escalated in EP6 to concrete 3-step heist plan (vault drain → crown smash → billboard broadcast). EP7 executes Step 1."
     },
     {
       "id": "bella-double-agent",
       "type": "major",
       "description": "Bella tracked Dave down to the training room. She recognized him through default skin. First active move — initiated contact alone. Is she here to help, betray, or test him?",
       "opened_ep": 4,
-      "status": "active — escalated in EP5, Bella initiating contact"
+      "status": "RESOLVED in EP6 — Bella chose Dave's side. Admitted she's not what Rex made her. Proposed the heist plan herself. Now an active ally."
     },
     {
       "id": "dave-identity-known",
       "type": "minor",
       "description": "Bella saw past the default skin and asked 'are you Dave?' His cover (anonymity in the default skin) is cracking. How many others can see through it?",
       "opened_ep": 5,
-      "status": "active"
+      "status": "RESOLVED in EP6 — Dave confirmed identity to Bella. Cover dropped internally. The two-person alliance now built on known identities."
+    },
+    {
+      "id": "ep6-heist-locked-in",
+      "type": "major",
+      "description": "Dave and Bella committed to a 3-step exposé heist: (1) drain Rex's Robux vault — every coin stolen via Fanum Tax; (2) smash the fake crown publicly on the plaza; (3) broadcast the REAL Admin Crown on every server screen so the whole server turns on Rex. EP7 executes Step 1.",
+      "opened_ep": 6,
+      "status": "active — plan committed, execution pending"
     },
     {
       "id": "bob-liability",
@@ -146,7 +153,18 @@
     }
   ],
 
-  "closed_loops": [],
+  "closed_loops": [
+    {
+      "id": "bella-double-agent",
+      "resolved_ep": 6,
+      "resolution": "Bella chose Dave — broke from Rex, admitted the mask, proposed the heist plan herself. Alliance formed under mutual need, not trust."
+    },
+    {
+      "id": "dave-identity-known",
+      "resolved_ep": 6,
+      "resolution": "Dave confirmed his identity to Bella. Default-skin anonymity no longer protects him in close quarters."
+    }
+  ],
 
   "world_rules": [
     {
@@ -210,14 +228,16 @@
       "EP2: dramatic reveal — Shadow shows the real crown (reveal hook)",
       "EP3: size contrast — tiny scared Dave vs giant WANTED screen (contrast/scale hook)",
       "EP4: confidence walk — Dave walks through plaza from behind, crowd parts (action/swagger hook)",
-      "EP5: departure — Dave pushes up from plaza tiles, turns his back on WANTED screens, walks into the dark archway (departure hook)"
+      "EP5: departure — Dave pushes up from plaza tiles, turns his back on WANTED screens, walks into the dark archway (departure hook)",
+      "EP6: emotional-confession — Bella breaks her own mask in the training-room doorway, voice cracking (emotional-confession hook)"
     ],
     "recent_cliffhangers": [
       "EP1: mysterious object reveal — Shadow pulls glowing object from hoodie, golden light, cut to black",
       "EP2: character transformation — Dave smiles cold for the first time, WANTED screen blazes behind",
       "EP3: dramatic entrance — Dave walks into blazing plaza voluntarily, Bella watches with recognition, cut to black",
       "EP4: defeated but not broken — Dave on the ground studying the crown, internal monologue 'this ain't over for me but it is for you', cut to black",
-      "EP5: verbal recognition — Bella in doorway of training room sees through default skin, 'Hey… are you Dave?', cut to black"
+      "EP5: verbal recognition — Bella in doorway of training room sees through default skin, 'Hey… are you Dave?', cut to black",
+      "EP6: quiet-determination two-shot — Dave and Bella in training-room doorway light, looking into lit corridor, Dave cold half-smile, 'Yeah. I think it might.' NO cut to black — first lit ending in the series"
     ]
   },
 

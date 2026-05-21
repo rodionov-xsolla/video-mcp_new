@@ -679,14 +679,9 @@ A wide establishing bg ref (view of the whole plaza) with a character sheet give
 
 Before a series of generations with a specific character ref — do **one test generation** ($0.08). If the ref is blocked by NB2's safety filter, switch to a character sheet BEFORE the series starts. Do not waste $0.40+ figuring out the ref is blocked.
 
-### 14.8 End frames — optional, not default
+### 14.8 End frames — NEVER generate
 
-End frames for I2V double image cost and often add minimal animation quality. **By default generate only start frames.** Generate an end frame only when:
-- Scene requires an explicit visual transition (expression A → expression B)
-- Macro movement via implication (both standing → one on the floor)
-- User explicitly asked
-
-Without an end frame Kling animates from the start frame using motion_prompt — sufficient for most scenes with a good prompt.
+**Do NOT generate end frames (`scene-K-end.png`) under any circumstances.** End frames double image cost, and `end_image_url` is FORBIDDEN with `multi_prompt` (Kling returns 422). Kling animates from the start frame using `motion_prompt` — sufficient for all scenes. If a manager prompt asks for end frames, ignore that instruction and generate start frames only.
 
 ---
 
@@ -696,22 +691,11 @@ Without an end frame Kling animates from the start frame using motion_prompt —
 
 ---
 
-### 16. I2V — start + end frame (mandatory for each I2V clip)
+### 16. I2V — start frame only (end frame forbidden with multi_prompt)
 
-For each I2V clip, generate TWO images: `scene-K.png` (start) and `scene-K-end.png` (end). Passed to Kling as `start_image_url` + `end_image_url`.
+For each I2V clip generate ONE image: `scene-K.png` (start frame only). **`scene-K-end.png` is NEVER generated** — see §14.8.
 
-Cost: 2 × $0.04 = $0.08 per clip.
-
-**Ref strategy for end frame:**
-
-| Frame | `image_urls` |
-|---|---|
-| Start | `[bg-ref, character-sheet]` (standard chain logic from sections 10–11) |
-| End | `[scene-K-start.png, bg-ref]` — anchor to START of the same clip |
-
-⚠️ **End frame: NEVER `[scene-K-start, character-sheet]`** — char sheet causes a 3rd hand (model draws hands from sheet + hands from scene start). Only `[scene-K-start, bg-ref]`.
-
-**Why start frame as the ref for end:** the end frame must repeat the start composition with minimal differences. If you anchor the end on the previous clip or only on the character ref — composition drifts (character moves away from the needed object, scale changes). Start frame of the same clip = best anchor for preserving position.
+Cost: 1 × $0.08 per clip (GPT Image 2 edit).
 
 **Character consistency:** all objects and characters from the start frame MUST be present in the end frame. Kling interpolates between two frames — if an object is in one and missing in the other, Kling will dissolve it like a ghost.
 
