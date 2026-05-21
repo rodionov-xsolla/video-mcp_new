@@ -696,11 +696,11 @@ Without an end frame Kling animates from the start frame using motion_prompt —
 
 ---
 
-### 16. I2V — start + end frame (mandatory for each I2V clip)
+### 16. I2V — start frame only (end frame forbidden with multi_prompt)
 
-For each I2V clip, generate TWO images: `scene-K.png` (start) and `scene-K-end.png` (end). Passed to Kling as `start_image_url` + `end_image_url`.
+For each I2V clip generate ONE image: `scene-K.png` (start frame). **Do NOT generate `scene-K-end.png`** — end frames are non-default per §14.8, and `end_image_url` is explicitly FORBIDDEN when using Kling `multi_prompt` (the animator returns a 422 error if both are present). Generate an end frame only when explicitly requested by the manager AND the clip uses single-prompt I2V (not multi_prompt).
 
-Cost: 2 × $0.04 = $0.08 per clip.
+Cost: 1 × $0.08 per clip (GPT Image 2 edit).
 
 **Ref strategy for end frame:**
 
