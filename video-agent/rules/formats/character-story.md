@@ -106,7 +106,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - **Three motion layers per clip** (mandatory): camera move + environment motion + character action. Each layer continues throughout the full 5s — do NOT write "then settles / then steady / then dissipates" (Kling reads those as freeze cues).
 - camera_angle differs between adjacent clips, AND every clip specifies an active camera move (push-in / pull-back / lateral dolly / low boom / crane up / handheld drift). No "camera holds steady" clips.
 - Number of characters in frame — per plot (1–2, max 2 in frame)
-- bg-reference for each unique location
+- **No bg-reference generation** — environment goes into `image_prompt` as text only
 - Voice: pick from ElevenLabs by character (Daniel — confident, George — neutral, Charlie — young, Charlotte — female)
 - General script rules — `rules/roles/scenarist.md`
 
@@ -151,11 +151,12 @@ The structure is flexible — the scenarist adapts it to the specific character'
 
 - Style is taken from `games/{GAME_TAG}/{GAME_TAG}.md` (identical to the game)
 - All frames 9:16 (608×1080)
-- Character ref: create an anchor ref (neutral pose, dark background) from game config. If the character appears at two ages (young / mature), make two refs — but max one per age variant.
-- **DO NOT generate separate bg-refs.** Backgrounds are described in detail inside `image_prompt` (location, lighting, props, depth of field) and NB2 paints them inline with the character. Empirically this produces better integration than chaining `[bg-ref, character-ref]` — the character feels part of the scene rather than composited onto it, and lighting/perspective match more reliably.
-- Chain: scene-N refs = `[character-ref-for-this-age-variant]` only (single ref input). For multi-character clips (max 2 characters in frame): refs = `[character-ref-A, character-ref-B]`, max 2 refs per image, and describe both subjects + the background in the prompt.
-- `image_prompt` describes the visual action from `action_description` AND the full background (interior architecture, time of day, props, atmosphere), NOT the monologue text. Be verbose about the environment — that is now where the location quality comes from.
-- **One PNG per clip — start frame only.** Do NOT generate `scene-K-end.png` for this format. Kling I2V is driven by start frame + motion_prompt; end frames are not used. Generating them wastes $0.08 per clip and biases Kling toward static interpolation.
+- Character ref: create an anchor ref (neutral pose, dark background) from game config
+- **No bg-reference generation.** Environment is baked into the scene prompt via `image_prompt`. Do NOT generate separate bg PNGs for character-story — use text description of the location in the prompt only.
+- Chain: scene-N refs = `[character-ref]` only (no bg ref)
+- If 2 characters in frame — both via refs, max 2 refs per image
+- `image_prompt` describes the visual action from `action_description`, NOT the monologue text
+- **One PNG per clip — start frame only.** Do NOT generate `scene-K-end.png`. End frames waste $0.08/clip and are FORBIDDEN with `multi_prompt`. See storyboarder.md §14.8.
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
@@ -238,7 +239,7 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 ├── storyboard.json
 ├── scenes/
 │   ├── refs/
-│   │   ├── character-ref.png        (one per age variant — typically 1 or 2; NO bg-refs)
+│   │   └── character-ref.png
 │   ├── scene-1/
 │   │   ├── scene-1.png           (start frame only — no end frame; background painted inline by NB2)
 │   │   ├── scene-1.mp4
@@ -261,9 +262,8 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 - [ ] `tts_segment` filled for each clip
 - [ ] Full monologue = sum of all `tts_segment`
 - [ ] All images 608×1080 (9:16)
-- [ ] Single-ref chain — `image_urls` for each scene contains ONLY the character-ref (or two character-refs for two-character clips); NO separate bg-ref files generated
-- [ ] Background is fully described inside each clip's `image_prompt` (architecture, lighting, props, atmosphere)
-- [ ] One PNG per scene (start frame only) — NO end-frame PNGs generated
+- [ ] No bg-reference files (environment in image_prompt only)
+- [ ] One PNG per scene (start frame only) — NO end-frame PNGs generated (§14.8)
 - [ ] camera_angle differs between adjacent clips, and every clip has an active camera move (no "holds steady")
 - [ ] motion_prompt has three concurrent layers (camera + environment + character) and uses continuous-tense verbs
 - [ ] motion_prompt contains NONE of the banned freeze phrases (then settles / then steady / then holds / hold position / no morphing / camera holds steady)
