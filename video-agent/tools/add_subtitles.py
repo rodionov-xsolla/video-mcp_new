@@ -34,7 +34,7 @@ import os
 import re
 import string
 
-FFMPEG = "/usr/local/bin/ffmpeg-full/ffmpeg"
+FFMPEG = "/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg"
 
 
 def strip_punct(word: str) -> str:
