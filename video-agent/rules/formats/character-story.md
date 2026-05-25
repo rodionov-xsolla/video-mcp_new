@@ -152,7 +152,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - All frames 9:16 (608×1080)
 - Character ref: create an anchor ref (neutral pose, dark background) from game config
 - **No bg-reference generation.** Environment is baked into the scene prompt via `image_prompt`. Do NOT generate separate bg PNGs for character-story — use text description of the location in the prompt only.
-- Chain: scene-N refs = `[character-ref]` only (no bg ref)
+- Chain: `scene-1` refs = `[character-ref]`; `scene-N` (N≥2) refs = `[character-ref, scene-(N-1).png]`. No bg ref (фон через текст в `image_prompt`), но prev-scene chain — обязателен для continuity между кадрами (verified on Picard EP1: storyboarder использовал chain для clips 3/5/6/7 → continuity улучшилась). См. storyboarder.md §10.
 - If 2 characters in frame — both via refs, max 2 refs per image
 - `image_prompt` describes the visual action from `action_description`, NOT the monologue text
 - **One PNG per clip — start frame only.** Do NOT generate `scene-K-end.png`. End frames waste $0.08/clip and are FORBIDDEN with `multi_prompt`. See storyboarder.md §14.8.

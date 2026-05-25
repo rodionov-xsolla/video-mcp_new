@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Video Production Pipeline — Overview</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel-2: #1d2129;
+    --line: #2a2f3a;
+    --text: #d8dde6;
+    --muted: #8891a1;
+    --accent: #ffb454;
+    --accent-dim: #6e5024;
+    --green: #6cb37a;
+    --red: #d96a6a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.55; font-size: 15px; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 48px 28px 96px; }
+  h1 { font-size: 34px; margin: 0 0 8px; letter-spacing: -0.02em; }
+  h2 { font-size: 22px; margin: 56px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--line); letter-spacing: -0.01em; }
+  h3 { font-size: 16px; margin: 24px 0 8px; color: var(--accent); }
+  h4 { font-size: 14px; margin: 16px 0 6px; color: var(--text); }
+  p, li { color: var(--text); }
+  .lead { color: var(--muted); font-size: 16px; margin: 0 0 8px; max-width: 780px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--panel-2); padding: 1px 6px; border-radius: 3px; font-size: 13px; color: var(--accent); }
+  pre { background: var(--panel-2); padding: 14px 16px; border-radius: 6px; overflow-x: auto; font-size: 13px; line-height: 1.5; color: var(--text); border: 1px solid var(--line); }
+  pre code { background: transparent; color: var(--text); padding: 0; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent-dim); }
+  a:hover { border-bottom-style: solid; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .grid { display: grid; gap: 14px; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 800px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 18px; }
+  .card h3 { margin-top: 0; }
+  .tag { display: inline-block; padding: 2px 8px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; font-size: 11px; color: var(--muted); margin: 2px 4px 2px 0; font-family: ui-monospace, monospace; }
+  .tag-accent { color: var(--accent); border-color: var(--accent-dim); }
+  .tag-green { color: var(--green); border-color: #2e4a35; }
+  .muted { color: var(--muted); }
+  .pipeline { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin: 12px 0 24px; font-size: 13px; }
+  .pipeline .step { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; text-align: center; }
+  .pipeline .step .role { color: var(--accent); font-weight: 600; }
+  .pipeline .step .model { color: var(--muted); font-size: 11px; font-family: ui-monospace, monospace; margin-top: 2px; }
+  .pipeline .step .out { font-size: 11px; color: var(--text); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line); }
+  @media (max-width: 900px) { .pipeline { grid-template-columns: 1fr 1fr; } }
+  .deps { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; line-height: 1.7; background: var(--panel-2); padding: 18px 20px; border-radius: 6px; border: 1px solid var(--line); white-space: pre; overflow-x: auto; }
+  .matrix th { background: var(--panel-2); }
+  .matrix .y { color: var(--green); text-align: center; }
+  .matrix .n { color: #3a4150; text-align: center; }
+  .meta-bar { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; color: var(--muted); margin-bottom: 32px; padding: 10px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; }
+  .meta-bar b { color: var(--text); font-weight: 600; }
+  ul.tight, ol.tight { margin: 6px 0 6px 22px; padding: 0; }
+  ul.tight li, ol.tight li { margin: 2px 0; }
+  hr { border: none; border-top: 1px solid var(--line); margin: 32px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Video Production Pipeline</h1>
+<p class="lead">AI-конвейер коротких вертикальных роликов (1080×1920) для game-каналов. Сценарий, голос, изображение, видео, монтаж — всё через сабагенты Claude поверх fal.ai, ElevenLabs, FFmpeg и Supabase.</p>
+
+<div class="meta-bar">
+  <span><b>Стек:</b> Claude Code (Opus/Sonnet/Haiku) · fal.ai · ElevenLabs · Supabase · FFmpeg</span>
+  <span><b>Корень:</b> <code>video-agent/</code></span>
+  <span><b>Формат:</b> 1080×1920, 25–60s</span>
+  <span><b>Стоимость ролика:</b> $1.5–$6</span>
+</div>
+
+<h2>Pipeline — последовательность фаз</h2>
+<p class="lead">Manager (родительский агент) делегирует 5 фаз через Agent tool. Каждый sub-agent — отдельный процесс с пинnedой моделью; контекст не разделяется, всё передаётся через файлы.</p>
+
+<div class="pipeline">
+  <div class="step">
+    <div class="role">Scenarist</div>
+    <div class="model">sonnet</div>
+    <div class="out">storyboard.json<br><span class="muted">(narrative)</span></div>
+  </div>
+  <div class="step">
+    <div class="role">Sound</div>
+    <div class="model">haiku</div>
+    <div class="out">tts_url<br><span class="muted">(в storyboard)</span></div>
+  </div>
+  <div class="step">
+    <div class="role">Storyboarder</div>
+    <div class="model">sonnet</div>
+    <div class="out">scene-K.png<br><span class="muted">(NB2)</span></div>
+  </div>
+  <div class="step">
+    <div class="role">Animator</div>
+    <div class="model">sonnet</div>
+    <div class="out">scene-K.mp4<br><span class="muted">(Kling)</span></div>
+  </div>
+  <div class="step">
+    <div class="role">Editor</div>
+    <div class="model">sonnet</div>
+    <div class="out">final.mp4<br><span class="muted">(FFmpeg)</span></div>
+  </div>
+  <div class="step" style="background: var(--panel-2);">
+    <div class="role" style="color: var(--green);">Manager</div>
+    <div class="model">opus (parent)</div>
+    <div class="out">git push +<br><span class="muted">cost report</span></div>
+  </div>
+</div>
+
+<h3>Стоимость одного прохода (типичный ролик 30s, 6 сцен)</h3>
+<table>
+  <tr><th>Фаза</th><th>API/ресурс</th><th>Цена за единицу</th><th>За ролик</th></tr>
+  <tr><td>Scenarist</td><td>Claude Sonnet (генерация storyboard.json)</td><td>~$0.05 токены</td><td>$0.05</td></tr>
+  <tr><td>Sound</td><td>ElevenLabs TTS via fal.ai</td><td>$0.30/1000 chars</td><td>$0.10–0.30</td></tr>
+  <tr><td>Storyboarder</td><td>Nano Banana 2 (NB2) + refs</td><td>$0.04/PNG</td><td>$0.30–0.50</td></tr>
+  <tr><td>Animator</td><td>Kling v3 Standard I2V / Avatar v2</td><td>$0.084/s I2V, $0.056/s Avatar</td><td>$1.50–4.00</td></tr>
+  <tr><td>Editor</td><td>FFmpeg (локально) + Supabase upload</td><td>$0</td><td>$0</td></tr>
+  <tr><td colspan="3" style="text-align:right; color: var(--accent);"><b>Итого</b></td><td><b>$2–5</b></td></tr>
+</table>
+
+<h2>Граф зависимостей — кто куда обращается</h2>
+<p class="lead">Каждый агент видит только свои файлы и API. Manager — единственный, кто знает про всех. Никакой shared memory; всё через диск + Supabase.</p>
+
+<div class="deps">                          ┌─────────────────────────────────────┐
+                          │              Manager                │
+                          │       (Opus, parent agent)          │
+                          │   читает только manager.md          │
+                          └──┬──────┬──────┬──────┬──────┬──────┘
+                             │      │      │      │      │
+                  Agent tool │      │      │      │      │
+                             ▼      ▼      ▼      ▼      ▼
+                    ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+                    │  Scenarist  │→ │    Sound    │→ │ Storyboarder│
+                    │   Sonnet    │  │   Haiku     │  │    Opus     │
+                    └──────┬──────┘  └──────┬──────┘  └──────┬──────┘
+                           │                │                │
+                           ▼                ▼                ▼
+                   storyboard.json   tts_url + mp3      scene-K.png
+                   (narrative)       (в storyboard)     + chain refs
+                           │                │                │
+                           └────────────────┴────────────────┘
+                                            │
+                                            ▼
+                                    ┌─────────────┐
+                                    │   Animator  │
+                                    │    Opus     │
+                                    └──────┬──────┘
+                                           ▼
+                                     scene-K.mp4
+                                           │
+                                           ▼
+                                    ┌─────────────┐
+                                    │   Editor    │
+                                    │   Sonnet    │
+                                    └──────┬──────┘
+                                           ▼
+                                       final.mp4
+                                           │
+                                           ▼
+                                  Supabase Storage
+                                  (public URL)
+</div>
+
+<h3>Матрица «агент → внешний сервис»</h3>
+<table class="matrix">
+  <tr>
+    <th>Агент</th>
+    <th>fal.ai NB2</th>
+    <th>fal.ai Kling</th>
+    <th>ElevenLabs<br>(via fal.ai)</th>
+    <th>Supabase<br>Storage</th>
+    <th>Supabase<br>DB</th>
+    <th>FFmpeg</th>
+    <th>git</th>
+  </tr>
+  <tr>
+    <td>Manager</td>
+    <td class="n">—</td><td class="n">—</td><td class="n">—</td>
+    <td class="n">—</td><td class="y">читает<br>game_assets</td><td class="n">—</td><td class="y">pull / push</td>
+  </tr>
+  <tr>
+    <td>Scenarist</td>
+    <td class="n">—</td><td class="n">—</td><td class="n">—</td>
+    <td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td>
+  </tr>
+  <tr>
+    <td>Sound</td>
+    <td class="n">—</td><td class="n">—</td><td class="y">TTS</td>
+    <td class="y">upload MP3</td><td class="n">—</td><td class="y">probe duration</td><td class="n">—</td>
+  </tr>
+  <tr>
+    <td>Storyboarder</td>
+    <td class="y">PNG</td><td class="n">—</td><td class="n">—</td>
+    <td class="y">upload PNG +<br>read refs</td><td class="y">читает<br>game_assets</td><td class="n">—</td><td class="n">—</td>
+  </tr>
+  <tr>
+    <td>Animator</td>
+    <td class="n">—</td><td class="y">I2V / Avatar</td><td class="n">—</td>
+    <td class="y">read PNG/MP3</td><td class="n">—</td><td class="y">trim, probe</td><td class="n">—</td>
+  </tr>
+  <tr>
+    <td>Editor</td>
+    <td class="n">—</td><td class="n">—</td><td class="n">—</td>
+    <td class="y">upload final.mp4</td><td class="n">—</td><td class="y">concat,<br>subtitles, mix</td><td class="n">—</td>
+  </tr>
+</table>
+
+<h3>Поток файла <code>storyboard.json</code></h3>
+<p class="lead">Один JSON растёт через все 4 фазы: каждый агент дописывает свои поля, не удаляя чужие.</p>
+<pre><code>Scenarist     →  scenes[].narrative_text, action_description, facial_expression,
+                 character_state, visual_identity, voices, duration_sec, clip_type
+
+Sound         +  scenes[].tts_url       (Supabase public URL .mp3)
+              +  scenes[].tts_dur       (ffprobe seconds)
+              +  bg_music_url
+
+Storyboarder  +  scenes[].image_prompt  (для NB2)
+              +  scenes[].scene_image_url   (Supabase public URL .png)
+
+Animator      +  scenes[].motion_prompt (для Kling)
+              +  scenes[].clip_url      (локальный путь .mp4)
+              +  cost_log[]
+
+Editor        →  читает всё, пишет final.mp4 на диск + загружает в Supabase
+</code></pre>
+
+<h2>Sub-agents — пять ролей</h2>
+
+<div class="grid grid-2">
+  <div class="card">
+    <h3>Manager <span class="tag tag-accent">parent</span></h3>
+    <p class="muted">Оркестратор. НЕ пишет storyboard, НЕ зовёт fal.ai, НЕ запускает ffmpeg. Только Agent-вызовы + git + детект формата + cost report.</p>
+    <h4>Что делает</h4>
+    <ul class="tight">
+      <li><code>git pull origin main</code> в самом начале</li>
+      <li>Детект формата из user request → читает <code>rules/formats/{format}.md</code></li>
+      <li>Делегирует 5 фаз через Agent tool</li>
+      <li>Программатическая валидация после каждой фазы (filesize, ffprobe — без визуальной читки PNG/MP4)</li>
+      <li>Обновляет story bible (для serial-drama / reddit-story)</li>
+      <li>Финальный cost report + <code>git push</code></li>
+    </ul>
+    <p><span class="tag">rules/roles/manager.md</span></p>
+  </div>
+
+  <div class="card">
+    <h3>Scenarist <span class="tag">sonnet</span></h3>
+    <p class="muted">Пишет <code>storyboard.json</code> (narrative side). Никаких изображений, видео, аудио.</p>
+    <h4>Что делает</h4>
+    <ul class="tight">
+      <li>Сцены/биты, <code>action_description</code>, <code>dialogue</code></li>
+      <li><code>visual_identity</code>, <code>facial_expression</code>, <code>character_state</code></li>
+      <li>Согласует длительности с budget'ом формата</li>
+      <li>Для серий — читает story bible, дописывает её</li>
+    </ul>
+    <p><span class="tag">rules/roles/scenarist.md</span> · <span class="tag">prompts/scenarist.txt</span></p>
+  </div>
+
+  <div class="card">
+    <h3>Sound <span class="tag">haiku</span></h3>
+    <p class="muted">ElevenLabs TTS для каждой диалоговой реплики. Загрузка MP3 в Supabase, URL'ы обратно в storyboard.json. Выбор bg-music.</p>
+    <h4>Что делает</h4>
+    <ul class="tight">
+      <li>Для каждого <code>clip_type: dialogue</code> — POST в fal.ai ElevenLabs eleven-v3</li>
+      <li>Voice mapping из game config (Kirk, Worf, Narrator, и т.д.)</li>
+      <li>Загрузка MP3 в Supabase Storage, public URL</li>
+      <li>Подбор bg-music из <code>music/{Dark|Fun|Neutral}/</code> по format mood</li>
+      <li>Для длинных монологов (>30s в одной сцене) — резка по предложениям (NB: не для Avatar — там hard cap 25s)</li>
+    </ul>
+    <p><span class="tag">rules/roles/sound.md</span> · <span class="tag">prompts/sound.txt</span></p>
+  </div>
+
+  <div class="card">
+    <h3>Storyboarder <span class="tag">sonnet</span></h3>
+    <p class="muted">Переводит <code>action_description</code> в <code>image_prompt</code>, генерит PNG через Nano Banana 2, грузит в Supabase. Chain-ref для consistency.</p>
+    <h4>Что делает</h4>
+    <ul class="tight">
+      <li>Решает камеру, угол, оптику, гэйз персонажей</li>
+      <li>Chain-ref: <code>scene-N = [character-sheet, scene-(N-1)]</code> для continuity</li>
+      <li>NB2 prompt-engineering (без негаций, photographic vocabulary)</li>
+      <li>Для Avatar-сцен — zero-text rule (никакого текста в кадре, иначе Kling превратит в иероглифы)</li>
+      <li>Программатическая валидация PNG: filesize, dimensions, ffprobe</li>
+    </ul>
+    <p><span class="tag">rules/roles/storyboarder.md</span> · <span class="tag">prompts/storyboarder.txt</span></p>
+  </div>
+
+  <div class="card">
+    <h3>Animator <span class="tag">sonnet</span></h3>
+    <p class="muted">Kling I2V (action) или Kling Avatar v2 (dialogue/lipsync). Самая дорогая фаза — $0.28–$1.40 за вызов.</p>
+    <h4>Что делает</h4>
+    <ul class="tight">
+      <li>Пишет <code>motion_prompt</code> сам, из <code>action_description</code> + <code>facial_expression</code></li>
+      <li><b>I2V:</b> v3 Standard ($0.084/s) — primary; v2.6 Pro — fallback</li>
+      <li><b>Avatar:</b> Kling Avatar v2 Standard ($0.056/s), hard cap 25s TTS</li>
+      <li>Multi-prompt для длинных action-сцен (до 15s, 6 shots)</li>
+      <li>Программатическая валидация MP4: filesize, ffprobe duration, video/audio streams</li>
+    </ul>
+    <p><span class="tag">rules/roles/animator.md</span> · <span class="tag">prompts/animator.txt</span></p>
+  </div>
+
+  <div class="card">
+    <h3>Editor <span class="tag">sonnet</span></h3>
+    <p class="muted">FFmpeg-сборка <code>final.mp4</code>. Нормализация, concat, субтитры, музыка, CTA, загрузка в Supabase. Никаких AI-API.</p>
+    <h4>Что делает</h4>
+    <ul class="tight">
+      <li>Trim каждого клипа (Avatar tail = TTS_dur + 0.3s)</li>
+      <li>concat через <code>-f concat</code>, нормализация SAR/FPS</li>
+      <li>Субтитры: <code>add_subtitles.py</code> (faster-whisper → ASS chunks по 3 слова)</li>
+      <li>Audio mix: voice 100%, bg-music ~20%, gameplay 25% (где есть)</li>
+      <li>Speedup (для gameplay-ai-avatar — 1.3×)</li>
+      <li>Upload final.mp4 в Supabase</li>
+    </ul>
+    <p><span class="tag">rules/roles/editor.md</span> · <span class="tag">prompts/editor.txt</span></p>
+  </div>
+</div>
+
+<h2>Форматы</h2>
+<p class="lead">11 playbook'ов — каждый описывает структуру ролика, целевую длительность, какие Kling-модели и какие role-briefs применяются.</p>
+
+<table>
+  <tr>
+    <th>Формат</th><th>Длительность</th><th>Суть</th><th>Kling</th><th>TTS</th>
+  </tr>
+  <tr>
+    <td><b>character-story</b></td><td>30–40s · 6–8×5s</td>
+    <td>Персонаж рассказывает свою лор-историю от первого лица, Kling I2V визуализирует ключевые моменты</td>
+    <td>I2V v2.6 Pro</td><td>да (overlay)</td>
+  </tr>
+  <tr>
+    <td><b>serial-drama</b></td><td>25–40s · 3–5 клипов</td>
+    <td>Микро-драма с cliffhanger, продолжается в следующем эпизоде (story bible)</td>
+    <td>I2V + Avatar</td><td>да</td>
+  </tr>
+  <tr>
+    <td><b>news</b></td><td>20–30s</td>
+    <td>Игровые новости — анкор + ко-анкор в студии, lipsync</td>
+    <td>Avatar v2</td><td>да</td>
+  </tr>
+  <tr>
+    <td><b>gameplay-ai-avatar</b></td><td>25–40s</td>
+    <td>Split-screen: 60% gameplay сверху + 40% talking-head внизу, голос 1.3× speedup</td>
+    <td>Avatar v2 + gameplay-mp4</td><td>да</td>
+  </tr>
+  <tr>
+    <td><b>reddit-story</b></td><td>≤60s (TTS ≤58s)</td>
+    <td>Монолог поверх gameplay (shuffled), word-highlight субтитры</td>
+    <td>—</td><td>да (drives all)</td>
+  </tr>
+  <tr>
+    <td><b>standard</b></td><td>20–30s</td>
+    <td>Универсальный I2V без диалогов — сцены подряд с motion</td>
+    <td>I2V</td><td>опционально</td>
+  </tr>
+  <tr>
+    <td><b>what-if-real-life</b></td><td>20–30s</td>
+    <td>Персонаж игры в обычном мире (Спок-бариста, Кирк в Starbucks)</td>
+    <td>I2V + Avatar</td><td>да</td>
+  </tr>
+  <tr>
+    <td><b>dance-battle</b></td><td>15–25s</td>
+    <td>Комедийный dance-баттл двух персонажей</td>
+    <td>I2V</td><td>—</td>
+  </tr>
+  <tr>
+    <td><b>motion-dance</b></td><td>15–25s</td>
+    <td>Персонаж танцует под музыку через motion-transfer с reference-видео</td>
+    <td>motion transfer</td><td>—</td>
+  </tr>
+  <tr>
+    <td><b>dual-style</b></td><td>15–25s</td>
+    <td>Cartoon + realistic в одном ролике (split / cross-fade)</td>
+    <td>I2V</td><td>опционально</td>
+  </tr>
+  <tr>
+    <td><b>object-character</b></td><td>15–25s</td>
+    <td>Антропоморфные предметы (чашка кофе говорит, меч жалуется)</td>
+    <td>I2V</td><td>да (overlay)</td>
+  </tr>
+</table>
+
+<h2>Игры</h2>
+
+<div class="grid grid-3">
+  <div class="card">
+    <h3>roblox</h3>
+    <p class="muted">Блочный voxel-стиль, Roblox-noob, preppy-girl, builderman.</p>
+    <p><span class="tag">games/roblox/roblox.md</span></p>
+    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">character-story</span><span class="tag tag-accent">motion-dance</span><span class="tag tag-accent">news</span></p>
+  </div>
+  <div class="card">
+    <h3>star-trek-timelines</h3>
+    <p class="muted">Канон ST, TOS/TNG/DS9/VOY/ENT эры, корабли.</p>
+    <p><span class="tag">games/star-trek-timelines/star-trek-timelines.md</span></p>
+    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">character-story</span><span class="tag tag-accent">what-if-real-life</span><span class="tag tag-accent">gameplay-ai-avatar</span></p>
+  </div>
+  <div class="card">
+    <h3>marvel snap</h3>
+    <p class="muted">Карточная игра Marvel, гэймплей-клипы + reddit-story bibles.</p>
+    <p><span class="tag">games/marvel snap/</span></p>
+    <p><span class="tag tag-accent">reddit-story</span></p>
+  </div>
+  <div class="card">
+    <h3>mlbb</h3>
+    <p class="muted">Mobile Legends: Bang Bang. Свой <code>news_special.md</code> override.</p>
+    <p><span class="tag">games/mlbb/mlbb.md</span></p>
+    <p><span class="tag tag-accent">news</span></p>
+  </div>
+  <div class="card">
+    <h3>oxide</h3>
+    <p class="muted">Oxide: Survival Island.</p>
+    <p><span class="tag">games/oxide/oxide.md</span></p>
+    <p><span class="tag tag-accent">standard</span></p>
+  </div>
+  <div class="card">
+    <h3>kekele</h3>
+    <p class="muted">Kakele Online — MMO RPG.</p>
+    <p><span class="tag">games/kekele/kekele.md</span></p>
+    <p><span class="tag tag-accent">standard</span></p>
+  </div>
+</div>
+
+<h2>Внешние сервисы</h2>
+
+<div class="grid grid-2">
+  <div class="card">
+    <h3>fal.ai</h3>
+    <p class="muted">Прокси к моделям. Три семейства: NB2 (картинки), Kling (видео), ElevenLabs (голос).</p>
+    <h4>Эндпоинты в работе</h4>
+    <ul class="tight">
+      <li><code>fal-ai/nano-banana-2</code> — text-to-image</li>
+      <li><code>fal-ai/nano-banana-2/edit</code> — chain-ref edit</li>
+      <li><code>fal-ai/kling-video/v3/standard/image-to-video</code> — I2V primary</li>
+      <li><code>fal-ai/kling-video/v2.6/pro/image-to-video</code> — I2V fallback</li>
+      <li><code>fal-ai/kling-video/ai-avatar/v2/standard</code> — Avatar lipsync</li>
+      <li><code>fal-ai/elevenlabs/tts/eleven-v3</code> — TTS</li>
+    </ul>
+    <p>Async очередь. fal.ai temp-URLs живут часами — поэтому всё перезаливаем в Supabase до Kling-вызова.</p>
+  </div>
+
+  <div class="card">
+    <h3>Supabase</h3>
+    <p class="muted">Постоянное хранилище всех ассетов + БД с метаданными.</p>
+    <h4>Storage</h4>
+    <ul class="tight">
+      <li><code>assets/{game}/refs/</code> — character sheets, bg-refs (шарятся между эпизодами)</li>
+      <li><code>assets/{game}/scenes/{date}/{format}/</code> — scene PNGs (per-эпизод, чтоб не затирались)</li>
+      <li><code>assets/{game}/tts/</code> — MP3</li>
+      <li><code>assets/{game}/final/</code> — готовые final.mp4</li>
+    </ul>
+    <h4>DB</h4>
+    <ul class="tight">
+      <li><code>game_assets</code> — реестр ассетов (URL, tags, prompt_block)</li>
+      <li><code>video_tasks</code> — очередь для worker'а (queue mode)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>ElevenLabs</h3>
+    <p class="muted">Доступ через fal.ai. Голос eleven-v3, 29 языков. stability/style — per-voice.</p>
+    <h4>Голоса</h4>
+    <ul class="tight">
+      <li>Voice mapping в <code>sound.md</code> + per-game в game config</li>
+      <li>Per-character settings (Kirk: stable, Spock: flat, Worf: harsh)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>FFmpeg</h3>
+    <p class="muted">Локально, версия с libass (для ASS-субтитров). Никаких облаков.</p>
+    <h4>Используется</h4>
+    <ul class="tight">
+      <li>Editor: concat, trim, atempo, amix, drawbox, subtitles burn-in</li>
+      <li>Animator: ffprobe (validation), bridge-frame extraction (multi-call chain)</li>
+      <li>Sound: ffprobe duration</li>
+      <li>Бинарь: <code>/usr/local/bin/ffmpeg-full/ffmpeg</code> (libass-enabled)</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Структура репозитория</h2>
+<pre><code>video-agent/
+├── CLAUDE.md              ─ корневой бриф для Manager
+├── providers.json         ─ активные провайдеры/модели
+├── .env                   ─ FAL_KEY, ELEVENLABS_API_KEY, SUPABASE_*
+│
+├── rules/
+│   ├── roles/             ─ craft sub-agent'ов (format-agnostic)
+│   │   ├── manager.md     ─ оркестрация
+│   │   ├── scenarist.md   ─ storyboard.json
+│   │   ├── sound.md       ─ TTS + субтитры
+│   │   ├── storyboarder.md─ NB2 + chain refs
+│   │   ├── animator.md    ─ Kling I2V/Avatar
+│   │   └── editor.md      ─ FFmpeg сборка
+│   ├── formats/           ─ 11 format playbooks
+│   │   └── {character-story, serial-drama, news, ...}.md
+│   └── main/
+│       ├── budgets.md     ─ цены моделей
+│       ├── fallback.md    ─ обработка ошибок
+│       ├── validation.md  ─ программатические проверки
+│       └── new-format-skill.md
+│
+├── prompts/               ─ шаблоны для Agent-вызовов
+│   └── {scenarist, sound, storyboarder, animator, editor}.txt
+│
+├── tools/                 ─ API reference
+│   ├── fal-ai.md          ─ Kling/NB2/ElevenLabs эндпоинты
+│   └── ffmpeg-api.md
+│
+├── games/                 ─ per-game configs
+│   └── {game}/
+│       ├── {game}.md      ─ visual style guide, character prompts
+│       ├── assets/        ─ локальные refs
+│       ├── gameplay/      ─ background gameplay clips
+│       └── {format}_story_bible.json   ─ для серий
+│
+├── music/                 ─ bg-music library
+│   └── {Dark|Fun|Neutral}/*.mp3
+│
+├── output/                ─ артефакты роликов
+│   └── {YYYY-MM-DD}/{game}/{format-slug}/
+│       ├── storyboard.json
+│       ├── scenes/scene-K/scene-K.{png,mp4,mp3}
+│       └── final.mp4
+│
+├── queue/                 ─ worker для Supabase video_tasks
+│   ├── worker.py
+│   └── upload-asset.sh
+│
+└── legacy/                ─ архив старых правил (fallback only)
+</code></pre>
+
+<h2>Правила (rules/) — точки входа</h2>
+
+<div class="grid grid-2">
+  <div class="card">
+    <h3>main/</h3>
+    <ul class="tight">
+      <li><a href="video-agent/rules/main/budgets.md">budgets.md</a> — цены моделей, format budget cap</li>
+      <li><a href="video-agent/rules/main/fallback.md">fallback.md</a> — обработка ошибок fal.ai, fallback cascade</li>
+      <li><a href="video-agent/rules/main/validation.md">validation.md</a> — программатические проверки (filesize, ffprobe), no visual reads</li>
+      <li><a href="video-agent/rules/main/new-format-skill.md">new-format-skill.md</a> — как добавить новый формат</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>roles/</h3>
+    <ul class="tight">
+      <li><a href="video-agent/rules/roles/manager.md">manager.md</a></li>
+      <li><a href="video-agent/rules/roles/scenarist.md">scenarist.md</a></li>
+      <li><a href="video-agent/rules/roles/sound.md">sound.md</a></li>
+      <li><a href="video-agent/rules/roles/storyboarder.md">storyboarder.md</a></li>
+      <li><a href="video-agent/rules/roles/animator.md">animator.md</a></li>
+      <li><a href="video-agent/rules/roles/editor.md">editor.md</a></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>formats/</h3>
+    <ul class="tight">
+      <li><a href="video-agent/rules/formats/character-story.md">character-story.md</a></li>
+      <li><a href="video-agent/rules/formats/serial-drama.md">serial-drama.md</a></li>
+      <li><a href="video-agent/rules/formats/news.md">news.md</a></li>
+      <li><a href="video-agent/rules/formats/gameplay-ai-avatar.md">gameplay-ai-avatar.md</a></li>
+      <li><a href="video-agent/rules/formats/reddit-story.md">reddit-story.md</a></li>
+      <li><a href="video-agent/rules/formats/standard.md">standard.md</a></li>
+      <li><a href="video-agent/rules/formats/what-if-real-life.md">what-if-real-life.md</a></li>
+      <li><a href="video-agent/rules/formats/dance-battle.md">dance-battle.md</a></li>
+      <li><a href="video-agent/rules/formats/motion-dance.md">motion-dance.md</a></li>
+      <li><a href="video-agent/rules/formats/dual-style.md">dual-style.md</a></li>
+      <li><a href="video-agent/rules/formats/object-character.md">object-character.md</a></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>tools/</h3>
+    <ul class="tight">
+      <li><a href="video-agent/tools/fal-ai.md">fal-ai.md</a> — Kling, NB2, ElevenLabs API reference</li>
+      <li><a href="video-agent/tools/ffmpeg-api.md">ffmpeg-api.md</a> — FFmpeg Cloud (fallback)</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Принципы</h2>
+<ul class="tight">
+  <li><b>Manager не делает работу sub-agent'ов.</b> Если делает — всё едет на parent-Opus, стоимость x3.</li>
+  <li><b>Не читай PNG/MP4 визуально.</b> Валидация — только программатическая (filesize + ffprobe). Качество — на уровне промпта, не на инспекции глазами.</li>
+  <li><b>Никогда не из памяти — всегда читай rule-файлы.</b> Правила меняются.</li>
+  <li><b>Перед дорогим вызовом — Supabase upload.</b> fal.ai temp-URLs протухают, Kling за $1.40 не успеет скачать.</li>
+  <li><b>storyboard.json — единственный канал между фазами.</b> Sub-agent'ы не видят чужой контекст.</li>
+  <li><b>Debug mode</b> — остановка после каждой фазы для confirm.</li>
+</ul>
+
+<hr>
+<p class="muted" style="font-size: 12px; text-align: center;">
+  video-mcp pipeline · обновлено вручную при правках правил
+</p>
+
+</div>
+</body>
+</html>

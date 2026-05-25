@@ -26,8 +26,8 @@ What you personally do:
    |---|---|---|---|
    | 1. Script | `scenarist` | sonnet | writes `storyboard.json` (narrative + visual_identity) |
    | 2. Audio (TTS) | `sound` | haiku | TTS for dialogue clips, Supabase URLs written back into storyboard.json. Skip if there are no dialogue clips |
-   | 3. Images | `storyboarder` | opus | NB2 PNGs per scene, image_prompt + scene_image into storyboard.json |
-   | 4. Animation | `animator` | opus | Kling I2V/Avatar v2 → MP4 per scene. Expensive ($0.28–1.40/clip) — validate after |
+   | 3. Images | `storyboarder` | sonnet | NB2 PNGs per scene, image_prompt + scene_image into storyboard.json |
+   | 4. Animation | `animator` | sonnet | Kling I2V/Avatar v2 → MP4 per scene. Expensive ($0.28–1.40/clip) — validate after |
    | 5. Assembly | `editor` | sonnet | ffmpeg concat → `final.mp4`, subtitles, music, CTA, upload to Supabase |
 
 7. **For every sub-agent, pass in `prompt`** (it does not see your context):

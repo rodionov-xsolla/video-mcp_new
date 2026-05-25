@@ -792,13 +792,18 @@ Nano Banana 2 (avatar ref) → ElevenLabs TTS (speech.wav, через fal.ai) �
 ```bash
 # 1. Генерируй изображение через NB2 → скачай локально
 # 2. Загрузи в Supabase Storage
-curl -s -X POST "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/assets/${GAME_TAG}/scenes/${FILENAME}" \
+#    Путь ОБЯЗАН содержать дату и формат для scene PNG, иначе следующий эпизод
+#    того же game_tag затрёт предыдущий. См. storyboarder.md §15.1.
+#    scene PNG:  ${GAME_TAG}/scenes/${YYYY-MM-DD}/${FORMAT_SLUG}/scene-K.png
+#    bg/char ref: ${GAME_TAG}/refs/${name}.png  (без даты — шарится между эпизодами)
+STORAGE_PATH="${GAME_TAG}/scenes/${DATE}/${FORMAT_SLUG}/${FILENAME}"
+curl -s -X POST "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/assets/${STORAGE_PATH}" \
   -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
   -H "Content-Type: image/png" \
   --data-binary @"$LOCAL_FILE"
 
 # 3. Получи постоянный URL
-PERMANENT_URL="https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/${GAME_TAG}/scenes/${FILENAME}"
+PERMANENT_URL="https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/${STORAGE_PATH}"
 
 # 4. Используй PERMANENT_URL как start_image_url в Kling I2V
 ```

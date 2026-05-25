@@ -283,12 +283,47 @@ Kling Avatar at close-up of the face produces an uncanny valley: cheap, frighten
 | Avatar / dialogue | medium close-up, medium shot, medium wide |
 | I2V action | any (including close-up) |
 
+#### 6.1.1 Avatar scene PNG — zero-text rule (MANDATORY)
+
+Kling Avatar v2 при анимации обрабатывает любой текст в исходном кадре как
+семантический контент и деградирует его в иероглифы/garbled Latin при движении.
+Артефакты появляются даже на 7-секундных клипах (см. comedy-sketch Spock barista,
+scene-3, 7.15s → CJK артефакт в последние 1.3s). Параметр `negative_prompt` у
+Avatar v2 API не работает — единственная защита это чистый исходный PNG.
+
+**Для каждой сцены с `clip_type: avatar` в `image_prompt` запрещены:**
+- меню-доски, ценники, вывески, объявления
+- корешки книг, обложки журналов, газеты
+- плакаты, баннеры, флаги с надписями
+- чашки/банки/упаковка с брендингом и текстом
+- бейджи, нашивки, ярлыки на одежде
+- экраны мониторов/телефонов с UI-элементами и текстом
+- надписи мелом, маркером, граффити с буквами
+- цифры/числа на табло, циферблаты с цифрами
+
+**Если локация требует текстовых элементов — replace с no-text эквивалентом:**
+
+| Локация требует | image_prompt пишет |
+|---|---|
+| кафе / бар | `blank dark chalkboard, no writing`, `unbranded white ceramic cups`, `plain wooden shelves` |
+| ньюсрум | `solid blue backdrop, no chyrons, no lower thirds, no ticker` |
+| офис | `closed laptop, blank notebook pages, unmarked folders` |
+| магазин | `solid-color packaging, plain shelves, no price tags` |
+| улица | `building facades without signs, no street signs, no advertisements` |
+
+**В `image_prompt` для NB2 добавлять positive-фразы (не negations — NB2 их
+игнорирует):** `clean text-free background`, `surfaces without writing`,
+`unbranded objects`, `blank signage`, `no visible letters or characters in frame`.
+
+Этот блок отменяет §7.2 («Text in frame — double quotes») для любых
+Avatar-сцен: в кадр под Avatar текст не добавляется никогда, даже в кавычках.
+
 ---
 
 ### 7. image_prompt anti-patterns
 
 - ❌ `high quality, masterpiece, 4K, ultra HD` — junk tags, no effect on NB2
-- ❌ `no watermark, no text` — NB2 handles negations poorly
+- ❌ `no watermark, no text` (negations) — NB2 их игнорирует. Для Avatar-сцен, где текст недопустим, описывать поверхности positively: `blank chalkboard`, `plain wall`, `unbranded ceramic cup`. См. §6.1.1.
 - ❌ `beautiful, amazing, epic, cool` — abstract, no visual meaning
 - ❌ Duplicating `style_tags` inside `character_state`
 - ❌ Abstract secondary characters: `"armored man"` → NB2 makes a robot. Describe: `"weathered leather vest, scarred bearded face, sun-darkened skin"`
@@ -329,6 +364,9 @@ NB2 associates photo terms with concrete visual patterns. Use when standard `dra
 | `chiaroscuro lighting, high contrast` | Hard shadows, dramatic light |
 
 ### 7.2 Text in frame — double quotes
+
+> **Не применяется к Avatar-сценам.** Технику с двойными кавычками используем
+> только для I2V/static-кадров. Для `clip_type: avatar` — §6.1.1 (zero-text rule).
 
 When you need text in the image (sign, screen, label):
 
@@ -688,6 +726,55 @@ Before a series of generations with a specific character ref — do **one test g
 ### 15. Each scene = its own PNG
 
 **Forbidden** to use a ref directly as a scene image. Each clip needs its own scene PNG generation, even if visually close to the ref. Otherwise the scene prompt (pose, expression, environment) will not apply.
+
+---
+
+### 15.1 Supabase upload path — date + format в пути (MANDATORY)
+
+Локальный путь не меняется: `${OUTPUT_DIR}/scenes/scene-K/scene-K.png`.
+
+**Supabase Storage path обязан содержать дату и формат**, иначе следующий эпизод
+этого же game_tag затрёт PNG'и предыдущего (реальный кейс: Picard scene PNGs
+перезаписаны Seven-эпизодом, потому что путь был `roblox/scenes/scene-K.png`
+без даты — backed up to disk only).
+
+**Каноническая схема пути для scene PNG:**
+
+```
+assets/${GAME_TAG}/scenes/${YYYY-MM-DD}/${FORMAT_SLUG}/scene-${K}.png
+assets/${GAME_TAG}/scenes/${YYYY-MM-DD}/${FORMAT_SLUG}/scene-${K}-end.png   # (если внезапно нужен end-frame — для совместимости с legacy)
+```
+
+Где:
+- `${YYYY-MM-DD}` — дата ролика (та же, что в `OUTPUT_DIR`)
+- `${FORMAT_SLUG}` — `serial-drama`, `character-story`, `news`, `gameplay-ai-avatar` и т.д.
+- `${K}` — номер сцены без leading zero (`scene-1.png`, не `scene-01.png`)
+
+**Для bg-refs (переиспользуемые между эпизодами) — путь БЕЗ даты:**
+
+```
+assets/${GAME_TAG}/refs/bg-${location-slug}.png
+assets/${GAME_TAG}/refs/character-${name-slug}.png
+```
+
+Refs живут долго и шарятся между эпизодами — дата в пути сделает кэширование
+невозможным. Сцены же эпизод-специфичны и должны быть изолированы.
+
+**Bash:**
+```bash
+DATE=$(basename $(dirname $(dirname "$OUTPUT_DIR")))   # из ${...}/output/YYYY-MM-DD/{game}/{format}/
+FORMAT_SLUG=$(basename "$OUTPUT_DIR")
+STORAGE_PATH="${GAME_TAG}/scenes/${DATE}/${FORMAT_SLUG}/scene-${K}.png"
+curl -s -X POST \
+  "${SUPABASE_URL}/storage/v1/object/assets/${STORAGE_PATH}" \
+  -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+  -H "Content-Type: image/png" \
+  --data-binary @"${OUTPUT_DIR}/scenes/scene-${K}/scene-${K}.png"
+PUBLIC_URL="${SUPABASE_URL}/storage/v1/object/public/assets/${STORAGE_PATH}"
+```
+
+Никогда не загружать scene PNG в `assets/${GAME_TAG}/scenes/scene-K.png` без даты.
+Никогда не использовать `--upsert` для scene PNG (это разрешает перезапись).
 
 ---
 
