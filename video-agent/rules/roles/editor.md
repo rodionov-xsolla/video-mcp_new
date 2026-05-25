@@ -238,7 +238,7 @@ If a prepared CTA video exists — concat it at the very end after all scenes.
 3. **`games/{GAME_TAG}/assets/cta/cta.mp4`** — local shared CTA of the game.
 4. **Programmatic fallback** (section 5.2) — generate "FOLLOW FOR MORE" on black.
 
-> ⚠️ **NEVER pick a CTA from a game-agnostic location** (e.g. `video-agent/cta-idle.mp4` at the repo root). Several root-level CTA files were originally created for `star-trek-timelines` and contain that game's branding (DILITHIUM / QUANTUM / etc.). Resolve the CTA strictly from a `GAME_TAG`-scoped path — Supabase URL from the game .md file, the most recent prior episode's `output/.../{GAME_TAG}/...cta-fallback.mp4`, or `games/{GAME_TAG}/assets/cta/cta.mp4`. **The path is the validation** — never Read a frame to confirm branding.
+> ⚠️ **NEVER pick a CTA from a game-agnostic location** (e.g. `video-agent/cta-star-trek-timelines.mp4` at the repo root — this is star-trek-timelines branded, do NOT use for any other game). Resolve the CTA strictly from a `GAME_TAG`-scoped path — Supabase URL from the game .md file, the most recent prior episode's `output/.../{GAME_TAG}/...cta-fallback.mp4`, or `games/{GAME_TAG}/assets/cta/cta.mp4`. **The path is the validation** — never Read a frame to confirm branding.
 
 Different episodes may have different CTAs. Don't copy blindly — verify filename + size + duration via ffprobe. Brand correctness is guaranteed by the path, not by visual inspection.
 
