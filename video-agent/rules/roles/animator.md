@@ -276,17 +276,23 @@ Camera slow push-in. ++Figure in foreground++ turns head slowly left, jaw tighte
 
 Not more than one `++` per prompt.
 
-### Anti-text negative_prompt (MANDATORY for text backgrounds)
+### Avatar v2 API не поддерживает negative_prompt
 
-If the avatar ref or scene image contains text (sign, monitor screen, banner, logo) — Kling Avatar v2 hallucinates garbage text (hieroglyphs, garbled Latin) in the area below the character, especially during active gesturing.
+Endpoint `fal-ai/kling-video/ai-avatar/v2/standard` (и `/pro`) принимает только
+3 параметра: `image_url`, `audio_url`, `prompt`. Любой `negative_prompt` в body
+fal.ai тихо игнорирует (verified против схемы fal.ai, 2026-05). Раньше мы клали
+длинный anti-text negative_prompt в каждый Avatar-вызов — он не делал ничего.
 
-**Mandatory negative_prompt for ALL Avatar generations with text on the background:**
+**Защита от text-артефактов = upstream, в Storyboarder §6.1.1** (zero-text rule
+для Avatar PNG). На стороне Animator контроля нет — если в исходном PNG есть
+меню/вывески/логотипы/брендинг, Kling Avatar превратит их в иероглифы при
+движении, независимо от длины клипа (артефакты видели на 7s клипах).
 
-```
-text, subtitles, captions, watermark, letters, characters, words, writing, font, label, title, credits, symbols, hieroglyphs, Chinese characters, Japanese characters, Korean characters, numbers on screen, overlay text, burned-in subtitles, closed captions
-```
+Если Animator получает PNG с явным текстом в кадре для Avatar-сцены — return
+to Storyboarder, не запускать Avatar.
 
-Additionally in motion_prompt: avoid wave/gesture with hands below the desk — that's the area artifacts appear. Prefer `hands remain on desk` for short scenes.
+В motion_prompt держать руки выше пояса (на столе/на груди/у лица). Зона
+ниже пояса — область, где Kling «дорисовывает» галлюцинированный текст.
 
 ---
 
@@ -455,6 +461,32 @@ Body (minimum):
 - `image_url` — scene PNG, **Supabase public URL** (not fal.ai temp)
 - `audio_url` — TTS .mp3, **Supabase public URL** (not fal.ai temp from ElevenLabs)
 - `prompt` — motion_prompt (see section 7)
+
+**НЕ добавлять `negative_prompt`** — параметр API'ем игнорируется (см. §4).
+Защита от text-артефактов делается upstream в Storyboarder §6.1.1.
+
+### Длина Avatar-клипа — hard limit 25s
+
+Endpoint позволяет до 60s, fal.ai dev guide рекомендует 5–30s. По нашему опыту
+артефакты temporal drift (псевдо-субтитры, иероглифы в нижней трети кадра)
+начинаются стабильно от ~30s. Берём запас.
+
+**Правило:** `TTS_dur` для Avatar-сцены ≤ 25s.
+
+Если TTS_dur > 25s:
+- НЕ запускать Avatar. Stop.
+- Вернуть сцену Scenarist'у с инструкцией «сократить реплику до ≤25s TTS»
+  (≈55–60 слов EN на нормальной скорости, ≈50 RU).
+- Дробление одной реплики на несколько Avatar-клипов с тем же `image_url`
+  не делаем — слишком много возни на склейке lipsync.
+
+Sanity-check перед каждым Avatar-вызовом:
+
+```bash
+TTS_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 scene-K.mp3)
+awk -v d="$TTS_DUR" 'BEGIN{ exit (d > 25.0) ? 1 : 0 }' \
+  || { echo "TTS too long ($TTS_DUR s) — return to scenarist"; exit 1; }
+```
 
 ### Polling — base path
 
