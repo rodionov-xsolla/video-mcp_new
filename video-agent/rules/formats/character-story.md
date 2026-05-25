@@ -37,7 +37,7 @@ The character does NOT speak on camera (no lipsync). Video = visualization of wh
 
 | Component | 5s clip |
 |---|---|
-| Image (NB2, start frame only — no end frame) | $0.08 |
+| Image (NB2, start frame only — no end frame, no bg-ref) | $0.08 |
 | Kling I2V 5s (generate_audio=false) | $0.35 |
 | **Per clip** | **~$0.43** |
 
@@ -45,11 +45,12 @@ The character does NOT speak on camera (no lipsync). Video = visualization of wh
 |---|---|
 | ElevenLabs TTS (~40s monologue) | ~$0.20 |
 | Music (local) | $0.00 |
+| Character ref (one per age variant — typically 1 or 2) | $0.08 each |
 
 | Variant | Clips | Cost |
 |---|---|---|
-| Base (recommended) | 6 × 5s = 30s + 1 char-ref + 4–6 bg-refs | ~$3.40 |
-| Extended | 8 × 5s = 40s + 1 char-ref + 6–7 bg-refs | ~$4.30 |
+| Base (recommended) | 6 × 5s = 30s + 1–2 char-refs (NO separate bg-refs) | ~$2.80 |
+| Extended | 8 × 5s = 40s + 1–2 char-refs (NO separate bg-refs) | ~$3.60 |
 
 ---
 
@@ -102,6 +103,8 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - `character_speech: null` for all clips (voice via TTS overlay, not in video)
 - `tts` field in storyboard.json — monologue text per clip
 - `action_description` — what happens visually, NOT a repeat of the monologue text
+- **HOOK self-introduction is MANDATORY.** The first clip's `tts_segment` must name the character with their full canonical designation so unfamiliar viewers (most of the audience) immediately know who they're watching. Include four elements when applicable: **rank + full name + role + ship/affiliation**. Examples: "I am Captain Benjamin Lafayette Sisko", "I am Seven of Nine, Tertiary Adjunct of Unimatrix Zero One", "I am Lieutenant Nyota Uhura, Communications Officer, Starship Enterprise". One line, ≤18 words, hard requirement. Without this the video reads as art-piece monologue rather than a character story.
+- **Show visual age progression where canon supports it.** If the character has clearly distinct age variants in their canon (child / young adult / cadet / mature), the arc MUST visualize AT LEAST 2 of them across the clips — ideally 3 (child → young → mature). ORIGIN clips usually carry the youngest variant; HOOK and REVELATION the most mature. Mark each clip's image_prompt with the specific age variant ("child X at ~8 years old", "young cadet X at ~20", "Captain X at ~50"). A flat single-age character story loses the "growing-up arc" that defines the format.
 - **Three motion layers per clip** (mandatory): camera move + environment motion + character action. Each layer continues throughout the full 5s — do NOT write "then settles / then steady / then dissipates" (Kling reads those as freeze cues).
 - camera_angle differs between adjacent clips, AND every clip specifies an active camera move (push-in / pull-back / lateral dolly / low boom / crane up / handheld drift). No "camera holds steady" clips.
 - Number of characters in frame — per plot (1–2, max 2 in frame)
@@ -240,7 +243,7 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 │   ├── refs/
 │   │   └── character-ref.png
 │   ├── scene-1/
-│   │   ├── scene-1.png           (start frame only — no end frame)
+│   │   ├── scene-1.png           (start frame only — no end frame; background painted inline by NB2)
 │   │   ├── scene-1.mp4
 │   │   └── scene-1-scaled.mp4
 │   └── scene-N/...
@@ -260,9 +263,12 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 - [ ] `character_speech: null` for all clips (voice via TTS, not in video)
 - [ ] `tts_segment` filled for each clip
 - [ ] Full monologue = sum of all `tts_segment`
+- [ ] **HOOK clip's `tts_segment` contains the character's name + rank/role + ship/affiliation** (self-introduction for unfamiliar viewers)
+- [ ] **If character has canonical age variants, arc visualizes ≥2 of them** (separate clips for young/mature, each with the matching character-ref); single-age stories rejected for characters with multi-age canon
 - [ ] All images 608×1080 (9:16)
 - [ ] No bg-reference files (environment in image_prompt only)
 - [ ] One PNG per scene (start frame only) — NO end-frame PNGs generated (§14.8)
+- [ ] All Supabase uploads use date-suffix paths (`<slug>-<YYYY-MM-DD>.png` for refs, `scene-K-<slug>-<YYYY-MM-DD>.png` for scenes) — no bare `scene-K.png` paths that would collide with prior episodes
 - [ ] camera_angle differs between adjacent clips, and every clip has an active camera move (no "holds steady")
 - [ ] motion_prompt has three concurrent layers (camera + environment + character) and uses continuous-tense verbs
 - [ ] motion_prompt contains NONE of the banned freeze phrases (then settles / then steady / then holds / hold position / no morphing / camera holds steady)
@@ -293,3 +299,7 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 - ❌ "Camera holds steady" / "then settles" / "then steady" / "hold position" / "no morphing" / "maintain exact character appearance" anywhere in `motion_prompt` (Kling reads these as freeze cues — produces static clips)
 - ❌ Stacked negative listings (`No walking, no running, no fighting, no impact`) — replace with positive grounded actions
 - ❌ Title cards, brainrot tags, character name overlays
+- ❌ Separate `bg-{location}.png` references generated as a phase before scene PNGs — NB2 paints the background inline with the character; chaining `[bg-ref, character-ref]` produces stiff composite-feel results with mismatched lighting/perspective. Describe the location verbosely in `image_prompt` instead.
+- ❌ HOOK clip without character name self-introduction — viewers who don't know the character are lost in the first 5 seconds. The name + rank/role + ship/affiliation must be in clip 1's `tts_segment`.
+- ❌ Single-age character story when the character has clearly different canonical age variants (child / young / mature). The arc must visualize ≥2 of them; otherwise the "growing-up" beat collapses and the video reads as a moment-in-time portrait rather than a lore arc. Generate one character-ref per age variant used.
+- ❌ Supabase scene PNG uploads at bare `scene-K.png` paths (without date+character suffix) — collides with prior episodes' scene assets and silently clobbers them. Always upload to `scene-K-<character-slug>-<YYYY-MM-DD>.png`.

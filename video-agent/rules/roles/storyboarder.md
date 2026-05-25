@@ -729,55 +729,6 @@ Before a series of generations with a specific character ref — do **one test g
 
 ---
 
-### 15.1 Supabase upload path — date + format в пути (MANDATORY)
-
-Локальный путь не меняется: `${OUTPUT_DIR}/scenes/scene-K/scene-K.png`.
-
-**Supabase Storage path обязан содержать дату и формат**, иначе следующий эпизод
-этого же game_tag затрёт PNG'и предыдущего (реальный кейс: Picard scene PNGs
-перезаписаны Seven-эпизодом, потому что путь был `roblox/scenes/scene-K.png`
-без даты — backed up to disk only).
-
-**Каноническая схема пути для scene PNG:**
-
-```
-assets/${GAME_TAG}/scenes/${YYYY-MM-DD}/${FORMAT_SLUG}/scene-${K}.png
-assets/${GAME_TAG}/scenes/${YYYY-MM-DD}/${FORMAT_SLUG}/scene-${K}-end.png   # (если внезапно нужен end-frame — для совместимости с legacy)
-```
-
-Где:
-- `${YYYY-MM-DD}` — дата ролика (та же, что в `OUTPUT_DIR`)
-- `${FORMAT_SLUG}` — `serial-drama`, `character-story`, `news`, `gameplay-ai-avatar` и т.д.
-- `${K}` — номер сцены без leading zero (`scene-1.png`, не `scene-01.png`)
-
-**Для bg-refs (переиспользуемые между эпизодами) — путь БЕЗ даты:**
-
-```
-assets/${GAME_TAG}/refs/bg-${location-slug}.png
-assets/${GAME_TAG}/refs/character-${name-slug}.png
-```
-
-Refs живут долго и шарятся между эпизодами — дата в пути сделает кэширование
-невозможным. Сцены же эпизод-специфичны и должны быть изолированы.
-
-**Bash:**
-```bash
-DATE=$(basename $(dirname $(dirname "$OUTPUT_DIR")))   # из ${...}/output/YYYY-MM-DD/{game}/{format}/
-FORMAT_SLUG=$(basename "$OUTPUT_DIR")
-STORAGE_PATH="${GAME_TAG}/scenes/${DATE}/${FORMAT_SLUG}/scene-${K}.png"
-curl -s -X POST \
-  "${SUPABASE_URL}/storage/v1/object/assets/${STORAGE_PATH}" \
-  -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
-  -H "Content-Type: image/png" \
-  --data-binary @"${OUTPUT_DIR}/scenes/scene-${K}/scene-${K}.png"
-PUBLIC_URL="${SUPABASE_URL}/storage/v1/object/public/assets/${STORAGE_PATH}"
-```
-
-Никогда не загружать scene PNG в `assets/${GAME_TAG}/scenes/scene-K.png` без даты.
-Никогда не использовать `--upsert` для scene PNG (это разрешает перезапись).
-
----
-
 ### 16. I2V — start frame only (end frame forbidden with multi_prompt)
 
 For each I2V clip generate ONE image: `scene-K.png` (start frame only). **`scene-K-end.png` is NEVER generated** — see §14.8.
