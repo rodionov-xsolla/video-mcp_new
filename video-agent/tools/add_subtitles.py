@@ -7,21 +7,37 @@ Most chunks are plain white. Scenarist-marked phrases appear yellow+italic
 only in the chunk(s) where they occur.
 
 Usage:
-  python3 add_subtitles.py <video.mp4> <audio.mp3> <output.mp4> [options]
+  python3 add_subtitles.py <video.mp4> <audio.mp3> <output.mp4|output.ass> [options]
+
+  When `output` ends with `.ass` OR `--emit-ass-only` is passed, the script
+  emits only the ASS file and exits — no ffmpeg burn-in. This is the path used
+  by the editor canonical single-pass pipeline (editor.md §0), which burns
+  subtitles in via the `ass=` filter inside its own filter_complex.
 
 Options:
+  --emit-ass-only            emit ASS only; skip ffmpeg burn-in. Implied when
+                             the output path ends in .ass. Use with the canonical
+                             editor pipeline.
   --chunk N                  words per chunk (default: 3)
   --emphasis "phrase1,..."   comma-separated phrases to highlight (case-insensitive)
   --fontsize N               base font size in px (default: 72)
   --marginv N                bottom margin in px (default: 200)
   --lang CODE                whisper language hint (default: en)
-  --no-scale                 skip scale/pad to 1080x1920
+  --no-scale                 skip scale/pad to 1080x1920 (legacy burn-in only)
   --tbc                      append TO BE CONTINUED... after last chunk
   --color AABBGGRR           highlight color in ASS hex (default: 0000FFFF = yellow)
+  --duration SECS            override clip duration in seconds. Required when
+                             --emit-ass-only is used without a video file
+                             (pass "-" or any string as video arg, then --duration).
+                             The last chunk extends to this duration.
   --atempo N.NN              audio will be sped up by this factor in editor;
                              whisper runs on the original mp3 but ASS timestamps
                              are divided by atempo so subs stay in sync after speedup
-                             (cap 1.4× — voice quality degrades above)
+                             (cap 1.5× — voice quality degrades above)
+  --start-offset SECS        shift all ASS timestamps by SECS forward. Use when
+                             the canonical pipeline will apply `adelay` after
+                             atempo — pass the adelay in seconds so the ASS
+                             aligns with the audio's final position.
 
 Stdout: output file path. Stderr: progress logs.
 FFMPEG: /usr/local/bin/ffmpeg-full/ffmpeg  (tessus build, requires libass)
@@ -34,7 +50,7 @@ import os
 import re
 import string
 
-FFMPEG = "/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg"
+FFMPEG = "/usr/local/bin/ffmpeg-full/ffmpeg"
 
 
 def strip_punct(word: str) -> str:
@@ -161,15 +177,30 @@ def main():
     ap.add_argument("--color", default="0000FFFF")
     ap.add_argument("--atempo", type=float, default=1.0,
                     help="audio speedup factor in editor; ASS timestamps divided by this")
+    ap.add_argument("--emit-ass-only", action="store_true",
+                    help="emit ASS only, skip ffmpeg burn-in (canonical pipeline mode)")
+    ap.add_argument("--duration", type=float, default=None,
+                    help="override clip duration in seconds; required with --emit-ass-only when no video file is given")
+    ap.add_argument("--start-offset", type=float, default=0.0,
+                    help="shift all timestamps forward by SECS (use with canonical pipeline adelay)")
     args = ap.parse_args()
 
     if args.atempo < 1.0 or args.atempo > 1.5:
         print(f"ERROR: --atempo must be in [1.0, 1.5], got {args.atempo}", file=sys.stderr)
         sys.exit(1)
 
+    # Auto-detect ass-only mode from output extension
+    ass_only = args.emit_ass_only or args.output.lower().endswith(".ass")
+
     emphasis = [p.strip() for p in args.emphasis.split(",") if p.strip()] if args.emphasis else []
 
-    clip_dur = get_duration(args.video)
+    if args.duration is not None:
+        clip_dur = float(args.duration)
+    elif ass_only and (args.video == "-" or not os.path.exists(args.video)):
+        print("ERROR: --emit-ass-only without a video file requires --duration SECS", file=sys.stderr)
+        sys.exit(1)
+    else:
+        clip_dur = get_duration(args.video)
     words = transcribe(args.audio, args.lang)
     if not words:
         print("ERROR: no words detected", file=sys.stderr)
@@ -179,12 +210,25 @@ def main():
         words = [(s / args.atempo, e / args.atempo, w) for (s, e, w) in words]
         print(f"  [atempo] timestamps scaled by 1/{args.atempo:.3f}", file=sys.stderr)
 
+    if args.start_offset != 0.0:
+        off = args.start_offset
+        words = [(s + off, e + off, w) for (s, e, w) in words]
+        print(f"  [offset] timestamps shifted by +{off:.2f}s", file=sys.stderr)
+
     chunks = chunk_words(words, args.chunk, clip_dur)
     print(f"  [subtitles] {len(chunks)} chunks:", file=sys.stderr)
     for s, e, ws in chunks:
         print(f"    {s:.2f}→{e:.2f}  {' '.join(ws)}", file=sys.stderr)
 
     ass_content = build_ass(chunks, args.fontsize, args.marginv, emphasis, args.color, args.tbc)
+
+    if ass_only:
+        ass_path = args.output if args.output.lower().endswith(".ass") else args.output + ".ass"
+        with open(ass_path, "w", encoding="utf-8") as f:
+            f.write(ass_content)
+        print(f"  [ass-only] wrote {ass_path} ({len(chunks)} chunks)", file=sys.stderr)
+        print(ass_path)
+        return
 
     ass_path = args.output.replace(".mp4", ".ass")
     with open(ass_path, "w", encoding="utf-8") as f:
