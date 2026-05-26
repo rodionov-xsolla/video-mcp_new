@@ -128,7 +128,8 @@ video-agent/
 │       ├── character-story.md   # Лор-монолог персонажа
 │       ├── motion-dance.md     # Motion transfer танец с реф-видео
 │       ├── what-if-real-life.md # «Что если бы персонаж попал в реальную жизнь» (Spock-бариста, Kratos-воспитатель, ...)
-│       └── top-list.md          # TOP-5 countdown персонажей / локаций / предметов
+│       ├── top-list.md          # TOP-5 countdown персонажей / локаций / предметов
+│       └── fun-news.md          # Выдуманные ироничные новости из лора игры (anchor + 1-2 reporters, Avatar v2)
 │
 ├── games/
 │   ├── mlbb/

@@ -17,6 +17,7 @@
 | Motion Dance | **$3.00** | Spend > $2.70 |
 | What If... Real Life | **$6.00** | Spend > $5.40 |
 | TOP List | **$5.00** | Spend > $4.50 |
+| Fun News | **$4.00** | Spend > $3.60 |
 
 Tracking: after each generation, record the cost. Before the next one — check the limit.
 
