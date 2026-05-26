@@ -29,16 +29,20 @@ ASSETS FROM SUPABASE (URLs passed below — already downloaded if non-empty):
 - CTA: ${CTA_PATH:-<none>}
 
 TASK:
-Assemble ${OUTPUT_DIR}/final.mp4 (1080×1920, 30fps, AAC 128k stereo) following editor.md and rules/formats/${FORMAT}.md exactly. Standard pipeline:
-1. Normalize each scene (scale + 30fps + AAC, add anullsrc to silent I2V clips)
-2. Apply subtitles per-scene (formats: serial-drama drawtext via tools/add_subtitles.py; gameplay-ai-avatar drawtext + faster_whisper; reddit-story drawtext word-highlight; standard/news per format brief)
-3. Episode number / TBC overlays per format
-4. Concat all clips with re-encode (NEVER -c copy, NEVER -shortest)
-5. Speed boost (per format: serial-drama 1.15x, news 1.18x, etc. — see format brief)
-6. Background music via amix (volume from sound.md table)
-7. Fade-to-black on the last story clip
-8. CTA last in concat list (custom CTA from Supabase, or fallback drawtext)
-9. Validate final.mp4 (programmatic: stat + ffprobe — see validation.md)
+Assemble ${OUTPUT_DIR}/final.mp4 (1080×1920, 30fps, AAC 128k stereo). DEFAULT path is `editor.md §0 — canonical single-pass filter_complex pipeline`. Read §0 first; it is the authoritative worked example and ships in ~90 s wall-clock vs the legacy multi-stage's 12–32 min.
+
+Pre-flight (off the main pipeline):
+1. Download + ffprobe-validate CTA (do NOT pre-normalize; §0 ingests it raw via scale/pad/fps).
+2. Generate ASS subtitles via `tools/add_subtitles.py` against the SAME audio shaping (atempo + adelay) that §0 will apply. The script emits build/subs.ass; §0 burns it in via the `ass=` filter inside the main graph.
+3. Per format, compute MAIN_DUR (sum of scene durations), TOTAL_DUR (= MAIN_DUR + CTA_DUR), atempo value (= TTS_DUR / TTS_WINDOW), title-card pre-delay (PRE_MS, e.g. 5000 for what-if-lore).
+
+Main pipeline = ONE ffmpeg-full invocation per §0.2. Encoder is `-preset medium -crf 22`. Hard cap with `-t TOTAL_DUR` (NEVER -shortest, NEVER unbounded amix).
+
+Use §§1–5 (legacy multi-stage) only when:
+- Format playbook explicitly requires a per-scene composite that does not fit in §0 (e.g. gameplay-ai-avatar split-screen — build each split-scene first via §7, then feed those composites into §0)
+- Debugging which stage corrupts output
+
+After §0 emits build/final.tmp.mp4: ffprobe-validate, then atomic `mv` to OUTPUT_DIR root. Validate again per validation.md (duration, dims, audio stream, bitrate sanity).
 
 PARAMETERS:
 - Game tag: ${GAME_TAG}

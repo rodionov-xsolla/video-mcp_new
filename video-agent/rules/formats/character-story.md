@@ -23,7 +23,7 @@ Keywords: "character story", "история персонажа", "лор", "lor
 ### Models
 
 - **Image:** NB2 (`fal-ai/nano-banana-2/edit`) — character refs + scene images
-- **Video:** Kling 2.6 Pro I2V (`fal-ai/kling-video/v2.6/pro/image-to-video`) — `generate_audio: false`
+- **Video:** Kling v3 Standard I2V (`fal-ai/kling-video/v3/standard/image-to-video`) — `generate_audio: false`. Fallback to v2.6 Pro only on v3 artifacts. v3 supports native `multi_prompt`.
 - **Audio:** ElevenLabs TTS overlay (`fal-ai/elevenlabs/tts/eleven-v3`) — first-person monologue
 - **Music:** yes, mood per plot, `volume` per mood (0.10–0.20)
 
@@ -163,7 +163,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
 
 ### Animator
 
-- All clips via **Kling 2.6 Pro I2V** (`generate_audio: false`)
+- All clips via **Kling v3 Standard I2V** (`generate_audio: false`); fallback v2.6 Pro only on v3 artifacts
 - **Start frame only.** Do NOT pass `tail_image_url` / end frame. Identity is held by `image_url` (start frame, chain-ref'd by Storyboarder) + the chain consistency Kling already enforces between adjacent frames. End frames make Kling interpolate-then-freeze and produce static clips.
 - **Motion is mandatory, not optional.** Every clip must specify three concurrent layers:
   1. **Camera move** — pick one per clip: slow push-in, slow pull-back, lateral dolly, low boom up, crane up, parallax handheld drift. Distribute variety across the 6–8 clips. NEVER "camera holds steady".

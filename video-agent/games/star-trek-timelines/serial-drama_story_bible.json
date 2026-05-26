@@ -5,7 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 3,
+  "last_episode": 4,
 
   "characters": [
     {
@@ -14,7 +14,7 @@
       "character_description": "semi-realistic Pixar 3D Captain James T. Kirk, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
       "voice": "Daniel",
       "elevenlabs_voice": "Daniel",
-      "status": "EP3: Walked through the unlocked airlock despite Worf's warning. Found Chekov alive inside the decontamination chamber. Now kneeling beside him. Just heard Chekov say 'it's someone on your crew.' Somewhere behind — Worf spotted a silhouette at the corridor junction pointing a finger at Kirk.",
+      "status": "EP4: Confirmed Spock as the watcher. Learned from Spock that Scotty armed the weapons array and is on the bridge. Left Chekov under Worf's guard and sprinted alone toward the bridge with ~2 minutes before weapons fire.",
       "aura_points": 750,
       "relationships": {
         "Worf": "uneasy alliance — Worf told the truth at great personal cost",
@@ -27,7 +27,7 @@
       "character_description": "semi-realistic Pixar 3D Commander Worf, imposing Klingon-Human, prominent forehead ridges, dark skin, fierce disciplined expression, TNG Starfleet command red uniform with lieutenant commander pips, broad shoulders, intense dark eyes",
       "voice": "George",
       "elevenlabs_voice": "George",
-      "status": "EP3: Tried to stop Kirk from entering the airlock ('Whoever opened that door is watching us right now'). Kirk walked through anyway. Worf drew phaser, held guard at doorway. Spotted silhouette figure at far corridor junction pointing at Kirk. Swung phaser toward the figure — face-off at corridor length. Bridge locked out.",
+      "status": "EP4: Lowered phaser when the watcher revealed himself as Spock. Now guarding Chekov in the airlock chamber — Kirk's direct order: 'No one in or out.' Waiting while Kirk goes to the bridge alone.",
       "aura_points": 600,
       "relationships": {
         "Kirk": "bound together now — shared knowledge of Section 31 = shared death sentence"
@@ -39,24 +39,38 @@
       "character_description": "semi-realistic Pixar 3D Ensign Pavel Chekov, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
       "voice": "Charlie",
       "elevenlabs_voice": "Charlie",
-      "status": "EP3: Found alive inside the airlock decontamination chamber, slumped against the wall. Exhausted, barely conscious. Delivered critical intel to Kirk: 'it's someone on your crew.' Identity of the mole unknown.",
+      "status": "EP4: Still slumped in the airlock chamber. Witnessed Spock arrive and deliver intel. Last seen barely conscious, under Worf's guard. Knows who the mole is but has not been further questioned.",
       "aura_points": 200,
       "relationships": {
         "Kirk": "trusts captain completely — begged for help"
+      }
+    },
+    {
+      "name": "Spock",
+      "role": "ally",
+      "character_description": "semi-realistic Pixar 3D Commander Spock, pointed Vulcan ears, sharply arched thick eyebrows, straight black bowl-cut hair, olive-tinted skin, calm emotionless expression with one eyebrow slightly raised, blue TOS science tunic with black collar and Starfleet delta badge, hands clasped behind back",
+      "voice": "Brian",
+      "elevenlabs_voice": "Brian",
+      "status": "EP4: Revealed as the watcher. Was running a Section 31 counter-operation. Gave Kirk the intel on Scotty and the weapons lock. Remained behind in the corridor after Kirk sprinted to the bridge.",
+      "aura_points": 900,
+      "relationships": {
+        "Kirk": "deep bond — acts independently but always in Kirk's interests",
+        "Worf": "neutral — Worf accepted his identity without conflict"
       }
     }
   ],
 
   "active_loops": [
-    "major NEW: Who is the mole on Kirk's crew? (Chekov's intel)",
-    "major NEW: Who is the watcher in the corridor — Section 31 agent or ally?",
-    "major NEW: Bridge locked out — who controls the Enterprise now?",
-    "major: Section 31 behind the kill order — how deep does the conspiracy go?",
+    "major: Is Scotty truly the mole — or was Spock's intel wrong/planted?",
+    "major: Kirk alone on the bridge with 2 minutes before weapons fire on allied ship",
+    "major: Enterprise weapons array locked on allied vessel — will Kirk stop it in time?",
+    "major: Section 31 conspiracy — how deep does it go?",
     "eternal: Kirk always fights for his crew against the system"
   ],
   "closed_loops": [
-    "minor: Is Worf loyal? — RESOLVED: yes, revealed the truth at cost of his life",
-    "minor: Is Chekov alive? — RESOLVED: yes, found in airlock chamber, exhausted but conscious"
+    "minor: Is Worf loyal? — RESOLVED: yes",
+    "minor: Is Chekov alive? — RESOLVED: yes, found in airlock chamber",
+    "minor: Who is the watcher? — RESOLVED EP4: it was Spock, running a Section 31 counter-operation"
   ],
 
   "world_state": {
@@ -75,7 +89,12 @@
       "EP2: Airlock door SWITCHED from SEALED to UNLOCKED by itself — nobody touched the panel",
       "EP3: Worf warned Kirk the watcher is still active. Kirk said 'Then they're watching me walk through it.' and entered anyway.",
       "EP3: Chekov found alive, slumped in decontamination chamber. Told Kirk: 'it's someone on your crew.'",
-      "EP3: Worf spotted silhouette figure at corridor junction pointing at Kirk — drew phaser, standoff across full corridor length"
+      "EP3: Worf spotted silhouette figure at corridor junction pointing at Kirk — drew phaser, standoff across full corridor length",
+      "EP4: The watcher walked forward into the red alert light — revealed as Spock. Worf lowered his phaser.",
+      "EP4: Spock told Kirk: 'The weapons array was armed six minutes ago. Scotty is on the bridge.'",
+      "EP4: Kirk asked 'How long do we have.' Spock: 'Approximately two minutes, Captain.'",
+      "EP4: Kirk ordered Worf to guard Chekov and sprinted alone down the corridor toward the bridge.",
+      "EP4: Enterprise weapons array locked on allied Starfleet vessel USS [escort ship] — amber targeting confirmed."
     ]
   },
 
@@ -87,10 +106,14 @@
       "Captain... it's someone on your crew.",
       "Now you see, Captain. We are both dead.",
       "The order. Show me.",
-      "It was Section 31."
+      "It was Section 31.",
+      "The weapons array was armed six minutes ago, Captain. Scotty is on the bridge.",
+      "How long do we have.",
+      "By my estimate... approximately two minutes, Captain.",
+      "Worf. You stay with him. No one in or out."
     ],
-    "recent_hooks": ["physical-confrontation-action", "watcher-reveal-silhouette"],
-    "recent_cliffhangers": ["autonomous-system-betrayal", "unknown-watcher-reveal"]
+    "recent_hooks": ["physical-confrontation-action", "watcher-reveal-silhouette", "vulcan-corridor-reveal"],
+    "recent_cliffhangers": ["autonomous-system-betrayal", "unknown-watcher-reveal", "ship-weapons-locked-on-allied-vessel"]
   },
 
   "episode_summaries": [
@@ -116,6 +139,14 @@
       "summary": "Worf grabs Kirk — warns the watcher is still active. Kirk walks through anyway: 'Then they're watching me walk through it.' Worf draws phaser, holds the doorway. Kirk finds Chekov alive inside the airlock chamber, slumped against the wall. Chekov delivers his bombshell: 'it's someone on your crew.' Behind them: Worf spots a silhouette figure at the far corridor junction — motionless, arm raised, pointing at Kirk. Worf's phaser swings toward it. Standoff.",
       "cliffhanger": "A figure in Starfleet uniform stands at the corridor end pointing at Kirk. It doesn't move. It doesn't run. Who is the mole — and is this figure ally or assassin?",
       "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-04-23/serial-drama-en-ep3_final.mp4",
+      "duration_sec": 44
+    },
+    {
+      "episode": 4,
+      "language": "en",
+      "summary": "The watcher walks forward into the red alert light — it's Spock. Worf lowers his phaser. Spock tells Kirk the weapons array was armed six minutes ago and Scotty is on the bridge. Two minutes left. Kirk orders Worf to guard Chekov and sprints alone toward the bridge.",
+      "cliffhanger": "Exterior shot: Enterprise weapons array locks on an allied Starfleet escort vessel. Amber targeting reticle confirmed. Kirk is still running.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-25/serial-drama-en-ep4_final.mp4",
       "duration_sec": 44
     }
   ]

@@ -23,7 +23,7 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 ### Clip mix (balances)
 
 - **ACTION/DIALOGUE ~ 50/50.** All-dialogue episode = monotonous and expensive; all-action = no plot.
-- **I2V (Kling 2.6 Pro)** — action/reaction clips (silent)
+- **I2V (Kling v3 Standard)** — action/reaction clips (silent); fallback v2.6 Pro only on v3 artifacts
 - **Avatar (Kling Avatar v2)** — dialogue clips with lipsync (TTS from ElevenLabs)
 - **TTS overlay with aecho** — only for "behind glass/door" scenes (character is visible through a barrier, face not visible)
 
@@ -222,10 +222,10 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 
 ### Animator
 
-- I2V clips via Kling 2.6 Pro (`generate_audio: false`, always) — micro motion only
+- I2V clips via Kling v3 Standard (`generate_audio: false`, always) — micro motion only. Fallback to v2.6 Pro only on v3 artifacts.
 - Avatar clips via Kling Avatar v2 Standard (with TTS audio_url)
 - Motion prompt = technical (positions, camera, physical actions), without names/moods
-- One model for the whole episode — do not mix Kling I2V v2.6 Pro with Avatar v2
+- One I2V model for the whole episode — do not mix Kling I2V versions within one episode
 - Start ≈ end for I2V; persistent character in both frames
 - **Do NOT speed up Avatar** in serial-drama (1.3x — only for gameplay-ai-avatar)
 - General rules — `rules/roles/animator.md`

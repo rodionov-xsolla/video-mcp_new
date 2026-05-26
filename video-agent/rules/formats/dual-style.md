@@ -17,6 +17,8 @@ Keywords: "dual-style", "game vs reality", "meet your character IRL", cosplay co
 - **Cartoon left + realistic right** (positioning fixed for the whole video)
 - **3 clips × 5–10s** → 15–30s total
 - **Model:** Kling 2.6 Pro I2V, `generate_audio: true` (SFX)
+
+> ⚠️ **FORMAT NEEDS REFACTOR (2026-05-26 audit).** `animator.md` line 74 and `tools/fal-ai.md` lines 190, 218, 378 state Kling I2V cannot generate audio in any version — `generate_audio: true` yields garbled noise, not SFX. Refactor options: switch to Veo3 T2V for embedded audio, or keep Kling silent and add SFX as separate audio layer in Editor. Do NOT run unmodified.
 - **Speech:** NO, `character_speech: null` everywhere
 - **Budget:** $5 max
 

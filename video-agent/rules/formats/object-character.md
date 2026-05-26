@@ -16,6 +16,8 @@ Keywords: "object character", "антропоморф", "talking object", a hous
 
 - **1 object → 1 clip × 10s** (single) or **5 videos** (series)
 - **Model:** strictly **Kling 2.6 Pro I2V** (`generate_audio: true` for SFX — creak, knock, ambient)
+
+> ⚠️ **FORMAT NEEDS REFACTOR (2026-05-26 audit).** `animator.md` line 74 and `tools/fal-ai.md` lines 190, 218, 378 state Kling I2V cannot generate audio in any version — `generate_audio: true` yields garbled noise, not SFX. Refactor options: switch to Veo3 T2V for embedded SFX (creak, knock, ambient), or keep Kling silent + layer SFX from a sound library in Editor. Do NOT run unmodified.
 - **Speech:** via **ElevenLabs TTS** overlay (Kling does not generate voice), `character_speech: null` in storyboard
 - **Budget:** $1.50 (single) / $7.50 (series)
 - **NOT** Veo3 T2V

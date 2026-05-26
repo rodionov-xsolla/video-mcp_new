@@ -20,6 +20,8 @@ Ideal for series: new characters every episode, the same stage.
 - **Frame:** wide shot, low angle (~15°), both dancers in frame
 - **Style:** realistic 3D render with comedic stylization
 - **Model:** Kling 2.6 Pro I2V ($0.14/s), **`generate_audio: true`** (Kling generates crowd, music, SFX)
+
+> ⚠️ **FORMAT NEEDS REFACTOR (2026-05-26 audit).** Both `rules/roles/animator.md` line 74 and `tools/fal-ai.md` lines 190, 218, 378 state Kling I2V CANNOT generate audio in any version — `generate_audio: true` yields garbled noise, not SFX. This format's audio strategy is broken as written. Refactor options: (a) switch to Veo3 T2V (supports baked-in audio, $3.20/8 s with audio); (b) keep Kling I2V silent + add SFX/crowd via separate audio layer in Editor. Do NOT use unmodified — flag to Manager.
 - **Speech:** NO — `character_speech: null` in all scenes
 - **Duration:** 3×5s (15s) or 2×10s (20s)
 - **Budget:** $5 max (~$2.30–$3.00 typical)

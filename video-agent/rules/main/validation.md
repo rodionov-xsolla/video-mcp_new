@@ -53,5 +53,5 @@ ffprobe -v error -show_entries format=duration -of csv=p=0 scene-1.mp3
 Where the right asset depends on game/format (CTA, openers, character refs, bg refs) — **resolve by `GAME_TAG`-scoped path or by Supabase URL recorded in the story bible / game config.** Never pick from a generic location and then visually verify the branding — the path is the validation.
 
 Examples:
-- CTA → `games/{GAME_TAG}/assets/cta/cta.mp4` or previous-episode `output/.../{GAME_TAG}/.../cta-fallback.mp4`. Never `video-agent/cta-idle.mp4` (game-agnostic root path is the trap).
+- CTA → `games/{GAME_TAG}/assets/cta/cta.mp4` or previous-episode `output/.../{GAME_TAG}/.../cta-fallback.mp4`. Never `video-agent/cta-star-trek-timelines.mp4` (star-trek-timelines branded, wrong for any other game).
 - Character refs → `games/{GAME_TAG}/{format}_story_bible.json → supabase_assets.char_refs`. Never re-derive from a wide-shot scene render.

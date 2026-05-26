@@ -61,7 +61,137 @@ This rule applies regardless of format. A reader of `OUTPUT_DIR` should see four
 
 ---
 
-## 1. Normalization (scale + fps + audio)
+## 0. Canonical pipeline — single-pass `filter_complex` (DEFAULT)
+
+**This is the path. Use it for every format unless a section below explicitly overrides for that format (split-screen gameplay-ai-avatar, format-specific subtitle burn-in styles).**
+
+Multi-stage assembly (sections 1–5) is **legacy**: kept for debugging when you need to inspect an intermediate, or when a clip-specific filter (e.g. per-scene drawtext) cannot be expressed inside one filter graph. The legacy path is what made editor runs take 12–32 minutes for 50s output. Single-pass on the same hardware: **~90 seconds**.
+
+### 0.1 Architecture
+
+One `ffmpeg-full` invocation. All inputs (N scene MP4s + 1 CTA MP4 + 1 TTS MP3 + 1 music MP3) → `filter_complex` graph → single libx264 encode → `final.mp4`.
+
+```
+INPUTS:
+  [0..N-1] scene-1.mp4 … scene-N.mp4
+  [N]      cta.mp4 (already downloaded + ffprobe-validated; do NOT pre-normalize)
+  [N+1]    tts-output.mp3 (raw from Sound; reshape inside filter_complex)
+  [N+2]    bg-music.mp3   (raw from Sound; reshape inside filter_complex)
+
+filter_complex (logical):
+  [k:v] scale=1080:1920:force_original_aspect_ratio=decrease,
+        pad=1080:1920:(ow-iw)/2:(oh-ih)/2,
+        fps=30,
+        setpts=PTS-STARTPTS    → [vk]            (each input k, including CTA)
+  [vN_last]  + fade=t=out:st=DUR-1:d=1            (last story clip before CTA only)
+  [v0]…[vN] concat=n=N+1:v=1:a=0                  → [vcat]
+  [vcat]    ass=build/subs.ass                    → [vsub]
+
+  [N+1:a]   atempo=X, adelay=PRE_MS|PRE_MS,
+            volume=1.0                            → [atts]
+  [N+2:a]   volume=MUS_VOL,
+            afade=t=out:st=MAIN_DUR-1:d=1.0       → [amus]
+  [atts][amus] amix=inputs=2:duration=longest:
+                    dropout_transition=0:
+                    normalize=0                   → [aout]
+
+OUTPUT:
+  -map [vsub] -map [aout]
+  -c:v libx264 -preset medium -crf 22 -pix_fmt yuv420p
+  -c:a aac -b:a 128k -ar 44100 -ac 2
+  -t TOTAL_DUR
+  final.mp4
+```
+
+### 0.2 Worked example (what-if-lore, 8 scenes + CTA)
+
+This is the exact command that ships our what-if-lore Spock-Borg video (50s output, 1:28 wall-clock, 23 MB):
+
+```bash
+FF=/usr/local/bin/ffmpeg-full/ffmpeg     # libass + libfreetype required
+mkdir -p build
+
+# Pre-flight (cheap, off the main pipeline):
+#   1. CTA: curl + ffprobe (validate codec/dur; pass raw, do NOT re-encode)
+#   2. ASS: tools/add_subtitles.py emits build/subs.ass aligned to the SAME
+#      audio shaping (atempo, adelay) used below. See §6 for the script call.
+
+SCENE_LAST_DUR=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 scenes/scene-8/scene-8.mp4)
+FADE_START=$(echo "$SCENE_LAST_DUR - 1.0" | bc -l)
+TOTAL_DUR=50.0                            # MAIN_DUR + CTA_DUR (computed)
+MAIN_DUR=44.96                            # for afade=out anchor
+
+$FF -y \
+  -i scenes/scene-1/scene-1.mp4 \
+  -i scenes/scene-2/scene-2.mp4 \
+  -i scenes/scene-3/scene-3.mp4 \
+  -i scenes/scene-4/scene-4.mp4 \
+  -i scenes/scene-5/scene-5.mp4 \
+  -i scenes/scene-6/scene-6.mp4 \
+  -i scenes/scene-7/scene-7.mp4 \
+  -i scenes/scene-8/scene-8.mp4 \
+  -i build/cta-raw.mp4 \
+  -i tts-output.mp3 \
+  -i bg-music.mp3 \
+  -filter_complex "\
+[0:v]scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30,setpts=PTS-STARTPTS[v0]; \
+[1:v]scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30,setpts=PTS-STARTPTS[v1]; \
+[2:v]scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30,setpts=PTS-STARTPTS[v2]; \
+[3:v]scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30,setpts=PTS-STARTPTS[v3]; \
+[4:v]scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30,setpts=PTS-STARTPTS[v4]; \
+[5:v]scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30,setpts=PTS-STARTPTS[v5]; \
+[6:v]scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30,setpts=PTS-STARTPTS[v6]; \
+[7:v]scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30,setpts=PTS-STARTPTS,fade=t=out:st=${FADE_START}:d=1.0[v7]; \
+[8:v]scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30,setpts=PTS-STARTPTS[v8]; \
+[v0][v1][v2][v3][v4][v5][v6][v7][v8]concat=n=9:v=1:a=0[vcat]; \
+[vcat]ass=build/subs.ass[vsub]; \
+[9:a]atempo=1.46,adelay=5000|5000,volume=1.0[atts]; \
+[10:a]volume=0.15,afade=t=out:st=${MAIN_DUR}:d=1.0[amus]; \
+[atts][amus]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0[aout]" \
+  -map "[vsub]" -map "[aout]" \
+  -c:v libx264 -preset medium -crf 22 -pix_fmt yuv420p \
+  -c:a aac -b:a 128k -ar 44100 -ac 2 \
+  -t "$TOTAL_DUR" \
+  build/final.tmp.mp4
+
+# Atomic move only after ffprobe-validation:
+ffprobe -v error -show_entries format=duration -of csv=p=0 build/final.tmp.mp4
+mv build/final.tmp.mp4 final.mp4
+```
+
+### 0.3 Encoder choice
+
+- **`-preset medium -crf 22`** — single-pass default. On 1080×1920, ~0.55× realtime (~90 s for 50 s output). Visually indistinguishable from `slow crf 20` after social-network re-encode (TikTok/Reels/Shorts re-transcode anyway).
+- **`-preset slow -crf 20`** — ONLY for archival masters or when explicitly requested. Costs 3–5× wall-clock for 5–10% bitrate at perceptual parity. Do not use as default.
+- `-pix_fmt yuv420p` — required for QuickTime + all social uploads.
+- `-c:a aac -b:a 128k -ar 44100 -ac 2` — locked. Do not change.
+- `-t TOTAL_DUR` — mandatory hard cap so `apad` / `amix duration=longest` do not extend final to music length (185 s of bg-music would otherwise leak through).
+
+### 0.4 Audio shaping — match what the ASS expects
+
+The ASS file from `tools/add_subtitles.py` is timed against the **final** TTS shape after atempo + adelay. The filter graph must apply the same operations in the same order. If you re-trim TTS or change atempo after generating ASS, subtitles will drift — regenerate the ASS.
+
+Order is `atempo` → `adelay`. atempo first compresses speech to fit the picture window; adelay then offsets it so TTS starts after any title-card silence (e.g. 5000 ms for what-if-lore's title card).
+
+### 0.5 Format-specific overrides
+
+- **gameplay-ai-avatar split-screen** (§7) — the per-scene 60/40 stack cannot be expressed across N scene inputs cleanly inside one concat. Two-stage: first build each split-scene composite (§7), then feed those composites as inputs into the §0 canonical pipeline.
+- **serial-drama "behind glass" TTS overlay** (§3) — per-scene aecho is a pre-mix on the I2V scene before §0. Treat output of §3 as the canonical input `[k:v]/[k:a]` for the main pipeline.
+- **Subtitle generation** (§6) — different formats use different styles (PIL PNG word-highlight vs ASS chunked vs drawtext). All emit a file (PNG sequence / ASS / drawtext expr) that §0 ingests via `ass=`, `overlay=`, or `drawtext=`. The principle holds: generate the asset off-pipeline, burn in **inside** §0.
+- **Per-scene drawtext / TBC / episode card** — express as `drawtext` filters chained onto the affected `[vk]` branch BEFORE concat. Do not run a separate pass.
+
+### 0.6 When NOT to use the canonical pipeline
+
+- A single scene needs per-scene filter that breaks the graph (rare — usually solvable by chaining filters on that `[vk]` branch)
+- Debugging which stage corrupts output → run the legacy multi-stage (§§1–5) once, find the bad stage, fix the underlying filter, return to §0
+
+There is **no quality reason** to prefer multi-stage. Every multi-stage run = N full re-encodes of the entire timeline = N× generation loss. Single-pass = one encode.
+
+---
+
+## 1. Normalization (scale + fps + audio) — LEGACY (debug only)
+
+> ⚠️ **Prefer §0 single-pass pipeline.** This section describes the legacy multi-stage path. Use only when debugging an intermediate, or when §0 cannot express a required per-scene filter chain.
 
 **Path convention for every snippet below.** Run all commands with `OUTPUT_DIR` as cwd. Inputs come from `scenes/scene-K/...` (unchanged). **Every scratch file in the snippets — `concat-list.txt`, `concat-final.txt`, `final-base.mp4`, `final-speed.mp4`, `video-concat.mp4`, `cta-normalized.mp4`, `cta-fallback.mp4`, `bg-music.mp3`, `tts-output.mp3`, `tts-fast.mp3`, etc. — must be written to `build/`, not to the root.** So when a snippet says `final-base.mp4`, you write `build/final-base.mp4` and read it the same way on the next step. The ONLY file that lands in the root is the final deliverable, via `mv build/final-music.mp4 final.mp4` at the very end. Run `mkdir -p build` before your first ffmpeg call. See "Workspace layout (MANDATORY)" above.
 
@@ -238,7 +368,7 @@ If a prepared CTA video exists — concat it at the very end after all scenes.
 3. **`games/{GAME_TAG}/assets/cta/cta.mp4`** — local shared CTA of the game.
 4. **Programmatic fallback** (section 5.2) — generate "FOLLOW FOR MORE" on black.
 
-> ⚠️ **NEVER pick a CTA from a game-agnostic location** (e.g. `video-agent/cta-idle.mp4` at the repo root). Several root-level CTA files were originally created for `star-trek-timelines` and contain that game's branding (DILITHIUM / QUANTUM / etc.). Resolve the CTA strictly from a `GAME_TAG`-scoped path — Supabase URL from the game .md file, the most recent prior episode's `output/.../{GAME_TAG}/...cta-fallback.mp4`, or `games/{GAME_TAG}/assets/cta/cta.mp4`. **The path is the validation** — never Read a frame to confirm branding.
+> ⚠️ **NEVER pick a CTA from a game-agnostic location** (e.g. `video-agent/cta-star-trek-timelines.mp4` at the repo root — this is star-trek-timelines branded, do NOT use for any other game). Resolve the CTA strictly from a `GAME_TAG`-scoped path — Supabase URL from the game .md file, the most recent prior episode's `output/.../{GAME_TAG}/...cta-fallback.mp4`, or `games/{GAME_TAG}/assets/cta/cta.mp4`. **The path is the validation** — never Read a frame to confirm branding.
 
 Different episodes may have different CTAs. Don't copy blindly — verify filename + size + duration via ffprobe. Brand correctness is guaranteed by the path, not by visual inspection.
 
@@ -293,6 +423,32 @@ CTA (custom or fallback) is added AFTER the last clip in the concat list.
 ## 6. Subtitles — Editor generates and overlays
 
 Editor owns the entire process: takes text from `storyboard.json`, generates timings/PNG/SRT, overlays on the video. **Sound is not involved.**
+
+### 6.0 ASS subtitles for canonical pipeline (§0) — `--emit-ass-only`
+
+When using §0 single-pass, **never run `add_subtitles.py` in its default burn-in mode** — the canonical pipeline burns subtitles via the `ass=` filter inside its own filter_complex, so the script must only emit the ASS file.
+
+Pass either an output path ending in `.ass`, or `--emit-ass-only`. The script accepts the raw TTS MP3 and `--atempo` + `--start-offset` so the ASS timeline matches the canonical pipeline's post-shaping audio (`atempo` then `adelay`).
+
+```bash
+# Canonical preflight for what-if-lore: raw TTS, atempo 1.46, 5 s title-card adelay.
+python3 tools/add_subtitles.py - tts-output.mp3 build/subs.ass \
+  --emit-ass-only \
+  --duration 45 \
+  --atempo 1.46 \
+  --start-offset 5.0 \
+  --chunk 3 --fontsize 72 --marginv 200 --lang en
+```
+
+Output: `build/subs.ass`. The canonical pipeline (§0) then references it via `[vcat]ass=build/subs.ass[vsub]`.
+
+`--start-offset` is the number of seconds the canonical pipeline will `adelay` the TTS in filter_complex — pass the same value to both so the ASS aligns with where the voice actually plays.
+
+`--duration` is the picture-window length (sum of scene durations the subtitles cover) — required when the script gets `-` instead of a real video file. The last chunk extends to this duration.
+
+The script's default behavior (its own ffmpeg burn-in) remains available for the legacy multi-stage path (§§1–5) and for one-off debug renders.
+
+---
 
 ⚠️ **Forbidden overlays:**
 - Series / episode titles (title cards)
