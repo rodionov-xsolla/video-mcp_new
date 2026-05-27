@@ -51,6 +51,16 @@ import re
 import string
 
 FFMPEG = "/usr/local/bin/ffmpeg-full/ffmpeg"
+# Fallback: use homebrew ffmpeg-full if the legacy path is unavailable
+import os as _os
+if not _os.path.isfile(FFMPEG):
+    for _alt in [
+        "/opt/homebrew/Cellar/ffmpeg-full/8.1.1/bin/ffmpeg",
+        "/opt/homebrew/bin/ffmpeg",
+    ]:
+        if _os.path.isfile(_alt):
+            FFMPEG = _alt
+            break
 
 
 def strip_punct(word: str) -> str:
