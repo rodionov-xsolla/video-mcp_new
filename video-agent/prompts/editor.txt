@@ -34,7 +34,7 @@ Assemble ${OUTPUT_DIR}/final.mp4 (1080×1920, 30fps, AAC 128k stereo). DEFAULT p
 Pre-flight (off the main pipeline):
 1. Download + ffprobe-validate CTA (do NOT pre-normalize; §0 ingests it raw via scale/pad/fps).
 2. Generate ASS subtitles via `tools/add_subtitles.py` against the SAME audio shaping (atempo + adelay) that §0 will apply. The script emits build/subs.ass; §0 burns it in via the `ass=` filter inside the main graph.
-3. Per format, compute MAIN_DUR (sum of scene durations), TOTAL_DUR (= MAIN_DUR + CTA_DUR), atempo value (= TTS_DUR / TTS_WINDOW), title-card pre-delay (PRE_MS, e.g. 5000 for what-if-lore).
+3. Per format, compute MAIN_DUR (sum of scene durations), TOTAL_DUR (= MAIN_DUR + CTA_DUR), atempo value (= TTS_DUR / TTS_WINDOW), title-card pre-delay (PRE_MS, e.g. 5000 for redcon).
 
 Main pipeline = ONE ffmpeg-full invocation per §0.2. Encoder is `-preset medium -crf 22`. Hard cap with `-t TOTAL_DUR` (NEVER -shortest, NEVER unbounded amix).
 

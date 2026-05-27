@@ -67,7 +67,7 @@ Fix the mode in `storyboard.json → visual_identity.reaction_mode`. Sound uses 
 | Kling Avatar v2 5s (single-talker scene) | $0.28 | 3–5 | $0.84–$1.40 |
 | Kling Avatar v2 10s (on-screen dialogue, 2 talkers) | $0.56 each | 0–1 | $0–$0.56 |
 | Kling I2V 5s with audio (physical gag) | $0.42–$0.63 | 0–1 | $0–$0.63 |
-| Kling I2V 5s no audio (transition / silent vignette) | $0.42 | 0–2 | $0–$0.84 |
+| Kling I2V 5s no audio (silent vignette) | $0.42 | 0–2 | $0–$0.84 |
 | ElevenLabs TTS — character lines | ~$0.07 | 4–6 | $0.28–$0.42 |
 | ElevenLabs TTS — off-screen customer / narrator | ~$0.05 | 0–5 | $0–$0.25 |
 | Title card (NB2 still, optional minor I2V) | $0.08 (+$0.42 if I2V) | 1 | $0.08–$0.50 |
@@ -88,7 +88,6 @@ Max with 1–2 retries: **$6.00**. Stop at **$5.40**.
 | Vignette 4 | optional | 5s | — |
 | Vignette 5 | optional | 5s | — |
 | Vignette 6 | optional | 5s | — |
-| Transition + punchline (split) | optional | 3s + 2s | I2V deadpan→expression-change, then short Avatar punchline. Use when the closing beat needs a visible facial transformation |
 | CTA | yes | 3s | Channel CTA from Supabase |
 
 Total target: 28–34s pre-speedup → ~24–29s after 1.18× speedup. Hard cap 32s post-speedup (short-form sweet spot).
@@ -108,7 +107,6 @@ Each vignette picks ONE of these. Sound, Animator, Editor read `scene.scene_type
 | `monologue` | Narrator VO TTS over silent visuals | Kling I2V `generate_audio: false` + TTS overlay by Editor | Voice-of-god narration over the character doing something silly silently. |
 | `inner-thought` | Character TTS over silent I2V (the persona THINKS, doesn't speak — face stays still) | Kling I2V `generate_audio: false` + TTS overlay | "Subtitled internal monologue" — character on screen, eyes communicate, voice is internal. |
 | `physical-gag` | SFX only, no speech | Kling I2V `generate_audio: true` | Kratos crushes a juice box trying to open it. Sound = SFX from Kling. |
-| `transition` (used in split scenes) | None | Kling I2V `generate_audio: false`, start+end frames | Facial-state transition (deadpan → smile / blank → horror). Followed by an Avatar punchline as a separate scene. |
 
 ---
 
@@ -184,7 +182,6 @@ References:
 - Character outfit must include a clearly visible role-overlay (apron, lanyard, scrubs) — viewers register the role in <1s.
 - For `dialogue-offscreen` scenes: customers are back-to-camera, edge-of-frame, or blurred in the background. Prompt this explicitly (e.g. "customer in foreground, BACK to camera, head turned away, only shoulders visible"). Otherwise NB2 invents inconsistent faces.
 - For `dialogue-on-screen` scenes: both characters in frame, framed for 2× Avatar v2 lipsync (clean view of both mouths).
-- For `transition` scenes: produce TWO refs (start frame + end frame) showing the facial-state shift.
 - Chain-reference using the character sheet as `anchor`, prev-scene as second ref. Location stays consistent across all vignettes of the same video.
 - General rules — `rules/roles/storyboarder.md`.
 
@@ -193,7 +190,7 @@ References:
 - Dispatch per `scene_type`:
   - `dialogue-offscreen` → Kling Avatar v2 with silence-padded mp3 (do NOT trim leading silence — it's the pause that makes the bit work).
   - `dialogue-on-screen` → 2× Kling Avatar v2 (or HeyGen for the second face if Avatar can't do dual). Coordinate timings via two padded mp3s so the two voices don't talk over each other.
-  - `monologue`, `inner-thought`, `transition` → Kling I2V with `generate_audio: false`, start+end frames where appropriate.
+  - `monologue`, `inner-thought` → Kling I2V with `generate_audio: false`.
   - `physical-gag` → Kling I2V with `generate_audio: true` for SFX.
 - Watch for Kling Avatar v2 CJK text artifacts in the bottom strip (y ≈ 1700–1850). Subtitles are designed to mask them — don't try to prompt them away, you'll only waste Avatar calls.
 - **Debug mode:** before launching the Avatar batch, list planned clips with per-clip cost and get user OK (see `rules/roles/manager.md` Debug-mode safety rules).
@@ -218,15 +215,17 @@ References:
 ### Editor
 
 - Per-scene burn-in pipeline:
-  - `dialogue-offscreen`: scale → amix(Avatar audio, customer.mp3) → burn ASS via **ffmpeg-full** (libass required).
-  - `dialogue-on-screen`: assemble side-by-side or shot-reverse-shot cuts of the two Avatar outputs → burn ASS.
-  - `monologue` / `inner-thought`: silent I2V → overlay TTS via amix → burn ASS.
-  - `physical-gag`: I2V (Kling-generated SFX already baked) → keep audio → no subtitles (or short caption only).
+  - `title-card`: scale → burn **title_lines** from storyboard.json as 4-stacked-line centered ASS text (Alignment=5). Style: line 1 "What if..." small italic (fs36), line 2 character name large bold (fs80), line 3 "Becomes a" small (fs36), line 4 role name large bold (fs52). No audio → add anullsrc. This overlay is MANDATORY — without it the title card is a blank shot.
+  - `dialogue-offscreen`: scale → amix(Avatar audio, customer.mp3) → burn ASS via **ffmpeg-full** (libass required). ASS MUST contain TWO styles: **Default** (Worf lines, white bold 58, BorderStyle=4, MarginV=120) AND **Customer** (off-screen child lines, light-gray italic 52, BorderStyle=4, MarginV=120). Customer events are timed 0:00:00.30 → `duration(customer.mp3)`. Default events start after the silence gap (= `duration(customer.mp3)` + 0.6s). Text from `customer_line` and `character_line` in storyboard.json — verbatim, no re-transcription.
+  - `dialogue-on-screen`: assemble shot-reverse-shot cuts → burn ASS.
+  - `monologue` / `inner-thought`: silent I2V → overlay TTS (scene-K.mp3) via amix → burn ASS with Default style timed from 0:00:00.00.
+  - `physical-gag`: I2V with Kling SFX baked → keep audio → no subtitles.
+- bg-music.mp3 lookup: check `OUTPUT_DIR/bg-music.mp3` first (Sound writes it here), then `OUTPUT_DIR/build/bg-music.mp3`. Fail loudly if neither exists.
 - Concat all scenes + CTA → `build/concat.mp4`.
 - Apply **1.18× speedup** (`setpts=PTS/1.18` + `atempo=1.18`) BEFORE music mix. Self-check: `duration(final) ≈ sum(scene_durations) / 1.18`.
-- Mix `bg-music.mp3` from Fun/ at volume 0.08.
-- RMS sanity check on intervals with off-screen / narrator VO: must be > -30 dB. -40 dB = VO dropped from mix.
-- General rules — `rules/roles/editor.md` (especially §11 ffmpeg-full, §12 off-screen VO mix, §13 artifact masking, §14 speedup).
+- Mix bg-music at volume 0.08.
+- RMS sanity check on every `dialogue-offscreen` scene interval: > -30 dB. -40 dB = customer VO dropped.
+- General rules — `rules/roles/editor.md` (especially §11 ffmpeg-full, §12 off-screen VO mix + customer subtitles, §13 artifact masking, §14 speedup).
 
 ---
 
@@ -249,13 +248,6 @@ output/YYYY-MM-DD/{GAME_TAG}/what-if-real-life/
 │   │   ├── narrator.mp3               # if monologue
 │   │   ├── inner.mp3                  # if inner-thought
 │   │   └── scene-K.mp4
-│   └── scene-N+1/                     # optional transition + punchline split
-│       ├── scene-Na-start.png
-│       ├── scene-Na-end.png
-│       ├── scene-Na.mp4
-│       ├── scene-Nb.png
-│       ├── scene-Nb.mp3
-│       └── scene-Nb.mp4
 ├── build/                             # all intermediate work (ASS, scaled mp4s, concat lists)
 └── final.mp4                          # 1080×1920, ≤ 32s after 1.18× speedup
 ```

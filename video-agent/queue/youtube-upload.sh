@@ -1,0 +1,117 @@
+#!/bin/bash
+# Upload a video to YouTube via Data API v3 (resumable upload).
+#
+# Usage:
+#   youtube-upload.sh <video_path> <title> <description> <privacy> [<tags>]
+#
+#   privacy: public | unlisted | private (default: private)
+#   tags:    comma-separated, e.g. "roblox,gaming,shorts"
+#
+# Requires in .env:
+#   YOUTUBE_CLIENT_ID
+#   YOUTUBE_CLIENT_SECRET
+#   YOUTUBE_REFRESH_TOKEN
+#   YOUTUBE_CHANNEL_ID   (optional, upload goes to the authorized account's default channel)
+#
+# Returns: YouTube video URL on success, exits 1 on failure.
+
+set -euo pipefail
+
+# ── args ────────────────────────────────────────────────────────────────────
+VIDEO_PATH="${1:?Usage: youtube-upload.sh <video_path> <title> <description> <privacy> [<tags>]}"
+TITLE="${2:?title required}"
+DESCRIPTION="${3:-}"
+PRIVACY="${4:-private}"
+TAGS="${5:-}"
+
+# ── load env ─────────────────────────────────────────────────────────────────
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ENV_FILE="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)/video-agent/.env"
+if [ -f "$ENV_FILE" ]; then
+  set -a; source "$ENV_FILE"; set +a
+fi
+
+: "${YOUTUBE_CLIENT_ID:?YOUTUBE_CLIENT_ID not set in .env}"
+: "${YOUTUBE_CLIENT_SECRET:?YOUTUBE_CLIENT_SECRET not set in .env}"
+: "${YOUTUBE_REFRESH_TOKEN:?YOUTUBE_REFRESH_TOKEN not set in .env}"
+
+# ── get access token ──────────────────────────────────────────────────────────
+echo "[youtube-upload] Refreshing access token..."
+TOKEN_RESPONSE=$(curl -s -X POST https://oauth2.googleapis.com/token \
+  -d "client_id=${YOUTUBE_CLIENT_ID}" \
+  -d "client_secret=${YOUTUBE_CLIENT_SECRET}" \
+  -d "refresh_token=${YOUTUBE_REFRESH_TOKEN}" \
+  -d "grant_type=refresh_token")
+
+ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('access_token',''))")
+if [ -z "$ACCESS_TOKEN" ]; then
+  echo "[youtube-upload] ERROR: failed to get access token"
+  echo "$TOKEN_RESPONSE"
+  exit 1
+fi
+
+# ── build metadata JSON ───────────────────────────────────────────────────────
+FILE_SIZE=$(stat -f%z "$VIDEO_PATH" 2>/dev/null || stat -c%s "$VIDEO_PATH")
+
+# Build tags array
+TAGS_JSON="[]"
+if [ -n "$TAGS" ]; then
+  TAGS_JSON=$(python3 -c "
+import json, sys
+tags = [t.strip() for t in '${TAGS}'.split(',') if t.strip()]
+print(json.dumps(tags))
+")
+fi
+
+METADATA=$(python3 -c "
+import json
+meta = {
+  'snippet': {
+    'title': '''${TITLE}''',
+    'description': '''${DESCRIPTION}''',
+    'tags': ${TAGS_JSON},
+    'categoryId': '20'
+  },
+  'status': {
+    'privacyStatus': '${PRIVACY}',
+    'selfDeclaredMadeForKids': False
+  }
+}
+print(json.dumps(meta))
+")
+
+# ── initiate resumable upload ─────────────────────────────────────────────────
+echo "[youtube-upload] Initiating upload: $(basename "$VIDEO_PATH") (${FILE_SIZE} bytes)"
+
+INIT_RESPONSE=$(curl -s -D - -X POST \
+  "https://www.googleapis.com/upload/youtube/v3/videos?part=snippet,status&uploadType=resumable" \
+  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -H "X-Upload-Content-Type: video/mp4" \
+  -H "X-Upload-Content-Length: ${FILE_SIZE}" \
+  -d "$METADATA")
+
+UPLOAD_URL=$(echo "$INIT_RESPONSE" | grep -i "^location:" | tr -d '\r' | awk '{print $2}')
+if [ -z "$UPLOAD_URL" ]; then
+  echo "[youtube-upload] ERROR: could not get upload URL"
+  echo "$INIT_RESPONSE"
+  exit 1
+fi
+
+# ── upload the file ───────────────────────────────────────────────────────────
+echo "[youtube-upload] Uploading..."
+UPLOAD_RESPONSE=$(curl -s -X PUT "$UPLOAD_URL" \
+  -H "Content-Type: video/mp4" \
+  -H "Content-Length: ${FILE_SIZE}" \
+  --data-binary "@${VIDEO_PATH}")
+
+VIDEO_ID=$(echo "$UPLOAD_RESPONSE" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('id',''))" 2>/dev/null || true)
+if [ -z "$VIDEO_ID" ]; then
+  echo "[youtube-upload] ERROR: upload failed"
+  echo "$UPLOAD_RESPONSE"
+  exit 1
+fi
+
+YOUTUBE_URL="https://www.youtube.com/watch?v=${VIDEO_ID}"
+echo "[youtube-upload] SUCCESS: ${YOUTUBE_URL}"
+echo "$YOUTUBE_URL"

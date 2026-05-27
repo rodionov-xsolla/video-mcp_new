@@ -7,7 +7,7 @@
       "command": "npx",
       "args": ["-y", "mcp-gsheets@latest"],
       "env": {
-        "GOOGLE_SERVICE_ACCOUNT_KEY": "/path/to/service-account.json"
+        "GOOGLE_SERVICE_ACCOUNT_KEY": "/Users/admin/conductor/workspaces/video-mcp-new/brasilia/video-agent/queue/service-account.json"
       }
     },
     "supabase": {

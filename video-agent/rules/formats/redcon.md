@@ -1,4 +1,4 @@
-# Format "What If... Lore" — alternate-universe character story with lore divergence
+# Format "Redcon" — alternate-universe character story with lore divergence
 
 A serious, cinematic "What If?" for game characters: one divergence point in canon, one alternative fate, told in first-person by the alternate-self. Think Marvel's What If? or DC Elseworlds — not comedy, but genuine tragedy, horror, or triumph that *could have been*. The character narrates their own alternate history as TTS overlay over I2V visualizations.
 
@@ -8,7 +8,7 @@ This file is the **playbook**: when to use, concept, budget, role briefs. Craft 
 
 ## When to use
 
-Keywords: "what if lore", "alternate history", "альтернативная история", "what if character", "elseworlds", "что если бы", "lore what if", "divergence", "alternate fate", "another path".
+Keywords: "redcon", "what if lore", "alternate history", "альтернативная история", "what if character", "elseworlds", "что если бы", "lore what if", "divergence", "alternate fate", "another path".
 
 **Distinct from:**
 - `what-if-real-life` — that format is comedy (character in mundane real world). This format is serious lore.
@@ -100,14 +100,14 @@ Same as `character-story`: character does NOT speak on camera (no lipsync). I2V 
 - **The divergence clip (clip 4) must specify the exact canon year and event** in `action_description` so Storyboarder can ground the visual.
 - Three motion layers per clip in `action_description` — same rules as `character-story`.
 - `camera_angle` must differ between adjacent clips; every clip has an active camera move.
-- `format: "what-if-lore"` in storyboard.json
+- `format: "redcon"` in storyboard.json
 - General script rules — `rules/roles/scenarist.md`
 
 **Storyboard.json — extra fields:**
 
 ```json
 {
-  "format": "what-if-lore",
+  "format": "redcon",
   "game_tag": "{GAME_TAG}",
   "character_name": "{canonical name}",
   "alternate_designation": "{what they became}",
@@ -176,7 +176,7 @@ Same as `character-story`: character does NOT speak on camera (no lipsync). I2V 
 
 ### Editor
 
-**Use `rules/roles/editor.md §0 — canonical single-pass `filter_complex` pipeline`** (the what-if-lore worked example in §0.2 ships exactly this format).
+**Use `rules/roles/editor.md §0 — canonical single-pass `filter_complex` pipeline`** (the redcon worked example in §0.2 ships exactly this format).
 
 Format-specific parameters to compute and pass into §0:
 - `PRE_MS = 5000` — TTS starts after the 5 s title card via `adelay=5000|5000`
@@ -194,7 +194,7 @@ General rules — `rules/roles/editor.md`
 ## Output files
 
 ```
-output/YYYY-MM-DD/{GAME_TAG}/what-if-lore/
+output/YYYY-MM-DD/{GAME_TAG}/redcon/
 ├── storyboard.json
 ├── scenes/
 │   ├── refs/
@@ -216,7 +216,7 @@ output/YYYY-MM-DD/{GAME_TAG}/what-if-lore/
 
 ## Validation before publishing
 
-- [ ] `format: "what-if-lore"` in storyboard.json
+- [ ] `format: "redcon"` in storyboard.json
 - [ ] `character_speech: null` for ALL clips
 - [ ] `tts_segment: null` for title card (clip 1 only)
 - [ ] Two character refs generated: canonical + alternate

@@ -103,9 +103,9 @@ OUTPUT:
   final.mp4
 ```
 
-### 0.2 Worked example (what-if-lore, 8 scenes + CTA)
+### 0.2 Worked example (redcon, 8 scenes + CTA)
 
-This is the exact command that ships our what-if-lore Spock-Borg video (50s output, 1:28 wall-clock, 23 MB):
+This is the exact command that ships our redcon Spock-Borg video (50s output, 1:28 wall-clock, 23 MB):
 
 ```bash
 FF=/usr/local/bin/ffmpeg-full/ffmpeg     # libass + libfreetype required
@@ -171,7 +171,7 @@ mv build/final.tmp.mp4 final.mp4
 
 The ASS file from `tools/add_subtitles.py` is timed against the **final** TTS shape after atempo + adelay. The filter graph must apply the same operations in the same order. If you re-trim TTS or change atempo after generating ASS, subtitles will drift — regenerate the ASS.
 
-Order is `atempo` → `adelay`. atempo first compresses speech to fit the picture window; adelay then offsets it so TTS starts after any title-card silence (e.g. 5000 ms for what-if-lore's title card).
+Order is `atempo` → `adelay`. atempo first compresses speech to fit the picture window; adelay then offsets it so TTS starts after any title-card silence (e.g. 5000 ms for redcon's title card).
 
 ### 0.5 Format-specific overrides
 
@@ -431,7 +431,7 @@ When using §0 single-pass, **never run `add_subtitles.py` in its default burn-i
 Pass either an output path ending in `.ass`, or `--emit-ass-only`. The script accepts the raw TTS MP3 and `--atempo` + `--start-offset` so the ASS timeline matches the canonical pipeline's post-shaping audio (`atempo` then `adelay`).
 
 ```bash
-# Canonical preflight for what-if-lore: raw TTS, atempo 1.46, 5 s title-card adelay.
+# Canonical preflight for redcon: raw TTS, atempo 1.46, 5 s title-card adelay.
 python3 tools/add_subtitles.py - tts-output.mp3 build/subs.ass \
   --emit-ass-only \
   --duration 45 \
@@ -451,10 +451,12 @@ The script's default behavior (its own ffmpeg burn-in) remains available for the
 ---
 
 ⚠️ **Forbidden overlays:**
-- Series / episode titles (title cards)
+- Series / episode titles (serial-drama episode numbers like "EP 3") — these are FORBIDDEN
 - Brainrot tags ("AURA: −9999", "COOKED")
 - Character names over the frame
 - Any text overlays other than dialogue subs + TBC + CTA
+
+**Exception — format title cards:** If a scene has `scene_type: "title-card"` and `title_lines` in storyboard.json, burning those lines IS required. This is not a serial-drama episode title — it is the hook card of the video (e.g. "What if... / COMMANDER WORF / Becomes a / KINDERGARTEN TEACHER"). Read the format playbook's Editor section for exact ASS style.
 
 PIL is **forbidden** — only ffmpeg drawtext for all formats.
 
@@ -764,6 +766,23 @@ $FFMPEG -y -i scene-K-scaled.mp4 -i scenes/scene-K/extra-vo.mp3 \
 ```bash
 $FFMPEG -i final.mp4 -ss 1.5 -t 2.0 -af "volumedetect" -f null - 2>&1 | grep mean_volume
 ```
+
+---
+
+## 12a. Customer / off-screen speaker subtitles (dialogue-offscreen scenes)
+
+For any scene with `scene_type: "dialogue-offscreen"`, mixing `customer.mp3` audio (§12) is not enough — the viewer also needs to READ what the off-screen speaker says. Generate a **Customer** ASS style alongside the Default (character) style:
+
+```
+Style: Customer,Montserrat Bold,52,&H00E0E0E0,&H000000FF,&H00000000,&HCC000000,0,1,0,0,100,100,0,0,4,0,0,2,10,10,120,1
+```
+(light-gray, italic, size 52, BorderStyle=4, same MarginV=120)
+
+**Timing:**
+- Customer event: `0:00:00.30` → `duration(customer.mp3)` — text from `storyboard.json[scene].customer_line`
+- Default (character) events: start at `duration(customer.mp3) + 0.6s` (the silence gap end) — text from `character_line` / `tts`
+
+Both styles go in the **same ASS file** per scene. Customer events appear before Default events in the [Events] section. No overlap between Customer and Default event ranges.
 
 ---
 

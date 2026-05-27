@@ -1,0 +1,20 @@
+# Environment
+video-agent/.env
+.env
+
+# Secrets / credentials
+**/*service-account*.json
+**/*credentials*.json
+**/*oauth*.json
+
+# Generated output
+video-agent/output/
+output/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+phase*.txt
+subs/

@@ -91,6 +91,8 @@ Without this phrase — work autonomously.
 ### PHASE 1 — Script
 Delegate via `Agent(subagent_type="scenarist")` (model: sonnet, defined in `.claude/agents/scenarist.md`). The sub-agent will load `rules/roles/scenarist.md` itself — you do NOT read it. In the `prompt`, pass: `GAME_TAG`, `FORMAT` (playbook), `IDEA`, `OUTPUT_DIR` (absolute), `LANGUAGE`, story bible path if applicable, `EXISTING_REFS_JSON` if applicable. Template: `prompts/scenarist.txt`.
 
+> ⚠️ **ALWAYS use the prompt template as the base** (`prompts/{role}.txt`). The templates contain critical boilerplate: `.env` loading (`set -a; source "$(git rev-parse --show-toplevel)/video-agent/.env"; set +a`), env verification, and constraint reminders. Writing a shorter custom prompt drops these and causes hard-to-debug failures (missing FAL_KEY, wrong subtitle style, etc.).
+
 **Output:** `output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/storyboard.json`.
 
 In debug mode — stop for approval.
@@ -132,16 +134,32 @@ Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude
    - Path: `videos/{GAME_TAG}/{YYYY-MM-DD}/{format_slug}_final.mp4`
    - Get the public URL
 
-2. Logging (when the `video_agent_runs` table is ready):
+2. **Upload to YouTube** (if `YOUTUBE_REFRESH_TOKEN` is set in `.env`):
+   ```bash
+   # Title: from storyboard.json → title (or idea if no title field)
+   # Tags: GAME_TAG + format_slug + any tags from storyboard.json → youtube_tags
+   YOUTUBE_URL=$(bash queue/youtube-upload.sh \
+     "$OUTPUT_DIR/final.mp4" \
+     "$TITLE" \
+     "$DESCRIPTION" \
+     "${YOUTUBE_PRIVACY:-private}" \
+     "$TAGS")
+   echo "YouTube: $YOUTUBE_URL"
+   ```
+   - If `YOUTUBE_REFRESH_TOKEN` is empty — skip silently (YouTube upload is optional)
+   - On error — log and continue (Supabase URL is the primary deliverable)
+   - Default privacy: `private` (change to `public` in `.env` when ready to publish)
+
+3. Logging (when the `video_agent_runs` table is ready):
    ```sql
    INSERT INTO video_agent_runs (
      game_tag, input_idea, agent_plan, approach_used, model_used,
-     total_cost_usd, output_video_url, status, error_message,
+     total_cost_usd, output_video_url, youtube_url, status, error_message,
      video_duration_seconds, run_duration_seconds, scenes
    ) VALUES (...);
    ```
 
-3. **Update story bible** (if the format uses one) — characters, aura, relationships, active_loops, episode_summary, cliffhanger, anti_repetition.
+4. **Update story bible** (if the format uses one) — characters, aura, relationships, active_loops, episode_summary, cliffhanger, anti_repetition.
 
 ### PHASE 6 — Git push (MANDATORY after completion)
 
@@ -183,6 +201,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 | "character story", "история персонажа", "лор", "lore", "backstory", "origin story", "предыстория" | Character Story | `rules/formats/character-story.md` |
 | "motion dance", "motion control", "моушн", "motion transfer", "танцует под видео" | Motion Dance | `rules/formats/motion-dance.md` |
 | "what if", "real life", "real world", "real-world", "что если", "в реальной жизни", "реальная жизнь", "fish out of water", "cameo", "mundane job", "ordinary life" | What If... Real Life | `rules/formats/what-if-real-life.md` |
+| "redcon", "what if lore", "alternate universe", "alternate history", "what if they", "divergence", "alternate fate", "elseworlds", "другая судьба", "альтернативная история" | Redcon | `rules/formats/redcon.md` |
 | Anything else | Standard | `rules/formats/standard.md` |
 
 **Do not load format files unrelated to the task.**

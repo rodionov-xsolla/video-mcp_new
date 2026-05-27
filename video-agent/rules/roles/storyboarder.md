@@ -827,8 +827,7 @@ Only after ALL images pass — hand off to Manager.
 - [ ] All character refs created or pulled from Supabase
 - [ ] All location bg refs created (for serial-drama)
 - [ ] All scene PNGs created, programmatic validation passed (filesize > 1KB, dimensions correct)
-- [ ] For I2V clips: start + end frames created, both passed programmatic validation
-- [ ] For Avatar clips: only start frame (no end)
+- [ ] For I2V clips: start frame only (`scene-K.png`), programmatic validation passed — end frames are NEVER generated (see §14.8 / §16)
 - [ ] Max 2 refs in image_urls per generation
 - [ ] No extra characters, style consistent
 - [ ] All files downloaded locally and uploaded to Supabase
