@@ -23,14 +23,14 @@ Keywords: "fun news", "fictional news", "fake news", "lore news", "иронич�
 - **Only Kling Avatar v2 Standard** + ElevenLabs TTS (lipsync via `audio_url`)
 - **Opener and CTA — pre-built mp4 from Supabase**, not regenerated
 - **Tone:** ironic / satirical / absurd / dry-deadpan — mix per item
-- **Duration:** 20–40s after speedup (excluding opener/CTA)
-- **Budget:** up to $4 (~$1.30–$1.80 typical)
+- **Duration:** 35–50s after speedup (including opener+CTA)
+- **Budget:** up to $4.50 hard cap (~$3.30 typical for episode 2+; pilot episodes run higher due to one-time prep + iteration)
 - **Frame format:** 9:16 (1080×1920)
 
 ### Models
 
-- **Image:** NB2 (only for new reporter refs not yet in Supabase)
-- **Video:** Kling Avatar v2 Standard
+- **Image:** NB2 (per-episode on-location backgrounds for reporters + one-time anchor avatar + one-time opener)
+- **Video:** Kling Avatar v2 Standard ($0.056/s of **input audio duration** — see Budget pitfall below)
 - **Audio:** ElevenLabs TTS (per dialogue scene)
 
 ---
@@ -51,11 +51,12 @@ curl -s -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
 
 Find from the result:
    - **Opener** — record with tag `opener` and `video` → `.mp4`
-   - **CTA** — record with tag `cta` → `.mp4`
-   - **Anchor avatar** — record matching `anchor.name` from the story bible, tag `fun-news` or `news` and `avatar` in `character_name` → `.png`
-   - **Reporter avatars** — records with tag `fun-news` or `character` matching reporter names selected in Phase 1
-4. **STOP** if opener / CTA / anchor avatar not found — notify the user (must be uploaded in advance).
-5. **STOP** if a topic-matched reporter ref is missing — do **not** auto-generate on the fly. Phase 2 handles new reporter generation explicitly.
+   - **CTA** — record with tag `cta` and `video` → `.mp4`
+   - **Anchor avatar** — record matching `anchor.character_name` from the story bible, tag `fun-news` and `avatar` → `.png`
+   - **Reporter base avatars** — records with tag `fun-news` and `avatar` matching reporter names selected in Phase 1; these are the **portrait base** for per-episode on-location edits
+
+4. **STOP** if opener / CTA / anchor avatar not found — notify the user. These are one-time-per-game (~$0.66 first run; $0 after) and must be uploaded before episode 1.
+5. **STOP** if a topic-matched reporter base avatar is missing — Phase 2 handles new reporter generation explicitly.
 
 ### Phase 1: Lore research
 
@@ -87,52 +88,80 @@ Priority: official wiki → game's own narrative material → fan-curated lore w
       "headline": "...",
       "satire_angle": "ironic|satirical|absurd|dry-deadpan",
       "canon_fact_index": 0,
-      "summary": "25–35-word fictional report"
+      "summary": "20-30-word fictional report — KEEP TIGHT, see word-budget below",
+      "location": "Where the reporter stands (Vulcan Academy, Starfleet briefing room, etc.) — used for NB2 on-location bg",
+      "kicker_phrases": ["phrase1", "phrase2"]
     }
   ],
   "topic_tags": ["faction-X", "character-Y", "location-Z"]
 }
 ```
 
-### Phase 2: Characters
+### Phase 2: Characters and on-location backgrounds
 
-**Anchor** — read `anchor.character_name` from story bible. Avatar ref already downloaded in Phase 0.
+**Anchor** — read `anchor.character_name` from story bible. Avatar ref already downloaded in Phase 0. Anchor stays in the same news-desk studio every episode (do **not** regenerate per episode).
 
 **Reporters** — choose **1–2** based on `topic_tags`:
-- Prefer canon characters that are thematically tied to the news topic (a pirate-themed item → pirate reporter; a mage event → mage reporter).
-- Look up matching avatars in Supabase by `character_name` and tag `fun-news` / `character`.
+- Prefer canon characters that are thematically tied to the news topic (a Vulcan-themed item → Spock; a Voyager-themed item → Seven of Nine; a Klingon honor-themed item → Worf).
+- Look up reporter base avatars in Supabase by `character_name` and tag `fun-news,avatar`.
 
-**If a topic-matched reporter has no Supabase avatar:**
-1. **Character sheet** (NB2 text-to-image, 16:9 concept art)
-2. **Avatar ref** (NB2 edit with sheet as ref, 9:16, frontal portrait at the desk, teeth visible for lipsync)
+**Per-episode on-location backgrounds (MANDATORY, $0.08 × N_reporters per episode):**
+
+The format spec calls for reporters to appear **on location relevant to their news item**, not against bare/abstract studio backgrounds. For each reporter selected in Phase 1, generate a fresh NB2 **edit** using the base avatar as `image_urls[0]`:
+
+```
+NB2 /edit with:
+  image_urls: [reporter_base_avatar_url]
+  prompt: "{character} on-location field reporter at {news_item.location},
+           semi-realistic photographic Star Trek movie cinematic quality,
+           NOT cartoon, NOT illustration, NOT animation, NOT graphic style,
+           9:16 vertical, ... mouth slightly open mid-speech for lipsync,
+           professional broadcasting key light on face,
+           no on-screen text overlay, no captions"
+```
+
+Upload each scene's on-location png to Supabase as `refs/{character}-on-location-{topic}.png` (no tags update — these are per-episode, may be reused if topic recurs).
+
+**If a topic-matched reporter has NO base avatar in Supabase:**
+1. **Character sheet** (NB2 text-to-image, 16:9 concept art) — `$0.08`
+2. **Avatar ref** (NB2 edit with sheet as ref, 9:16, frontal portrait, teeth visible for lipsync) — `$0.08`
 3. Upload both to Supabase via `queue/upload-asset.sh` with tags `fun-news,avatar`
 4. In future episodes this reporter is already in Supabase
 
+**Style consistency:** Avatar v2 closely tracks the reference image. If you use a stylized/cartoonish base ref (e.g. one tagged `what-if-lore` or `comedy-sketch`), the rendered video will look stylized too. **Prefer photoreal-tagged refs** for reporters when the game style is semi-realistic. If you must use a stylized base, the NB2 on-location edit prompt above explicitly counters with "NOT cartoon, NOT illustration".
+
 ### Phase 3: Script → `storyboard.json`
 
-Structure — **exactly 4 dialogue scenes** (opener/CTA are pre-built, not in storyboard):
+Structure — **exactly 5 dialogue scenes** (opener/CTA are pre-built, not in storyboard):
 
 | Scene | Role | Camera | Content |
 |---|---|---|---|
-| 1 | **Anchor intro** | Frontal, medium close-up | Greeting + tease of items + handover by name to Reporter 1 |
-| 2 | **Reporter 1** | Three-quarter, medium close-up | Fictional news #1 (25–35 words) + ironic kicker |
-| 3 | **Reporter 2** *(or Anchor if only 1 reporter)* | Different angle from scene 2 | Fictional news #2 (25–35 words) + reaction |
-| 4 | **Anchor outro** | Slightly wider than scene 1 | Wrap + signature ironic sign-off + CTA tease |
+| 1 | **Anchor intro** | Frontal, medium close-up | Hook-first: `"Hi, I'm {Anchor} with {Show} — {hook line}. {Reporter 1} is on the line."` Do **not** tease the items' contents — that's spoiler. |
+| 2 | **Reporter 1** | On-location, three-quarter medium close-up | Fictional news #1 + ironic kicker. Ends with `"{Anchor name}?"` — handoff back to anchor. |
+| 3 | **Anchor reaction (interstitial)** | Frontal, medium close-up | Short, in-character reaction + handoff to reporter 2. Example: `"Astonishing, as expected — {Reporter 2}, you're up."` — ~5–8 words. |
+| 4 | **Reporter 2** | On-location, frontal/different angle from scene 2 | Fictional news #2 + reaction. Ends with `"{Anchor name}?"` handoff. |
+| 5 | **Anchor outro** | Slightly wider than scene 1, fade-out last 1s before CTA | Wrap + signature ironic sign-off + "Goodnight." Do **not** tease next episode (this format is non-serial). |
 
-With 2 reporters: scenes 1, 2, 3, 4 = anchor → R1 → R2 → anchor.
-With 1 reporter: scenes 1, 2, 3, 4 = anchor → R1 → anchor → anchor (anchor delivers news #2 directly).
+With 1 reporter: scenes 1, 2, 3, 4, 5 = anchor → R1 → anchor reaction (recap-ish) → anchor (delivers news #2 directly) → anchor outro. But two reporters is the default — recruit from `reporter_pool`.
 
 **Handoff — by name, mandatory.**
-- Anchor → Reporter: `"Over to [reporter name] on the scene"` / `"[Name], what are you seeing?"`
-- Reporter → Anchor: `"Back to you, [anchor name]"` / `"That's all from [location], [anchor name]"`
-- Reporter → Reporter: `"[Other reporter name] has more — over to you"`
+- Anchor → Reporter: terse, no preamble: `"{Reporter name} is on the line."` / `"{Reporter name}, you're up."`
+- Reporter → Anchor: terse: `"{Anchor name}?"` (single-word handoff is correct)
 
-**Tone per scene** — pick from `satire_angle` of the corresponding news item (`ironic` / `satirical` / `absurd` / `dry-deadpan`). Adjacent scenes should not repeat the same angle.
+**Tone per scene** — pick from `satire_angle` of the corresponding news item (`ironic` / `satirical` / `absurd` / `dry-deadpan`). Adjacent reporter scenes (2 and 4) should not repeat the same angle. The anchor reaction in scene 3 should be **sarcastic** — a dry put-down that doesn't take the previous item seriously.
 
-**Script length:**
-- Anchor intro: 20–30 words
-- Reporter scenes: 25–35 words
-- Anchor outro: 15–20 words
+**Script word budget (HARD — drives Avatar v2 cost):**
+
+| Scene | Words | Raw TTS @ ~2.5 wps | Sped @ 1.3× | Cost (Avatar v2) |
+|---|---|---|---|---|
+| 1 Anchor intro | 15–20 | ~6–8s | ~5–6s | ~$0.40 |
+| 2 Reporter 1 | 20–28 | ~8–11s | ~6–8s | ~$0.50 |
+| 3 Anchor reaction | 5–10 | ~3–5s | ~2.5–4s | ~$0.25 |
+| 4 Reporter 2 | 20–28 | ~8–11s | ~6–8s | ~$0.50 |
+| 5 Anchor outro | 15–20 | ~6–10s | ~5–8s | ~$0.45 |
+| **Total** | **~95** | **~35–45s** | **~27–35s** | **~$2.10** |
+
+**Punctuation tax** — ElevenLabs adds a noticeable pause on every `.`, slightly less on `,` and `—`. A 5-period outro of 18 words can take 14s instead of 7s. To keep the anchor energetic: prefer commas and em-dashes for natural cadence; reserve periods for the final beat. Reporters can use full sentences since their pace is the satirical content itself.
 
 Every dialogue scene has a `tts` field with the text for ElevenLabs.
 
@@ -141,43 +170,70 @@ Every dialogue scene has a `tts` field with the text for ElevenLabs.
 For each dialogue scene:
 1. **ElevenLabs TTS** → `.mp3` → upload to Supabase (Sound role)
 2. **Kling Avatar v2** with parameters:
-   - `image_url` = avatar ref from Supabase (9:16, not square)
-   - `audio_url` = TTS mp3 **from Supabase** (not fal.ai temp URL)
-   - `motion_prompt` = `broadcaster energy, hand gestures, head turns, subtle smirk on ironic line`
-   - `negative_prompt` mandatory (anti-text set — avatar ref may have studio overlays / text)
-3. **1.3x speedup** after generation (energetic ironic delivery):
-
-```bash
-$FFMPEG -y -i avatar.mp4 \
-  -filter_complex "[0:v]setpts=PTS/1.3[v];[0:a]atempo=1.3[a]" \
-  -map "[v]" -map "[a]" \
-  -r 30 -c:v libx264 -preset medium -crf 14 -pix_fmt yuv420p \
-  -ar 44100 -ac 2 -c:a aac -b:a 128k \
-  avatar-fast.mp4
-```
+   - `image_url` = avatar ref from Supabase (9:16, not square). Anchor uses the studio avatar; reporters use the per-episode **on-location** edit from Phase 2.
+   - `audio_url` = TTS mp3 **from Supabase** (not fal.ai temp URL).
+   - Note: Avatar v2 currently accepts only `image_url` + `audio_url` per fal docs — no `motion_prompt` or `negative_prompt` are sent (the ones in `storyboard.json` are documentation hints for future Lipsync model upgrades).
+3. **Avatar v2 output duration ≈ input audio duration**, with a small trailing-silence buffer (often 0.05–1.8s where video continues with mouth-closed pose). This trailing buffer matters for assembly — Editor must `apad` per-scene audio to the **video** duration, not the **audio** duration, or lipsync drifts (see Phase 5 + Anti-patterns).
+4. **1.3× speedup applied in Editor's filter_complex** (not pre-encoded as a separate mp4). The Avatar v2 raw output goes straight into the canonical pipeline.
 
 ### Phase 5: Assembly (FFmpeg)
 
-Canonical single-pass pipeline (see `rules/roles/editor.md` §0):
+Canonical single-pass pipeline (see `rules/roles/editor.md` §0). Pseudo-graph:
 
-1. **Subtitles ASS** — per-scene via `tools/add_subtitles.py --emit-ass-only` with word-highlight on the satirical kicker phrases (`--emphasis "..."`).
-2. **Normalize** all clips: 1080×1920, 30fps, AAC 128k.
-3. **Opener** — normalize the `.mp4` downloaded from Supabase (same scale/fps/codec).
-4. **Concat** in one filter_complex: opener → scene-1-sub → scene-2-sub → scene-3-sub → scene-4-sub → CTA.
-5. **Music:** comedic / lo-fi beat, `volume=0.15`.
-6. **Fade-to-black** last 1.0s before CTA join.
-7. → `final.mp4` → upload to Supabase.
+```
+Inputs:
+  [0..4]   scene-1..5.mp4 (Avatar v2 raw, video + audio)
+  [5]      opener.mp4 (Supabase, no audio)
+  [6]      cta.mp4 (Supabase, no audio)
+  [7]      bg-music.mp3 (Sound's pick from music/tracks.json)
+
+VIDEO branch:
+  [5:v]  scale/pad/fps,setpts=PTS-STARTPTS                          → [vop]
+  [k:v]  scale/pad/fps,setpts=(PTS-STARTPTS)/1.3,ass=build/scene-k.ass [vk]   (k=0..4)
+  [4:v]  + fade=t=out:st=SPED_DUR-1:d=1.0 on scene-5 only
+  [6:v]  scale/pad/fps,setpts=PTS-STARTPTS                          → [vct]
+  [vop][v0][v1][v2][v3][v4][vct] concat=n=7:v=1:a=0                 → [vout]
+
+AUDIO branch (per-scene apad to match sped VIDEO duration):
+  [k:a]  atempo=1.3,asetpts=PTS-STARTPTS,apad=whole_dur=<sped_video_dur_k>  [ak]
+  [a0][a1][a2][a3][a4] concat=n=5:v=0:a=1                            → [adlg]
+  [adlg] adelay=2000|2000                                            → [atts]   (2s for opener silence prefix)
+  [7:a]  volume=0.15,afade=t=out:st=TOTAL-1:d=1.0                    → [amus]
+  [atts][amus] amix=inputs=2:duration=longest:dropout_transition=0:normalize=0  → [aout]
+
+Output:
+  -map [vout] -map [aout]
+  -c:v libx264 -preset medium -crf 22 -pix_fmt yuv420p
+  -c:a aac -b:a 128k -ar 44100 -ac 2
+  -t TOTAL_DUR
+  build/final.tmp.mp4   → mv final.mp4 after ffprobe-validate
+```
+
+**Critical:** the per-scene `apad=whole_dur=<sped_video_dur>` is **mandatory**. Avatar v2 returns video that is 0.05–1.8s longer than the input audio (trailing silence with mouth-closed pose). Without `apad`, the concat audio runs ahead of concat video, accumulating a multi-second lip-sync drift by scene 5. See Anti-patterns.
+
+**ASS subtitles** — one ASS per scene via `tools/add_subtitles.py --emit-ass-only --atempo 1.3 --emphasis "<kicker phrases>"`, burned into the corresponding `[vk]` branch BEFORE concat. Per-scene burn-in (rather than one ASS over concat) keeps timings local and trivially correct.
+
+**Music** — Sound picks from `music/tracks.json` filtered by `use_for` including `news` or `mood ∈ {fun, energetic, comedic}`. Default volume `0.15`.
+
+**Fade** — fade-to-black on the last scene before CTA (`fade=t=out:st=SPED_DUR-1:d=1.0`), and `afade=t=out` on music at TOTAL-1.
+
+**Output upload** — `final.mp4` → Supabase bucket `videos`, path `videos/{GAME_TAG}/{YYYY-MM-DD}/fun-news_final.mp4`.
 
 ---
 
 ## Voices
 
-| Role | Voice (ElevenLabs) | stability | Notes |
-|---|---|---|---|
-| Anchor (locked) | from `voice_mapping.anchor` in story bible | 0.25 | one voice across all episodes |
-| Reporter (per character) | from `voice_mapping.reporters[character_name]` | 0.30 | locked once a reporter character is first used |
+| Role | Voice (ElevenLabs) | stability | style | Notes |
+|---|---|---|---|---|
+| Anchor (locked) | from `voice_mapping.anchor` in story bible | **0.55** | **omit** (do NOT set) | Fast, snappy, news-anchor energy. `style: 0.8` produces theatrical pauses — bloats outro to 15s, kills retention. |
+| Reporter | from `voice_mapping.reporters[character_name]` | **0.55** | omit | Locked once a reporter character is first used. |
 
-`stability: 0.25` = energetic broadcaster tone. Use `voice` (name string), not `voice_id` hash.
+Use `voice` (name string), not `voice_id` hash.
+
+**Voice recipe validated on pilot (Star Trek Timelines ep1):**
+- Q (anchor) → `Daniel`, stability 0.55, no style — fast and snappy
+- Spock (reporter) → `George`, stability 0.55 — dry-deadpan suits Vulcan
+- Seven of Nine (reporter) → `Charlotte`, stability 0.55 — clinical female
 
 ---
 
@@ -194,34 +250,48 @@ Create on first run: `games/{GAME_TAG}/fun-news_story_bible.json`
   "last_episode": 0,
   "anchor": {
     "character_name": "",
+    "display_name": "",
     "voice": "",
-    "tone_signature": "deadpan anchor with a smirk"
+    "stability": 0.55,
+    "style": null,
+    "tone_signature": "...",
+    "supabase_avatar_url": ""
   },
   "voice_mapping": {
     "anchor": "",
     "reporters": {}
   },
+  "reporter_pool": [],
   "style_tone": "ironic|satirical|absurd|dry-deadpan",
   "topic_rotation": {
     "recent_topic_tags": [],
     "recent_canon_facts": [],
     "cooldown_episodes": 5
   },
-  "episode_summaries": [
-    {
-      "episode": 0,
-      "date": "",
-      "anchor": "",
-      "reporters": [],
-      "news_items": [],
-      "topic_tags": []
-    }
-  ]
+  "episode_summaries": [],
+  "opener_url": "",
+  "cta_url": ""
 }
 ```
 
-**FIFO 5** on `episode_summaries` — keep last 5, drop older.
+**FIFO 5** on `episode_summaries` — keep last 5, drop older. Append per episode (after editor confirms `final.mp4`):
+
+```json
+{
+  "episode": N,
+  "date": "YYYY-MM-DD",
+  "anchor": "Q",
+  "reporters": ["Spock", "Seven of Nine"],
+  "structure": "5 scenes — anchor intro → reporter 1 → anchor reaction → reporter 2 → anchor outro",
+  "news_items": [{"index": 1, "headline": "...", "reporter": "..."}, ...],
+  "topic_tags": [...],
+  "final_url": "...",
+  "duration_sec": 45.6
+}
+```
+
 **Anti-repetition:** before Phase 1, manager checks `recent_topic_tags` and `recent_canon_facts`; the scenarist's research.json must not collide.
+
 **No loop management** (this is not serial — each episode is standalone).
 
 ---
@@ -233,40 +303,51 @@ Before Phase 3, manager validates:
 - [ ] None of `news_items[].canon_fact_index` resolves to a fact in `recent_canon_facts`.
 - [ ] None of `topic_tags` overlap with `recent_topic_tags` (last 5 episodes).
 - [ ] `satire_angle` distribution differs from the previous episode (don't run two `absurd`-only episodes back-to-back).
+- [ ] Reporter rotation: at least one reporter different from the previous episode (avoid Spock-Seven both episodes back-to-back when Worf is in the pool).
 
 If a collision is found — scenarist regenerates research.json with cooldown applied.
 
 ---
 
-## Storyboard JSON (template)
+## Storyboard JSON (template, 5 scenes)
 
 ```json
 {
   "format": "fun-news",
   "show_name": "{Game} Lore Newsflash",
   "episode": 1,
+  "game_tag": "{TAG}",
+  "language": "en",
   "research": {"file": "research.json"},
   "visual_identity": {
     "characters": {
-      "anchor": {"name": "...", "character_description": "..."},
-      "reporter_1": {"name": "...", "character_description": "..."},
-      "reporter_2": {"name": "...", "character_description": "..."}
+      "anchor":     {"name": "...", "character_description": "...", "image_url": "supabase://avatars/anchor.png"},
+      "reporter_1": {"name": "...", "character_description": "...", "image_url": "supabase://refs/reporter-1-on-location.png"},
+      "reporter_2": {"name": "...", "character_description": "...", "image_url": "supabase://refs/reporter-2-on-location.png"}
     },
     "environments": {
-      "studio": "lore-themed news desk, game-specific signage"
+      "q_studio":          "news desk for anchor scenes",
+      "reporter_1_location": "tied to news item #1",
+      "reporter_2_location": "tied to news item #2"
     }
   },
   "voices": {
-    "anchor":    {"voice": "George",    "stability": 0.25, "language_code": "en"},
-    "reporter_1":{"voice": "Daniel",    "stability": 0.30, "language_code": "en"},
-    "reporter_2":{"voice": "Charlotte", "stability": 0.30, "language_code": "en"}
+    "anchor":    {"voice": "Daniel",    "stability": 0.55, "language_code": "en"},
+    "reporter_1":{"voice": "George",    "stability": 0.55, "language_code": "en"},
+    "reporter_2":{"voice": "Charlotte", "stability": 0.55, "language_code": "en"}
   },
   "scenes": [
-    {"index": 1, "role": "anchor",     "clip_type": "dialogue", "satire_angle": "dry-deadpan", "tts": "..."},
-    {"index": 2, "role": "reporter_1", "clip_type": "dialogue", "satire_angle": "absurd",      "news_item_index": 1, "tts": "..."},
-    {"index": 3, "role": "reporter_2", "clip_type": "dialogue", "satire_angle": "ironic",      "news_item_index": 2, "tts": "..."},
-    {"index": 4, "role": "anchor",     "clip_type": "dialogue", "satire_angle": "satirical",   "tts": "..."}
-  ]
+    {"index": 1, "role": "anchor",     "satire_angle": "hook-intro",       "tts": "Hi, I'm {Anchor} with {Show}. {Hook}. {R1 name} is on the line."},
+    {"index": 2, "role": "reporter_1", "satire_angle": "dry-deadpan",      "news_item_index": 1, "tts": "..."},
+    {"index": 3, "role": "anchor",     "satire_angle": "sarcastic-handoff", "tts": "{Reaction} — {R2 name}, you're up."},
+    {"index": 4, "role": "reporter_2", "satire_angle": "clinical-absurdism", "news_item_index": 2, "tts": "..."},
+    {"index": 5, "role": "anchor",     "satire_angle": "satirical-wrap",   "tts": "..."}
+  ],
+  "subtitles": {"method": "ass-emit-only", "word_highlight": true, "emphasis": {"scene_1": "...", "scene_2": "...", "scene_3": "...", "scene_4": "...", "scene_5": "..."}, "atempo": 1.3},
+  "speedup": 1.3,
+  "music": {"mood": "energetic|comedic|fun", "volume": 0.15},
+  "opener": {"url": "supabase://refs/opener.mp4"},
+  "cta":    {"url": "supabase://cta-link-in-bio.mp4"}
 }
 ```
 
@@ -274,22 +355,54 @@ If a collision is found — scenarist regenerates research.json with cooldown ap
 
 ## Budget
 
-| Item | 5s clip | Cost |
+**Per-second pricing (from `budgets.md`):**
+- NB2 image: $0.08
+- Kling Avatar v2 Standard: **$0.056/s of input audio duration** (NOT per clip — this trips most cost estimates)
+- ElevenLabs TTS: ~$0.30/min ≈ $0.06–0.10 per line
+
+**Per-episode breakdown (steady-state, prep already in Supabase):**
+
+| Item | Cost | Notes |
 |---|---|---|
-| Opener (from Supabase) | — | $0 |
-| CTA (from Supabase) | — | $0 |
-| Anchor avatar ref (from Supabase) | — | $0 |
-| Reporter avatar ref (already in Supabase) | — | $0 |
-| New reporter (sheet + ref, only if absent) | — | ~$0.16 |
-| ElevenLabs TTS (4 lines, ~20–30s) | — | ~$0.25–0.35 |
-| Kling Avatar v2 (4 × 5s = 20s raw @ $0.056/s) | $0.28 | ~$1.12 |
+| Opener (Supabase) | $0 | one-time prep, see below |
+| CTA (Supabase) | $0 | one-time prep |
+| Anchor avatar (Supabase) | $0 | one-time prep |
+| Reporter base avatars (Supabase) | $0 | one-time per reporter joining pool |
+| Reporter **on-location** edits per episode | $0.16 | 2 × NB2 edit, scene-specific bg |
+| ElevenLabs TTS (5 lines, ~38s audio) | ~$0.30 | |
+| Kling Avatar v2 (5 scenes × $0.056/s ≈ 50s audio) | ~$2.80 | dominant cost |
+| **Typical episode 2+** | **~$3.26** | under hard cap |
 
-| Variant | Clips | Reporter refs in Supabase | Typical cost |
-|---|---|---|---|
-| Base | 4 × 5s | yes | **~$1.40–$1.50** |
-| Worst case (1 new reporter) | 4 × 5s | partial | **~$1.65** |
+**Pilot (episode 1) overhead — one-time prep:**
 
-**Limit: $4.00.** Stop if spend > **$3.60**.
+| Item | Cost |
+|---|---|
+| NB2 anchor sheet | $0.08 |
+| NB2 anchor avatar edit | $0.08 |
+| NB2 opener title image (assume 1 iteration) | $0.08 |
+| Kling I2V opener 5s (no audio) → trim to 2s | $0.42 |
+| NB2 base avatars for first 2 reporters (if not in Supabase) | $0.32 |
+| **One-time prep** | **~$0.98** |
+
+**Realistic pilot total** (prep + first episode): ~**$4.30** if everything works first try.
+
+**Iteration tax (what actually happens on pilots):**
+
+| Reason | Typical hit |
+|---|---|
+| User rejects 1 NB2 result (opener, anchor, reporter style) | +$0.08–$0.16 per regen |
+| Texts trimmed mid-flight → re-TTS | +$0.30 |
+| Avatar v2 result GC'd before download (>30 min gap) → resubmit | +$0.50–$1.00 per scene |
+| User wants on-location bg after first render → re-Avatar | +$1.40–$2.00 |
+| Off-by-one or label mistake in download → re-render wrong scene | +$0.50–$1.00 |
+
+Plan for **±50% over typical** on first run; budget pilots at $7–8.
+
+**Limits**
+
+- **Hard cap: $4.50** (raised from $4 after pilot empirical data — typical $3.26 is too close to $4 to absorb 1 retry).
+- **Soft stop: $4.00** — review before continuing.
+- Pilots: log overrun in episode_summaries.notes; treat one-time prep separately.
 
 ---
 
@@ -300,15 +413,20 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 ├── research.json
 ├── storyboard.json
 ├── scenes/
-│   ├── scene-1/
+│   ├── scene-1/    # anchor intro
 │   │   ├── scene-1.mp3           # TTS
-│   │   ├── scene-1.mp4           # Kling Avatar raw
-│   │   ├── scene-1-fast.mp4      # 1.3x speedup
-│   │   └── scene-1-sub.ass       # ASS subtitles
-│   ├── scene-2/...
-│   ├── scene-3/...
-│   └── scene-4/...
-└── final.mp4
+│   │   └── scene-1.mp4           # Avatar v2 raw (no separate -fast.mp4; speedup applied in editor)
+│   ├── scene-2/    # reporter 1 on-location
+│   ├── scene-3/    # anchor reaction
+│   ├── scene-4/    # reporter 2 on-location
+│   └── scene-5/    # anchor outro
+├── build/          # ffmpeg intermediates, ASS files (per editor.md workspace rule)
+│   ├── scene-1.ass ... scene-5.ass
+│   ├── opener-raw.mp4
+│   ├── cta-raw.mp4
+│   ├── bg-music.mp3
+│   └── final.tmp.mp4
+└── final.mp4       # only deliverable in OUTPUT_DIR root
 ```
 
 ---
@@ -316,67 +434,110 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 ## Role briefs
 
 ### Scenarist
-- 4 dialogue scenes (opener/CTA are pre-built — not in storyboard)
-- Fictional headlines derived from canon lore (no real patch notes)
-- Anchor intro 20–30 words, reporter scenes 25–35 words, anchor outro 15–20 words
-- Mandatory by-name handoffs between anchor ↔ reporter
-- `satire_angle` per scene; adjacent scenes must differ
-- Anti-repetition vs story bible `topic_rotation`
-- General rules — `rules/roles/scenarist.md`
+- **5 dialogue scenes** (opener/CTA are pre-built — not in storyboard). Structure: anchor intro → reporter 1 → anchor reaction → reporter 2 → anchor outro.
+- Fictional headlines derived from canon lore (no real patch notes).
+- Word budget: anchor intro 15–20, reporter 20–28, anchor reaction 5–10, reporter 20–28, anchor outro 15–20.
+- **Hook-first intro** — do NOT tease item contents in scene 1 (spoiler). Tease the brand/show, not the news.
+- Anchor reaction (scene 3) is sarcastic/dismissive — NOT a recap of item 1.
+- Mandatory by-name handoffs. Reporter handoff is single-word: `"{Anchor name}?"`
+- `satire_angle` per scene; reporter scenes 2 and 4 must differ.
+- Anti-repetition vs story bible `topic_rotation`.
+- `research.json.news_items[].location` must be populated — used by Storyboarder for on-location bg generation.
+- `research.json.news_items[].kicker_phrases` — used by Sound for ASS word-highlight.
+- General rules — `rules/roles/scenarist.md`.
 
 ### Storyboarder
-- Anchor and existing reporters — taken from Supabase, do **not** regenerate
-- Only generate NB2 character sheet + avatar ref for **brand-new** reporters; upload to Supabase with tags `fun-news,avatar`
-- 9:16 (608×1080) avatar refs, frontal, teeth visible for lipsync
-- General rules — `rules/roles/storyboarder.md`
+- Anchor avatar — pulled from Supabase, do NOT regenerate.
+- Reporter base avatars — pulled from Supabase by `character_name` tag; generate sheet+ref only for brand-new reporters joining the pool.
+- **Per-episode on-location backgrounds (MANDATORY)** — NB2 edit using reporter base ref as `image_urls[0]`, with the news item's `location` in the prompt. Avoid the wording "Pixar 3D" if it pulls the model toward animated style — instead use "semi-realistic photographic cinematic quality, NOT cartoon, NOT illustration".
+- 9:16 (1080×1920) all images, frontal/three-quarter, teeth visible for lipsync.
+- Upload per-episode on-location images to Supabase as `refs/{character}-on-location-{topic}.png`.
+- General rules — `rules/roles/storyboarder.md`.
 
 ### Animator
-- **ONLY Kling Avatar v2 Standard**
-- `audio_url` and `image_url` — Supabase permanent URLs (no fal.ai temp)
-- `negative_prompt` mandatory
-- 1.3x speedup after generation
-- General rules — `rules/roles/animator.md`
+- **ONLY Kling Avatar v2 Standard.**
+- `audio_url` and `image_url` — Supabase permanent URLs (no fal.ai temp).
+- **Avatar v2 only takes `image_url` + `audio_url`** — no motion_prompt/negative_prompt parameters. The descriptive fields in storyboard.json are documentation hints, not API inputs.
+- Do NOT pre-encode 1.3× speedup as a separate -fast.mp4. Pass raw Avatar v2 output to Editor; speedup happens inside Editor's single-pass filter_complex.
+- After submission, store `request_id` per scene. **Download promptly** — fal GCs results after ~5–30 min; a GC'd result requires full re-render at $0.50–$1.00.
+- When downloading multiple scenes, use **explicit per-scene id mapping**. Bash off-by-one (`IDS=("" "a" "b" ...)` + `IDS[$((N-1))]`) is a documented anti-pattern. Prefer `declare -a IDS; IDS[1]=...; IDS[2]=...` indexing or zip the id and scene number in one structure.
+- General rules — `rules/roles/animator.md`.
 
 ### Sound
-- ElevenLabs TTS for each dialogue scene
-- ASS subtitles per-scene via `tools/add_subtitles.py --emit-ass-only --emphasis "<kicker phrases>"` (word-highlight on punchlines)
-- Music: comedic / lo-fi, `volume=0.15`
-- General rules — `rules/roles/sound.md`
+- ElevenLabs TTS for each of the 5 dialogue scenes. Voice settings: `stability: 0.55`, `style: omit` for anchor; `stability: 0.55` for reporters.
+- Use `voice` (name string), not `voice_id` hash.
+- Replace periods with commas/em-dashes in anchor lines where natural — periods bloat duration via TTS pause inflation.
+- Upload mp3s to Supabase `scenes/{date}/fun-news/scene-N.mp3` for use by Avatar v2 (permanent URLs).
+- ASS subtitles per-scene via `tools/add_subtitles.py --emit-ass-only --atempo 1.3 --emphasis "<kicker phrases from research.json>"`. Each scene's ASS lives at `build/scene-N.ass` and is burned in by Editor.
+- Music: pick from `music/tracks.json` where `use_for` includes `news` or mood is `fun/energetic/comedic`. Default `volume=0.15`.
+- General rules — `rules/roles/sound.md`.
 
 ### Editor
-- Download opener + CTA from Supabase, normalize
-- Canonical single-pass pipeline: per-scene ASS burn-in inside one filter_complex → concat (opener → scenes → CTA) → music → fade
-- General rules — `rules/roles/editor.md`
+- Canonical single-pass `filter_complex` (see `rules/roles/editor.md` §0). One ffmpeg call, no intermediate re-encodes.
+- Inputs: 5 scene mp4s + opener + cta + bg-music.
+- **Per-scene `apad=whole_dur=<sped_video_dur>` on audio** — non-negotiable. Without it, audio leads video by 3+ seconds by scene 5.
+- Per-scene ASS burn-in inside each `[vk]` branch BEFORE concat.
+- `adelay=2000|2000` on concat dialogue audio (matches 2s opener silence).
+- Fade-out on scene-5 video (last 1s before CTA) + afade-out on music.
+- `-t TOTAL_DUR` mandatory to cap on amix duration=longest.
+- Atomic finalize: write to `build/final.tmp.mp4`, ffprobe-validate, `mv` to `final.mp4`.
+- Upload to Supabase: bucket `videos`, path `videos/{GAME_TAG}/{YYYY-MM-DD}/fun-news_final.mp4`.
+- General rules — `rules/roles/editor.md`.
 
 ---
 
 ## Validation
 
-- [ ] `research.json` with 2–3 fictional items, each tied to a real canon fact
-- [ ] Anchor matches `anchor.character_name` from story bible (locked)
-- [ ] Reporters chosen by topic, refs present in Supabase OR explicitly generated in Phase 2
-- [ ] Opener and CTA downloaded from Supabase (not generated)
-- [ ] All dialogue scenes — Kling Avatar v2, nothing else
-- [ ] `negative_prompt` on all Avatar generations
-- [ ] 1.3x speedup on all Avatar clips
-- [ ] ASS subtitles per-scene with word-highlight on kicker phrases
-- [ ] `satire_angle` differs between adjacent scenes
-- [ ] No collision with `recent_topic_tags` / `recent_canon_facts` (last 5 episodes)
-- [ ] By-name handoffs in every scene transition
-- [ ] Final: 1080×1920, 30fps, 20–40s (excluding opener/CTA), budget < $4
+- [ ] `research.json` with 2–3 fictional items, each tied to a real canon fact + `location` + `kicker_phrases`.
+- [ ] Anchor matches `anchor.character_name` from story bible (locked).
+- [ ] Reporters chosen by topic; **on-location backgrounds generated this episode** (not bare base avatars).
+- [ ] On-location refs uploaded to Supabase (so debug runs and re-renders can refer to them).
+- [ ] Opener and CTA downloaded from Supabase (not generated this run).
+- [ ] All 5 dialogue scenes — Kling Avatar v2 with `image_url` + `audio_url` only.
+- [ ] 5-scene structure: anchor → R1 → anchor → R2 → anchor.
+- [ ] Adjacent reporter scenes (2 and 4) have different `satire_angle`.
+- [ ] Per-scene `apad=whole_dur=<sped_video_dur>` applied in Editor's filter_complex (verify by listening — if audio leads video, this is missing).
+- [ ] ASS subtitles per-scene with word-highlight on kicker phrases.
+- [ ] By-name handoffs in every scene transition.
+- [ ] No collision with `recent_topic_tags` / `recent_canon_facts` (last 5 episodes).
+- [ ] Voice settings: `stability: 0.55` for all; `style` omitted for anchor.
+- [ ] Final: 1080×1920, 30fps, ≤50s total (opener 2s + dialogue ~35s + CTA 5s), budget ≤ $4.50 hard cap.
 
 ---
 
 ## Anti-patterns
 
-- ❌ Using real patch notes / live web search results as news items (that's `news.md`, not Fun News)
-- ❌ Changing the anchor between episodes (anchor is locked per game)
-- ❌ Generating opener / CTA — always pulled from Supabase
-- ❌ Regenerating existing characters — anchor and known reporters are from Supabase
-- ❌ Subtitles on a concatenated video — burn ASS per-scene inside the single-pass filter_complex
-- ❌ 1.18x or 1.0x speedup — Fun News uses **1.3x** (ironic energetic delivery)
-- ❌ fal.ai temp URLs for Kling — only Supabase permanent URLs
-- ❌ `voice_id` hash — use `voice` name string
-- ❌ Repeating a canon fact or topic_tag used in the last 5 episodes
-- ❌ Same `satire_angle` on adjacent scenes
-- ❌ `-shortest` in FFmpeg (use `apad`)
+- ❌ Using real patch notes / live web search results as news items (that's `news.md`, not Fun News).
+- ❌ Changing the anchor between episodes (anchor is locked per game).
+- ❌ Generating opener / CTA per episode — they are one-time-per-game assets pulled from Supabase.
+- ❌ Bare character refs as reporter `image_url` — reporters must be **on-location** matching their news item. A reporter speaking about a closed conference shouldn't be standing on a starship bridge.
+- ❌ Pixar 3D / cartoon-style references for reporters when the game is semi-realistic — Avatar v2 mirrors the input style. Use photoreal-tagged refs and a "NOT cartoon, NOT illustration" prompt for on-location edits.
+- ❌ Anchor intro that teases item contents — kills the surprise. Hook the brand, not the news.
+- ❌ Anchor reaction scene that recaps the previous item — make it a dry put-down (`"Astonishing, as expected — {Next reporter}, you're up."`).
+- ❌ Daniel voice with `style: 0.8` / `stability: 0.2` — theatrical, slow. Use `stability: 0.55` + no `style`. Validated on pilot.
+- ❌ Too many periods in anchor lines — each `.` adds ~0.5s of TTS pause. Use commas and em-dashes.
+- ❌ Subtitles on a concatenated video — burn ASS **per-scene** inside the single-pass filter_complex.
+- ❌ 1.18× or 1.0× speedup — Fun News uses **1.3×** (ironic energetic delivery). 1.5× is the max where voice quality holds.
+- ❌ fal.ai temp URLs for Kling — only Supabase permanent URLs.
+- ❌ `voice_id` hash — use `voice` name string.
+- ❌ Repeating a canon fact or topic_tag used in the last 5 episodes.
+- ❌ Same `satire_angle` on adjacent reporter scenes.
+- ❌ Avatar v2 cost estimate based on "N × 5s clip" — **WRONG**. Avatar v2 is billed per **second of input audio**. A 17s mp3 input costs $0.95, not $0.28. Compute from word-budget table.
+- ❌ Pre-encoding `-fast.mp4` per scene (legacy multi-stage). Apply speedup inside Editor's single-pass `filter_complex` via `setpts=PTS/1.3` + `atempo=1.3` per `[vk]`/`[k:a]` branch.
+- ❌ Audio concat **without** per-scene `apad=whole_dur=<sped_video_dur>` — Avatar v2's trailing silence in video makes the audio run shorter than video per scene; concat without padding stacks the drift across all 5 scenes (up to 4s by the outro).
+- ❌ Bash off-by-one in scene-id arrays during download — prefer `declare -a IDS; IDS[N]=...` indexing or named structs over `IDS=("" "a" "b")` + `IDS[$((N-1))]`.
+- ❌ `-shortest` in FFmpeg (use `apad` and `-t TOTAL_DUR`).
+
+---
+
+## Pilot notes (for future format maintainers)
+
+The Star Trek Timelines episode 1 pilot (2026-05-26) burned $8.13 vs the original budget estimate of $1.40–$1.50. Root causes:
+
+1. **Cost-model error in original spec** — estimated Avatar v2 as 4 × 5s clips ($1.12), reality is 50s audio × $0.056 = $2.80. Spec budget table now reflects per-audio-second pricing.
+2. **Mid-flight requirement changes** — added on-location backgrounds (+$1.60), added 5th scene (+$0.21), trimmed/rewrote texts (+$0.40 in re-TTS). Future episodes assume on-location + 5-scene from the start.
+3. **fal.ai result GC** — Avatar v2 results expire after ~5–30 min if not downloaded; one scene was lost ($0.88 to resubmit). Animator role brief now explicitly calls out prompt download.
+4. **Off-by-one in download loop** — `IDS=("" "a" "b" ...)` + `IDS[$((N-1))]` shifted scene labels, requiring a re-investigation pass. Anti-pattern documented above.
+5. **Lipsync drift from apad omission** — first Editor pass produced 3s audio lead; fixed with per-scene `apad=whole_dur=<sped_video_dur>`. Anti-pattern documented.
+
+Steady-state episode 2 forecast (with prep in Supabase, on-location built into pipeline from start, no rework): **~$3.26**, under $4.50 hard cap.
