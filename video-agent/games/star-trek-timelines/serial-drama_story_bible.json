@@ -5,8 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 4,
-
+  "last_episode": 5,
   "characters": [
     {
       "name": "Kirk",
@@ -14,11 +13,13 @@
       "character_description": "semi-realistic Pixar 3D Captain James T. Kirk, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
       "voice": "Daniel",
       "elevenlabs_voice": "Daniel",
-      "status": "EP4: Confirmed Spock as the watcher. Learned from Spock that Scotty armed the weapons array and is on the bridge. Left Chekov under Worf's guard and sprinted alone toward the bridge with ~2 minutes before weapons fire.",
-      "aura_points": 750,
+      "status": "EP5: Burst onto the bridge with <1 minute to spare. Confronted Scotty. Scotty claims innocence. Saw the Fleet Admiral appear on the viewscreen — the conspiracy goes all the way to the top.",
+      "aura_points": 900,
       "relationships": {
         "Worf": "uneasy alliance — Worf told the truth at great personal cost",
-        "Chekov": "still fighting for him — refusing to abandon the mission"
+        "Chekov": "still fighting for him — refusing to abandon the mission",
+        "Scotty": "unknown — trust shattered, truth undetermined",
+        "Fleet Admiral": "confirmed enemy — appeared on viewscreen directly"
       }
     },
     {
@@ -51,34 +52,46 @@
       "character_description": "semi-realistic Pixar 3D Commander Spock, pointed Vulcan ears, sharply arched thick eyebrows, straight black bowl-cut hair, olive-tinted skin, calm emotionless expression with one eyebrow slightly raised, blue TOS science tunic with black collar and Starfleet delta badge, hands clasped behind back",
       "voice": "Brian",
       "elevenlabs_voice": "Brian",
-      "status": "EP4: Revealed as the watcher. Was running a Section 31 counter-operation. Gave Kirk the intel on Scotty and the weapons lock. Remained behind in the corridor after Kirk sprinted to the bridge.",
+      "status": "EP5: Remained in corridor guarding with Worf after Kirk sprinted ahead. Out of the bridge confrontation.",
       "aura_points": 900,
       "relationships": {
         "Kirk": "deep bond — acts independently but always in Kirk's interests",
         "Worf": "neutral — Worf accepted his identity without conflict"
       }
+    },
+    {
+      "name": "Scotty",
+      "role": "crew",
+      "character_description": "semi-realistic Pixar 3D Chief Engineer Montgomery Scott, stocky build, round friendly face now tense and alarmed, swept-back dark hair with grey temples and short sideburns, wide desperate eyes, TOS red engineering tunic with black collar and Starfleet delta badge, hands raised in protest",
+      "voice": "George",
+      "elevenlabs_voice": "George",
+      "status": "EP5: Found at weapons console when Kirk burst onto the bridge. Claims he did not arm the weapons — someone locked him out remotely. Guilt or innocence unresolved.",
+      "aura_points": 300,
+      "relationships": {
+        "Kirk": "loyal engineer — or the mole? unresolved"
+      }
     }
   ],
-
   "active_loops": [
-    "major: Is Scotty truly the mole — or was Spock's intel wrong/planted?",
-    "major: Kirk alone on the bridge with 2 minutes before weapons fire on allied ship",
-    "major: Enterprise weapons array locked on allied vessel — will Kirk stop it in time?",
-    "major: Section 31 conspiracy — how deep does it go?",
+    "major: Is Scotty truly the mole — or was the remote lockout real?",
+    "major: Fleet Admiral watching in real-time — who else on the ship reports to him?",
+    "major: Weapons array still locked — will it fire?",
+    "major: Section 31 conspiracy — the Fleet Admiral is personally involved",
     "eternal: Kirk always fights for his crew against the system"
   ],
   "closed_loops": [
     "minor: Is Worf loyal? — RESOLVED: yes",
     "minor: Is Chekov alive? — RESOLVED: yes, found in airlock chamber",
-    "minor: Who is the watcher? — RESOLVED EP4: it was Spock, running a Section 31 counter-operation"
+    "minor: Who is the watcher? — RESOLVED EP4: it was Spock, running a Section 31 counter-operation",
+    "minor: Kirk reaches the bridge before weapons fire — RESOLVED EP5: yes, but weapons still locked"
   ],
-
   "world_state": {
-    "location": "Enterprise Airlock Corridor",
+    "location": "Enterprise Bridge",
     "important_items": [
-      "Airlock door — just switched SEALED → UNLOCKED by itself, green indicator glowing",
-      "PADD with Fleet Admiral's signed Section 31 kill order — on corridor console",
-      "Chekov behind the unlocked door — fate unknown"
+      "Weapons array still locked on allied Starfleet escort vessel",
+      "Fleet Admiral appeared on viewscreen — watching in real time",
+      "Weapons console — Scotty claims he was locked out remotely",
+      "Countdown timer was in low 00:20s when Admiral appeared"
     ],
     "key_events": [
       "EP1: Worf executed airlock procedure on Chekov on Fleet Admiral's orders",
@@ -94,28 +107,37 @@
       "EP4: Spock told Kirk: 'The weapons array was armed six minutes ago. Scotty is on the bridge.'",
       "EP4: Kirk asked 'How long do we have.' Spock: 'Approximately two minutes, Captain.'",
       "EP4: Kirk ordered Worf to guard Chekov and sprinted alone down the corridor toward the bridge.",
-      "EP4: Enterprise weapons array locked on allied Starfleet vessel USS [escort ship] — amber targeting confirmed."
+      "EP4: Enterprise weapons array locked on allied Starfleet vessel USS [escort ship] — amber targeting confirmed.",
+      "EP5: Kirk burst through bridge blast doors with under 2 minutes left.",
+      "EP5: Scotty claims he did not arm the weapons — someone locked him out remotely.",
+      "EP5: The Fleet Admiral appeared on the Enterprise viewscreen unprompted. Calm. Watching.",
+      "EP5: Cliffhanger — Fleet Admiral said \"Captain\" and the countdown was at 00:11."
     ]
   },
-
   "anti_repetition": {
     "recent_phrases": [
-      "Whoever opened that door is watching us right now, Captain.",
-      "Then they're watching me walk through it.",
-      "Chekov. I've got you.",
-      "Captain... it's someone on your crew.",
-      "Now you see, Captain. We are both dead.",
-      "The order. Show me.",
       "It was Section 31.",
       "The weapons array was armed six minutes ago, Captain. Scotty is on the bridge.",
       "How long do we have.",
       "By my estimate... approximately two minutes, Captain.",
-      "Worf. You stay with him. No one in or out."
+      "Worf. You stay with him. No one in or out.",
+      "Scotty. Step away from that console.",
+      "Captain — I didn't arm them. Someone locked me out.",
+      "Captain."
     ],
-    "recent_hooks": ["physical-confrontation-action", "watcher-reveal-silhouette", "vulcan-corridor-reveal"],
-    "recent_cliffhangers": ["autonomous-system-betrayal", "unknown-watcher-reveal", "ship-weapons-locked-on-allied-vessel"]
+    "recent_hooks": [
+      "physical-confrontation-action",
+      "watcher-reveal-silhouette",
+      "vulcan-corridor-reveal",
+      "corridor-sprint-multi-shot"
+    ],
+    "recent_cliffhangers": [
+      "autonomous-system-betrayal",
+      "unknown-watcher-reveal",
+      "ship-weapons-locked-on-allied-vessel",
+      "authority-figure-live-comms-reveal"
+    ]
   },
-
   "episode_summaries": [
     {
       "episode": 1,
@@ -148,6 +170,14 @@
       "cliffhanger": "Exterior shot: Enterprise weapons array locks on an allied Starfleet escort vessel. Amber targeting reticle confirmed. Kirk is still running.",
       "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-25/serial-drama-en-ep4_final.mp4",
       "duration_sec": 44
+    },
+    {
+      "episode": 5,
+      "language": "en",
+      "summary": "Kirk bursts onto the bridge in time. Scotty is at the weapons console but claims he was locked out — someone has remote access. The weapons array stays locked on the allied vessel. Then the viewscreen activates: the Fleet Admiral appears, calm and watching. He says one word.",
+      "cliffhanger": "Fleet Admiral appears on viewscreen — \"Captain.\" Countdown at 00:11.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-27/serial-drama-en-ep5_final.mp4",
+      "duration_sec": 36
     }
   ]
 }
