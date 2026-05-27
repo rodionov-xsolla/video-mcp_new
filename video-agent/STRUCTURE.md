@@ -127,7 +127,8 @@ video-agent/
 │       ├── dance-battle.md      # Комедийные танцевальные батлы
 │       ├── character-story.md   # Лор-монолог персонажа
 │       ├── motion-dance.md     # Motion transfer танец с реф-видео
-│       └── what-if-real-life.md # «Что если бы персонаж попал в реальную жизнь» (Spock-бариста, Kratos-воспитатель, ...)
+│       ├── what-if-real-life.md # «Что если бы персонаж попал в реальную жизнь» (Spock-бариста, Kratos-воспитатель, ...)
+│       └── top-list.md          # TOP-5 countdown персонажей / локаций / предметов
 │
 ├── games/
 │   ├── mlbb/
