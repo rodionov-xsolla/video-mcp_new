@@ -420,17 +420,25 @@ Order:
 3. If neither has it — generate character sheet (NB2 text-to-image) + avatar ref (NB2 edit with sheet as ref)
 3. **MANDATORY: upload to Supabase** immediately after generation:
    ```bash
-   # Character sheet
-   bash queue/upload-asset.sh "{GAME_TAG}" "{char-name}" "generated_ref" ./sheet.png \
-     --tags "{format},character-sheet"
-   # Avatar ref (for Kling Avatar formats)
-   bash queue/upload-asset.sh "{GAME_TAG}" "{char-name}" "avatar_ref" ./avatar-ref.png \
-     --tags "{format},avatar"
-   # Character ref (single-figure for I2V chain)
-   bash queue/upload-asset.sh "{GAME_TAG}" "{char-name}" "reference_image" ./character-ref.png \
-     --tags "{format},character-ref"
+   # Character sheet (canonical)
+   bash queue/upload-asset.sh --kind character --game {GAME_TAG} --slug {slug} \
+     ./sheet.png --tags "{format},character-sheet"
+   # Character variant (young / mature / borg / prophet / cadet / child / adult / ...)
+   bash queue/upload-asset.sh --kind character --game {GAME_TAG} --slug {slug} \
+     --variant {variant} ./variant.png --tags "{format}"
+   # Avatar ref (Kling Avatar v2)
+   bash queue/upload-asset.sh --kind avatar --game {GAME_TAG} --slug {slug} \
+     ./avatar.png --tags "{format},avatar"
+   # Location bg-ref (slug WITHOUT bg- prefix)
+   bash queue/upload-asset.sh --kind location --game {GAME_TAG} --slug {loc-slug} \
+     ./bg.png --tags "{format}"
+   # Branding (cta, opener, title-card)
+   bash queue/upload-asset.sh --kind branding --game {GAME_TAG} --name opener-{format} \
+     ./opener.mp4 --tags "{format},opener"
    ```
-   **Without Supabase upload generation is incomplete.** The next agent will not find the asset and will regenerate = money down the drain.
+   **Без Supabase upload генерация неполная.** Следующий агент не найдёт ассет и перегенерит = деньги в трубу.
+
+   > Per-episode scene PNG / TTS — **другой kind**: `--kind episode-scene` / `episode-tts` с `--episode {YYYY-MM-DD}-{format}`. Эти файлы пишутся в bucket `episodes/`, в `game_assets` НЕ регистрируются (одноразовый эпизодный мусор).
 
 Applies to ALL formats: news (anchor + co-anchor), serial-drama (multiple characters), gameplay-ai-avatar (avatar), character-story (hero), standard (characters).
 
