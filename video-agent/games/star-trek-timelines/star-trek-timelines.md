@@ -45,8 +45,10 @@
 
 ### Prompt prefix
 ```
-Star Trek Timelines style, semi-realistic sci-fi character portrait, LCARS interface aesthetic, deep space background, dramatic cinematic lighting, Starfleet uniform details
+Star Trek Timelines style, semi-realistic sci-fi character portrait, cinematic Federation lighting, deep space environment, Starfleet uniform details, clean cinematic frame, no UI overlay
 ```
+
+> ⚠️ В prefix описываем **стиль** (свет, палитра, художественное направление), не диегетический UI. Слова `LCARS interface aesthetic`, `HUD`, `text overlay`, `panel borders` сюда не пихать — NB2 трактует их буквально и рисует UI поверх лица. LCARS-панели рисуем локально в `environment_state` тех сцен, где они нужны (title card, DS9 Ops).
 
 ---
 
