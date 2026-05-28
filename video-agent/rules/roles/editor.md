@@ -526,6 +526,14 @@ python3 tools/add_subtitles.py \
 
 3. **Opaque box (BorderStyle=4) — НЕ во всю ширину кадра.** Бокс ASS обрамляет только текст + outline-padding. Никаких `drawbox` во всю ширину 1080 — это режет картинку. Если артефакт шире саба — увеличь `--secondary-style` font size или разбей фразу на длиннее чанк, но не делай full-width drawbox.
 
+4. **Субтитры НЕ должны заходить на CTA.** Последнее ASS-событие в `subs.ass` должно заканчиваться не позже `MAIN_DUR` (конец последнего story-клипа, до CTA). `add_subtitles.py` генерирует тайминги по TTS, и если TTS-аудио после atempo+adelay длиннее `MAIN_DUR`, последний chunk автоматически вылазит за границу. После генерации ASS **всегда проверяй** конечный таймкод последнего `Dialogue:` события: если он > `MAIN_DUR`, обрежь его:
+   ```bash
+   # Пример: MAIN_DUR=40s → обрезать последний event
+   sed -i '' "s/\(Dialogue:.*\),0:MM:SS\.ss,\(Default.*\)$/.../" build/subs.ass
+   # Или вручную отредактируй последнюю строку в build/subs.ass
+   ```
+   CTA — отдельный branded ролик без субтитров. Субтитры на CTA = брак.
+
 ### 6.4 Programmatic self-eval после бёрна
 
 После того как final.mp4 собран, перед handoff Manager'у — три программные проверки:

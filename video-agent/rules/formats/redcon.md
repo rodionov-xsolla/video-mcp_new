@@ -195,6 +195,25 @@ Format-specific parameters to compute and pass into §0:
 
 ASS generation: `tools/add_subtitles.py` against `tts-output.mp3` PRE-shaped (atempo applied, then 5 s adelay prepended), so the ASS timeline matches what §0 feeds the `ass=` filter.
 
+**Title card text (MANDATORY) — через ASS, не через drawtext или overlay.**
+`title_lines` из `storyboard.json` (clip 1) рендерятся как отдельные `Dialogue:` события в том же `subs.ass` — ровно тот же механизм что и субтитры, просто крупнее и с позиционированием через `\pos`. Добавить 4 события (по числу строк) с таймингами `0:00:00.50–0:00:04.80` (чуть позже старта, исчезают до конца title card):
+
+```ass
+Dialogue: 0,0:00:00.50,0:00:04.80,Default,,0,0,0,,{\an5\pos(540,720)\fs65\c&H00FFFFFF&}WHAT IF:
+Dialogue: 0,0:00:00.50,0:00:04.80,Default,,0,0,0,,{\an5\pos(540,870)\fs165\c&H00FFFFFF&}{CHARACTER NAME}
+Dialogue: 0,0:00:00.50,0:00:04.80,Default,,0,0,0,,{\an5\pos(540,1010)\fs65\c&H00FFFFFF&}BECAME
+Dialogue: 0,0:00:00.50,0:00:04.80,Default,,0,0,0,,{\an5\pos(540,1115)\fs100\c&H0000D7FF&}{ALTERNATE FATE}
+```
+
+- `\an5` = center alignment, `\pos(540, y)` = horizontal center в 1080px кадре
+- Строка 1 "WHAT IF:" — `\fs65`, белый `\c&H00FFFFFF&`
+- Строка 2 имя персонажа — `\fs165`, белый (крупнее всего)
+- Строка 3 "BECAME" — `\fs65`, белый
+- Строка 4 альт-судьба — `\fs100`, золотой `\c&H0000D7FF&` (ASS BGR для `#FFD700`)
+- y-позиции рассчитаны для PlayResY=1920; суммарный блок ~400px, центрирован чуть выше середины кадра
+
+Эти события добавляются **в начало** `[Events]` секции (до первого subtitle-события) чтобы Layer=0 совпадал и порядок был предсказуем.
+
 General rules — `rules/roles/editor.md`
 
 ---
