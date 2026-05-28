@@ -1,3 +1,11 @@
+---
+subtitle_style: bold
+subtitle_offset_s: 0
+subtitle_mask: false
+subtitle_highlight: false
+subtitle_extras: []
+---
+
 # Format "Dance Battle" — comedic dance battles
 
 Two characters compete in a dance battle on stage. Contrast between effort and absurdity is the main source of humor. No speech, only SFX + music.

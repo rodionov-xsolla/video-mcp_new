@@ -121,7 +121,33 @@ If output of one stage (TTS, images) is needed as input for the next expensive s
 **Output:** `scenes/scene-K/scene-K.mp4` + `.mp3` per dialogue clip.
 
 ### PHASE 4 — Assembly
-Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude/agents/editor.md`). Sub-agent loads `rules/roles/editor.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute), `OPENER_PATH` / `CTA_PATH` if applicable. All scene MP4s and audio tracks are already on disk in `OUTPUT_DIR/scenes/`. Template: `prompts/editor.txt`.
+Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude/agents/editor.md`). Sub-agent loads `rules/roles/editor.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute), `OPENER_PATH` / `CTA_PATH` if applicable, **+ subtitle parameters parsed from format front-matter (см. ниже)**. All scene MP4s and audio tracks are already on disk in `OUTPUT_DIR/scenes/`. Template: `prompts/editor.txt`.
+
+**Subtitle parameters — оркестратор парсит, editor не читает форматы.**
+
+В начале каждого `rules/formats/${FORMAT}.md` лежит YAML front-matter блок:
+
+```yaml
+---
+subtitle_style: bold        # bold | narrative | none | custom
+subtitle_offset_s: 0        # 5 для redcon / what-if-lore (титульная карточка)
+subtitle_mask: false        # true для what-if-real-life (маска артефактов)
+subtitle_highlight: false   # true для gameplay-ai-avatar, reddit-story (word-by-word)
+subtitle_extras: []         # дополнительные CLI-флаги, напр. ["--secondary-style", "Customer=lightgray,52,1,120"]
+---
+```
+
+Перед запуском editor sub-agent'а:
+1. Прочитай первые ~10 строк `rules/formats/${FORMAT}.md`, извлеки front-matter (между двумя `---`).
+2. Прокинь editor'у в `prompt`:
+   - `SUBTITLE_STYLE` (строка)
+   - `SUBTITLE_OFFSET_S` (число)
+   - `SUBTITLE_MASK` (`true` / `false`)
+   - `SUBTITLE_HIGHLIGHT` (`true` / `false`)
+   - `SUBTITLE_EXTRAS` (строка с уже склеенными флагами; пустая если массив пустой)
+3. Editor НЕ читает `rules/formats/*.md` ради субтитров — у него только эти 5 переменных.
+
+Если у формата нет front-matter (legacy формат) — дефолт `subtitle_style=bold`, остальные пустые. **Но это переходный режим — все 14 форматов должны иметь front-matter.** Если видишь legacy — попроси меня (юзера) обновить формат.
 
 **Post-Editor layout check.** After the sub-agent returns, run `ls "$OUTPUT_DIR"` and verify only `final.mp4`, `storyboard.json`, `scenes/`, optional `recap/` / `_archive/` are at the root. Any other file (concat lists, intermediate renders, temp audio, ad-hoc scripts/logs) must live under `OUTPUT_DIR/build/`. If something leaked to root, move it into `build/` yourself before Phase 5 — do not re-invoke the sub-agent for this.
 

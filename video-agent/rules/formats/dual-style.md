@@ -1,3 +1,11 @@
+---
+subtitle_style: none
+subtitle_offset_s: 0
+subtitle_mask: false
+subtitle_highlight: false
+subtitle_extras: []
+---
+
 # Format "Dual-Style" — cartoon + realistic
 
 In one frame: cartoon/chibi game character next to its photorealistic human "twin". Style contrast is the main device.

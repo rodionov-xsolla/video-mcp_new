@@ -11,7 +11,8 @@ LOAD AND FOLLOW (in this exact order):
 2. tools/ffmpeg-api.md — FFmpeg Cloud API reference (use only when local FFmpeg cannot do the job)
 3. rules/main/budgets.md — cost limits for ${FORMAT}
 4. rules/main/validation.md — validation policy (default: programmatic only, no Read of binaries)
-5. rules/formats/${FORMAT}.md — Editor brief specific to this format (sections "Editor", "Output files", "Validation")
+5. rules/formats/${FORMAT}.md — Editor brief specific to this format (sections "Editor", "Output files", "Validation").
+   **ВАЖНО:** ради субтитров формат НЕ читай — стиль/offset/mask/highlight передаёт оркестратор в плейсхолдерах ниже.
 
 DO NOT load:
 - rules/roles/manager.md (not your job)
@@ -49,6 +50,17 @@ PARAMETERS:
 - Format: ${FORMAT}
 - Output dir: ${OUTPUT_DIR}
 - Task ID (for status updates): ${TASK_ID:-<none>}
+
+SUBTITLE PARAMETERS (от оркестратора — не читай ради этого формат-файл):
+- SUBTITLE_STYLE: ${SUBTITLE_STYLE:-bold}        # bold | narrative | none | custom
+- SUBTITLE_OFFSET_S: ${SUBTITLE_OFFSET_S:-0}     # pre-delay в секундах (5 для титульной карточки)
+- SUBTITLE_MASK: ${SUBTITLE_MASK:-false}         # true → BorderStyle=4 (маска артефактов)
+- SUBTITLE_HIGHLIGHT: ${SUBTITLE_HIGHLIGHT:-false} # true → word-by-word акцент
+- SUBTITLE_EXTRAS: ${SUBTITLE_EXTRAS:-}          # доп. CLI-флаги: "--secondary-style Customer=lightgray,52,1,120"
+
+Если SUBTITLE_STYLE = `none` → не генерируй ASS, не добавляй `ass=` фильтр в filter_complex.
+Если SUBTITLE_STYLE = `custom` → форматные drawtext-оверлеи (top-list графика #N + {NAME}) описаны в правиле формата как graphic overlays (не путать с субтитрами).
+Иначе → вызывай `tools/add_subtitles.py` с этими параметрами (см. editor.md §6.2).
 
 CONSTRAINTS:
 - WORKSPACE LAYOUT: write every scratch file (concat lists, intermediate MP4s, normalized assets, temp audio, ad-hoc scripts/logs) under ${OUTPUT_DIR}/build/. The OUTPUT_DIR root must end up with only final.mp4, storyboard.json, scenes/, and optional recap/_archive/. See editor.md "Workspace layout (MANDATORY)" + final checklist.

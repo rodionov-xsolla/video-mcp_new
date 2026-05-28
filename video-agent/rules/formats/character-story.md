@@ -1,3 +1,11 @@
+---
+subtitle_style: narrative
+subtitle_offset_s: 0
+subtitle_mask: false
+subtitle_highlight: false
+subtitle_extras: []
+---
+
 # Format "Character Story" — first-person lore monologue with visualization
 
 A tightly-cut lore video: the character tells their story in first person while Kling I2V visualizes the key moments. TTS overlay on silent picture; subtitles via `add_subtitles.py` (whisper word-timestamps → ASS chunks of 3 words, burned in before audio mix).

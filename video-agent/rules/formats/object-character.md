@@ -1,3 +1,11 @@
+---
+subtitle_style: bold
+subtitle_offset_s: 0
+subtitle_mask: false
+subtitle_highlight: false
+subtitle_extras: []
+---
+
 # Format "Object Character" — anthropomorphic objects
 
 A household item with a strong emotion delivers a 10-second first-person monologue. A fork with eyes, a tired mug, an angry slipper.

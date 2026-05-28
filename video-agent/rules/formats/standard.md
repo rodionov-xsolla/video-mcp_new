@@ -1,3 +1,11 @@
+---
+subtitle_style: bold
+subtitle_offset_s: 0
+subtitle_mask: false
+subtitle_highlight: false
+subtitle_extras: []
+---
+
 # Format "Standard" — universal I2V
 
 Universal default format: action, standup, guides, ratings, trailers. Picked when the idea doesn't fit specialized formats.
