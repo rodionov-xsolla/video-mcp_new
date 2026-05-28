@@ -17,6 +17,7 @@ From Manager:
 ## Outputs
 
 - `scenes/scene-K/scene-K.mp3` — TTS audio per dialogue clip (for Animator → Kling Avatar)
+- `scenes/scene-K/scene-K.timings.json` — word-level timings (для редактора, см. §11)
 - `bg-music.mp3` — background music (optional)
 
 ---
@@ -188,63 +189,25 @@ Do not write stage directions inside the text (`[angry]`, `(whispers)`) — the 
 
 ---
 
-## 8. Subtitles — ALWAYS via `add_subtitles.py` (whisper + ASS), NEVER PIL PNG by clip
+## 8. Subtitles — твоя задача только эмитить тайминги, бёрнит Editor
 
-**Banned:** generating subtitle PNGs by `tts_segment` boundaries (one big PNG per 5s clip with full sentence). It produces 13-word, 3-line subs glued to clip duration — unreadable, ignores actual speech timing. **Don't do this. Ever.**
+**Sound не запускает Whisper, не генерирует PNG, не бёрнит ASS.** Стилевой выбор делает оркестратор по front-matter формата (см. `rules/roles/manager.md`). Editor читает стиль от оркестратора и бёрнит ASS канонически. Подробнее — `rules/roles/editor.md` §0 + §subtitles.
 
-**Mandatory tool:** `tools/add_subtitles.py` — `faster-whisper` word_timestamps → ASS chunks (default 3 words) → ffmpeg burn-in. Style: `Arial Bold 72px`, white + 8px black outline, MarginV 200, bottom-center. Optional `--emphasis "phrase1,phrase2"` for yellow italic on scenarist-marked phrases. Optional `--tbc` for `TO BE CONTINUED…` after last chunk.
+**Твой единственный артефакт по сабам — `scene-K.timings.json` рядом с каждым `scene-K.mp3` (см. §11 ниже).**
 
-There are **two pipelines**, pick by format:
+### Запрещено
 
-### 8A. Multi-voice (Avatar dialogues, multiple characters per video)
+- ❌ Генерация PNG-сабов на границу `tts_segment` (нечитаемо).
+- ❌ Прямой запуск `faster-whisper` (он у нас в fallback и медленный — мы знаем текст из `tts`).
+- ❌ Любая запись `*.ass` файлов из sound — это работа editor'а.
 
-Formats: serial-drama, news, gameplay-ai-avatar (multi-character), object-character (when both objects speak), reddit-story (with character voice + narrator).
+### Audio/video duration mismatch — speed control
 
-Whisper on a concat of mixed voices skips entire scenes (different timbres + silence joints break VAD). **Subtitle per scene, then concat the subtitled clips:**
+Если `dur(tts) > dur(video_timeline)` — Editor применит `atempo` к TTS (cap **1.4×**; выше деградирует голос). Тайминги в `timings.json` пишутся для **оригинального** mp3 (без atempo) — Editor сам пересчитает через `--atempo` в `add_subtitles.py`.
 
-```bash
-# Per dialogue scene (input: video already at 1080×1920, mp3 = the line spoken in that scene):
-python3 tools/add_subtitles.py \
-  scenes/scene-K/scene-K-scaled.mp4 \
-  scenes/scene-K/scene-K.mp3 \
-  scenes/scene-K/scene-K-sub.mp4 \
-  --chunk 3 --emphasis "keyword1,keyword2" \
-  --fontsize 72 --marginv 200 --lang en --no-scale
+Если `dur(tts) < dur(video_timeline)` — Editor расширит последний клип freeze-frame'ом; **не** допы тишиной в начале TTS.
 
-# Editor concat: title-card-scaled.mp4 + scene-1-sub.mp4 + scene-2-sub.mp4 + ...
-```
-
-### 8B. Single-voice narration (one TTS track over the whole video)
-
-Formats: character-story, dance-battle (narrator), motion-dance (narrator), reddit-story (single-narrator variant), any future format with one voice end-to-end.
-
-TTS is generated as ONE coherent monologue and overlaid on the concatenated picture. Run whisper ONCE on the full mp3 → single ASS over the concat:
-
-```bash
-# After Editor produces the picture-only concat (no audio yet):
-python3 tools/add_subtitles.py \
-  build/concat-noaudio.mp4 \
-  tts-output.mp3 \
-  build/concat-subbed.mp4 \
-  --chunk 3 --emphasis "..." \
-  --fontsize 72 --marginv 200 --lang en --no-scale
-
-# Then Editor mixes TTS + music on top of concat-subbed.mp4.
-```
-
-**Why single-voice can do whole-track whisper:** one timbre, no silence-at-joint problem (concat is uninterrupted picture, the audio is one continuous file). Word-timestamps are accurate.
-
-### 8C. Audio/video duration mismatch — speed control
-
-If `dur(tts) > dur(video_timeline)` — Editor applies `atempo` to TTS (cap **1.4×**; above that voice quality degrades). Whisper still runs on the ORIGINAL mp3, but ASS event times are scaled by `1/atempo` before burn-in. The script accepts `--atempo N.NN` for this — pass it in.
-
-If `dur(tts) < dur(video_timeline)` — Editor extends the last clip via freeze-frame or stretches a low-motion clip; do NOT pad TTS with silence at the head.
-
-If mismatch > 40% — go back to Scenarist, do not paper over with atempo.
-
-### 8D. Validate every rendered subtitle mp4
-
-`add_subtitles.py` writes to `*.tmp.mp4`, ffprobes it, checks duration matches input within 0.5s, then atomically renames. If your subagent runs in a sandbox with a process timeout and ffmpeg is killed mid-encode, the script will exit with `ERROR: output duration ... — encode was killed mid-stream` and the partial file is removed — re-run is safe. If you ever see a final `*.mp4` whose size is dramatically smaller than its sibling variant, ffprobe it BEFORE handing off to Editor — a missing `moov atom` means the encode was truncated.
+Если несоответствие > 40% — обратно к Scenarist, не маскировать atempo.
 
 ---
 
@@ -285,53 +248,11 @@ Hand off to Editor:
 
 ---
 
-## 10. ASS subtitle invariants (Sound writes the ASS, Editor burns it in)
+## 10. ASS subtitle invariants — переехали в editor.md
 
-When Sound writes ASS files for Editor to burn in (or burns them directly), the following invariants are **non-negotiable**. Each was paid for in a real rebuild.
+ASS-инварианты (no event overlap, last-event reaches clip end, MarginV direction, opaque box не во всю ширину) — это работа Editor, см. `rules/roles/editor.md` §subtitles. Sound не пишет ASS.
 
-### 10.1 No event overlap within the same Style
-
-Events in `[Events]` for the same `Style:` MUST NOT overlap by time. Two `Dialogue:` events both timed `0:00:00.00 → 0:00:06.60` will render simultaneously — text scrambles, word order looks broken to the viewer.
-
-Validation (run before handoff):
-```python
-# pseudocode
-events = parse_ass_events(path)
-for style, evs in group_by_style(events).items():
-    evs.sort(key=lambda e: e.start)
-    for prev, nxt in zip(evs, evs[1:]):
-        assert prev.end <= nxt.start, f"{style}: {prev.end} > {nxt.start}"
-```
-
-If a line is too long for one event — split into N sequential events (e.g. `0–3.30`, `3.30–6.60`), not two overlapping ones.
-
-### 10.2 Last subtitle must reach end of clip (when masking artifacts)
-
-If the subtitle's job is also to **mask** a generation artifact (e.g. CJK text hallucination from Kling Avatar v2 at the bottom of the frame), the last event's `end` MUST be ≥ clip_duration − 0.05s. Don't drop the subtitle when speech ends — the artifact stays visible during the trailing silence.
-
-If actual speech is shorter than the clip, either:
-- Extend the last event's `end` to clip end (text stays on screen during silence — acceptable for short tail), OR
-- Add a final empty-text event with the same Style covering the tail (keeps the opaque box without showing words)
-
-### 10.3 Alignment=2 + MarginV — direction is FROM the bottom
-
-For `Alignment: 2` (bottom-center), `MarginV` is the distance **from the BOTTOM of the frame in pixels**, not from the top. Bigger MarginV = subtitle higher on screen. Smaller MarginV = subtitle lower (closer to the bottom edge).
-
-If you need the subtitle to **cover** an artifact near the very bottom of a 1920-tall frame (y ≈ 1700–1850), MarginV should be SMALL (≈ 70–150), NOT large. "Raise the subtitle to cover the artifact" is the wrong mental model when the artifact is below the subtitle — you need to LOWER MarginV to push the subtitle down onto the artifact.
-
-Always cross-check by extracting one frame at the subtitle's `start` and visually confirming the subtitle box covers the artifact pixels.
-
-### 10.4 Opaque box without full-frame cover
-
-To mask an artifact behind subtitles, use ASS `BorderStyle=4` (opaque box that hugs text width, plus the configured outline/shadow padding). Do **not** use a full-width drawbox over the entire frame width — that cuts the visible picture for no reason and users hate it. If the artifact is wider than the text, increase font size or split into a wider phrase, but do not extend the box to the full 1080 px width unless the user explicitly asks.
-
-Style fragment that produces a tight opaque box behind text:
-```
-Style: Name,Montserrat,60,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,4,0,0,2,80,80,120,1
-                                                                                          ^BorderStyle=4         ^Alignment=2  ^MarginV
-```
-
-### 10.5 Music tone must match format mood
+## 11. Music tone must match format mood
 
 Pick `bg-music.mp3` from the folder that matches the format's emotional register, not from the whole library. Quick mapping:
 
@@ -343,3 +264,50 @@ Pick `bg-music.mp3` from the folder that matches the format's emotional register
 | `music/Tense/` | serial-drama (cliffhanger), action recap |
 
 If the format is comedic and the picked track is melancholic/ambient — the whole video reads wrong. Re-pick before handing off.
+
+---
+
+## 12. `scene-K.timings.json` — word-level тайминги для Editor
+
+После генерации каждого `scene-K.mp3` (TTS) — рядом сохрани `scene-K.timings.json`. **Без Whisper.** Тайминги вычисляются пропорционально из известного текста (поле `tts` в storyboard.json) и длительности MP3.
+
+### Команда
+
+```bash
+python3 tools/add_subtitles.py \
+  - scenes/scene-K/scene-K.mp3 scenes/scene-K/scene-K.timings.json \
+  --emit-timings \
+  --text "$(jq -r '.clips[K].tts' storyboard.json)"
+```
+
+Аргумент `video` = `-` (его нет на этом этапе). Длительность MP3 берётся через `ffprobe`. Текст обязателен.
+
+### Формат файла
+
+```json
+{
+  "duration_s": 4.23,
+  "text": "Точный текст, поданный в TTS.",
+  "words": [
+    {"text": "Точный", "start": 0.000, "end": 0.825},
+    {"text": "текст,", "start": 0.825, "end": 1.587},
+    {"text": "поданный", "start": 1.587, "end": 2.762},
+    {"text": "в",        "start": 2.762, "end": 2.987},
+    {"text": "TTS.",     "start": 2.987, "end": 4.230}
+  ]
+}
+```
+
+`words[*].text` — токен ровно как в исходном тексте (с пунктуацией). Тайминги покрывают `[0, duration_s]` без зазоров.
+
+### Зачем это нужно Editor'у
+
+1. **Бёрн ASS без Whisper-fallback** — Editor вызывает `add_subtitles.py --text "..."` напрямую (или читает уже готовый JSON, если он есть).
+2. **Snap-to-word-boundary при тримминге** — если Editor подрезает хвост клипа под музыку, он snap'ит к ближайшей `word.end ≤ target`.
+
+### Контракт
+
+- ОБЯЗАТЕЛЬНО для каждой сцены с непустым `tts`.
+- Пишется в `scenes/scene-K/scene-K.timings.json` (рядом с mp3).
+- Перед handoff Manager'у — `ls scenes/scene-*/scene-*.timings.json` должен совпадать по количеству с `scene-*.mp3` (тех, что имеют диалог).
+- Если у сцены `tts` пустой (silent I2V / physical-gag) — `timings.json` НЕ пишется.

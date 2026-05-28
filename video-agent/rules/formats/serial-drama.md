@@ -1,3 +1,11 @@
+---
+subtitle_style: bold
+subtitle_offset_s: 0
+subtitle_mask: false
+subtitle_highlight: false
+subtitle_extras: []
+---
+
 # Format "Serial Drama" — serial micro-dramas
 
 Serial micro-dramas with brainrot aesthetic and an endless plot. Each episode = 25–40 seconds, 3–5 clips, cliffhanger at the end.

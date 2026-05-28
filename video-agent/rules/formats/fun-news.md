@@ -1,3 +1,11 @@
+---
+subtitle_style: bold
+subtitle_offset_s: 0
+subtitle_mask: false
+subtitle_highlight: false
+subtitle_extras: []
+---
+
 # Format "Fun News" — Fictional ironic news from a game's lore
 
 > **Single video model — Kling Avatar v2 Standard.** Opener and CTA — pre-built from Supabase. Anchor — locked per game in story bible. Reporters — variable, pulled from Supabase by topic. Tone — ironic/satirical/absurd mix.

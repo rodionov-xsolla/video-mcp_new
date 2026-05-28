@@ -420,172 +420,138 @@ CTA (custom or fallback) is added AFTER the last clip in the concat list.
 
 ---
 
-## 6. Subtitles — Editor generates and overlays
+## 6. Subtitles — единый канонический путь
 
-Editor owns the entire process: takes text from `storyboard.json`, generates timings/PNG/SRT, overlays on the video. **Sound is not involved.**
+Стиль субтитров определяет **оркестратор** через front-matter формата (`subtitle_style`, `subtitle_offset_s`, `subtitle_mask`, `subtitle_highlight`, `subtitle_extras`). Editor получает их в виде плейсхолдеров `${SUBTITLE_*}` и просто прокидывает в `tools/add_subtitles.py`. Никаких форматных таблиц «serial-drama vs reddit-story» здесь больше нет — это работа `manager.md`.
 
-### 6.0 ASS subtitles for canonical pipeline (§0) — `--emit-ass-only`
+### 6.0 Три hard-rules (нарушение → silent failure)
 
-When using §0 single-pass, **never run `add_subtitles.py` in its default burn-in mode** — the canonical pipeline burns subtitles via the `ass=` filter inside its own filter_complex, so the script must only emit the ASS file.
+**Rule SUB-1 — субтитры это ПОСЛЕДНИЙ фильтр в `filter_complex`.**
+В graph'е `ass=build/subs.ass[vsub]` идёт после `concat` и после ВСЕХ overlay-токенов (CTA-фильтры, маски, drawtext). Если бёрн саба попадёт ДО overlay'я — оверлей нарисуется поверх текста, в логах чисто. Проверка перед запуском ffmpeg: `grep -nE 'ass=|subtitles=' <filter_complex>` должна быть последним токеном в видеоцепочке перед `-map [v…]`.
 
-Pass either an output path ending in `.ass`, or `--emit-ass-only`. The script accepts the raw TTS MP3 and `--atempo` + `--start-offset` so the ASS timeline matches the canonical pipeline's post-shaping audio (`atempo` then `adelay`).
-
+**Rule SUB-2 — Loudnorm 2-pass на финальном аудио ДО сборки final.mp4.**
+Цель: -14 LUFS integrated / -1 dBTP peak / 11 LU range (стандарт TikTok/YouTube/Reels/X). Двухпроходно:
 ```bash
-# Canonical preflight for redcon/what-if-lore: raw TTS, atempo 1.46, 5 s title-card adelay.
-python3 tools/add_subtitles.py - tts-output.mp3 build/subs.ass \
-  --emit-ass-only \
-  --duration 45 \
-  --atempo 1.46 \
-  --start-offset 5.0 \
-  --chunk 3 --fontsize 72 --marginv 200 --lang en
+# pass 1: measurement
+$FFMPEG -i build/aout.wav -af loudnorm=I=-14:TP=-1:LRA=11:print_format=json -f null - 2>&1 \
+  | sed -n '/^{$/,/^}$/p' > build/loudnorm.json
+
+# pass 2: apply with measured params
+M_I=$(jq -r .input_i build/loudnorm.json)
+M_TP=$(jq -r .input_tp build/loudnorm.json)
+M_LRA=$(jq -r .input_lra build/loudnorm.json)
+M_THRESH=$(jq -r .input_thresh build/loudnorm.json)
+OFFSET=$(jq -r .target_offset build/loudnorm.json)
+
+$FFMPEG -y -i build/aout.wav \
+  -af "loudnorm=I=-14:TP=-1:LRA=11:measured_I=$M_I:measured_TP=$M_TP:measured_LRA=$M_LRA:measured_thresh=$M_THRESH:offset=$OFFSET:linear=true" \
+  -ar 44100 -ac 2 -c:a aac -b:a 128k build/aout-norm.m4a
 ```
+Затем `aout-norm.m4a` идёт в final.mp4 (через `-i build/aout-norm.m4a -map …:a -c:a copy`). Без 2-pass соцсети сами понизят громкость неравномерно по сценам, и микс «прыгает».
 
-Output: `build/subs.ass`. The canonical pipeline (§0) then references it via `[vcat]ass=build/subs.ass[vsub]`.
+**Rule SUB-3 — никаких порезов внутри слова.**
+Если Editor подрезает хвост сцены под музыку / `-t TOTAL_DUR` / cliffhanger — snap к ближайшей `word.end ≤ target` из `scenes/scene-K/scene-K.timings.json` (Sound пишет этот файл, см. `sound.md` §12). Без snap'а последний саб обрывается на полуслове.
 
-`--start-offset` is the number of seconds the canonical pipeline will `adelay` the TTS in filter_complex — pass the same value to both so the ASS aligns with where the voice actually plays.
+### 6.1 Обоснование MarginV safe-zone (для всех пресетов)
 
-`--duration` is the picture-window length (sum of scene durations the subtitles cover) — required when the script gets `-` instead of a real video file. The last chunk extends to this duration.
+UI TikTok/Reels/Shorts (caption-bar, username, right-rail actions) перекрывает нижние 25-30% кадра 1080×1920. При `PlayResY=1920`:
 
-The script's default behavior (its own ffmpeg burn-in) remains available for the legacy multi-stage path (§§1–5) and for one-off debug renders.
+| Пресет | MarginV | Позиция от низа | Когда применять |
+|---|---|---|---|
+| `bold` | 520 | ~27% | Фастпейс, punchy, конкурирует с UI — нужен запас |
+| `narrative` | 420 | ~22% | Длинные строки, спокойный темп, ниже допустимо |
 
----
+**Меньшие значения трогать только если у формата есть конкретная причина** (например, `--mask` для перекрытия артефактов Kling у самого низа кадра в `what-if-real-life`: MarginV=120 при mask=true опускает бокс прямо на артефакт). Это override от оркестратора через `SUBTITLE_EXTRAS`, а не дефолт.
 
-⚠️ **Forbidden overlays:**
-- Series / episode titles (serial-drama episode numbers like "EP 3") — these are FORBIDDEN
-- Brainrot tags ("AURA: −9999", "COOKED")
-- Character names over the frame
-- Any text overlays other than dialogue subs + TBC + CTA
+⚠️ **Alignment=2 + MarginV — направление ОТ низа.** Бóльший MarginV = выше на экране. Меньший = ниже. Если задача — закрыть артефакт у самого низа, нужен МАЛЕНЬКИЙ MarginV (70-150), не большой.
 
-**Exception — format title cards:** If a scene has `scene_type: "title-card"` and `title_lines` in storyboard.json, burning those lines IS required. This is not a serial-drama episode title — it is the hook card of the video (e.g. "What if... / COMMANDER WORF / Becomes a / KINDERGARTEN TEACHER"). Read the format playbook's Editor section for exact ASS style.
+### 6.2 Канонический вызов из editor pipeline
 
-PIL is **forbidden** — only ffmpeg drawtext for all formats.
+Editor получает от manager'а:
+- `${SUBTITLE_STYLE}` — `bold` / `narrative` / `none` / `custom`
+- `${SUBTITLE_OFFSET_S}` — число (pre-delay титульной карточки, 0 если её нет)
+- `${SUBTITLE_MASK}` — `true` / `false`
+- `${SUBTITLE_HIGHLIGHT}` — `true` / `false`
+- `${SUBTITLE_EXTRAS}` — строка с дополнительными CLI-флагами (например `--secondary-style Customer=lightgray,52,1,120 --marginv 800`)
 
-| Format | Method |
-|---|---|
-| serial-drama | drawtext (white text, black stroke) |
-| gameplay-ai-avatar | drawtext + faster_whisper (word-sync) |
-| reddit-story | drawtext word-highlight (manual segmentation) |
+Если `${SUBTITLE_STYLE}` = `none` — НЕ генерировать ASS, в `filter_complex` нет `ass=` токена, переход сразу к audio map. Это `motion-dance`, `dual-style`, любая сцена с `scene_type: physical-gag`.
 
----
+Если `${SUBTITLE_STYLE}` = `custom` — формат сам описывает per-scene drawtext-логику в своём правиле (это режим для `top-list` номеров/имён — там это graphic overlay, а не субтитры).
 
-### serial-drama — subtitle text from storyboard, NEVER re-transcribe known dialogue
-
-> ⚠️ **The subtitle text MUST come verbatim from `storyboard.json`** — fields `character_speech`, `tts`, `tts_overlay[].tts`, etc. The scenarist already wrote the exact line; the Editor renders it as-is. **Do NOT pass the dialogue audio through `faster-whisper` to derive subtitle text** — Whisper transcription introduces errors on short utterances ("Hey… are you Dave?" can come back as "Poor guy Wish" or other garbage), and re-transcribing a string we already have is wasted work.
->
-> Whisper has ONE legitimate use in Editor: word-level **timing** inside an already-known string for the `gameplay-ai-avatar` format (where Avatar audio is sped up 1.3x and word boundaries need to align with the visible-mouth frames). For all other formats — and for serial-drama specifically — read the text from `storyboard.json` and time it by `TTS_DUR`.
->
-> For `serial-drama` also note the conflict in this file: line ~303 says "PIL forbidden, drawtext only", but `formats/serial-drama.md` line 238 says "PIL PNG overlay (ffmpeg 8.1 without libfreetype can't drawtext)". Resolve in the format's favor — if your ffmpeg lacks libfreetype, render PIL PNGs and overlay; if it has libfreetype, drawtext is fine. Either way, the TEXT comes from `storyboard.json`, not from a transcription pass.
-
-Subtitles are generated by `tools/add_subtitles.py` — it transcribes TTS audio via faster-whisper, splits into 3-word chunks with real timings and renders via ffmpeg drawtext.
-
-The script splits TTS audio into N-word chunks (word timestamps from faster-whisper) and renders via ASS. Most chunks are plain white text. If the scenarist marked `subtitle_emphasis` — only those chunks containing the phrase become yellow + italic.
+Иначе — для каждого диалогового клипа (или одного master.ass на весь концат) генерируем ASS:
 
 ```bash
-# Base call (no emphasis)
+# Per-scene вариант (multi-voice форматы — serial-drama, news, gameplay-ai-avatar, what-if-real-life):
+TTS_TEXT=$(jq -r ".clips[$((K-1))].tts" storyboard.json)
+DUR=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 scenes/scene-$K/scene-$K.mp4)
+
+EXTRA_FLAGS=""
+[ "${SUBTITLE_MASK}" = "true" ] && EXTRA_FLAGS="$EXTRA_FLAGS --mask"
+[ "${SUBTITLE_HIGHLIGHT}" = "true" ] && EXTRA_FLAGS="$EXTRA_FLAGS --highlight-words"
+
 python3 tools/add_subtitles.py \
-  scenes/scene-K/scene-K.mp4 \
-  scenes/scene-K/scene-K.mp3 \
-  scenes/scene-K/scene-K-sub.mp4
+  - scenes/scene-$K/scene-$K.mp3 build/subs-scene-$K.ass \
+  --emit-ass-only \
+  --duration "$DUR" \
+  --text "$TTS_TEXT" \
+  --style "${SUBTITLE_STYLE}" \
+  --offset "${SUBTITLE_OFFSET_S}" \
+  $EXTRA_FLAGS \
+  ${SUBTITLE_EXTRAS}
 
-# With emphasis from storyboard.json → clips[K].subtitle_emphasis
-EMPHASIS=$(python3 -c "
-import json
-clips = json.load(open('storyboard.json'))['clips']
-e = clips[K-1].get('subtitle_emphasis', [])
-print(','.join(e))
-")
-python3 tools/add_subtitles.py scene-K.mp4 scene-K.mp3 scene-K-sub.mp4 \
-  --emphasis "$EMPHASIS"
+# Single-voice (один TTS на весь концат — character-story, reddit-story, what-if-lore, redcon):
+python3 tools/add_subtitles.py \
+  - build/tts-output.mp3 build/subs.ass \
+  --emit-ass-only \
+  --duration "$MAIN_DUR" \
+  --text "$FULL_NARRATION" \
+  --style "${SUBTITLE_STYLE}" \
+  --offset "${SUBTITLE_OFFSET_S}" \
+  --atempo "$ATEMPO_USED" \
+  $EXTRA_FLAGS \
+  ${SUBTITLE_EXTRAS}
 ```
 
-Options:
-- `--chunk N` — words per chunk (default: 3)
-- `--emphasis "phrase1,phrase2"` — from scenarist's `subtitle_emphasis`; empty = don't pass the flag
-- `--fontsize N` — base font size (default: 72)
-- `--marginv N` — bottom margin in px (default: 380)
-- `--lang CODE` — language for whisper (default: `en`)
-- `--no-scale` — do not rescale to 1080×1920
-- `--tbc` — append "TO BE CONTINUED..." after the last chunk
+**Источник текста ВСЕГДА `storyboard.json`** (поле `tts` / `narrative_text` / `character_line` в зависимости от формата). Никогда не транскрибируй через faster-whisper известный текст. Whisper остаётся только как fallback внутри `add_subtitles.py` если `--text` не передан.
 
-**Recap clips also get subtitles** — if the recap clip contained dialogue, pass its mp3 to the script.
+**`--atempo`** должен совпадать с тем atempo, который применит `filter_complex` (см. §0.4). Иначе тайминги ASS поплывут относительно фактического звучания TTS.
 
-⚠️ **ffmpeg-full required** — Homebrew ffmpeg lacks libass. The script uses `/usr/local/bin/ffmpeg-full/ffmpeg` automatically.
+**`--offset`** должен совпадать с `adelay` в filter_complex (в секундах). Например, для what-if-lore с титульной 5-секундной карточкой: `adelay=5000|5000` ↔ `--offset 5.0`.
 
-### 6.1 Audio padding after subtitles (MANDATORY before concat)
+### 6.3 ASS-инварианты (от Sound сюда, см. предыдущую версию `sound.md` §10)
 
-`add_subtitles.py` truncates the audio track after the last word of speech. If audio is shorter than video — concat accumulates a shift: each subsequent dialogue plays earlier than its frames.
+1. **No event overlap within the same Style.** Два `Dialogue:` события одного стиля с пересекающимися временами рендерятся одновременно — текст ломается. `add_subtitles.py` гарантирует это by construction (каждый чанк живёт до начала следующего), но если ты редактируешь ASS вручную — проверяй.
 
-**After every `add_subtitles.py` call** — check and align:
+2. **Last subtitle reaches clip end when masking.** При `--mask` последнее событие должно дотягиваться до `clip_duration - 0.05s`. Иначе во время хвостовой тишины артефакт под боксом снова виден. `add_subtitles.py` делает это автоматически (`out[-1] = (start, duration, word)`).
+
+3. **Opaque box (BorderStyle=4) — НЕ во всю ширину кадра.** Бокс ASS обрамляет только текст + outline-padding. Никаких `drawbox` во всю ширину 1080 — это режет картинку. Если артефакт шире саба — увеличь `--secondary-style` font size или разбей фразу на длиннее чанк, но не делай full-width drawbox.
+
+### 6.4 Programmatic self-eval после бёрна
+
+После того как final.mp4 собран, перед handoff Manager'у — три программные проверки:
+
+1. **Длительность.** `ffprobe duration final.mp4 ≈ sum(scene_durations) [+ CTA_dur] ± 200мс`. Иначе encode был прерван или amix утянул хвост в music.
+
+2. **Loudness.** `ffmpeg -i final.mp4 -af loudnorm=I=-14:TP=-1:LRA=11:print_format=json -f null -` → `input_i` должен быть в [-15.0, -13.0]. Иначе loudnorm 2-pass не сработал.
+
+3. **Bottom-strip variance per dialogue scene** (если `${SUBTITLE_STYLE} != none`). Для каждой сцены с непустым `tts` сэмплировать 1 кадр в `scene_midpoint + 0.5s`, посчитать pixel variance в bottom 25% кадра. Variance > порог (~500) ⇒ субтитр действительно прорендерился. Если хоть одна сцена даёт пустую полосу — бёрн саба провалился (libass не подцепился, fonts.conf битый, что-то ещё).
 
 ```bash
-VDUR=$(ffprobe -v quiet -select_streams v:0 -show_entries stream=duration -of csv=p=0 scene-K-sub.mp4)
-ADUR=$(ffprobe -v quiet -select_streams a:0 -show_entries stream=duration -of csv=p=0 scene-K-sub.mp4)
-# If ADUR < VDUR — pad:
-$FFMPEG -y -i scene-K-sub.mp4 \
-  -filter:a "apad=whole_dur=$VDUR" \
-  -c:v copy -c:a aac -b:a 128k \
-  scene-K-sub-padded.mp4
+# вариант проверки: один кадр через ffmpeg + variance через ImageMagick / Python+PIL
+$FFMPEG -y -ss "$SCENE_MID" -i final.mp4 -frames:v 1 -q:v 2 build/probe-$K.jpg
+python3 -c "
+import sys
+from PIL import Image, ImageStat
+img = Image.open(sys.argv[1]).convert('L')
+w, h = img.size
+strip = img.crop((0, int(h*0.75), w, h))
+v = ImageStat.Stat(strip).stddev[0]
+print(f'scene {sys.argv[2]} variance={v:.1f}')
+sys.exit(0 if v > 15 else 1)
+" build/probe-$K.jpg "$K"
 ```
 
-**Rule:** before concat, every clip's audio duration must match video duration (tolerance ±0.02s). Check ALL clips, not just subtitled — Avatar tails sometimes also come up short.
-
----
-
-### gameplay-ai-avatar — drawtext + faster_whisper
-
-Editor transcribes the already-sped-up `avatar-fast.mp3` via `faster-whisper`:
-
-```python
-from faster_whisper import WhisperModel
-model = WhisperModel("medium", device="cpu", compute_type="int8")
-segments, _ = model.transcribe("avatar-fast.mp3", word_timestamps=True)
-```
-
-⚠️ Transcribe the sped-up file (`avatar-fast.mp3`, already 1.3x) — timestamps are already correct. If transcribing the original — divide all timestamps by 1.3.
-
-Group words into chunks of 3–4. **Anti-overlap:** `start[N] = max(end[N-1], orig_start[N])`.
-
-Editor outputs `subs.srt` → applies via `subtitles=`:
-
-```bash
-$FFMPEG -y -i final-base.mp4 \
-  -vf "subtitles=subs.srt:force_style='FontName=Montserrat Bold,FontSize=42,PrimaryColour=&Hffffff,OutlineColour=&H000000,BorderStyle=3,Outline=3,Shadow=0,Alignment=2,MarginV=200'" \
-  -c:v libx264 -preset slow -crf 20 -c:a copy \
-  final-with-subs.mp4
-```
-
-Style: Montserrat Bold, 42px, `y=1122` (at the split-screen seam), drawbox `y=1100, h=104`.
-
----
-
-### reddit-story — drawtext word-highlight (manual segmentation)
-
-No faster_whisper — timing is computed from `TTS_DUR`, text is taken from `storyboard.json → narrative_text`.
-
-```
-TTS_DUR = ffprobe duration of tts-output.mp3
-segment_dur = TTS_DUR / N_segments   # N_segments = ceil(word_count / 4)
-```
-
-Accent color for the keyword (usually noun/verb in the segment) — from `game config → color_palette`. Position: `y=H*0.78`, `x=(w-text_w)/2`, drawbox background `black@0.6`.
-
-For 30+ segments — use `-filter_complex_script`:
-
-```bash
-cat > subtitle-filter.txt << 'EOF'
-[0:v]
-drawbox=x=0:y=ih*0.74:w=iw:h=ih*0.12:color=black@0.6:t=fill:enable='between(t,0,TTS_DUR)',
-drawtext=text='I spent 200 hours':fontsize=52:fontcolor=white:x=(w-text_w)/2:y=h*0.78:enable='between(t,0.0,1.5)',
-drawtext=text='building':fontsize=52:fontcolor=yellow:x=(w-text_w)/2:y=h*0.78:enable='between(t,1.5,2.2)',
-...
-[vout]
-EOF
-
-$FFMPEG -y -i assembled.mp4 -filter_complex_script subtitle-filter.txt \
-  -map "[vout]" -map 0:a -c:a copy subtitled.mp4
-```
-
-**Rule (all formats):** subtitles must not overlap (each chunk's `start` ≥ previous `end`).
+До **3 ретраев** перепрожига с поправкой (например, на повторе передать `--marginv` ниже если variance подозрительно низкий). После 3 неуспешных — fail Manager'у, не молча.
 
 
 ## 7. Split-screen (gameplay-ai-avatar)
@@ -769,20 +735,21 @@ $FFMPEG -i final.mp4 -ss 1.5 -t 2.0 -af "volumedetect" -f null - 2>&1 | grep mea
 
 ---
 
-## 12a. Customer / off-screen speaker subtitles (dialogue-offscreen scenes)
+## 12a. Off-screen speaker subtitles — через `--secondary-style`
 
-For any scene with `scene_type: "dialogue-offscreen"`, mixing `customer.mp3` audio (§12) is not enough — the viewer also needs to READ what the off-screen speaker says. Generate a **Customer** ASS style alongside the Default (character) style:
+Если у формата есть второй голос (off-screen NPC, customer, narrator поверх Avatar'а — `dialogue-offscreen` сцены), оркестратор передаёт `SUBTITLE_EXTRAS` с флагом `--secondary-style`, например:
 
 ```
-Style: Customer,Montserrat Bold,52,&H00E0E0E0,&H000000FF,&H00000000,&HCC000000,0,1,0,0,100,100,0,0,4,0,0,2,10,10,120,1
+--secondary-style "Customer=lightgray,52,1,120"
 ```
-(light-gray, italic, size 52, BorderStyle=4, same MarginV=120)
 
-**Timing:**
-- Customer event: `0:00:00.30` → `duration(customer.mp3)` — text from `storyboard.json[scene].customer_line`
-- Default (character) events: start at `duration(customer.mp3) + 0.6s` (the silence gap end) — text from `character_line` / `tts`
+(`Name=color,size,italic,marginv`). `add_subtitles.py` добавит второй ASS-стиль в тот же файл (см. `tools/add_subtitles.py` функцию `parse_secondary_style`).
 
-Both styles go in the **same ASS file** per scene. Customer events appear before Default events in the [Events] section. No overlap between Customer and Default event ranges.
+**Тайминги** двух событий (Default + secondary) editor рассчитывает сам по `timings.json` (Sound пишет timings и для основного TTS, и для off-screen mp3 — `scene-K.timings.json` для `scene-K.mp3`, `scene-K.customer.timings.json` для `customer.mp3`). События обоих стилей попадают в один ASS:
+- Customer events: `0:00:00.30` → `duration(customer.mp3)` (текст из `storyboard.json[scene].customer_line`)
+- Default events: с `duration(customer.mp3) + 0.6s` (после паузы) (текст из `character_line` / `tts`)
+
+Между Customer и Default диапазонами — без перекрытий (§6.3 invariant 1).
 
 ---
 
@@ -790,7 +757,7 @@ Both styles go in the **same ASS file** per scene. Customer events appear before
 
 Some clips arrive with generation artifacts (Kling Avatar v2 CJK hallucinations near the bottom of the frame, garbled UI text, etc.). To hide them, the right tool is:
 
-1. **Preferred:** Subtitle ASS box (`BorderStyle=4`) sized and positioned to cover exactly the artifact region (see `sound.md` §10.3/10.4 for MarginV direction).
+1. **Preferred:** Subtitle ASS box (`BorderStyle=4`, через `--mask` от оркестратора) sized and positioned to cover exactly the artifact region (см. §6.1 для MarginV direction).
 2. **Acceptable:** Narrow `drawbox` slightly wider than the artifact bbox (padding ≤ +40 px on each side).
 3. **Forbidden:** Full-width `drawbox` covering the entire bottom strip — it crops the picture for no reason and users will reject the result.
 

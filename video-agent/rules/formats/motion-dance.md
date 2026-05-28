@@ -1,3 +1,11 @@
+---
+subtitle_style: none
+subtitle_offset_s: 0
+subtitle_mask: false
+subtitle_highlight: false
+subtitle_extras: []
+---
+
 # Format "Motion Dance" — character dances to music via motion transfer from reference video
 
 A single character (game skin, OC, meme) dances to music. Movements come from a real dance video via Kling Motion Control. Key feature — analyzing the reference video before image generation so the character's shot and pose match the reference.

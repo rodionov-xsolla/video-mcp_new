@@ -1,3 +1,11 @@
+---
+subtitle_style: bold
+subtitle_offset_s: 0
+subtitle_mask: false
+subtitle_highlight: false
+subtitle_extras: []
+---
+
 # Format "Game News"
 
 > **Single video model — Kling Avatar v2 Standard.** No other video models. Opener and CTA — pre-built from Supabase. Characters — from Supabase `game_assets`.

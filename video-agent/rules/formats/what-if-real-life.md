@@ -1,4 +1,20 @@
+---
+subtitle_style: narrative
+subtitle_offset_s: 0
+subtitle_mask: true
+subtitle_highlight: false
+subtitle_extras: ["--marginv", "120", "--secondary-style", "Customer=lightgray,52,1,120"]
+---
+
 # Format "What If... Real Life" — game characters dropped into the mundane real world
+
+<!-- Subtitle config:
+  --mask (BorderStyle=4) — закрывает CJK-артефакты Kling Avatar v2 у низа кадра.
+  --marginv 120 — опускает бокс прямо на артефакт (направление от низа: меньше=ниже).
+  --secondary-style Customer=lightgray,52,1,120 — второй стиль для off-screen ребёнка
+    в dialogue-offscreen сценах (легкосерый italic 52px, тот же MarginV=120).
+-->
+
 
 A recognizable game character is placed into a banal real-world situation or job — the contrast between who they ARE (their game persona, abilities, mannerisms, way of speaking) and who they have to BE in this context generates the comedy. Examples: Spock as a coffee barista, Kratos as a kindergarten teacher, a blocky Roblox guy trying to shop at a luxury boutique, Master Chief at a DMV counter, Geralt as a vet's receptionist.
 

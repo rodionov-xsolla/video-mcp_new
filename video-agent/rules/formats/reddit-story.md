@@ -1,3 +1,11 @@
+---
+subtitle_style: narrative
+subtitle_offset_s: 0
+subtitle_mask: false
+subtitle_highlight: true
+subtitle_extras: []
+---
+
 # Format "Reddit Story" — monologue over gameplay
 
 A first-person monologue over random gameplay with word-highlight subtitles. Personal story: funny, touching, drama, shock, rage. Offerwall is woven into the plot as the hero's action.

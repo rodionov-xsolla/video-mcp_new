@@ -1,4 +1,15 @@
+---
+subtitle_style: bold
+subtitle_offset_s: 0
+subtitle_mask: false
+subtitle_highlight: false
+subtitle_extras: []
+---
+
 # Format "TOP List" — countdown of top-5 characters / locations / items in a game
+
+<!-- Графические оверлеи `#N` (Montserrat Black ~220px) и `{NAME}` (Bebas Neue ~96px) — это НЕ субтитры, а graphic overlays формата. Описаны в секции Editor ниже. Subtitle_style=bold относится только к narrator-сабам (если у сцены есть `tts`). -->
+
 
 Stylized "TOP 5" countdown video: an animated title card in the game's visual language, then 5 items revealed in **5 → 1** order with the climax on #1. Narrator delivers one short, punchy line per item ("In third place: T'Pol from Enterprise — Vulcan grace and a logic-defying figure.").
 
