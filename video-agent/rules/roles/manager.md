@@ -193,14 +193,18 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
 
    - On error — log and continue (Supabase URL is the primary deliverable).
 
-3. Logging (when the `video_agent_runs` table is ready):
-   ```sql
-   INSERT INTO video_agent_runs (
-     game_tag, input_idea, agent_plan, approach_used, model_used,
-     total_cost_usd, output_video_url, youtube_url, status, error_message,
-     video_duration_seconds, run_duration_seconds, scenes
-   ) VALUES (...);
+3. **Log to `video_agent_runs`** (catalog of generated videos: date, title, format, links). Upsert by `output_video_url` — INSERT on first generation, UPDATE on regeneration to the same path (created_at preserved, no dupes):
+   ```bash
+   bash queue/log-video.sh \
+     --game "$GAME_TAG" \
+     --title "$TITLE" \
+     --format "$format_slug" \
+     --video-url "$SUPABASE_VIDEO_URL" \
+     --youtube-url "$YOUTUBE_URL"   # omit if YT upload was skipped
    ```
+   - `--video-url` is the Supabase public URL from step 1 (stable per game/date/format → the upsert key, mapped to `output_video_url`).
+   - `--title` lands in `input_idea` (the table's NOT NULL title field). `--format` and `--youtube-url` in their own columns.
+   - Requires `UNIQUE(output_video_url)` + `format`/`youtube_url` columns — see `queue/setup.sql` (run the ALTERs once in the SQL editor).
 
 4. **Update story bible** (if the format uses one) — characters, aura, relationships, active_loops, episode_summary, cliffhanger, anti_repetition.
 

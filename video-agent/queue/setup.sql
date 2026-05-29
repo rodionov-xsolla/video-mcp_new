@@ -92,6 +92,18 @@ CREATE POLICY "Allow anon full access on game_assets"
   WITH CHECK (true);
 
 -- ============================================
+-- video_agent_runs: каталог сгенерированных видео.
+-- Добавляем формат + youtube_url + UNIQUE на output_video_url,
+-- чтобы регенерация в тот же путь обновляла строку (upsert), а не плодила дубли.
+-- Пишется из queue/log-video.sh. title маппится на input_idea.
+-- ============================================
+
+ALTER TABLE video_agent_runs ADD COLUMN IF NOT EXISTS format text;
+ALTER TABLE video_agent_runs ADD COLUMN IF NOT EXISTS youtube_url text;
+ALTER TABLE video_agent_runs DROP CONSTRAINT IF EXISTS video_agent_runs_output_url_key;
+ALTER TABLE video_agent_runs ADD CONSTRAINT video_agent_runs_output_url_key UNIQUE (output_video_url);
+
+-- ============================================
 -- Supabase Storage: создай buckets вручную
 -- Dashboard → Storage → New Bucket → Name: "videos" → Public: ON
 -- Dashboard → Storage → New Bucket → Name: "assets" → Public: ON
