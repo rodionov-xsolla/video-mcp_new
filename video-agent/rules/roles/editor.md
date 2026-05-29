@@ -496,25 +496,33 @@ python3 tools/add_subtitles.py \
   --text "$TTS_TEXT" \
   --style "${SUBTITLE_STYLE}" \
   --offset "${SUBTITLE_OFFSET_S}" \
+  --verify-audio scenes/scene-$K/scene-$K.mp3 \
   $EXTRA_FLAGS \
   ${SUBTITLE_EXTRAS}
 
 # Single-voice (один TTS на весь концат — character-story, reddit-story, what-if-lore, redcon):
+# ВАЖНО: audio-аргумент = ФИНАЛЬНОЕ аудио, которое реально идёт в микс (tts-fast.mp3,
+# уже после atempo). НЕ передаём --atempo — множитель уже «запечён» в длительности файла,
+# и подавать его нечем ошибиться. --verify-audio с тем же файлом ставит code-guard на дрейф.
 python3 tools/add_subtitles.py \
-  - build/tts-output.mp3 build/subs.ass \
+  - build/tts-fast.mp3 build/subs.ass \
   --emit-ass-only \
   --duration "$MAIN_DUR" \
   --text "$FULL_NARRATION" \
   --style "${SUBTITLE_STYLE}" \
   --offset "${SUBTITLE_OFFSET_S}" \
-  --atempo "$ATEMPO_USED" \
+  --verify-audio build/tts-fast.mp3 \
   $EXTRA_FLAGS \
   ${SUBTITLE_EXTRAS}
 ```
 
 **Источник текста ВСЕГДА `storyboard.json`** (поле `tts` / `narrative_text` / `character_line` в зависимости от формата). Никогда не транскрибируй через faster-whisper известный текст. Whisper остаётся только как fallback внутри `add_subtitles.py` если `--text` не передан.
 
-**`--atempo`** должен совпадать с тем atempo, который применит `filter_complex` (см. §0.4). Иначе тайминги ASS поплывут относительно фактического звучания TTS.
+**Антидрейф by construction (вместо ручного `--atempo`).** ASS генерим из **того же аудио, что идёт в микс** — `build/tts-fast.mp3` (уже после `atempo`) для single-voice, `scene-$K.mp3` для per-scene. Тайминги тогда считаются по реальной длительности и не могут разойтись с фактическим звучанием. Флаг **`--atempo` устарел** — не передавай его: множитель уже запечён в длительности файла, а ручной множитель — это и был источник «съезжания» (несовпал с `filter_complex` → субтитры уезжали к концу клипа). Если файл по какой-то причине ещё не ускорен — сначала сделай `tts-fast.mp3` (§3b), потом генери ASS.
+
+**`--verify-audio` ОБЯЗАТЕЛЕН** и указывает на то же финальное аудио. `add_subtitles.py` падает (exit 1), если конец последнего слова расходится с `offset + длина(аудио)` больше чем на 0.30с. Это code-guard: любой рассинхрон становится ошибкой билда, а не молча уезжает в прод. Не игнорируй его падение «ретраем» — чини источник (не то аудио / лишний `--atempo` / ASS сгенерён до финального speed).
+
+**ASS генерится ПОСЛЕДНИМ — после того как форма аудио заморожена** (после любого `atempo`/whole-video speedup §3d). Если сначала собрал ASS, а потом поменял скорость — пересобери ASS.
 
 **`--offset`** должен совпадать с `adelay` в filter_complex (в секундах). Например, для what-if-lore с титульной 5-секундной карточкой: `adelay=5000|5000` ↔ `--offset 5.0`.
 
