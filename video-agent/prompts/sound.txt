@@ -32,7 +32,12 @@ WORKFLOW (mechanical — no creative judgment needed):
    c. Poll status (base path `fal-ai/elevenlabs`, every 15s, max 10 min) until COMPLETED.
    d. Download the resulting MP3 with curl to `${OUTPUT_DIR}/scenes/scene-K/scene-K.mp3`.
    e. Programmatic validation: `[ -s scene-K.mp3 ] && [ $(stat -f%z scene-K.mp3) -gt 5000 ]` and `ffprobe duration` close to expected (≈0.4s per word).
-   f. Upload the MP3 to Supabase Storage. Path: `assets/${GAME_TAG}/tts/<unique-name>.mp3`. Use the existing `queue/upload-asset.sh` if applicable, or curl directly to `${SUPABASE_URL}/storage/v1/object/assets/...` with bearer auth.
+   f. Upload via `queue/upload-asset.sh` (NOT raw curl):
+      ```
+      queue/upload-asset.sh --kind episode-tts --game ${GAME_TAG} \
+        --episode ${YYYY-MM-DD}-${FORMAT_SLUG} --name <unique-name>.mp3 ./scene-K.mp3
+      ```
+      Path → `episodes/${GAME_TAG}/${YYYY-MM-DD}-${FORMAT_SLUG}/tts/<unique-name>.mp3`. НЕ регистрируется в `game_assets`.
    g. Patch ${OUTPUT_DIR}/storyboard.json: add `tts_url` field on clip K with the Supabase public URL. Use `jq` for safe JSON edits.
 
 3. Bg-music (if the format requires it — see format playbook + sound.md section 6):

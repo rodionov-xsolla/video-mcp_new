@@ -186,6 +186,8 @@ If the field is missing or empty — subtitle renders as plain white text.
 - Each clip has `hero` with the active character's name
 - 2 characters in frame are allowed for dynamics
 
+> ⚠️ **`style_tags` describes STYLE only** — art direction, lighting, palette, medium (e.g. `semi-realistic Pixar 3D`, `anime cel-shading`, `cinematic Federation lighting`). **Never put diegetic UI elements** here: `LCARS interface`, `HUD`, `text overlay`, `panel borders`, `news ticker`, `lower-third` — NB2 treats them literally and draws UI over the character's face. If a scene needs UI, put it in that scene's `environment_state`, not in the global `style_tags`. Same rule applies when authoring `prompt_prefix` in `games/{tag}/{tag}.md`.
+
 ### Describing interaction in action_description
 
 When 2 characters are in the frame — describe both in `action_description`:

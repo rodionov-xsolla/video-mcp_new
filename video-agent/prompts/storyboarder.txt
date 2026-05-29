@@ -55,9 +55,9 @@ CONSTRAINTS — STRICT:
 - Bg-ref ALWAYS first in `image_urls`.
 - DO NOT use Read tool on PNG files — programmatic validation only (filesize + identify/ffprobe). Visual validation is opt-in per `rules/main/validation.md` and the format playbook.
 - DO NOT regenerate refs that already exist in the Supabase asset bank — reuse the URL.
-- ALL generated refs and scene PNGs MUST be uploaded to Supabase Storage — Animator needs Supabase public URLs for Kling, fal.ai temp URLs expire. Path convention (см. storyboarder.md §15.1):
-  - scene PNG: `assets/${GAME_TAG}/scenes/${YYYY-MM-DD}/${FORMAT_SLUG}/scene-K.png` — дата+формат ОБЯЗАТЕЛЬНЫ, иначе следующий эпизод затрёт.
-  - bg/character ref: `assets/${GAME_TAG}/refs/...` — без даты, шарится между эпизодами.
+- ALL generated refs and scene PNGs MUST be uploaded to Supabase. Use ONLY `queue/upload-asset.sh` — оно само выбирает правильный bucket/path по `--kind`. Не пиши raw curl к `storage/v1`:
+  - Reusable: `--kind character --slug X [--variant V]`, `--kind avatar --slug X`, `--kind location --slug X`, `--kind branding --name X`. Path: `assets/${GAME_TAG}/{characters|locations|branding}/...`.
+  - Per-episode: `--kind episode-scene --episode ${YYYY-MM-DD}-${FORMAT_SLUG} --name scene-K.png` → bucket `episodes/`. **НЕ регистрируется в game_assets.** Дата+формат в `--episode` ОБЯЗАТЕЛЬНЫ, иначе следующий эпизод затрёт.
 - DO NOT modify storyboard.json fields written by Scenarist (action_description, character_speech, tts, etc.) or Sound (tts_url). Only ADD image_prompt / image_urls / scene_image / scene_image_end.
 - DO NOT call ElevenLabs / Kling / FFmpeg — those belong to other agents.
 - Workspace hygiene per storyboarder.md section 17 — move previous PNG versions to `${OUTPUT_DIR}/_archive/` before regeneration.

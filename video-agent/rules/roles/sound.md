@@ -137,8 +137,13 @@ echo "$URL"
 
 After TTS generation:
 1. Download `.mp3` locally (`curl -sSL -o tts-N.mp3 "$FAL_AUDIO_URL"`)
-2. **Upload to Supabase Storage** → `assets/{game}/tts/clip-N.mp3`
-3. **Use the Supabase public URL** for Avatar's `audio_url`, not the fal.ai temp URL
+2. **Upload via `queue/upload-asset.sh`** (НЕ raw curl):
+   ```bash
+   queue/upload-asset.sh --kind episode-tts --game {GAME_TAG} \
+     --episode {YYYY-MM-DD}-{format_slug} --name clip-N.mp3 ./tts-N.mp3
+   ```
+   Path → `episodes/{game}/{YYYY-MM-DD}-{format}/tts/clip-N.mp3`. **НЕ регистрируется** в `game_assets` (одноразовое).
+3. **Use the returned Supabase public URL** for Avatar's `audio_url`, not the fal.ai temp URL
 
 fal.ai TTS audio_url expires. Avatar polling takes 1–3 min — during that time the URL can become invalid. Supabase URL is permanent.
 

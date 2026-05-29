@@ -1,0 +1,844 @@
+old_bucket	old_path	new_bucket	new_path	rule	confidence	notes
+assets	motion-dance-bts/character.png	assets	roblox/_unsorted/motion-dance-bts/character.png	orphan-funnel	low	funneled 'motion-dance-bts' → roblox/_unsorted/motion-dance-bts
+assets	motion-dance-bts/dance-ref.mp4	assets	roblox/_unsorted/motion-dance-bts/dance-ref.mp4	orphan-funnel	low	funneled 'motion-dance-bts' → roblox/_unsorted/motion-dance-bts
+assets	motion-dance-bts/final.mp4	assets	roblox/_unsorted/motion-dance-bts/final.mp4	orphan-funnel	low	funneled 'motion-dance-bts' → roblox/_unsorted/motion-dance-bts
+assets	motion-dance-test/bg-ref.jpg	assets	roblox/_unsorted/motion-dance-test/bg-ref.jpg	orphan-funnel	low	funneled 'motion-dance-test' → roblox/_unsorted/motion-dance-test
+assets	motion-dance-test/character-v2.png	assets	roblox/_unsorted/motion-dance-test/character-v2.png	orphan-funnel	low	funneled 'motion-dance-test' → roblox/_unsorted/motion-dance-test
+assets	motion-dance-test/character.png	assets	roblox/_unsorted/motion-dance-test/character.png	orphan-funnel	low	funneled 'motion-dance-test' → roblox/_unsorted/motion-dance-test
+assets	motion-dance-test/dance-ref.mp4	assets	roblox/_unsorted/motion-dance-test/dance-ref.mp4	orphan-funnel	low	funneled 'motion-dance-test' → roblox/_unsorted/motion-dance-test
+assets	motion-dance-test/girl-v1.png	assets	roblox/_unsorted/motion-dance-test/girl-v1.png	orphan-funnel	low	funneled 'motion-dance-test' → roblox/_unsorted/motion-dance-test
+assets	motion-dance-test/tpol-canon-ref.jpg	assets	roblox/_unsorted/motion-dance-test/tpol-canon-ref.jpg	orphan-funnel	low	funneled 'motion-dance-test' → roblox/_unsorted/motion-dance-test
+assets	motion-dance-test/tpol-v2-archive.png	assets	roblox/_unsorted/motion-dance-test/tpol-v2-archive.png	orphan-funnel	low	funneled 'motion-dance-test' → roblox/_unsorted/motion-dance-test
+assets	motion-dance-tpol/dance-ref.mp4	assets	roblox/_unsorted/motion-dance-tpol/dance-ref.mp4	orphan-funnel	low	funneled 'motion-dance-tpol' → roblox/_unsorted/motion-dance-tpol
+assets	motion-test/dance-ref.mp4	assets	roblox/_unsorted/motion-test/dance-ref.mp4	orphan-funnel	low	funneled 'motion-test' → roblox/_unsorted/motion-test
+assets	motion-test/girl-v1.png	assets	roblox/_unsorted/motion-test/girl-v1.png	orphan-funnel	low	funneled 'motion-test' → roblox/_unsorted/motion-test
+assets	music/fun-robot-rock-funk.mp3	music	fun-robot-rock-funk.mp3	denest-music	medium	cross-bucket: assets/music → music; mood unknown
+assets	shared/cta-normalized.mp4	assets	shared/cta-normalized.mp4	shared-keep	high	multi-game shared
+assets	shared/cta-ref-screenshot.png	assets	shared/cta-ref-screenshot.png	shared-keep	high	multi-game shared
+assets	shared/cta-star-trek-link-in-bio.png	assets	shared/cta-star-trek-link-in-bio.png	shared-keep	high	multi-game shared
+assets	shared/cta-star-trek-source.png	assets	shared/cta-star-trek-source.png	shared-keep	high	multi-game shared
+assets	star-trek-timelines/cta-link-in-bio.mp4	assets	star-trek-timelines/branding/cta-link-in-bio.mp4	toplevel-branding-video	high	top-level mp4 inside game | first-of-collision
+assets	_tmp/scale-test-1778674933/bg-raven-lab.png	_skip		tmp-skip	high	ignore temp
+assets	_tmp/scale-test-1778674933/child-annika-ref.png	_skip		tmp-skip	high	ignore temp
+assets	kekele/refs/demon-cartoon-sheet.png	assets	kekele/characters/demon-cartoon/sheet.png	character-sheet	high	first-of-collision
+assets	kekele/refs/demon-realistic-counterpart-sheet.png	assets	kekele/characters/demon-realistic-counterpart/sheet.png	character-sheet	high	first-of-collision
+assets	kekele/refs/knight-cartoon-sheet.png	assets	kekele/characters/knight-cartoon/sheet.png	character-sheet	high	first-of-collision
+assets	kekele/refs/knight-realistic-counterpart-sheet.png	assets	kekele/characters/knight-realistic-counterpart/sheet.png	character-sheet	high	first-of-collision
+assets	kekele/refs/pirate-cartoon-sheet.png	assets	kekele/characters/pirate-cartoon/sheet.png	character-sheet	high	first-of-collision
+assets	kekele/refs/pirate-realistic-counterpart-sheet.png	assets	kekele/characters/pirate-realistic-counterpart/sheet.png	character-sheet	high	first-of-collision
+assets	marvel snap/avatars/captain-america-cosmic.png	assets	marvel-snap/characters/captain-america/avatar-cosmic.png	avatar-variant	high	variant=cosmic | first-of-collision
+assets	marvel snap/gameplay/Marvel Snap - Mobile Gameplay 1.mp4	assets	marvel-snap/gameplay/marvel-snap---mobile-gameplay-1.mp4	gameplay-keep	high	renamed from 'Marvel Snap - Mobile Gameplay 1.mp4' | first-of-collision
+assets	marvel snap/gameplay/Marvel Snap - Mobile Gameplay 3.mp4	assets	marvel-snap/gameplay/marvel-snap---mobile-gameplay-3.mp4	gameplay-keep	high	renamed from 'Marvel Snap - Mobile Gameplay 3.mp4' | first-of-collision
+assets	marvel snap/tts/george-expressive.mp3	episodes	marvel-snap/unknown-date-unknown-format/tts/george-expressive.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	marvel-snap/avatars/captain-america-ref.png	assets	marvel-snap/characters/captain-america/avatar.png	avatar-folder	high	first-of-collision
+assets	marvel-snap/gameplay/marvel-snap---mobile-gameplay-1.mp4	assets	marvel-snap/gameplay/marvel-snap---mobile-gameplay-1-c2.mp4	gameplay-keep	high	COLLISION (n=2/2); renamed from marvel-snap/gameplay/marvel-snap---mobile-gameplay-1.mp4
+assets	marvel-snap/gameplay/marvel-snap---mobile-gameplay-3.mp4	assets	marvel-snap/gameplay/marvel-snap---mobile-gameplay-3-c2.mp4	gameplay-keep	high	COLLISION (n=2/2); renamed from marvel-snap/gameplay/marvel-snap---mobile-gameplay-3.mp4
+assets	marvel-snap/gameplay/marvel-snap-mobile-gameplay-1.mp4	assets	marvel-snap/gameplay/marvel-snap-mobile-gameplay-1.mp4	gameplay-keep	high	first-of-collision
+assets	MarvelSnap/gameplay/marvel-snap-mobile-gameplay-1.mp4	assets	marvel-snap/gameplay/marvel-snap-mobile-gameplay-1-c2.mp4	gameplay-keep	high	COLLISION (n=2/2); renamed from marvel-snap/gameplay/marvel-snap-mobile-gameplay-1.mp4
+assets	mlbb/refs/aamon-sheet.png	assets	mlbb/characters/aamon/sheet.png	character-sheet	high	first-of-collision
+assets	mlbb/refs/benedetta-sheet.png	assets	mlbb/characters/benedetta/sheet.png	character-sheet	high	first-of-collision
+assets	mlbb/refs/chou-sheet.png	assets	mlbb/characters/chou/sheet.png	character-sheet	high	first-of-collision
+assets	mlbb/refs/esmeralda-sheet.png	assets	mlbb/characters/esmeralda/sheet.png	character-sheet	high	first-of-collision
+assets	mlbb/refs/fanny-sheet.png	assets	mlbb/characters/fanny/sheet.png	character-sheet	high	first-of-collision
+assets	mlbb/refs/gusion-sheet.png	assets	mlbb/characters/gusion/sheet.png	character-sheet	high	first-of-collision
+assets	mlbb/refs/kagura-sheet.png	assets	mlbb/characters/kagura/sheet.png	character-sheet	high	first-of-collision
+assets	mlbb/refs/lancelot-sheet.png	assets	mlbb/characters/lancelot/sheet.png	character-sheet	high	first-of-collision
+assets	mlbb/refs/ling-sheet.png	assets	mlbb/characters/ling/sheet.png	character-sheet	high	first-of-collision
+assets	mlbb/refs/wanwan-sheet.png	assets	mlbb/characters/wanwan/sheet.png	character-sheet	high	first-of-collision
+assets	oxide/refs/geared-veteran-sheet.png	assets	oxide/characters/geared-veteran/sheet.png	character-sheet	high	first-of-collision
+assets	oxide/refs/noob-sheet.png	assets	oxide/characters/noob/sheet.png	character-sheet	high	first-of-collision
+assets	oxide/refs/raider-sheet.png	assets	oxide/characters/raider/sheet.png	character-sheet	high	first-of-collision
+assets	roblox/avatars/chad-news-avatar-ref.png	assets	roblox/characters/chad-news/avatar.png	avatar-folder	high	first-of-collision
+assets	roblox/avatars/jake-news-avatar-ref.png	assets	roblox/characters/jake-news/avatar.png	avatar-folder	high	first-of-collision
+assets	roblox/avatars/sarah-news-avatar-ref.png	assets	roblox/characters/sarah-news/avatar.png	avatar-folder	high	first-of-collision
+assets	roblox/ep2/scene-6.png	episodes	roblox/ep2-unknown-date/scenes/scene-6.png	episode-dir-scene	medium	original ep2/ | first-of-collision
+assets	roblox/episodes/ep2-en-serial-drama.mp4	videos	roblox/unknown-date/ep2-en-serial-drama.mp4	game-episodes-cross	medium	looks like final mp4
+assets	roblox/gameplay/dance-ref.mp4	assets	roblox/gameplay/dance-ref.mp4	gameplay-keep	high	
+assets	roblox/gameplay/motion-result.mp4	assets	roblox/gameplay/motion-result.mp4	gameplay-keep	high	
+assets	roblox/refs/_identity-y2k-blonde.jpg	assets	roblox/characters/y2k-blonde/identity.jpg	identity-prefix	medium	
+assets	roblox/refs/anime-noob-ref.png	assets	roblox/characters/anime-noob/sheet.png	character-bare-ref	medium	no variant
+assets	roblox/refs/bacon-bob-sheet.png	assets	roblox/characters/bacon-bob/sheet.png	character-sheet	high	
+assets	roblox/refs/bacon-hair-sheet.png	assets	roblox/characters/bacon-hair/sheet.png	character-sheet	high	
+assets	roblox/refs/bg-luxuria-alcove.png	assets	roblox/locations/luxuria-alcove.png	location-bg	high	
+assets	roblox/refs/bg-luxuria-plaza.png	assets	roblox/locations/luxuria-plaza.png	location-bg	high	
+assets	roblox/refs/bg-throne-room.png	assets	roblox/locations/throne-room.png	location-bg	high	
+assets	roblox/refs/bg-vip-vault.png	assets	roblox/locations/vip-vault.png	location-bg	high	
+assets	roblox/refs/builder-sheet.png	assets	roblox/characters/builder/sheet.png	character-sheet	high	
+assets	roblox/refs/chad-on-location-university.png	assets	roblox/_unsorted/chad-on-location-university.png	character-on-location	low	manual decision needed
+assets	roblox/refs/chad-sigma-sheet.png	assets	roblox/characters/chad-sigma/sheet.png	character-sheet	high	
+assets	roblox/refs/character-ref-bella.png	assets	roblox/characters/bella/sheet.png	character-ref	high	
+assets	roblox/refs/character-ref-builderman.png	assets	roblox/characters/builderman/sheet.png	character-ref	high	
+assets	roblox/refs/character-ref-dave.png	assets	roblox/characters/dave/sheet.png	character-ref	high	
+assets	roblox/refs/character-ref-rex.png	assets	roblox/characters/rex/sheet.png	character-ref	high	
+assets	roblox/refs/character-ref-shadow.png	assets	roblox/characters/shadow/sheet.png	character-ref	high	first-of-collision
+assets	roblox/refs/character.png	assets	roblox/_unsorted/character.png	ambiguous-name	high	not a character (literal 'character.png' or stray scene)
+assets	roblox/refs/ep5-bg-ref-training-room.png	episodes	roblox/ep5-unknown-date/refs/bg-training-room.png	episode-bg-ref	medium	ep5, format unknown
+assets	roblox/refs/ep5-character-ref-bella.png	episodes	roblox/ep5-unknown-date/refs/character-ref-bella.png	episode-character-ref	medium	ep5 duplicate of base character
+assets	roblox/refs/ep5-character-ref-dave.png	episodes	roblox/ep5-unknown-date/refs/character-ref-dave.png	episode-character-ref	medium	ep5 duplicate of base character
+assets	roblox/refs/jake-news-sheet.png	assets	roblox/characters/jake-news/sheet.png	character-sheet	high	
+assets	roblox/refs/news-cta.mp4	assets	roblox/branding/news-cta.mp4	branding-video	high	
+assets	roblox/refs/news-title-card.mp4	assets	roblox/branding/news-title-card.mp4	branding-video	high	
+assets	roblox/refs/news-title-card.png	assets	roblox/branding/news-title-card.png	branding-still	high	
+assets	roblox/refs/noob-sheet.png	assets	roblox/characters/noob/sheet.png	character-sheet	high	
+assets	roblox/refs/parkour-girl-sheet.png	assets	roblox/characters/parkour-girl/sheet.png	character-sheet	high	
+assets	roblox/refs/preppy-girl-sheet.png	assets	roblox/characters/preppy-girl/sheet.png	character-sheet	high	
+assets	roblox/refs/ref-frame-mid.jpg	assets	roblox/_unsorted/ref-frame-mid.jpg	ref-frame-unsorted	high	composition ref, not a character
+assets	roblox/refs/ref-king-rex-v3.png	assets	roblox/characters/king-rex/variants/v3.png	ref-prefix-version	high	variant=v3
+assets	roblox/refs/ref-king-rex.png	assets	roblox/characters/king-rex/sheet.png	ref-prefix-sheet	low	ambiguous
+assets	roblox/refs/rich-player-sheet.png	assets	roblox/characters/rich-player/sheet.png	character-sheet	high	
+assets	roblox/refs/sarah-news-sheet.png	assets	roblox/characters/sarah-news/sheet.png	character-sheet	high	
+assets	roblox/refs/sarah-on-location-bacon-protest.png	assets	roblox/_unsorted/sarah-on-location-bacon-protest.png	character-on-location	low	manual decision needed
+assets	roblox/refs/scene-1.png	episodes	roblox/unknown-date-unknown-format/scenes/scene-1.png	scene-in-refs	medium	orig tail '', clean ''
+assets	roblox/refs/shadow-sheet.png	assets	roblox/characters/shadow/sheet-c2.png	character-sheet	high	COLLISION (n=2/2); renamed from roblox/characters/shadow/sheet.png
+assets	roblox/refs/slender-sheet.png	assets	roblox/characters/slender/sheet.png	character-sheet	high	
+assets	roblox/refs/y2k-blonde-sheet.png	assets	roblox/characters/y2k-blonde/sheet.png	character-sheet	high	
+assets	roblox/refs/y2k-girl-sheet.png	assets	roblox/characters/y2k-girl/sheet.png	character-sheet	high	
+assets	roblox/tts/2026-05-25-news-scene-1.mp3	episodes	roblox/2026-05-25-news/tts/2026-05-25-news-scene-1.mp3	tts	medium	date=2026-05-25 fmt=news
+assets	roblox/tts/2026-05-25-news-scene-2.mp3	episodes	roblox/2026-05-25-news/tts/2026-05-25-news-scene-2.mp3	tts	medium	date=2026-05-25 fmt=news
+assets	roblox/tts/2026-05-25-news-scene-3.mp3	episodes	roblox/2026-05-25-news/tts/2026-05-25-news-scene-3.mp3	tts	medium	date=2026-05-25 fmt=news
+assets	roblox/tts/builderman_character_story_1779374663.mp3	episodes	roblox/unknown-date-unknown-format/tts/builderman_character_story_1779374663.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	roblox/tts/clip-3.mp3	episodes	roblox/unknown-date-unknown-format/tts/clip-3.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	roblox/tts/clip-5.mp3	episodes	roblox/unknown-date-unknown-format/tts/clip-5.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	roblox/tts/clip-7.mp3	episodes	roblox/unknown-date-unknown-format/tts/clip-7.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	roblox/tts/ep3-clip-2.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep3-clip-2.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	roblox/tts/ep3-clip-3.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep3-clip-3.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	roblox/tts/ep3-clip-6.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep3-clip-6.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	roblox/tts/ep5-scene2-shot-a-liam.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep5-scene2-shot-a-liam.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	roblox/tts/ep5-scene2-shot-c-liam.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep5-scene2-shot-c-liam.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	roblox/tts/ep5-scene2-shot-d-liam.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep5-scene2-shot-d-liam.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	roblox/tts/ep5-scene3-bella-charlotte.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep5-scene3-bella-charlotte.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	roblox/tts/fun-news-scene-1.mp3	episodes	roblox/unknown-date-fun-news/tts/fun-news-scene-1.mp3	tts	medium	date=unknown-date fmt=fun-news
+assets	roblox/tts/fun-news-scene-2.mp3	episodes	roblox/unknown-date-fun-news/tts/fun-news-scene-2.mp3	tts	medium	date=unknown-date fmt=fun-news
+assets	roblox/tts/fun-news-scene-3.mp3	episodes	roblox/unknown-date-fun-news/tts/fun-news-scene-3.mp3	tts	medium	date=unknown-date fmt=fun-news
+assets	roblox/tts/fun-news-scene-4.mp3	episodes	roblox/unknown-date-fun-news/tts/fun-news-scene-4.mp3	tts	medium	date=unknown-date fmt=fun-news
+assets	roblox/tts/fun-news-scene-5.mp3	episodes	roblox/unknown-date-fun-news/tts/fun-news-scene-5.mp3	tts	medium	date=unknown-date fmt=fun-news
+assets	roblox/tts/news-2026-05-04-scene-1.mp3	episodes	roblox/2026-05-04-news/tts/news-2026-05-04-scene-1.mp3	tts	medium	date=2026-05-04 fmt=news
+assets	roblox/tts/news-2026-05-04-scene-2.mp3	episodes	roblox/2026-05-04-news/tts/news-2026-05-04-scene-2.mp3	tts	medium	date=2026-05-04 fmt=news
+assets	roblox/tts/news-2026-05-04-scene-3.mp3	episodes	roblox/2026-05-04-news/tts/news-2026-05-04-scene-3.mp3	tts	medium	date=2026-05-04 fmt=news
+assets	roblox/tts/news-2026-05-12-scene-1.mp3	episodes	roblox/2026-05-12-news/tts/news-2026-05-12-scene-1.mp3	tts	medium	date=2026-05-12 fmt=news
+assets	roblox/tts/news-2026-05-12-scene-2.mp3	episodes	roblox/2026-05-12-news/tts/news-2026-05-12-scene-2.mp3	tts	medium	date=2026-05-12 fmt=news
+assets	roblox/tts/news-2026-05-12-scene-3.mp3	episodes	roblox/2026-05-12-news/tts/news-2026-05-12-scene-3.mp3	tts	medium	date=2026-05-12 fmt=news
+assets	roblox/tts/news-2026-05-12-scene-4.mp3	episodes	roblox/2026-05-12-news/tts/news-2026-05-12-scene-4.mp3	tts	medium	date=2026-05-12 fmt=news
+assets	roblox/tts/news-2026-05-21-scene-1.mp3	episodes	roblox/2026-05-21-news/tts/news-2026-05-21-scene-1.mp3	tts	medium	date=2026-05-21 fmt=news
+assets	roblox/tts/news-2026-05-21-scene-2.mp3	episodes	roblox/2026-05-21-news/tts/news-2026-05-21-scene-2.mp3	tts	medium	date=2026-05-21 fmt=news
+assets	roblox/tts/news-2026-05-21-scene-3.mp3	episodes	roblox/2026-05-21-news/tts/news-2026-05-21-scene-3.mp3	tts	medium	date=2026-05-21 fmt=news
+assets	roblox/tts/news-scene-1.mp3	episodes	roblox/unknown-date-news/tts/news-scene-1.mp3	tts	medium	date=unknown-date fmt=news
+assets	roblox/tts/news-scene-2.mp3	episodes	roblox/unknown-date-news/tts/news-scene-2.mp3	tts	medium	date=unknown-date fmt=news
+assets	roblox/tts/news-scene-3.mp3	episodes	roblox/unknown-date-news/tts/news-scene-3.mp3	tts	medium	date=unknown-date fmt=news
+assets	star-trek-timelines/_unsorted/seven-on-location-riker-chair.png	assets	star-trek-timelines/_unsorted/_unsorted/seven-on-location-riker-chair.png	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	star-trek-timelines/_unsorted/spock-on-location-vulcan-academy.png	assets	star-trek-timelines/_unsorted/_unsorted/spock-on-location-vulcan-academy.png	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	star-trek-timelines/avatars/kirk-avatar-ref.png	assets	star-trek-timelines/characters/kirk/avatar.png	avatar-folder	high	
+assets	star-trek-timelines/avatars/q-avatar.png	assets	star-trek-timelines/characters/q/avatar.png	avatar-folder	high	
+assets	star-trek-timelines/branding/cta-link-in-bio.mp4	assets	star-trek-timelines/branding/cta-link-in-bio-c2.mp4	already-branding	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/branding/cta-link-in-bio.mp4
+assets	star-trek-timelines/branding/cta.mp4	assets	star-trek-timelines/branding/cta.mp4	already-branding	high	already in target shape | first-of-collision
+assets	star-trek-timelines/branding/opener-v3.png	assets	star-trek-timelines/branding/opener-v3.png	already-branding	high	already in target shape | first-of-collision
+assets	star-trek-timelines/branding/opener.mp4	assets	star-trek-timelines/branding/opener.mp4	already-branding	high	already in target shape | first-of-collision
+assets	star-trek-timelines/character-story-2026-05-07/bg-enterprise_d_bridge.png	episodes	star-trek-timelines/2026-05-07-character-story/bg-enterprise_d_bridge.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/bg-enterprise_d_bridge_clip6.png	episodes	star-trek-timelines/2026-05-07-character-story/bg-enterprise_d_bridge_clip6.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/bg-enterprise_d_observation_lounge.png	episodes	star-trek-timelines/2026-05-07-character-story/bg-enterprise_d_observation_lounge.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/bg-omicron_theta_ruins.png	episodes	star-trek-timelines/2026-05-07-character-story/bg-omicron_theta_ruins.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/bg-soong_lab_omicron_theta.png	episodes	star-trek-timelines/2026-05-07-character-story/bg-soong_lab_omicron_theta.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/bg-starfleet_academy_classroom.png	episodes	star-trek-timelines/2026-05-07-character-story/bg-starfleet_academy_classroom.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/bg-uss_trieste_corridor.png	episodes	star-trek-timelines/2026-05-07-character-story/bg-uss_trieste_corridor.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/character-ref.png	episodes	star-trek-timelines/2026-05-07-character-story/character-ref.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/scene-1.png	episodes	star-trek-timelines/2026-05-07-character-story/scene-1.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/scene-2.png	episodes	star-trek-timelines/2026-05-07-character-story/scene-2.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/scene-3.png	episodes	star-trek-timelines/2026-05-07-character-story/scene-3.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/scene-4.png	episodes	star-trek-timelines/2026-05-07-character-story/scene-4.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/scene-5.png	episodes	star-trek-timelines/2026-05-07-character-story/scene-5.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/scene-6.png	episodes	star-trek-timelines/2026-05-07-character-story/scene-6.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/character-story-2026-05-07/scene-7.png	episodes	star-trek-timelines/2026-05-07-character-story/scene-7.png	character-story-dir	medium	original character-story-2026-05-07
+assets	star-trek-timelines/ep2/scene-1-end.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-1-end.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-1-start.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-1-start.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-10.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-10.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-11-end.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-11-end.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-11-start.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-11-start.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-2.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-2.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-3-end.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-3-end.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-3-start.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-3-start.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-4.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-4.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-5-end.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-5-end.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-5-start.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-5-start.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-6.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-6.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-7-end.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-7-end.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-7-start.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-7-start.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-8.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-8.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-9-end.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-9-end.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/scene-9-start.png	episodes	star-trek-timelines/ep2-unknown-date/scenes/scene-9-start.png	episode-dir-scene	medium	original ep2/
+assets	star-trek-timelines/ep2/tts-10.mp3	episodes	star-trek-timelines/ep2-unknown-date/tts/tts-10.mp3	episode-dir-tts-bare	medium	
+assets	star-trek-timelines/ep2/tts-2.mp3	episodes	star-trek-timelines/ep2-unknown-date/tts/tts-2.mp3	episode-dir-tts-bare	medium	
+assets	star-trek-timelines/ep2/tts-4.mp3	episodes	star-trek-timelines/ep2-unknown-date/tts/tts-4.mp3	episode-dir-tts-bare	medium	
+assets	star-trek-timelines/ep2/tts-6.mp3	episodes	star-trek-timelines/ep2-unknown-date/tts/tts-6.mp3	episode-dir-tts-bare	medium	
+assets	star-trek-timelines/ep2/tts-8.mp3	episodes	star-trek-timelines/ep2-unknown-date/tts/tts-8.mp3	episode-dir-tts-bare	medium	
+assets	star-trek-timelines/ep3/scene-1.png	episodes	star-trek-timelines/ep3-unknown-date/scenes/scene-1.png	episode-dir-scene	medium	original ep3/
+assets	star-trek-timelines/ep3/scene-2-end.png	episodes	star-trek-timelines/ep3-unknown-date/scenes/scene-2-end.png	episode-dir-scene	medium	original ep3/
+assets	star-trek-timelines/ep3/scene-2-start.png	episodes	star-trek-timelines/ep3-unknown-date/scenes/scene-2-start.png	episode-dir-scene	medium	original ep3/
+assets	star-trek-timelines/ep3/scene-3.png	episodes	star-trek-timelines/ep3-unknown-date/scenes/scene-3.png	episode-dir-scene	medium	original ep3/
+assets	star-trek-timelines/ep3/scene-4.png	episodes	star-trek-timelines/ep3-unknown-date/scenes/scene-4.png	episode-dir-scene	medium	original ep3/
+assets	star-trek-timelines/ep3/scene-5-end.png	episodes	star-trek-timelines/ep3-unknown-date/scenes/scene-5-end.png	episode-dir-scene	medium	original ep3/
+assets	star-trek-timelines/ep3/scene-5-start.png	episodes	star-trek-timelines/ep3-unknown-date/scenes/scene-5-start.png	episode-dir-scene	medium	original ep3/
+assets	star-trek-timelines/ep3/scene-6.png	episodes	star-trek-timelines/ep3-unknown-date/scenes/scene-6.png	episode-dir-scene	medium	original ep3/
+assets	star-trek-timelines/ep3/tts-1.mp3	episodes	star-trek-timelines/ep3-unknown-date/tts/tts-1.mp3	episode-dir-tts-bare	medium	
+assets	star-trek-timelines/ep3/tts-3.mp3	episodes	star-trek-timelines/ep3-unknown-date/tts/tts-3.mp3	episode-dir-tts-bare	medium	
+assets	star-trek-timelines/ep3/tts-4.mp3	episodes	star-trek-timelines/ep3-unknown-date/tts/tts-4.mp3	episode-dir-tts-bare	medium	
+assets	star-trek-timelines/ep3/tts-6.mp3	episodes	star-trek-timelines/ep3-unknown-date/tts/tts-6.mp3	episode-dir-tts-bare	medium	
+assets	star-trek-timelines/gameplay/Startrek_gameplay_1.mp4	assets	star-trek-timelines/gameplay/startrek-gameplay-1.mp4	gameplay-keep	high	renamed from 'Startrek_gameplay_1.mp4'
+assets	star-trek-timelines/gameplay/Startrek_gameplay_2.mp4	assets	star-trek-timelines/gameplay/startrek-gameplay-2.mp4	gameplay-keep	high	renamed from 'Startrek_gameplay_2.mp4'
+assets	star-trek-timelines/gameplay/Startrek_gameplay_3.mp4	assets	star-trek-timelines/gameplay/startrek-gameplay-3.mp4	gameplay-keep	high	renamed from 'Startrek_gameplay_3.mp4'
+assets	star-trek-timelines/gameplay/Startrek_gameplay_5.mp4	assets	star-trek-timelines/gameplay/startrek-gameplay-5.mp4	gameplay-keep	high	renamed from 'Startrek_gameplay_5.mp4'
+assets	star-trek-timelines/gameplay/Startrek_gameplay_6.mp4	assets	star-trek-timelines/gameplay/startrek-gameplay-6.mp4	gameplay-keep	high	renamed from 'Startrek_gameplay_6.mp4'
+assets	star-trek-timelines/locations/academy.png	assets	star-trek-timelines/locations/academy.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/airlock-corridor-v2.png	assets	star-trek-timelines/locations/airlock-corridor-v2.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/airlock.png	assets	star-trek-timelines/locations/airlock.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/bar.png	assets	star-trek-timelines/locations/bar.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/borg-cube.png	assets	star-trek-timelines/locations/borg-cube.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/defiant-bridge.png	assets	star-trek-timelines/locations/defiant-bridge.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/ds9-ops.png	assets	star-trek-timelines/locations/ds9-ops.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/ds9-readyroom.png	assets	star-trek-timelines/locations/ds9-readyroom.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/enterprise-bridge.png	assets	star-trek-timelines/locations/enterprise-bridge.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/enterprise-corridor.png	assets	star-trek-timelines/locations/enterprise-corridor.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/nola-kitchen.png	assets	star-trek-timelines/locations/nola-kitchen.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/observation-lounge.png	assets	star-trek-timelines/locations/observation-lounge.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/ready-room.png	assets	star-trek-timelines/locations/ready-room.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/saratoga-burning.png	assets	star-trek-timelines/locations/saratoga-burning.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/starfleet-academy.png	assets	star-trek-timelines/locations/starfleet-academy.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/stargazer.png	assets	star-trek-timelines/locations/stargazer.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/vineyard.png	assets	star-trek-timelines/locations/vineyard.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/vulcan-surface.png	assets	star-trek-timelines/locations/vulcan-surface.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/locations/wormhole-threshold.png	assets	star-trek-timelines/locations/wormhole-threshold.png	already-target	high	already in target shape | first-of-collision
+assets	star-trek-timelines/music/energetic-kompa-pasion-playful-comedy.mp3	music	unknown-mood/energetic-kompa-pasion-playful-comedy.mp3	game-music-cross	low	mood unknown
+assets	star-trek-timelines/refs/archer-mature-captain-ref-v2-2026-05-27.png	assets	star-trek-timelines/characters/archer/variants/mature-captain.png	character-variant-ref	high	variant=mature-captain | first-of-collision
+assets	star-trek-timelines/refs/archer-young-boy-ref-2026-05-27.png	assets	star-trek-timelines/characters/archer/variants/young-boy.png	character-variant-ref	high	variant=young-boy | first-of-collision
+assets	star-trek-timelines/refs/bg-academy.png	assets	star-trek-timelines/locations/academy-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/academy.png
+assets	star-trek-timelines/refs/bg-airlock-corridor-v2.png	assets	star-trek-timelines/locations/airlock-corridor-v2-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/airlock-corridor-v2.png
+assets	star-trek-timelines/refs/bg-airlock.png	assets	star-trek-timelines/locations/airlock-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/airlock.png
+assets	star-trek-timelines/refs/bg-bar.png	assets	star-trek-timelines/locations/bar-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/bar.png
+assets	star-trek-timelines/refs/bg-borg-cube.png	assets	star-trek-timelines/locations/borg-cube-c2.png	location-bg	high	COLLISION (n=2/3); renamed from star-trek-timelines/locations/borg-cube.png
+assets	star-trek-timelines/refs/bg-defiant-bridge.png	assets	star-trek-timelines/locations/defiant-bridge-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/defiant-bridge.png
+assets	star-trek-timelines/refs/bg-ds9-ops.png	assets	star-trek-timelines/locations/ds9-ops-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/ds9-ops.png
+assets	star-trek-timelines/refs/bg-ds9-readyroom.png	assets	star-trek-timelines/locations/ds9-readyroom-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/ds9-readyroom.png
+assets	star-trek-timelines/refs/bg-enterprise-bridge.png	assets	star-trek-timelines/locations/enterprise-bridge-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/enterprise-bridge.png
+assets	star-trek-timelines/refs/bg-enterprise-corridor.png	assets	star-trek-timelines/locations/enterprise-corridor-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/enterprise-corridor.png
+assets	star-trek-timelines/refs/bg-nola-kitchen.png	assets	star-trek-timelines/locations/nola-kitchen-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/nola-kitchen.png
+assets	star-trek-timelines/refs/bg-observation-lounge.png	assets	star-trek-timelines/locations/observation-lounge-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/observation-lounge.png
+assets	star-trek-timelines/refs/bg-ready-room.png	assets	star-trek-timelines/locations/ready-room-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/ready-room.png
+assets	star-trek-timelines/refs/bg-saratoga-burning.png	assets	star-trek-timelines/locations/saratoga-burning-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/saratoga-burning.png
+assets	star-trek-timelines/refs/bg-starfleet-academy.png	assets	star-trek-timelines/locations/starfleet-academy-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/starfleet-academy.png
+assets	star-trek-timelines/refs/bg-stargazer.png	assets	star-trek-timelines/locations/stargazer-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/stargazer.png
+assets	star-trek-timelines/refs/bg-vineyard.png	assets	star-trek-timelines/locations/vineyard-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/vineyard.png
+assets	star-trek-timelines/refs/bg-vulcan-surface.png	assets	star-trek-timelines/locations/vulcan-surface-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/vulcan-surface.png
+assets	star-trek-timelines/refs/bg-wormhole-threshold.png	assets	star-trek-timelines/locations/wormhole-threshold-c2.png	location-bg	high	COLLISION (n=2/2); renamed from star-trek-timelines/locations/wormhole-threshold.png
+assets	star-trek-timelines/refs/captain-kirk-sheet.png	assets	star-trek-timelines/characters/kirk/sheet.png	character-sheet	high	first-of-collision
+assets	star-trek-timelines/refs/captain-picard-ref.png	assets	star-trek-timelines/characters/picard/sheet.png	character-bare-ref	medium	no variant | first-of-collision
+assets	star-trek-timelines/refs/carol-marcus-adult-2026-05-26.png	assets	star-trek-timelines/characters/carol-marcus/variants/adult.png	fallback-variant	low	guessed variant=adult | first-of-collision
+assets	star-trek-timelines/refs/carol-marcus-young-2026-05-26.png	assets	star-trek-timelines/characters/carol-marcus/variants/young.png	fallback-variant	low	guessed variant=young | first-of-collision
+assets	star-trek-timelines/refs/character-ref-kirk.png	assets	star-trek-timelines/characters/kirk/sheet-c2.png	character-ref	high	COLLISION (n=2/3); renamed from star-trek-timelines/characters/kirk/sheet.png
+assets	star-trek-timelines/refs/character-ref-sisko-mature.png	assets	star-trek-timelines/characters/sisko/variants/mature.png	character-ref-variant	high	variant=mature | first-of-collision
+assets	star-trek-timelines/refs/character-ref-sisko-young.png	assets	star-trek-timelines/characters/sisko/variants/young.png	character-ref-variant	high	variant=young | first-of-collision
+assets	star-trek-timelines/refs/character-ref.png	assets	star-trek-timelines/_unsorted/character-ref.png	bare-ref-no-character	low	stem was pure noise
+assets	star-trek-timelines/refs/chekov-sheet.png	assets	star-trek-timelines/characters/chekov/sheet.png	character-sheet	high	first-of-collision
+assets	star-trek-timelines/refs/child-annika-ref.png	assets	star-trek-timelines/characters/annika/sheet.png	character-bare-ref	medium	no variant | first-of-collision
+assets	star-trek-timelines/refs/commander-worf-sheet.png	assets	star-trek-timelines/characters/worf/sheet.png	character-sheet	high	first-of-collision
+assets	star-trek-timelines/refs/cta.mp4	assets	star-trek-timelines/branding/cta-c2.mp4	branding-video	high	COLLISION (n=2/2); renamed from star-trek-timelines/branding/cta.mp4
+assets	star-trek-timelines/refs/data-pixar-sheet.png	assets	star-trek-timelines/characters/data/variants/pixar.png	character-sheet-variant	high	sheet, variant=pixar | first-of-collision
+assets	star-trek-timelines/refs/data-sheet.png	assets	star-trek-timelines/characters/data/sheet.png	character-sheet	high	first-of-collision
+assets	star-trek-timelines/refs/ep5-scene-1.png	episodes	star-trek-timelines/ep5-unknown-date/scenes/scene-1.png	episode-scene	medium	ep5
+assets	star-trek-timelines/refs/ep5-scene-2.png	episodes	star-trek-timelines/ep5-unknown-date/scenes/scene-2.png	episode-scene	medium	ep5
+assets	star-trek-timelines/refs/ep5-scene-3.png	episodes	star-trek-timelines/ep5-unknown-date/scenes/scene-3.png	episode-scene	medium	ep5
+assets	star-trek-timelines/refs/ep5-scene-4.png	episodes	star-trek-timelines/ep5-unknown-date/scenes/scene-4.png	episode-scene	medium	ep5
+assets	star-trek-timelines/refs/ep5-scene-5-v2.png	episodes	star-trek-timelines/ep5-unknown-date/scenes/scene-5.png	episode-scene	medium	ep5 | first-of-collision
+assets	star-trek-timelines/refs/ep5-scene-5.png	episodes	star-trek-timelines/ep5-unknown-date/scenes/scene-5-c2.png	episode-scene	medium	ep5 | COLLISION (n=2/2); renamed from star-trek-timelines/ep5-unknown-date/scenes/scene-5.png
+assets	star-trek-timelines/refs/jadzia-dax-adult-2026-05-24.png	assets	star-trek-timelines/characters/jadzia-dax/variants/adult.png	fallback-variant	low	guessed variant=adult | first-of-collision
+assets	star-trek-timelines/refs/jadzia-dax-initiate-2026-05-24.png	assets	star-trek-timelines/characters/jadzia-dax/variants/initiate.png	fallback-variant	low	guessed variant=initiate | first-of-collision
+assets	star-trek-timelines/refs/janeway-cadet-ref-2026-05-27.png	assets	star-trek-timelines/characters/janeway/variants/cadet.png	character-variant-ref	high	variant=cadet | first-of-collision
+assets	star-trek-timelines/refs/janeway-captain-ref-2026-05-27.png	assets	star-trek-timelines/characters/janeway/variants/captain.png	character-variant-ref	high	variant=captain | first-of-collision
+assets	star-trek-timelines/refs/michael-burnham-ref-2026-05-26.png	assets	star-trek-timelines/characters/michael-burnham/sheet.png	character-bare-ref	medium	no variant | first-of-collision
+assets	star-trek-timelines/refs/opener-v3.png	assets	star-trek-timelines/branding/opener-v3-c2.png	branding-still	high	COLLISION (n=2/2); renamed from star-trek-timelines/branding/opener-v3.png
+assets	star-trek-timelines/refs/opener.mp4	assets	star-trek-timelines/branding/opener-c2.mp4	branding-video	high	COLLISION (n=2/2); renamed from star-trek-timelines/branding/opener.mp4
+assets	star-trek-timelines/refs/q-sheet.png	assets	star-trek-timelines/characters/q/sheet.png	character-sheet	high	first-of-collision
+assets	star-trek-timelines/refs/scene-1-end.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-1-end.png	scene-in-refs	medium	orig tail '-end', clean 'end'
+assets	star-trek-timelines/refs/scene-1-jadzia-dax-2026-05-24.png	episodes	star-trek-timelines/2026-05-24-character-story/scenes/scene-1.png	scene-in-refs	medium	orig tail '-jadzia-dax-2026-05-24', clean 'jadzia-dax'
+assets	star-trek-timelines/refs/scene-1-janeway-2026-05-27.png	episodes	star-trek-timelines/2026-05-27-character-story/scenes/scene-1.png	scene-in-refs	medium	orig tail '-janeway-2026-05-27', clean 'janeway'
+assets	star-trek-timelines/refs/scene-1-sisko-2026-05-21.png	episodes	star-trek-timelines/2026-05-21-character-story/scenes/scene-1.png	scene-in-refs	medium	orig tail '-sisko-2026-05-21', clean 'sisko'
+assets	star-trek-timelines/refs/scene-1-uhura-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-1.png	scene-in-refs	medium	orig tail '-uhura-2026-05-23', clean 'uhura' | first-of-collision
+assets	star-trek-timelines/refs/scene-1-uhura-kelvin-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-1-c2.png	scene-in-refs	medium	orig tail '-uhura-kelvin-2026-05-23', clean 'uhura-kelvin' | COLLISION (n=2/2); renamed from star-trek-timelines/2026-05-23-character-story/scenes/scene-1.png
+assets	star-trek-timelines/refs/scene-1.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-1.png	scene-in-refs	medium	orig tail '', clean ''
+assets	star-trek-timelines/refs/scene-2-end.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-2-end.png	scene-in-refs	medium	orig tail '-end', clean 'end'
+assets	star-trek-timelines/refs/scene-2-jadzia-dax-2026-05-24.png	episodes	star-trek-timelines/2026-05-24-character-story/scenes/scene-2.png	scene-in-refs	medium	orig tail '-jadzia-dax-2026-05-24', clean 'jadzia-dax'
+assets	star-trek-timelines/refs/scene-2-janeway-2026-05-27.png	episodes	star-trek-timelines/2026-05-27-character-story/scenes/scene-2.png	scene-in-refs	medium	orig tail '-janeway-2026-05-27', clean 'janeway'
+assets	star-trek-timelines/refs/scene-2-sisko-2026-05-21.png	episodes	star-trek-timelines/2026-05-21-character-story/scenes/scene-2.png	scene-in-refs	medium	orig tail '-sisko-2026-05-21', clean 'sisko'
+assets	star-trek-timelines/refs/scene-2-uhura-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-2.png	scene-in-refs	medium	orig tail '-uhura-2026-05-23', clean 'uhura' | first-of-collision
+assets	star-trek-timelines/refs/scene-2-uhura-kelvin-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-2-c2.png	scene-in-refs	medium	orig tail '-uhura-kelvin-2026-05-23', clean 'uhura-kelvin' | COLLISION (n=2/2); renamed from star-trek-timelines/2026-05-23-character-story/scenes/scene-2.png
+assets	star-trek-timelines/refs/scene-2.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-2.png	scene-in-refs	medium	orig tail '', clean ''
+assets	star-trek-timelines/refs/scene-3-end.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-3-end.png	scene-in-refs	medium	orig tail '-end', clean 'end'
+assets	star-trek-timelines/refs/scene-3-jadzia-dax-2026-05-24.png	episodes	star-trek-timelines/2026-05-24-character-story/scenes/scene-3.png	scene-in-refs	medium	orig tail '-jadzia-dax-2026-05-24', clean 'jadzia-dax'
+assets	star-trek-timelines/refs/scene-3-janeway-2026-05-27.png	episodes	star-trek-timelines/2026-05-27-character-story/scenes/scene-3.png	scene-in-refs	medium	orig tail '-janeway-2026-05-27', clean 'janeway'
+assets	star-trek-timelines/refs/scene-3-sisko-2026-05-21.png	episodes	star-trek-timelines/2026-05-21-character-story/scenes/scene-3.png	scene-in-refs	medium	orig tail '-sisko-2026-05-21', clean 'sisko'
+assets	star-trek-timelines/refs/scene-3-uhura-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-3.png	scene-in-refs	medium	orig tail '-uhura-2026-05-23', clean 'uhura' | first-of-collision
+assets	star-trek-timelines/refs/scene-3-uhura-kelvin-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-3-c2.png	scene-in-refs	medium	orig tail '-uhura-kelvin-2026-05-23', clean 'uhura-kelvin' | COLLISION (n=2/2); renamed from star-trek-timelines/2026-05-23-character-story/scenes/scene-3.png
+assets	star-trek-timelines/refs/scene-3.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-3.png	scene-in-refs	medium	orig tail '', clean ''
+assets	star-trek-timelines/refs/scene-4-end.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-4-end.png	scene-in-refs	medium	orig tail '-end', clean 'end'
+assets	star-trek-timelines/refs/scene-4-jadzia-dax-2026-05-24.png	episodes	star-trek-timelines/2026-05-24-character-story/scenes/scene-4.png	scene-in-refs	medium	orig tail '-jadzia-dax-2026-05-24', clean 'jadzia-dax'
+assets	star-trek-timelines/refs/scene-4-janeway-2026-05-27.png	episodes	star-trek-timelines/2026-05-27-character-story/scenes/scene-4.png	scene-in-refs	medium	orig tail '-janeway-2026-05-27', clean 'janeway'
+assets	star-trek-timelines/refs/scene-4-sisko-2026-05-21.png	episodes	star-trek-timelines/2026-05-21-character-story/scenes/scene-4.png	scene-in-refs	medium	orig tail '-sisko-2026-05-21', clean 'sisko'
+assets	star-trek-timelines/refs/scene-4-uhura-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-4.png	scene-in-refs	medium	orig tail '-uhura-2026-05-23', clean 'uhura' | first-of-collision
+assets	star-trek-timelines/refs/scene-4-uhura-kelvin-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-4-c2.png	scene-in-refs	medium	orig tail '-uhura-kelvin-2026-05-23', clean 'uhura-kelvin' | COLLISION (n=2/2); renamed from star-trek-timelines/2026-05-23-character-story/scenes/scene-4.png
+assets	star-trek-timelines/refs/scene-4-v2.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-4.png	scene-in-refs	medium	orig tail '-v2', clean 'v2' | first-of-collision
+assets	star-trek-timelines/refs/scene-4.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-4-c2.png	scene-in-refs	medium	orig tail '', clean '' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-unknown-format/scenes/scene-4.png
+assets	star-trek-timelines/refs/scene-5-end.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-5-end.png	scene-in-refs	medium	orig tail '-end', clean 'end'
+assets	star-trek-timelines/refs/scene-5-jadzia-dax-2026-05-24.png	episodes	star-trek-timelines/2026-05-24-character-story/scenes/scene-5.png	scene-in-refs	medium	orig tail '-jadzia-dax-2026-05-24', clean 'jadzia-dax'
+assets	star-trek-timelines/refs/scene-5-janeway-2026-05-27.png	episodes	star-trek-timelines/2026-05-27-character-story/scenes/scene-5.png	scene-in-refs	medium	orig tail '-janeway-2026-05-27', clean 'janeway'
+assets	star-trek-timelines/refs/scene-5-sisko-2026-05-21.png	episodes	star-trek-timelines/2026-05-21-character-story/scenes/scene-5.png	scene-in-refs	medium	orig tail '-sisko-2026-05-21', clean 'sisko'
+assets	star-trek-timelines/refs/scene-5-uhura-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-5.png	scene-in-refs	medium	orig tail '-uhura-2026-05-23', clean 'uhura' | first-of-collision
+assets	star-trek-timelines/refs/scene-5-uhura-kelvin-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-5-c2.png	scene-in-refs	medium	orig tail '-uhura-kelvin-2026-05-23', clean 'uhura-kelvin' | COLLISION (n=2/2); renamed from star-trek-timelines/2026-05-23-character-story/scenes/scene-5.png
+assets	star-trek-timelines/refs/scene-5-v2.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-5.png	scene-in-refs	medium	orig tail '-v2', clean 'v2' | first-of-collision
+assets	star-trek-timelines/refs/scene-5.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-5-c2.png	scene-in-refs	medium	orig tail '', clean '' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-unknown-format/scenes/scene-5.png
+assets	star-trek-timelines/refs/scene-6-end.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-6-end.png	scene-in-refs	medium	orig tail '-end', clean 'end'
+assets	star-trek-timelines/refs/scene-6-jadzia-dax-2026-05-24.png	episodes	star-trek-timelines/2026-05-24-character-story/scenes/scene-6.png	scene-in-refs	medium	orig tail '-jadzia-dax-2026-05-24', clean 'jadzia-dax'
+assets	star-trek-timelines/refs/scene-6-janeway-2026-05-27.png	episodes	star-trek-timelines/2026-05-27-character-story/scenes/scene-6.png	scene-in-refs	medium	orig tail '-janeway-2026-05-27', clean 'janeway'
+assets	star-trek-timelines/refs/scene-6-sisko-2026-05-21.png	episodes	star-trek-timelines/2026-05-21-character-story/scenes/scene-6.png	scene-in-refs	medium	orig tail '-sisko-2026-05-21', clean 'sisko'
+assets	star-trek-timelines/refs/scene-6-uhura-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-6.png	scene-in-refs	medium	orig tail '-uhura-2026-05-23', clean 'uhura' | first-of-collision
+assets	star-trek-timelines/refs/scene-6-uhura-kelvin-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-6-c2.png	scene-in-refs	medium	orig tail '-uhura-kelvin-2026-05-23', clean 'uhura-kelvin' | COLLISION (n=2/2); renamed from star-trek-timelines/2026-05-23-character-story/scenes/scene-6.png
+assets	star-trek-timelines/refs/scene-6.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-6.png	scene-in-refs	medium	orig tail '', clean ''
+assets	star-trek-timelines/refs/scene-7-end.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-7-end.png	scene-in-refs	medium	orig tail '-end', clean 'end'
+assets	star-trek-timelines/refs/scene-7-jadzia-dax-2026-05-24.png	episodes	star-trek-timelines/2026-05-24-character-story/scenes/scene-7.png	scene-in-refs	medium	orig tail '-jadzia-dax-2026-05-24', clean 'jadzia-dax'
+assets	star-trek-timelines/refs/scene-7-janeway-2026-05-27.png	episodes	star-trek-timelines/2026-05-27-character-story/scenes/scene-7.png	scene-in-refs	medium	orig tail '-janeway-2026-05-27', clean 'janeway'
+assets	star-trek-timelines/refs/scene-7-sisko-2026-05-21.png	episodes	star-trek-timelines/2026-05-21-character-story/scenes/scene-7.png	scene-in-refs	medium	orig tail '-sisko-2026-05-21', clean 'sisko'
+assets	star-trek-timelines/refs/scene-7-uhura-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-7.png	scene-in-refs	medium	orig tail '-uhura-2026-05-23', clean 'uhura' | first-of-collision
+assets	star-trek-timelines/refs/scene-7-uhura-kelvin-2026-05-23.png	episodes	star-trek-timelines/2026-05-23-character-story/scenes/scene-7-c2.png	scene-in-refs	medium	orig tail '-uhura-kelvin-2026-05-23', clean 'uhura-kelvin' | COLLISION (n=2/2); renamed from star-trek-timelines/2026-05-23-character-story/scenes/scene-7.png
+assets	star-trek-timelines/refs/scene-7.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-7.png	scene-in-refs	medium	orig tail '', clean ''
+assets	star-trek-timelines/refs/scene-8-end.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-8-end.png	scene-in-refs	medium	orig tail '-end', clean 'end'
+assets	star-trek-timelines/refs/scene-8-v2.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-8.png	scene-in-refs	medium	orig tail '-v2', clean 'v2' | first-of-collision
+assets	star-trek-timelines/refs/scene-8.png	episodes	star-trek-timelines/unknown-date-unknown-format/scenes/scene-8-c2.png	scene-in-refs	medium	orig tail '', clean '' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-unknown-format/scenes/scene-8.png
+assets	star-trek-timelines/refs/seven-on-location-riker-chair.png	assets	star-trek-timelines/_unsorted/seven-on-location-riker-chair.png	character-on-location	low	manual decision needed
+assets	star-trek-timelines/refs/sisko-prophet-ref.png	assets	star-trek-timelines/characters/sisko/variants/prophet.png	character-variant-ref	high	variant=prophet | first-of-collision
+assets	star-trek-timelines/refs/spock-borg-ref-2026-05-25.png	assets	star-trek-timelines/characters/spock/variants/borg.png	character-variant-ref	high	variant=borg | first-of-collision
+assets	star-trek-timelines/refs/spock-canonical-ref-2026-05-25.png	assets	star-trek-timelines/characters/spock/variants/canonical.png	character-variant-ref	high	variant=canonical | first-of-collision
+assets	star-trek-timelines/refs/spock-on-location-vulcan-academy.png	assets	star-trek-timelines/_unsorted/spock-on-location-vulcan-academy.png	character-on-location	low	manual decision needed
+assets	star-trek-timelines/refs/spock-sheet.png	assets	star-trek-timelines/characters/spock/sheet.png	character-sheet	high	first-of-collision
+assets	star-trek-timelines/refs/tpol-ref.png	assets	star-trek-timelines/characters/tpol/sheet.png	character-bare-ref	medium	no variant | first-of-collision
+assets	star-trek-timelines/refs/uhura-character-ref-2026-05-23.png	assets	star-trek-timelines/characters/uhura/sheet.png	character-bare-ref	medium	no variant
+assets	star-trek-timelines/refs/uhura-kelvin-adult-2026-05-23.png	assets	star-trek-timelines/characters/uhura-kelvin/variants/adult.png	fallback-variant	low	guessed variant=adult | first-of-collision
+assets	star-trek-timelines/refs/uhura-kelvin-cadet-2026-05-23.png	assets	star-trek-timelines/characters/uhura-kelvin/variants/cadet.png	fallback-variant	low	guessed variant=cadet | first-of-collision
+assets	star-trek-timelines/refs/uhura-kelvin-child-2026-05-23.png	assets	star-trek-timelines/characters/uhura-kelvin/variants/child.png	fallback-variant	low	guessed variant=child | first-of-collision
+assets	star-trek-timelines/scenes/spock-cs-scene-1-end.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-1-end.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/scenes/spock-cs-scene-1.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-1.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/scenes/spock-cs-scene-2-end.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-2-end.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/scenes/spock-cs-scene-2.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-2.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/scenes/spock-cs-scene-3-end.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-3-end.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/scenes/spock-cs-scene-3.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-3.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/scenes/spock-cs-scene-4-end.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-4-end.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/scenes/spock-cs-scene-4.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-4.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/scenes/spock-cs-scene-5-end.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-5-end.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/scenes/spock-cs-scene-5.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-5.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/scenes/spock-cs-scene-6-end.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-6-end.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/scenes/spock-cs-scene-6.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-6.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/scenes/spock-cs-scene-7-end.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-7-end.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/scenes/spock-cs-scene-7.png	episodes	star-trek-timelines/unknown-date-character-story/spock/scenes/scene-7.png	scenes-cs-prefix	high	char=spock
+assets	star-trek-timelines/tts/2026-04-20-gameplay-avatar-tts.mp3	episodes	star-trek-timelines/2026-04-20-gameplay-avatar/tts/2026-04-20-gameplay-avatar-tts.mp3	tts	medium	date=2026-04-20 fmt=gameplay-avatar
+assets	star-trek-timelines/tts/2026-05-26-scene-2-customer.mp3	episodes	star-trek-timelines/2026-05-26-unknown-format/tts/2026-05-26-scene-2-customer.mp3	tts	medium	date=2026-05-26 fmt=unknown-format
+assets	star-trek-timelines/tts/2026-05-26-scene-2.mp3	episodes	star-trek-timelines/2026-05-26-unknown-format/tts/2026-05-26-scene-2.mp3	tts	medium	date=2026-05-26 fmt=unknown-format
+assets	star-trek-timelines/tts/2026-05-26-scene-4.mp3	episodes	star-trek-timelines/2026-05-26-unknown-format/tts/2026-05-26-scene-4.mp3	tts	medium	date=2026-05-26 fmt=unknown-format
+assets	star-trek-timelines/tts/2026-05-26-scene-5-customer.mp3	episodes	star-trek-timelines/2026-05-26-unknown-format/tts/2026-05-26-scene-5-customer.mp3	tts	medium	date=2026-05-26 fmt=unknown-format
+assets	star-trek-timelines/tts/2026-05-26-scene-5.mp3	episodes	star-trek-timelines/2026-05-26-unknown-format/tts/2026-05-26-scene-5.mp3	tts	medium	date=2026-05-26 fmt=unknown-format
+assets	star-trek-timelines/tts/2026-05-26-scene-6-customer.mp3	episodes	star-trek-timelines/2026-05-26-unknown-format/tts/2026-05-26-scene-6-customer.mp3	tts	medium	date=2026-05-26 fmt=unknown-format
+assets	star-trek-timelines/tts/2026-05-26-scene-6.mp3	episodes	star-trek-timelines/2026-05-26-unknown-format/tts/2026-05-26-scene-6.mp3	tts	medium	date=2026-05-26 fmt=unknown-format
+assets	star-trek-timelines/tts/archer-character-story-2026-05-27.mp3	episodes	star-trek-timelines/2026-05-27-character-story/tts/archer-character-story-2026-05-27.mp3	tts	medium	date=2026-05-27 fmt=character-story
+assets	star-trek-timelines/tts/carol-marcus-character-story-2026-05-26.mp3	episodes	star-trek-timelines/2026-05-26-character-story/tts/carol-marcus-character-story-2026-05-26.mp3	tts	medium	date=2026-05-26 fmt=character-story | first-of-collision
+assets	star-trek-timelines/tts/character-story-data-2026-05-07.mp3	episodes	star-trek-timelines/2026-05-07-character-story/tts/character-story-data-2026-05-07.mp3	tts	medium	date=2026-05-07 fmt=character-story
+assets	star-trek-timelines/tts/character-story-data-short-2026-05-07.mp3	episodes	star-trek-timelines/2026-05-07-character-story/tts/character-story-data-short-2026-05-07.mp3	tts	medium	date=2026-05-07 fmt=character-story
+assets	star-trek-timelines/tts/customer-3d7649f6.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/customer-3d7649f6.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/customer-7bbe0d64.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/customer-7bbe0d64.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/customer-9039d283.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/customer-9039d283.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/customer-ae29a3de.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/customer-ae29a3de.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/ep4-scene-3-Brian.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/ep4-scene-3-Brian.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/ep4-scene-4-Daniel.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/ep4-scene-4-Daniel.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/ep4-scene-5-Brian.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/ep4-scene-5-Brian.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/ep5-scene-2-1779883462823614000.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/ep5-scene-2-1779883462823614000.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/ep5-scene-2.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/ep5-scene-2.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/ep5-scene-3-1779883466861047000.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/ep5-scene-3-1779883466861047000.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/ep5-scene-5.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/ep5-scene-5.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/jadzia-dax-character-story-2026-05-24.mp3	episodes	star-trek-timelines/2026-05-24-character-story/tts/jadzia-dax-character-story-2026-05-24.mp3	tts	medium	date=2026-05-24 fmt=character-story
+assets	star-trek-timelines/tts/janeway-character-story-2026-05-27.mp3	episodes	star-trek-timelines/2026-05-27-character-story/tts/janeway-character-story-2026-05-27.mp3	tts	medium	date=2026-05-27 fmt=character-story
+assets	star-trek-timelines/tts/picard-character-story-2026-05-20.mp3	episodes	star-trek-timelines/2026-05-20-character-story/tts/picard-character-story-2026-05-20.mp3	tts	medium	date=2026-05-20 fmt=character-story
+assets	star-trek-timelines/tts/scene5-customer-charlotte-4832ms.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/scene5-customer-charlotte-4832ms.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/seven-of-nine-character-story-2026-05-22.mp3	episodes	star-trek-timelines/2026-05-22-character-story/tts/seven-of-nine-character-story-2026-05-22.mp3	tts	medium	date=2026-05-22 fmt=character-story
+assets	star-trek-timelines/tts/seven-of-nine-character-story.mp3	episodes	star-trek-timelines/unknown-date-character-story/tts/seven-of-nine-character-story.mp3	tts	medium	date=unknown-date fmt=character-story
+assets	star-trek-timelines/tts/sisko-character-story-2026-05-21.mp3	episodes	star-trek-timelines/2026-05-21-character-story/tts/sisko-character-story-2026-05-21.mp3	tts	medium	date=2026-05-21 fmt=character-story
+assets	star-trek-timelines/tts/sisko-prophet-redcon-2026-05-28.mp3	episodes	star-trek-timelines/2026-05-28-redcon/tts/sisko-prophet-redcon-2026-05-28.mp3	tts	medium	date=2026-05-28 fmt=redcon
+assets	star-trek-timelines/tts/spock-borg-what-if-lore-2026-05-25.mp3	episodes	star-trek-timelines/2026-05-25-what-if-lore/tts/spock-borg-what-if-lore-2026-05-25.mp3	tts	medium	date=2026-05-25 fmt=what-if-lore | first-of-collision
+assets	star-trek-timelines/tts/spock-padded-2740dd1f.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/spock-padded-2740dd1f.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/spock-padded-359ae716.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/spock-padded-359ae716.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/spock-padded-629ffccc.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/spock-padded-629ffccc.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/spock-padded-9c8daec9.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/spock-padded-9c8daec9.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/spock-padded-a91e6220.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/spock-padded-a91e6220.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/top-list-2026-05-26-scene-0.mp3	episodes	star-trek-timelines/2026-05-26-top-list/tts/top-list-2026-05-26-scene-0.mp3	tts	medium	date=2026-05-26 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-26-scene-1.mp3	episodes	star-trek-timelines/2026-05-26-top-list/tts/top-list-2026-05-26-scene-1.mp3	tts	medium	date=2026-05-26 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-26-scene-2.mp3	episodes	star-trek-timelines/2026-05-26-top-list/tts/top-list-2026-05-26-scene-2.mp3	tts	medium	date=2026-05-26 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-26-scene-3.mp3	episodes	star-trek-timelines/2026-05-26-top-list/tts/top-list-2026-05-26-scene-3.mp3	tts	medium	date=2026-05-26 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-26-scene-4.mp3	episodes	star-trek-timelines/2026-05-26-top-list/tts/top-list-2026-05-26-scene-4.mp3	tts	medium	date=2026-05-26 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-26-scene-5.mp3	episodes	star-trek-timelines/2026-05-26-top-list/tts/top-list-2026-05-26-scene-5.mp3	tts	medium	date=2026-05-26 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-26-scene-6.mp3	episodes	star-trek-timelines/2026-05-26-top-list/tts/top-list-2026-05-26-scene-6.mp3	tts	medium	date=2026-05-26 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-27-scene-0.mp3	episodes	star-trek-timelines/2026-05-27-top-list/tts/top-list-2026-05-27-scene-0.mp3	tts	medium	date=2026-05-27 fmt=top-list | first-of-collision
+assets	star-trek-timelines/tts/top-list-2026-05-27-scene-1.mp3	episodes	star-trek-timelines/2026-05-27-top-list/tts/top-list-2026-05-27-scene-1.mp3	tts	medium	date=2026-05-27 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-27-scene-2.mp3	episodes	star-trek-timelines/2026-05-27-top-list/tts/top-list-2026-05-27-scene-2.mp3	tts	medium	date=2026-05-27 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-27-scene-3.mp3	episodes	star-trek-timelines/2026-05-27-top-list/tts/top-list-2026-05-27-scene-3.mp3	tts	medium	date=2026-05-27 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-27-scene-4.mp3	episodes	star-trek-timelines/2026-05-27-top-list/tts/top-list-2026-05-27-scene-4.mp3	tts	medium	date=2026-05-27 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-27-scene-5.mp3	episodes	star-trek-timelines/2026-05-27-top-list/tts/top-list-2026-05-27-scene-5.mp3	tts	medium	date=2026-05-27 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-27-scene-6.mp3	episodes	star-trek-timelines/2026-05-27-top-list/tts/top-list-2026-05-27-scene-6.mp3	tts	medium	date=2026-05-27 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-28-scene-0.mp3	episodes	star-trek-timelines/2026-05-28-top-list/tts/top-list-2026-05-28-scene-0.mp3	tts	medium	date=2026-05-28 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-28-scene-1.mp3	episodes	star-trek-timelines/2026-05-28-top-list/tts/top-list-2026-05-28-scene-1.mp3	tts	medium	date=2026-05-28 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-28-scene-2.mp3	episodes	star-trek-timelines/2026-05-28-top-list/tts/top-list-2026-05-28-scene-2.mp3	tts	medium	date=2026-05-28 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-28-scene-3.mp3	episodes	star-trek-timelines/2026-05-28-top-list/tts/top-list-2026-05-28-scene-3.mp3	tts	medium	date=2026-05-28 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-28-scene-4.mp3	episodes	star-trek-timelines/2026-05-28-top-list/tts/top-list-2026-05-28-scene-4.mp3	tts	medium	date=2026-05-28 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-28-scene-5.mp3	episodes	star-trek-timelines/2026-05-28-top-list/tts/top-list-2026-05-28-scene-5.mp3	tts	medium	date=2026-05-28 fmt=top-list
+assets	star-trek-timelines/tts/top-list-2026-05-28-scene-6.mp3	episodes	star-trek-timelines/2026-05-28-top-list/tts/top-list-2026-05-28-scene-6.mp3	tts	medium	date=2026-05-28 fmt=top-list
+assets	star-trek-timelines/tts/tts-customer-1778855898991.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/tts-customer-1778855898991.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/tts-kirk-ru.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/tts-kirk-ru.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/tts-spock-padded-1778855887137.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/tts-spock-padded-1778855887137.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/tts-spock-padded-1778855895083.mp3	episodes	star-trek-timelines/unknown-date-unknown-format/tts/tts-spock-padded-1778855895083.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	star-trek-timelines/tts/uhura-character-story-2026-05-23.mp3	episodes	star-trek-timelines/2026-05-23-character-story/tts/uhura-character-story-2026-05-23.mp3	tts	medium	date=2026-05-23 fmt=character-story
+assets	star-trek-timelines/tts/uhura-kelvin-character-story-2026-05-23.mp3	episodes	star-trek-timelines/2026-05-23-character-story/tts/uhura-kelvin-character-story-2026-05-23.mp3	tts	medium	date=2026-05-23 fmt=character-story
+assets	star-trek-timelines/videos/spock-borg-what-if-lore-2026-05-25.mp4	videos	star-trek-timelines/spock-borg-what-if-lore-2026-05-25.mp4	game-videos-cross	high	
+assets	tts/roblox/scene-1-1778760673.mp3	episodes	roblox/unknown-date-unknown-format/tts/scene-1-1778760673.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	tts/roblox/scene-2-1778761142612.mp3	episodes	roblox/unknown-date-unknown-format/tts/scene-2-1778761142612.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	tts/roblox/scene-3-1778761154969.mp3	episodes	roblox/unknown-date-unknown-format/tts/scene-3-1778761154969.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	tts/roblox/scene-4-1778761164639.mp3	episodes	roblox/unknown-date-unknown-format/tts/scene-4-1778761164639.mp3	tts	medium	date=unknown-date fmt=unknown-format
+assets	assets/roblox/tts/ep6-scene-1.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep6-scene-1.mp3	denest+tts	medium	stripped nested 'assets/' prefix; date=unknown-date fmt=unknown-format
+assets	assets/roblox/tts/ep6-scene-2.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep6-scene-2.mp3	denest+tts	medium	stripped nested 'assets/' prefix; date=unknown-date fmt=unknown-format
+assets	assets/roblox/tts/ep6-scene-3.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep6-scene-3.mp3	denest+tts	medium	stripped nested 'assets/' prefix; date=unknown-date fmt=unknown-format
+assets	assets/roblox/tts/ep6-scene-4.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep6-scene-4.mp3	denest+tts	medium	stripped nested 'assets/' prefix; date=unknown-date fmt=unknown-format
+assets	assets/roblox/tts/ep6-scene-5.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep6-scene-5.mp3	denest+tts	medium	stripped nested 'assets/' prefix; date=unknown-date fmt=unknown-format
+assets	assets/roblox/tts/ep6-scene-6.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep6-scene-6.mp3	denest+tts	medium	stripped nested 'assets/' prefix; date=unknown-date fmt=unknown-format
+assets	assets/roblox/tts/ep6-scene-7.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep6-scene-7.mp3	denest+tts	medium	stripped nested 'assets/' prefix; date=unknown-date fmt=unknown-format
+assets	assets/roblox/tts/ep6-scene-8.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep6-scene-8.mp3	denest+tts	medium	stripped nested 'assets/' prefix; date=unknown-date fmt=unknown-format
+assets	assets/roblox/tts/ep6-scene-9.mp3	episodes	roblox/unknown-date-unknown-format/tts/ep6-scene-9.mp3	denest+tts	medium	stripped nested 'assets/' prefix; date=unknown-date fmt=unknown-format
+assets	assets/star-trek-timelines/tts/carol-marcus-character-story-2026-05-26.mp3	episodes	star-trek-timelines/2026-05-26-character-story/tts/carol-marcus-character-story-2026-05-26-c2.mp3	denest+tts	medium	stripped nested 'assets/' prefix; date=2026-05-26 fmt=character-story | COLLISION (n=2/2); renamed from star-trek-timelines/2026-05-26-character-story/tts/carol-marcus-character-story-2026-05-26.mp3
+assets	assets/star-trek-timelines/tts/spock-borg-what-if-lore-2026-05-25.mp3	episodes	star-trek-timelines/2026-05-25-what-if-lore/tts/spock-borg-what-if-lore-2026-05-25-c2.mp3	denest+tts	medium	stripped nested 'assets/' prefix; date=2026-05-25 fmt=what-if-lore | COLLISION (n=2/2); renamed from star-trek-timelines/2026-05-25-what-if-lore/tts/spock-borg-what-if-lore-2026-05-25.mp3
+assets	assets/star-trek-timelines/tts/top-list-2026-05-27-scene-0.mp3	episodes	star-trek-timelines/2026-05-27-top-list/tts/top-list-2026-05-27-scene-0-c2.mp3	denest+tts	medium	stripped nested 'assets/' prefix; date=2026-05-27 fmt=top-list | COLLISION (n=2/2); renamed from star-trek-timelines/2026-05-27-top-list/tts/top-list-2026-05-27-scene-0.mp3
+assets	kekele/characters/demon-cartoon/sheet.png	assets	kekele/characters/demon-cartoon/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from kekele/characters/demon-cartoon/sheet.png
+assets	kekele/characters/demon-realistic-counterpart/sheet.png	assets	kekele/characters/demon-realistic-counterpart/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from kekele/characters/demon-realistic-counterpart/sheet.png
+assets	kekele/characters/knight-cartoon/sheet.png	assets	kekele/characters/knight-cartoon/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from kekele/characters/knight-cartoon/sheet.png
+assets	kekele/characters/knight-realistic-counterpart/sheet.png	assets	kekele/characters/knight-realistic-counterpart/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from kekele/characters/knight-realistic-counterpart/sheet.png
+assets	kekele/characters/pirate-cartoon/sheet.png	assets	kekele/characters/pirate-cartoon/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from kekele/characters/pirate-cartoon/sheet.png
+assets	kekele/characters/pirate-realistic-counterpart/sheet.png	assets	kekele/characters/pirate-realistic-counterpart/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from kekele/characters/pirate-realistic-counterpart/sheet.png
+assets	marvel-snap/characters/captain-america/avatar-cosmic.png	assets	marvel-snap/characters/captain-america/avatar-cosmic-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from marvel-snap/characters/captain-america/avatar-cosmic.png
+assets	marvel-snap/characters/captain-america/avatar.png	assets	marvel-snap/characters/captain-america/avatar-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from marvel-snap/characters/captain-america/avatar.png
+assets	mlbb/characters/aamon/sheet.png	assets	mlbb/characters/aamon/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from mlbb/characters/aamon/sheet.png
+assets	mlbb/characters/benedetta/sheet.png	assets	mlbb/characters/benedetta/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from mlbb/characters/benedetta/sheet.png
+assets	mlbb/characters/chou/sheet.png	assets	mlbb/characters/chou/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from mlbb/characters/chou/sheet.png
+assets	mlbb/characters/esmeralda/sheet.png	assets	mlbb/characters/esmeralda/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from mlbb/characters/esmeralda/sheet.png
+assets	mlbb/characters/fanny/sheet.png	assets	mlbb/characters/fanny/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from mlbb/characters/fanny/sheet.png
+assets	mlbb/characters/gusion/sheet.png	assets	mlbb/characters/gusion/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from mlbb/characters/gusion/sheet.png
+assets	mlbb/characters/kagura/sheet.png	assets	mlbb/characters/kagura/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from mlbb/characters/kagura/sheet.png
+assets	mlbb/characters/lancelot/sheet.png	assets	mlbb/characters/lancelot/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from mlbb/characters/lancelot/sheet.png
+assets	mlbb/characters/ling/sheet.png	assets	mlbb/characters/ling/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from mlbb/characters/ling/sheet.png
+assets	mlbb/characters/wanwan/sheet.png	assets	mlbb/characters/wanwan/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from mlbb/characters/wanwan/sheet.png
+assets	oxide/characters/geared-veteran/sheet.png	assets	oxide/characters/geared-veteran/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from oxide/characters/geared-veteran/sheet.png
+assets	oxide/characters/noob/sheet.png	assets	oxide/characters/noob/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from oxide/characters/noob/sheet.png
+assets	oxide/characters/raider/sheet.png	assets	oxide/characters/raider/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from oxide/characters/raider/sheet.png
+assets	roblox/_unsorted/motion-dance-bts/character.png	assets	roblox/_unsorted/_unsorted/motion-dance-bts/character.png	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	roblox/_unsorted/motion-dance-bts/dance-ref.mp4	assets	roblox/_unsorted/_unsorted/motion-dance-bts/dance-ref.mp4	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	roblox/_unsorted/motion-dance-bts/final.mp4	assets	roblox/_unsorted/_unsorted/motion-dance-bts/final.mp4	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	roblox/_unsorted/motion-dance-test/bg-ref.jpg	assets	roblox/_unsorted/_unsorted/motion-dance-test/bg-ref.jpg	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	roblox/_unsorted/motion-dance-test/character-v2.png	assets	roblox/_unsorted/_unsorted/motion-dance-test/character-v2.png	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	roblox/_unsorted/motion-dance-test/character.png	assets	roblox/_unsorted/_unsorted/motion-dance-test/character.png	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	roblox/_unsorted/motion-dance-test/dance-ref.mp4	assets	roblox/_unsorted/_unsorted/motion-dance-test/dance-ref.mp4	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	roblox/_unsorted/motion-dance-test/girl-v1.png	assets	roblox/_unsorted/_unsorted/motion-dance-test/girl-v1.png	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	roblox/_unsorted/motion-dance-test/tpol-canon-ref.jpg	assets	roblox/_unsorted/_unsorted/motion-dance-test/tpol-canon-ref.jpg	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	roblox/_unsorted/motion-dance-test/tpol-v2-archive.png	assets	roblox/_unsorted/_unsorted/motion-dance-test/tpol-v2-archive.png	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	roblox/_unsorted/motion-dance-tpol/dance-ref.mp4	assets	roblox/_unsorted/_unsorted/motion-dance-tpol/dance-ref.mp4	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	roblox/_unsorted/motion-test/dance-ref.mp4	assets	roblox/_unsorted/_unsorted/motion-test/dance-ref.mp4	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	roblox/_unsorted/motion-test/girl-v1.png	assets	roblox/_unsorted/_unsorted/motion-test/girl-v1.png	unknown-subdir	low	subdir '_unsorted' not recognized
+assets	roblox/characters/chad-news/avatar.png	assets	roblox/characters/chad-news/avatar-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from roblox/characters/chad-news/avatar.png
+assets	roblox/characters/jake-news/avatar.png	assets	roblox/characters/jake-news/avatar-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from roblox/characters/jake-news/avatar.png
+assets	roblox/characters/sarah-news/avatar.png	assets	roblox/characters/sarah-news/avatar-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from roblox/characters/sarah-news/avatar.png
+assets	roblox/motion-dance/2026-05-18/character.png	episodes	roblox/2026-05-18-motion-dance/character.png	motion-dance-date	high	
+assets	roblox/motion-dance/2026-05-18/dance-ref.mp4	episodes	roblox/2026-05-18-motion-dance/dance-ref.mp4	motion-dance-date	high	
+assets	roblox/motion-dance/2026-05-18/ref-frame-mid.jpg	episodes	roblox/2026-05-18-motion-dance/ref-frame-mid.jpg	motion-dance-date	high	
+assets	roblox/refs/ep6/scene-1.png	episodes	roblox/ep6-unknown-date/refs/scene-1.png	refs-nested-ep	medium	
+assets	roblox/refs/ep6/scene-2.png	episodes	roblox/ep6-unknown-date/refs/scene-2.png	refs-nested-ep	medium	
+assets	roblox/refs/ep6/scene-3.png	episodes	roblox/ep6-unknown-date/refs/scene-3.png	refs-nested-ep	medium	
+assets	roblox/refs/ep6/scene-4.png	episodes	roblox/ep6-unknown-date/refs/scene-4.png	refs-nested-ep	medium	
+assets	roblox/refs/ep6/scene-5-end.png	episodes	roblox/ep6-unknown-date/refs/scene-5-end.png	refs-nested-ep	medium	
+assets	roblox/refs/ep6/scene-5.png	episodes	roblox/ep6-unknown-date/refs/scene-5.png	refs-nested-ep	medium	
+assets	roblox/refs/ep6/scene-6-end.png	episodes	roblox/ep6-unknown-date/refs/scene-6-end.png	refs-nested-ep	medium	
+assets	roblox/refs/ep6/scene-6.png	episodes	roblox/ep6-unknown-date/refs/scene-6.png	refs-nested-ep	medium	
+assets	roblox/refs/ep6/scene-7-end.png	episodes	roblox/ep6-unknown-date/refs/scene-7-end.png	refs-nested-ep	medium	
+assets	roblox/refs/ep6/scene-7.png	episodes	roblox/ep6-unknown-date/refs/scene-7.png	refs-nested-ep	medium	
+assets	roblox/refs/ep6/scene-8.png	episodes	roblox/ep6-unknown-date/refs/scene-8.png	refs-nested-ep	medium	
+assets	roblox/refs/ep6/scene-9.png	episodes	roblox/ep6-unknown-date/refs/scene-9.png	refs-nested-ep	medium	
+assets	roblox/scenes/builderman-character-story/scene-1.png	episodes	roblox/unknown-date-character-story/builderman/scenes/scene-1.png	scenes-named	medium	original dir 'builderman-character-story'
+assets	roblox/scenes/builderman-character-story/scene-10.png	episodes	roblox/unknown-date-character-story/builderman/scenes/scene-10.png	scenes-named	medium	original dir 'builderman-character-story'
+assets	roblox/scenes/builderman-character-story/scene-2.png	episodes	roblox/unknown-date-character-story/builderman/scenes/scene-2.png	scenes-named	medium	original dir 'builderman-character-story'
+assets	roblox/scenes/builderman-character-story/scene-3.png	episodes	roblox/unknown-date-character-story/builderman/scenes/scene-3.png	scenes-named	medium	original dir 'builderman-character-story'
+assets	roblox/scenes/builderman-character-story/scene-4.png	episodes	roblox/unknown-date-character-story/builderman/scenes/scene-4.png	scenes-named	medium	original dir 'builderman-character-story'
+assets	roblox/scenes/builderman-character-story/scene-5.png	episodes	roblox/unknown-date-character-story/builderman/scenes/scene-5.png	scenes-named	medium	original dir 'builderman-character-story'
+assets	roblox/scenes/builderman-character-story/scene-6.png	episodes	roblox/unknown-date-character-story/builderman/scenes/scene-6.png	scenes-named	medium	original dir 'builderman-character-story'
+assets	roblox/scenes/builderman-character-story/scene-7.png	episodes	roblox/unknown-date-character-story/builderman/scenes/scene-7.png	scenes-named	medium	original dir 'builderman-character-story'
+assets	roblox/scenes/builderman-character-story/scene-8.png	episodes	roblox/unknown-date-character-story/builderman/scenes/scene-8.png	scenes-named	medium	original dir 'builderman-character-story'
+assets	roblox/scenes/builderman-character-story/scene-9.png	episodes	roblox/unknown-date-character-story/builderman/scenes/scene-9.png	scenes-named	medium	original dir 'builderman-character-story'
+assets	roblox/scenes/ep1/bg-luxuria-alcove.png	episodes	roblox/unknown-date-unknown-format/ep1/refs/bg-luxuria-alcove.png	scenes-named-bg-ref	medium	bg-ref inside scenes/ep1/
+assets	roblox/scenes/ep1/bg-luxuria-avenue.png	episodes	roblox/unknown-date-unknown-format/ep1/refs/bg-luxuria-avenue.png	scenes-named-bg-ref	medium	bg-ref inside scenes/ep1/
+assets	roblox/scenes/ep1/bg-luxuria-plaza-fountain.png	episodes	roblox/unknown-date-unknown-format/ep1/refs/bg-luxuria-plaza-fountain.png	scenes-named-bg-ref	medium	bg-ref inside scenes/ep1/
+assets	roblox/scenes/ep1/bg-luxuria-plaza.png	episodes	roblox/unknown-date-unknown-format/ep1/refs/bg-luxuria-plaza.png	scenes-named-bg-ref	medium	bg-ref inside scenes/ep1/
+assets	roblox/scenes/ep1/bg-luxuria-vip-area.png	episodes	roblox/unknown-date-unknown-format/ep1/refs/bg-luxuria-vip-area.png	scenes-named-bg-ref	medium	bg-ref inside scenes/ep1/
+assets	roblox/scenes/ep1/bg-luxuria-vip-rope.png	episodes	roblox/unknown-date-unknown-format/ep1/refs/bg-luxuria-vip-rope.png	scenes-named-bg-ref	medium	bg-ref inside scenes/ep1/
+assets	roblox/scenes/ep1/scene-1-end.png	episodes	roblox/ep1-unknown-date/scenes/scene-1-end.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-1-start.png	episodes	roblox/ep1-unknown-date/scenes/scene-1-start.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-1.mp4	episodes	roblox/ep1-unknown-date/scenes/scene-1.mp4	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-2-end.png	episodes	roblox/ep1-unknown-date/scenes/scene-2-end.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-2-start.png	episodes	roblox/ep1-unknown-date/scenes/scene-2-start.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-2.mp4	episodes	roblox/ep1-unknown-date/scenes/scene-2.mp4	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-3.mp4	episodes	roblox/ep1-unknown-date/scenes/scene-3.mp4	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-3.png	episodes	roblox/ep1-unknown-date/scenes/scene-3.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-4-end.png	episodes	roblox/ep1-unknown-date/scenes/scene-4-end.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-4-start.png	episodes	roblox/ep1-unknown-date/scenes/scene-4-start.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-4.mp4	episodes	roblox/ep1-unknown-date/scenes/scene-4.mp4	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-5.mp4	episodes	roblox/ep1-unknown-date/scenes/scene-5.mp4	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-5.png	episodes	roblox/ep1-unknown-date/scenes/scene-5.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-6-end.png	episodes	roblox/ep1-unknown-date/scenes/scene-6-end.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-6-start.png	episodes	roblox/ep1-unknown-date/scenes/scene-6-start.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-6.mp4	episodes	roblox/ep1-unknown-date/scenes/scene-6.mp4	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-7.mp4	episodes	roblox/ep1-unknown-date/scenes/scene-7.mp4	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-7.png	episodes	roblox/ep1-unknown-date/scenes/scene-7.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-8-end.png	episodes	roblox/ep1-unknown-date/scenes/scene-8-end.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-8-start.png	episodes	roblox/ep1-unknown-date/scenes/scene-8-start.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1/scene-8.mp4	episodes	roblox/ep1-unknown-date/scenes/scene-8.mp4	scenes-ep-dir	high	
+assets	roblox/scenes/ep1v3/scene-1-end.png	episodes	roblox/ep1v3-unknown-date/scenes/scene-1-end.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1v3/scene-1-start.png	episodes	roblox/ep1v3-unknown-date/scenes/scene-1-start.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep1v3/scene-2-start.png	episodes	roblox/ep1v3-unknown-date/scenes/scene-2-start.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep2/scene-1.png	episodes	roblox/ep2-unknown-date/scenes/scene-1.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep2/scene-2-end.png	episodes	roblox/ep2-unknown-date/scenes/scene-2-end.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep2/scene-2-start.png	episodes	roblox/ep2-unknown-date/scenes/scene-2-start.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep2/scene-3.png	episodes	roblox/ep2-unknown-date/scenes/scene-3.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep2/scene-4.png	episodes	roblox/ep2-unknown-date/scenes/scene-4.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep2/scene-5-end.png	episodes	roblox/ep2-unknown-date/scenes/scene-5-end.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep2/scene-5-start.png	episodes	roblox/ep2-unknown-date/scenes/scene-5-start.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep2/scene-6.png	episodes	roblox/ep2-unknown-date/scenes/scene-6-c2.png	scenes-ep-dir	high	COLLISION (n=2/2); renamed from roblox/ep2-unknown-date/scenes/scene-6.png
+assets	roblox/scenes/ep2/scene-7.png	episodes	roblox/ep2-unknown-date/scenes/scene-7.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep3/bg-luxuria-alcove-wanted.png	episodes	roblox/unknown-date-unknown-format/ep3/refs/bg-luxuria-alcove-wanted.png	scenes-named-bg-ref	medium	bg-ref inside scenes/ep3/
+assets	roblox/scenes/ep3/bg-luxuria-plaza-wanted.png	episodes	roblox/unknown-date-unknown-format/ep3/refs/bg-luxuria-plaza-wanted.png	scenes-named-bg-ref	medium	bg-ref inside scenes/ep3/
+assets	roblox/scenes/ep3/scene-1-start.png	episodes	roblox/ep3-unknown-date/scenes/scene-1-start.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep3/scene-1.png	episodes	roblox/ep3-unknown-date/scenes/scene-1.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep3/scene-2.png	episodes	roblox/ep3-unknown-date/scenes/scene-2.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep3/scene-3.png	episodes	roblox/ep3-unknown-date/scenes/scene-3.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep3/scene-4.png	episodes	roblox/ep3-unknown-date/scenes/scene-4.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep3/scene-5.png	episodes	roblox/ep3-unknown-date/scenes/scene-5.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep3/scene-6.png	episodes	roblox/ep3-unknown-date/scenes/scene-6.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep3/scene-7.png	episodes	roblox/ep3-unknown-date/scenes/scene-7.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/bg-luxuria-plaza-close.png	episodes	roblox/unknown-date-unknown-format/ep4/refs/bg-luxuria-plaza-close.png	scenes-named-bg-ref	medium	bg-ref inside scenes/ep4/
+assets	roblox/scenes/ep4/bg-luxuria-plaza-medium.png	episodes	roblox/unknown-date-unknown-format/ep4/refs/bg-luxuria-plaza-medium.png	scenes-named-bg-ref	medium	bg-ref inside scenes/ep4/
+assets	roblox/scenes/ep4/bg-luxuria-staircase-bottom.png	episodes	roblox/unknown-date-unknown-format/ep4/refs/bg-luxuria-staircase-bottom.png	scenes-named-bg-ref	medium	bg-ref inside scenes/ep4/
+assets	roblox/scenes/ep4/bg-luxuria-staircase-v2.png	episodes	roblox/unknown-date-unknown-format/ep4/refs/bg-luxuria-staircase-v2.png	scenes-named-bg-ref	medium	bg-ref inside scenes/ep4/
+assets	roblox/scenes/ep4/bg-luxuria-vip-staircase.png	episodes	roblox/unknown-date-unknown-format/ep4/refs/bg-luxuria-vip-staircase.png	scenes-named-bg-ref	medium	bg-ref inside scenes/ep4/
+assets	roblox/scenes/ep4/scene-1.png	episodes	roblox/ep4-unknown-date/scenes/scene-1.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/scene-2.png	episodes	roblox/ep4-unknown-date/scenes/scene-2.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/scene-3-chain.png	episodes	roblox/ep4-unknown-date/scenes/scene-3-chain.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/scene-3.png	episodes	roblox/ep4-unknown-date/scenes/scene-3.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/scene-4-end.png	episodes	roblox/ep4-unknown-date/scenes/scene-4-end.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/scene-4.png	episodes	roblox/ep4-unknown-date/scenes/scene-4.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/scene-4b.png	episodes	roblox/ep4-unknown-date/scenes/scene-4b.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/scene-5.png	episodes	roblox/ep4-unknown-date/scenes/scene-5.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/scene-6-chain.png	episodes	roblox/ep4-unknown-date/scenes/scene-6-chain.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/scene-6.png	episodes	roblox/ep4-unknown-date/scenes/scene-6.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/tts-2.mp3	episodes	roblox/ep4-unknown-date/scenes/tts-2.mp3	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/tts-4b.mp3	episodes	roblox/ep4-unknown-date/scenes/tts-4b.mp3	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/tts-5.mp3	episodes	roblox/ep4-unknown-date/scenes/tts-5.mp3	scenes-ep-dir	high	
+assets	roblox/scenes/ep4/tts-6.mp3	episodes	roblox/ep4-unknown-date/scenes/tts-6.mp3	scenes-ep-dir	high	
+assets	roblox/scenes/ep5/scene-1-end.png	episodes	roblox/ep5-unknown-date/scenes/scene-1-end.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep5/scene-1.png	episodes	roblox/ep5-unknown-date/scenes/scene-1.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep5/scene-2-mid.png	episodes	roblox/ep5-unknown-date/scenes/scene-2-mid.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep5/scene-2.png	episodes	roblox/ep5-unknown-date/scenes/scene-2.png	scenes-ep-dir	high	
+assets	roblox/scenes/ep5/scene-3.png	episodes	roblox/ep5-unknown-date/scenes/scene-3.png	scenes-ep-dir	high	
+assets	roblox/tts/ep2/clip-1.mp3	episodes	roblox/ep2-unknown-date/tts/clip-1.mp3	tts-ep-nested	medium	
+assets	roblox/tts/ep2/clip-3.mp3	episodes	roblox/ep2-unknown-date/tts/clip-3.mp3	tts-ep-nested	medium	
+assets	roblox/tts/ep2/clip-4.mp3	episodes	roblox/ep2-unknown-date/tts/clip-4.mp3	tts-ep-nested	medium	
+assets	roblox/tts/ep2/clip-6.mp3	episodes	roblox/ep2-unknown-date/tts/clip-6.mp3	tts-ep-nested	medium	
+assets	roblox/tts/ep2/clip-7.mp3	episodes	roblox/ep2-unknown-date/tts/clip-7.mp3	tts-ep-nested	medium	
+assets	star-trek-timelines/bg-refs/2026-05-13/bg-assimilation.png	assets	star-trek-timelines/locations/assimilation.png	bg-refs-folder	high	original folder: bg-refs/2026-05-13/
+assets	star-trek-timelines/bg-refs/2026-05-13/bg-borg-cube.png	assets	star-trek-timelines/locations/borg-cube-c3.png	bg-refs-folder	high	original folder: bg-refs/2026-05-13/ | COLLISION (n=3/3); renamed from star-trek-timelines/locations/borg-cube.png
+assets	star-trek-timelines/bg-refs/2026-05-13/bg-fenris-cockpit.png	assets	star-trek-timelines/locations/fenris-cockpit.png	bg-refs-folder	high	original folder: bg-refs/2026-05-13/
+assets	star-trek-timelines/bg-refs/2026-05-13/bg-quarters-viewport.png	assets	star-trek-timelines/locations/quarters-viewport.png	bg-refs-folder	high	original folder: bg-refs/2026-05-13/
+assets	star-trek-timelines/bg-refs/2026-05-13/bg-raven-lab.png	assets	star-trek-timelines/locations/raven-lab.png	bg-refs-folder	high	original folder: bg-refs/2026-05-13/
+assets	star-trek-timelines/bg-refs/2026-05-13/bg-voyager-corridor.png	assets	star-trek-timelines/locations/voyager-corridor.png	bg-refs-folder	high	original folder: bg-refs/2026-05-13/
+assets	star-trek-timelines/bg-refs/2026-05-13/bg-voyager-mirror.png	assets	star-trek-timelines/locations/voyager-mirror.png	bg-refs-folder	high	original folder: bg-refs/2026-05-13/
+assets	star-trek-timelines/characters/annika/sheet.png	assets	star-trek-timelines/characters/annika/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/annika/sheet.png
+assets	star-trek-timelines/characters/character/sheet.png	assets	star-trek-timelines/characters/character/sheet.png	already-target	high	already in target shape
+assets	star-trek-timelines/characters/chekov/sheet.png	assets	star-trek-timelines/characters/chekov/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/chekov/sheet.png
+assets	star-trek-timelines/characters/data/sheet.png	assets	star-trek-timelines/characters/data/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/data/sheet.png
+assets	star-trek-timelines/characters/kirk/sheet-c2.png	assets	star-trek-timelines/characters/kirk/sheet-c2.png	already-target	high	already in target shape
+assets	star-trek-timelines/characters/kirk/sheet.png	assets	star-trek-timelines/characters/kirk/sheet-c3.png	already-target	high	already in target shape | COLLISION (n=3/3); renamed from star-trek-timelines/characters/kirk/sheet.png
+assets	star-trek-timelines/characters/michael-burnham/sheet.png	assets	star-trek-timelines/characters/michael-burnham/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/michael-burnham/sheet.png
+assets	star-trek-timelines/characters/picard/sheet.png	assets	star-trek-timelines/characters/picard/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/picard/sheet.png
+assets	star-trek-timelines/characters/q/sheet.png	assets	star-trek-timelines/characters/q/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/q/sheet.png
+assets	star-trek-timelines/characters/spock/sheet.png	assets	star-trek-timelines/characters/spock/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/spock/sheet.png
+assets	star-trek-timelines/characters/tpol/sheet.png	assets	star-trek-timelines/characters/tpol/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/tpol/sheet.png
+assets	star-trek-timelines/characters/uhura-character/sheet.png	assets	star-trek-timelines/characters/uhura-character/sheet.png	already-target	high	already in target shape
+assets	star-trek-timelines/characters/worf/sheet.png	assets	star-trek-timelines/characters/worf/sheet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/worf/sheet.png
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-1.mp4	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-1.mp4	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-1.png	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-1.png	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-2.png	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-2.png	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-3.mp4	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-3.mp4	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-3.png	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-3.png	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-4.mp4	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-4.mp4	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-4.png	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-4.png	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-5.mp4	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-5.mp4	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-5.png	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-5.png	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-6.mp4	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-6.mp4	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-6.png	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-6.png	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-7a.mp4	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-7a.mp4	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-7a.png	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-7a.png	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-7b.mp4	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-7b.mp4	comedy-sketch-date	high	
+assets	star-trek-timelines/comedy-sketch/2026-05-15/scene-7b.png	episodes	star-trek-timelines/2026-05-15-comedy-sketch/scene-7b.png	comedy-sketch-date	high	
+assets	star-trek-timelines/ep1-en/refs/bg-airlock-corridor.png	episodes	star-trek-timelines/ep1-en-unknown-date/refs/bg-airlock-corridor.png	episode-dir-refs	medium	
+assets	star-trek-timelines/ep1-en/refs/bg-enterprise-bridge-redalert.png	episodes	star-trek-timelines/ep1-en-unknown-date/refs/bg-enterprise-bridge-redalert.png	episode-dir-refs	medium	
+assets	star-trek-timelines/ep1-en/refs/bg-enterprise-bridge.png	episodes	star-trek-timelines/ep1-en-unknown-date/refs/bg-enterprise-bridge.png	episode-dir-refs	medium	
+assets	star-trek-timelines/ep1-en/scene-1/scene-1-end.png	episodes	star-trek-timelines/ep1-en-unknown-date/scenes/scene-1/scene-1-end.png	episode-dir-scene	medium	original ep1-en/
+assets	star-trek-timelines/ep1-en/scene-1/scene-1-start.png	episodes	star-trek-timelines/ep1-en-unknown-date/scenes/scene-1/scene-1-start.png	episode-dir-scene	medium	original ep1-en/
+assets	star-trek-timelines/ep1-en/scene-2/scene-2.png	episodes	star-trek-timelines/ep1-en-unknown-date/scenes/scene-2/scene-2.png	episode-dir-scene	medium	original ep1-en/
+assets	star-trek-timelines/ep1-en/scene-3/scene-3.png	episodes	star-trek-timelines/ep1-en-unknown-date/scenes/scene-3/scene-3.png	episode-dir-scene	medium	original ep1-en/
+assets	star-trek-timelines/ep1-en/scene-4/scene-4-end.png	episodes	star-trek-timelines/ep1-en-unknown-date/scenes/scene-4/scene-4-end.png	episode-dir-scene	medium	original ep1-en/
+assets	star-trek-timelines/ep1-en/scene-4/scene-4-start.png	episodes	star-trek-timelines/ep1-en-unknown-date/scenes/scene-4/scene-4-start.png	episode-dir-scene	medium	original ep1-en/
+assets	star-trek-timelines/ep1-en/scene-5/scene-5.png	episodes	star-trek-timelines/ep1-en-unknown-date/scenes/scene-5/scene-5.png	episode-dir-scene	medium	original ep1-en/
+assets	star-trek-timelines/ep1-en/scene-6/scene-6.png	episodes	star-trek-timelines/ep1-en-unknown-date/scenes/scene-6/scene-6.png	episode-dir-scene	medium	original ep1-en/
+assets	star-trek-timelines/ep1-en/scene-7/scene-7-end.png	episodes	star-trek-timelines/ep1-en-unknown-date/scenes/scene-7/scene-7-end.png	episode-dir-scene	medium	original ep1-en/
+assets	star-trek-timelines/ep1-en/scene-7/scene-7-start.png	episodes	star-trek-timelines/ep1-en-unknown-date/scenes/scene-7/scene-7-start.png	episode-dir-scene	medium	original ep1-en/
+assets	star-trek-timelines/ep1-en/scene-8/scene-8.png	episodes	star-trek-timelines/ep1-en-unknown-date/scenes/scene-8/scene-8.png	episode-dir-scene	medium	original ep1-en/
+assets	star-trek-timelines/ep1-en/scene-9/scene-9-end.png	episodes	star-trek-timelines/ep1-en-unknown-date/scenes/scene-9/scene-9-end.png	episode-dir-scene	medium	original ep1-en/
+assets	star-trek-timelines/ep1-en/scene-9/scene-9-start.png	episodes	star-trek-timelines/ep1-en-unknown-date/scenes/scene-9/scene-9-start.png	episode-dir-scene	medium	original ep1-en/
+assets	star-trek-timelines/ep1-en/tts/tts-2.mp3	episodes	star-trek-timelines/ep1-en-unknown-date/tts/tts-2.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep1-en/tts/tts-3.mp3	episodes	star-trek-timelines/ep1-en-unknown-date/tts/tts-3.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep1-en/tts/tts-4.mp3	episodes	star-trek-timelines/ep1-en-unknown-date/tts/tts-4.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep1-en/tts/tts-5.mp3	episodes	star-trek-timelines/ep1-en-unknown-date/tts/tts-5.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep1-en/tts/tts-6.mp3	episodes	star-trek-timelines/ep1-en-unknown-date/tts/tts-6.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep1-en/tts/tts-8.mp3	episodes	star-trek-timelines/ep1-en-unknown-date/tts/tts-8.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep2-en/refs/bg-airlock-interior.png	episodes	star-trek-timelines/ep2-en-unknown-date/refs/bg-airlock-interior.png	episode-dir-refs	medium	
+assets	star-trek-timelines/ep2-en/refs/mirror-chekov-ref.png	episodes	star-trek-timelines/ep2-en-unknown-date/refs/mirror-chekov-ref.png	episode-dir-refs	medium	
+assets	star-trek-timelines/ep2-en/scene-1/scene-1.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-1/scene-1.png	episode-dir-scene	medium	original ep2-en/
+assets	star-trek-timelines/ep2-en/scene-2/scene-2-end.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-2/scene-2-end.png	episode-dir-scene	medium	original ep2-en/
+assets	star-trek-timelines/ep2-en/scene-2/scene-2-start.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-2/scene-2-start.png	episode-dir-scene	medium	original ep2-en/
+assets	star-trek-timelines/ep2-en/scene-3/scene-3.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-3/scene-3.png	episode-dir-scene	medium	original ep2-en/
+assets	star-trek-timelines/ep2-en/scene-4/scene-4.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-4/scene-4.png	episode-dir-scene	medium	original ep2-en/
+assets	star-trek-timelines/ep2-en/scene-5/scene-5-end.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-5/scene-5-end.png	episode-dir-scene	medium	original ep2-en/
+assets	star-trek-timelines/ep2-en/scene-5/scene-5-start.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-5/scene-5-start.png	episode-dir-scene	medium	original ep2-en/
+assets	star-trek-timelines/ep2-en/scene-6/scene-6-end.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-6/scene-6-end.png	episode-dir-scene	medium	original ep2-en/
+assets	star-trek-timelines/ep2-en/scene-6/scene-6-start.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-6/scene-6-start.png	episode-dir-scene	medium	original ep2-en/
+assets	star-trek-timelines/ep2-en/scene-7/scene-7.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-7/scene-7.png	episode-dir-scene	medium	original ep2-en/
+assets	star-trek-timelines/ep2-en/scenes/scene-1-end.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-1-end.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep2-en/scenes/scene-1-start.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-1-start.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep2-en/scenes/scene-2.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-2.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep2-en/scenes/scene-3.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-3.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep2-en/scenes/scene-4-end.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-4-end.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep2-en/scenes/scene-4-start.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-4-start.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep2-en/scenes/scene-5-end.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-5-end.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep2-en/scenes/scene-5-start.png	episodes	star-trek-timelines/ep2-en-unknown-date/scenes/scene-5-start.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep2-en/tts/clip-2-worf.mp3	episodes	star-trek-timelines/ep2-en-unknown-date/tts/clip-2-worf.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep2-en/tts/clip-3-kirk.mp3	episodes	star-trek-timelines/ep2-en-unknown-date/tts/clip-3-kirk.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep2-en/tts/tts-1.mp3	episodes	star-trek-timelines/ep2-en-unknown-date/tts/tts-1.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep2-en/tts/tts-3.mp3	episodes	star-trek-timelines/ep2-en-unknown-date/tts/tts-3.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep2-en/tts/tts-4.mp3	episodes	star-trek-timelines/ep2-en-unknown-date/tts/tts-4.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep2-en/tts/tts-7.mp3	episodes	star-trek-timelines/ep2-en-unknown-date/tts/tts-7.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep3-en/scene-1/scene-1-end.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-1/scene-1-end.png	episode-dir-scene	medium	original ep3-en/
+assets	star-trek-timelines/ep3-en/scene-1/scene-1-start.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-1/scene-1-start.png	episode-dir-scene	medium	original ep3-en/
+assets	star-trek-timelines/ep3-en/scene-2/scene-2.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-2/scene-2.png	episode-dir-scene	medium	original ep3-en/
+assets	star-trek-timelines/ep3-en/scene-3/scene-3.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-3/scene-3.png	episode-dir-scene	medium	original ep3-en/
+assets	star-trek-timelines/ep3-en/scene-4/scene-4-end.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-4/scene-4-end.png	episode-dir-scene	medium	original ep3-en/
+assets	star-trek-timelines/ep3-en/scene-4/scene-4-start.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-4/scene-4-start.png	episode-dir-scene	medium	original ep3-en/
+assets	star-trek-timelines/ep3-en/scene-5/scene-5.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-5/scene-5.png	episode-dir-scene	medium	original ep3-en/
+assets	star-trek-timelines/ep3-en/scene-6/scene-6.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-6/scene-6.png	episode-dir-scene	medium	original ep3-en/
+assets	star-trek-timelines/ep3-en/scene-7/scene-7-end.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-7/scene-7-end.png	episode-dir-scene	medium	original ep3-en/
+assets	star-trek-timelines/ep3-en/scene-7/scene-7-start.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-7/scene-7-start.png	episode-dir-scene	medium	original ep3-en/
+assets	star-trek-timelines/ep3-en/scenes/scene-1-end.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-1-end.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-1-start.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-1-start.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-2.mp3	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-2.mp3	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-2.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-2.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-3.mp3	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-3.mp3	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-3.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-3.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-4-end.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-4-end.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-4-start.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-4-start.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-5-end.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-5-end.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-5-start.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-5-start.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-6.mp3	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-6.mp3	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-6.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-6.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-7.mp3	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-7.mp3	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-7.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-7.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-8-end.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-8-end.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/scenes/scene-8-start.png	episodes	star-trek-timelines/ep3-en-unknown-date/scenes/scene-8-start.png	episode-dir-scenes	medium	
+assets	star-trek-timelines/ep3-en/tts/tts-2.mp3	episodes	star-trek-timelines/ep3-en-unknown-date/tts/tts-2.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep3-en/tts/tts-3.mp3	episodes	star-trek-timelines/ep3-en-unknown-date/tts/tts-3.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep3-en/tts/tts-5.mp3	episodes	star-trek-timelines/ep3-en-unknown-date/tts/tts-5.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/ep3-en/tts/tts-6.mp3	episodes	star-trek-timelines/ep3-en-unknown-date/tts/tts-6.mp3	episode-dir-tts	medium	
+assets	star-trek-timelines/scenes/2026-05-13/scene-1.png	episodes	star-trek-timelines/2026-05-13-unknown-format/scenes/scene-1.png	scenes-date-only	medium	
+assets	star-trek-timelines/scenes/2026-05-13/scene-2.png	episodes	star-trek-timelines/2026-05-13-unknown-format/scenes/scene-2.png	scenes-date-only	medium	
+assets	star-trek-timelines/scenes/2026-05-13/scene-3.png	episodes	star-trek-timelines/2026-05-13-unknown-format/scenes/scene-3.png	scenes-date-only	medium	
+assets	star-trek-timelines/scenes/2026-05-13/scene-4.png	episodes	star-trek-timelines/2026-05-13-unknown-format/scenes/scene-4.png	scenes-date-only	medium	
+assets	star-trek-timelines/scenes/2026-05-13/scene-5.png	episodes	star-trek-timelines/2026-05-13-unknown-format/scenes/scene-5.png	scenes-date-only	medium	
+assets	star-trek-timelines/scenes/2026-05-13/scene-6.png	episodes	star-trek-timelines/2026-05-13-unknown-format/scenes/scene-6.png	scenes-date-only	medium	
+assets	star-trek-timelines/scenes/2026-05-13/scene-7.png	episodes	star-trek-timelines/2026-05-13-unknown-format/scenes/scene-7.png	scenes-date-only	medium	
+assets	star-trek-timelines/scenes/character-story-2026-05-06/bg-academy.png	episodes	star-trek-timelines/2026-05-06-character-story/character-story-2026-05-06/refs/bg-academy.png	scenes-named-bg-ref	medium	bg-ref inside scenes/character-story-2026-05-06/
+assets	star-trek-timelines/scenes/character-story-2026-05-06/bg-bridge.png	episodes	star-trek-timelines/2026-05-06-character-story/character-story-2026-05-06/refs/bg-bridge.png	scenes-named-bg-ref	medium	bg-ref inside scenes/character-story-2026-05-06/
+assets	star-trek-timelines/scenes/character-story-2026-05-06/bg-iowa-farm.png	episodes	star-trek-timelines/2026-05-06-character-story/character-story-2026-05-06/refs/bg-iowa-farm.png	scenes-named-bg-ref	medium	bg-ref inside scenes/character-story-2026-05-06/
+assets	star-trek-timelines/scenes/character-story-2026-05-06/bg-medical-bay.png	episodes	star-trek-timelines/2026-05-06-character-story/character-story-2026-05-06/refs/bg-medical-bay.png	scenes-named-bg-ref	medium	bg-ref inside scenes/character-story-2026-05-06/
+assets	star-trek-timelines/scenes/character-story-2026-05-06/bg-simulation.png	episodes	star-trek-timelines/2026-05-06-character-story/character-story-2026-05-06/refs/bg-simulation.png	scenes-named-bg-ref	medium	bg-ref inside scenes/character-story-2026-05-06/
+assets	star-trek-timelines/scenes/character-story-2026-05-06/scene-1.png	episodes	star-trek-timelines/2026-05-06-character-story/character-story-2026-05-06/scenes/scene-1.png	scenes-named	medium	original dir 'character-story-2026-05-06'
+assets	star-trek-timelines/scenes/character-story-2026-05-06/scene-2.png	episodes	star-trek-timelines/2026-05-06-character-story/character-story-2026-05-06/scenes/scene-2.png	scenes-named	medium	original dir 'character-story-2026-05-06'
+assets	star-trek-timelines/scenes/character-story-2026-05-06/scene-3.png	episodes	star-trek-timelines/2026-05-06-character-story/character-story-2026-05-06/scenes/scene-3.png	scenes-named	medium	original dir 'character-story-2026-05-06'
+assets	star-trek-timelines/scenes/character-story-2026-05-06/scene-4.png	episodes	star-trek-timelines/2026-05-06-character-story/character-story-2026-05-06/scenes/scene-4.png	scenes-named	medium	original dir 'character-story-2026-05-06'
+assets	star-trek-timelines/scenes/character-story-2026-05-06/scene-5.png	episodes	star-trek-timelines/2026-05-06-character-story/character-story-2026-05-06/scenes/scene-5.png	scenes-named	medium	original dir 'character-story-2026-05-06'
+assets	star-trek-timelines/scenes/character-story-2026-05-06/scene-6.png	episodes	star-trek-timelines/2026-05-06-character-story/character-story-2026-05-06/scenes/scene-6.png	scenes-named	medium	original dir 'character-story-2026-05-06'
+assets	star-trek-timelines/scenes/character-story-2026-05-06/scene-7.png	episodes	star-trek-timelines/2026-05-06-character-story/character-story-2026-05-06/scenes/scene-7.png	scenes-named	medium	original dir 'character-story-2026-05-06'
+assets	star-trek-timelines/scenes/character-story-2026-05-06/tts-output.mp3	episodes	star-trek-timelines/2026-05-06-character-story/character-story-2026-05-06/scenes/tts-output.mp3	scenes-named	medium	original dir 'character-story-2026-05-06'
+assets	star-trek-timelines/scenes/worf-character-story/bg-enterprise-bridge.png	episodes	star-trek-timelines/unknown-date-character-story/worf/refs/bg-enterprise-bridge.png	scenes-named-bg-ref	medium	bg-ref inside scenes/worf-character-story/ | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/bg-enterprise-corridor.png	episodes	star-trek-timelines/unknown-date-character-story/worf/refs/bg-enterprise-corridor.png	scenes-named-bg-ref	medium	bg-ref inside scenes/worf-character-story/ | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/bg-khitomer-ruins.png	episodes	star-trek-timelines/unknown-date-character-story/worf/refs/bg-khitomer-ruins.png	scenes-named-bg-ref	medium	bg-ref inside scenes/worf-character-story/ | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/bg-klingon-council.png	episodes	star-trek-timelines/unknown-date-character-story/worf/refs/bg-klingon-council.png	scenes-named-bg-ref	medium	bg-ref inside scenes/worf-character-story/ | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/bg-starfleet-academy.png	episodes	star-trek-timelines/unknown-date-character-story/worf/refs/bg-starfleet-academy.png	scenes-named-bg-ref	medium	bg-ref inside scenes/worf-character-story/ | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-1-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-1-end.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-1.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-1.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-2-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-2-end.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-2.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-2.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-3-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-3-end.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-3.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-3.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-4-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-4-end.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-4.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-4.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-5-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-5-end.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-5.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-5.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-6-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-6-end.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-6.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-6.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-7-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-7-end.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-character-story/scene-7.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-7.png	scenes-named	medium	original dir 'worf-character-story' | first-of-collision
+assets	star-trek-timelines/scenes/worf-cs/bg-enterprise-bridge.png	episodes	star-trek-timelines/unknown-date-character-story/worf/refs/bg-enterprise-bridge-c2.png	scenes-named-bg-ref	medium	bg-ref inside scenes/worf-cs/ | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/refs/bg-enterprise-bridge.png
+assets	star-trek-timelines/scenes/worf-cs/bg-enterprise-corridor.png	episodes	star-trek-timelines/unknown-date-character-story/worf/refs/bg-enterprise-corridor-c2.png	scenes-named-bg-ref	medium	bg-ref inside scenes/worf-cs/ | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/refs/bg-enterprise-corridor.png
+assets	star-trek-timelines/scenes/worf-cs/bg-khitomer-ruins.png	episodes	star-trek-timelines/unknown-date-character-story/worf/refs/bg-khitomer-ruins-c2.png	scenes-named-bg-ref	medium	bg-ref inside scenes/worf-cs/ | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/refs/bg-khitomer-ruins.png
+assets	star-trek-timelines/scenes/worf-cs/bg-klingon-council.png	episodes	star-trek-timelines/unknown-date-character-story/worf/refs/bg-klingon-council-c2.png	scenes-named-bg-ref	medium	bg-ref inside scenes/worf-cs/ | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/refs/bg-klingon-council.png
+assets	star-trek-timelines/scenes/worf-cs/bg-starfleet-academy.png	episodes	star-trek-timelines/unknown-date-character-story/worf/refs/bg-starfleet-academy-c2.png	scenes-named-bg-ref	medium	bg-ref inside scenes/worf-cs/ | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/refs/bg-starfleet-academy.png
+assets	star-trek-timelines/scenes/worf-cs/scene-1-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-1-end-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-1-end.png
+assets	star-trek-timelines/scenes/worf-cs/scene-1.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-1-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-1.png
+assets	star-trek-timelines/scenes/worf-cs/scene-2-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-2-end-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-2-end.png
+assets	star-trek-timelines/scenes/worf-cs/scene-2.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-2-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-2.png
+assets	star-trek-timelines/scenes/worf-cs/scene-3-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-3-end-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-3-end.png
+assets	star-trek-timelines/scenes/worf-cs/scene-3.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-3-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-3.png
+assets	star-trek-timelines/scenes/worf-cs/scene-4-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-4-end-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-4-end.png
+assets	star-trek-timelines/scenes/worf-cs/scene-4.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-4-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-4.png
+assets	star-trek-timelines/scenes/worf-cs/scene-5-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-5-end-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-5-end.png
+assets	star-trek-timelines/scenes/worf-cs/scene-5.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-5-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-5.png
+assets	star-trek-timelines/scenes/worf-cs/scene-6-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-6-end-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-6-end.png
+assets	star-trek-timelines/scenes/worf-cs/scene-6.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-6-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-6.png
+assets	star-trek-timelines/scenes/worf-cs/scene-7-end.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-7-end-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-7-end.png
+assets	star-trek-timelines/scenes/worf-cs/scene-7.png	episodes	star-trek-timelines/unknown-date-character-story/worf/scenes/scene-7-c2.png	scenes-named	medium	original dir 'worf-cs' | COLLISION (n=2/2); renamed from star-trek-timelines/unknown-date-character-story/worf/scenes/scene-7.png
+assets	videos/roblox/2026-05-12/news_final.mp4	videos	roblox/2026-05-12/news_final.mp4	denest-videos	high	cross-bucket: assets/videos → videos
+assets	videos/star-trek-timelines/2026-05-27/character-story_final.mp4	videos	star-trek-timelines/2026-05-27/character-story_final.mp4	denest-videos	high	cross-bucket: assets/videos → videos
+assets	videos/star-trek-timelines/2026-05-27/serial-drama-en-ep5_final.mp4	videos	star-trek-timelines/2026-05-27/serial-drama-en-ep5_final.mp4	denest-videos	high	cross-bucket: assets/videos → videos
+assets	star-trek-timelines/characters/archer/variants/mature-captain.png	assets	star-trek-timelines/characters/archer/variants/mature-captain-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/archer/variants/mature-captain.png
+assets	star-trek-timelines/characters/archer/variants/young-boy.png	assets	star-trek-timelines/characters/archer/variants/young-boy-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/archer/variants/young-boy.png
+assets	star-trek-timelines/characters/carol-marcus/variants/adult.png	assets	star-trek-timelines/characters/carol-marcus/variants/adult-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/carol-marcus/variants/adult.png
+assets	star-trek-timelines/characters/carol-marcus/variants/young.png	assets	star-trek-timelines/characters/carol-marcus/variants/young-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/carol-marcus/variants/young.png
+assets	star-trek-timelines/characters/data/variants/pixar.png	assets	star-trek-timelines/characters/data/variants/pixar-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/data/variants/pixar.png
+assets	star-trek-timelines/characters/jadzia-dax/variants/adult.png	assets	star-trek-timelines/characters/jadzia-dax/variants/adult-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/jadzia-dax/variants/adult.png
+assets	star-trek-timelines/characters/jadzia-dax/variants/initiate.png	assets	star-trek-timelines/characters/jadzia-dax/variants/initiate-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/jadzia-dax/variants/initiate.png
+assets	star-trek-timelines/characters/janeway/variants/cadet.png	assets	star-trek-timelines/characters/janeway/variants/cadet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/janeway/variants/cadet.png
+assets	star-trek-timelines/characters/janeway/variants/captain.png	assets	star-trek-timelines/characters/janeway/variants/captain-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/janeway/variants/captain.png
+assets	star-trek-timelines/characters/sisko/variants/mature.png	assets	star-trek-timelines/characters/sisko/variants/mature-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/sisko/variants/mature.png
+assets	star-trek-timelines/characters/sisko/variants/prophet.png	assets	star-trek-timelines/characters/sisko/variants/prophet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/sisko/variants/prophet.png
+assets	star-trek-timelines/characters/sisko/variants/young.png	assets	star-trek-timelines/characters/sisko/variants/young-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/sisko/variants/young.png
+assets	star-trek-timelines/characters/spock/variants/borg.png	assets	star-trek-timelines/characters/spock/variants/borg-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/spock/variants/borg.png
+assets	star-trek-timelines/characters/spock/variants/canonical.png	assets	star-trek-timelines/characters/spock/variants/canonical-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/spock/variants/canonical.png
+assets	star-trek-timelines/characters/uhura-kelvin/variants/adult.png	assets	star-trek-timelines/characters/uhura-kelvin/variants/adult-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/uhura-kelvin/variants/adult.png
+assets	star-trek-timelines/characters/uhura-kelvin/variants/cadet.png	assets	star-trek-timelines/characters/uhura-kelvin/variants/cadet-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/uhura-kelvin/variants/cadet.png
+assets	star-trek-timelines/characters/uhura-kelvin/variants/child.png	assets	star-trek-timelines/characters/uhura-kelvin/variants/child-c2.png	already-target	high	already in target shape | COLLISION (n=2/2); renamed from star-trek-timelines/characters/uhura-kelvin/variants/child.png
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-1-start.png	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-1-start.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-1.mp4	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-1.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-2-start.png	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-2-start.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-2.mp4	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-2.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-3.mp4	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-3.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-3.png	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-3.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-4.mp4	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-4.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-4.png	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-4.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-5.mp4	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-5.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-5.png	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-5.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-6-start.png	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-6-start.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-6.mp4	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-6.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-7-start.png	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-7-start.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/serial-drama/scene-7.mp4	episodes	star-trek-timelines/2026-05-25-serial-drama/scenes/scene-7.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/what-if-lore/scene-1.png	episodes	star-trek-timelines/2026-05-25-what-if-lore/scenes/scene-1.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/what-if-lore/scene-2.png	episodes	star-trek-timelines/2026-05-25-what-if-lore/scenes/scene-2.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/what-if-lore/scene-3.png	episodes	star-trek-timelines/2026-05-25-what-if-lore/scenes/scene-3.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/what-if-lore/scene-4.png	episodes	star-trek-timelines/2026-05-25-what-if-lore/scenes/scene-4.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/what-if-lore/scene-5.png	episodes	star-trek-timelines/2026-05-25-what-if-lore/scenes/scene-5.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/what-if-lore/scene-6.png	episodes	star-trek-timelines/2026-05-25-what-if-lore/scenes/scene-6.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/what-if-lore/scene-7.png	episodes	star-trek-timelines/2026-05-25-what-if-lore/scenes/scene-7.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-25/what-if-lore/scene-8.png	episodes	star-trek-timelines/2026-05-25-what-if-lore/scenes/scene-8.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/character-story/scene-1-carol-marcus-2026-05-26.png	episodes	star-trek-timelines/2026-05-26-character-story/scenes/scene-1-carol-marcus-2026-05-26.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/character-story/scene-2-carol-marcus-2026-05-26.png	episodes	star-trek-timelines/2026-05-26-character-story/scenes/scene-2-carol-marcus-2026-05-26.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/character-story/scene-3-carol-marcus-2026-05-26.png	episodes	star-trek-timelines/2026-05-26-character-story/scenes/scene-3-carol-marcus-2026-05-26.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/character-story/scene-4-carol-marcus-2026-05-26.png	episodes	star-trek-timelines/2026-05-26-character-story/scenes/scene-4-carol-marcus-2026-05-26.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/character-story/scene-5-carol-marcus-2026-05-26.png	episodes	star-trek-timelines/2026-05-26-character-story/scenes/scene-5-carol-marcus-2026-05-26.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/character-story/scene-6-carol-marcus-2026-05-26.png	episodes	star-trek-timelines/2026-05-26-character-story/scenes/scene-6-carol-marcus-2026-05-26.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/character-story/scene-7-carol-marcus-2026-05-26.png	episodes	star-trek-timelines/2026-05-26-character-story/scenes/scene-7-carol-marcus-2026-05-26.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/scene-1-avatar-v3.mp4	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/scene-1-avatar-v3.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/scene-1-avatar.mp4	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/scene-1-avatar.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/scene-1.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/scene-1.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/scene-2-avatar-v3.mp4	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/scene-2-avatar-v3.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/scene-2-avatar.mp4	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/scene-2-avatar.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/scene-2.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/scene-2.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/scene-3-avatar-v3.mp4	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/scene-3-avatar-v3.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/scene-3-avatar.mp4	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/scene-3-avatar.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/scene-3.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/scene-3.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/scene-4-avatar-v3.mp4	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/scene-4-avatar-v3.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/scene-4-avatar.mp4	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/scene-4-avatar.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/scene-4.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/scene-4.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/scene-5-avatar-v3.mp4	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/scene-5-avatar-v3.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/v2-scene-1.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/v2-scene-1.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/v2-scene-2.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/v2-scene-2.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/v2-scene-3.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/v2-scene-3.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/v2-scene-4.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/v2-scene-4.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/v2-scene-5.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/v2-scene-5.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/v3-scene-1.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/v3-scene-1.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/v3-scene-2.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/v3-scene-2.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/v3-scene-3.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/v3-scene-3.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/v3-scene-4.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/v3-scene-4.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/fun-news/v3-scene-5.mp3	episodes	star-trek-timelines/2026-05-26-fun-news/scenes/v3-scene-5.mp3	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/top-list/scene-0.png	episodes	star-trek-timelines/2026-05-26-top-list/scenes/scene-0.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/top-list/scene-1.png	episodes	star-trek-timelines/2026-05-26-top-list/scenes/scene-1.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/top-list/scene-2.png	episodes	star-trek-timelines/2026-05-26-top-list/scenes/scene-2.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/top-list/scene-3.png	episodes	star-trek-timelines/2026-05-26-top-list/scenes/scene-3.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/top-list/scene-4.png	episodes	star-trek-timelines/2026-05-26-top-list/scenes/scene-4.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/top-list/scene-5.png	episodes	star-trek-timelines/2026-05-26-top-list/scenes/scene-5.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/top-list/scene-6.png	episodes	star-trek-timelines/2026-05-26-top-list/scenes/scene-6.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/what-if-real-life/scene-1.png	episodes	star-trek-timelines/2026-05-26-what-if-real-life/scenes/scene-1.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/what-if-real-life/scene-2.png	episodes	star-trek-timelines/2026-05-26-what-if-real-life/scenes/scene-2.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/what-if-real-life/scene-3.png	episodes	star-trek-timelines/2026-05-26-what-if-real-life/scenes/scene-3.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/what-if-real-life/scene-4.png	episodes	star-trek-timelines/2026-05-26-what-if-real-life/scenes/scene-4.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/what-if-real-life/scene-5.png	episodes	star-trek-timelines/2026-05-26-what-if-real-life/scenes/scene-5.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/what-if-real-life/scene-6.png	episodes	star-trek-timelines/2026-05-26-what-if-real-life/scenes/scene-6.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/what-if-real-life/scene-7-end.png	episodes	star-trek-timelines/2026-05-26-what-if-real-life/scenes/scene-7-end.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-26/what-if-real-life/scene-7-start.png	episodes	star-trek-timelines/2026-05-26-what-if-real-life/scenes/scene-7-start.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/character-story-archer/scene-1-archer-2026-05-27.png	episodes	star-trek-timelines/2026-05-27-character-story-archer/scenes/scene-1-archer-2026-05-27.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/character-story-archer/scene-2-archer-2026-05-27.png	episodes	star-trek-timelines/2026-05-27-character-story-archer/scenes/scene-2-archer-2026-05-27.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/character-story-archer/scene-3-archer-2026-05-27.png	episodes	star-trek-timelines/2026-05-27-character-story-archer/scenes/scene-3-archer-2026-05-27.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/character-story-archer/scene-4-archer-2026-05-27.png	episodes	star-trek-timelines/2026-05-27-character-story-archer/scenes/scene-4-archer-2026-05-27.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/character-story-archer/scene-5-archer-2026-05-27.png	episodes	star-trek-timelines/2026-05-27-character-story-archer/scenes/scene-5-archer-2026-05-27.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/character-story-archer/scene-6-archer-2026-05-27.png	episodes	star-trek-timelines/2026-05-27-character-story-archer/scenes/scene-6-archer-2026-05-27.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-0.mp4	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-0.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-0.png	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-0.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-1.mp4	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-1.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-1.png	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-1.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-2.mp4	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-2.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-2.png	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-2.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-3.mp4	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-3.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-3.png	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-3.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-4.mp4	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-4.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-4.png	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-4.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-5.mp4	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-5.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-5.png	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-5.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-6.mp4	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-6.mp4	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-27/top-list/scene-6.png	episodes	star-trek-timelines/2026-05-27-top-list/scenes/scene-6.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-28/redcon/scene-1.png	episodes	star-trek-timelines/2026-05-28-redcon/scenes/scene-1.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-28/redcon/scene-2.png	episodes	star-trek-timelines/2026-05-28-redcon/scenes/scene-2.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-28/redcon/scene-3.png	episodes	star-trek-timelines/2026-05-28-redcon/scenes/scene-3.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-28/redcon/scene-4.png	episodes	star-trek-timelines/2026-05-28-redcon/scenes/scene-4.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-28/redcon/scene-5.png	episodes	star-trek-timelines/2026-05-28-redcon/scenes/scene-5.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-28/redcon/scene-6.png	episodes	star-trek-timelines/2026-05-28-redcon/scenes/scene-6.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-28/redcon/scene-7.png	episodes	star-trek-timelines/2026-05-28-redcon/scenes/scene-7.png	scenes-date-format	high	
+assets	star-trek-timelines/scenes/2026-05-28/redcon/scene-8.png	episodes	star-trek-timelines/2026-05-28-redcon/scenes/scene-8.png	scenes-date-format	high	

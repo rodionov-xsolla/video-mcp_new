@@ -301,15 +301,15 @@
 
   "supabase_assets": {
     "bg_refs": {
-      "luxuria-plaza": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/scenes/ep1/bg-luxuria-plaza.png",
-      "luxuria-alcove": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/scenes/ep1/bg-luxuria-alcove.png"
+      "luxuria-plaza": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/locations/luxuria-plaza.png",
+      "luxuria-alcove": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/locations/luxuria-alcove.png"
     },
     "char_refs": {
-      "noob-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/noob-sheet.png",
-      "rich-player-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/rich-player-sheet.png",
-      "shadow-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/shadow-sheet.png",
-      "preppy-girl-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/preppy-girl-sheet.png",
-      "bacon-hair-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/bacon-hair-sheet.png"
+      "noob-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/characters/noob/sheet.png",
+      "rex-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/characters/rex/sheet.png",
+      "shadow-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/characters/shadow/sheet.png",
+      "preppy-girl-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/characters/preppy-girl/sheet.png",
+      "bacon-hair-sheet": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/characters/bacon-hair/sheet.png"
     }
   }
 }
