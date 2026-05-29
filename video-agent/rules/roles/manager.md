@@ -160,30 +160,51 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
    - Path: `videos/{GAME_TAG}/{YYYY-MM-DD}/{format_slug}_final.mp4`
    - Get the public URL
 
-2. **Upload to YouTube** (if `YOUTUBE_REFRESH_TOKEN` is set in `.env`):
+2. **Upload to YouTube.**
+
+   **Channel routing.** Read `youtube_channel` from the game config metadata (`games/{GAME_TAG}/{GAME_TAG}.md`):
+   - `star-trek-timelines` → `gamepulse`
+   - `roblox` → `yellowguy`
+   - No `youtube_channel` field → no channel mapped yet. Do NOT guess. Skip the YT upload and tell the user which channel to map (Supabase URL stays the deliverable).
+
+   **Metadata.** Title: `storyboard.json → title` (fallback: idea). Description: `storyboard.json → description` (fallback: empty). Tags: `GAME_TAG + format_slug + storyboard.json → youtube_tags`.
+
+   **Privacy is always `public`** for the routed channel (per user). The `YOUTUBE_PRIVACY` env var is no longer the gate.
+
    ```bash
-   # Title: from storyboard.json → title (or idea if no title field)
-   # Tags: GAME_TAG + format_slug + any tags from storyboard.json → youtube_tags
+   CHANNEL="<resolved from game config>"   # gamepulse | yellowguy
    YOUTUBE_URL=$(bash queue/youtube-upload.sh \
+     --channel "$CHANNEL" \
      "$OUTPUT_DIR/final.mp4" \
      "$TITLE" \
      "$DESCRIPTION" \
-     "${YOUTUBE_PRIVACY:-private}" \
+     "public" \
      "$TAGS")
    echo "YouTube: $YOUTUBE_URL"
    ```
-   - If `YOUTUBE_REFRESH_TOKEN` is empty — skip silently (YouTube upload is optional)
-   - On error — log and continue (Supabase URL is the primary deliverable)
-   - Default privacy: `private` (change to `public` in `.env` when ready to publish)
 
-3. Logging (when the `video_agent_runs` table is ready):
-   ```sql
-   INSERT INTO video_agent_runs (
-     game_tag, input_idea, agent_plan, approach_used, model_used,
-     total_cost_usd, output_video_url, youtube_url, status, error_message,
-     video_duration_seconds, run_duration_seconds, scenes
-   ) VALUES (...);
+   **Debug vs non-debug — the gate on going public:**
+   - **Non-debug:** upload straight to `public` on the routed channel. No questions.
+   - **Debug mode:** STOP before the YT upload. Show the user:
+     - the Supabase **public URL** (clickable — this is how they watch the result),
+     - the **destination channel**, the **title**, **description**, and **tags**.
+
+     Ask: «Заливаю в паблик на `<channel>`?» Wait for OK. Apply any metadata edits the user gives, then run the upload. The script re-checks `channelId` against `YOUTUBE_CHANNEL_ID_<CHANNEL>` and warns on mismatch.
+
+   - On error — log and continue (Supabase URL is the primary deliverable).
+
+3. **Log to `video_agent_runs`** (catalog of generated videos: date, title, format, links). Upsert by `output_video_url` — INSERT on first generation, UPDATE on regeneration to the same path (created_at preserved, no dupes):
+   ```bash
+   bash queue/log-video.sh \
+     --game "$GAME_TAG" \
+     --title "$TITLE" \
+     --format "$format_slug" \
+     --video-url "$SUPABASE_VIDEO_URL" \
+     --youtube-url "$YOUTUBE_URL"   # omit if YT upload was skipped
    ```
+   - `--video-url` is the Supabase public URL from step 1 (stable per game/date/format → the upsert key, mapped to `output_video_url`).
+   - `--title` lands in `input_idea` (the table's NOT NULL title field). `--format` and `--youtube-url` in their own columns.
+   - Requires `UNIQUE(output_video_url)` + `format`/`youtube_url` columns — see `queue/setup.sql` (run the ALTERs once in the SQL editor).
 
 4. **Update story bible** (if the format uses one) — characters, aura, relationships, active_loops, episode_summary, cliffhanger, anti_repetition.
 
@@ -297,37 +318,62 @@ Before calling ANY external API (fal.ai, ElevenLabs, Kling, HeyGen, Supabase) **
 
 ## Supabase
 
-### Table `game_assets`
+### Storage buckets (current layout — Phase 3, 2026-05-28)
+
+```
+assets/{GAME_TAG}/
+├── characters/
+│   └── {slug}/
+│       ├── sheet.png                       canonical character ref
+│       ├── variants/{variant}.png          young, mature, borg, child, prophet, ...
+│       └── avatar.png                      Kling Avatar v2 ref
+├── locations/{slug}.png                    background / location (без префикса bg-)
+├── branding/{name}.{png|mp4}               cta.mp4, opener-{format}.mp4, title-card-{format}.png
+└── gameplay/{filename}.mp4                 gameplay recording
+
+episodes/{GAME_TAG}/{YYYY-MM-DD}-{format}/
+├── scenes/scene-K.{png|mp4}                per-episode scene PNG (+ I2V mp4)
+├── scenes/scene-K-end.png                  end frame для I2V
+└── tts/clip-K.mp3                          per-episode TTS
+                                           ↑ episode-* files НЕ регистрируются в game_assets
+
+videos/{GAME_TAG}/{YYYY-MM-DD}/{format}_final.mp4   final video
+
+music/{Mood}/{track}.mp3                    Drama/, Fun/, Tense/, Dark/, Neutral/
+```
+
+**NOT in storage:** story bibles (JSON) — local только в `games/`.
+
+### Table `game_assets` (long-lived refs only)
 
 Fields: `game_tag`, `character_name`, `asset_type`, `url`, `prompt_block`, `tags`. UNIQUE `(game_tag, character_name, asset_type)`.
 
-| `asset_type` | Description | Subfolder | Tags (examples) |
+Только reusable ассеты. Эпизодные сцены/TTS — НЕ сюда.
+
+| `asset_type` | Когда | Storage path | `character_name` convention |
 |---|---|---|---|
-| `reference_image` | Character ref (PNG) | `refs/` | `news`, `serial-drama` |
-| `character_card` | Promo card | `refs/` | |
-| `screenshot` | In-game screenshot | `refs/` | |
-| `promo_art` | Official art | `refs/` | |
-| `generated_ref` | AI-generated ref (sheet, opener, CTA) | `refs/` | `opener,video` / `cta,video` / `news,title-card` |
-| `avatar_ref` | AI avatar ref (PNG) | `avatars/` | `news,avatar` / `gameplay-ai-avatar` |
-| `gameplay_clip` | Gameplay recording (MP4) | `gameplay/` | |
+| `reference_image` | Persistent character ref / variant | `characters/{slug}/sheet.png` или `characters/{slug}/variants/{var}.png` | `slug` (для sheet) или `slug-variant` |
+| `avatar_ref` | Kling Avatar v2 ref | `characters/{slug}/avatar.png` | `slug` |
+| `generated_ref` | Location или branding (cta/opener/title-card) | `locations/{slug}.png` или `branding/{name}.{ext}` | `location:{slug}` или `branding:{name}` |
+| `gameplay_clip` | MP4 геймплея | `gameplay/{filename}.mp4` | имя клипа |
 
-**Tags are used for filtering.** Editor finds CTA/opener by tag `cta`/`opener` + `video`. Animator finds avatar ref by format tag + `avatar`. Manager checks for required tags in Phase 0.
+`character_card`, `screenshot`, `promo_art` — легаси типы, не использовать в новых загрузках (текущий DB constraint их ещё допускает).
 
-Upload: `queue/upload-asset.sh "GAME_TAG" "Name" "asset_type" ./file.png`
+**Tags** для фильтрации: `cta`, `opener`, `title-card`, `location`, `branding`, формат (`news`, `serial-drama`, ...). Editor находит CTA/opener по тегам `cta`/`opener`. Animator — `avatar` + формат.
 
-### Storage buckets
+### Upload helper
 
+```bash
+queue/upload-asset.sh --kind character  --game GAME --slug picard [--variant prophet] ./file.png
+queue/upload-asset.sh --kind avatar     --game GAME --slug q ./file.png
+queue/upload-asset.sh --kind location   --game GAME --slug ds9-ops ./file.png
+queue/upload-asset.sh --kind branding   --game GAME --name cta ./file.mp4
+queue/upload-asset.sh --kind gameplay   --game GAME ./file.mp4
+
+# Эпизодные — only Storage, no DB row:
+queue/upload-asset.sh --kind episode-scene --game GAME --episode 2026-05-28-redcon --name scene-1.png ./file.png
+queue/upload-asset.sh --kind episode-tts   --game GAME --episode 2026-05-28-redcon --name clip-1.mp3 ./file.mp3
 ```
-assets/{GAME_TAG}/gameplay/{filename}.mp4
-assets/{GAME_TAG}/refs/{character-name}.png
-assets/{GAME_TAG}/avatars/{avatar-name}.png
-
-videos/{GAME_TAG}/{YYYY-MM-DD}/{format_slug}_final.mp4
-
-music/{track-name}.mp3
-```
-
-**NOT in storage:** story bibles (JSON) — local only in `games/`.
 
 ---
 

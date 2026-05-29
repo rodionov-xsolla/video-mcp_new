@@ -8,6 +8,7 @@
 - **Аудитория:** Global, фанаты Star Trek, gacha/RPG игроки 25-45 лет
 - **Стиль арта:** Sci-fi LCARS UI, полуреалистичные 2D-портреты, 3D-корабли
 - **Премьера:** Январь 2016 (10+ лет активной работы)
+- **youtube_channel:** gamepulse
 
 ---
 
@@ -45,8 +46,10 @@
 
 ### Prompt prefix
 ```
-Star Trek Timelines style, semi-realistic sci-fi character portrait, LCARS interface aesthetic, deep space background, dramatic cinematic lighting, Starfleet uniform details
+Star Trek Timelines style, semi-realistic sci-fi character portrait, cinematic Federation lighting, deep space environment, Starfleet uniform details, clean cinematic frame, no UI overlay
 ```
+
+> ⚠️ В prefix описываем **стиль** (свет, палитра, художественное направление), не диегетический UI. Слова `LCARS interface aesthetic`, `HUD`, `text overlay`, `panel borders` сюда не пихать — NB2 трактует их буквально и рисует UI поверх лица. LCARS-панели рисуем локально в `environment_state` тех сцен, где они нужны (title card, DS9 Ops).
 
 ---
 
@@ -234,7 +237,7 @@ Star Trek Timelines style, semi-realistic sci-fi character portrait, LCARS inter
 
 ## CTA
 
-- **Supabase URL:** `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/cta-link-in-bio.mp4`
+- **Supabase URL:** `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta-link-in-bio.mp4`
 - **Текст:** "LINK IN BIO"
 - **Формат:** 1080×1920, 30fps, ~5s
 - **Использование:** Editor скачивает, нормализует (scale+pad+30fps+AAC), конкатенирует в конец после всех сцен

@@ -11,7 +11,7 @@
     "stability": 0.55,
     "style": null,
     "tone_signature": "theatrical omnipotent trickster, smug knowing grin, condescends to mortals, dry irony with occasional grandeur",
-    "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/avatars/q-avatar.png"
+    "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/q/avatar.png"
   },
   "voice_mapping": {
     "anchor": "Daniel",
@@ -20,13 +20,13 @@
         "voice": "George",
         "stability": 0.55,
         "tone": "dry-deadpan",
-        "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/refs/spock-on-location-vulcan-academy.png"
+        "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/_unsorted/spock-on-location-vulcan-academy.png"
       },
       "seven-on-location": {
         "voice": "Charlotte",
         "stability": 0.55,
         "tone": "clinical-absurdism",
-        "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/refs/seven-on-location-riker-chair.png"
+        "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/_unsorted/seven-on-location-riker-chair.png"
       }
     }
   },
@@ -100,6 +100,6 @@
       "notes": "Pilot — burned extra $4 on iteration tax (texts trimmed mid-flight, on-location pivoted after first render, off-by-one bug in scene labels). Episode 2+ projected at ~$3.50."
     }
   ],
-  "opener_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/refs/opener.mp4",
-  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/cta-link-in-bio.mp4"
+  "opener_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/opener.mp4",
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta-link-in-bio.mp4"
 }
