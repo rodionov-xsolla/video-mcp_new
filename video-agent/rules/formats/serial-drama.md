@@ -224,7 +224,7 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 - All frames 9:16 (608×1080) — square forbidden
 - **bg-reference per location** mandatory — without it the background drifts between clips (see `storyboarder.md` section 2)
 - Character refs: characters from story bible, mouth with teeth for lipsync clips
-- I2V clips require start + end frame (both with the same bg-ref in `image_urls`)
+- I2V clips: **start frame only** (`scene-K.png`). End frames are NEVER generated — see `storyboarder.md` §14.8/§16. `end_image_url` is FORBIDDEN with `multi_prompt` (Kling returns 422).
 - Each clip = its own scene PNG (not the ref directly)
 - General rules — `rules/roles/storyboarder.md`
 
@@ -234,7 +234,7 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 - Avatar clips via Kling Avatar v2 Standard (with TTS audio_url)
 - Motion prompt = technical (positions, camera, physical actions), without names/moods
 - One I2V model for the whole episode — do not mix Kling I2V versions within one episode
-- Start ≈ end for I2V; persistent character in both frames
+- Start frame only for I2V; Kling animates from the start frame via `motion_prompt`
 - **Do NOT speed up Avatar** in serial-drama (1.3x — only for gameplay-ai-avatar)
 - General rules — `rules/roles/animator.md`
 
@@ -291,7 +291,6 @@ output/YYYY-MM-DD/{GAME_TAG}/serial-drama/
 │   │   └── bg-{location}.png
 │   ├── scene-1/
 │   │   ├── scene-1.png
-│   │   ├── scene-1-end.png (for I2V only)
 │   │   ├── scene-1.mp4
 │   │   ├── scene-1-scaled.mp4
 │   │   └── tts-1.mp3 (for dialogue only)
@@ -315,7 +314,7 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - [ ] Dialogue clips = 5s (10s only with `duration_reason`)
 - [ ] All images 608×1080 (9:16)
 - [ ] bg-reference per location created
-- [ ] I2V start + end frames: same character, same bg
+- [ ] I2V: start frame only (`scene-K.png`), no end frames generated
 - [ ] TTS via fal.ai ElevenLabs (`voice` name, not `voice_id`)
 - [ ] Subtitles PIL PNG; dialogue + TBC only
 - [ ] fps normalized to 30 before concat
@@ -334,7 +333,7 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - ❌ `voice_id` hash instead of `voice` name
 - ❌ 1:1 square for Avatar (only 9:16)
 - ❌ character ref directly as scene image (each clip = its own PNG)
-- ❌ Different character on start/end I2V (Kling will mix them)
+- ❌ Generating `scene-K-end.png` for I2V — end frames forbidden (storyboarder.md §14.8); `end_image_url` + `multi_prompt` = Kling 422
 - ❌ `-shortest` in FFmpeg
 - ❌ Closing all loops (at least 2 active)
 - ❌ Repeating hooks/cliffhangers from the last 8 episodes
