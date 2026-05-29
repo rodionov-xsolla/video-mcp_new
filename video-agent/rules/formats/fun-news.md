@@ -452,6 +452,7 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 - Anti-repetition vs story bible `topic_rotation`.
 - `research.json.news_items[].location` must be populated — used by Storyboarder for on-location bg generation.
 - `research.json.news_items[].kicker_phrases` — used by Sound for ASS word-highlight.
+- **`subtitles.emphasis.scene_K` length cap: ≤14 characters per phrase (UPPERCASE on Helvetica Bold 96px overflows the 1080-wide frame above that).** Prefer punchy short kickers (`"COOKED"`, `"NO CAP"`, `"73%"`, `"BHLF"`, `"SKILL ISSUE"`). For longer concepts, trim to the key word or split into two emphasis entries. See `rules/roles/scenarist.md` § `subtitle_emphasis` for full word-budget rules.
 - General rules — `rules/roles/scenarist.md`.
 
 ### Storyboarder

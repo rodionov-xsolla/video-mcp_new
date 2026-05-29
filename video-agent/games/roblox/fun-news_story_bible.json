@@ -1,0 +1,68 @@
+{
+  "series_id": "fun-news-roblox",
+  "game_tag": "roblox",
+  "title": "Robloxia Lore Newsflash",
+  "created_at": "2026-05-28",
+  "last_episode": 1,
+  "anchor": {
+    "character_name": "jake-news",
+    "display_name": "Jake",
+    "voice": "Daniel",
+    "stability": 0.55,
+    "style": null,
+    "tone_signature": "fast snappy news-anchor energy, dry sarcastic delivery, treats absurd Robloxia events as routine breaking news",
+    "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/avatars/jake-news-avatar-ref.png"
+  },
+  "voice_mapping": {
+    "anchor": "Daniel",
+    "reporters": {
+      "sarah-news": "Charlotte",
+      "chad-news": "George"
+    }
+  },
+  "reporter_pool": [
+    {
+      "character_name": "sarah-news",
+      "display_name": "Sarah",
+      "voice": "Charlotte",
+      "stability": 0.55,
+      "tone_signature": "earnest field reporter, slightly worried tone, takes Bacon Hair plight very seriously",
+      "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/avatars/sarah-news-avatar-ref.png"
+    },
+    {
+      "character_name": "chad-news",
+      "display_name": "Chad",
+      "voice": "George",
+      "stability": 0.55,
+      "tone_signature": "deadpan analyst-correspondent, dry delivery, treats absurd statistics as serious data journalism",
+      "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/avatars/chad-news-avatar-ref.png"
+    }
+  ],
+  "style_tone": "satirical|dry-deadpan|absurd",
+  "topic_rotation": {
+    "recent_topic_tags": ["bacon-hair", "robux-inequality", "default-avatar", "robloxia-society", "bacon-hair-liberation-front", "university-of-robloxia", "mewing", "protest", "academic-satire"],
+    "recent_canon_facts": ["bacon-hair-default-avatar-archetype", "robux-currency-as-status-marker", "mewing-meme-from-roblox-brainrot"],
+    "cooldown_episodes": 5
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-05-28",
+      "anchor": "Jake",
+      "reporters": ["Sarah", "Chad"],
+      "structure": "5 scenes — anchor intro → reporter 1 (Bacon Hair Liberation Front protest) → anchor reaction → reporter 2 (University 73% mewing study) → anchor outro",
+      "news_items": [
+        {"index": 1, "headline": "Bacon Hair Liberation Front Demands Reparations from Robux Holders", "reporter": "Sarah"},
+        {"index": 2, "headline": "Sociologist: 73% of Bacon Hairs Still Mewing on Default Jawline — A Structural Problem", "reporter": "Chad"}
+      ],
+      "topic_tags": ["bacon-hair", "robux-inequality", "default-avatar", "robloxia-society", "bacon-hair-liberation-front", "university-of-robloxia", "mewing", "protest", "academic-satire"],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/roblox/2026-05-28/fun-news_final.mp4",
+      "duration_sec": 47.45,
+      "cost_usd": 3.36,
+      "notes": "Pilot episode. Reused existing news.md assets (Jake/Sarah/Chad avatars + opener/CTA) — saved ~$0.98 one-time prep cost vs full fresh fun-news setup."
+    }
+  ],
+  "opener_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/news-title-card.mp4",
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/news-cta.mp4",
+  "notes": "Pilot episode reuses existing news.md assets (opener/CTA/anchor/reporters) instead of generating fresh fun-news prep — saves ~$0.98 one-time cost. Visually identical Roblox-style block-head avatars; only the editorial framing (fictional satirical headlines vs real patch notes) distinguishes fun-news from news."
+}
