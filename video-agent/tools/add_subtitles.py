@@ -4,8 +4,9 @@
 
 Два канонических стилевых пресета (выбор делает оркестратор, не редактор):
 
-  --style bold       punchy social-video подписи: Helvetica Bold 108, КАПС,
-                     2 слова на чанк (или перенос на пунктуации), MarginV=520.
+  --style bold       punchy social-video подписи: Helvetica Bold 96, КАПС,
+                     2 слова на чанк (или перенос на пунктуации), MarginV=520,
+                     MarginL/R=100 (safe-zone от overflow на длинных парах).
                      Для фастпейс-форматов (serial-drama, news, dance-battle,
                      standard, top-list narrator).
 
@@ -107,7 +108,8 @@ if not os.path.isfile(FFMPEG):
 BOLD_STYLE = {
     "name": "Default",
     "fontname": "Helvetica",
-    "fontsize": 108,
+    "fontsize": 96,             # снижено с 108 — длинные UPPERCASE-пары
+                                # ("SYSTEMIC OPPRESSION") вылазили за кадр
     "primary": "&H00FFFFFF",   # белый
     "secondary": "&H000000FF",
     "outline_col": "&H00000000",  # чёрный
@@ -124,8 +126,8 @@ BOLD_STYLE = {
     "outline": 6,
     "shadow": 0,
     "alignment": 2,             # bottom-center
-    "marginl": 60,
-    "marginr": 60,
+    "marginl": 100,             # safe-zone слева (было 60) — anti-overflow
+    "marginr": 100,             # safe-zone справа (было 60) — anti-overflow
     "marginv": 520,             # ~27% от низа 1920 — над TikTok/Reels UI
     "encoding": 1,
     # чанкинг:
@@ -413,7 +415,7 @@ def build_ass(
     chunks: list[tuple[float, float, list[str]]],
     chunks_raw: list[list[tuple[float, float, str]]],
     style: dict,
-    secondary: dict | None,
+    secondary,
     highlight_words: bool,
     highlight_color: str,
 ) -> str:
