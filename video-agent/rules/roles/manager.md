@@ -160,21 +160,38 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
    - Path: `videos/{GAME_TAG}/{YYYY-MM-DD}/{format_slug}_final.mp4`
    - Get the public URL
 
-2. **Upload to YouTube** (if `YOUTUBE_REFRESH_TOKEN` is set in `.env`):
+2. **Upload to YouTube.**
+
+   **Channel routing.** Read `youtube_channel` from the game config metadata (`games/{GAME_TAG}/{GAME_TAG}.md`):
+   - `star-trek-timelines` → `gamepulse`
+   - `roblox` → `yellowguy`
+   - No `youtube_channel` field → no channel mapped yet. Do NOT guess. Skip the YT upload and tell the user which channel to map (Supabase URL stays the deliverable).
+
+   **Metadata.** Title: `storyboard.json → title` (fallback: idea). Description: `storyboard.json → description` (fallback: empty). Tags: `GAME_TAG + format_slug + storyboard.json → youtube_tags`.
+
+   **Privacy is always `public`** for the routed channel (per user). The `YOUTUBE_PRIVACY` env var is no longer the gate.
+
    ```bash
-   # Title: from storyboard.json → title (or idea if no title field)
-   # Tags: GAME_TAG + format_slug + any tags from storyboard.json → youtube_tags
+   CHANNEL="<resolved from game config>"   # gamepulse | yellowguy
    YOUTUBE_URL=$(bash queue/youtube-upload.sh \
+     --channel "$CHANNEL" \
      "$OUTPUT_DIR/final.mp4" \
      "$TITLE" \
      "$DESCRIPTION" \
-     "${YOUTUBE_PRIVACY:-private}" \
+     "public" \
      "$TAGS")
    echo "YouTube: $YOUTUBE_URL"
    ```
-   - If `YOUTUBE_REFRESH_TOKEN` is empty — skip silently (YouTube upload is optional)
-   - On error — log and continue (Supabase URL is the primary deliverable)
-   - Default privacy: `private` (change to `public` in `.env` when ready to publish)
+
+   **Debug vs non-debug — the gate on going public:**
+   - **Non-debug:** upload straight to `public` on the routed channel. No questions.
+   - **Debug mode:** STOP before the YT upload. Show the user:
+     - the Supabase **public URL** (clickable — this is how they watch the result),
+     - the **destination channel**, the **title**, **description**, and **tags**.
+
+     Ask: «Заливаю в паблик на `<channel>`?» Wait for OK. Apply any metadata edits the user gives, then run the upload. The script re-checks `channelId` against `YOUTUBE_CHANNEL_ID_<CHANNEL>` and warns on mismatch.
+
+   - On error — log and continue (Supabase URL is the primary deliverable).
 
 3. Logging (when the `video_agent_runs` table is ready):
    ```sql
