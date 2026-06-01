@@ -407,6 +407,30 @@ Example body (5 shots × 3s = 15s):
 }
 ```
 
+### Elements — ввести нового персонажа/объект в конкретный шот
+
+> ✅ **Burn-tested 2026-06-01 (v3 Standard, $0.50).** `elements` + `multi_prompt` работают вместе. Полная схема и выводы — `tools/fal-ai.md §2c`.
+
+`multi_prompt` тянет всё из одного `start_image_url` → новые сущности в кадре сами не появляются. Чтобы в шоте N вошёл персонаж/объект, которого нет на стартовом кадре:
+
+1. Storyboarder генерит его референсы (фронталь + ≥1 ракурс), грузит в Supabase (`storyboarder.md §15.2`).
+2. Кладёшь в `elements[0]` (полная схема — `tools/fal-ai.md §2c`):
+   ```json
+   "elements": [{"frontal_image_url": "…/worf-front.png", "reference_image_urls": ["…/worf-side.png", "…/worf-3q.png"]}]
+   ```
+3. В промптах шотов до N — **не упоминаешь** элемент; в промпте шота N — `@Element1 enters the frame`.
+
+- `reference_image_urls` **обязателен (≥1)**. Если чистый ракурс один — допустим дубликат фронтали, но идентичность слабее.
+- `elements` — на уровне запроса, не шота. `@ElementN` зовётся из `prompt` любого шота.
+- Video-элемент — только 1 на запрос (`video_url` + опц. `voice_id`).
+- Все URL — постоянные Supabase, НЕ fal.media.
+- Style-anchor и анти-фотореал negative по-прежнему в КАЖДОМ шоте — element не отменяет правил дрейфа (`serial-drama.md`).
+
+**Где element реально помогает (из теста):**
+- ✅ **Крупный план лица в финальном шоте** — заякоривание элементом чинит EP6-дрейф «третий шот плывёт в реализм». Используй element для on-model клоуз-апа лица, которого нет на стартовом кадре.
+- ⚠️ **Мелкая/перекрытая область** (лицо за стеклом, в толпе, под цветным светом) — идентичность element НЕ гарантируется, читается обобщённо. Для узнаваемости давай элементу заметную площадь кадра. Если важна именно узнаваемость в мелком плане — отдельный клип со своим start-frame надёжнее.
+- ✅ **Проверяй `video.url` в результате** — валидация elements отложенная, ошибка приходит в `detail` при fetch (см. §2c), а не на submit.
+
 ### Multi-call chaining (sequences > 15s)
 
 To produce, say, 25s of multi-shot action:
@@ -425,6 +449,8 @@ This preserves narrative continuity AND keeps each call within the 15s cap. Tota
 | ≤ 15s sequence of multiple distinct actions from one anchor (montage, combo) | **multi_prompt** (cheaper, smoother shot transitions) |
 | > 15s sequence | **multi_prompt × N calls + bridge** (above) |
 | Different locations / different start anchors per shot | **Separate I2V calls** (multi_prompt is single-anchor only) |
+| New character/object enters mid-sequence, заметной площадью кадра (same location, one anchor) | **multi_prompt + `elements`** (см. выше, burn-tested) |
+| New character must be RECOGNISABLE в мелком/перекрытом плане (за стеклом, в толпе) | **Separate I2V** со своим start-frame — element там читается обобщённо |
 | One simple action, 5–10s | **Regular I2V** (single `prompt`) |
 
 ### Pricing recap

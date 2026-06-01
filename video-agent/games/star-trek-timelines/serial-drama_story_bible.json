@@ -5,7 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 6,
+  "last_episode": 7,
   "planned_arc": {
     "note": "Pre-locked season-1 finale arc EP6-EP15. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim (translate only if language != en), adapt each episode's beats into 3-5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion only, all movement/explosions/pod-flight = CUT between clips not animation, protagonist always faces camera, cliffhanger spoken line = Avatar TTS). After shipping an episode, fold its loops/status into characters[], active_loops, episode_summaries as usual. Do NOT re-invent episodes while this arc has unshipped entries.",
     "new_characters": [
@@ -431,7 +431,7 @@
       "character_description": "semi-realistic Pixar 3D Captain James T. Kirk, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
       "voice": "Daniel",
       "elevenlabs_voice": "Daniel",
-      "status": "EP6: Refused Admiral's order to fire on allied ship. Overloaded Enterprise phaser array to abort the shot. Now in airlock bay — a black pod with his own biosignature has crashed aboard.",
+      "status": "EP7: Defied Admiral's order to jettison the pod. Manually opened it. Mirror Kirk — his mirror-universe double — stepped out. Confronting an impossible situation: a version of himself who knows too much.",
       "aura_points": 1100,
       "relationships": {
         "Worf": "uneasy alliance — Worf told the truth at great personal cost",
@@ -490,6 +490,21 @@
       }
     },
     {
+      "name": "Mirror_Kirk",
+      "role": "antagonist",
+      "character_description": "semi-realistic Pixar 3D mirror-universe James T. Kirk, identical face structure to Kirk but harder and predatory, cold confident smirk showing teeth with no warmth, thin diagonal scar across left cheek, slicked darker hair pressed flat, dead-calm glacier eyes, black-and-silver Section 31 mirror universe uniform with sharp angular trim and no Starfleet delta, lean forward predatory posture",
+      "voice": "Daniel",
+      "elevenlabs_voice": "Daniel",
+      "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery.",
+      "status": "EP7: Emerged from black pod in Enterprise airlock. First words to Kirk: 'Hello, Jim. You're late again.' Immediately identified Chekov and stated he 'was supposed to die first' — confirming foreknowledge of the Airlock Protocol. Now aboard the Enterprise.",
+      "aura_points": 0,
+      "relationships": {
+        "Kirk": "mirror double — same face, opposite intent; knows Kirk's choices before he makes them",
+        "Chekov": "designated target — knows Chekov was selected for the Airlock Protocol first"
+      },
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/mirror-kirk/sheet.png"
+    },
+    {
       "name": "Fleet_Admiral",
       "role": "antagonist",
       "character_description": "semi-realistic Pixar 3D Starfleet Fleet Admiral, older distinguished male, silver-grey hair combed straight back, sharp strong cheekbones, four gold admiral pips on collar, dark navy Starfleet admiral uniform with gold trim, cold calculating expression, slight controlled cold smile",
@@ -503,11 +518,13 @@
     }
   ],
   "active_loops": [
-    "major: Who is in the pod — and why does it read JAMES T. KIRK — ALIVE?",
-    "major: Why did the Admiral want the allied ship destroyed before the pod could launch?",
+    "major: Mirror Kirk knows Chekov was designated to die first — who gave him that intel?",
+    "major: Why did the Admiral want the pod jettisoned before it was opened — what did he know?",
     "major: Scotty still under suspicion — role in conspiracy unresolved",
     "major: Section 31 conspiracy — the Fleet Admiral is personally involved",
     "major: Enterprise weapons offline — phaser array destroyed by Kirk's own hand",
+    "major: Mirror Kirk is now aboard — what does he want and who does he serve?",
+    "major: Why Chekov was chosen first for the Airlock Protocol",
     "eternal: Kirk always fights for his crew against the system"
   ],
   "closed_loops": [
@@ -515,18 +532,17 @@
     "minor: Is Chekov alive? — RESOLVED: yes, found in airlock chamber",
     "minor: Who is the watcher? — RESOLVED EP4: it was Spock, running a Section 31 counter-operation",
     "minor: Kirk reaches the bridge before weapons fire — RESOLVED EP5: yes, but weapons still locked",
-    "minor: Will Kirk obey the Admiral's fire order? — RESOLVED EP6: No. Kirk destroyed his own weapons to prevent it."
+    "minor: Will Kirk obey the Admiral's fire order? — RESOLVED EP6: No. Kirk destroyed his own weapons to prevent it.",
+    "minor: Who is in the pod? — RESOLVED EP7: Mirror Kirk, a mirror-universe double of James T. Kirk"
   ],
   "world_state": {
     "location": "Enterprise Airlock Bay",
     "important_items": [
-      "Weapons array still locked on allied Starfleet escort vessel",
-      "Fleet Admiral appeared on viewscreen — watching in real time",
-      "Weapons console — Scotty claims he was locked out remotely",
-      "Countdown timer was in low 00:20s when Admiral appeared",
-      "Enterprise phaser array — DESTROYED (overloaded by Kirk's order)",
-      "Black escape pod in airlock — biosignature reads JAMES T. KIRK — ALIVE",
-      "Enterprise weapons offline"
+      "Mirror Kirk — aboard Enterprise, free and unrestrained",
+      "Enterprise phaser array — DESTROYED (weapons offline)",
+      "Black escape pod — opened, empty, in airlock bay",
+      "Chekov — present in airlock bay, identified by Mirror Kirk as 'the one supposed to die first'",
+      "Fleet Admiral — issued direct order to jettison pod (defied by Kirk)"
     ],
     "key_events": [
       "EP1: Worf executed airlock procedure on Chekov on Fleet Admiral's orders",
@@ -551,45 +567,49 @@
       "EP6: Kirk ordered Scotty to overload Enterprise phaser node — weapons destroyed to abort the shot.",
       "EP6: Black pod launched from the damaged allied ship and crashed into Enterprise airlock.",
       "EP6: Spock wiped porthole glass of pod — saw Kirk's face inside, eyes closed.",
-      "EP6: Spock: 'Captain... it's you in there.'"
+      "EP6: Spock: 'Captain... it's you in there.'",
+      "EP7: Admiral ordered 'Do not open it. That is a direct order.' — Kirk defied.",
+      "EP7: Kirk: 'You already lied to me once.' — overrode the Admiral's jettison order.",
+      "EP7: Chekov: 'I saw that pod before the airlock.' — confirming he recognized it.",
+      "EP7: Kirk manually cranked open the pod hatch against the Admiral's orders.",
+      "EP7: Mirror Kirk stepped out — identical face to Kirk, scar on left cheek, black-silver Section 31 mirror uniform.",
+      "EP7: Mirror Kirk: 'Hello, Jim. You're late again.'",
+      "EP7: Mirror Kirk turned to Chekov with a predatory smile: 'And that one was supposed to die first.'"
     ]
   },
   "anti_repetition": {
     "recent_phrases": [
-      "Whoever opened that door is watching us right now, Captain.",
-      "Then they're watching me walk through it.",
-      "Chekov. I've got you.",
       "Captain... it's someone on your crew.",
       "Now you see, Captain. We are both dead.",
       "The order. Show me.",
-      "It was Section 31.",
-      "The weapons array was armed six minutes ago, Captain. Scotty is on the bridge.",
-      "How long do we have.",
-      "By my estimate... approximately two minutes, Captain.",
       "Worf. You stay with him. No one in or out.",
       "Scotty. Step away from that console.",
       "Captain — I didn't arm them. Someone locked me out.",
-      "Captain.",
       "Eleven seconds, Captain. Fire.",
       "Captain, that ship must not survive.",
       "Then you should have told me why.",
       "We'll lose the phasers!",
       "Better the weapons than my conscience.",
-      "Captain... it's you in there."
+      "Captain... it's you in there.",
+      "Do not open it. That is a direct order.",
+      "You already lied to me once.",
+      "I saw that pod before the airlock.",
+      "Hello, Jim. You're late again.",
+      "And that one was supposed to die first."
     ],
     "recent_hooks": [
-      "physical-confrontation-action",
       "watcher-reveal-silhouette",
       "vulcan-corridor-reveal",
       "corridor-sprint-multi-shot",
-      "ticking-clock-targeting-reticle-allied-ship"
+      "ticking-clock-targeting-reticle-allied-ship",
+      "smoking-pod-crew-convergence"
     ],
     "recent_cliffhangers": [
-      "autonomous-system-betrayal",
       "unknown-watcher-reveal",
       "ship-weapons-locked-on-allied-vessel",
       "authority-figure-live-comms-reveal",
-      "biosignature-scanner-identity-reveal-pod"
+      "biosignature-scanner-identity-reveal-pod",
+      "mirror-double-predatory-reveal"
     ]
   },
   "episode_summaries": [
@@ -640,6 +660,14 @@
       "cliffhanger": "Biosignature scanner reads JAMES T. KIRK — ALIVE. Spock: 'Captain... it's you in there.' Kirk is standing right there.",
       "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-29/serial-drama_final.mp4",
       "duration_sec": 38
+    },
+    {
+      "episode": 7,
+      "language": "en",
+      "summary": "Kirk, Worf, Spock and Chekov stand before the smoking black pod in the airlock. The Admiral appears on the comm panel and orders them not to open it: 'Do not open it. That is a direct order.' Kirk refuses: 'You already lied to me once.' Chekov recognizes the pod — 'I saw that pod before the airlock.' Kirk manually cranks the hatch open. Mirror Kirk — identical face, scar on cheek, black-silver Section 31 uniform — steps out of the smoke and says: 'Hello, Jim. You're late again.'",
+      "cliffhanger": "Mirror Kirk turns slowly toward Chekov with a predatory smile: 'And that one was supposed to die first.' Chekov freezes.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-01/serial-drama_final.mp4",
+      "duration_sec": 29
     }
   ]
 }

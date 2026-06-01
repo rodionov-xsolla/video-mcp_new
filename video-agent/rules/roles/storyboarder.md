@@ -741,6 +741,26 @@ Before a series of generations with a specific character ref — do **one test g
 
 ---
 
+### 15.2 Element-референсы для I2V `elements` (по запросу Animator)
+
+> ✅ **Burn-tested 2026-06-01** — генерируй только если Scenarist/Animator явно просит element для `multi_prompt`-клипа (новый персонаж/объект входит в середине клипа). См. `animator.md §5a`, `tools/fal-ai.md §2c`.
+
+Это **отдельный тип ассета**, не scene-PNG и не char-ref. Когда в `multi_prompt`-клипе должен появиться персонаж/объект, которого нет на стартовом кадре, Kling `elements` хочет **набор «character sheet»**, а не один кадр:
+
+- `frontal_image_url` — 1 фронтальный вид;
+- `reference_image_urls` — **обязателен, ≥1 кадр** с других ракурсов (профиль, 3/4) на нейтральном фоне. Если у персонажа в Supabase чистый ракурс только один — **сгенерируй второй ракурс** (NB2 от существующего рефа, $0.08), не полагайся на дубликат: дубликат проходит валидацию, но узнаваемость хуже.
+
+Это **референсы элемента, а не сцены**: нейтральный фон, чистая поза, без окружения/действия. Генерируй через NB2 (chain reference от char-ref для консистентности).
+
+Путь в Supabase — как у char-ref (без даты, шарится между эпизодами):
+`${GAME_TAG}/refs/elements/${name}-front.png`, `…-side.png`, `…-3q.png`.
+
+Записывай URL-ы обратно в `storyboard.json` (поле клипа `elements`), чтобы Animator забрал их в запрос Kling.
+
+⚠️ Не путать с §14.8/§16: element-референсы НЕ являются end-frame и под запрет end-frame не попадают.
+
+---
+
 ### 16. I2V — start frame only (end frame forbidden with multi_prompt)
 
 For each I2V clip generate ONE image: `scene-K.png` (start frame only). **`scene-K-end.png` is NEVER generated** — see §14.8.
