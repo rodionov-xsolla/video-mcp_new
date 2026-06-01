@@ -251,6 +251,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 | "redcon", "what if lore", "alternate universe", "alternate history", "what if they", "divergence", "alternate fate", "elseworlds", "другая судьба", "альтернативная история" | Redcon | `rules/formats/redcon.md` |
 | "top-5", "top 5", "топ-5", "топ 5", "top list", "топ", "топ персонажей", "top characters", "top heroes", "top locations", "top items", "best characters", "ranking", "рейтинг", "countdown" | TOP List | `rules/formats/top-list.md` |
 | "fun news", "fictional news", "fake news", "lore news", "ироничные новости", "выдуманные новости", "фейковые новости", "satire news", "lore satire" | Fun News | `rules/formats/fun-news.md` |
+| "in-game pov", "pov", "от первого лица", "first person", "ты оказался", "вы оказались", "тебя зажали", "survival guide", "survival manual", "как выжить", "how to survive", "survive the", "выживание", "you wake up", "ты очнулся" | In-Game POV | `rules/formats/in-game-pov.md` |
 | Anything else | Standard | `rules/formats/standard.md` |
 
 **Do not load format files unrelated to the task.**
