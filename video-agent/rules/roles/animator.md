@@ -378,6 +378,8 @@ Kling v3 (`standard`, `pro`, `4k`) `image-to-video` supports a `multi_prompt` fi
 - **Max 6 shots** per call.
 - Each shot `duration`: enum string `"1"`–`"15"`. Sum of shot durations must equal top-level `duration`.
 - For sequences > 15s: split into N calls and concat (see "Multi-call chaining" below).
+- **Each shot `prompt` ≤ 512 characters (hard Kling limit).** fal.ai validates this at deferred-compute, so an over-length shot fails AFTER submit with a 422 in `detail` (the submit looks accepted, then dies on fetch) — every time costing you the round-trip. Count characters per shot when writing `motion_prompt` and trim to ≤512 BEFORE submitting. Bit us repeatedly on EP7. (Style anchor + anti-photoreal negative still mandatory per shot — fit them inside the 512.)
+- **Plural human nouns in a shot prompt = clones.** A shot that says `four figures advance`, `the crew freezes`, `silhouettes approach` against a start frame anchored to one character → Kling replicates that face across the frame. Describe a specific named subject + position, or `a single blurred silhouette`; never a plural crowd noun (mirror of `storyboarder.md §11`).
 
 ### Body — strict rules
 

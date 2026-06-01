@@ -348,6 +348,15 @@ NB2 does not understand the scale and intent of abstract descriptions. "Steps cl
 
 **Rule:** if a prompt is interpretable two ways (romance vs threat, sadness vs fatigue) — NB2 will pick the more neutral. Remove ambiguity with concrete physical details.
 
+#### 7.3.1 State-change actions (opening / breaking / emerging) — spell out the full mechanics
+
+When the scene is an object changing state — a hatch opening, a door sliding, a pod venting, something emerging — a terse `"hatch opens"` is the single biggest source of garbage: NB2/Kling invent the mechanism (opens the wrong way, into the wrong space, in a different room — EP7 scene-6 hatch "opened upward into another corridor"). The fix is **prompt detail, not avoiding the action**: describe the mechanism, the direction, the phases, and what occludes the transition.
+
+- Name the mechanism and direction: `"heavy circular hatch hinged on the left, swings outward toward camera"`, not `"hatch opens"`.
+- Describe the phase you're freezing in THIS frame (start frame = pre-action): `"hatch still sealed, hot orange seal ring glowing, Kirk's hands on the crank bar mid-pull"`.
+- For a reveal, prefer an occlusion the model renders reliably (steam, smoke, dust, light flare) over precise mechanical articulation — `"a burst of steam floods the frame; a figure emerges from the cloud"` is far more robust than animating door geometry. (EP7: dropping the hatch mechanism entirely and revealing Mirror Kirk out of a steam cloud is what finally worked.)
+- Keep the object's design consistent with prior scenes by carrying the previous scene as a chain ref (see §10) — don't let the pod/hatch redesign itself every frame.
+
 ---
 
 ### 7.1 Photographic vocabulary — precise visual control
@@ -532,6 +541,14 @@ When generating EP2+ scenes with the same characters — use the end frame of th
 
 Without a cross-episode anchor every episode is generated "from scratch" off the char sheet → proportions drift.
 
+#### 10.0.1 Within-episode continuation — carry the PREVIOUS scene of THIS episode as the background anchor
+
+For a scene that continues in the same location as the previous one, the primary chain ref is **the previous approved scene PNG of THIS episode**, plus the location bg-ref — not the character sheet alone, and not an older episode's scene that merely happens to contain the location. The character sheet locks the face; the **environment (set design, the pod, walls, props, scale) is carried by the previous scene PNG**. Skip it and the environment redesigns itself every frame (EP7: the escape pod's size and the hatch changed shape scene to scene because generation chained off char sheets / a wrong-episode frame instead of the previous in-episode scene).
+
+- Continuation in same location → `image_urls: [previous-scene-of-this-episode, bg-ref-or-char-sheet]` (bg/prev frame ALWAYS first, §11).
+- Do NOT reach into an older episode's scene as a "scale reference" unless it's the same shot type AND actually depicts the thing you're anchoring (EP7: I pulled EP6 scene-8 for "pod scale", but scene-8 was a character at a wall LCARS panel — so LCARS panels bled into the new frame and the pod scale didn't transfer). Verify what the ref actually shows before using it.
+- One pivotal visual fact (how a reveal happens, the design of a hero prop) that spans several scenes: lock it in the FIRST scene that establishes it, then chain every dependent scene off that frame. Changing it later means regenerating every downstream scene by hand (EP7 hatch→steam change cascaded across scenes 6/7/8 and wasted an already-rendered clip).
+
 Standard pattern for one character in a scene:
 
 | Scene | `image_urls` |
@@ -563,6 +580,12 @@ For complex multi-character scenes, when you need to exactly match the previous 
 ### 11. Refs in `image_urls` — rules
 
 3+ refs → model tries to "place" each ref as a separate entity → **characters duplicate**.
+
+**Plural nouns + a single character ref = clones (CRITICAL).** When `image_urls` carries ONE character sheet and the prompt uses a plural/collective noun for people — `figures`, `crew`, `silhouettes`, `soldiers`, `the Kirks`, `four figures approach` — NB2 (and Kling on the matching shot) stamps that one ref into every body → a row of identical clones. (EP7 scene-2: "multiple figures in a semicircle" + Kirk sheet → a wall of Kirk clones.) Fix:
+- Name each in-frame person individually with a continuous block and an explicit position (`"Kirk in foreground center … Worf one step behind his right shoulder …"`), OR
+- Make secondaries non-replicable: `"a single blurred dark silhouette in the background"` (no own ref, singular, out of focus), OR
+- Cut the crowd: if only 1–2 people actually matter in the shot, describe only them.
+- Never combine a single character ref with a plural human noun expecting "a group" — you get copies of that one face.
 
 **Order of refs:** bg ref **always first** in `image_urls`. White background of char sheets floods the atmosphere if it goes first.
 

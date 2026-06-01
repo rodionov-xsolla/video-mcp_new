@@ -93,6 +93,16 @@ Appropriate in dialogue: `rizz`, `sigma`, `cooked`, `negative aura`, `bro`, `no 
 - 10s dialogue clip = **almost always a mistake** (a static head for 10 seconds = death of dynamics). Split into 2×5s with different angles.
 - 10s clip requires `duration_reason` in storyboard.json.
 
+#### ⚠️ Avatar renders to TTS length, NOT `duration_sec` — runtime planning
+
+Kling Avatar produces a video **exactly as long as the audio fed to it**. A 1.7s line → a 1.7s clip, regardless of `duration_sec: 5`. So five "5s" dialogue clips (25s on paper) render as ~10s of actual footage (EP7 first cut came out 24s instead of the 37s the numbers implied).
+
+**Plan target runtime from real clip lengths, not nominal `duration_sec`:**
+- **Dialogue/Avatar clip ≈ its spoken line length** — budget ~0.4s/word EN (~2–3s per short line), NOT 5s.
+- **Action/I2V clip = its declared `duration` honestly** (6s = 6s; multi_prompt 9s = 9s).
+- To hit a target runtime (e.g. 40–45s), **carry the runtime in action/I2V clips** (6–9s each) and/or write longer dialogue lines — never inflate by freezing the last Avatar frame (see Anti-patterns).
+- Rough formula: `runtime ≈ Σ(action durations) + Σ(TTS line lengths) + CTA`. Compute this before generation; if short, add an action clip, don't stretch a still.
+
 ---
 
 ## Story Bible — persistent series state
@@ -349,6 +359,7 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - ❌ Repeating hooks/cliffhangers from the last 8 episodes
 - ❌ Redoing clips that already work (each extra generation = $0.35+)
 - ❌ Layered assembly (breaks music and timing)
+- ❌ Padding Avatar/dialogue clips to `duration_sec` with `tpad=stop_mode=clone` / freeze-last-frame (dead frozen face after every line — EP7). Avatar runs its natural TTS length; runtime comes from action clips
 - ❌ Title cards, brainrot tags, character name overlays
 - ❌ Long 10s dialogue clips for $0.04 savings (kills dynamics)
 - ❌ Re-rendering one line into a parallel `-new`/`-v2` audio file (drops locked voice → same character, two voices — EP6 Admiral)
