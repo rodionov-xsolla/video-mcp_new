@@ -271,7 +271,14 @@ Three-stage assembly (HUD drawtext per-scene before concat, then subtitles, then
 - **POV clips (scene-1 through scene-N):** per-scene, two drawtext layers:
   - **Persistent counter** (every POV scene): `drawtext=text='SURVIVAL ${survival_pct}%%':fontsize=52:fontcolor=white:borderw=4:bordercolor=black:x=w-text_w-40:y=80`, full duration.
   - **Outcome plate** (final non-CTA POV scene only): `fontsize=110`, green (`ВЫ ВЫЖИЛИ`) or red (`ВЫ ПОГИБЛИ`) per `outcome`, center `x=(w-text_w)/2:y=(h-text_h)/2`, `enable='gte(t,3.5)'`, fade in alpha over last 1.5s.
-- Escape `%` as `%%` and any `:`/`'` in drawtext text.
+- **MANDATORY: use `textfile=` not `text=`** for all drawtext layers — inline `text=` breaks on `:` (colon is ffmpeg option separator) and on `%` in font paths. Write each text to a temp file, then reference it:
+  ```bash
+  echo "BATTLE OF WOLF 359" > /tmp/ing_title.txt
+  echo "SURVIVAL CHANCE: 2%" > /tmp/ing_hook.txt
+  echo "SURVIVAL ${pct}%" > /tmp/ing_counter.txt
+  echo "YOU DIED" > /tmp/ing_outcome.txt
+  # then drawtext=textfile='/tmp/ing_title.txt':...
+  ```
 - HUD goes ONLY here — never ask NB2/Kling to draw it.
 
 **Stage 1 — Picture-only concat:**
