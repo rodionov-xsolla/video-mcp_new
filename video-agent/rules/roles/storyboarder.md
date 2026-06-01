@@ -566,6 +566,8 @@ For complex multi-character scenes, when you need to exactly match the previous 
 
 **Order of refs:** bg ref **always first** in `image_urls`. White background of char sheets floods the atmosphere if it goes first.
 
+**One character = one locked ref asset for the whole episode.** Pick the character's canonical ref once and use that exact same URL in every clip the character appears in — like the locked voice. Do NOT reference one character from two different asset paths across clips (EP6 took Spock from `spock/variants/canonical.png` in scene 8 and `spock-canonical/sheet.png` in scene 9 — one of them HTTP 400 — guaranteeing the face differed between two adjacent clips). **Verify the ref URL returns 200 before the first generation that uses it** (one test gen, §14.7) — a dead ref means NB2 silently falls back to text-only and invents the face.
+
 | Frame type | `image_urls` |
 |---|---|
 | 1 character | `[bg-ref, character-sheet]` (max) |
@@ -630,6 +632,8 @@ Special case: when a character is seen through a constrained opening — proport
 ```
 
 Without this, NB2 fills the entire opening with a close-up of the face.
+
+**Figure-behind-barrier seen by another character = silhouette, never a face.** When a character looks *through* a porthole/glass/door at someone, and the only character ref in `image_urls` is the looker, NB2 will draw the looker's own face inside the opening. If the figure behind the barrier must stay unidentified (or is a different character with no ref present), describe it strictly as `"dark silhouette of a slumped human shape, no distinct face, no features visible"` — never `"a face is visible inside"`. (EP6 scene 8: Spock's own face appeared in the porthole he was looking through.)
 
 #### 14.2 BG ref = scene-without-actor, NOT wallpaper
 
@@ -830,6 +834,8 @@ Only after ALL images pass — hand off to Manager.
 ## Checklist before handing off to Manager
 
 - [ ] Each scene has an `image_prompt` (40–80 words), added to `storyboard.json`
+- [ ] **Every `image_prompt` opens with the full `style_tags` prefix from the bible** — never a shortened style string (EP6 scene 8 lost the prefix and drifted off-style)
+- [ ] Each character referenced from ONE locked ref URL across all its clips; every ref URL verified 200 before use
 - [ ] `camera_angle` differs between adjacent scenes
 - [ ] Lipsync scenes have `mouth slightly open with teeth visible` in the prompt
 - [ ] All character refs created or pulled from Supabase
