@@ -94,7 +94,9 @@ Slightly more than the previous 6-clip layout because rank-1 is split into 2 cli
 
 ## Title card (clip 0) — special construction
 
-Two-stage build, the same as a regular scene but with text baked into the NB2 image:
+> 🔒 **Locked brand reference (if the game provides one).** A game may pin ONE fixed title-card design in `games/{GAME_TAG}/top-list_special.md` (a branding asset tagged `title-card`). When present, the title card is NOT composed from scratch per episode — Storyboarder generates scene 0 via **NB2 `/edit`** with `image_urls: ["<reference URL>"]`, keeps the locked composition VERBATIM (emblem, wordmark, hero art, background), and only adds the per-episode `{THEME}` text in the reference's matching style. This keeps every countdown on-brand. **Star Trek Timelines has this locked reference** (`assets/star-trek-timelines/branding/top-list-titlecard.png` — Starfleet laurel emblem + metallic `TOP-5` + ship over planet; only `{THEME}` changes under the `TOP-5`). See `games/star-trek-timelines/top-list_special.md`. If a game has NO such reference, fall back to the from-scratch two-stage build below.
+
+Two-stage build (fallback when there is no locked reference), the same as a regular scene but with text baked into the NB2 image:
 
 1. **NB2 image** (608×1080):
    - Composition: hero collage / silhouette montage of the 5 items behind a big foreground title plate
