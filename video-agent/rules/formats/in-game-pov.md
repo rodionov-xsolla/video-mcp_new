@@ -264,25 +264,40 @@ Three-stage assembly (HUD drawtext per-scene before concat, then subtitles, then
 
 **Stage 0 — HUD overlays (per-scene, BEFORE concat, ffmpeg-full / libfreetype):**
 - Use `$FFMPEG = /usr/local/bin/ffmpeg-full/ffmpeg` (drawtext needs libfreetype).
-- **Title card (scene-0-scaled.mp4):** draw two text layers centered:
-  - Line 1 — `title_card_text` (situation name): `fontsize=80:fontcolor=white:borderw=5:bordercolor=black:x=(w-text_w)/2:y=h*0.35`, fade in from t=0.0–0.6s.
-  - Line 2 — `hook_plate` (survival %): `fontsize=96:fontcolor=red:borderw=6:bordercolor=black:x=(w-text_w)/2:y=h*0.52`, fade in from t=0.6–1.2s, stay through end.
+- **Title card (scene-0-scaled.mp4):** draw **three** text layers centered, all via `textfile=`:
+  - Line 1 — first half of `title_card_text` (e.g. "BATTLE"): `fontfile=FONT_ULT:fontsize=130:fontcolor=white:x=(w-text_w)/2:y=680`
+  - Line 2 — second half of `title_card_text` (e.g. "OF WOLF 359"): `fontfile=FONT_ULT:fontsize=130:fontcolor=white:x=(w-text_w)/2:y=840`
+  - Line 3 — `hook_plate` (survival %): `fontfile=FONT_MED:fontsize=60:fontcolor=red:x=(w-text_w)/2:y=1030:expansion=none`
+  - Fonts: `FONT_ULT=/Users/daniil.efimov/Library/Fonts/TacticSans-Ult.otf`, `FONT_MED=/Users/daniil.efimov/Library/Fonts/TacticSans-Med.otf`
   - No `survival_pct` counter on the title card.
 - **POV clips (scene-1 through scene-N):** per-scene, two drawtext layers:
-  - **Persistent counter** (every POV scene): `drawtext=text='SURVIVAL ${survival_pct}%%':fontsize=52:fontcolor=white:borderw=4:bordercolor=black:x=w-text_w-40:y=80`, full duration.
+  - **Persistent counter** (every POV scene): `drawtext=textfile=...:fontfile=FONT_ARI:fontsize=52:fontcolor=white:borderw=4:bordercolor=black:x=w-text_w-40:y=80`, full duration.
   - **Outcome plate** (final non-CTA POV scene only): `fontsize=110`, green (`ВЫ ВЫЖИЛИ`) or red (`ВЫ ПОГИБЛИ`) per `outcome`, center `x=(w-text_w)/2:y=(h-text_h)/2`, `enable='gte(t,3.5)'`, fade in alpha over last 1.5s.
 - **MANDATORY drawtext rules (macOS ffmpeg 8.x):**
   1. Use `textfile=` not `text=` — inline `text=` breaks on `:` (colon is treated as option separator even inside single quotes).
-  2. Use `fontfile='/System/Library/Fonts/Supplemental/Arial Unicode.ttf'` — without fontfile, text renders invisible.
-  3. The `%` character is special in drawtext format strings — use the **fullwidth percent sign `％` (U+FF05)** instead. It renders identically but is not interpreted as a format specifier. Write it as UTF-8 bytes `\xef\xbc\x85`:
+  2. Always specify `fontfile=` explicitly — without it, text renders invisible on macOS.
+  3. The `%` character in drawtext format strings: **two approaches depending on context:**
+     - For TacticSans fonts (title card): add `expansion=none` to the drawtext filter — this disables format-string parsing so a literal `%` in the textfile renders correctly.
+     - For Arial Unicode (HUD counter): use the **fullwidth percent `％` (U+FF05, UTF-8: `\xef\xbc\x85`)** — TacticSans lacks this glyph (renders as tofu), but Arial Unicode has it.
   ```bash
-  PCT="\xef\xbc\x85"   # ％ U+FF05 — looks like % but safe in drawtext
-  FONT="/System/Library/Fonts/Supplemental/Arial Unicode.ttf"
-  printf "BATTLE OF WOLF 359" > /tmp/ing_title.txt
-  printf "SURVIVAL CHANCE: 2${PCT}" > /tmp/ing_hook.txt
-  printf "SURVIVAL ${pct}${PCT}" > /tmp/ing_counter.txt
+  FONT_ULT="/Users/daniil.efimov/Library/Fonts/TacticSans-Ult.otf"
+  FONT_MED="/Users/daniil.efimov/Library/Fonts/TacticSans-Med.otf"
+  FONT_ARI="/System/Library/Fonts/Supplemental/Arial Unicode.ttf"
+  PCT_ARI="\xef\xbc\x85"   # ％ U+FF05 — for Arial Unicode counter only
+
+  # Title card — split title_card_text into two lines manually
+  printf "BATTLE" > /tmp/ing_l1.txt
+  printf "OF WOLF 359" > /tmp/ing_l2.txt
+  echo 'SURVIVAL CHANCE: 2%' > /tmp/ing_hook.txt   # literal %, expansion=none handles it
+
+  # drawtext=textfile='/tmp/ing_l1.txt':fontfile='$FONT_ULT':fontsize=130:fontcolor=white:x=(w-text_w)/2:y=680,
+  # drawtext=textfile='/tmp/ing_l2.txt':fontfile='$FONT_ULT':fontsize=130:fontcolor=white:x=(w-text_w)/2:y=840,
+  # drawtext=textfile='/tmp/ing_hook.txt':fontfile='$FONT_MED':fontsize=60:fontcolor=red:x=(w-text_w)/2:y=1030:expansion=none
+
+  # HUD counter (Arial Unicode + ％)
+  printf "SURVIVAL ${pct}${PCT_ARI}" > /tmp/ing_counter.txt
   printf "YOU DIED" > /tmp/ing_outcome.txt
-  # drawtext=textfile='/tmp/ing_title.txt':fontfile='$FONT':...
+  # drawtext=textfile='/tmp/ing_counter.txt':fontfile='$FONT_ARI':...
   ```
 - HUD goes ONLY here — never ask NB2/Kling to draw it.
 
