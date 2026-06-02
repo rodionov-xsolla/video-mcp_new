@@ -113,6 +113,10 @@ Priority: official wiki → game's own narrative material → fan-curated lore w
 - Prefer canon characters that are thematically tied to the news topic (a Vulcan-themed item → Spock; a Voyager-themed item → Seven of Nine; a Klingon honor-themed item → Worf).
 - Look up reporter base avatars in Supabase by `character_name` and tag `fun-news,avatar`.
 
+**Reporters always carry a microphone (MANDATORY):**
+
+Every reporter in every on-location image must visibly hold a **broadcast handheld microphone** — the kind a field reporter holds up to their mouth. This is a core visual identity signal of the fun-news format (they are field reporters, not studio guests). The microphone must appear in the NB2 on-location prompt explicitly: `"holding a broadcast handheld microphone in one hand"`. Do NOT use a desk mic (that belongs to the anchor only) or a lavalier/clip mic (invisible). If the character previously held a scroll or other prop, replace it with the microphone or add it to the free hand.
+
 **Per-episode on-location backgrounds (MANDATORY, $0.08 × N_reporters per episode):**
 
 The format spec calls for reporters to appear **on location relevant to their news item**, not against bare/abstract studio backgrounds. For each reporter selected in Phase 1, generate a fresh NB2 **edit** using the base avatar as `image_urls[0]`:
@@ -459,6 +463,7 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 - Anchor avatar — pulled from Supabase, do NOT regenerate.
 - Reporter base avatars — pulled from Supabase by `character_name` tag; generate sheet+ref only for brand-new reporters joining the pool.
 - **Per-episode on-location backgrounds (MANDATORY)** — NB2 edit using reporter base ref as `image_urls[0]`, with the news item's `location` in the prompt. Avoid the wording "Pixar 3D" if it pulls the model toward animated style — instead use "semi-realistic photographic cinematic quality, NOT cartoon, NOT illustration".
+- **Reporters always hold a broadcast handheld microphone (MANDATORY)** — every on-location reporter image must include `"holding a broadcast handheld microphone in one hand"` in the NB2 prompt. No exceptions. This is the visual identity of the format.
 - 9:16 (1080×1920) all images, frontal/three-quarter, teeth visible for lipsync.
 - Upload per-episode on-location images to Supabase as `refs/{character}-on-location-{topic}.png`.
 - General rules — `rules/roles/storyboarder.md`.
