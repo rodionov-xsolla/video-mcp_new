@@ -20,6 +20,8 @@
 | Fun News | **$4.50** | Spend > $4.00 |
 | Streettalk | **$7.00** | Spend > $6.30 (pilot allowance; EP2+ target ~$3.00) |
 | In-Game POV | **$7.00** | Spend > $6.30 |
+| Redcon | **$6.00** | Spend > $5.40 |
+| What If... Lore | **$6.00** | Spend > $5.40 |
 
 Tracking: after each generation, record the cost. Before the next one — check the limit.
 
