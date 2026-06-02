@@ -63,6 +63,7 @@ rules/
 │       reddit-story, dance-battle, object-character, dual-style,
 │       character-story, motion-dance, what-if-real-life, top-list,
 │       fun-news, streettalk}.md
+│       fun-news, in-game-pov}.md
 └── main/
     ├── budgets.md             — model pricing
     ├── fallback.md            — error handling

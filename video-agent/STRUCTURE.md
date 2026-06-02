@@ -131,6 +131,7 @@ video-agent/
 │       ├── top-list.md          # TOP-5 countdown персонажей / локаций / предметов
 │       ├── fun-news.md          # Выдуманные ироничные новости из лора игры (anchor + 1-2 reporters, Avatar v2)
 │       └── streettalk.md        # Vox-pop уличное интервью: 1 репортёр + 3 интервьюируемых, без студии, channel-bug branding (Avatar v2)
+│       └── in-game-pov.md       # POV от первого лица: «ты оказался в ситуации», survival-мануал + живой HUD-счётчик %, исход — выжил/погиб
 │
 ├── games/
 │   ├── mlbb/
