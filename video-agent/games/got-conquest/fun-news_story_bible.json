@@ -76,8 +76,8 @@
       ],
       "topic_tags": ["dragons", "king's-landing", "animal-control", "drogon", "night's-watch", "the-wall", "winter-is-coming", "stark-words"],
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/videos/got-conquest/2026-06-02/fun-news_final.mp4",
-      "duration_sec": 42.88,
-      "cost_notes": "Pilot episode — one-time asset prep included. Total: ~$5.21 (steady-state ep2+ est. ~$3.26). Music offset: 1:50 in heroic-neptune. Ambient sound: skipped (no library tracks matched, manual_sfx_needed for ep2+). Microphone flag rule added to fun-news.md."
+      "duration_sec": 45.91,
+      "cost_notes": "Pilot episode — one-time asset prep included. Total: ~$5.21 (steady-state ep2+ est. ~$3.26). Music offset: 1:50 in heroic-neptune. Ambient sound: skipped (no library tracks matched, manual_sfx_needed for ep2+). Microphone flag rule added to fun-news.md. v3 fix: music gating — music-timed.wav (real anullsrc silence) replaces broken volume:enable filter. Scene-2 at 1.0x speed. FFmpeg 8.1 note: ass/subtitles filters not compiled in this build — subtitles omitted."
     }
   ],
   "opener_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/branding/opener-fun-news.mp4",
