@@ -46,8 +46,8 @@ The character does NOT speak on camera (no lipsync). Video = visualization of wh
 | Component | 5s clip |
 |---|---|
 | Image (NB2, start frame only — no end frame, no bg-ref) | $0.08 |
-| Kling I2V 5s (generate_audio=false) | $0.35 |
-| **Per clip** | **~$0.43** |
+| Kling v3 Standard I2V 5s (generate_audio=false) | $0.42 |
+| **Per clip** | **~$0.50** |
 
 | Component | Cost |
 |---|---|

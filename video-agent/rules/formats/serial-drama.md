@@ -41,11 +41,11 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 
 | Component | 5s clip | 10s clip |
 |---|---|---|
-| Image (NB2) | $0.04 | $0.04 |
-| Kling I2V (generate_audio=false, $0.07/s) | $0.35 | $0.70 |
+| Image (NB2) | $0.08 | $0.08 |
+| Kling v3 Standard I2V (generate_audio=false, $0.084/s) | $0.42 | $0.84 |
 | ElevenLabs TTS (line 5–15s) | ~$0.05 | ~$0.07 |
 | Kling Avatar v2 (dialogue) | ~$0.28 | ~$0.56 |
-| **I2V action clip** | **~$0.39** | **~$0.74** |
+| **I2V action clip** | **~$0.50** | **~$0.92** |
 | **Avatar dialogue clip** | **~$0.32** | **~$0.63** |
 
 | Variant | Clips | Cost |
@@ -357,7 +357,7 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - ❌ `-shortest` in FFmpeg
 - ❌ Closing all loops (at least 2 active)
 - ❌ Repeating hooks/cliffhangers from the last 8 episodes
-- ❌ Redoing clips that already work (each extra generation = $0.35+)
+- ❌ Redoing clips that already work (each extra generation = $0.42+)
 - ❌ Layered assembly (breaks music and timing)
 - ❌ Padding Avatar/dialogue clips to `duration_sec` with `tpad=stop_mode=clone` / freeze-last-frame (dead frozen face after every line — EP7). Avatar runs its natural TTS length; runtime comes from action clips
 - ❌ Title cards, brainrot tags, character name overlays
