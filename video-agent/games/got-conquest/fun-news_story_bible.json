@@ -1,0 +1,92 @@
+{
+  "series_id": "fun-news-got-conquest",
+  "game_tag": "got-conquest",
+  "title": "Game of Thrones Daily",
+  "created_at": "2026-06-02",
+  "last_episode": 1,
+  "anchor": {
+    "character_name": "tyrion-lannister",
+    "display_name": "Tyrion Lannister",
+    "voice": "Brian",
+    "stability": 0.55,
+    "style": null,
+    "tone_signature": "dry sardonic wit, patrician sarcasm, delivers absurdity with complete sincerity, wine-goblet energy, short punchy sentences",
+    "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/characters/tyrion-lannister/avatar.png"
+  },
+  "voice_mapping": {
+    "anchor": "Brian",
+    "reporters": {
+      "varys": "Daniel",
+      "jon-snow": "George"
+    }
+  },
+  "reporter_pool": [
+    {
+      "stage": 1,
+      "character_name": "varys",
+      "display_name": "Varys",
+      "voice": "Daniel",
+      "stability": 0.55,
+      "tone_signature": "conspiratorial, knows more than he says, whisper-to-normal cadence, pauses for effect",
+      "topics": ["politics", "king's-landing", "intrigue", "small-council"],
+      "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/characters/varys/avatar.png",
+      "supabase_on_location_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/locations/varys-on-location-kings-landing.png"
+    },
+    {
+      "stage": 1,
+      "character_name": "jon-snow",
+      "display_name": "Jon Snow",
+      "voice": "George",
+      "stability": 0.55,
+      "tone_signature": "flat deadpan monotone, zero emotional range, absurd content delivered with maximum sincerity",
+      "topics": ["night's-watch", "the-wall", "north", "wildlings"],
+      "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/characters/jon-snow/avatar.png",
+      "supabase_on_location_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/locations/jon-snow-on-location-the-wall.png"
+    }
+  ],
+  "style_tone": "ironic|satirical|absurd|dry-deadpan",
+  "topic_rotation": {
+    "recent_topic_tags": ["dragons", "king's-landing", "animal-control", "drogon", "night's-watch", "the-wall", "winter-is-coming", "stark-words"],
+    "recent_canon_facts": [
+      "Dragons in Westeros regularly cause fire damage — Drogon, Rhaegal etc.",
+      "'Winter is Coming' — House Stark words repeated for decades before winter arrives"
+    ],
+    "cooldown_episodes": 5
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-06-02",
+      "anchor": "Tyrion Lannister",
+      "reporters": ["Varys", "Jon Snow"],
+      "structure": "5 scenes — anchor intro → reporter 1 → anchor reaction → reporter 2 → anchor outro",
+      "news_items": [
+        {
+          "index": 1,
+          "headline": "Animal Control Opens Investigation Into Unsanctioned Dragon Flyovers — Drogon Melts Investigators' Clipboards",
+          "reporter": "Varys",
+          "satire_angle": "absurd"
+        },
+        {
+          "index": 2,
+          "headline": "Night's Watch Retires 'Winter is Coming' After Phrase Loses Urgency — New Advisory: 'Dress Appropriately'",
+          "reporter": "Jon Snow",
+          "satire_angle": "satirical"
+        }
+      ],
+      "topic_tags": ["dragons", "king's-landing", "animal-control", "drogon", "night's-watch", "the-wall", "winter-is-coming", "stark-words"],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/videos/got-conquest/2026-06-02/fun-news_final.mp4",
+      "duration_sec": 45.91,
+      "cost_notes": "Pilot episode — one-time asset prep included. Total: ~$5.21 (steady-state ep2+ est. ~$3.26). Music offset: 1:50 in heroic-neptune. Ambient sound: skipped (no library tracks matched, manual_sfx_needed for ep2+). Microphone flag rule added to fun-news.md. v3 fix: music gating — music-timed.wav (real anullsrc silence) replaces broken volume:enable filter. Scene-2 at 1.0x speed. FFmpeg 8.1 note: ass/subtitles filters not compiled in this build — subtitles omitted."
+    }
+  ],
+  "opener_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/branding/opener-fun-news.mp4",
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/branding/cta.mp4",
+  "music": {
+    "track": "heroic-neptune",
+    "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/heroic-neptune.mp3",
+    "start_offset_sec": 110,
+    "notes": "Start from 1:50 — dynamic section for news opener energy"
+  },
+  "notes": "Pilot complete. All one-time assets in Supabase. Microphone flag rule added to fun-news.md (reporters always hold GoT Daily branded handheld mic). Ambient intershum not yet in library — ep2+ candidate."
+}

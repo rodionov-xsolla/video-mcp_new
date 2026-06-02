@@ -45,6 +45,44 @@ Keywords: "streettalk", "street talk", "street-talk", "vox pop", "vox-pop", "у�
 
 ---
 
+## Visual Identity & Branding (MANDATORY)
+
+### Opener — game-specific, always required
+
+Every streettalk episode must open with a **game-specific branded opener** (pre-built in Supabase, reused every episode). Rules:
+- **Visual style** — matches the game's aesthetic exactly: if it's DS9, the opener looks like a DS9 newscast; if it's a fantasy game, the opener uses that world's visual language. NOT a generic "street interview" template.
+- **Show name and location prominently displayed** — e.g. "GLN Streettalk — DS9 Promenade". The card establishes both brand and place.
+
+### Opener music = CTA music (same theme, only at those two points)
+
+The opener and the CTA/packshot share the **same musical theme** — upbeat and energetic but NOT harsh or jarring. During all dialogue scenes: **no background music** (real silence). Only ambient SFX plays during dialogue (see Sound section). Music placement:
+- t=0 → opener end (~2s): theme plays
+- t=2s → CTA start: **silence** — dialogue + ambient SFX only
+- CTA start → end (~5s): same theme reprises with fade-out
+
+**Implementation (Editor):** build a `music-timed.wav` using `anullsrc` for the silence portion (same approach as fun-news). Do NOT use `volume:enable` filter (FFmpeg passthrough bug). Ambient SFX is a separate layer mixed at 0.15 throughout the dialogue; only the music track is gated.
+
+### TV attributes (all scenes)
+
+**Microphones:**
+- Reporter always holds a **broadcast handheld microphone with the show's name on the mic flag** (e.g. "GLN Streettalk", or the game-specific show name). NOT a generic channel logo, NOT a blank flag.
+- For interviewee scenes: reporter's mic is visible in the foreground from off-screen (standard vox-pop framing). The flag is still readable.
+- Include in NB2 prompt: `"reporter holds broadcast mic with '[SHOW NAME]' on the mic flag"` (reporter scenes) or `"reporter's mic with '[SHOW NAME]' flag in foreground"` (interviewee scenes).
+
+**Show signage:**
+- The reporter intro/outro shot should include **visible show branding** in the environment: a street banner, marquee, or lower-third graphic establishing the show. This is optional for on-the-fly location shots but preferred for the opener-frame reference.
+
+### Reporter/interviewee background matches question topic (MANDATORY)
+
+On-location backgrounds must visually relate to the **specific question being asked**, not just the general location:
+- Question about a Klingon honor dispute → at minimum one Klingon element visible in background, or signage referencing the dispute
+- Question about dragon incidents → even on the Promenade, background extras or signage should hint at the dragon topic
+- The viewer should be able to partially infer the topic from the background
+
+**Storyboarder responsibility:** when generating on-location NB2 edits, inject topic-related visual elements into the background description — don't use the location ref as-is if the question has a more specific visual hook.
+
+---
+
 ## Pipeline (strict order)
 
 ### Phase 0: Initialization (manager)
@@ -177,8 +215,8 @@ Save raw output to `build/ambient.mp3`, upload to Supabase `episodes/{game}/{dat
 
 **Ambient prompt seed (per-game, from story bible's `location.ambient_prompt`).** Example for DS9 promenade: `"DS9 Promenade ambient: low chatter of multiple alien species voices in unintelligible languages, soft Bajoran-Cardassian station hum, distant footsteps on metal walkway, occasional door-chime and PADD beeps, no music no melody, urban marketplace texture with indoor reverb, layered crowd murmur, no clear English words"`.
 
-**Music selection (background, low layer):**
-From `music/tracks.json` — picked by Sound, default `energetic-simulacao` (BPM 130, tagged `news`/`gameplay-ai-avatar`/`standard`). Volume **`0.06`** (much lower than fun-news 0.15) — vox-pop is dominated by dialogue + ambient; music is a faint pulse underneath, not the texture.
+**Music selection (opener + CTA theme only):**
+From `music/tracks.json` — picked by Sound, default `energetic-simulacao` (BPM 130, tagged `news`/`gameplay-ai-avatar`/`standard`). The chosen track plays **only during opener (~2s) and CTA (~5s)**; during dialogue only ambient SFX plays. Write `music.start_offset_sec` into storyboard.json. Volume in music-timed.wav: **`0.06`** (vox-pop is dialogue + ambient dominant; music is a brief energetic pulse at the bookends only, not a continuous underscore).
 
 **Audio layer volume contract** (Editor consumes):
 - Dialogue (Avatar v2 embedded audio): **1.0**
@@ -235,9 +273,9 @@ AUDIO branch (THREE layers: dialogue + ambient + music):
   [adlg] adelay=2000|2000                                            → [atts]   (2s opener silence prefix)
   [8:a]  volume=0.15,apad=whole_dur=TOTAL_DUR,
          afade=t=in:st=0:d=0.5,
-         afade=t=out:st=TOTAL-1:d=1.0                                → [aamb]   (ambient SFX, 0.15)
-  [7:a]  volume=0.06,
-         afade=t=out:st=TOTAL-1:d=1.0                                → [amus]   (music, 0.06)
+         afade=t=out:st=TOTAL-1:d=1.0                                → [aamb]   (ambient SFX, 0.15 — plays throughout)
+  [7:a]  (music-timed.wav — pre-built: 2s theme + silence + 5s theme; volume 0.06 baked in)
+                                                                     → [amus]   (music bookends only)
   [atts][aamb][amus] amix=inputs=3:duration=longest:
                           dropout_transition=0:
                           normalize=0                                → [aout]
@@ -552,7 +590,8 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 ### Storyboarder
 - Pull reporter avatar / location ref / opener from Supabase if present in story bible. Otherwise generate as one-time prep (logged to `pilot_prep_cost`).
 - 3 interviewees: each gets one on-location NB2 edit using base ref as `image_urls[0]`. Reporter gets two (scene 1 + scene 5).
-- All 5 scene images 9:16, three-quarter or frontal med-CU, mic visible per scene (reporter holds mic for intro/outro; mic in foreground for interviewees).
+- All 5 scene images 9:16, three-quarter or frontal med-CU, mic visible per scene (reporter holds mic with show-name flag for intro/outro; mic with flag in foreground for interviewees).
+- **Background matches question topic** — inject topic-specific visual elements into every on-location edit. If the question is about food prices, background should hint at a market/vendor. If about Klingon honor, Klingon visual elements in background. Do not use the bare location ref as-is when a specific question topic offers a richer visual hook.
 - For each canon interviewee, base ref priority: `streettalk,interviewee` tag → any photoreal tag → generate fresh.
 - Upload per-episode scene PNGs to `episodes/{game}/{date}-streettalk/scenes/scene-K.png` (NOT registered in game_assets).
 - New base refs for previously-unseen interviewees: tagged `streettalk,interviewee,{slug}` for future episodes.
@@ -612,6 +651,11 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 
 ## Anti-patterns
 
+- ❌ Generic/non-game-specific opener — opener must be visually styled to the specific game world, not a generic vox-pop card.
+- ❌ Background music during dialogue scenes — music plays ONLY at opener (~2s) and CTA (~5s). Use `music-timed.wav` with `anullsrc` for silence. Ambient SFX continues throughout at 0.15 (separate layer).
+- ❌ Opener and CTA with different music themes — same track/offset, same upbeat-but-not-jarring theme at both bookends.
+- ❌ Mic flag without show name — reporter's mic must bear the show name (e.g. "GLN Streettalk"). Generic or blank flag breaks TV identity.
+- ❌ On-location background unrelated to question topic — even at the signature location, inject question-specific visual elements (topic-related characters, signs, or props in background).
 - ❌ Studio/anchor scenes — streettalk is ENTIRELY on-location, never cuts back to a desk.
 - ❌ Same question/topic recycled within 5 episodes.
 - ❌ All 3 interviewees same species/faction — kills the «vox-pop diversity» joke.
