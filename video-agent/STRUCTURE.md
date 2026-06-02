@@ -129,7 +129,8 @@ video-agent/
 │       ├── motion-dance.md     # Motion transfer танец с реф-видео
 │       ├── what-if-real-life.md # «Что если бы персонаж попал в реальную жизнь» (Spock-бариста, Kratos-воспитатель, ...)
 │       ├── top-list.md          # TOP-5 countdown персонажей / локаций / предметов
-│       └── fun-news.md          # Выдуманные ироничные новости из лора игры (anchor + 1-2 reporters, Avatar v2)
+│       ├── fun-news.md          # Выдуманные ироничные новости из лора игры (anchor + 1-2 reporters, Avatar v2)
+│       └── in-game-pov.md       # POV от первого лица: «ты оказался в ситуации», survival-мануал + живой HUD-счётчик %, исход — выжил/погиб
 │
 ├── games/
 │   ├── mlbb/
