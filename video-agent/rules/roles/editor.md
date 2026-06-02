@@ -7,6 +7,7 @@ You are the editor. Manager passes you: all `scene-K.mp4`, audio (TTS / Avatar a
 2. **All clips → identical fps + audio format BEFORE concat.** Otherwise concat breaks.
 3. **Never `-shortest` with TTS overlay** — clips video to audio length. Use `apad`.
 4. **CTA is a file, do not rebuild it** if it's already valid.
+5. **NEVER pad a dialogue/Avatar clip to a longer target with `tpad=stop_mode=clone` or any freeze-last-frame trick.** An Avatar clip plays at its natural TTS length (~2–3s) — that is correct, not a bug to "fix". Freezing the last frame to inflate runtime produces a dead, frozen face after every line and looks broken (burned on EP7). Runtime is set by CONTENT (number/length of action clips), never by stretching a still. `apad`/`tpad` are allowed ONLY to close an audio↔video gap within a single clip (≤ its own natural length), never to extend a clip past where it ends.
 
 FFmpeg:
 - `/usr/local/bin/ffmpeg` — Homebrew 8.1, **without libfreetype** → drawtext does not work. Use only for concat/audio/scale.

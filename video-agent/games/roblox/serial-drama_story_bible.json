@@ -7,6 +7,114 @@
   "created_at": "2026-04-24",
   "last_episode": 6,
 
+  "planned_arc": {
+    "note": "Pre-locked arc EP7-EP10 (the 3-step exposE heist from EP6). Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion only, all running/chases/hammer-swings = CUT between clips not animation, protagonist always faces camera, cliffhanger spoken line = Avatar TTS). Bacon Bob is comic-chaos engine: most loops turn on his accidents. After shipping an episode fold its loops/status into characters[], active_loops, episode_summaries. Do NOT re-invent episodes while this arc has unshipped entries. Non-cast speakers: 'Computer' = robotic server-announcer voice; 'Crowd kid' = one-off background child line (can be TTS overlay, no on-screen lipsync needed).",
+    "episodes": [
+      {
+        "episode": 7,
+        "title": "The Vault Job",
+        "link": "After EP6 Dave and Bella have a 3-step plan. Step 1 - drain Rex's Robux vault.",
+        "beats": [
+          "HOOK - golden bank under the plaza. Dave and Bella drop in through a vent; below, Bob already dangles upside-down in a laser trap.",
+          "Dave wants to ditch Bob; Bella calls him noise; Dave sees a security ban-hammer already aimed at Bob.",
+          "Dave saves Bob; Bob falls onto a button that triggers not the alarm but an old service lift to the vault - a door even VIPs don't know.",
+          "They open Rex's vault: almost no Robux. Inside are contracts, transfer screenshots and a black file: SHADOW / CROWN RENTAL / KING REX.",
+          "Bob accidentally grabs the single most important file; cameras log his face beside Dave and Bella."
+        ],
+        "key_lines": [
+          { "speaker": "Bob", "line": "I was literally just looking for a free hot dog!" },
+          { "speaker": "Bella", "line": "He's not with us. He's a problem." },
+          { "speaker": "Dave", "line": "That's what Rex says about noobs." },
+          { "speaker": "Bob", "line": "Did I press death or luck?" },
+          { "speaker": "Bella", "line": "Worse. You pressed plot." },
+          { "speaker": "Dave", "line": "Rex isn't a king. He's a renter." },
+          { "speaker": "Bella", "line": "Shadow sold him power." },
+          { "speaker": "Computer", "line": "Three intruders identified." }
+        ],
+        "cliffhanger": {
+          "scene": "Rex appears on the bank's screen.",
+          "line_speaker": "Rex",
+          "line": "Bob? Even you betrayed me?"
+        },
+        "loops": ["Bob is not an ally but an accidental witness", "Rex and Shadow are bound by a contract", "the vault was about evidence, not money", "Bob is now WANTED alongside Dave and Bella"]
+      },
+      {
+        "episode": 8,
+        "title": "The Golden Chase",
+        "link": "Bob got caught on camera, so they're forced to drag him along.",
+        "beats": [
+          "Dave, Bella and Bob bolt out of the bank.",
+          "Rex unleashes VIP security on hoverboards.",
+          "Bob panics and accidentally mounts a security golden scooter.",
+          "Chase through the LUXURIA shopping street.",
+          "Bob flies into Rex's statue and knocks its head clean off."
+        ],
+        "key_lines": [
+          { "speaker": "Bob", "line": "I'm not in your gang! I'm a hostage of the plot!" },
+          { "speaker": "Dave", "line": "Then run like a hostage." },
+          { "speaker": "Bella", "line": "He's loud, but useful." },
+          { "speaker": "Rex", "line": "Catch the noob, the girl, and the bacon rat!" }
+        ],
+        "cliffhanger": {
+          "scene": "Posters appear on every screen.",
+          "screen_text": "WANTED: NOOB DAVE / BELLA / BACON BOB",
+          "line_speaker": "Bob",
+          "line": "Mom, I became the main character!"
+        },
+        "loops": ["Bob is now officially tied to the team", "Rex publicly declares the hunt", "Bella realizes Bob can be a chaos tool"]
+      },
+      {
+        "episode": 9,
+        "title": "Break the Fake Crown",
+        "link": "After the chase the team can't hide; Dave jumps straight to Step 2 - smash the fake crown.",
+        "beats": [
+          "Plaza. Rex holds a 'real king' parade.",
+          "Dave steps out onto a billboard rooftop.",
+          "Rex challenges him to a Crown Obby Duel.",
+          "Bella cracks open Rex's cheat-platforms.",
+          "Bob accidentally triggers a giant hammer that smashes the crown."
+        ],
+        "key_lines": [
+          { "speaker": "Rex", "line": "Noobs don't challenge kings." },
+          { "speaker": "Dave", "line": "Kings don't rent thrones." },
+          { "speaker": "Bella", "line": "He's cheating. The left platform is fake." },
+          { "speaker": "Bob", "line": "I wanted to press the fireworks button!" }
+        ],
+        "cliffhanger": {
+          "scene": "The crown shatters. Inside is a tag.",
+          "screen_text": "RENTAL PROPERTY OF SHADOW",
+          "line_speaker": "Crowd kid",
+          "line": "The king was on a subscription?"
+        },
+        "loops": ["Rex is publicly humiliated", "Shadow becomes the visible owner of power", "Bob accidentally lands the team's first big win"]
+      },
+      {
+        "episode": 10,
+        "title": "The Real Crown",
+        "link": "The fake crown is broken, so Shadow is forced to reveal the real Admin Crown himself.",
+        "beats": [
+          "The plaza is in uproar; Rex is losing authority.",
+          "Shadow appears on the screens and opens a black case.",
+          "The real Admin Crown hangs over the plaza like a prize.",
+          "Rex, Dave and Bella all lunge for it.",
+          "Bob tries to hide behind the case and accidentally puts the crown on."
+        ],
+        "key_lines": [
+          { "speaker": "Shadow", "line": "The fake king has fallen. A real one is needed." },
+          { "speaker": "Rex", "line": "It's mine! I paid for it!" },
+          { "speaker": "Dave", "line": "Exactly. You paid." },
+          { "speaker": "Bob", "line": "Why did the hat pick me?!" }
+        ],
+        "cliffhanger": {
+          "scene": "The crown clamps onto Bob's head. The sky changes. The server freezes.",
+          "line_speaker": "Computer",
+          "line": "Bacon Bob has been granted admin rights."
+        },
+        "loops": ["Bob becomes not a sidekick but a walking catastrophe", "Shadow was clearly steering them toward activating the crown", "Dave wanted to expose power but accidentally created new power"]
+      }
+    ]
+  },
+
   "synopsis": "Noob Dave arrives at LUXURIA, the most exclusive Roblox trading server where wealth is power. King Rex rules the plaza with an iron crown. Nobody gives Dave a second look — until they do. Because Dave isn't just a noob. He's sitting on the rarest inventory anyone has ever seen. The question isn't IF he'll reveal it. It's WHEN... and what happens after.",
 
   "characters": [
