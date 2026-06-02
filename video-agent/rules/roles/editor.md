@@ -173,6 +173,43 @@ The ASS file from `tools/add_subtitles.py` is timed against the **final** TTS sh
 
 Order is `atempo` → `adelay`. atempo first compresses speech to fit the picture window; adelay then offsets it so TTS starts after any title-card silence (e.g. 5000 ms for redcon/what-if-lore's title card).
 
+#### 0.4.1 Audio PTS hygiene — `asetpts=N/SR/TB` + `aresample=async=1` (MANDATORY)
+
+When the audio chain combines `concat`, `adelay`, `amix`, or any per-scene `amix` (e.g. ambient SFX layer + TTS), PTS drift compounds silently — ffmpeg writes the mp4 cleanly, ffprobe shows reasonable codec info, but the **container audio timestamp** ends up far outside the playable range. Symptom: `ffprobe` reports `start_time` like `209146758205323.687500` (≈ 6.6 million years), `duration` is hugely negative, and `nb_frames` is tiny (e.g. 88 frames for a 44s video). Most players (QuickTime, browsers, mobile) refuse to play this audio — the video appears silent even though the bitstream contains data.
+
+The fix is two filters, applied at every chain boundary in the audio branch:
+
+1. `aresample=async=1:first_pts=0` on every audio INPUT (`[k:a]`, `[bg_music:a]`, ambient `[amb:a]`) — resyncs the source PTS to start at 0. Avatar v2 audio inherits its container PTS which can be wildly off-zero.
+2. `asetpts=N/SR/TB` after **every** filter that re-times audio: after `atempo`, after `apad`, after `concat`, after `adelay`, after `amix`. `N/SR/TB` regenerates monotonic PTS from sample count.
+
+Canonical per-scene audio branch (replaces the simpler chain in §0.1):
+
+```
+[k:a]aresample=async=1:first_pts=0,atempo=1.3,apad=whole_dur=<sped_dur_k>,asetpts=N/SR/TB[ak]
+```
+
+If scene K layers ambient SFX (custom format extension, e.g. WWE Champions fun-news scene_ambient field) — apply the ambient mix BEFORE atempo, but also reset PTS at every chain join:
+
+```
+[k:a]aresample=async=1:first_pts=0[ttsk];
+[amb_k:a]volume=<amb_vol>,atrim=0:<raw_dur_k>,asetpts=N/SR/TB[ambk];
+[ttsk][ambk]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[mixk];
+[mixk]atempo=1.3,apad=whole_dur=<sped_dur_k>,asetpts=N/SR/TB[ak]
+```
+
+Concat + adelay + bg-music mix tail:
+
+```
+[a0][a1][a2][a3][a4]concat=n=5:v=0:a=1,asetpts=N/SR/TB[adlg];
+[adlg]adelay=2000|2000,asetpts=N/SR/TB[atts];
+[bg:a]aresample=async=1:first_pts=0,volume=0.15,afade=t=out:st=<TOTAL-1>:d=1.0,asetpts=N/SR/TB[amus];
+[atts][amus]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0,asetpts=N/SR/TB[aout]
+```
+
+**Self-check after first pass:** `ffprobe -v error -select_streams a -show_entries stream=duration,start_time,nb_frames final.mp4`. If `start_time` is anything other than `0.000000` (or close), or `nb_frames` is < ~40/sec of duration, the audio PTS is broken — rebuild with the recipe above.
+
+WWE Champions fun-news pilot (2026-06-01) burned 1× re-render because the original pass omitted both filters on a chain that included `adelay+amix`. Cost: $0 (audio-only rebuild reusing same scene mp4s + bg-music) but ~10 min wasted. Don't repeat.
+
 ### 0.5 Format-specific overrides
 
 - **gameplay-ai-avatar split-screen** (§7) — the per-scene 60/40 stack cannot be expressed across N scene inputs cleanly inside one concat. Two-stage: first build each split-scene composite (§7), then feed those composites as inputs into the §0 canonical pipeline.
@@ -766,6 +803,94 @@ $FFMPEG -i final.mp4 -ss 1.5 -t 2.0 -af "volumedetect" -f null - 2>&1 | grep mea
 - Default events: с `duration(customer.mp3) + 0.6s` (после паузы) (текст из `character_line` / `tts`)
 
 Между Customer и Default диапазонами — без перекрытий (§6.3 invariant 1).
+
+---
+
+## 13a. Channel bug overlay (надканальный бренд)
+
+Some games carry a permanent channel brand bug — a small static logo overlaid on every video like a TV station identifier (CNN/BBC/GLN style). Manager parses `channel_bug_url` from `games/{GAME_TAG}/{GAME_TAG}.md` and passes it as `CHANNEL_BUG_URL` in the editor prompt.
+
+**Contract:**
+- `CHANNEL_BUG_URL` empty / unset → NO overlay step. Skip this section entirely; pipeline runs as if channel branding does not exist.
+- `CHANNEL_BUG_URL` non-empty → mandatory overlay. Apply per below.
+
+### Positioning + sizing (universal — same across all formats / games)
+
+| Parameter | Value | Why |
+|---|---|---|
+| Anchor corner | top-left | TikTok/Reels right-rail UI conflicts with right side; top-left stays clear of TikTok native UI + youtube Shorts cards. |
+| Margin from edges | 40 px | Safe inside iPhone notch / mobile bezel. |
+| Size at overlay | 110×110 | TV-bug subtlety. Larger = watermark, smaller = unreadable on 6" screens. |
+| Source PNG | square RGBA, ≥256×256 (downscaled in filter) | Pre-baked alpha so we don't need to colorchannelmixer in the chain. |
+| Opacity behavior | use PNG's baked alpha | If the source PNG was authored at 100% alpha and we need 70%, add `colorchannelmixer=aa=0.7` before overlay. |
+| Lifetime | static, full video duration | No fade in/out; brand bug doesn't blink. |
+| Apply position in graph | **after concat, before audio mapping** | One overlay over the whole timeline. NOT per-scene (would have to apply 5× and burn 5× more pixel work). |
+
+### Single-pass filter_complex addendum
+
+Add to §0 canonical pipeline when `CHANNEL_BUG_URL` is non-empty:
+
+```bash
+# In phase 0 (manager OR editor pre-flight): download to build/
+curl -sLo build/channel-bug.png "$CHANNEL_BUG_URL"
+[ -s build/channel-bug.png ] || { echo "ERROR: channel-bug.png empty"; exit 1; }
+
+# In the ffmpeg invocation: add as last input
+$FF -y \
+  -i scenes/scene-1/scene-1.mp4 \
+  ...  # all scenes
+  -i build/cta-raw.mp4 \
+  -i tts.mp3 \
+  -i bg-music.mp3 \
+  -i build/channel-bug.png \           # <-- NEW input, last position
+  -filter_complex "\
+    ...  # scene normalizes, concat → [vcat]
+    [vcat]<existing video tail filters → [vsub]>; \
+    [N+3:v]scale=110:110[bug]; \         # N+3 = channel-bug index (after cta, tts, music)
+    [vsub][bug]overlay=40:40:format=auto[vout]; \
+    ...  # audio branch unchanged → [aout]
+  " \
+  -map "[vout]" -map "[aout]" \
+  ...
+```
+
+**Critical:** the overlay goes **AFTER** the ASS burn (`[vsub]`). Subtitles do not appear on top of the bug (bug is in top-left corner where subs never go), but visually it's cleaner to compose bug last so any pixel work on subtitles happens before the bug pixel is written.
+
+If your specific format burns ASS per-scene inside each `[vk]` (fun-news / streettalk pattern), the overlay still goes after concat:
+
+```
+[vk] ... ass=build/scene-k.ass → [vk]   (per scene, k=1..N)
+[v0..vN] concat=...→[vcat]
+[vcat][bug]overlay=40:40[vout]          # bug applied to whole concat once
+```
+
+### Validation
+
+Programmatic self-check after final.mp4 build:
+
+```bash
+# Sample one frame at t=1.0s, check top-left 200×200 region has non-empty pixel variance
+$FFMPEG -y -ss 1.0 -i final.mp4 -frames:v 1 build/probe-bug.png 2>&1 | tail -3
+python3 -c "
+from PIL import Image, ImageStat
+img = Image.open('build/probe-bug.png').convert('L')
+strip = img.crop((30, 30, 230, 230))  # 200×200 area around bug
+v = ImageStat.Stat(strip).stddev[0]
+print(f'top-left variance: {v:.1f}')
+import sys; sys.exit(0 if v > 25 else 1)
+" || { echo "ERROR: channel bug missing or near-uniform"; exit 1; }
+```
+
+Variance > 25 means the bug is visually present (logo has structure → non-uniform luminance). Near-zero variance → bug overlay silently failed (likely chain error in filter_complex labels, or PNG was empty).
+
+### Anti-patterns
+
+- ❌ Bug per-scene (5 separate `[vk][bug]overlay` chains) — wastes pixel work, identical visual result.
+- ❌ Bug on the CTA (visible double-brand) — the CTA is its own branded artifact; bug ends with the concat-before-CTA boundary OR runs through everything depending on game policy. Default: bug runs over entire timeline including CTA (consistent TV-bug behavior). If the game's CTA already has its own brand mark, override in format playbook.
+- ❌ Bug fade in/out at scene transitions — looks broken, not TV-broadcast.
+- ❌ Reading PNG via subprocess to "verify alpha" — programmatic variance check above is the standard. Do NOT visually Read the PNG in role-agent context (manager rule, `CLAUDE.md`).
+- ❌ Bug position varying between videos in the same channel — kills brand recognition. Always top-left 40,40 at 110×110.
+- ❌ Audio filter chain (`concat → adelay → amix`, or per-scene `amix` for ambient SFX) without `asetpts=N/SR/TB` after each stage and `aresample=async=1:first_pts=0` on inputs — produces a final.mp4 whose audio bitstream is correct but container timestamps are garbage (`start_time` ≈ 6.6 million years, `nb_frames` ≈ 2/sec instead of ~40/sec). Players ignore the audio → video appears silent. See §0.4.1 for the canonical recipe. Self-check: `ffprobe -select_streams a -show_entries stream=start_time,nb_frames final.mp4` — `start_time` MUST be ~0.
 
 ---
 

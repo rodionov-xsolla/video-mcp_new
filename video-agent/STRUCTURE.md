@@ -129,7 +129,8 @@ video-agent/
 │       ├── motion-dance.md     # Motion transfer танец с реф-видео
 │       ├── what-if-real-life.md # «Что если бы персонаж попал в реальную жизнь» (Spock-бариста, Kratos-воспитатель, ...)
 │       ├── top-list.md          # TOP-5 countdown персонажей / локаций / предметов
-│       └── fun-news.md          # Выдуманные ироничные новости из лора игры (anchor + 1-2 reporters, Avatar v2)
+│       ├── fun-news.md          # Выдуманные ироничные новости из лора игры (anchor + 1-2 reporters, Avatar v2)
+│       └── streettalk.md        # Vox-pop уличное интервью: 1 репортёр + 3 интервьюируемых, без студии, channel-bug branding (Avatar v2)
 │
 ├── games/
 │   ├── mlbb/

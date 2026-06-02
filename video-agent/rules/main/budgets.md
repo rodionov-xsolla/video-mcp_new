@@ -18,6 +18,7 @@
 | What If... Real Life | **$6.00** | Spend > $5.40 |
 | TOP List | **$5.00** | Spend > $4.50 |
 | Fun News | **$4.50** | Spend > $4.00 |
+| Streettalk | **$7.00** | Spend > $6.30 (pilot allowance; EP2+ target ~$3.00) |
 
 Tracking: after each generation, record the cost. Before the next one — check the limit.
 
