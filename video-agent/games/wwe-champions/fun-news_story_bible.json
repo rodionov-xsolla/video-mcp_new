@@ -1,0 +1,105 @@
+{
+  "series_id": "fun-news-wwe-champions",
+  "game_tag": "wwe-champions",
+  "title": "WWE Champions — Kayfabe News",
+  "created_at": "2026-06-01",
+  "last_episode": 1,
+  "anchor": {
+    "character_name": "pat-mcafee-anchor",
+    "display_name": "Pat McAfee",
+    "voice": "Brian",
+    "stability": 0.55,
+    "style": null,
+    "tone_signature": "energetic sports broadcaster, loud and charismatic, ESPN-style hot-takes, ironic kayfabe-serious",
+    "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/wwe-champions/characters/pat-mcafee/avatar.png"
+  },
+  "voice_mapping": {
+    "anchor": "Brian",
+    "reporters": {
+      "the-undertaker": {
+        "voice": "Bill",
+        "stability": 0.55,
+        "tone": "dry-deadpan-funereal",
+        "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/wwe-champions/characters/the-undertaker/avatar.png"
+      },
+      "john-cena": {
+        "voice": "Adam",
+        "stability": 0.55,
+        "tone": "patriotic-earnest",
+        "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/wwe-champions/characters/john-cena/avatar.png"
+      },
+      "becky-lynch": {
+        "voice": "Charlotte",
+        "stability": 0.55,
+        "tone": "fierce-satirical",
+        "supabase_avatar_url": ""
+      },
+      "roman-reigns": {
+        "voice": "Adam",
+        "stability": 0.55,
+        "tone": "stoic-power-broker",
+        "supabase_avatar_url": ""
+      }
+    }
+  },
+  "reporter_pool": [
+    "the-undertaker",
+    "john-cena",
+    "becky-lynch",
+    "roman-reigns"
+  ],
+  "reporter_pool_stage2": [
+    "rhea-ripley",
+    "cody-rhodes",
+    "cm-punk",
+    "brock-lesnar"
+  ],
+  "reporter_rotation_rule": "Do not repeat the same pair of reporters in consecutive episodes. After 2 episodes, ask user about introducing stage-2 reporters.",
+  "style_tone": "kayfabe-serious + ironic-satirical bureaucratic mix, sports broadcast energy, real US agencies (OSHA/TSA/IRS/DARPA/FAA) reacting to kayfabe phenomena as if they were real",
+  "topic_rotation": {
+    "recent_topic_tags": [
+      "undertaker",
+      "tombstone-piledriver",
+      "osha",
+      "funeral-directors",
+      "john-cena",
+      "invisibility-meme",
+      "tsa",
+      "airport-security"
+    ],
+    "recent_canon_facts": [
+      "Undertaker's Tombstone Piledriver finisher + Funeral Parlor era opponent burial visual",
+      "John Cena 'You can't see me' catchphrase / invisibility meme since 2004"
+    ],
+    "cooldown_episodes": 5
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-06-01",
+      "anchor": "Pat McAfee",
+      "reporters": ["The Undertaker", "John Cena"],
+      "structure": "5 scenes — anchor intro → reporter 1 (Undertaker) → anchor reaction → reporter 2 (Cena) → anchor outro",
+      "news_items": [
+        {"index": 1, "headline": "OSHA cites Undertaker for 847 counts of unlicensed embalming via Tombstone Piledriver; Funeral Directors Association claims $2.4M lost revenue", "reporter": "The Undertaker"},
+        {"index": 2, "headline": "TSA approves $40M millimeter-wave scanner array after 47 'undetected Cena' airport incidents; Cena-class visibility gap classified", "reporter": "John Cena"}
+      ],
+      "topic_tags": ["undertaker", "tombstone-piledriver", "osha", "funeral-directors", "john-cena", "invisibility-meme", "tsa", "airport-security"],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/wwe-champions/2026-06-01/fun-news_final.mp4",
+      "duration_sec": 44.23,
+      "cost_breakdown": {
+        "prep_nb2_initial": 0.56,
+        "prep_nb2_pat_regen": 0.16,
+        "prep_kling_opener_cta": 0.84,
+        "tts": 0.24,
+        "nb2_on_location": 0.16,
+        "avatar_v2": 2.72,
+        "editor": 0.0,
+        "total_pilot_usd": 4.68
+      },
+      "notes": "Pilot ep 1 — under $8 budget. Custom additions: (a) energetic Pat McAfee anchor tone (not dry-deadpan), (b) scene_ambient field on reporter scenes 2 and 4 for chapel + airport SFX at vol 0.10 (synthesized via FFmpeg noise filters, free), (c) verbatim 'STAY HARD' outro sign-off. Editor caught a PTS bug on first pass (audio bitstream OK but container timestamps broken — silent video on most players); rebuilt audio with asetpts=N/SR/TB + aresample=async=1:first_pts=0 chain hygiene. Antipattern documented in editor.md §0.4.1. Steady-state ep 2+ projected ~$3.10 (no Phase 0 prep)."
+    }
+  ],
+  "opener_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/wwe-champions/branding/opener.mp4",
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/wwe-champions/branding/cta.mp4"
+}
