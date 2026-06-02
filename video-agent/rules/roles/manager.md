@@ -6,6 +6,8 @@ You are the video production manager. Your job: take the user request through to
 
 **Core principle:** script first, then generation. Never run an expensive model (Kling Avatar, I2V) without a complete `storyboard.json` and a validated scene PNG.
 
+**Re-roll discipline — diagnose before re-generating.** Before re-rolling any clip > $0.30 (I2V $0.42–0.84, Avatar $0.28+), state the root-cause HYPOTHESIS in one line, fix THAT, then regenerate. Do not iterate on the surface symptom. If you've regenerated the same scene more than twice and it's still wrong, STOP — the problem is your diagnosis (wrong chain ref, under-detailed prompt, a Kling limitation), not the dice. EP7 burned scene-6 four times (one 9s I2V = $0.76 each) chasing "too small → too big → opens wrong way" instead of naming the two real causes up front (wrong/missing background ref + under-specified opening mechanics). A clean serial-drama episode is ~$2.5; EP7 ate nearly the whole ~$10 cap largely on re-rolls. When a fix has downstream dependents (a pivotal frame other scenes chain off), get it RIGHT and approved before generating the dependents — changing it later re-burns every dependent clip.
+
 ---
 
 ## Debug mode
@@ -104,7 +106,7 @@ Delegate via `Agent(subagent_type="storyboarder")` (model: opus, defined in `.cl
 
 **Workspace hygiene:** before regenerating any asset — move previous files to `output/.../_archive/`. The output folder must contain only current files.
 
-**Output:** `scenes/refs/character-ref.png`, `scenes/scene-K/scene-K.png` (+ `scene-K-end.png` for I2V).
+**Output:** `scenes/refs/character-ref.png`, `scenes/scene-K/scene-K.png` (start frame only — no end frames; see storyboarder.md §14.8).
 
 ### PHASE 3 — Animation (Sound has already run before Storyboarder)
 - **Animator** — delegate via `Agent(subagent_type="animator")` (model: opus, defined in `.claude/agents/animator.md`). Sub-agent loads `rules/roles/animator.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute). Kling I2V for action clips, Kling Avatar for dialogue. Template: `prompts/animator.txt`. If many scenes don't fit one pass — split: call the sub-agent multiple times with explicit scene-index lists in the prompt.
@@ -116,7 +118,7 @@ If output of one stage (TTS, images) is needed as input for the next expensive s
 2. Upload to Supabase Storage → get a permanent public URL
 3. Use ONLY the Supabase URL for the next stage
 4. NEVER use temporary fal.ai result URLs as input to expensive generation
-5. Before launching Kling — print a mapping table (clip# → image_url → audio_url → expected text), make sure all URLs are unique
+5. **Run the cross-asset pre-flight gate** (`rules/main/validation.md` → "Cross-asset pre-flight") before launching Kling: (1) every input URL returns 200, (2) no two dialogue clips share an audio md5, (3) filenames derive from `clips[].index` with no `-new`/`-v2` parallels, (4) each `scene_image_url` basename matches its clip index and the face ref matches `clip.hero`. Print the mapping table (clip# → image_url → audio_url → expected text → hero) and confirm all four pass. This gate catches the dead-ref / cascade-copy / wrong-PNG / voice-mismatch failures programmatically, before any Kling spend.
 
 **Output:** `scenes/scene-K/scene-K.mp4` + `.mp3` per dialogue clip.
 
@@ -262,7 +264,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 
 ```
 Phase 1 → Phase 2:    output/.../storyboard.json
-Phase 2 → Phase 3:    output/.../scenes/scene-K/scene-K.png (+ end frame for I2V)
+Phase 2 → Phase 3:    output/.../scenes/scene-K/scene-K.png (start frame only — no end frames, see storyboarder.md §14.8)
 Phase 3 → Phase 4:    output/.../scenes/scene-K/scene-K.mp4 + Supabase audio URL
 Phase 4 → Phase 5:    output/.../final.mp4
 ```
@@ -275,8 +277,7 @@ output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/
 │   ├── refs/
 │   │   └── character-ref.png
 │   ├── scene-1/
-│   │   ├── scene-1.png
-│   │   ├── scene-1-end.png        (for I2V)
+│   │   ├── scene-1.png            (start frame only — no end frames, see storyboarder.md §14.8)
 │   │   ├── scene-1.mp4
 │   │   └── scene-1-scaled.mp4
 │   └── scene-2/ ...
@@ -333,8 +334,7 @@ assets/{GAME_TAG}/
 └── gameplay/{filename}.mp4                 gameplay recording
 
 episodes/{GAME_TAG}/{YYYY-MM-DD}-{format}/
-├── scenes/scene-K.{png|mp4}                per-episode scene PNG (+ I2V mp4)
-├── scenes/scene-K-end.png                  end frame для I2V
+├── scenes/scene-K.{png|mp4}                per-episode scene PNG (+ I2V mp4) — start frame only, no end frames
 └── tts/clip-K.mp3                          per-episode TTS
                                            ↑ episode-* files НЕ регистрируются в game_assets
 

@@ -64,7 +64,7 @@ Body (minimum):
   "end_image_url": "{end_frame_supabase_url}",
   "duration": "5",
   "generate_audio": false,
-  "negative_prompt": "blur, distort, deformed, extra limbs, extra fingers, morphing face, smoothing facial features, changing skin color, altering proportions"
+  "negative_prompt": "blur, distort, deformed, extra limbs, extra fingers, morphing face, smoothing facial features, changing skin color, altering proportions, banding in blacks, posterization, harsh color shift, overexposed clipping"
 }
 ```
 
@@ -73,6 +73,7 @@ Required:
 - `end_image_url` — end frame (optional). ⚠️ NOT `tail_image_url` — this parameter DOES NOT EXIST in API v2.6, will be ignored.
 - `generate_audio: false` — **ALWAYS**. Kling cannot do sound. If you set `true` you get garbled noise instead of silence.
 - `duration` — `"5"` or `"10"` (string, not number). Per `storyboard.json`.
+- `negative_prompt` tail `banding in blacks, posterization, harsh color shift, overexposed clipping` — color-fidelity guards. Kling drifts color/tone across a clip (lifts blacks, pushes green/magenta, clips bright FX); these cut the most common grading artifacts, especially on dark/space scenes and clips with bright light bursts. Borrowed from production T2V negative_prompt arrays.
 
 ### Polling — base path
 
@@ -235,6 +236,22 @@ Pick motion_prompt tempo to match the scene mood. Not "always slow" and not "alw
 
 **Rule:** Each 5s clip contains at least 2-3 separate actions (camera + character + environment). Camera moves in every clip (push in, track, drift, pan — not holds steady).
 
+### State-change / transformation clips — LOCK the camera, sell the transition
+
+**Exception to the "camera moves in every clip" rule above.** When the thing changing state is an *object* — a hatch opening, a door sliding, a pod venting, a console assembling, a prop transforming — a moving camera is actively harmful. Kling has to reconcile camera motion AND object-geometry change in the same frames, can't do both, and invents geometry (EP7: the hatch "opened upward into another corridor"). Production transformation prompts (IKEA box auto-assembling a room, PS5 controller forming from parts) confirm the fix:
+
+1. **Lock the camera.** `Camera fixed, locked-off wide.` Spend the entire motion budget on the object's transformation, not on reconciling a pan with changing geometry. (PS5-style orbital camera works ONLY when the object assembles in an empty void with no background to desync — not our case; our objects sit in a built set.)
+2. **Sell the hard middle through an occlusion / transition medium**, not through articulating the mechanism frame-by-frame. The mechanically-impossible interpolation frames get masked by particles/light/steam. Vocabulary (borrowed from production transformation prompts):
+   - `a burst of steam floods the frame, then clears` (our EP7 winner)
+   - `light bloom washes across the seam, then fades`
+   - `a veil of particles sweeps the object, then settles`
+   - `magnetic-snap flash as parts lock, then steadies`
+   - The reveal happens *behind* the medium; you animate the medium (which Kling does reliably), not the hinge.
+3. **Phase the object as an ordered verb chain with an endpoint:** `hatch trembles, seal ring flares, steam bursts outward, then the cloud settles to reveal the open hatch`. Same endpoint discipline as §4, applied to the object instead of the character.
+4. **Keep the object's part-inventory explicit** so Kling doesn't redesign it mid-clip — see Storyboarder §7.3.1 (in-prompt object manifest). The start frame locks the design; the manifest in motion_prompt keeps the parts from morphing as they move.
+
+If the start/end pair would force visible mechanical articulation with no occlusion to hide it → return to Storyboarder for a frame pair built around a transition medium (steam/light), per §7.3.1.
+
 ### Multi-character motion
 
 If 2 characters are in the scene — describe the micro-movements **of each separately**. Example:
@@ -378,6 +395,8 @@ Kling v3 (`standard`, `pro`, `4k`) `image-to-video` supports a `multi_prompt` fi
 - **Max 6 shots** per call.
 - Each shot `duration`: enum string `"1"`–`"15"`. Sum of shot durations must equal top-level `duration`.
 - For sequences > 15s: split into N calls and concat (see "Multi-call chaining" below).
+- **Each shot `prompt` ≤ 512 characters (hard Kling limit).** fal.ai validates this at deferred-compute, so an over-length shot fails AFTER submit with a 422 in `detail` (the submit looks accepted, then dies on fetch) — every time costing you the round-trip. Count characters per shot when writing `motion_prompt` and trim to ≤512 BEFORE submitting. Bit us repeatedly on EP7. (Style anchor + anti-photoreal negative still mandatory per shot — fit them inside the 512.)
+- **Plural human nouns in a shot prompt = clones.** A shot that says `four figures advance`, `the crew freezes`, `silhouettes approach` against a start frame anchored to one character → Kling replicates that face across the frame. Describe a specific named subject + position, or `a single blurred silhouette`; never a plural crowd noun (mirror of `storyboarder.md §11`).
 
 ### Body — strict rules
 
@@ -407,6 +426,30 @@ Example body (5 shots × 3s = 15s):
 }
 ```
 
+### Elements — ввести нового персонажа/объект в конкретный шот
+
+> ✅ **Burn-tested 2026-06-01 (v3 Standard, $0.50).** `elements` + `multi_prompt` работают вместе. Полная схема и выводы — `tools/fal-ai.md §2c`.
+
+`multi_prompt` тянет всё из одного `start_image_url` → новые сущности в кадре сами не появляются. Чтобы в шоте N вошёл персонаж/объект, которого нет на стартовом кадре:
+
+1. Storyboarder генерит его референсы (фронталь + ≥1 ракурс), грузит в Supabase (`storyboarder.md §15.2`).
+2. Кладёшь в `elements[0]` (полная схема — `tools/fal-ai.md §2c`):
+   ```json
+   "elements": [{"frontal_image_url": "…/worf-front.png", "reference_image_urls": ["…/worf-side.png", "…/worf-3q.png"]}]
+   ```
+3. В промптах шотов до N — **не упоминаешь** элемент; в промпте шота N — `@Element1 enters the frame`.
+
+- `reference_image_urls` **обязателен (≥1)**. Если чистый ракурс один — допустим дубликат фронтали, но идентичность слабее.
+- `elements` — на уровне запроса, не шота. `@ElementN` зовётся из `prompt` любого шота.
+- Video-элемент — только 1 на запрос (`video_url` + опц. `voice_id`).
+- Все URL — постоянные Supabase, НЕ fal.media.
+- Style-anchor и анти-фотореал negative по-прежнему в КАЖДОМ шоте — element не отменяет правил дрейфа (`serial-drama.md`).
+
+**Где element реально помогает (из теста):**
+- ✅ **Крупный план лица в финальном шоте** — заякоривание элементом чинит EP6-дрейф «третий шот плывёт в реализм». Используй element для on-model клоуз-апа лица, которого нет на стартовом кадре.
+- ⚠️ **Мелкая/перекрытая область** (лицо за стеклом, в толпе, под цветным светом) — идентичность element НЕ гарантируется, читается обобщённо. Для узнаваемости давай элементу заметную площадь кадра. Если важна именно узнаваемость в мелком плане — отдельный клип со своим start-frame надёжнее.
+- ✅ **Проверяй `video.url` в результате** — валидация elements отложенная, ошибка приходит в `detail` при fetch (см. §2c), а не на submit.
+
 ### Multi-call chaining (sequences > 15s)
 
 To produce, say, 25s of multi-shot action:
@@ -425,7 +468,19 @@ This preserves narrative continuity AND keeps each call within the 15s cap. Tota
 | ≤ 15s sequence of multiple distinct actions from one anchor (montage, combo) | **multi_prompt** (cheaper, smoother shot transitions) |
 | > 15s sequence | **multi_prompt × N calls + bridge** (above) |
 | Different locations / different start anchors per shot | **Separate I2V calls** (multi_prompt is single-anchor only) |
+| New character/object enters mid-sequence, заметной площадью кадра (same location, one anchor) | **multi_prompt + `elements`** (см. выше, burn-tested) |
+| New character must be RECOGNISABLE в мелком/перекрытом плане (за стеклом, в толпе) | **Separate I2V** со своим start-frame — element там читается обобщённо |
 | One simple action, 5–10s | **Regular I2V** (single `prompt`) |
+
+### Seamless-loop clips — `loop_hint` (⚠️ UNVERIFIED, burn-test pending)
+
+For loop formats (`motion-dance`, `dance-battle`) where the clip must autoplay seamlessly, production T2V prompts append a loop directive so the last frames settle back toward the first: `"hold final 6 frames for seamless autoplay"` / `"loop_hint: motion returns to the start pose for a clean cut"`. The idea maps onto our final `multi_prompt` shot — its endpoint should land on the same pose/framing as the start frame so concat/loop has no visible jump.
+
+**Not yet burn-tested on Kling I2V** — fal.ai's `image-to-video` schema has no dedicated `loop_hint` field, so this would live inside the last shot's `prompt` text (e.g. final shot endpoint = `"…returns to the opening stance, holds steady on the last beat"`). Before relying on it in a real episode:
+- one $0.42 burn test on a single dance clip — does the last beat actually settle to the start pose, or drift?
+- if it works, promote this to a verified rule and add to `motion-dance.md` / `dance-battle.md`. If not, fall back to ffmpeg crossfade-loop in Editor.
+
+Do NOT spend the budget assuming it works — flag to Manager that the loop is "soft" until tested.
 
 ### Pricing recap
 

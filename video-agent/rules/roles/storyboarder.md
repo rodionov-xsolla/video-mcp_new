@@ -348,6 +348,17 @@ NB2 does not understand the scale and intent of abstract descriptions. "Steps cl
 
 **Rule:** if a prompt is interpretable two ways (romance vs threat, sadness vs fatigue) — NB2 will pick the more neutral. Remove ambiguity with concrete physical details.
 
+#### 7.3.1 State-change actions (opening / breaking / emerging) — spell out the full mechanics
+
+When the scene is an object changing state — a hatch opening, a door sliding, a pod venting, something emerging — a terse `"hatch opens"` is the single biggest source of garbage: NB2/Kling invent the mechanism (opens the wrong way, into the wrong space, in a different room — EP7 scene-6 hatch "opened upward into another corridor"). The fix is **prompt detail, not avoiding the action**: describe the mechanism, the direction, the phases, and what occludes the transition.
+
+- Name the mechanism and direction: `"heavy circular hatch hinged on the left, swings outward toward camera"`, not `"hatch opens"`.
+- Describe the phase you're freezing in THIS frame (start frame = pre-action): `"hatch still sealed, hot orange seal ring glowing, Kirk's hands on the crank bar mid-pull"`.
+- For a reveal, prefer an occlusion the model renders reliably (steam, smoke, dust, light flare) over precise mechanical articulation — `"a burst of steam floods the frame; a figure emerges from the cloud"` is far more robust than animating door geometry. (EP7: dropping the hatch mechanism entirely and revealing Mirror Kirk out of a steam cloud is what finally worked.)
+- Keep the object's design consistent with prior scenes by carrying the previous scene as a chain ref (see §10) — don't let the pod/hatch redesign itself every frame.
+- **In-prompt object manifest — list the parts that must be present.** Chain-ref is the *visual* lock; the manifest is a cheap *textual* lock that stops NB2/Kling dropping or re-inventing parts of a mechanism as it changes state. Production transformation prompts always carry one: IKEA box → `["box (logo visible)", "bed", "bedside tables", "lamps", "wardrobe"]`; PS5 controller → `"triggers, face buttons, analog sticks, haptic core"`. For our hatch: enumerate `"heavy circular hatch, the crank bar, the hinge on the left, the orange seal ring, the recessed frame"` explicitly in `image_prompt` — every named part survives the transition instead of being re-imagined. Use for any object with ≥3 distinct parts that must stay coherent across phases.
+- **Environment / transition medium — describe its physics, not just its name.** A reveal medium (steam, dust, particles, light) reads cheap when it's a bare noun. Add the physics so it moves believably and the Animator can animate it with an endpoint: `"steam drifts on gentle convection, no chaotic turbulence"`, `"the seal-ring glow falls off inverse-square across the frame"`, `"dust settles with inertia, not an instant cut"`. (Borrowed from production `physics_rules` blocks.) This is what makes the occlusion reveal look like physics instead of a wipe.
+
 ---
 
 ### 7.1 Photographic vocabulary — precise visual control
@@ -532,6 +543,14 @@ When generating EP2+ scenes with the same characters — use the end frame of th
 
 Without a cross-episode anchor every episode is generated "from scratch" off the char sheet → proportions drift.
 
+#### 10.0.1 Within-episode continuation — carry the PREVIOUS scene of THIS episode as the background anchor
+
+For a scene that continues in the same location as the previous one, the primary chain ref is **the previous approved scene PNG of THIS episode**, plus the location bg-ref — not the character sheet alone, and not an older episode's scene that merely happens to contain the location. The character sheet locks the face; the **environment (set design, the pod, walls, props, scale) is carried by the previous scene PNG**. Skip it and the environment redesigns itself every frame (EP7: the escape pod's size and the hatch changed shape scene to scene because generation chained off char sheets / a wrong-episode frame instead of the previous in-episode scene).
+
+- Continuation in same location → `image_urls: [previous-scene-of-this-episode, bg-ref-or-char-sheet]` (bg/prev frame ALWAYS first, §11).
+- Do NOT reach into an older episode's scene as a "scale reference" unless it's the same shot type AND actually depicts the thing you're anchoring (EP7: I pulled EP6 scene-8 for "pod scale", but scene-8 was a character at a wall LCARS panel — so LCARS panels bled into the new frame and the pod scale didn't transfer). Verify what the ref actually shows before using it.
+- One pivotal visual fact (how a reveal happens, the design of a hero prop) that spans several scenes: lock it in the FIRST scene that establishes it, then chain every dependent scene off that frame. Changing it later means regenerating every downstream scene by hand (EP7 hatch→steam change cascaded across scenes 6/7/8 and wasted an already-rendered clip).
+
 Standard pattern for one character in a scene:
 
 | Scene | `image_urls` |
@@ -564,7 +583,15 @@ For complex multi-character scenes, when you need to exactly match the previous 
 
 3+ refs → model tries to "place" each ref as a separate entity → **characters duplicate**.
 
+**Plural nouns + a single character ref = clones (CRITICAL).** When `image_urls` carries ONE character sheet and the prompt uses a plural/collective noun for people — `figures`, `crew`, `silhouettes`, `soldiers`, `the Kirks`, `four figures approach` — NB2 (and Kling on the matching shot) stamps that one ref into every body → a row of identical clones. (EP7 scene-2: "multiple figures in a semicircle" + Kirk sheet → a wall of Kirk clones.) Fix:
+- Name each in-frame person individually with a continuous block and an explicit position (`"Kirk in foreground center … Worf one step behind his right shoulder …"`), OR
+- Make secondaries non-replicable: `"a single blurred dark silhouette in the background"` (no own ref, singular, out of focus), OR
+- Cut the crowd: if only 1–2 people actually matter in the shot, describe only them.
+- Never combine a single character ref with a plural human noun expecting "a group" — you get copies of that one face.
+
 **Order of refs:** bg ref **always first** in `image_urls`. White background of char sheets floods the atmosphere if it goes first.
+
+**One character = one locked ref asset for the whole episode.** Pick the character's canonical ref once and use that exact same URL in every clip the character appears in — like the locked voice. Do NOT reference one character from two different asset paths across clips (EP6 took Spock from `spock/variants/canonical.png` in scene 8 and `spock-canonical/sheet.png` in scene 9 — one of them HTTP 400 — guaranteeing the face differed between two adjacent clips). **Verify the ref URL returns 200 before the first generation that uses it** (one test gen, §14.7) — a dead ref means NB2 silently falls back to text-only and invents the face.
 
 | Frame type | `image_urls` |
 |---|---|
@@ -630,6 +657,8 @@ Special case: when a character is seen through a constrained opening — proport
 ```
 
 Without this, NB2 fills the entire opening with a close-up of the face.
+
+**Figure-behind-barrier seen by another character = silhouette, never a face.** When a character looks *through* a porthole/glass/door at someone, and the only character ref in `image_urls` is the looker, NB2 will draw the looker's own face inside the opening. If the figure behind the barrier must stay unidentified (or is a different character with no ref present), describe it strictly as `"dark silhouette of a slumped human shape, no distinct face, no features visible"` — never `"a face is visible inside"`. (EP6 scene 8: Spock's own face appeared in the porthole he was looking through.)
 
 #### 14.2 BG ref = scene-without-actor, NOT wallpaper
 
@@ -737,6 +766,26 @@ Before a series of generations with a specific character ref — do **one test g
 
 ---
 
+### 15.2 Element-референсы для I2V `elements` (по запросу Animator)
+
+> ✅ **Burn-tested 2026-06-01** — генерируй только если Scenarist/Animator явно просит element для `multi_prompt`-клипа (новый персонаж/объект входит в середине клипа). См. `animator.md §5a`, `tools/fal-ai.md §2c`.
+
+Это **отдельный тип ассета**, не scene-PNG и не char-ref. Когда в `multi_prompt`-клипе должен появиться персонаж/объект, которого нет на стартовом кадре, Kling `elements` хочет **набор «character sheet»**, а не один кадр:
+
+- `frontal_image_url` — 1 фронтальный вид;
+- `reference_image_urls` — **обязателен, ≥1 кадр** с других ракурсов (профиль, 3/4) на нейтральном фоне. Если у персонажа в Supabase чистый ракурс только один — **сгенерируй второй ракурс** (NB2 от существующего рефа, $0.08), не полагайся на дубликат: дубликат проходит валидацию, но узнаваемость хуже.
+
+Это **референсы элемента, а не сцены**: нейтральный фон, чистая поза, без окружения/действия. Генерируй через NB2 (chain reference от char-ref для консистентности).
+
+Путь в Supabase — как у char-ref (без даты, шарится между эпизодами):
+`${GAME_TAG}/refs/elements/${name}-front.png`, `…-side.png`, `…-3q.png`.
+
+Записывай URL-ы обратно в `storyboard.json` (поле клипа `elements`), чтобы Animator забрал их в запрос Kling.
+
+⚠️ Не путать с §14.8/§16: element-референсы НЕ являются end-frame и под запрет end-frame не попадают.
+
+---
+
 ### 16. I2V — start frame only (end frame forbidden with multi_prompt)
 
 For each I2V clip generate ONE image: `scene-K.png` (start frame only). **`scene-K-end.png` is NEVER generated** — see §14.8.
@@ -830,6 +879,8 @@ Only after ALL images pass — hand off to Manager.
 ## Checklist before handing off to Manager
 
 - [ ] Each scene has an `image_prompt` (40–80 words), added to `storyboard.json`
+- [ ] **Every `image_prompt` opens with the full `style_tags` prefix from the bible** — never a shortened style string (EP6 scene 8 lost the prefix and drifted off-style)
+- [ ] Each character referenced from ONE locked ref URL across all its clips; every ref URL verified 200 before use
 - [ ] `camera_angle` differs between adjacent scenes
 - [ ] Lipsync scenes have `mouth slightly open with teeth visible` in the prompt
 - [ ] All character refs created or pulled from Supabase

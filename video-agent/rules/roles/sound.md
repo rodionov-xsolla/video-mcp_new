@@ -95,6 +95,10 @@ Auth: `Authorization: Key $FAL_KEY`
 
 For serial-drama: one character = one voice across the whole series. Field `voice` in `story_bible.json characters[].voice`. **Do not change between episodes** — viewers notice.
 
+### One character = one voice = one pass within an episode
+
+All lines of a character in one episode are generated **with the same `voice` + `stability`**, ideally in one batch. **Never regenerate a single line into a parallel file** (`ep6-scene-1-new.mp3`, `..-v2`, `..-fixed`). A one-off re-gen drops the locked voice/stability params and produces an audibly different voice for the same character — EP6's Admiral spoke with two different voices because scene 1 was re-rendered as a separate `-new` file while scene 3 kept the original. Regeneration overwrites the **same** filename keyed to the clip index (archive the old one first). If you re-do one line, re-confirm `voice`/`stability` match every other line of that character.
+
 ---
 
 ## 3. Voice approval BEFORE Avatar (for gameplay-ai-avatar)
@@ -315,4 +319,5 @@ python3 tools/add_subtitles.py \
 - ОБЯЗАТЕЛЬНО для каждой сцены с непустым `tts`.
 - Пишется в `scenes/scene-K/scene-K.timings.json` (рядом с mp3).
 - Перед handoff Manager'у — `ls scenes/scene-*/scene-*.timings.json` должен совпадать по количеству с `scene-*.mp3` (тех, что имеют диалог).
+- **`timings.json.text` ОБЯЗАН совпадать с `clips[K].tts`** для той же сцены. Если не совпадает — файл стейл (остался от прошлой структуры/перенумерации) и поведёт субтитры мимо аудио. Перегенери timings для текущего текста, не оставляй старый. (В EP6 `scene-3.timings.json` описывал реплику Кирка, а в `scene-3.mp4` звучал Адмирал.)
 - Если у сцены `tts` пустой (silent I2V / physical-gag) — `timings.json` НЕ пишется.

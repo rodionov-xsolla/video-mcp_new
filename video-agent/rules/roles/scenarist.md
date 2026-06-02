@@ -95,6 +95,8 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
 3. A 10s clip requires justification in `duration_reason`. Can't explain — make it 5s.
 4. If the dialogue doesn't fit in 5s — cut text, don't stretch the clip.
 
+> ⚠️ **`duration_sec` for a dialogue clip is a cap, not the rendered length.** Kling Avatar renders a clip exactly as long as the TTS line (~0.4s/word EN). A 4-word line → ~2s clip, not 5s. So an episode's REAL runtime ≈ `Σ(action clip durations) + Σ(TTS line lengths) + CTA`, not `Σ(duration_sec)`. When the format brief sets a target runtime (e.g. 40–45s), reach it by adding/lengthening **action/I2V clips** (they honor their duration) or by writing longer lines — never assume five "5s" dialogue clips equal 25s (they're ~10s). EP7 first cut came out 24s for exactly this reason.
+
 ---
 
 ## 4. action_description — scene description for Storyboarder and Animator
@@ -121,6 +123,8 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
 - ✅ "Kirk leans over the console, jabbing at controls. Worf looks up from his station, eyebrow raised, not convinced." — two characters, each acting
 
 **For I2V clips — micro motion only.** Don't describe walking, hits, running — Kling I2V does not animate that. Movement = montage transition between clips, not animation inside one clip.
+
+**For Avatar/dialogue clips — do NOT introduce a second character into the frame** unless they are the explicit 2-shot partner. Storyboarder renders literally everything `action_description` mentions: a "background reaction" beat like "Spock tilts his head toward Chekov" puts Spock in the frame and breaks the intended solo shot (EP7 — Chekov's solo line rendered with Spock standing in front of him). If the speaker is alone in the shot, `action_description` mentions ONLY the speaker. Reaction of others = a separate clip.
 
 ---
 
@@ -226,6 +230,7 @@ If two dialogue (Avatar) clips run back-to-back — they cannot both be the same
 - ❌ Walking/running/hits in `action_description` for an I2V clip — impossible to animate
 - ❌ One looped action across the whole clip — minimum 2 beats
 - ❌ Adjacent Avatar clips with the same angle — change composition
+- ❌ Mentioning a second character in a solo Avatar clip's `action_description` (even as a "background reaction") — Storyboarder renders them into the frame (EP7 Chekov+Spock). Solo line = only the speaker described
 - ❌ Dialogue clip > 5s without justification in `duration_reason`
 - ❌ Title/brainrot text overlays in storyboard — only dialogue subs + TBC + CTA
 
