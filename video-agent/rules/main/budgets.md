@@ -19,6 +19,7 @@
 | TOP List | **$5.00** | Spend > $4.50 |
 | Fun News | **$4.50** | Spend > $4.00 |
 | In-Game POV | **$7.00** | Spend > $6.30 |
+| Streettalk | **$7.00** | Spend > $6.30 (pilot allowance; EP2+ target ~$3.00) |
 
 Tracking: after each generation, record the cost. Before the next one — check the limit.
 

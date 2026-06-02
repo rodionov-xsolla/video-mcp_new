@@ -254,6 +254,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 | "top-5", "top 5", "топ-5", "топ 5", "top list", "топ", "топ персонажей", "top characters", "top heroes", "top locations", "top items", "best characters", "ranking", "рейтинг", "countdown" | TOP List | `rules/formats/top-list.md` |
 | "fun news", "fictional news", "fake news", "lore news", "ироничные новости", "выдуманные новости", "фейковые новости", "satire news", "lore satire" | Fun News | `rules/formats/fun-news.md` |
 | "in-game pov", "pov", "от первого лица", "first person", "ты оказался", "вы оказались", "тебя зажали", "survival guide", "survival manual", "как выжить", "how to survive", "survive the", "выживание", "you wake up", "ты очнулся" | In-Game POV | `rules/formats/in-game-pov.md` |
+| "streettalk", "street talk", "street-talk", "vox pop", "vox-pop", "уличное интервью", "стрит-ток", "прохожие", "мнения прохожих", "опрос на улице" | Streettalk | `rules/formats/streettalk.md` |
 | Anything else | Standard | `rules/formats/standard.md` |
 
 **Do not load format files unrelated to the task.**
