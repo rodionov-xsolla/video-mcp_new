@@ -43,7 +43,7 @@ Tracking: after each generation, record the cost. Before the next one — check 
 | Kling 2.6 Pro I2V 10s (no audio, fallback) | fal-ai/kling-video/v2.6/pro/image-to-video | $0.70 |
 | Veo3 T2V 8s (with audio) | fal-ai/veo3 | $3.20 |
 | Veo3 T2V 8s (no audio) | fal-ai/veo3 | $1.60 |
-| ElevenLabs TTS (via fal.ai) | fal-ai/elevenlabs/tts/eleven-v3 | ~$0.30/min (~$0.05–0.10/line). **voice = name, NOT voice_id** |
+| MiniMax TTS | fal-ai/minimax/speech-2.8-hd | ~$0.10/1k chars (~$0.001–0.005/phrase). `voice_setting.voice_id`, `emotion` |
 | Kling Lipsync | fal-ai/kling-video/lipsync/audio-to-video | ~$0.10/s |
 | HeyGen Avatar IV | fal-ai/heygen/avatar4/image-to-video | $0.10/s |
 | Kling Avatar v2 Standard | fal-ai/kling-video/ai-avatar/v2/standard | $0.056/s |

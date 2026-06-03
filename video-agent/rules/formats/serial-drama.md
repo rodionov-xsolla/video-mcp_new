@@ -32,7 +32,7 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 
 - **ACTION/DIALOGUE ~ 50/50.** All-dialogue episode = monotonous and expensive; all-action = no plot.
 - **I2V (Kling v3 Standard)** — action/reaction clips (silent); fallback v2.6 Pro only on v3 artifacts
-- **Avatar (Kling Avatar v2)** — dialogue clips with lipsync (TTS from ElevenLabs)
+- **Avatar (Kling Avatar v2)** — dialogue clips with lipsync (TTS from MiniMax)
 - **TTS overlay with aecho** — only for "behind glass/door" scenes (character is visible through a barrier, face not visible)
 
 ---
@@ -43,7 +43,7 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 |---|---|---|
 | Image (NB2) | $0.08 | $0.08 |
 | Kling v3 Standard I2V (generate_audio=false, $0.084/s) | $0.42 | $0.84 |
-| ElevenLabs TTS (line 5–15s) | ~$0.05 | ~$0.07 |
+| MiniMax TTS (line 5–15s) | ~$0.002 | ~$0.003 |
 | Kling Avatar v2 (dialogue) | ~$0.28 | ~$0.56 |
 | **I2V action clip** | **~$0.50** | **~$0.92** |
 | **Avatar dialogue clip** | **~$0.32** | **~$0.63** |
@@ -125,7 +125,7 @@ File `games/{GAME_TAG}/serial-drama_story_bible.json` stores the universe state 
       "name": "Noob Dave",
       "role": "protagonist",
       "character_description": "Roblox-style blocky humanoid, bright yellow smooth plastic skin, simple blue torso shirt, bright green pants, round head with wide innocent eyes, small curved mouth, matte plastic texture",
-      "voice": "Charlie",
+      "voice": "Casual_Guy",
       "status": "just joined the server, secretly rich",
       "aura_points": 0,
       "relationships": {}
@@ -257,7 +257,7 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 
 ### Sound
 
-- TTS via fal.ai ElevenLabs — `voice` (name string) from story bible, `language_code` ISO 639-1, `stability` per mood
+- TTS via fal.ai MiniMax — `voice_setting.voice_id` from story bible, `emotion` per mood, field is `prompt` not `text`
 - One character = one voice across the whole series (locked in story bible)
 - **Subtitles: PIL PNG overlay** (ffmpeg 8.1 without libfreetype can't drawtext)
   - Font Arial/Helvetica Bold 38–48px, white + 3px stroke, lower third
@@ -335,7 +335,7 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - [ ] Cross-asset pre-flight passed (all URLs 200, distinct audio per clip, filename=index, scene_image_url↔hero) — `validation.md`
 - [ ] Each character from ONE locked ref; no photoreal-tagged refs; every `image_prompt` has full style prefix
 - [ ] Each I2V has anti-photoreal negative; each multi_prompt shot has a style anchor; no multi_prompt ends on an invented face close-up
-- [ ] TTS via fal.ai ElevenLabs (`voice` name, not `voice_id`)
+- [ ] TTS via fal.ai MiniMax (`voice_setting.voice_id`, field `prompt` not `text`)
 - [ ] Subtitles PIL PNG; dialogue + TBC only
 - [ ] fps normalized to 30 before concat
 - [ ] One ffmpeg pipeline, not layered
@@ -349,7 +349,7 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 ## Anti-patterns
 
 - ❌ `generate_audio: true` in Kling (voice is bad)
-- ❌ Kokoro TTS, Kling Lipsync, direct ElevenLabs API
+- ❌ Kokoro TTS, Kling Lipsync, ElevenLabs
 - ❌ `voice_id` hash instead of `voice` name
 - ❌ 1:1 square for Avatar (only 9:16)
 - ❌ character ref directly as scene image (each clip = its own PNG)

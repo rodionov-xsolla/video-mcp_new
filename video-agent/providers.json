@@ -2,7 +2,7 @@
   "active": {
     "image_gen": "fal-ai",
     "video_gen": "fal-ai",
-    "tts": "elevenlabs",
+    "tts": "minimax",
     "ffmpeg": "ffmpeg-api"
   },
   "providers": {
@@ -37,7 +37,7 @@
         "image_gen_fallback": "fal-ai/gpt-image-1/text-to-image",
         "video_gen_i2v": "fal-ai/kling-video/v3/standard/image-to-video",
         "video_gen_i2v_fallback": "fal-ai/kling-video/v2.6/pro/image-to-video",
-        "tts": "fal-ai/elevenlabs/tts/eleven-v3",
+        "tts": "fal-ai/minimax/speech-2.8-hd",
         "avatar": "fal-ai/kling-video/ai-avatar/v2/standard",
         "motion_control": "fal-ai/kling-video/v2.6/standard/motion-control",
         "motion_control_v3": "fal-ai/kling-video/v3/standard/motion-control",
@@ -51,7 +51,7 @@
         "motion_control": "$0.07/sec (Kling Motion Control v2.6 Standard)",
         "video_gen_i2v": "$0.084/sec (Kling v3 Standard, audio off)",
         "video_gen_i2v_fallback": "$0.07/sec (Kling 2.6 Pro, audio off)",
-        "tts": "~$0.30/min (~$0.05-0.10/phrase, ElevenLabs via fal.ai)"
+        "tts": "~$0.10/1k chars (~$0.001-0.005/phrase, MiniMax via fal.ai)"
       }
     },
     "kling-direct": {
@@ -74,19 +74,19 @@
       },
       "status": "planned"
     },
-    "elevenlabs": {
-      "name": "ElevenLabs (через fal.ai)",
+    "minimax": {
+      "name": "MiniMax (via fal.ai)",
       "auth_env": "FAL_KEY",
       "tools_file": "tools/fal-ai.md",
       "capabilities": ["tts"],
-      "status": "active — используется через fal.ai wrapper, НЕ напрямую",
+      "status": "active",
       "models": {
-        "tts": "fal-ai/elevenlabs/tts/eleven-v3"
+        "tts": "fal-ai/minimax/speech-2.8-hd"
       },
       "pricing": {
-        "tts": "~$0.30/min (~$0.05-0.10/phrase)"
+        "tts": "~$0.10/1k chars (~$0.001-0.005/phrase)"
       },
-      "notes": "voice = имя (Daniel, Charlotte), НЕ voice_id хеш"
+      "notes": "voice in voice_setting.voice_id; emotion: angry/happy/sad/neutral; tags: (laughs) (groans) (sighs); pause: <#0.5#>"
     },
     "ffmpeg-api": {
       "name": "FFmpeg Cloud API",

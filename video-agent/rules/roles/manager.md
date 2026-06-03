@@ -306,7 +306,7 @@ Before calling ANY external API (fal.ai, ElevenLabs, Kling, HeyGen, Supabase) **
 | Kling v3 Standard I2V (primary) | `fal-ai/kling-video/v3/standard/image-to-video` | $0.084/s ($0.42/5s no audio; always `generate_audio: false`) |
 | Kling 2.6 Pro I2V (fallback) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.07/s ($0.35/5s no audio; always `generate_audio: false`) |
 | ~~Veo3 T2V~~ | ~~`fal-ai/veo3`~~ | ~~$0.20–$0.40/s~~ — **DO NOT USE** (expensive, no voice control) |
-| ElevenLabs TTS (via fal.ai) | `fal-ai/elevenlabs/tts/eleven-v3` | ~$0.30/min. **`voice` = name (Daniel), NOT `voice_id`** |
+| MiniMax TTS (via fal.ai) | `fal-ai/minimax/speech-2.8-hd` | ~$0.10/1k chars. `voice_setting.voice_id`, `emotion`. Field is `prompt` not `text`. |
 | Kling Lipsync | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/s |
 | HeyGen Avatar IV | `fal-ai/heygen/avatar4/image-to-video` | $0.10/s |
 | Kling Avatar v2 Standard | `fal-ai/kling-video/ai-avatar/v2/standard` | $0.056/s |
