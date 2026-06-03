@@ -689,6 +689,8 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 - ❌ Silent ambient track (no street SFX layer) — uncanny / fake immediately. Mandatory ambient at 0.25 volume.
 - ❌ Theatrical / announcer-speak in any line ("Ladies and gentlemen", "in conclusion", "without further ado"). Streettalk is vox-pop, not a speech.
 - ❌ Long sentences with 3+ periods. Each `.` is a 0.5s TTS pause; vox-pop must feel alive.
+- ❌ **Reporter missing arm/hand (Roblox EP1, scenes 1 & 5).** NB2 sometimes drops a limb when the character is tightly cropped. Fix: in reporter scene prompts, explicitly add `"both arms and hands fully visible, mic held with full hand grip, no missing limbs"`. If image_prompt already contains this and NB2 still clips an arm — regenerate once; the body geometry is the only acceptable re-roll reason for a scene PNG.
+- ❌ **Interviewee off-center and wrong gaze direction (Roblox EP1, scene 2).** NB2 placed Bacon Hair far left of frame, looking away from the off-screen mic. Fix: interviewee image_prompt MUST include `"character centered in frame"` + `"eyes and body angled toward reporter's mic in foreground, three-quarter turn toward the mic side"`. Never let NB2 default to a neutral/profile pose for vox-pop — the character must always be turned toward the interviewer.
 
 ---
 
