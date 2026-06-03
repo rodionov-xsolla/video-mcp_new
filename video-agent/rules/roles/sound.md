@@ -224,7 +224,7 @@ ElevenLabs reacts to punctuation:
 - `?` — rising intonation
 - ALL CAPS — shout / emphasis
 
-Do not write stage directions inside the text (`[angry]`, `(whispers)`) — the model does not understand, it reads literally.
+Use only the supported emotive tags from §1 (`(laughs)`, `(groans)`, etc.). Any other stage directions (`[angry]`, `(whispers)`, `[quietly]`) — the model reads literally as text. Emotion control goes in `voice_setting.emotion`, not in the text.
 
 ---
 
