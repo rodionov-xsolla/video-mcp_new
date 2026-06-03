@@ -22,6 +22,7 @@
 | In-Game POV | **$7.00** | Spend > $6.30 |
 | Redcon | **$6.00** | Spend > $5.40 |
 | What If... Lore | **$6.00** | Spend > $5.40 |
+| Wild Documentary | **$5.00** | Spend > $4.50 |
 
 Tracking: after each generation, record the cost. Before the next one — check the limit.
 
