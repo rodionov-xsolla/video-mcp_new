@@ -8,6 +8,7 @@
 - **Аудитория:** Global, фанаты Star Trek, gacha/RPG игроки 25-45 лет
 - **Стиль арта:** Sci-fi LCARS UI, полуреалистичные 2D-портреты, 3D-корабли
 - **Премьера:** Январь 2016 (10+ лет активной работы)
+- **youtube_channel:** gamepulse
 
 ---
 
@@ -240,3 +241,23 @@ Star Trek Timelines style, semi-realistic sci-fi character portrait, cinematic F
 - **Текст:** "LINK IN BIO"
 - **Формат:** 1080×1920, 30fps, ~5s
 - **Использование:** Editor скачивает, нормализует (scale+pad+30fps+AAC), конкатенирует в конец после всех сцен
+
+---
+
+## GLN Channel Branding (надканальный бренд)
+
+Всё ST-Timelines контент идёт как сетка **Galactic Lol Network (GLN)** — фановый ТВ-канал по вселенной Star Trek. Brand-bug накладывается Editor'ом ПОВЕРХ финального видео (после concat, до субтитров), как это делают реальные ТВ-каналы (CNN/BBC/RT).
+
+- **`channel_bug_url`**: `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/gln-bug.png`
+- **Источник логотипа:** Gemini Generated (2026-05-29), вырезан до RGBA (background transparent), 512×512 PNG, ~42 KB
+- **Позиция в кадре:** top-left, отступ 40 px от верха и левого края
+- **Размер при overlay:** 110×110 px (downscale из 512×512 через `scale=110:110` в filter_complex)
+- **Прозрачность:** альфа уже зашита в PNG (~70% эффективная); если нужно сильнее погасить — `colorchannelmixer=aa=0.7` в overlay цепочке
+- **Поведение:** static, full-video duration (без fade in/out)
+- **Применимо к форматам:** ВСЕ ST-Timelines форматы (streettalk, fun-news, news, character-story, what-if-lore, redcon, ...). Editor читает `channel_bug_url` из game config и применяет автоматически — см. `rules/roles/editor.md` §13a.
+- **Когда НЕ применять:** если game config не содержит `channel_bug_url` (другие игры — Roblox, MLBB и пр.), а также если конкретный формат явно отключает через свой playbook (нет таких форматов на момент 2026-05-29).
+
+**Анти-паттерны:**
+- ❌ Bug на CTA — CTA это отдельный branded ролик, bug на нём = двойной брендинг. Применять ТОЛЬКО на основном контенте (между opener и CTA, или на всём, если opener тоже свой — зависит от format-specific решения).
+- ❌ Bug меняет позицию / размер от ролика к ролику. Везде одинаково — top-left, 110×110, 40px отступ.
+- ❌ Bug на 100% непрозрачности или больше 200×200 px — это watermark, не TV bug. Сатира требует тонкости.

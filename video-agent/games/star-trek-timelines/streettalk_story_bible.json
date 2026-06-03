@@ -1,0 +1,50 @@
+{
+  "series_id": "streettalk-star-trek-timelines",
+  "game_tag": "star-trek-timelines",
+  "title": "GLN Streettalk — DS9 Promenade",
+  "created_at": "2026-05-29",
+  "last_episode": 0,
+  "reporter": {
+    "character_name": "jake-sisko-reporter",
+    "display_name": "Jake Sisko",
+    "voice": "Imposing_Manner",
+    "stability": 0.55,
+    "style": null,
+    "tone_signature": "earnest young field reporter, slightly precocious news-anchor confidence, treats absurd DS9 promenade gossip as serious journalism",
+    "supabase_avatar_url": ""
+  },
+  "voice_mapping": {
+    "reporter": "Imposing_Manner",
+    "interviewees": {}
+  },
+  "species_voice_defaults": {
+    "klingon": "Elegant_Man",
+    "vulcan": "Determined_Man",
+    "bajoran": "Deep_Voice_Man",
+    "ferengi": "Josh",
+    "cardassian": "Deep_Voice_Man",
+    "romulan": "Antoni",
+    "starfleet": "Imposing_Manner",
+    "trill": "Inspirational_girl",
+    "human": "Antoni"
+  },
+  "location": {
+    "slug": "ds9-promenade",
+    "display_name": "DS9 Promenade",
+    "supabase_ref_url": "",
+    "description_for_nb2": "Deep Space Nine promenade upper level interior, semi-realistic photographic Star Trek movie cinematic quality, NOT cartoon NOT illustration, second-floor balconied promenade with railing, Quark's bar storefront visible in mid-distance with Ferengi signage, varied alien species passers-by walking, Bajoran Cardassian architectural fusion with curved arches and ornate brass detailing, warm amber Cardassian-era ambient lighting mixed with cool blue Starfleet utility panels, busy commercial corridor energy, NO LCARS UI overlay, NO on-screen text",
+    "ambient_prompt": "DS9 Promenade ambient: low chatter of multiple alien species voices in unintelligible languages, soft Bajoran-Cardassian station hum, distant footsteps on metal walkway, occasional door-chime and PADD beeps, no music no melody, urban marketplace texture with indoor reverb, layered crowd murmur, no clear English words"
+  },
+  "interviewee_pool": [],
+  "topic_rotation": {
+    "recent_question_tags": [],
+    "recent_interviewees": [],
+    "recent_species": [],
+    "cooldown_episodes": 5
+  },
+  "episode_summaries": [],
+  "opener_url": "",
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta-link-in-bio.mp4",
+  "channel_bug_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/gln-bug.png",
+  "notes": "Pilot episode (EP1, 2026-05-29) — Klingon opera + universal translator generational satire. Reporter is Jake Sisko (canonical DS9 character, son of Captain Benjamin Sisko, in canon an aspiring journalist — perfect fit for vox-pop streettalk format). Voice Liam selected for earnest young-reporter quality. Opener and reporter avatar to be generated in Phase 2 prep."
+}

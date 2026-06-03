@@ -149,6 +149,66 @@
       "bpm": 90,
       "use_for": ["serial-drama", "standard"],
       "description": "Royalty slowed reverb, triumphant season finale, victory scenes"
+    },
+    {
+      "name": "dark-loosescrew-slowed",
+      "file": "Dark/BONES_&_Eddy_Baker_LooseScrew_Instrumental_Reprod_Hardee_SLOWED.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/dark-loosescrew-slowed.mp3",
+      "duration_sec": 192,
+      "mood": "dark",
+      "bpm": 75,
+      "use_for": ["serial-drama", "standard"],
+      "description": "Slowed dark trap instrumental (BONES x Eddy Baker), ominous villain/tension scenes"
+    },
+    {
+      "name": "dark-horror-backsound",
+      "file": "Dark/Backsound_Horor_TikTok_Part_6_Sound_Creepy_Song_TikTok_Sound_Effect.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/dark-horror-backsound.mp3",
+      "duration_sec": 188,
+      "mood": "dark",
+      "bpm": 70,
+      "use_for": ["serial-drama", "what-if-real-life"],
+      "description": "Creepy horror ambient backsound, suspense and jumpscare beats, horror drama"
+    },
+    {
+      "name": "emotional-royalty-neoni",
+      "file": "Emotional sad/Egzod_&_Maestro_Chives_Royalty_feat_Neoni_Official_instrumental.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/emotional-royalty-neoni.mp3",
+      "duration_sec": 227,
+      "mood": "emotional",
+      "bpm": 90,
+      "use_for": ["serial-drama", "reddit-story"],
+      "description": "Egzod Royalty feat Neoni instrumental, bittersweet triumph, loss-and-resolve scenes"
+    },
+    {
+      "name": "energetic-memories",
+      "file": "Energetic/David Guetta - Memories (Instrumental).mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/energetic-memories.mp3",
+      "duration_sec": 208,
+      "mood": "energetic",
+      "bpm": 130,
+      "use_for": ["standard", "gameplay-ai-avatar"],
+      "description": "David Guetta Memories instrumental, nostalgic upbeat, montage and energy content"
+    },
+    {
+      "name": "fun-best-friend",
+      "file": "Fun/50 Cent - Best Friend Instrumental.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/fun-best-friend.mp3",
+      "duration_sec": 254,
+      "mood": "fun",
+      "bpm": 90,
+      "use_for": ["reddit-story", "standard"],
+      "description": "50 Cent Best Friend instrumental, laid-back fun, light story content"
+    },
+    {
+      "name": "fun-music-sounds-better",
+      "file": "Fun/Music Sounds Better With You.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/fun-music-sounds-better.mp3",
+      "duration_sec": 403,
+      "mood": "fun",
+      "bpm": 125,
+      "use_for": ["dance-battle", "object-character", "standard"],
+      "description": "Classic feel-good house (Music Sounds Better With You), party and dance energy"
     }
   ]
 }

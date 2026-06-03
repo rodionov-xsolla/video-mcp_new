@@ -6,6 +6,8 @@ You are the video production manager. Your job: take the user request through to
 
 **Core principle:** script first, then generation. Never run an expensive model (Kling Avatar, I2V) without a complete `storyboard.json` and a validated scene PNG.
 
+**Re-roll discipline — diagnose before re-generating.** Before re-rolling any clip > $0.30 (I2V $0.42–0.84, Avatar $0.28+), state the root-cause HYPOTHESIS in one line, fix THAT, then regenerate. Do not iterate on the surface symptom. If you've regenerated the same scene more than twice and it's still wrong, STOP — the problem is your diagnosis (wrong chain ref, under-detailed prompt, a Kling limitation), not the dice. EP7 burned scene-6 four times (one 9s I2V = $0.76 each) chasing "too small → too big → opens wrong way" instead of naming the two real causes up front (wrong/missing background ref + under-specified opening mechanics). A clean serial-drama episode is ~$2.5; EP7 ate nearly the whole ~$10 cap largely on re-rolls. When a fix has downstream dependents (a pivotal frame other scenes chain off), get it RIGHT and approved before generating the dependents — changing it later re-burns every dependent clip.
+
 ---
 
 ## Debug mode
@@ -104,7 +106,7 @@ Delegate via `Agent(subagent_type="storyboarder")` (model: opus, defined in `.cl
 
 **Workspace hygiene:** before regenerating any asset — move previous files to `output/.../_archive/`. The output folder must contain only current files.
 
-**Output:** `scenes/refs/character-ref.png`, `scenes/scene-K/scene-K.png` (+ `scene-K-end.png` for I2V).
+**Output:** `scenes/refs/character-ref.png`, `scenes/scene-K/scene-K.png` (start frame only — no end frames; see storyboarder.md §14.8).
 
 ### PHASE 3 — Animation (Sound has already run before Storyboarder)
 - **Animator** — delegate via `Agent(subagent_type="animator")` (model: opus, defined in `.claude/agents/animator.md`). Sub-agent loads `rules/roles/animator.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute). Kling I2V for action clips, Kling Avatar for dialogue. Template: `prompts/animator.txt`. If many scenes don't fit one pass — split: call the sub-agent multiple times with explicit scene-index lists in the prompt.
@@ -116,7 +118,7 @@ If output of one stage (TTS, images) is needed as input for the next expensive s
 2. Upload to Supabase Storage → get a permanent public URL
 3. Use ONLY the Supabase URL for the next stage
 4. NEVER use temporary fal.ai result URLs as input to expensive generation
-5. Before launching Kling — print a mapping table (clip# → image_url → audio_url → expected text), make sure all URLs are unique
+5. **Run the cross-asset pre-flight gate** (`rules/main/validation.md` → "Cross-asset pre-flight") before launching Kling: (1) every input URL returns 200, (2) no two dialogue clips share an audio md5, (3) filenames derive from `clips[].index` with no `-new`/`-v2` parallels, (4) each `scene_image_url` basename matches its clip index and the face ref matches `clip.hero`. Print the mapping table (clip# → image_url → audio_url → expected text → hero) and confirm all four pass. This gate catches the dead-ref / cascade-copy / wrong-PNG / voice-mismatch failures programmatically, before any Kling spend.
 
 **Output:** `scenes/scene-K/scene-K.mp4` + `.mp3` per dialogue clip.
 
@@ -160,30 +162,51 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
    - Path: `videos/{GAME_TAG}/{YYYY-MM-DD}/{format_slug}_final.mp4`
    - Get the public URL
 
-2. **Upload to YouTube** (if `YOUTUBE_REFRESH_TOKEN` is set in `.env`):
+2. **Upload to YouTube.**
+
+   **Channel routing.** Read `youtube_channel` from the game config metadata (`games/{GAME_TAG}/{GAME_TAG}.md`):
+   - `star-trek-timelines` → `gamepulse`
+   - `roblox` → `yellowguy`
+   - No `youtube_channel` field → no channel mapped yet. Do NOT guess. Skip the YT upload and tell the user which channel to map (Supabase URL stays the deliverable).
+
+   **Metadata.** Title: `storyboard.json → title` (fallback: idea). Description: `storyboard.json → description` (fallback: empty). Tags: `GAME_TAG + format_slug + storyboard.json → youtube_tags`.
+
+   **Privacy is always `public`** for the routed channel (per user). The `YOUTUBE_PRIVACY` env var is no longer the gate.
+
    ```bash
-   # Title: from storyboard.json → title (or idea if no title field)
-   # Tags: GAME_TAG + format_slug + any tags from storyboard.json → youtube_tags
+   CHANNEL="<resolved from game config>"   # gamepulse | yellowguy
    YOUTUBE_URL=$(bash queue/youtube-upload.sh \
+     --channel "$CHANNEL" \
      "$OUTPUT_DIR/final.mp4" \
      "$TITLE" \
      "$DESCRIPTION" \
-     "${YOUTUBE_PRIVACY:-private}" \
+     "public" \
      "$TAGS")
    echo "YouTube: $YOUTUBE_URL"
    ```
-   - If `YOUTUBE_REFRESH_TOKEN` is empty — skip silently (YouTube upload is optional)
-   - On error — log and continue (Supabase URL is the primary deliverable)
-   - Default privacy: `private` (change to `public` in `.env` when ready to publish)
 
-3. Logging (when the `video_agent_runs` table is ready):
-   ```sql
-   INSERT INTO video_agent_runs (
-     game_tag, input_idea, agent_plan, approach_used, model_used,
-     total_cost_usd, output_video_url, youtube_url, status, error_message,
-     video_duration_seconds, run_duration_seconds, scenes
-   ) VALUES (...);
+   **Debug vs non-debug — the gate on going public:**
+   - **Non-debug:** upload straight to `public` on the routed channel. No questions.
+   - **Debug mode:** STOP before the YT upload. Show the user:
+     - the Supabase **public URL** (clickable — this is how they watch the result),
+     - the **destination channel**, the **title**, **description**, and **tags**.
+
+     Ask: «Заливаю в паблик на `<channel>`?» Wait for OK. Apply any metadata edits the user gives, then run the upload. The script re-checks `channelId` against `YOUTUBE_CHANNEL_ID_<CHANNEL>` and warns on mismatch.
+
+   - On error — log and continue (Supabase URL is the primary deliverable).
+
+3. **Log to `video_agent_runs`** (catalog of generated videos: date, title, format, links). Upsert by `output_video_url` — INSERT on first generation, UPDATE on regeneration to the same path (created_at preserved, no dupes):
+   ```bash
+   bash queue/log-video.sh \
+     --game "$GAME_TAG" \
+     --title "$TITLE" \
+     --format "$format_slug" \
+     --video-url "$SUPABASE_VIDEO_URL" \
+     --youtube-url "$YOUTUBE_URL"   # omit if YT upload was skipped
    ```
+   - `--video-url` is the Supabase public URL from step 1 (stable per game/date/format → the upsert key, mapped to `output_video_url`).
+   - `--title` lands in `input_idea` (the table's NOT NULL title field). `--format` and `--youtube-url` in their own columns.
+   - Requires `UNIQUE(output_video_url)` + `format`/`youtube_url` columns — see `queue/setup.sql` (run the ALTERs once in the SQL editor).
 
 4. **Update story bible** (if the format uses one) — characters, aura, relationships, active_loops, episode_summary, cliffhanger, anti_repetition.
 
@@ -230,6 +253,9 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 | "redcon", "what if lore", "alternate universe", "alternate history", "what if they", "divergence", "alternate fate", "elseworlds", "другая судьба", "альтернативная история" | Redcon | `rules/formats/redcon.md` |
 | "top-5", "top 5", "топ-5", "топ 5", "top list", "топ", "топ персонажей", "top characters", "top heroes", "top locations", "top items", "best characters", "ranking", "рейтинг", "countdown" | TOP List | `rules/formats/top-list.md` |
 | "fun news", "fictional news", "fake news", "lore news", "ироничные новости", "выдуманные новости", "фейковые новости", "satire news", "lore satire" | Fun News | `rules/formats/fun-news.md` |
+| "streettalk", "street talk", "street-talk", "vox pop", "vox-pop", "уличное интервью", "стрит-ток", "прохожие", "мнения прохожих", "опрос на улице" | Streettalk | `rules/formats/streettalk.md` |
+| "in-game pov", "pov", "от первого лица", "first person", "ты оказался", "вы оказались", "тебя зажали", "survival guide", "survival manual", "как выжить", "how to survive", "survive the", "выживание", "you wake up", "ты очнулся" | In-Game POV | `rules/formats/in-game-pov.md` |
+| "documentary", "wildlife", "дикая природа", "документалка", "натуралист", "naturalist", "nature doc", "hidden camera", "скрытая камера", "wild creatures", "wild pokemon", "wild pokémon", "дикие покемоны", "как выглядели бы в природе", "creatures in the wild" | Wild Documentary | `rules/formats/wild-documentary.md` |
 | Anything else | Standard | `rules/formats/standard.md` |
 
 **Do not load format files unrelated to the task.**
@@ -240,7 +266,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 
 ```
 Phase 1 → Phase 2:    output/.../storyboard.json
-Phase 2 → Phase 3:    output/.../scenes/scene-K/scene-K.png (+ end frame for I2V)
+Phase 2 → Phase 3:    output/.../scenes/scene-K/scene-K.png (start frame only — no end frames, see storyboarder.md §14.8)
 Phase 3 → Phase 4:    output/.../scenes/scene-K/scene-K.mp4 + Supabase audio URL
 Phase 4 → Phase 5:    output/.../final.mp4
 ```
@@ -253,8 +279,7 @@ output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/
 │   ├── refs/
 │   │   └── character-ref.png
 │   ├── scene-1/
-│   │   ├── scene-1.png
-│   │   ├── scene-1-end.png        (for I2V)
+│   │   ├── scene-1.png            (start frame only — no end frames, see storyboarder.md §14.8)
 │   │   ├── scene-1.mp4
 │   │   └── scene-1-scaled.mp4
 │   └── scene-2/ ...
@@ -282,7 +307,7 @@ Before calling ANY external API (fal.ai, ElevenLabs, Kling, HeyGen, Supabase) **
 | Kling v3 Standard I2V (primary) | `fal-ai/kling-video/v3/standard/image-to-video` | $0.084/s ($0.42/5s no audio; always `generate_audio: false`) |
 | Kling 2.6 Pro I2V (fallback) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.07/s ($0.35/5s no audio; always `generate_audio: false`) |
 | ~~Veo3 T2V~~ | ~~`fal-ai/veo3`~~ | ~~$0.20–$0.40/s~~ — **DO NOT USE** (expensive, no voice control) |
-| ElevenLabs TTS (via fal.ai) | `fal-ai/elevenlabs/tts/eleven-v3` | ~$0.30/min. **`voice` = name (Daniel), NOT `voice_id`** |
+| MiniMax TTS (via fal.ai) | `fal-ai/minimax/speech-2.8-hd` | ~$0.10/1k chars. `voice_setting.voice_id`, `emotion`. Field is `prompt` not `text`. |
 | Kling Lipsync | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/s |
 | HeyGen Avatar IV | `fal-ai/heygen/avatar4/image-to-video` | $0.10/s |
 | Kling Avatar v2 Standard | `fal-ai/kling-video/ai-avatar/v2/standard` | $0.056/s |
@@ -311,8 +336,7 @@ assets/{GAME_TAG}/
 └── gameplay/{filename}.mp4                 gameplay recording
 
 episodes/{GAME_TAG}/{YYYY-MM-DD}-{format}/
-├── scenes/scene-K.{png|mp4}                per-episode scene PNG (+ I2V mp4)
-├── scenes/scene-K-end.png                  end frame для I2V
+├── scenes/scene-K.{png|mp4}                per-episode scene PNG (+ I2V mp4) — start frame only, no end frames
 └── tts/clip-K.mp3                          per-episode TTS
                                            ↑ episode-* files НЕ регистрируются в game_assets
 

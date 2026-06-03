@@ -6,6 +6,7 @@
 - **Платформа:** PC, Mobile, Console
 - **Аудитория:** Gen Z / Gen Alpha, глобальная, 8-18 лет
 - **Стиль арта:** Blocky 3D, Pixar-like, яркие пластиковые текстуры
+- **youtube_channel:** yellowguy
 
 ---
 

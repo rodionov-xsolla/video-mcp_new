@@ -187,9 +187,9 @@ Based on collected data, compute typical and maximum cost.
 
 | Model | 5s | 10s |
 |--------|----|----|
-| NB2 image | $0.04 | $0.04 |
-| Kling I2V (no audio) | $0.35 | $0.70 |
-| Kling I2V (with audio) | $0.70 | $1.40 |
+| NB2 image | $0.08 | $0.08 |
+| Kling v3 Standard I2V (no audio) | $0.42 | $0.84 |
+| Kling v3 Standard I2V (with audio) | $0.63 | $1.26 |
 | Kling Avatar v2 | $0.28 | $0.56 |
 | ElevenLabs TTS (line) | ~$0.05–0.10 | ~$0.07–0.15 |
 | Veo3 T2V 8s (with audio) | — | $3.20 |

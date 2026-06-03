@@ -6,15 +6,197 @@
   "style_tags": "Roblox-inspired Pixar-style 3D animation, blocky stylized characters, smooth plastic-like skin texture, expressive exaggerated cartoon faces, vibrant saturated colors, soft ambient lighting, cinematic depth of field, toy-like proportions, dramatic emotional expressions",
   "created_at": "2026-04-24",
   "last_episode": 6,
-
+  "planned_arc": {
+    "note": "Pre-locked arc EP7-EP10 (the 3-step exposE heist from EP6). Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion only, all running/chases/hammer-swings = CUT between clips not animation, protagonist always faces camera, cliffhanger spoken line = Avatar TTS). Bacon Bob is comic-chaos engine: most loops turn on his accidents. After shipping an episode fold its loops/status into characters[], active_loops, episode_summaries. Do NOT re-invent episodes while this arc has unshipped entries. Non-cast speakers: 'Computer' = robotic server-announcer voice; 'Crowd kid' = one-off background child line (can be TTS overlay, no on-screen lipsync needed).",
+    "episodes": [
+      {
+        "episode": 7,
+        "title": "The Vault Job",
+        "link": "After EP6 Dave and Bella have a 3-step plan. Step 1 - drain Rex's Robux vault.",
+        "beats": [
+          "HOOK - golden bank under the plaza. Dave and Bella drop in through a vent; below, Bob already dangles upside-down in a laser trap.",
+          "Dave wants to ditch Bob; Bella calls him noise; Dave sees a security ban-hammer already aimed at Bob.",
+          "Dave saves Bob; Bob falls onto a button that triggers not the alarm but an old service lift to the vault - a door even VIPs don't know.",
+          "They open Rex's vault: almost no Robux. Inside are contracts, transfer screenshots and a black file: SHADOW / CROWN RENTAL / KING REX.",
+          "Bob accidentally grabs the single most important file; cameras log his face beside Dave and Bella."
+        ],
+        "key_lines": [
+          {
+            "speaker": "Bob",
+            "line": "I was literally just looking for a free hot dog!"
+          },
+          {
+            "speaker": "Bella",
+            "line": "He's not with us. He's a problem."
+          },
+          {
+            "speaker": "Dave",
+            "line": "That's what Rex says about noobs."
+          },
+          {
+            "speaker": "Bob",
+            "line": "Did I press death or luck?"
+          },
+          {
+            "speaker": "Bella",
+            "line": "Worse. You pressed plot."
+          },
+          {
+            "speaker": "Dave",
+            "line": "Rex isn't a king. He's a renter."
+          },
+          {
+            "speaker": "Bella",
+            "line": "Shadow sold him power."
+          },
+          {
+            "speaker": "Computer",
+            "line": "Three intruders identified."
+          }
+        ],
+        "cliffhanger": {
+          "scene": "Rex appears on the bank's screen.",
+          "line_speaker": "Rex",
+          "line": "Bob? Even you betrayed me?"
+        },
+        "loops": [
+          "Bob is not an ally but an accidental witness",
+          "Rex and Shadow are bound by a contract",
+          "the vault was about evidence, not money",
+          "Bob is now WANTED alongside Dave and Bella"
+        ]
+      },
+      {
+        "episode": 8,
+        "title": "The Golden Chase",
+        "link": "Bob got caught on camera, so they're forced to drag him along.",
+        "beats": [
+          "Dave, Bella and Bob bolt out of the bank.",
+          "Rex unleashes VIP security on hoverboards.",
+          "Bob panics and accidentally mounts a security golden scooter.",
+          "Chase through the LUXURIA shopping street.",
+          "Bob flies into Rex's statue and knocks its head clean off."
+        ],
+        "key_lines": [
+          {
+            "speaker": "Bob",
+            "line": "I'm not in your gang! I'm a hostage of the plot!"
+          },
+          {
+            "speaker": "Dave",
+            "line": "Then run like a hostage."
+          },
+          {
+            "speaker": "Bella",
+            "line": "He's loud, but useful."
+          },
+          {
+            "speaker": "Rex",
+            "line": "Catch the noob, the girl, and the bacon rat!"
+          }
+        ],
+        "cliffhanger": {
+          "scene": "Posters appear on every screen.",
+          "screen_text": "WANTED: NOOB DAVE / BELLA / BACON BOB",
+          "line_speaker": "Bob",
+          "line": "Mom, I became the main character!"
+        },
+        "loops": [
+          "Bob is now officially tied to the team",
+          "Rex publicly declares the hunt",
+          "Bella realizes Bob can be a chaos tool"
+        ]
+      },
+      {
+        "episode": 9,
+        "title": "Break the Fake Crown",
+        "link": "After the chase the team can't hide; Dave jumps straight to Step 2 - smash the fake crown.",
+        "beats": [
+          "Plaza. Rex holds a 'real king' parade.",
+          "Dave steps out onto a billboard rooftop.",
+          "Rex challenges him to a Crown Obby Duel.",
+          "Bella cracks open Rex's cheat-platforms.",
+          "Bob accidentally triggers a giant hammer that smashes the crown."
+        ],
+        "key_lines": [
+          {
+            "speaker": "Rex",
+            "line": "Noobs don't challenge kings."
+          },
+          {
+            "speaker": "Dave",
+            "line": "Kings don't rent thrones."
+          },
+          {
+            "speaker": "Bella",
+            "line": "He's cheating. The left platform is fake."
+          },
+          {
+            "speaker": "Bob",
+            "line": "I wanted to press the fireworks button!"
+          }
+        ],
+        "cliffhanger": {
+          "scene": "The crown shatters. Inside is a tag.",
+          "screen_text": "RENTAL PROPERTY OF SHADOW",
+          "line_speaker": "Crowd kid",
+          "line": "The king was on a subscription?"
+        },
+        "loops": [
+          "Rex is publicly humiliated",
+          "Shadow becomes the visible owner of power",
+          "Bob accidentally lands the team's first big win"
+        ]
+      },
+      {
+        "episode": 10,
+        "title": "The Real Crown",
+        "link": "The fake crown is broken, so Shadow is forced to reveal the real Admin Crown himself.",
+        "beats": [
+          "The plaza is in uproar; Rex is losing authority.",
+          "Shadow appears on the screens and opens a black case.",
+          "The real Admin Crown hangs over the plaza like a prize.",
+          "Rex, Dave and Bella all lunge for it.",
+          "Bob tries to hide behind the case and accidentally puts the crown on."
+        ],
+        "key_lines": [
+          {
+            "speaker": "Shadow",
+            "line": "The fake king has fallen. A real one is needed."
+          },
+          {
+            "speaker": "Rex",
+            "line": "It's mine! I paid for it!"
+          },
+          {
+            "speaker": "Dave",
+            "line": "Exactly. You paid."
+          },
+          {
+            "speaker": "Bob",
+            "line": "Why did the hat pick me?!"
+          }
+        ],
+        "cliffhanger": {
+          "scene": "The crown clamps onto Bob's head. The sky changes. The server freezes.",
+          "line_speaker": "Computer",
+          "line": "Bacon Bob has been granted admin rights."
+        },
+        "loops": [
+          "Bob becomes not a sidekick but a walking catastrophe",
+          "Shadow was clearly steering them toward activating the crown",
+          "Dave wanted to expose power but accidentally created new power"
+        ]
+      }
+    ]
+  },
   "synopsis": "Noob Dave arrives at LUXURIA, the most exclusive Roblox trading server where wealth is power. King Rex rules the plaza with an iron crown. Nobody gives Dave a second look — until they do. Because Dave isn't just a noob. He's sitting on the rarest inventory anyone has ever seen. The question isn't IF he'll reveal it. It's WHEN... and what happens after.",
-
   "characters": [
     {
       "name": "Noob Dave",
       "role": "protagonist",
       "character_description": "Roblox-style blocky humanoid character, bright yellow smooth plastic skin, simple blue torso shirt with no details, bright green pants, round compact head proportional to body width with wide innocent eyes with tiny black pupils, small curved mouth, stubby short limbs, standard blocky proportions, matte plastic texture, clean simple design",
-      "voice": "Charlie",
+      "voice": "Casual_Guy",
       "speech_pattern": "Hesitant, pauses — then sudden confident sigma drops. 'I... I don't think... actually, nah.'",
       "status": "Walked away from plaza into an abandoned Roblox training room. Started physical preparation — parkour drills + punching bag combos. Shadow's voice (flashback callbacks from EP2/EP3) plays in his head — Dave is internalizing what he learned. Bella has tracked him to the training room. She knows who he is despite the default skin.",
       "aura_points": 220,
@@ -30,7 +212,7 @@
       "name": "King Rex",
       "role": "antagonist",
       "character_description": "Roblox-style blocky humanoid with oversized golden crown with embedded red and blue jewels, thick diamond chain necklace with large dollar sign pendant, white fluffy fur coat draped over gold vest, dark designer sunglasses pushed up on forehead, smug arrogant expression with raised left eyebrow, glossy shiny plastic texture, golden particle shimmer around body, wide power stance",
-      "voice": "Daniel",
+      "voice": "Deep_Voice_Man",
       "speech_pattern": "Short commands, ultimatums. Never explains — orders. 'Get him. Now.' / 'Wrong answer.' / 'You think this is funny?'",
       "status": "Descended from VIP to confront Dave personally. Put Dave on the ground and told him to never show his face again. Public dominance reasserted — but Dave didn't break, and Rex doesn't know why.",
       "aura_points": 600,
@@ -45,7 +227,7 @@
       "name": "Shadow",
       "role": "ally / mysterious",
       "character_description": "Roblox-style tall slim humanoid, jet black emo hair covering left eye with sharp spiky tips, dark black hoodie with glowing purple circuit pattern on chest, ripped dark jeans with chain, one visible glowing cyan eye through hair gap, thin angular face with neutral unreadable expression, elongated limbs, matte dark plastic texture, subtle purple particle aura",
-      "voice": "Liam",
+      "voice": "Imposing_Manner",
       "speech_pattern": "Maximum 3-5 words per line. Every word hits. 'You're not ready.' Silence = power.",
       "status": "Dave rejected his offer — 'I'm not yours.' Shadow admitted he used Bob the same way ('Bob was weak. You're not.'). His manipulation was exposed but he didn't deny it. Now watching from the shadows as Dave acts independently.",
       "aura_points": 999,
@@ -60,7 +242,7 @@
       "name": "Bella",
       "role": "love interest / wildcard",
       "character_description": "Roblox-style female blocky humanoid, bright blonde ponytail with large pink satin bow on top, pastel pink crop top with small white heart pattern, white pleated mini skirt, pink heart-shaped sunglasses pushed on top of head, rosy round cheeks with wide cheerful smile showing teeth, small button nose, smooth glossy pink-tinted plastic texture, bubbly energetic pose with hands on hips",
-      "voice": "Charlotte",
+      "voice": "Inspirational_girl",
       "speech_pattern": "Fake-naive, questioning intonation, hidden manipulation. 'Wait, like, seriously? That's so... interesting.'",
       "status": "Tracked Dave to the abandoned training room — found him despite his default skin. Walked in alone, asked 'Hey… are you Dave?' First active move toward Dave without Rex around. Bella made the choice to seek Dave out — she's the one initiating contact now.",
       "aura_points": 380,
@@ -74,7 +256,7 @@
       "name": "Bacon Bob",
       "role": "comic relief / sidekick",
       "character_description": "Roblox-style default blocky avatar, distinctive orange-brown wavy bacon-strip hair flat on top of round head, plain grey torso shirt with small coffee stain, dark navy blue pants slightly too short, generic default face with small dot eyes, permanently slightly downturned mouth giving tired resigned expression, standard blocky proportions, worn scratched matte plastic texture, slightly slouched posture",
-      "voice": "George",
+      "voice": "Determined_Man",
       "speech_pattern": "Self-deprecating humor, long rambling phrases, accidental wisdom. 'Man, I've been here six months and I still can't...'",
       "status": "Revealed Shadow's pattern to Dave — 'Same speech. Six months ago.' Showed himself as living proof of Shadow's failed experiment. Left the alcove separately. Location unknown — traumatized and a liability.",
       "aura_points": -50,
@@ -86,7 +268,6 @@
       }
     }
   ],
-
   "active_loops": [
     {
       "id": "dave-sigma-awakening",
@@ -152,7 +333,6 @@
       "status": "active"
     }
   ],
-
   "closed_loops": [
     {
       "id": "bella-double-agent",
@@ -165,7 +345,6 @@
       "resolution": "Dave confirmed his identity to Bella. Default-skin anonymity no longer protects him in close quarters."
     }
   ],
-
   "world_rules": [
     {
       "rule": "Only one Admin Crown exists on the server",
@@ -188,7 +367,6 @@
       "status": "active"
     }
   ],
-
   "world_state": {
     "location": "Abandoned Roblox-style training room — cracked plates, scattered obby blocks, worn punching bag on a chain, low parkour scaffolding, golden dust in shafts of light from broken windows. Dave inside, mid-training. Bella in the doorway, having just walked in. Rex still in plaza/VIP. Shadow location unknown.",
     "important_items": [
@@ -204,7 +382,6 @@
       "EP5: Dave left the plaza, found an abandoned training room. Trained — parkour drills (wall-run, vault, drop) + heavy punching bag combos until the bag split open. Shadow's voice echoed in his head (flashback callbacks: 'Rex's crown is a fake', 'Same speech. Six months ago.', 'Bob was weak. You're not.'). At the end Dave leaned forehead on the broken bag, breathing heavy. Bella entered the doorway, recognized him through the default skin, asked 'Hey… are you Dave?'"
     ]
   },
-
   "anti_repetition": {
     "recent_phrases": [
       "default skin AND no rizz",
@@ -240,7 +417,6 @@
       "EP6: quiet-determination two-shot — Dave and Bella in training-room doorway light, looking into lit corridor, Dave cold half-smile, 'Yeah. I think it might.' NO cut to black — first lit ending in the series"
     ]
   },
-
   "episode_summaries": [
     {
       "episode": 1,
@@ -249,7 +425,12 @@
       "summary": "Dave arrives at LUXURIA, stunned by the luxury. Sees Bella, tries to talk to her ('your bow is really cool'). Rex steps in, publicly humiliates Dave ('default skin AND no rizz, negative aura'). Crowd laughs. Dave walks away crushed. Shadow beckons him into a dark alcove. Shadow pulls out a glowing object.",
       "cliffhanger": "Shadow pulls glowing object from hoodie — golden light on Dave's face, eyes go wide, cut to black.",
       "clips": 8,
-      "new_characters": ["Noob Dave", "Bella", "King Rex", "Shadow"],
+      "new_characters": [
+        "Noob Dave",
+        "Bella",
+        "King Rex",
+        "Shadow"
+      ],
       "cost": "~$3.36"
     },
     {
@@ -259,7 +440,9 @@
       "summary": "Shadow reveals Rex's crown is fake — he holds the real Admin Crown. Dave's expression transforms from shocked noob to cold calculation for the first time. Shadow asks 'What are YOU hiding?' Bacon Bob stumbles into the alcove, sees everything, reveals he lost everything to Shadow in a Trade Duel six months ago. Rex issues server-wide WANTED for Dave.",
       "cliffhanger": "Rex's WANTED announcement blazes across plaza screens. Dave smiles cold — first time in the series. Cut to black.",
       "clips": 7,
-      "new_characters": ["Bacon Bob"],
+      "new_characters": [
+        "Bacon Bob"
+      ],
       "cost": "~$3.14",
       "assembly_note": "EP1 clips 7-8 prepended before clip 1"
     },
@@ -298,7 +481,6 @@
       "assembly_note": "EP4 scenes 5-6 (Bella sympathy + Dave on tiles cliffhanger) prepended as recap before Scene 1."
     }
   ],
-
   "supabase_assets": {
     "bg_refs": {
       "luxuria-plaza": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/locations/luxuria-plaza.png",

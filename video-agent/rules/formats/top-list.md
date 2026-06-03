@@ -3,7 +3,7 @@ subtitle_style: bold
 subtitle_offset_s: 0
 subtitle_mask: false
 subtitle_highlight: false
-subtitle_extras: []
+subtitle_extras: ["--marginv", "240"]
 ---
 
 # Format "TOP List" — countdown of top-5 characters / locations / items in a game
@@ -94,7 +94,9 @@ Slightly more than the previous 6-clip layout because rank-1 is split into 2 cli
 
 ## Title card (clip 0) — special construction
 
-Two-stage build, the same as a regular scene but with text baked into the NB2 image:
+> 🔒 **Locked brand reference (if the game provides one).** A game may pin ONE fixed title-card design in `games/{GAME_TAG}/top-list_special.md` (a branding asset tagged `title-card`). When present, the title card is NOT composed from scratch per episode — Storyboarder generates scene 0 via **NB2 `/edit`** with `image_urls: ["<reference URL>"]`, keeps the locked composition VERBATIM (emblem, wordmark, hero art, background), and only adds the per-episode `{THEME}` text in the reference's matching style. This keeps every countdown on-brand. **Star Trek Timelines has this locked reference** (`assets/star-trek-timelines/branding/top-list-titlecard.png` — Starfleet laurel emblem + metallic `TOP-5` + ship over planet; only `{THEME}` changes under the `TOP-5`). See `games/star-trek-timelines/top-list_special.md`. If a game has NO such reference, fall back to the from-scratch two-stage build below.
+
+Two-stage build (fallback when there is no locked reference), the same as a regular scene but with text baked into the NB2 image:
 
 1. **NB2 image** (608×1080):
    - Composition: hero collage / silhouette montage of the 5 items behind a big foreground title plate
@@ -132,7 +134,9 @@ Two overlays per item clip (drawtext or PIL), applied **per-scene before concat*
 | Overlay | Position | Style | Timing |
 |---|---|---|---|
 | Number `"#5"` (huge) | top-left @ x=80, y=200 | game font (or Montserrat Black), ~220px, accent color stroke 4px, black drop-shadow | 0.0s–5.0s (whole clip) |
-| Name `"T'POL"` (uppercase) | bottom third @ y=1400 (above subtitle area) | game font (or Bebas Neue), ~96px, white with 6px black stroke | 0.3s–5.0s (slide-in from left 0.0–0.3s) |
+| Name `"T'POL"` (uppercase) | bottom third @ **y=1300** (sits ABOVE the narrator subtitle) | game font (or Bebas Neue), ~96px, white with 6px black stroke | 0.3s–5.0s (slide-in from left 0.0–0.3s) |
+
+> ⚠️ **Name / subtitle collision (recurring bug — fixed by construction).** The bold-subtitle preset in `tools/add_subtitles.py` defaults to `MarginV=520`, which anchors the narrator caption at ≈y1400 — exactly where the `{NAME}` plate used to sit, so the subtitle landed directly on top of / above the battle name. Fix: the format front-matter now ships `subtitle_extras: ["--marginv", "240"]` (orchestrator passes it to Editor automatically → narrator caption drops to the bottom safe zone ≈y1488–1680), and the `{NAME}` plate moved up to **y=1300**. Result: three non-overlapping zones — `#N` top-left (y200), `{NAME}` (y1300), narrator subtitle (marginv240). Do NOT revert either value without re-checking the gap.
 
 ### CTA — pack-shot from Supabase (preferred)
 
@@ -155,7 +159,7 @@ Narrator subtitles per-scene (drawtext on each `-scaled.mp4` BEFORE concat — n
 
 - Method: drawtext ffmpeg (single-line, may auto-wrap to 2)
 - Font: **Montserrat Bold 44px** (or game-specified)
-- Position: lower third, `y=1550`, centered
+- Position: bottom safe zone via `--marginv 240` (already in front-matter `subtitle_extras`), centered. MUST sit BELOW the `{NAME}` plate (y=1300) — never reuse the bold preset's default MarginV=520, which collides with the name. See the collision note in "Text overlays".
 - Color: white, stroke 4px black
 - Timing: matches TTS line, with `adelay=200ms` (TTS starts 0.2s into clip so visual lands first)
 
@@ -369,7 +373,7 @@ If file absent → defaults from this playbook.
 
 - For each item clip with a `rank` (scenes 1–6), apply **two drawtext overlays** before concat:
   - `#{N}` huge top-left (game/Montserrat Black ~220px, accent stroke 4px, drop shadow), full duration
-  - `{NAME}` uppercase bottom-third (game/Bebas Neue ~96px, white + 6px black stroke), 0.3s slide-in
+  - `{NAME}` uppercase bottom-third @ y=1300 (game/Bebas Neue ~96px, white + 6px black stroke), 0.3s slide-in — must sit ABOVE the narrator subtitle (which is at `--marginv 240`); see the collision note in "Text overlays"
 - Rank-1 pair (scenes 5 + 6) both show `#1` + `{NAME}` overlays. They are visually continuous (same number, same name), but distinct shots.
 - Title card (scene 0): NO number/name overlay (text is in NB2). Only subtitle if `tts` present.
 - Per-scene pipeline: subtitles → number+name overlay → normalize (1080×1920, 30fps, `-c:v libx264 -preset slow -crf 20`, AAC 128k).

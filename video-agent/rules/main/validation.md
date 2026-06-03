@@ -48,6 +48,49 @@ ffprobe -v error -show_entries format=duration -of csv=p=0 scene-1.mp3
 - If the prompt-engineering is wrong, a Read on the result tells you "the prompt was wrong" — but you already shipped one expensive generation. Fix at the prompt level, not at validation.
 - Programmatic checks (filesize / dimensions / duration / codec) catch the only failure modes that are silent at the API layer (truncated download, dimension mismatch, corrupted MP4).
 
+## Cross-asset pre-flight (Manager, before any expensive generation)
+
+Most of the costly failures in EP6 «11 Seconds» were not creative — they were file/URL bookkeeping: a dead ref URL, a cascaded `cp` that gave 4 clips the same audio, a TTS filename that drifted out of sync with the clip index, a scene PNG pointed at the wrong character. All four are caught programmatically, before paying Kling. Run these in Phase 2 (before NB2) and Phase 3 (before Avatar/I2V):
+
+### 1. URL reachability — every input URL returns 200
+
+Before handing any `image_urls[]`, `scene_image_url`, or `tts_url` to NB2/Kling:
+
+```bash
+for u in $URLS; do
+  code=$(curl -s -o /dev/null -w "%{http_code}" "$u")
+  [ "$code" = "200" ] || echo "DEAD REF ($code): $u"
+done
+```
+
+Any non-200 → STOP, do not spend on the clip. (EP6 scene-9 Spock ref was HTTP 400 → the clip was generated with no valid character ref → wrong face.)
+
+### 2. Distinct-audio — no two dialogue clips share an audio track
+
+After Sound, before Avatar:
+
+```bash
+# md5 of every dialogue clip's audio must be unique
+for f in scenes/scene-*/scene-*.mp3; do md5 -q "$f"; done | sort | uniq -d
+```
+
+Any duplicate md5 → a cascade-copy bug (one line overwrote several). STOP and re-resolve sources. (EP6: scenes 3–6 all carried the Admiral's line at 35153 B.)
+
+### 3. Filename = f(index) — names are derived from the clip index, never a free counter
+
+TTS and scene files are named strictly from `clips[].index`: `scene-{index}.png/.mp4/.mp3`, `tts` keyed to the same index. **No `-new`, `-v2`, `-fixed` parallel files** — a regeneration overwrites the same name (archive the old one first, see storyboarder §17). Drifting names (`ep6-scene-2.mp3` actually belonging to clip 3) are what let the wrong audio/PNG reach the wrong clip.
+
+### 4. scene_image_url ↔ index — the PNG under a clip is that clip's own PNG
+
+```bash
+# basename of scene_image_url must contain scene-{index}
+jq -r '.clips[] | "\(.index) \(.scene_image_url)"' storyboard.json
+```
+
+For dialogue clips, the face ref must match `clip.hero`. (EP6: the Admiral clip briefly pointed at Kirk's bust PNG → Kirk's face lipsynced to the Admiral's voice.)
+
+**Print the mapping table** (`clip# → image_url → audio_url → expected text → hero`) and confirm all four checks pass before launching Kling. This is the single highest-ROI gate in the pipeline — it catches 4 of the 5 most expensive EP6 bugs with zero vision tokens.
+
 ## Asset selection: by path, not by visual inspection
 
 Where the right asset depends on game/format (CTA, openers, character refs, bg refs) — **resolve by `GAME_TAG`-scoped path or by Supabase URL recorded in the story bible / game config.** Never pick from a generic location and then visually verify the branding — the path is the validation.

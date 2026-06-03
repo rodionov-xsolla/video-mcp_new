@@ -4,8 +4,9 @@
 
 Два канонических стилевых пресета (выбор делает оркестратор, не редактор):
 
-  --style bold       punchy social-video подписи: Helvetica Bold 108, КАПС,
-                     2 слова на чанк (или перенос на пунктуации), MarginV=520.
+  --style bold       punchy social-video подписи: Helvetica Bold 96, КАПС,
+                     2 слова на чанк (или перенос на пунктуации), MarginV=520,
+                     MarginL/R=100 (safe-zone от overflow на длинных парах).
                      Для фастпейс-форматов (serial-drama, news, dance-battle,
                      standard, top-list narrator).
 
@@ -50,10 +51,18 @@
   --emit-timings PATH        НЕ генерировать ASS, а просто сохранить
                              timings JSON (используется sound-ролью).
 
+Антидрейф:
+  Подавай как audio-аргумент ФИНАЛЬНОЕ аудио, которое идёт в микс (post-atempo,
+  напр. build/tts-fast.mp3) — тайминги считаются по реальной длительности и не
+  разъезжаются. --atempo УСТАРЕЛ (ручной множитель = источник «съезжания», должен
+  был совпадать с filter_complex). Всегда добавляй --verify-audio с тем же файлом:
+  скрипт падает (exit 1), если конец последнего слова расходится с offset+dur >0.30с.
+
 Usage:
   # Канонический вызов из editor pipeline:
-  python3 add_subtitles.py - SCENE.mp3 build/subs.ass \\
+  python3 add_subtitles.py - build/tts-fast.mp3 build/subs.ass \\
       --emit-ass-only --duration 4.23 --text "..." --style bold \\
+      --verify-audio build/tts-fast.mp3 \\
       [--offset 5] [--mask] [--highlight-words] [--marginv 800]
 
   # Sound-роль: только timings JSON:
@@ -99,7 +108,8 @@ if not os.path.isfile(FFMPEG):
 BOLD_STYLE = {
     "name": "Default",
     "fontname": "Helvetica",
-    "fontsize": 108,
+    "fontsize": 96,             # снижено с 108 — длинные UPPERCASE-пары
+                                # ("SYSTEMIC OPPRESSION") вылазили за кадр
     "primary": "&H00FFFFFF",   # белый
     "secondary": "&H000000FF",
     "outline_col": "&H00000000",  # чёрный
@@ -116,8 +126,8 @@ BOLD_STYLE = {
     "outline": 6,
     "shadow": 0,
     "alignment": 2,             # bottom-center
-    "marginl": 60,
-    "marginr": 60,
+    "marginl": 100,             # safe-zone слева (было 60) — anti-overflow
+    "marginr": 100,             # safe-zone справа (было 60) — anti-overflow
     "marginv": 520,             # ~27% от низа 1920 — над TikTok/Reels UI
     "encoding": 1,
     # чанкинг:
@@ -405,7 +415,7 @@ def build_ass(
     chunks: list[tuple[float, float, list[str]]],
     chunks_raw: list[list[tuple[float, float, str]]],
     style: dict,
-    secondary: dict | None,
+    secondary,
     highlight_words: bool,
     highlight_color: str,
 ) -> str:
@@ -415,7 +425,10 @@ def build_ass(
         "ScriptType: v4.00+",
         "PlayResX: 1080",
         "PlayResY: 1920",
-        "WrapStyle: 2",
+        # WrapStyle 0 = умный перенос: длинная строка ломается на 2 сбалансированные
+        # строки в пределах MarginL/R, а не уезжает за край кадра (был WrapStyle 2 —
+        # перенос только по \N, из-за чего длинные narrative-чанки обрезались).
+        "WrapStyle: 0",
         "ScaledBorderAndShadow: yes",
         "",
         "[V4+ Styles]",
@@ -521,6 +534,11 @@ def main():
                     help="audio speedup factor; тайминги делятся на atempo")
     ap.add_argument("--duration", type=float, default=None,
                     help="принудительная длительность клипа (для --emit-ass-only без видео)")
+    ap.add_argument("--verify-audio", default=None,
+                    help="ПУТЬ к финальному аудио (post-atempo), которое реально идёт в микс. "
+                         "Скрипт падает, если конец последнего слова расходится с offset+dur "
+                         "этого аудио >0.30с — ловит рассинхрон субтитров by construction. "
+                         "Канонически = тот же файл, что подаёшь как audio-аргумент.")
 
     # Режимы вывода
     ap.add_argument("--emit-ass-only", action="store_true",
@@ -534,6 +552,13 @@ def main():
         print(f"ERROR: --atempo должен быть в [1.0, 1.5], получено {args.atempo}",
               file=sys.stderr)
         sys.exit(1)
+
+    if args.atempo != 1.0:
+        print("  [warn] --atempo хрупкий: множитель обязан в точности совпадать с filter_complex, "
+              "иначе субтитры съезжают к концу клипа. Предпочтительно подавать уже ускоренное "
+              "финальное аудио как audio-аргумент и НЕ передавать --atempo. "
+              "Добавь --verify-audio <финальное аудио> чтобы поймать рассинхрон.",
+              file=sys.stderr)
 
     # ---- 1. Определяем длительность клипа --------------------------------
     if args.duration is not None:
@@ -570,6 +595,32 @@ def main():
     if args.offset != 0.0:
         off = args.offset
         words = [(s + off, e + off, w) for (s, e, w) in words]
+
+    # ---- 2b. Drift guard: конец последнего слова ≈ offset + длина финального аудио
+    # Сравниваем именно последнее произнесённое слово (words[-1][1]), а не паддинг
+    # чанка под clip_dur. Если ASS считали под другое аудио, чем идёт в микс
+    # (например неверный --atempo), здесь падаем — рассинхрон не уедет в прод молча.
+    if args.verify_audio:
+        if not os.path.exists(args.verify_audio):
+            print(f"ERROR: --verify-audio файл не найден: {args.verify_audio}", file=sys.stderr)
+            sys.exit(1)
+        real_dur = get_duration(args.verify_audio)
+        last_word_end = words[-1][1]
+        expected_end = args.offset + real_dur
+        drift = abs(last_word_end - expected_end)
+        if drift > 0.30:
+            print(
+                f"ERROR: subtitle drift guard — последнее слово кончается на {last_word_end:.2f}s, "
+                f"а финальное аудио — на {expected_end:.2f}s (offset {args.offset:.2f}s + "
+                f"audio {real_dur:.2f}s). Дрейф {drift:.2f}s > 0.30s. ASS посчитан под другое "
+                f"аудио, чем идёт в микс — пересобери из финального аудио (подай post-atempo TTS "
+                f"как audio-аргумент и убери --atempo).",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        print(f"  [verify] дрейф {drift*1000:.0f}мс OK "
+              f"(последнее слово {last_word_end:.2f}s ≈ конец аудио {expected_end:.2f}s)",
+              file=sys.stderr)
 
     # ---- 3. Режим emit-timings: пишем JSON и выходим ---------------------
     if args.emit_timings:
