@@ -1,0 +1,118 @@
+{
+  "series_id": "streettalk-roblox",
+  "game_tag": "roblox",
+  "title": "Roblox Streettalk — Spawn Plaza",
+  "created_at": "2026-06-03",
+  "last_episode": 1,
+  "reporter": {
+    "character_name": "noob-reporter",
+    "display_name": "Noob",
+    "voice": "Determined_Man",
+    "stability": 0.55,
+    "style": null,
+    "tone_signature": "overcaffeinated Roblox citizen who somehow got a mic, sincere to a fault, delivers absurd Robloxia events with total dead-straight conviction, 0 irony detected",
+    "supabase_avatar_url": ""
+  },
+  "voice_mapping": {
+    "reporter": "Determined_Man",
+    "interviewees": {}
+  },
+  "character_type_voice_defaults": {
+    "noob": "Determined_Man",
+    "slender": "Calm_Man",
+    "shadow": "Calm_Man",
+    "rich_player": "Wise_Man",
+    "bacon_hair": "Friendly_Person",
+    "preppy_girl": "Inspirational_girl",
+    "chad_sigma": "Deep_Voice_Man",
+    "builder": "Determined_Man"
+  },
+  "location": {
+    "slug": "spawn-plaza",
+    "display_name": "Spawn Plaza",
+    "supabase_ref_url": "",
+    "description_for_nb2": "Classic Roblox Spawn Plaza, blocky colorful toy-like architecture, vibrant saturated colors, bright green plastic terrain, electric blue sky, pixelated floating platforms in background, glowing spawn point orb, blocky player silhouettes scattered around, Pixar-style 3D render with soft ambient lighting, cheerful and energetic atmosphere, cartoonish plastic textures everywhere",
+    "ambient_prompt": "Roblox Spawn Plaza ambient: multiple players chatting in robotic text-to-speech voices, distant 'oof' death sound effects, obby music barely audible from nearby server, footstep sounds on plastic block floors, in-game notification pings, keyboard clicking sounds, building block placement thuds, cheerful pixelated electronic background music, crowded virtual plaza buzz, no clear words audible"
+  },
+  "interviewee_pool": [
+    {
+      "character_name": "bacon-hair",
+      "display_name": "Bacon Hair",
+      "character_type": "noob-type",
+      "voice_id": "Friendly_Person",
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "chad-sigma",
+      "display_name": "Chad Sigma",
+      "character_type": "sigma-type",
+      "voice_id": "Deep_Voice_Man",
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "preppy-girl",
+      "display_name": "Preppy Girl",
+      "character_type": "preppy-type",
+      "voice_id": "Inspirational_girl",
+      "last_seen_episode": 1
+    }
+  ],
+  "topic_rotation": {
+    "recent_question_tags": [
+      "slender-noob-zone-ban"
+    ],
+    "recent_interviewees": [
+      "Bacon Hair",
+      "Chad Sigma",
+      "Preppy Girl"
+    ],
+    "recent_character_types": [
+      "noob-type",
+      "sigma-type",
+      "preppy-type"
+    ],
+    "cooldown_episodes": 5
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-06-03",
+      "reporter": "Noob",
+      "question": "Slenders have declared Spawn Plaza a no-Noob zone. Sigma behavior or pure NPC energy?",
+      "question_tag": "slender-noob-zone-ban",
+      "interviewees": [
+        {
+          "name": "Bacon Hair",
+          "character_type": "noob-type",
+          "tone": "earnest-cluelessness"
+        },
+        {
+          "name": "Chad Sigma",
+          "character_type": "sigma-type",
+          "tone": "dry-deadpan"
+        },
+        {
+          "name": "Preppy Girl",
+          "character_type": "preppy-type",
+          "tone": "satirical-takedown"
+        }
+      ],
+      "structure": "5 scenes — reporter intro → 3 vox-pop → reporter outro",
+      "topic_tags": [
+        "slender",
+        "noob",
+        "sigma",
+        "npc",
+        "spawn-plaza",
+        "rizz"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/roblox/2026-06-03/streettalk_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=MM1BWuYNjjc",
+      "duration_sec": 32.4,
+      "cost_usd": 3.45
+    }
+  ],
+  "opener_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/branding/streettalk-opener.mp4",
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/branding/news-cta.mp4",
+  "channel_bug_url": ""
+}
