@@ -8,7 +8,7 @@
 - **Аудитория:** Global, anime fans, gacha/RPG players 16-35
 - **Стиль арта:** Anime cel-shading, vibrant fantasy, painterly environments
 - **Премьера:** September 2020 (active live service)
-- **youtube_channel:** (не назначен)
+- **youtube_channel:** genshinsnap
 
 ---
 
