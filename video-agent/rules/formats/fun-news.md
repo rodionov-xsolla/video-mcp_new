@@ -355,7 +355,7 @@ If a collision is found — scenarist regenerates research.json with cooldown ap
   "speedup": 1.3,
   "music": {"mood": "energetic|comedic|fun", "volume": 0.15},
   "opener": {"url": "supabase://refs/opener.mp4"},
-  "cta":    {"url": "supabase://cta-link-in-bio.mp4"}
+  "cta":    {"url": "supabase://branding/cta.mp4"}
 }
 ```
 
