@@ -7,24 +7,24 @@
   "anchor": {
     "character_name": "jake-news",
     "display_name": "Jake",
-    "voice": "Daniel",
+    "voice": "Deep_Voice_Man",
     "stability": 0.55,
     "style": null,
     "tone_signature": "fast snappy news-anchor energy, dry sarcastic delivery, treats absurd Robloxia events as routine breaking news",
     "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/avatars/jake-news-avatar-ref.png"
   },
   "voice_mapping": {
-    "anchor": "Daniel",
+    "anchor": "Deep_Voice_Man",
     "reporters": {
-      "sarah-news": "Charlotte",
-      "chad-news": "George"
+      "sarah-news": "Inspirational_girl",
+      "chad-news": "Determined_Man"
     }
   },
   "reporter_pool": [
     {
       "character_name": "sarah-news",
       "display_name": "Sarah",
-      "voice": "Charlotte",
+      "voice": "Inspirational_girl",
       "stability": 0.55,
       "tone_signature": "earnest field reporter, slightly worried tone, takes Bacon Hair plight very seriously",
       "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/avatars/sarah-news-avatar-ref.png"
@@ -32,7 +32,7 @@
     {
       "character_name": "chad-news",
       "display_name": "Chad",
-      "voice": "George",
+      "voice": "Determined_Man",
       "stability": 0.55,
       "tone_signature": "deadpan analyst-correspondent, dry delivery, treats absurd statistics as serious data journalism",
       "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/avatars/chad-news-avatar-ref.png"
@@ -40,8 +40,22 @@
   ],
   "style_tone": "satirical|dry-deadpan|absurd",
   "topic_rotation": {
-    "recent_topic_tags": ["bacon-hair", "robux-inequality", "default-avatar", "robloxia-society", "bacon-hair-liberation-front", "university-of-robloxia", "mewing", "protest", "academic-satire"],
-    "recent_canon_facts": ["bacon-hair-default-avatar-archetype", "robux-currency-as-status-marker", "mewing-meme-from-roblox-brainrot"],
+    "recent_topic_tags": [
+      "bacon-hair",
+      "robux-inequality",
+      "default-avatar",
+      "robloxia-society",
+      "bacon-hair-liberation-front",
+      "university-of-robloxia",
+      "mewing",
+      "protest",
+      "academic-satire"
+    ],
+    "recent_canon_facts": [
+      "bacon-hair-default-avatar-archetype",
+      "robux-currency-as-status-marker",
+      "mewing-meme-from-roblox-brainrot"
+    ],
     "cooldown_episodes": 5
   },
   "episode_summaries": [
@@ -49,13 +63,34 @@
       "episode": 1,
       "date": "2026-05-28",
       "anchor": "Jake",
-      "reporters": ["Sarah", "Chad"],
+      "reporters": [
+        "Sarah",
+        "Chad"
+      ],
       "structure": "5 scenes — anchor intro → reporter 1 (Bacon Hair Liberation Front protest) → anchor reaction → reporter 2 (University 73% mewing study) → anchor outro",
       "news_items": [
-        {"index": 1, "headline": "Bacon Hair Liberation Front Demands Reparations from Robux Holders", "reporter": "Sarah"},
-        {"index": 2, "headline": "Sociologist: 73% of Bacon Hairs Still Mewing on Default Jawline — A Structural Problem", "reporter": "Chad"}
+        {
+          "index": 1,
+          "headline": "Bacon Hair Liberation Front Demands Reparations from Robux Holders",
+          "reporter": "Sarah"
+        },
+        {
+          "index": 2,
+          "headline": "Sociologist: 73% of Bacon Hairs Still Mewing on Default Jawline — A Structural Problem",
+          "reporter": "Chad"
+        }
       ],
-      "topic_tags": ["bacon-hair", "robux-inequality", "default-avatar", "robloxia-society", "bacon-hair-liberation-front", "university-of-robloxia", "mewing", "protest", "academic-satire"],
+      "topic_tags": [
+        "bacon-hair",
+        "robux-inequality",
+        "default-avatar",
+        "robloxia-society",
+        "bacon-hair-liberation-front",
+        "university-of-robloxia",
+        "mewing",
+        "protest",
+        "academic-satire"
+      ],
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/roblox/2026-05-28/fun-news_final.mp4",
       "duration_sec": 47.45,
       "cost_usd": 3.36,

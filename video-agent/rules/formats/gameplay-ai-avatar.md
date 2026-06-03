@@ -30,7 +30,7 @@ Keywords: "gameplay ai avatar", "ai avatar", "talking head", "offerwall", "offer
 - **Split-screen:** 60% gameplay (1080×1152) on top / 40% avatar (1080×768) below
 - **Duration:** 25–40s
 - **Budget:** up to $5 (~$1.90 typical). Stop if spend > $4.50.
-- **Languages:** 29 languages (ElevenLabs multilingual v2)
+- **Languages:** multilingual (MiniMax auto-detects)
 
 ### Visual layout (1080×1920, 9:16)
 
@@ -64,7 +64,7 @@ Run format: `gameplay ai avatar: {offer_text}, {language}`
 | Item | Cost |
 |---|---|
 | Avatar ref (NB2, if not in asset bank) | $0.04 |
-| ElevenLabs TTS (~30s) | ~$0.17 |
+| MiniMax TTS (~30s) | ~$0.003 |
 | Kling Avatar v2 Standard (~30s) | ~$1.68 |
 | Gameplay (pre-made clips) | $0 |
 | FFmpeg, music (local) | $0 |
@@ -122,7 +122,7 @@ Run format: `gameplay ai avatar: {offer_text}, {language}`
   "avatar": {
     "ref_url": "https://supabase.../avatars/MLBB/avatar-ref.png",
     "character_description": "Young male gamer, 20s, wearing headphones around neck, casual hoodie, friendly smile, well-lit room background",
-    "voice": "George",
+    "voice": "Determined_Man",
     "prompt": "energetic gaming blogger speaking to camera, natural hand gestures, nodding",
     "source": "asset_bank"
   },
@@ -237,8 +237,8 @@ Gameplay is trimmed to Avatar duration (after 1.3x speedup). If multiple clips �
 
 ### Sound
 
-- TTS via fal.ai ElevenLabs — `voice` (name, not `voice_id`), `stability` per tone (0.25 energetic, 0.30 drama, 0.50 calm), `language_code` ISO
-- Male deep voices: `George`, `Daniel`, `Adam`, `Brian`, `Chris`
+- TTS via fal.ai MiniMax — `voice_setting.voice_id`, `emotion` per tone, field is `prompt` not `text`
+- Male deep voices: `Deep_Voice_Man`, `Determined_Man`, `Imposing_Manner`, `Elegant_Man`, `Patient_Man`
 - **Subtitles: drawtext + faster_whisper** (not PIL PNG — this format uses ffmpeg-full with libfreetype)
   - Font: Montserrat Bold 42px (`/Users/admin/Library/Fonts/Montserrat-Bold.ttf`)
   - Background: opaque black bar `y=1100, h=104` (drawbox)
@@ -272,7 +272,7 @@ Gameplay is trimmed to Avatar duration (after 1.3x speedup). If multiple clips �
 | Item | Cost |
 |--------|-----------|
 | Avatar ref (Nano Banana 2) | $0.04 (or $0 from asset bank/user provided) |
-| ElevenLabs TTS (~30s) | ~$0.17 |
+| MiniMax TTS (~30s) | ~$0.003 |
 | Kling Avatar v2 Standard (30s) | ~$1.68 |
 | Gameplay (pre-made clips) | $0.00 |
 | FFmpeg (local) | $0.00 |
@@ -306,8 +306,8 @@ Before launching PHASE 3, verify:
 ## Anti-patterns
 
 **Do NOT:**
-- **DO NOT use Kokoro TTS** — only ElevenLabs via fal.ai
-- **DO NOT pass `voice_id`** (hash) to fal.ai ElevenLabs — use `voice` (name string)
+- **DO NOT use Kokoro TTS or ElevenLabs** — only MiniMax via fal.ai
+- **Field is `prompt`, NOT `text`** — using `text` causes silent failure (empty audio)
 - **DO NOT generate avatar video without an approved voice** — TTS first, approval, then lipsync
 - **DO NOT use `pad`** in split-screen — only `scale + crop`, no black bars
 - **DO NOT crop avatar by center** — crop from bottom (`crop=W:H:0:0`) so the face is not affected
@@ -356,7 +356,7 @@ After upload: `videos/{GAME_TAG}/{TIMESTAMP}_final.mp4` in Supabase.
 
 ## Anti-patterns
 
-- ❌ Kokoro TTS — only ElevenLabs via fal.ai
+- ❌ Kokoro TTS, ElevenLabs — only MiniMax via fal.ai
 - ❌ `voice_id` hash — use `voice` name string
 - ❌ Launching Avatar without approved TTS ($1.68 wasted on an unapproved voice)
 - ❌ Re-generating avatar when present in the asset bank

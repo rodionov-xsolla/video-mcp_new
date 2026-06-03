@@ -7,8 +7,8 @@ ENVIRONMENT (FIRST STEP, before any API call):
 - **The Bash tool does NOT preserve env between invocations.** Re-source .env in every command, or chain `source .env && curl ...` в одном command. Если "API key missing" — это не баг ключа, это потерянный env.
 
 LOAD AND FOLLOW (in this exact order):
-1. rules/roles/sound.md — your craft rules (ElevenLabs via fal.ai, voice mapping, stability, language_code, Supabase upload, music selection)
-2. tools/fal-ai.md — API reference (read ONLY the ElevenLabs section; ignore Kling / NB2 sections)
+1. rules/roles/sound.md — your craft rules (MiniMax via fal.ai, voice mapping, emotion, Supabase upload, music selection)
+2. tools/fal-ai.md — API reference (read ONLY the MiniMax TTS section; ignore Kling / NB2 / ElevenLabs sections)
 3. rules/main/budgets.md — TTS pricing for cost report
 4. rules/formats/${FORMAT}.md — read ONLY the "Sound" brief section to understand format-specific requirements (music volume, voice approval flow, etc.)
 
@@ -28,8 +28,8 @@ WORKFLOW (mechanical — no creative judgment needed):
 1. Read ${OUTPUT_DIR}/storyboard.json. Identify every clip where `clip_type == "dialogue"` and `tts` is non-empty (or `character_speech` for some formats — check format brief).
 2. For each such clip K:
    a. Build the request body as a JSON file (NEVER inline shell strings — see sound.md "Shell scripts" section). Required fields: `text`, `voice` (NAME string, NOT voice_id hash), `stability`, `language_code`. Use voice mapping from sound.md or from storyboard.json's `voices` block.
-   b. POST to fal.ai async endpoint: `POST https://queue.fal.run/fal-ai/elevenlabs/tts/eleven-v3`
-   c. Poll status (base path `fal-ai/elevenlabs`, every 15s, max 10 min) until COMPLETED.
+   b. POST to fal.ai async endpoint: `POST https://queue.fal.run/fal-ai/minimax/speech-2.8-hd`
+   c. Poll status (base path `fal-ai/minimax`, every 15s, max 10 min) until COMPLETED.
    d. Download the resulting MP3 with curl to `${OUTPUT_DIR}/scenes/scene-K/scene-K.mp3`.
    e. Programmatic validation: `[ -s scene-K.mp3 ] && [ $(stat -f%z scene-K.mp3) -gt 5000 ]` and `ffprobe duration` close to expected (≈0.4s per word).
    f. Upload via `queue/upload-asset.sh` (NOT raw curl):
@@ -49,10 +49,10 @@ WORKFLOW (mechanical — no creative judgment needed):
 4. Print the mapping table for verification (clip K → text → voice → Supabase URL). This is the "Mapping table" rule from sound.md.
 
 CONSTRAINTS — STRICT:
-- Use ONLY `fal-ai/elevenlabs/tts/eleven-v3` (the fal.ai wrapper). NEVER call api.elevenlabs.io directly. NEVER use Kokoro TTS.
-- `voice` field MUST be a name string (e.g. "George", "Daniel", "Charlotte"). NEVER pass `voice_id` hash — fal.ai silently falls back to Rachel and you lose money on regeneration.
-- `stability` is a top-level field, NOT inside `voice_settings`. Otherwise it is silently ignored.
-- `language_code` MUST be set (ISO 639-1: en, ru, pt, es, ...).
+- Use ONLY `fal-ai/minimax/speech-2.8-hd`. NEVER use ElevenLabs, Kokoro, or any other TTS.
+- Request field is `prompt`, NOT `text`. Using `text` → silent failure, empty audio.
+- Voice goes in `voice_setting.voice_id`, NOT as top-level `voice`.
+- `emotion` goes in `voice_setting.emotion`: angry, happy, sad, fearful, disgusted, surprised, neutral.
 - Pass the request body via JSON file (`curl -d @/tmp/body-K.json`) — inline shell strings break on quotes/apostrophes in TTS text.
 - ALL TTS files MUST be uploaded to Supabase BEFORE Animator runs (next phase). The fal.ai temp URL expires; Animator/Kling Avatar polling can take 1-3 min and the URL would be dead.
 - DO NOT call any other API (no Kling, no NB2, no FFmpeg cloud).
@@ -65,7 +65,7 @@ OUTPUT:
 - ${OUTPUT_DIR}/scenes/scene-K/scene-K.mp3 for every dialogue clip
 - ${OUTPUT_DIR}/bg-music.mp3 (if format uses bg music)
 - Updated ${OUTPUT_DIR}/storyboard.json with tts_url per dialogue clip and top-level music block
-- Cost summary: how many TTS calls, total seconds generated, total cost in USD (per budgets.md ElevenLabs row).
+- Cost summary: how many TTS calls, total characters generated, total cost in USD (per budgets.md MiniMax row).
 
 ON ERROR (any single TTS fails after 1 retry, Supabase upload fails, etc.):
 - Print the error to stderr with the failing clip K and the actual fal.ai response body.

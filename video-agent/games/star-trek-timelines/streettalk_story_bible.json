@@ -7,25 +7,25 @@
   "reporter": {
     "character_name": "jake-sisko-reporter",
     "display_name": "Jake Sisko",
-    "voice": "Liam",
+    "voice": "Imposing_Manner",
     "stability": 0.55,
     "style": null,
     "tone_signature": "earnest young field reporter, slightly precocious news-anchor confidence, treats absurd DS9 promenade gossip as serious journalism",
     "supabase_avatar_url": ""
   },
   "voice_mapping": {
-    "reporter": "Liam",
+    "reporter": "Imposing_Manner",
     "interviewees": {}
   },
   "species_voice_defaults": {
-    "klingon": "Brian",
-    "vulcan": "George",
-    "bajoran": "Adam",
+    "klingon": "Elegant_Man",
+    "vulcan": "Determined_Man",
+    "bajoran": "Deep_Voice_Man",
     "ferengi": "Josh",
-    "cardassian": "Daniel",
+    "cardassian": "Deep_Voice_Man",
     "romulan": "Antoni",
-    "starfleet": "Liam",
-    "trill": "Charlotte",
+    "starfleet": "Imposing_Manner",
+    "trill": "Inspirational_girl",
     "human": "Antoni"
   },
   "location": {
