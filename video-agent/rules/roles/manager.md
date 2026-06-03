@@ -206,7 +206,19 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
    ```
    - `--video-url` is the Supabase public URL from step 1 (stable per game/date/format → the upsert key, mapped to `output_video_url`).
    - `--title` lands in `input_idea` (the table's NOT NULL title field). `--format` and `--youtube-url` in their own columns.
+   - When `--youtube-url` is provided, `yt_published` is automatically set to the current UTC timestamp.
    - Requires `UNIQUE(output_video_url)` + `format`/`youtube_url` columns — see `queue/setup.sql` (run the ALTERs once in the SQL editor).
+
+   **Publication timestamp fields** (`yt_published`, `tt_published`, `inst_published`): each stores the UTC datetime when the video was published to that platform, or `NULL` if not yet published. The mobile-mcp posting agent uses this to find the oldest unpublished video per platform:
+   ```
+   GET /rest/v1/video_agent_runs?tt_published=is.null&order=created_at.asc&limit=1
+   GET /rest/v1/video_agent_runs?inst_published=is.null&order=created_at.asc&limit=1
+   ```
+   After a successful TikTok or Instagram post, the agent must call:
+   ```bash
+   bash queue/log-publish.sh --platform tt   --video-url "$SUPABASE_VIDEO_URL"
+   bash queue/log-publish.sh --platform inst --video-url "$SUPABASE_VIDEO_URL"
+   ```
 
 4. **Update story bible** (if the format uses one) — characters, aura, relationships, active_loops, episode_summary, cliffhanger, anti_repetition.
 
