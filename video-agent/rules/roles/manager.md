@@ -171,7 +171,7 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
 
    **Metadata.** Title: `storyboard.json → title` (fallback: idea). Description: `storyboard.json → description` (fallback: empty). Tags: `GAME_TAG + format_slug + storyboard.json → youtube_tags`.
 
-   **Privacy is always `public`** for the routed channel (per user). The `YOUTUBE_PRIVACY` env var is no longer the gate.
+   **Privacy is always `private`** — videos are uploaded privately so the user can review before publishing.
 
    ```bash
    CHANNEL="<resolved from game config>"   # gamepulse | yellowguy
@@ -180,18 +180,18 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
      "$OUTPUT_DIR/final.mp4" \
      "$TITLE" \
      "$DESCRIPTION" \
-     "public" \
+     "private" \
      "$TAGS")
    echo "YouTube: $YOUTUBE_URL"
    ```
 
-   **Debug vs non-debug — the gate on going public:**
-   - **Non-debug:** upload straight to `public` on the routed channel. No questions.
+   **Debug vs non-debug:**
+   - **Non-debug:** upload as `private` on the routed channel. No questions.
    - **Debug mode:** STOP before the YT upload. Show the user:
      - the Supabase **public URL** (clickable — this is how they watch the result),
      - the **destination channel**, the **title**, **description**, and **tags**.
 
-     Ask: «Заливаю в паблик на `<channel>`?» Wait for OK. Apply any metadata edits the user gives, then run the upload. The script re-checks `channelId` against `YOUTUBE_CHANNEL_ID_<CHANNEL>` and warns on mismatch.
+     Ask: «Заливаю как private на `<channel>`?» Wait for OK. Apply any metadata edits the user gives, then run the upload. The script re-checks `channelId` against `YOUTUBE_CHANNEL_ID_<CHANNEL>` and warns on mismatch.
 
    - On error — log and continue (Supabase URL is the primary deliverable).
 
