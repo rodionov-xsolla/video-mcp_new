@@ -133,7 +133,8 @@ video-agent/
 │       ├── streettalk.md        # Vox-pop уличное интервью: 1 репортёр + 3 интервьюируемых, без студии, channel-bug branding (Avatar v2)
 │       ├── in-game-pov.md       # POV от первого лица: «ты оказался в ситуации», survival-мануал + живой HUD-счётчик %, исход — выжил/погиб
 │       ├── what-if-lore.md      # Alternate-universe лор: «что если бы персонаж оказался в другой вселенной», нарративный монолог
-│       └── redcon.md            # Alternate-universe divergence: персонаж в точке расхождения лора, нарративный монолог
+│       ├── redcon.md            # Alternate-universe divergence: персонаж в точке расхождения лора, нарративный монолог
+│       └── wild-documentary.md  # Дикая природа: существа из игры как реальные животные, закадровый голос натуралиста, hidden-camera стиль
 │
 ├── games/
 │   ├── mlbb/
