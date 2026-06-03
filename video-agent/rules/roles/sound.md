@@ -22,74 +22,104 @@ From Manager:
 
 ---
 
-⚠️ **Context7 before calling ElevenLabs/fal.ai API:** `resolve-library-id` → `get-library-docs`. TTS parameters (voice names, stability range) update — never from memory.
-
 ---
 
-## 1. ElevenLabs TTS via fal.ai — NOT direct ElevenLabs API
+## 1. MiniMax TTS via fal.ai
 
-**Use only the fal.ai wrapper:** `fal-ai/elevenlabs/tts/eleven-v3`. Direct `api.elevenlabs.io` is forbidden (different auth, different parameters, different billing chain).
-
-**Forbidden alternatives:**
-- ❌ Kokoro TTS — low quality, no expressiveness
-- ❌ `api.elevenlabs.io` directly — different API
-- ❌ Kling Lipsync (`fal-ai/kling-video/lipsync/audio-to-video`) — that's Avatar, not TTS
-
-### Endpoint
-
+**Endpoint:**
 ```
-# Async (recommended for long lines):
-POST https://queue.fal.run/fal-ai/elevenlabs/tts/eleven-v3
+# Async (recommended):
+POST https://queue.fal.run/fal-ai/minimax/speech-2.8-hd
 
-# Sync (for short, up to ~10s):
-POST https://fal.run/fal-ai/elevenlabs/tts/eleven-v3
+# Sync (short lines up to ~10s):
+POST https://fal.run/fal-ai/minimax/speech-2.8-hd
 ```
 
 Auth: `Authorization: Key $FAL_KEY`
 
-### Body
+### Body — always write to file, never inline shell string
 
-```json
+```bash
+cat > /tmp/tts-K.json <<EOF
 {
-  "text": "Captain's log, supplemental.",
-  "voice": "George",
-  "stability": 0.30,
-  "language_code": "en"
+  "prompt": "Captain's log, supplemental.",
+  "voice_setting": {
+    "voice_id": "Determined_Man",
+    "speed": 0.9,
+    "emotion": "neutral"
+  },
+  "audio_setting": { "format": "mp3" }
 }
+EOF
+
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/minimax/speech-2.8-hd" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d @/tmp/tts-K.json)
 ```
 
 ### Parameters — critical
 
 | Parameter | What |
 |---|---|
-| `voice` | **Voice name as a string** (`"George"`, `"Daniel"`). NOT a `voice_id` hash. |
-| `stability` | Float 0–1, **top-level** field. NOT inside `voice_settings`. |
-| `language_code` | ISO 639-1 (`en`, `ru`, `pt`, `es`). Without it, English is the default. |
-| `text` | Line text. ≤25 words per line to fit 5–10s. |
+| `prompt` | Text. Field is `prompt`, NOT `text`. ≤25 words per line. |
+| `voice_setting.voice_id` | Voice name string — see mapping table below. |
+| `voice_setting.emotion` | `angry`, `happy`, `sad`, `fearful`, `disgusted`, `surprised`, `neutral` |
+| `voice_setting.speed` | 0.5–2.0. Default 1.0. Use 0.85–0.95 for dramatic delivery. |
 
-⚠️ **If you pass `voice_id` (hash) instead of `voice` (name)** — fal.ai **silently** uses the default female voice Rachel. No warning, no error. Output is a random voice — diagnosed by ear.
+⚠️ **Field is `prompt`, NOT `text`.** Using `text` → silent failure, empty audio.
 
-⚠️ **If you pass `voice_settings.stability` instead of top-level `stability`** — the parameter is ignored, default is used. Diagnosed by ear (voice flat / random).
+### Emotive tags (insert directly in `prompt` text)
+
+| Tag | Sound |
+|-----|-------|
+| `(laughs)` | laugh |
+| `(groans)` | groan |
+| `(sighs)` | sigh |
+| `(coughs)` | cough |
+| `(gasps)` | gasp |
+| `(sniffs)` | sniff |
+| `(yawns)` | yawn |
+| `(clears throat)` | throat clear |
+| `<#0.5#>` | pause N seconds |
+
+### Polling
+
+```bash
+# Base = fal-ai/minimax (2 segments only)
+STATUS_URL="https://queue.fal.run/fal-ai/minimax/requests/${REQUEST_ID}/status"
+RESULT_URL="https://queue.fal.run/fal-ai/minimax/requests/${REQUEST_ID}"
+```
+
+**Forbidden:**
+- ❌ Kokoro TTS — low quality
+- ❌ ElevenLabs (`fal-ai/elevenlabs`) — replaced by MiniMax
+- ❌ Kling Lipsync — that's Avatar, not TTS
 
 ---
 
 ## 2. Voice → character mapping
 
-| Character type | Voice | Parameters |
+| Character type | voice_id | emotion |
 |---|---|---|
-| Male (confident, authoritative) | `Daniel` | stability 0.10, style 0.8 |
-| Male (neutral, narrator) | `George` | stability 0.30 |
-| Male (young, energetic) | `Charlie` | stability 0.20 |
-| Female (confident) | `Charlotte` | stability 0.25 |
-| Female (neutral) | `Rachel` | stability 0.35 |
+| Male (confident, authoritative) | `Deep_Voice_Man` | `angry` or `neutral` |
+| Male (neutral, narrator) | `Determined_Man` | `neutral` |
+| Male (young, energetic) | `Casual_Guy` | `happy` or `neutral` |
+| Male (imposing, villain) | `Imposing_Manner` | `angry` |
+| Male (logical, calm) | `Elegant_Man` | `neutral` |
+| Male (patient, wise) | `Patient_Man` | `neutral` |
+| Male (young hero) | `Young_Knight` | `angry` or `neutral` |
+| Female (confident) | `Inspirational_girl` | `neutral` |
+| Female (neutral) | `Calm_Woman` | `neutral` |
+| Female (friendly) | `Friendly_Person` | `happy` |
 
-### Stability by mood (for one voice)
+### Speed by tone
 
-| Tone | stability |
+| Tone | speed |
 |---|---|
-| Energetic / Funny | 0.25 |
-| Drama / Authoritative | 0.30 |
-| Calm / Narrative | 0.50 |
+| Energetic / Funny | 1.0 |
+| Drama / Authoritative | 0.9 |
+| Calm / Narrative | 0.85 |
 
 ### Locking the voice in story_bible.json
 
@@ -194,7 +224,7 @@ ElevenLabs reacts to punctuation:
 - `?` — rising intonation
 - ALL CAPS — shout / emphasis
 
-Do not write stage directions inside the text (`[angry]`, `(whispers)`) — the model does not understand, it reads literally.
+Use only the supported emotive tags from §1 (`(laughs)`, `(groans)`, etc.). Any other stage directions (`[angry]`, `(whispers)`, `[quietly]`) — the model reads literally as text. Emotion control goes in `voice_setting.emotion`, not in the text.
 
 ---
 

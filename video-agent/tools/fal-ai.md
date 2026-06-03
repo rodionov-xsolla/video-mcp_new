@@ -551,57 +551,90 @@ Result: https://queue.fal.run/fal-ai/veo3/requests/{REQUEST_ID}
 
 ---
 
-## 4. ElevenLabs TTS (через fal.ai) — основной TTS для ВСЕХ форматов
+## 4. MiniMax TTS — основной TTS для ВСЕХ форматов
 
-**Endpoint:** `https://queue.fal.run/fal-ai/elevenlabs/tts/eleven-v3`
-**Метод:** POST (async, polling через `fal-ai/elevenlabs`)
-**Стоимость:** ~$0.30/мин (~$0.05–0.10 за фразу 2–6 сек)
-
-⚠️ **Это fal.ai wrapper, НЕ прямой ElevenLabs API.** Параметры отличаются от `elevenlabs.md`!
+**Endpoint:** `https://queue.fal.run/fal-ai/minimax/speech-2.8-hd`
+**Метод:** POST (async, polling через `fal-ai/minimax`)
+**Стоимость:** ~$0.10/1k chars (~$0.001–0.005 за фразу)
 
 ### Запрос
 
 ```bash
-RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/elevenlabs/tts/eleven-v3" \
+cat > /tmp/tts-body.json <<'EOF'
+{
+  "prompt": "Stand down, Worf. That is an order.",
+  "voice_setting": {
+    "voice_id": "Deep_Voice_Man",
+    "speed": 0.9,
+    "emotion": "angry"
+  },
+  "audio_setting": { "format": "mp3" }
+}
+EOF
+
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/minimax/speech-2.8-hd" \
   -H "Authorization: Key $FAL_KEY" \
   -H "Content-Type: application/json" \
-  -d '{
-    "text": "Stand down, Worf. That is an order.",
-    "voice": "Daniel",
-    "language_code": "en",
-    "stability": 0.10,
-    "style": 0.8
-  }')
+  -d @/tmp/tts-body.json)
 
 REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 ```
+
+⚠️ **КРИТИЧНО:** поле называется `prompt`, НЕ `text`. Голос — `voice_setting.voice_id`, НЕ `voice`.
 
 ### Параметры
 
 | Параметр | Тип | Обязательный | Описание |
 |----------|-----|-------------|----------|
-| `text` | string | Да | Текст для озвучки |
-| `voice` | string | Да | **Имя голоса** (строка): `Daniel`, `George`, `Charlie`, `Charlotte`, `Rachel`. **НЕ voice_id хеш!** |
-| `language_code` | string | Нет | Код языка: `en`, `ru`, `es`, `de`, `fr` и др. (29 языков) |
-| `stability` | float | Нет | 0.0–1.0. Низкое = экспрессивнее (0.10 для Captain Kirk), высокое = стабильнее |
-| `style` | float | Нет | 0.0–1.0. Стиль подачи (0.8 для выразительной речи) |
+| `prompt` | string | Да | Текст для озвучки. Поддерживает теги и паузы. |
+| `voice_setting.voice_id` | string | Нет | ID голоса. Default: `Wise_Woman` |
+| `voice_setting.speed` | float | Нет | 0.5–2.0. Темп речи. Default: 1.0 |
+| `voice_setting.emotion` | string | Нет | `angry`, `happy`, `sad`, `fearful`, `disgusted`, `surprised`, `neutral` |
+| `voice_setting.vol` | float | Нет | 0–10. Громкость. Default: 5 |
+| `audio_setting.format` | string | Нет | `mp3`, `pcm`, `flac`. Default: mp3 |
 
-### Голоса для Serial Drama
+### Теги в тексте
 
-| Тип персонажа | Голос | stability | style |
-|---------------|-------|-----------|-------|
-| Мужской (уверенный, авторитетный) | `Daniel` | 0.10 | 0.8 |
-| Мужской (нейтральный, рассказчик) | `George` | 0.30 | — |
-| Мужской (молодой, энергичный) | `Charlie` | 0.20 | — |
-| Женский (уверенный) | `Charlotte` | 0.25 | — |
-| Женский (нейтральный) | `Rachel` | 0.35 | — |
+| Тег | Звук |
+|-----|------|
+| `(laughs)` | смех |
+| `(groans)` | рёв/стон |
+| `(sighs)` | вздох |
+| `(coughs)` | кашель |
+| `(gasps)` | резкий вдох |
+| `(sniffs)` | шмыганье |
+| `(yawns)` | зевок |
+| `(clears throat)` | прочистка горла |
+| `<#0.5#>` | пауза 0.5 сек |
+
+### Голоса (все доступные)
+
+| voice_id | Характер |
+|----------|---------|
+| `Deep_Voice_Man` | глубокий мужской |
+| `Determined_Man` | решительный мужской |
+| `Imposing_Manner` | властный мужской |
+| `Young_Knight` | молодой мужской |
+| `Casual_Guy` | разговорный мужской |
+| `Patient_Man` | спокойный мужской |
+| `Elegant_Man` | формальный мужской |
+| `Decent_Boy` | нейтральный мужской |
+| `Wise_Woman` | мудрая женская |
+| `Calm_Woman` | спокойная женская |
+| `Friendly_Person` | дружелюбная |
+| `Inspirational_girl` | воодушевляющая женская |
+| `Lively_Girl` | живая женская |
+| `Lovely_Girl` | мягкая женская |
+| `Sweet_Girl_2` | сладкая женская |
+| `Exuberant_Girl` | экспрессивная женская |
+| `Abbess` | строгая женская |
 
 ### Polling
 
 ```bash
-# Base path для polling = fal-ai/elevenlabs (первые 2 сегмента, НЕ полный endpoint)
-STATUS_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}/status"
-RESULT_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}"
+# Base path для polling = fal-ai/minimax (первые 2 сегмента)
+STATUS_URL="https://queue.fal.run/fal-ai/minimax/requests/${REQUEST_ID}/status"
+RESULT_URL="https://queue.fal.run/fal-ai/minimax/requests/${REQUEST_ID}"
 ```
 
 ### Ответ
@@ -609,15 +642,13 @@ RESULT_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}"
 ```json
 {
   "audio": {
-    "url": "https://fal.media/files/abc123/audio.mp3",
+    "url": "https://fal.media/files/abc123/speech.mp3",
     "content_type": "audio/mpeg"
   }
 }
 ```
 
 Выходной формат: MP3 (готов для FFmpeg, конвертация не нужна).
-
-⚠️ **КРИТИЧНО:** Параметр `voice` = **имя** (`"Daniel"`), НЕ `voice_id` хеш (`"pNInz6obpgDQGcFmaJgB"`). Если передать хеш — fal.ai wrapper откатится на дефолтный голос (женский), и все персонажи будут говорить одним голосом.
 
 ---
 

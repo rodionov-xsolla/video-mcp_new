@@ -130,8 +130,11 @@ video-agent/
 │       ├── what-if-real-life.md # «Что если бы персонаж попал в реальную жизнь» (Spock-бариста, Kratos-воспитатель, ...)
 │       ├── top-list.md          # TOP-5 countdown персонажей / локаций / предметов
 │       ├── fun-news.md          # Выдуманные ироничные новости из лора игры (anchor + 1-2 reporters, Avatar v2)
+│       ├── streettalk.md        # Vox-pop уличное интервью: 1 репортёр + 3 интервьюируемых, без студии, channel-bug branding (Avatar v2)
 │       ├── in-game-pov.md       # POV от первого лица: «ты оказался в ситуации», survival-мануал + живой HUD-счётчик %, исход — выжил/погиб
-│       └── streettalk.md        # Vox-pop уличное интервью: 1 репортёр + 3 интервьюируемых, без студии, channel-bug branding (Avatar v2)
+│       ├── what-if-lore.md      # Alternate-universe лор: «что если бы персонаж оказался в другой вселенной», нарративный монолог
+│       ├── redcon.md            # Alternate-universe divergence: персонаж в точке расхождения лора, нарративный монолог
+│       └── wild-documentary.md  # Дикая природа: существа из игры как реальные животные, закадровый голос натуралиста, hidden-camera стиль
 │
 ├── games/
 │   ├── mlbb/
@@ -142,8 +145,22 @@ video-agent/
 │   │   └── serial-drama_special.md
 │   ├── oxide/
 │   │   └── oxide.md
-│   └── kekele/
-│       └── kekele.md
+│   ├── kekele/
+│   │   └── kekele.md
+│   ├── marvel snap/
+│   │   ├── gameplay/
+│   │   └── reddit-story_bible.json
+│   ├── genshin impact/
+│   │   ├── genshin-impact.md
+│   │   └── assets/
+│   ├── wwe-champions/
+│   │   ├── wwe-champions.md
+│   │   └── fun-news_story_bible.json
+│   └── star-trek-timelines/
+│       ├── star-trek-timelines.md
+│       ├── streettalk_story_bible.json
+│       ├── serial-drama_special.md
+│       └── top-list_special.md
 │
 ├── tools/
 │   ├── fal-ai.md               # fal.ai API reference
