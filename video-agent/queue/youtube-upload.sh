@@ -2,13 +2,15 @@
 # Upload a video to YouTube via Data API v3 (resumable upload).
 #
 # Usage:
-#   youtube-upload.sh [--channel NAME] <video_path> <title> <description> <privacy> [<tags>]
+#   youtube-upload.sh [--channel NAME] [--publish-at ISO8601] <video_path> <title> <description> <privacy> [<tags>]
 #
-#   --channel: gamepulse | yellowguy | <name matching .env suffix>.
-#              Selects YOUTUBE_REFRESH_TOKEN_<NAME> / YOUTUBE_CHANNEL_ID_<NAME>.
-#              Omit to use the default YOUTUBE_REFRESH_TOKEN / YOUTUBE_CHANNEL_ID.
-#   privacy:   public | unlisted | private (default: private)
-#   tags:      comma-separated, e.g. "roblox,gaming,shorts"
+#   --channel:    gamepulse | yellowguy | <name matching .env suffix>.
+#                 Selects YOUTUBE_REFRESH_TOKEN_<NAME> / YOUTUBE_CHANNEL_ID_<NAME>.
+#                 Omit to use the default YOUTUBE_REFRESH_TOKEN / YOUTUBE_CHANNEL_ID.
+#   --publish-at: ISO 8601 UTC datetime for scheduled publishing, e.g. "2026-06-03T20:00:00Z".
+#                 Forces privacyStatus=private; YouTube auto-publishes at the given time.
+#   privacy:      public | unlisted | private (default: private)
+#   tags:         comma-separated, e.g. "roblox,gaming,shorts"
 #
 # Requires in .env (shared OAuth client, per-channel refresh tokens):
 #   YOUTUBE_CLIENT_ID
@@ -22,11 +24,14 @@ set -euo pipefail
 
 # ── args ────────────────────────────────────────────────────────────────────
 CHANNEL=""
+PUBLISH_AT=""
 POSITIONAL=()
 while [ $# -gt 0 ]; do
   case "$1" in
     --channel) CHANNEL="$2"; shift 2 ;;
     --channel=*) CHANNEL="${1#*=}"; shift ;;
+    --publish-at) PUBLISH_AT="$2"; shift 2 ;;
+    --publish-at=*) PUBLISH_AT="${1#*=}"; shift ;;
     *) POSITIONAL+=("$1"); shift ;;
   esac
 done
@@ -96,6 +101,16 @@ fi
 
 METADATA=$(python3 -c "
 import json
+privacy = '${PRIVACY}'
+publish_at = '${PUBLISH_AT}'
+if publish_at:
+    privacy = 'private'
+status = {
+    'privacyStatus': privacy,
+    'selfDeclaredMadeForKids': False
+}
+if publish_at:
+    status['publishAt'] = publish_at
 meta = {
   'snippet': {
     'title': '''${TITLE}''',
@@ -103,10 +118,7 @@ meta = {
     'tags': ${TAGS_JSON},
     'categoryId': '20'
   },
-  'status': {
-    'privacyStatus': '${PRIVACY}',
-    'selfDeclaredMadeForKids': False
-  }
+  'status': status
 }
 print(json.dumps(meta))
 ")
@@ -153,5 +165,9 @@ if [ -n "$EXPECTED_CHANNEL_ID" ]; then
 fi
 
 YOUTUBE_URL="https://www.youtube.com/watch?v=${VIDEO_ID}"
-echo "[youtube-upload] SUCCESS: ${YOUTUBE_URL}"
+if [ -n "$PUBLISH_AT" ]; then
+  echo "[youtube-upload] SUCCESS (scheduled at ${PUBLISH_AT}): ${YOUTUBE_URL}"
+else
+  echo "[youtube-upload] SUCCESS: ${YOUTUBE_URL}"
+fi
 echo "$YOUTUBE_URL"
