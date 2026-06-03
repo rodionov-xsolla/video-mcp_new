@@ -209,7 +209,7 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
    - When `--youtube-url` is provided, `yt_published` is automatically set to the current UTC timestamp.
    - Requires `UNIQUE(output_video_url)` + `format`/`youtube_url` columns — see `queue/setup.sql` (run the ALTERs once in the SQL editor).
 
-   **Publication timestamp fields** (`yt_published`, `tt_published`, `inst_published`): each stores the UTC datetime when the video was published to that platform, `NULL` = not yet published. The manager only ever sets `yt_published` (via `log-video.sh`). **TikTok and Instagram publishing is a separate process — the manager does NOT trigger it and does NOT mention it to the user after generation.** Those platforms are handled by a dedicated mobile-mcp posting agent launched independently via its own command.
+   **Publication timestamp fields** (`yt_published`, `tt_published`, `inst_published`): each stores the UTC datetime when the video was published to that platform, `NULL` = not yet published. The manager only ever sets `yt_published` (via `log-video.sh`). **TikTok and Instagram publishing is a separate process — the manager does NOT trigger it and does NOT mention it to the user after generation.** Those platforms are handled by a dedicated mobile-mcp posting agent launched independently via its own command — runbook: `rules/roles/publisher.md` (triggered by «Опубликовать в тик-ток» / «Опубликовать в инстаграм»; uses `queue/fetch-for-publish.sh` to stage the video on the phone, then `queue/log-publish.sh` to mark it published).
 
 4. **Update story bible** (if the format uses one) — characters, aura, relationships, active_loops, episode_summary, cliffhanger, anti_repetition.
 
