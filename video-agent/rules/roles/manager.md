@@ -209,16 +209,7 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
    - When `--youtube-url` is provided, `yt_published` is automatically set to the current UTC timestamp.
    - Requires `UNIQUE(output_video_url)` + `format`/`youtube_url` columns — see `queue/setup.sql` (run the ALTERs once in the SQL editor).
 
-   **Publication timestamp fields** (`yt_published`, `tt_published`, `inst_published`): each stores the UTC datetime when the video was published to that platform, or `NULL` if not yet published. The mobile-mcp posting agent uses this to find the oldest unpublished video per platform:
-   ```
-   GET /rest/v1/video_agent_runs?tt_published=is.null&order=created_at.asc&limit=1
-   GET /rest/v1/video_agent_runs?inst_published=is.null&order=created_at.asc&limit=1
-   ```
-   After a successful TikTok or Instagram post, the agent must call:
-   ```bash
-   bash queue/log-publish.sh --platform tt   --video-url "$SUPABASE_VIDEO_URL"
-   bash queue/log-publish.sh --platform inst --video-url "$SUPABASE_VIDEO_URL"
-   ```
+   **Publication timestamp fields** (`yt_published`, `tt_published`, `inst_published`): each stores the UTC datetime when the video was published to that platform, `NULL` = not yet published. The manager only ever sets `yt_published` (via `log-video.sh`). **TikTok and Instagram publishing is a separate process — the manager does NOT trigger it and does NOT mention it to the user after generation.** Those platforms are handled by a dedicated mobile-mcp posting agent launched independently via its own command.
 
 4. **Update story bible** (if the format uses one) — characters, aura, relationships, active_loops, episode_summary, cliffhanger, anti_repetition.
 
