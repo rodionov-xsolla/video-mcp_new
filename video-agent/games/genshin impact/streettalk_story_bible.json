@@ -1,0 +1,68 @@
+{
+  "series_id": "streettalk-genshin-impact",
+  "game_tag": "genshin-impact",
+  "title": "GLN Streettalk — Mondstadt Plaza",
+  "created_at": "2026-06-03",
+  "last_episode": 1,
+  "reporter": {
+    "character_name": "charlotte",
+    "display_name": "Charlotte",
+    "voice": "Charlotte",
+    "stability": 0.55,
+    "style": null,
+    "tone_signature": "ambitious Fontaine journalist always chasing the scoop, treats Teyvat lore disputes like breaking news, slightly theatrical flair with rapid-fire news delivery, never misses a juicy angle",
+    "supabase_avatar_url": ""
+  },
+  "voice_mapping": {
+    "reporter": "Charlotte",
+    "interviewees": {}
+  },
+  "character_voice_defaults": {
+    "mondstadt_noble": "Daniel",
+    "knight": "Liam",
+    "bard": "Liam",
+    "healer": "Sarah",
+    "fatui": "Daniel",
+    "archon": "George",
+    "adventurer": "Adam"
+  },
+  "location": {
+    "slug": "mondstadt-plaza",
+    "display_name": "Mondstadt City Square",
+    "supabase_ref_url": "",
+    "description_for_nb2": "Mondstadt city square plaza, European medieval fantasy architecture, cobblestone streets, Church of Favonius gothic spires in background, dandelions floating in warm amber afternoon light, Genshin Impact anime style vibrant fantasy colors, wind chimes, market stalls, NPCs in medieval fantasy attire, blue sky with white clouds",
+    "ambient_prompt": "Mondstadt city ambiance: gentle wind through cobblestone streets, distant cathedral bells from Church of Favonius, soft marketplace chatter in multiple voices, wind chimes tinkling lightly, dandelion seeds drifting, occasional clinking of armor from Knights practice nearby, cheerful townspeople murmur, birds chirping, no clear words audible, warm peaceful afternoon fantasy city atmosphere"
+  },
+  "interviewee_pool": [
+    {"character_name": "diluc", "display_name": "Diluc", "faction": "mondstadt_noble", "voice": "Daniel", "last_seen_episode": 1},
+    {"character_name": "noelle", "display_name": "Noelle", "faction": "knight", "voice": "Sarah", "last_seen_episode": 1},
+    {"character_name": "venti", "display_name": "Venti", "faction": "archon", "voice": "Liam", "last_seen_episode": 1}
+  ],
+  "topic_rotation": {
+    "recent_question_tags": ["venti-archon-duty-500-years"],
+    "recent_interviewees": ["Diluc", "Noelle", "Venti"],
+    "recent_species": ["mondstadt_noble", "knight", "archon"],
+    "cooldown_episodes": 5
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-06-03",
+      "reporter": "Charlotte",
+      "question": "Venti hasn't done a single Archon duty in 500 years — hero or liability?",
+      "question_tag": "venti-archon-duty-500-years",
+      "interviewees": [
+        {"name": "Diluc", "faction": "mondstadt_noble", "tone": "dry-deadpan"},
+        {"name": "Noelle", "faction": "knight", "tone": "earnest-cluelessness"},
+        {"name": "Venti", "faction": "archon", "tone": "absurd"}
+      ],
+      "structure": "5 scenes — reporter intro → 3 vox-pop → reporter outro",
+      "topic_tags": ["archon-duty", "venti", "mondstadt", "governance"],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-03/streettalk_final.mp4",
+      "duration_sec": 36.9
+    }
+  ],
+  "opener_url": "",
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4",
+  "channel_bug_url": ""
+}

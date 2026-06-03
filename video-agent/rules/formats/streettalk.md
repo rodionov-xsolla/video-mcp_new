@@ -8,7 +8,7 @@ subtitle_extras: []
 
 # Format "Streettalk" — Vox-pop street interview from the universe's «street»
 
-> **Single video model — Kling Avatar v2 Standard.** Opener and CTA pre-built from Supabase. Reporter (anchor) locked per game in story bible. Interviewees variable, chosen by topic. Tone — ironic / satirical / absurd. Channel branding (GLN bug) applied via game config — see `channel_bug_url`.
+> **Single video model — Kling Avatar v2 Standard.** Opener and CTA pre-built from Supabase. Reporter (anchor) locked per game in story bible. Interviewees variable, chosen by topic. Tone — ironic / satirical / absurd. Channel branding (optional game-specific bug PNG) applied via `channel_bug_url` in story bible — empty string if the game has no corner branding.
 
 This file is the **playbook**: when to use, pipeline, role briefs. Craft rules — in `rules/roles/*.md`.
 
@@ -31,7 +31,7 @@ Keywords: "streettalk", "street talk", "street-talk", "vox pop", "vox-pop", "у�
 - **1 absurd question** per episode — reporter asks, 3 passers-by react with different angles
 - **Only Kling Avatar v2 Standard** + ElevenLabs TTS (lipsync via `audio_url`)
 - **Opener and CTA — pre-built mp4 from Supabase**, not regenerated per episode
-- **Channel bug** — `channel_bug_url` from game config, overlaid by Editor (top-left, 110×110, 70% opacity, static)
+- **Channel bug** — `channel_bug_url` from story bible (game-specific optional PNG), overlaid by Editor (top-left, 110×110, 70% opacity, static). Empty string = no overlay.
 - **Tone:** absurd / satirical / dry-deadpan / earnest-cluelessness — one angle per interviewee, must differ across the 3
 - **Duration:** 30–45s after speedup (opener 2s + 5 dialogue scenes ~30-35s + CTA ~5s)
 - **Budget:** up to $7.00 hard cap for pilot; ~$3.00 steady-state EP2+
@@ -51,11 +51,15 @@ Keywords: "streettalk", "street talk", "street-talk", "vox pop", "vox-pop", "у�
 
 Every streettalk episode must open with a **game-specific branded opener** (pre-built in Supabase, reused every episode). Rules:
 - **Visual style** — matches the game's aesthetic exactly: if it's DS9, the opener looks like a DS9 newscast; if it's a fantasy game, the opener uses that world's visual language. NOT a generic "street interview" template.
-- **Show name and location prominently displayed** — e.g. "GLN Streettalk — DS9 Promenade". The card establishes both brand and place.
+- **Show name formula — `{GameName} Streettalk`** (MANDATORY). The show is named after the game, not a generic channel brand. Examples: "Genshin Streettalk", "Roblox Streettalk", "Pokémon Streettalk", "Star Trek Streettalk". Never use "GLN" as the universal brand — "GLN" was invented for Star Trek and does not apply to other games.
+  - The `{GameName}` is the short recognizable name from the game config (e.g., "Genshin", "Roblox", "WWE") — not the full legal title.
+  - Story bible `title` field: `"{GameName} Streettalk — {Location}"` (e.g., "Genshin Streettalk — Mondstadt Plaza").
+  - Storyboard `show_name` field: same formula.
+- **Show name and location prominently displayed** — e.g. "Genshin Streettalk — Mondstadt Plaza". The card establishes both the show identity and the location.
 
 ### Opener music = CTA music (same theme, only at those two points)
 
-The opener and the CTA/packshot share the **same musical theme** — upbeat and energetic but NOT harsh or jarring. During all dialogue scenes: **no background music** (real silence). Only ambient SFX plays during dialogue (see Sound section). Music placement:
+The opener and the CTA/packshot share the **same musical theme** — light and fitting for the game's atmosphere. The music must feel like it belongs to the game world: a fantasy RPG gets something ethereal or adventurous; a fighting game gets something punchy; a city-builder gets something upbeat and urban. NOT a one-size-fits-all energetic track. Sound picks the track from `music/tracks.json` by matching the game config's `music.mood` — see Sound brief. During all dialogue scenes: **no background music** (real silence). Only ambient SFX plays during dialogue (see Sound section). Music placement:
 - t=0 → opener end (~2s): theme plays
 - t=2s → CTA start: **silence** — dialogue + ambient SFX only
 - CTA start → end (~5s): same theme reprises with fade-out
@@ -65,9 +69,9 @@ The opener and the CTA/packshot share the **same musical theme** — upbeat and 
 ### TV attributes (all scenes)
 
 **Microphones:**
-- Reporter always holds a **broadcast handheld microphone with the show's name on the mic flag** (e.g. "GLN Streettalk", or the game-specific show name). NOT a generic channel logo, NOT a blank flag.
+- Reporter always holds a **broadcast handheld microphone with the show's name on the mic flag** — the flag text is `storyboard.json → show_name` short form (e.g., "Genshin Streettalk", "Roblox Streettalk"). NOT a generic channel logo, NOT "GLN Streettalk" for non-Star-Trek games, NOT a blank flag.
 - For interviewee scenes: reporter's mic is visible in the foreground from off-screen (standard vox-pop framing). The flag is still readable.
-- Include in NB2 prompt: `"reporter holds broadcast mic with '[SHOW NAME]' on the mic flag"` (reporter scenes) or `"reporter's mic with '[SHOW NAME]' flag in foreground"` (interviewee scenes).
+- Include in NB2 prompt: `"reporter holds broadcast mic with '{show_name_short}' on the mic flag"` (reporter scenes) or `"reporter's mic with '{show_name_short}' flag in foreground"` (interviewee scenes). `show_name_short` = `"{GameName} Streettalk"` (without the location suffix).
 
 **Show signage:**
 - The reporter intro/outro shot should include **visible show branding** in the environment: a street banner, marquee, or lower-third graphic establishing the show. This is optional for on-the-fly location shots but preferred for the opener-frame reference.
@@ -117,7 +121,7 @@ On-location backgrounds must visually relate to the **specific question being as
 
 | Scene | Role | Camera | Content |
 |---|---|---|---|
-| 1 | **Reporter intro** | Reporter on location, frontal medium close-up, holding GLN-branded mic | Hook-first: `"{Reporter} here on the {location} for GLN Streettalk. Today's question: {QUESTION}. Let's find out."` (15–22 words, ~6-9s). |
+| 1 | **Reporter intro** | Reporter on location, frontal medium close-up, holding show-branded mic | Hook-first: `"{Reporter} here on the {location} for {show_name_short}. Today's question: {QUESTION}. Let's find out."` (15–22 words, ~6-9s). `show_name_short` = e.g. "Genshin Streettalk", "Roblox Streettalk". |
 | 2 | **Interviewee 1** | Interviewee on location, three-quarter medium close-up, reporter's mic visible in foreground | Reaction to question + signature line per interviewee's angle. (18–25 words, ~7-10s). |
 | 3 | **Interviewee 2** | Different framing from scene 2 (closer, or different background slice of the location) | Different angle. (18–25 words, ~7-10s). |
 | 4 | **Interviewee 3** | Different framing from scenes 2-3 — wider or with another extra in background blur | Different angle. (18–25 words, ~7-10s). |
@@ -216,7 +220,13 @@ Save raw output to `build/ambient.mp3`, upload to Supabase `episodes/{game}/{dat
 **Ambient prompt seed (per-game, from story bible's `location.ambient_prompt`).** Example for DS9 promenade: `"DS9 Promenade ambient: low chatter of multiple alien species voices in unintelligible languages, soft Bajoran-Cardassian station hum, distant footsteps on metal walkway, occasional door-chime and PADD beeps, no music no melody, urban marketplace texture with indoor reverb, layered crowd murmur, no clear English words"`.
 
 **Music selection (opener + CTA theme only):**
-From `music/tracks.json` — picked by Sound, default `energetic-simulacao` (BPM 130, tagged `news`/`gameplay-ai-avatar`/`standard`). The chosen track plays **only during opener (~2s) and CTA (~5s)**; during dialogue only ambient SFX plays. Write `music.start_offset_sec` into storyboard.json. Volume in music-timed.wav: **`0.06`** (vox-pop is dialogue + ambient dominant; music is a brief energetic pulse at the bookends only, not a continuous underscore).
+From `music/tracks.json` — picked by Sound based on the game's atmosphere. Selection rule:
+1. Read `games/{GAME_TAG}/{GAME_TAG}.md` → `music.mood` field (e.g., `ethereal`, `epic`, `fun`, `energetic`).
+2. Find tracks in `music/tracks.json` where `mood` matches AND `use_for` contains `news` or `streettalk` — prefer the closest fit.
+3. If no mood match: fallback to `energetic-simulacao` (BPM 130, general-purpose upbeat).
+4. The track must feel like it belongs to the game world — a fantasy RPG should not open with trap phonk; a fighting game should not open with melancholic piano.
+
+The chosen track plays **only during opener (~2s) and CTA (~5s)**; during dialogue only ambient SFX plays. Write `music.start_offset_sec` into storyboard.json. Volume in music-timed.wav: **`0.06`** (vox-pop is dialogue + ambient dominant; music is a brief atmospheric pulse at the bookends only, not a continuous underscore).
 
 **Audio layer volume contract** (Editor consumes):
 - Dialogue (Avatar v2 embedded audio): **1.0**
@@ -366,7 +376,7 @@ Create on first run: `games/{GAME_TAG}/streettalk_story_bible.json`
 {
   "series_id": "streettalk-{GAME_TAG}",
   "game_tag": "{GAME_TAG}",
-  "title": "GLN Streettalk — {Location}",
+  "title": "{GameName} Streettalk — {Location}",
   "created_at": "{TODAY}",
   "last_episode": 0,
   "reporter": {
@@ -457,7 +467,7 @@ If collision → scenarist regenerates with cooldown.
 ```json
 {
   "format": "streettalk",
-  "show_name": "GLN Streettalk — {Location}",
+  "show_name": "{GameName} Streettalk — {Location}",
   "episode": 1,
   "game_tag": "{TAG}",
   "language": "en",
@@ -480,17 +490,17 @@ If collision → scenarist regenerates with cooldown.
     "interviewee_3": {"voice": "Brian", "stability": 0.55, "language_code": "en"}
   },
   "scenes": [
-    {"index": 1, "role": "reporter",      "camera": "frontal-med-cu",       "tts": "{Reporter} here on the {Location} for GLN Streettalk. Today's question: {QUESTION}. Let's find out."},
+    {"index": 1, "role": "reporter",      "camera": "frontal-med-cu",       "tts": "{Reporter} here on the {Location} for {GameName} Streettalk. Today's question: {QUESTION}. Let's find out."},
     {"index": 2, "role": "interviewee_1", "camera": "3q-med-cu-mic-fg",     "tone": "satirical-takedown",  "tts": "..."},
     {"index": 3, "role": "interviewee_2", "camera": "closer-different-bg",  "tone": "earnest-cluelessness","tts": "..."},
     {"index": 4, "role": "interviewee_3", "camera": "wider-extra-blur-bg",  "tone": "absurd",              "tts": "..."},
     {"index": 5, "role": "reporter",      "camera": "wider-frontal",        "tts": "{Ironic sign-off}. {Catchphrase}."}
   ],
   "subtitles": {"method": "ass-emit-only", "style": "bold", "word_highlight": true, "emphasis": {"scene_1": "...", "scene_2": "...", "scene_3": "...", "scene_4": "...", "scene_5": "..."}, "speedup": 1.5},
-  "music": {"mood": "energetic", "track_name": "energetic-simulacao", "volume": 0.10},
+  "music": {"mood": "{game_mood_from_config}", "track_name": "{track_picked_by_sound}", "volume": 0.06},
   "opener": {"url": "supabase://branding/streettalk-opener.mp4"},
   "cta":    {"url": "supabase://branding/cta.mp4"},
-  "channel_bug_url": "supabase://branding/gln-bug.png"
+  "channel_bug_url": ""
 }
 ```
 
@@ -590,7 +600,7 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 ### Storyboarder
 - Pull reporter avatar / location ref / opener from Supabase if present in story bible. Otherwise generate as one-time prep (logged to `pilot_prep_cost`).
 - 3 interviewees: each gets one on-location NB2 edit using base ref as `image_urls[0]`. Reporter gets two (scene 1 + scene 5).
-- All 5 scene images 9:16, three-quarter or frontal med-CU, mic visible per scene (reporter holds mic with show-name flag for intro/outro; mic with flag in foreground for interviewees).
+- All 5 scene images 9:16, three-quarter or frontal med-CU, mic visible per scene (reporter holds mic with show-name flag for intro/outro; mic with flag in foreground for interviewees). Show name on mic flag = `storyboard.json → show_name` short form, e.g. "Genshin Streettalk" — never "GLN Streettalk" for non-Star-Trek games.
 - **Background matches question topic** — inject topic-specific visual elements into every on-location edit. If the question is about food prices, background should hint at a market/vendor. If about Klingon honor, Klingon visual elements in background. Do not use the bare location ref as-is when a specific question topic offers a richer visual hook.
 - For each canon interviewee, base ref priority: `streettalk,interviewee` tag → any photoreal tag → generate fresh.
 - Upload per-episode scene PNGs to `episodes/{game}/{date}-streettalk/scenes/scene-K.png` (NOT registered in game_assets).
@@ -603,7 +613,7 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 - Replace periods with commas/em-dashes in reporter lines (anchor anti-pattern from fun-news).
 - Upload mp3s to Supabase `episodes/{game}/{date}-streettalk/tts/scene-K.mp3`.
 - Emit `scene-K.timings.json` per scene for ASS (word-level timings).
-- Pick music: default `energetic-simulacao` (BPM 130, news-tagged); fallback `fun-central-cee-doja` (BPM 120, chill). Volume `0.10`.
+- Pick music: read game config `music.mood`, find best-matching track in `music/tracks.json` (prefer `use_for` containing `news`); fallback to `energetic-simulacao` if no mood match. Volume `0.06`.
 - General rules — `rules/roles/sound.md`.
 
 ### Animator
@@ -645,7 +655,10 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 - [ ] Final 1080×1920, 30fps, ≤45s total, budget ≤ $7.00 pilot / ≤ $3.00 EP2+.
 - [ ] Ambient SFX present (file `build/ambient.mp3` exists, mixed at 0.25 in filter graph).
 - [ ] No theatrical announcer-speak in any scene's tts. Average sentence ≤ 8 words.
-- [ ] Reporter Jake Sisko stays in earnest-junior-reporter register — no announcer voice.
+- [ ] Reporter stays in their story-bible tone_signature register — no announcer voice.
+- [ ] show_name uses `{GameName} Streettalk` formula (not "GLN Streettalk" for non-Star-Trek games).
+- [ ] Mic flag in all 5 scene PNGs shows the correct show name (e.g., "Genshin Streettalk").
+- [ ] Music track matches game atmosphere (not a mismatched genre).
 
 ---
 
@@ -653,8 +666,10 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 
 - ❌ Generic/non-game-specific opener — opener must be visually styled to the specific game world, not a generic vox-pop card.
 - ❌ Background music during dialogue scenes — music plays ONLY at opener (~2s) and CTA (~5s). Use `music-timed.wav` with `anullsrc` for silence. Ambient SFX continues throughout at 0.15 (separate layer).
-- ❌ Opener and CTA with different music themes — same track/offset, same upbeat-but-not-jarring theme at both bookends.
-- ❌ Mic flag without show name — reporter's mic must bear the show name (e.g. "GLN Streettalk"). Generic or blank flag breaks TV identity.
+- ❌ Opener and CTA with different music themes — same track/offset, same game-appropriate theme at both bookends.
+- ❌ Wrong game music — a fantasy RPG opener must not use trap phonk; a city-builder must not open with horror ambient. Pick from `music/tracks.json` by game mood.
+- ❌ Mic flag without show name — reporter's mic must bear the game-specific show name (e.g., "Genshin Streettalk", "Roblox Streettalk"). Generic, blank, or wrong-game flag breaks TV identity.
+- ❌ "GLN Streettalk" on mic/opener for non-Star-Trek games — "GLN" is Star Trek-specific. Other games use their own show name formula.
 - ❌ On-location background unrelated to question topic — even at the signature location, inject question-specific visual elements (topic-related characters, signs, or props in background).
 - ❌ Studio/anchor scenes — streettalk is ENTIRELY on-location, never cuts back to a desk.
 - ❌ Same question/topic recycled within 5 episodes.
@@ -674,11 +689,13 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 - ❌ Silent ambient track (no street SFX layer) — uncanny / fake immediately. Mandatory ambient at 0.25 volume.
 - ❌ Theatrical / announcer-speak in any line ("Ladies and gentlemen", "in conclusion", "without further ado"). Streettalk is vox-pop, not a speech.
 - ❌ Long sentences with 3+ periods. Each `.` is a 0.5s TTS pause; vox-pop must feel alive.
+- ❌ **Reporter missing arm/hand (Roblox EP1, scenes 1 & 5).** NB2 sometimes drops a limb when the character is tightly cropped. Fix: in reporter scene prompts, explicitly add `"both arms and hands fully visible, mic held with full hand grip, no missing limbs"`. If image_prompt already contains this and NB2 still clips an arm — regenerate once; the body geometry is the only acceptable re-roll reason for a scene PNG.
+- ❌ **Interviewee off-center and wrong gaze direction (Roblox EP1, scene 2).** NB2 placed Bacon Hair far left of frame, looking away from the off-screen mic. Fix: interviewee image_prompt MUST include `"character centered in frame"` + `"eyes and body angled toward reporter's mic in foreground, three-quarter turn toward the mic side"`. Never let NB2 default to a neutral/profile pose for vox-pop — the character must always be turned toward the interviewer.
 
 ---
 
 ## Future ideas
 
-- **Recurring extras**: `interviewee_pool` accumulates generic-NPC base refs (e.g. "Bajoran Bartender", "Cardassian Tourist") that show up across episodes as recognizable side-characters — builds the «GLN universe».
+- **Recurring extras**: `interviewee_pool` accumulates generic-NPC base refs (e.g. "Bajoran Bartender", "Mondstadt Merchant") that show up across episodes as recognizable side-characters — builds a universe of recurring faces per game.
 - **Crossover episodes**: pull a canon character from `serial-drama_story_bible.json` if their story-bible status allows ("active on DS9" etc.).
 - **Question types**: rotate question framings — political ("Should X be allowed Y?"), economic ("Will prices ever come down?"), pop-culture ("Is Z still cool?"), philosophical ("Does the universal translator make us lazier?").

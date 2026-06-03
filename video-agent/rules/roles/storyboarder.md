@@ -330,6 +330,8 @@ Avatar-сцен: в кадр под Avatar текст не добавляетс�
 - ❌ Missing `gaze_direction` with 2+ characters → random gazes
 - ❌ Abstract actions instead of concrete physics (see 7.3)
 - ❌ Era-specific keywords in the prompt (`"TNG"`, `"TOS"`, `"Voyager"`) — model overrides explicit color/style descriptions with era defaults. Write the uniform color explicitly (`"gold-yellow uniform"`) without era references
+- ❌ **Missing limb on reporter holding mic (observed: Roblox Streettalk EP1 scenes 1 & 5)** — NB2 drops an arm when the character is tightly cropped and one hand is occupied. Fix: explicitly add `"both arms and hands fully visible, mic held with full hand grip in right hand, left arm at side, no missing limbs"` to every reporter scene prompt. Acceptable re-roll reason: missing limb is the ONLY body-geometry defect that justifies a re-gen without further diagnosis.
+- ❌ **Interviewee off-center + wrong gaze direction (observed: Roblox Streettalk EP1 scene 2)** — NB2 defaulted to a neutral/profile pose, placing Bacon Hair far left of frame looking away from the mic. Fix for all vox-pop interviewee prompts: (1) `"character centered horizontally in frame"`, (2) `"body and eyes angled toward the reporter's mic in the foreground, three-quarter turn toward the mic side"`, (3) `"mic with show-name flag visible in foreground from off-screen [left|right]"`. Never omit the gaze-direction anchor in a vox-pop shot — NB2 will default to a face-forward or profile pose instead of the interviewee-faces-reporter convention.
 
 ---
 
