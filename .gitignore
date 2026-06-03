@@ -18,3 +18,9 @@ output/
 *.log
 phase*.txt
 subs/
+
+# Music files (stored in Supabase)
+video-agent/music/*.mp3
+video-agent/music/*.m4a
+video-agent/music/**/*.mp3
+video-agent/music/**/*.m4a

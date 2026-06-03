@@ -22,11 +22,14 @@ set -euo pipefail
 
 # ── args ────────────────────────────────────────────────────────────────────
 CHANNEL=""
+PUBLISH_AT=""
 POSITIONAL=()
 while [ $# -gt 0 ]; do
   case "$1" in
     --channel) CHANNEL="$2"; shift 2 ;;
     --channel=*) CHANNEL="${1#*=}"; shift ;;
+    --publish-at) PUBLISH_AT="$2"; shift 2 ;;
+    --publish-at=*) PUBLISH_AT="${1#*=}"; shift ;;
     *) POSITIONAL+=("$1"); shift ;;
   esac
 done
@@ -96,6 +99,14 @@ fi
 
 METADATA=$(python3 -c "
 import json
+status = {
+  'privacyStatus': '${PRIVACY}',
+  'selfDeclaredMadeForKids': False
+}
+publish_at = '${PUBLISH_AT}'
+if publish_at:
+  status['publishAt'] = publish_at
+  status['privacyStatus'] = 'private'
 meta = {
   'snippet': {
     'title': '''${TITLE}''',
@@ -103,10 +114,7 @@ meta = {
     'tags': ${TAGS_JSON},
     'categoryId': '20'
   },
-  'status': {
-    'privacyStatus': '${PRIVACY}',
-    'selfDeclaredMadeForKids': False
-  }
+  'status': status
 }
 print(json.dumps(meta))
 ")

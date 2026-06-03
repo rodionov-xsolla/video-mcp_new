@@ -7,23 +7,23 @@
   "anchor": {
     "character_name": "q-anchor",
     "display_name": "Q",
-    "voice": "Daniel",
+    "voice": "Deep_Voice_Man",
     "stability": 0.55,
     "style": null,
     "tone_signature": "theatrical omnipotent trickster, smug knowing grin, condescends to mortals, dry irony with occasional grandeur",
     "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/q/avatar.png"
   },
   "voice_mapping": {
-    "anchor": "Daniel",
+    "anchor": "Deep_Voice_Man",
     "reporters": {
       "spock-on-location": {
-        "voice": "George",
+        "voice": "Determined_Man",
         "stability": 0.55,
         "tone": "dry-deadpan",
         "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/_unsorted/spock-on-location-vulcan-academy.png"
       },
       "seven-on-location": {
-        "voice": "Charlotte",
+        "voice": "Inspirational_girl",
         "stability": 0.55,
         "tone": "clinical-absurdism",
         "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/_unsorted/seven-on-location-riker-chair.png"
