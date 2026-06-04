@@ -113,7 +113,7 @@ Zero-shot voice cloning — no training, no extra cost. Pass the reference MP3 o
 
 **Endpoint:**
 ```
-POST https://queue.fal.run/fal-ai/resemble-ai/chatterbox
+POST https://queue.fal.run/fal-ai/chatterbox/text-to-speech
 ```
 
 Auth: `Authorization: Key $FAL_KEY`
@@ -124,13 +124,14 @@ Auth: `Authorization: Key $FAL_KEY`
 cat > /tmp/tts-K.json <<EOF
 {
   "text": "You shouldn't have come here.",
-  "audio_url": "https://<supabase>/assets/genshin-impact/voices/Childe.mp3",
+  "audio_url": "https://<supabase>/assets/genshin-impact/characters/tartaglia/voice-ref.mp3",
   "exaggeration": 0.55,
-  "cfg_weight": 0.5
+  "cfg": 0.5,
+  "temperature": 0.7
 }
 EOF
 
-RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/resemble-ai/chatterbox" \
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/chatterbox/text-to-speech" \
   -H "Authorization: Key $FAL_KEY" \
   -H "Content-Type: application/json" \
   -d @/tmp/tts-K.json)
@@ -140,35 +141,37 @@ RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/resemble-ai/chatterbox"
 
 | Parameter | What |
 |---|---|
-| `text` | Text to synthesize. Field is `text` (not `prompt` — different from MiniMax). ≤25 words per line. |
+| `text` | Text to synthesize. Field is `text`. ≤25 words per line. |
 | `audio_url` | Supabase public URL of the character's reference MP3. **Must be Supabase URL, not local path.** |
-| `exaggeration` | 0.0–1.0. Emotional intensity. Dramatic dialogue: `0.6–0.7`. Whispers/calm: `0.3–0.4`. Default `0.5`. |
-| `cfg_weight` | 0.0–1.0. Pacing adherence. Higher = closer to reference cadence. Default `0.5`. |
+| `exaggeration` | 0.0–1.0. Emotional intensity. Dramatic dialogue: `0.6–0.7`. Whispers/calm: `0.3–0.4`. Default `0.25`. |
+| `cfg` | 0.1–1.0. Guidance weight (pacing adherence). Higher = closer to reference cadence. Default `0.5`. ⚠️ Field is `cfg`, NOT `cfg_weight`. |
+| `temperature` | 0.05–2.0. Higher = more expressive/creative. Default `0.7`. |
+| `seed` | Optional int. Use for reproducibility. |
 
-### Response
+### Response — WAV output
 
 ```json
-{ "audio": { "url": "https://fal.media/files/xxx/audio.mp3" } }
+{ "audio": { "url": "https://v3b.fal.media/files/xxx/audio.wav", "content_type": "audio/wav" } }
+```
+
+Output is **WAV**. Convert to MP3 after download:
+```bash
+curl -sSL -o /tmp/tts-K.wav "$AUDIO_URL"
+ffmpeg -i /tmp/tts-K.wav -codec:a libmp3lame -qscale:a 2 scenes/scene-K/scene-K.mp3
 ```
 
 ### Reference voice files — upload once per series, reuse URL
 
-Reference MP3s live in `games/genshin impact/`. Upload each to Supabase **once** and store the permanent URL in the story bible `voice_ref_url` field. Do NOT re-upload every episode.
-
-```bash
-# One-time upload per character (run manually before EP1):
-queue/upload-asset.sh --kind character-voice --game "genshin impact" \
-  --name Childe.mp3 "games/genshin impact/Childe.mp3"
-# → store returned URL in story_bible.json characters[].voice_ref_url
-```
+Reference MP3s live in `games/genshin impact/`. Upload each to Supabase **once** before EP1 and store the permanent URL in the story bible `voice_ref_url` field.
 
 Subsequent episodes: read `voice_ref_url` from the story bible, pass directly as `audio_url`.
 
-### Polling (same pattern as MiniMax)
+### Polling (base path = `fal-ai/chatterbox`)
 
 ```bash
-STATUS_URL="https://queue.fal.run/fal-ai/resemble-ai/chatterbox/requests/${REQUEST_ID}/status"
-RESULT_URL="https://queue.fal.run/fal-ai/resemble-ai/chatterbox/requests/${REQUEST_ID}"
+# Submit → base is first 2 segments of the endpoint path
+STATUS_URL="https://queue.fal.run/fal-ai/chatterbox/requests/${REQUEST_ID}/status"
+RESULT_URL="https://queue.fal.run/fal-ai/chatterbox/requests/${REQUEST_ID}"
 ```
 
 ### Emotion guide for Genshin characters
