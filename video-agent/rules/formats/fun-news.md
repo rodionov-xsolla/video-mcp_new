@@ -43,6 +43,46 @@ Keywords: "fun news", "fictional news", "fake news", "lore news", "иронич�
 
 ---
 
+## Visual Identity & Branding (MANDATORY)
+
+### Opener — game-specific, always required
+
+Every fun-news episode must open with a **game-specific branded opener** (pre-built in Supabase, reused every episode). Rules:
+- **Visual style** — matches the game's aesthetic exactly (dark fantasy, sci-fi, medieval, etc.). NOT a generic "breaking news" template. The opener must feel like it belongs to THIS game's world.
+- **Show name prominently displayed** — e.g. "Game of Thrones Daily", "Trek News", "Westeros Report". The opening card is the viewer's first brand touchpoint.
+
+### Opener music = CTA music (same theme, only at those two points)
+
+The opener and the CTA/packshot share **the same musical theme** — upbeat and energetic but NOT harsh or jarring (no ear-splitting horns or sudden drops). During all dialogue scenes: **no background music** (real silence). Music placement:
+- t=0 → opener end (~2s): theme plays
+- t=2s → CTA start (~40s): **silence** — dialogue only, no music
+- CTA start → end (~5s): same theme reprises with fade-out
+
+**Implementation (Editor):** build a `music-timed.wav` using `anullsrc` for the silence portion — do NOT use `volume=0:eval=frame:enable=...` (FFmpeg passthrough bug: `enable` is an identity filter, not a gate; audio plays at full volume when condition is false). The only correct approach is pre-baked real silence.
+
+### TV attributes (all scenes, both anchor and reporters)
+
+**Microphones:**
+- Reporters always hold a **broadcast handheld microphone** with the **show's name printed on the mic flag** (e.g. "GoT Daily", "Trek Report"). NOT a generic channel logo, NOT a blank flag.
+- Anchor has a **desk mic** visible on the news desk.
+- Mic flag must be legible — include in NB2 prompt: `"handheld broadcast mic with '[SHOW NAME]' printed on the mic flag in the reporter's hand"`.
+
+**Studio signage:**
+- The anchor's studio must include **visible show branding** — a desk plaque or lower-third banner/sign with the show name. One tasteful sign at desk level (NOT a wall-size logo, NOT text floating on background). Include in NB2 anchor prompt: `"desk nameplate reading '[SHOW NAME]'"`.
+
+### Reporter background matches news topic (MANDATORY)
+
+On-location backgrounds must reflect the **specific news item being covered**, not just the reporter's general territory:
+- Varys covering a dragon story → background shows dragons, scorched stone, fire smoke — NOT bare King's Landing corridor
+- Jon Snow covering a winter story → blizzard, falling snow, icy Wall details in frame
+- Any reporter → the viewer should be able to guess the topic from the background alone before the reporter speaks
+
+**Scenarist responsibility:** `news_items[].location` must be a specific, visually rich description: not `"King's Landing"` but `"King's Landing dragon landing zone — scorched stone pavement, smoke plumes, charred wood beams in background"`.
+
+**Storyboarder responsibility:** inject these topic-specific elements into the NB2 on-location edit prompt — the background should SHOW the news, not just indicate the general region.
+
+---
+
 ## Pipeline (strict order)
 
 ### Phase 0: Initialization
@@ -112,6 +152,10 @@ Priority: official wiki → game's own narrative material → fan-curated lore w
 **Reporters** — choose **1–2** based on `topic_tags`:
 - Prefer canon characters that are thematically tied to the news topic (a Vulcan-themed item → Spock; a Voyager-themed item → Seven of Nine; a Klingon honor-themed item → Worf).
 - Look up reporter base avatars in Supabase by `character_name` and tag `fun-news,avatar`.
+
+**Reporters always carry a microphone (MANDATORY):**
+
+Every reporter in every on-location image must visibly hold a **broadcast handheld microphone** — the kind a field reporter holds up to their mouth. This is a core visual identity signal of the fun-news format (they are field reporters, not studio guests). The microphone must appear in the NB2 on-location prompt explicitly: `"holding a broadcast handheld microphone in one hand"`. Do NOT use a desk mic (that belongs to the anchor only) or a lavalier/clip mic (invisible). If the character previously held a scroll or other prop, replace it with the microphone or add it to the free hand.
 
 **Per-episode on-location backgrounds (MANDATORY, $0.08 × N_reporters per episode):**
 
@@ -206,7 +250,7 @@ AUDIO branch (per-scene apad to match sped VIDEO duration):
   [k:a]  atempo=1.3,asetpts=PTS-STARTPTS,apad=whole_dur=<sped_video_dur_k>  [ak]
   [a0][a1][a2][a3][a4] concat=n=5:v=0:a=1                            → [adlg]
   [adlg] adelay=2000|2000                                            → [atts]   (2s for opener silence prefix)
-  [7:a]  volume=0.15,afade=t=out:st=TOTAL-1:d=1.0                    → [amus]
+  [7:a]  (music-timed.wav — pre-built with real silence; see below) → [amus]
   [atts][amus] amix=inputs=2:duration=longest:dropout_transition=0:normalize=0  → [aout]
 
 Output:
@@ -221,7 +265,21 @@ Output:
 
 **ASS subtitles** — one ASS per scene via `tools/add_subtitles.py --emit-ass-only --atempo 1.3 --emphasis "<kicker phrases>"`, burned into the corresponding `[vk]` branch BEFORE concat. Per-scene burn-in (rather than one ASS over concat) keeps timings local and trivially correct.
 
-**Music** — Sound picks from `music/tracks.json` filtered by `use_for` including `news` or `mood ∈ {fun, energetic, comedic}`. Default volume `0.15`.
+**Music** — Sound picks from `music/tracks.json` filtered by `use_for` including `news` or `mood ∈ {fun, energetic, comedic}`. Default volume `0.15`. Music plays **only during opener (~2s) and CTA (~5s)** — NOT during dialogue. Editor pre-builds `build/music-timed.wav`:
+
+```bash
+ffmpeg -y \
+  -i bg-music.mp3 \
+  -f lavfi -i "anullsrc=r=44100:cl=stereo" \
+  -filter_complex "
+    [0:a]atrim=start=OFFSET:end=$((OFFSET+2)),asetpts=PTS-STARTPTS,volume=0.15[a_op];
+    [1:a]atrim=start=0:end=${DLG_DUR},asetpts=PTS-STARTPTS[a_sil];
+    [0:a]atrim=start=OFFSET:end=$((OFFSET+5)),asetpts=PTS-STARTPTS,volume=0.15,afade=t=out:st=4.0:d=1.0[a_cta];
+    [a_op][a_sil][a_cta]concat=n=3:v=0:a=1[aout]
+  " -map "[aout]" -c:a pcm_s16le build/music-timed.wav
+```
+
+Where `OFFSET` = music track start offset (from story bible `music.start_offset_sec`), `DLG_DUR` = total dialogue duration (= TOTAL_DUR − 2s opener − 5s CTA). Then input [7] in the filter_complex is `music-timed.wav` with simple `aresample=44100` — no volume/enable filter needed.
 
 **Fade** — fade-to-black on the last scene before CTA (`fade=t=out:st=SPED_DUR-1:d=1.0`), and `afade=t=out` on music at TOTAL-1.
 
@@ -458,7 +516,8 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 ### Storyboarder
 - Anchor avatar — pulled from Supabase, do NOT regenerate.
 - Reporter base avatars — pulled from Supabase by `character_name` tag; generate sheet+ref only for brand-new reporters joining the pool.
-- **Per-episode on-location backgrounds (MANDATORY)** — NB2 edit using reporter base ref as `image_urls[0]`, with the news item's `location` in the prompt. Avoid the wording "Pixar 3D" if it pulls the model toward animated style — instead use "semi-realistic photographic cinematic quality, NOT cartoon, NOT illustration".
+- **Per-episode on-location backgrounds (MANDATORY)** — NB2 edit using reporter base ref as `image_urls[0]`, with the news item's `location` in the prompt. The background must visually reflect the **specific news topic**: if the story is about dragons, include dragons/fire/scorched stone in the background; if about The Wall, show ice and blizzard. Use the full location description from `research.json news_items[].location` (not just the region name). Avoid the wording "Pixar 3D" if it pulls the model toward animated style — instead use "semi-realistic photographic cinematic quality, NOT cartoon, NOT illustration".
+- **Reporters always hold a broadcast handheld microphone (MANDATORY)** — every on-location reporter image must include `"holding a broadcast handheld microphone in one hand"` in the NB2 prompt. No exceptions. This is the visual identity of the format.
 - 9:16 (1080×1920) all images, frontal/three-quarter, teeth visible for lipsync.
 - Upload per-episode on-location images to Supabase as `refs/{character}-on-location-{topic}.png`.
 - General rules — `rules/roles/storyboarder.md`.
@@ -478,7 +537,7 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 - Replace periods with commas/em-dashes in anchor lines where natural — periods bloat duration via TTS pause inflation.
 - Upload mp3s to Supabase `scenes/{date}/fun-news/scene-N.mp3` for use by Avatar v2 (permanent URLs).
 - ASS subtitles per-scene via `tools/add_subtitles.py --emit-ass-only --atempo 1.3 --emphasis "<kicker phrases from research.json>"`. Each scene's ASS lives at `build/scene-N.ass` and is burned in by Editor.
-- Music: pick from `music/tracks.json` where `use_for` includes `news` or mood is `fun/energetic/comedic`. Default `volume=0.15`.
+- Music: pick from `music/tracks.json` where `use_for` includes `news` or mood is `fun/energetic/comedic`. The chosen track plays **only during opener and CTA** — upbeat, not jarring. Write `music.start_offset_sec` into storyboard.json (pick the most energetic section of the track). Editor will use this offset when building `music-timed.wav`.
 - General rules — `rules/roles/sound.md`.
 
 ### Editor
@@ -516,6 +575,12 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 
 ## Anti-patterns
 
+- ❌ Generic/non-game-specific opener — opener must be visually styled to the game world (dark fantasy, sci-fi, etc.), not a generic news broadcast card.
+- ❌ Background music during dialogue scenes — music plays ONLY at opener (~2s) and CTA (~5s). Use `music-timed.wav` with real silence (anullsrc); do NOT use `volume:enable` filter (FFmpeg passthrough bug).
+- ❌ Opener and CTA with different music themes — they must share the same track/offset; viewer should recognize the show's signature theme both times.
+- ❌ Mic flag without show name — reporter mics must have the show name on the flag (e.g. "GoT Daily"). Generic or blank flags break the TV identity.
+- ❌ Anchor studio without show signage — anchor desk must include a visible nameplate or lower-third sign with the show name.
+- ❌ Generic reporter background unrelated to news topic — if Varys is covering a dragon fire story, the background must show dragons/fire, not a bare stone corridor. Background must telegraph the topic.
 - ❌ Using real patch notes / live web search results as news items (that's `news.md`, not Fun News).
 - ❌ Changing the anchor between episodes (anchor is locked per game).
 - ❌ Generating opener / CTA per episode — they are one-time-per-game assets pulled from Supabase.

@@ -5,7 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 7,
+  "last_episode": 8,
   "planned_arc": {
     "note": "Pre-locked season-1 finale arc EP6-EP15. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim (translate only if language != en), adapt each episode's beats into 3-5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion only, all movement/explosions/pod-flight = CUT between clips not animation, protagonist always faces camera, cliffhanger spoken line = Avatar TTS). After shipping an episode, fold its loops/status into characters[], active_loops, episode_summaries as usual. Do NOT re-invent episodes while this arc has unshipped entries.",
     "new_characters": [
@@ -14,8 +14,9 @@
         "role": "antagonist",
         "introduced_episode": 7,
         "character_description": "semi-realistic Pixar 3D mirror-universe James T. Kirk, identical face to Kirk but harder and predatory, cold confident smirk, thin scar across one cheek, slicked darker hair, dead-calm eyes, black-and-silver Section 31 mirror uniform with sharp trim instead of gold command tunic",
-        "voice": "Deep_Voice_Man",
-        "voice_note": "Same voice as Kirk BY DESIGN (he is a mirror double) - differentiate via lower emotion / colder delivery, not a different voice."
+        "voice": "Daniel",
+        "elevenlabs_voice": "Daniel",
+        "voice_note": "Same voice as Kirk BY DESIGN (he is a mirror double) - differentiate via lower stability / colder delivery, not a different voice."
       }
     ],
     "episodes": [
@@ -421,15 +422,17 @@
           "OPEN for season 2: the Mirror network"
         ]
       }
-    ]
+    ],
+    "mirror_kirk_survival_note": "Mirror Kirk was accidentally ejected through the airlock in EP8. He survived — Section 31 recovered him via emergency shuttle (off-screen). He reappears unexpectedly around EP11-12, referencing the incident: 'I've been outside before.' The arc continues but with the knowledge that Mirror Kirk is harder to kill than expected."
   },
   "characters": [
     {
       "name": "Kirk",
       "role": "protagonist",
       "character_description": "semi-realistic Pixar 3D Captain James T. Kirk, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
-      "voice": "Deep_Voice_Man",
-      "status": "EP7: Defied Admiral's order to jettison the pod. Manually opened it. Mirror Kirk — his mirror-universe double — stepped out. Confronting an impossible situation: a version of himself who knows too much.",
+      "voice": "Daniel",
+      "elevenlabs_voice": "Daniel",
+      "status": "EP8: Shielded Chekov from Mirror Kirk. Now facing open airlock, Chekov hanging on the frame. Mirror Kirk gone — ejected through the gap he opened.",
       "aura_points": 1100,
       "relationships": {
         "Worf": "uneasy alliance — Worf told the truth at great personal cost",
@@ -442,8 +445,9 @@
       "name": "Worf",
       "role": "ally",
       "character_description": "semi-realistic Pixar 3D Commander Worf, imposing Klingon-Human, prominent forehead ridges, dark skin, fierce disciplined expression, TNG Starfleet command red uniform with lieutenant commander pips, broad shoulders, intense dark eyes",
-      "voice": "Determined_Man",
-      "status": "EP4: Lowered phaser when the watcher revealed himself as Spock. Now guarding Chekov in the airlock chamber — Kirk's direct order: 'No one in or out.' Waiting while Kirk goes to the bridge alone.",
+      "voice": "George",
+      "elevenlabs_voice": "George",
+      "status": "EP8: Confronted Mirror Kirk physically — grabbed him, Mirror Kirk slipped the hold. Now in the airlock bay as decompression begins.",
       "aura_points": 600,
       "relationships": {
         "Kirk": "bound together now — shared knowledge of Section 31 = shared death sentence"
@@ -453,7 +457,8 @@
       "name": "Chekov",
       "role": "victim",
       "character_description": "semi-realistic Pixar 3D Ensign Pavel Chekov, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
-      "voice": "Casual_Guy",
+      "voice": "Charlie",
+      "elevenlabs_voice": "Charlie",
       "status": "EP4: Still slumped in the airlock chamber. Witnessed Spock arrive and deliver intel. Last seen barely conscious, under Worf's guard. Knows who the mole is but has not been further questioned.",
       "aura_points": 200,
       "relationships": {
@@ -464,7 +469,8 @@
       "name": "Spock",
       "role": "ally",
       "character_description": "semi-realistic Pixar 3D Commander Spock, pointed Vulcan ears, sharply arched thick eyebrows, straight black bowl-cut hair, olive-tinted skin, calm emotionless expression with one eyebrow slightly raised, blue TOS science tunic with black collar and Starfleet delta badge, hands clasped behind back",
-      "voice": "Elegant_Man",
+      "voice": "Brian",
+      "elevenlabs_voice": "Brian",
       "status": "EP6: Arrived at airlock bay. Wiped porthole of crashed pod — saw Kirk's face inside. Delivered cliffhanger: 'Captain... it's you in there.'",
       "aura_points": 900,
       "relationships": {
@@ -476,7 +482,8 @@
       "name": "Scotty",
       "role": "crew",
       "character_description": "semi-realistic Pixar 3D Chief Engineer Montgomery Scott, stocky build, round friendly face now tense and alarmed, swept-back dark hair with grey temples and short sideburns, wide desperate eyes, TOS red engineering tunic with black collar and Starfleet delta badge, hands raised in protest",
-      "voice": "Determined_Man",
+      "voice": "George",
+      "elevenlabs_voice": "George",
       "status": "EP6: Warned Kirk about phaser loss. Watched Kirk press the override. Phaser array destroyed — weapons offline. Still under suspicion but loyalty confirmed this episode.",
       "aura_points": 450,
       "relationships": {
@@ -487,8 +494,9 @@
       "name": "Mirror_Kirk",
       "role": "antagonist",
       "character_description": "semi-realistic Pixar 3D mirror-universe James T. Kirk, identical face structure to Kirk but harder and predatory, cold confident smirk showing teeth with no warmth, thin diagonal scar across left cheek, slicked darker hair pressed flat, dead-calm glacier eyes, black-and-silver Section 31 mirror universe uniform with sharp angular trim and no Starfleet delta, lean forward predatory posture",
-      "voice": "Deep_Voice_Man",
-      "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower emotion: fearful for colder, flatter delivery.",
+      "voice": "Daniel",
+      "elevenlabs_voice": "Daniel",
+      "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery.",
       "status": "EP7: Emerged from black pod in Enterprise airlock. First words to Kirk: 'Hello, Jim. You're late again.' Immediately identified Chekov and stated he 'was supposed to die first' — confirming foreknowledge of the Airlock Protocol. Now aboard the Enterprise.",
       "aura_points": 0,
       "relationships": {
@@ -501,7 +509,8 @@
       "name": "Fleet_Admiral",
       "role": "antagonist",
       "character_description": "semi-realistic Pixar 3D Starfleet Fleet Admiral, older distinguished male, silver-grey hair combed straight back, sharp strong cheekbones, four gold admiral pips on collar, dark navy Starfleet admiral uniform with gold trim, cold calculating expression, slight controlled cold smile",
-      "voice": "Imposing_Manner",
+      "voice": "Liam",
+      "elevenlabs_voice": "Liam",
       "status": "EP6: Ordered Kirk to fire on allied ship ('Eleven seconds, Captain. Fire.'). Kirk refused. Admiral's plan failed — phaser array destroyed. Section 31 conspiracy continues.",
       "aura_points": 0,
       "relationships": {
@@ -517,7 +526,8 @@
     "major: Enterprise weapons offline — phaser array destroyed by Kirk's own hand",
     "major: Mirror Kirk is now aboard — what does he want and who does he serve?",
     "major: Why Chekov was chosen first for the Airlock Protocol",
-    "eternal: Kirk always fights for his crew against the system"
+    "eternal: Kirk always fights for his crew against the system",
+    "major: Mirror Kirk ejected through the airlock — did Section 31 recover him? He will reappear unexpectedly."
   ],
   "closed_loops": [
     "minor: Is Worf loyal? — RESOLVED: yes",
@@ -587,21 +597,27 @@
       "You already lied to me once.",
       "I saw that pod before the airlock.",
       "Hello, Jim. You're late again.",
-      "And that one was supposed to die first."
+      "And that one was supposed to die first.",
+      "Take one step and I'll break your neck.",
+      "You're slower than my Worf.",
+      "Why Chekov?",
+      "Because you'll always save the boy."
     ],
     "recent_hooks": [
       "watcher-reveal-silhouette",
       "vulcan-corridor-reveal",
       "corridor-sprint-multi-shot",
       "ticking-clock-targeting-reticle-allied-ship",
-      "smoking-pod-crew-convergence"
+      "smoking-pod-crew-convergence",
+      "physical-grab-and-slip"
     ],
     "recent_cliffhangers": [
       "unknown-watcher-reveal",
       "ship-weapons-locked-on-allied-vessel",
       "authority-figure-live-comms-reveal",
       "biosignature-scanner-identity-reveal-pod",
-      "mirror-double-predatory-reveal"
+      "mirror-double-predatory-reveal",
+      "environmental-decompression-drag"
     ]
   },
   "episode_summaries": [
@@ -660,6 +676,14 @@
       "cliffhanger": "Mirror Kirk turns slowly toward Chekov with a predatory smile: 'And that one was supposed to die first.' Chekov freezes.",
       "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-01/serial-drama_v2_final.mp4",
       "duration_sec": 52
+    },
+    {
+      "episode": 8,
+      "language": "en",
+      "summary": "Mirror Kirk steps free of the pod. Worf tries to grab him — Mirror Kirk slips the hold. Kirk steps between Mirror Kirk and Chekov. Mirror Kirk reveals Chekov was always the target: 'Because you'll always save the boy.' Then Mirror Kirk presses the LCARS emergency panel — the outer airlock door cracks open behind Chekov. Explosive decompression drags Chekov toward the gap; he grabs the door frame and holds on. Mirror Kirk is also pulled out through the gap he opened.",
+      "cliffhanger": "Chekov hanging on the airlock frame, stars behind him. Mirror Kirk ejected into space.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-02/serial-drama_final.mp4",
+      "duration_sec": 37
     }
   ]
 }

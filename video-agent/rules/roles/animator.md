@@ -126,6 +126,7 @@ Kling I2V is **pose animation**, not physics simulation. Only micro motion from 
 - Any active physical actions with contact
 - `generate_audio: true` — voice will not generate correctly
 - **Mouth animation (open/close) in I2V clips** — if `clip_type: action` and the character is NOT speaking by the story, the mouth must not move. Add to negative_prompt: `"mouth movement, talking, lip movement, opening mouth"`. Without it Kling sometimes animates the mouth of a silent character — looks like a bug. Exception: if `action_description` has the character screaming, yawning, or otherwise explicitly moving the mouth
+- **Front-body hand actions on a back-facing character** — when the character's back is turned to camera and `motion_prompt` describes a hand action in front of their body (e.g. "hand pressing against chest", "hand reaching forward"), Kling physically bends the arm backward to show the gesture toward camera → anatomically broken movement. **Rule:** for back-facing poses, `motion_prompt` may only describe what is visible from behind — posture shifts, shoulder movement, hair/cape in wind. Front-body hand gestures must be cut. If the hand action is essential to the scene's emotion, the shot must be reframed (profile or facing camera) so Kling can animate it naturally.
 
 **Rule:** show the RESULT of the action, not the process. Not "Kirk walks to Chekov" but "Kirk already stands over Chekov" (a new clip). Movement = montage transition between clips, not animation inside one clip.
 

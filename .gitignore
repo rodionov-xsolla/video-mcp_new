@@ -1,6 +1,13 @@
 # Environment
 video-agent/.env
 .env
+video-agent/.env.*
+.env.*
+!video-agent/.env.example
+!.env.example
+
+# Local MCP config (machine-specific paths)
+.mcp.json
 
 # Secrets / credentials
 **/*service-account*.json

@@ -39,6 +39,9 @@ while [ $# -gt 0 ]; do
   esac
 done
 
+YT_TS=""
+[ -n "$YOUTUBE_URL" ] && YT_TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
 [ -n "$GAME" ]      || { echo "ERROR: --game required" >&2; exit 1; }
 [ -n "$VIDEO_URL" ] || { echo "ERROR: --video-url required" >&2; exit 1; }
 
@@ -47,13 +50,14 @@ done
 # youtube_url/format шлём только если заданы — иначе на регенерации до YT-аплоада не затрём прошлое.
 BODY=$(python3 -c '
 import json, sys
-game, title, fmt, url, yt = sys.argv[1:6]
+game, title, fmt, url, yt, yt_ts = sys.argv[1:7]
 row = {"game_tag": game, "output_video_url": url, "status": "completed",
        "input_idea": title or url}
-if fmt: row["format"] = fmt
-if yt:  row["youtube_url"] = yt
+if fmt:    row["format"] = fmt
+if yt:     row["youtube_url"] = yt
+if yt_ts:  row["yt_published"] = yt_ts
 print(json.dumps(row))
-' "$GAME" "$TITLE" "$FORMAT" "$VIDEO_URL" "$YOUTUBE_URL")
+' "$GAME" "$TITLE" "$FORMAT" "$VIDEO_URL" "$YOUTUBE_URL" "$YT_TS")
 
 HTTP=$(/usr/bin/curl -sS -o /tmp/log-video-resp.$$ -w "%{http_code}" -X POST \
   "${SUPABASE_URL}/rest/v1/video_agent_runs?on_conflict=output_video_url" \
