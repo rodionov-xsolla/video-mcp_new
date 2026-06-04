@@ -5,7 +5,7 @@
   "title": "Don't Save Me",
   "style_tags": "Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, soft outline anime aesthetic, magical elemental effects, Teyvat world environment, clean detailed character illustration, Liyue Harbor setting, cinematic 9:16 vertical composition",
   "created_at": "2026-06-04",
-  "last_episode": 0,
+  "last_episode": 1,
   "planned_arc": {
     "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion only, all combat/running/chases = CUT between clips not animation, protagonist always faces camera, cliffhanger spoken line = Avatar TTS). Childe is the reluctant protector — his every action should read as either threat or sacrifice until the last episode. No on-screen text. After shipping an episode, fold its loops/status into characters[], active_loops, episode_summaries. Do NOT re-invent episodes while this arc has unshipped entries.",
     "episodes": [
@@ -315,7 +315,7 @@
       "character_description": "male Fatui Harbinger Tartaglia, dark blue and red Fatui uniform with hydro-red accents, short bright orange hair, sharp confident grin softening into something genuine, hydro blades manifested at his sides, athletic lean build",
       "voice": "chatterbox",
       "voice_ref": "games/genshin impact/Childe.mp3",
-      "voice_ref_url": null,
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/voice-ref.mp3",
       "status": "EP0: Pre-series. Received direct order to bring in the Traveler. Burned it. Lumine witnessed everything.",
       "aura_points": 0,
       "relationships": {
@@ -330,7 +330,7 @@
       "character_description": "female Traveler Lumine, white and gold traveler outfit with star constellation motifs and flowing white sash, long blonde hair with signature silver star-shaped hair clip, sharp determined expression with a hint of wariness, one-handed sword at her side, graceful athletic build",
       "voice": "chatterbox",
       "voice_ref": "games/genshin impact/Traveller.mp3",
-      "voice_ref_url": null,
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/voice-ref.mp3",
       "status": "EP0: Pre-series. Doesn't yet know Fatui have an active order targeting her.",
       "aura_points": 0,
       "relationships": {
@@ -344,7 +344,7 @@
       "character_description": "male Fatui Agent, dark charcoal and black Fatui operative coat with deep crimson Fatui insignia, silver Fatui half-mask obscuring the upper face, cold calculating expression, hands clasped behind his back, average compact build radiating controlled menace",
       "voice": "chatterbox",
       "voice_ref": "games/genshin impact/Fatui_dottore.mp3",
-      "voice_ref_url": null,
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fatui-agent/voice-ref.mp3",
       "status": "EP0: Pre-series. Carrying direct orders from Snezhnaya regarding the Traveler.",
       "aura_points": 0,
       "relationships": {
@@ -438,5 +438,14 @@
       "season-cliff-next-time-without-orders"
     ]
   },
-  "episode_summaries": []
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "language": "en",
+      "summary": "Teaser hook: Lumine's face half-hidden in shadow, watching something unseen. Northland Bank at night — Agent hands Childe a sealed scroll. Childe reads it, expression hardens, drops it into candle flame. Lumine witnesses from the alcove shadows. Agent speaks the order aloud. Lumine steps out: 'This is about me?' Childe puts himself between them: 'You shouldn't have come here.' Lumine: 'Too late.'",
+      "cliffhanger": "Agent cold and measured: 'Prove she matters less than your orders.'",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-04/serial-drama_final.mp4",
+      "duration_sec": 36.6
+    }
+  ]
 }
