@@ -320,6 +320,35 @@ Avatar-сцен: в кадр под Avatar текст не добавляетс�
 
 ---
 
+### 5.1 Body direction — characters NOT facing camera
+
+NB2 defaults to face-forward (character facing the viewer) unless explicitly told otherwise. "Eyes locked on wall" or "looking away" are gaze hints — NOT body direction anchors. NB2 will still render a three-quarter face toward the camera.
+
+**Rule:** when the character must face away from the viewer, use CAPS in `image_prompt`:
+- `"BACK TO CAMERA"` — full back, face not visible
+- `"body facing the wall, face pressed against the surface, back visible to viewer"`
+- `"only back, shoulders, and back of head visible — face NOT toward camera"`
+
+Never rely on gaze description alone to control body orientation. State the orientation explicitly.
+
+---
+
+### 5.2 Scale — describe relative to objects, NOT to frame
+
+NB2 does not understand "1/4 of the frame height" or "small relative to frame." It has no concept of how large the output canvas is.
+
+**Rule:** express scale through other objects in the scene:
+
+| ❌ Frame-relative (NB2 ignores) | ✅ Object-relative (NB2 understands) |
+|---|---|
+| `"figure occupies 1/4 of frame height"` | `"figure is dwarfed by the 6-story building behind her"` |
+| `"small person in the image"` | `"figure is the same height as one floor of the building"` |
+| `"tiny character"` | `"character is barely visible above the heads of the crowd below"` |
+
+For wide/establishing shots: anchor scale to architecture (`"she is the height of one floor"`), or to other people (`"she appears the same height as the pedestrians on the sidewalk below"`). Do NOT remove the character sheet ref to fix scale — the ref ensures face/costume consistency. Fix scale through scene description, not by dropping refs.
+
+---
+
 ### 7. image_prompt anti-patterns
 
 - ❌ `high quality, masterpiece, 4K, ultra HD` — junk tags, no effect on NB2
