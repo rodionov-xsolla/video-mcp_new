@@ -257,21 +257,24 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 
 ### Sound
 
-- TTS via fal.ai MiniMax — `voice_setting.voice_id` from story bible, `emotion` per mood, field is `prompt` not `text`
+- TTS via fal.ai MiniMax — `voice_setting.voice_id` from story bible, `emotion` per mood, field is `prompt` not `text`. For Genshin Impact serial-drama: Chatterbox TTS (`fal-ai/chatterbox/text-to-speech`) — see `sound.md §1`.
 - One character = one voice across the whole series (locked in story bible)
-- **Subtitles: PIL PNG overlay** (ffmpeg 8.1 without libfreetype can't drawtext)
-  - Font Arial/Helvetica Bold 38–48px, white + 3px stroke, lower third
-  - ONLY dialogue subs + TBC. No title cards, brainrot tags, character names.
-- Background music: drama/cinematic, `volume=0.15`
+- **Narrator VO (optional):** off-screen series intro voice over I2V action clips. Store as `narrator_vo` top-level field in storyboard.json: `{text, voice, tts_url, duration_sec, overlay_clips, volume}`. Sound generates the MP3; Editor overlays it via amix starting at t=0. Generate with `faster-whisper` for timing (offset=0 per clip, then +cumulative_start for ASS timecodes).
+- **Subtitles:** ASS via `ffmpeg-full` (libass required; stock ffmpeg lacks it). Use sentence-level Whisper timing — NOT word-by-word. Dialogue style: Bold=1, Outline=6, Fontsize=70, white, MarginV=520. Narrator style: Bold=1, Outline=4, italic, warm color `#EDE0C8`, Fontsize=65, MarginV=540.
+- ONLY dialogue subs + narrator + TBC. No title cards, brainrot tags, character names.
+- Background music: drama/cinematic, `volume=0.15`; duck to `0.08–0.10` under narrator VO.
 - General rules — `rules/roles/sound.md`
 
 ### Editor
 
 - **One ffmpeg pipeline for the entire final assembly** (concat + overlays + music + fade + CTA). NOT layered.
-- I2V clips: fps normalization 24 → 30 mandatory before concat
-- Avatar clips: trim to TTS_dur + 0.3s, `apad=whole_dur=${TARGET}` (not `pad_dur`)
+- I2V clips: fps normalization 24 → 30 mandatory before concat. **NEVER trim I2V clips** — their declared duration is intentional and exact.
+- Avatar clips: trim **both video AND audio** to TTS_dur before concat. Use `trim=end=TTS_DUR,setpts=PTS-STARTPTS` (video) + `atrim=end=TTS_DUR,asetpts=PTS-STARTPTS` (audio). No apad needed — audio is embedded, not a separate track.
+- **A/V sync — joint concat mandatory:** when Avatar clips have embedded audio, use a single `concat=n=N:v=1:a=1` with interleaved `[sv_i][sa_i]` pairs (`[sv0][sa0][sv1][sa1]...`). Never split video and audio into two separate concat chains — they will drift. CTA (no audio) gets `anullsrc` paired with its video.
+- **amix for overlay tracks:** narrator VO + bg-music overlay on top of joint concat via `amix=inputs=3:duration=first:normalize=0`. `normalize=0` is mandatory (prevents volume division by N). `duration=first` anchors output length to the scene audio, avoiding music bleed-through.
+- Off-screen narrator VO: overlay as separate amix input starting at t=0; music ducked during VO. See storyboard.json `narrator_vo` field.
 - TTS overlay "behind glass" (rare): `aecho=0.8:0.9:10:0.3`, `adelay=500`
-- Subtitles via PNG overlay chain (filter_complex)
+- Subtitles: ASS via ffmpeg-full (has libass); sentence-level Whisper timing. Two styles: `Default` (Bold=1, Outline=6, white, MarginV=520) for dialogue; `Narrator` (Bold=1, Outline=4, italic, warm color, MarginV=540) for off-screen VO.
 - **CTA included in concat list** as the last clip (not a separate re-encode)
 - TBC overlay 2s before the end (before fade)
 - Fade out 1.0s on MAIN_DUR (before CTA); CTA goes after fade in silence
@@ -348,7 +351,7 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 
 ## Anti-patterns
 
-- ❌ `generate_audio: true` in Kling (voice is bad)
+- ❌ `generate_audio: true` in Kling for dialogue/Avatar clips (voice is bad). Exception: I2V **action** clips may use `generate_audio: true` to get atmospheric ambient sound (candle flicker, room tone, etc.) — this works correctly and costs $0.126/s instead of $0.084/s.
 - ❌ Kokoro TTS, Kling Lipsync, ElevenLabs
 - ❌ `voice_id` hash instead of `voice` name
 - ❌ 1:1 square for Avatar (only 9:16)

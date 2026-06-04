@@ -237,10 +237,11 @@ Star Trek Timelines style, semi-realistic sci-fi character portrait, cinematic F
 
 ## CTA
 
-- **Supabase URL:** `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta-link-in-bio.mp4`
-- **Текст:** "LINK IN BIO"
-- **Формат:** 1080×1920, 30fps, ~5s
-- **Использование:** Editor скачивает, нормализует (scale+pad+30fps+AAC), конкатенирует в конец после всех сцен
+- **Статус:** ready
+- **Supabase URL:** `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4`
+- **Текст:** "DOWNLOAD THE GAME · LINK IN BIO"
+- **Формат:** 720×1280, 30fps, ~5s — idle animation, star particles drifting
+- **Использование:** Editor скачивает, нормализует (scale+pad 1080×1920+30fps+AAC), конкатенирует в конец после всех сцен
 
 ---
 

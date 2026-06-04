@@ -24,7 +24,16 @@ From Manager:
 
 ---
 
-## 1. MiniMax TTS via fal.ai
+## 1. TTS engine selection
+
+| Condition | Engine |
+|---|---|
+| `game_tag == "genshin impact"` + serial-drama | **Chatterbox** (§1b) — voice cloned from reference MP3 |
+| All other games and formats | **MiniMax** (§1a) — preset voices |
+
+---
+
+## 1a. MiniMax TTS via fal.ai
 
 **Endpoint:**
 ```
@@ -95,6 +104,105 @@ RESULT_URL="https://queue.fal.run/fal-ai/minimax/requests/${REQUEST_ID}"
 - ❌ Kokoro TTS — low quality
 - ❌ ElevenLabs (`fal-ai/elevenlabs`) — replaced by MiniMax
 - ❌ Kling Lipsync — that's Avatar, not TTS
+
+---
+
+## 1b. Chatterbox TTS via fal.ai (Genshin Impact serial-drama only)
+
+Zero-shot voice cloning — no training, no extra cost. Pass the reference MP3 on every call.
+
+**Endpoint:**
+```
+POST https://queue.fal.run/fal-ai/chatterbox/text-to-speech
+```
+
+Auth: `Authorization: Key $FAL_KEY`
+
+### Body
+
+```bash
+cat > /tmp/tts-K.json <<EOF
+{
+  "text": "You shouldn't have come here.",
+  "audio_url": "https://<supabase>/assets/genshin-impact/characters/tartaglia/voice-ref.mp3",
+  "exaggeration": 0.55,
+  "cfg": 0.5,
+  "temperature": 0.7
+}
+EOF
+
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/chatterbox/text-to-speech" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d @/tmp/tts-K.json)
+```
+
+### Parameters
+
+| Parameter | What |
+|---|---|
+| `text` | Text to synthesize. Field is `text`. ≤25 words per line. |
+| `audio_url` | Supabase public URL of the character's reference MP3. **Must be Supabase URL, not local path.** |
+| `exaggeration` | 0.0–1.0. Emotional intensity. Dramatic dialogue: `0.6–0.7`. Whispers/calm: `0.3–0.4`. Default `0.25`. |
+| `cfg` | 0.1–1.0. Guidance weight (pacing adherence). Higher = closer to reference cadence. Default `0.5`. ⚠️ Field is `cfg`, NOT `cfg_weight`. |
+| `temperature` | 0.05–2.0. Higher = more expressive/creative. Default `0.7`. |
+| `seed` | Optional int. Use for reproducibility. |
+
+### Response — WAV output
+
+```json
+{ "audio": { "url": "https://v3b.fal.media/files/xxx/audio.wav", "content_type": "audio/wav" } }
+```
+
+Output is **WAV**. Convert to MP3 after download:
+```bash
+curl -sSL -o /tmp/tts-K.wav "$AUDIO_URL"
+ffmpeg -i /tmp/tts-K.wav -codec:a libmp3lame -qscale:a 2 scenes/scene-K/scene-K.mp3
+```
+
+### Reference voice files — upload once per series, reuse URL
+
+Reference MP3s live in `games/genshin impact/`. Upload each to Supabase **once** before EP1 and store the permanent URL in the story bible `voice_ref_url` field.
+
+Subsequent episodes: read `voice_ref_url` from the story bible, pass directly as `audio_url`.
+
+### Polling (base path = `fal-ai/chatterbox`)
+
+```bash
+# Submit → base is first 2 segments of the endpoint path
+STATUS_URL="https://queue.fal.run/fal-ai/chatterbox/requests/${REQUEST_ID}/status"
+RESULT_URL="https://queue.fal.run/fal-ai/chatterbox/requests/${REQUEST_ID}"
+```
+
+### ⚠️ Body must be built via Python — never bash heredoc
+
+Apostrophes in TTS text (e.g. `"You shouldn't have come here."`) break bash single-quote heredoc substitution silently — the text field arrives empty and Chatterbox generates blank audio. Always write the JSON body with Python:
+
+```python
+import json, subprocess
+body = {
+    "text": "You shouldn't have come here.",
+    "audio_url": "https://.../voice-ref.mp3",
+    "exaggeration": 0.65,
+    "cfg": 0.45,
+    "temperature": 0.7
+}
+with open("/tmp/tts-K.json", "w") as f:
+    json.dump(body, f)
+# Then: curl -s -X POST "..." -H "..." -d @/tmp/tts-K.json
+```
+
+### Emotion guide for Genshin characters
+
+| Character | Scene type | exaggeration | cfg_weight |
+|---|---|---|---|
+| Childe | casual / cocky | 0.55 | 0.5 |
+| Childe | intense / combat | 0.70 | 0.45 |
+| Childe | whisper (secret) | 0.35 | 0.55 |
+| Lumine | determined | 0.55 | 0.5 |
+| Lumine | angry / betrayed | 0.65 | 0.45 |
+| Agent | cold orders | 0.40 | 0.6 |
+| Agent | threatening | 0.55 | 0.55 |
 
 ---
 

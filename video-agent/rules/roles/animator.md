@@ -71,7 +71,7 @@ Body (minimum):
 Required:
 - `start_image_url` — start frame, **public Supabase URL** (not fal.ai temp). ⚠️ NOT `image_url` — that is a deprecated alias.
 - `end_image_url` — end frame (optional). ⚠️ NOT `tail_image_url` — this parameter DOES NOT EXIST in API v2.6, will be ignored.
-- `generate_audio: false` — **ALWAYS**. Kling cannot do sound. If you set `true` you get garbled noise instead of silence.
+- `generate_audio: false` — default. Exception: I2V **action** clips where atmospheric ambient sound is desired (candle flicker, room tone, ambient environment) may use `generate_audio: true`. This produces ambient sound, not voice. Cost increases from $0.084/s to $0.126/s. Do NOT use for dialogue/Avatar clips.
 - `duration` — `"5"` or `"10"` (string, not number). Per `storyboard.json`.
 - `negative_prompt` tail `banding in blacks, posterization, harsh color shift, overexposed clipping` — color-fidelity guards. Kling drifts color/tone across a clip (lifts blacks, pushes green/magenta, clips bright FX); these cut the most common grading artifacts, especially on dark/space scenes and clips with bright light bursts. Borrowed from production T2V negative_prompt arrays.
 
@@ -430,6 +430,7 @@ Example body (5 shots × 3s = 15s):
 ### Elements — ввести нового персонажа/объект в конкретный шот
 
 > ✅ **Burn-tested 2026-06-01 (v3 Standard, $0.50).** `elements` + `multi_prompt` работают вместе. Полная схема и выводы — `tools/fal-ai.md §2c`.
+> ⚠️ **`elements` требуют `multi_prompt: true`.** Передача `elements` без `multi_prompt` вызывает 500 на стороне Kling при fetch результата (submit проходит, ошибка откладывается). Никогда не используй elements с одиночным prompt.
 
 `multi_prompt` тянет всё из одного `start_image_url` → новые сущности в кадре сами не появляются. Чтобы в шоте N вошёл персонаж/объект, которого нет на стартовом кадре:
 
