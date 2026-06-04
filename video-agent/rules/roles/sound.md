@@ -174,6 +174,24 @@ STATUS_URL="https://queue.fal.run/fal-ai/chatterbox/requests/${REQUEST_ID}/statu
 RESULT_URL="https://queue.fal.run/fal-ai/chatterbox/requests/${REQUEST_ID}"
 ```
 
+### ⚠️ Body must be built via Python — never bash heredoc
+
+Apostrophes in TTS text (e.g. `"You shouldn't have come here."`) break bash single-quote heredoc substitution silently — the text field arrives empty and Chatterbox generates blank audio. Always write the JSON body with Python:
+
+```python
+import json, subprocess
+body = {
+    "text": "You shouldn't have come here.",
+    "audio_url": "https://.../voice-ref.mp3",
+    "exaggeration": 0.65,
+    "cfg": 0.45,
+    "temperature": 0.7
+}
+with open("/tmp/tts-K.json", "w") as f:
+    json.dump(body, f)
+# Then: curl -s -X POST "..." -H "..." -d @/tmp/tts-K.json
+```
+
 ### Emotion guide for Genshin characters
 
 | Character | Scene type | exaggeration | cfg_weight |
