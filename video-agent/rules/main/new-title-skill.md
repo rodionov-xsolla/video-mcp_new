@@ -25,13 +25,13 @@ Read before starting:
 | 4 | `developer` | Studio name | Second Dinner |
 | 5 | `audience` | Age range, casual/core, geo | 16–35, Core CCG, Global |
 | 6 | `art_style` | One phrase describing visual style | "Comic-book 2D illustration" |
-| 7 | `youtube_channel` | Which channel gets videos | `gamepulse` / `yellowguy` / none |
+| 7 | `youtube_channel` | Which channel gets videos | `starfleetarchive` / `yellowguy` / `genshinsnap` / none |
 
 ### Tier 1 validation
 
 - [ ] `game_tag` is kebab-case, all lowercase, no spaces
 - [ ] `game_tag` does NOT match any existing folder in `games/`
-- [ ] `youtube_channel` is one of: `gamepulse`, `yellowguy`, or explicitly `none` (no guessing)
+- [ ] `youtube_channel` is one of: `starfleetarchive`, `yellowguy`, `genshinsnap`, or explicitly `none` (no guessing)
 
 ---
 

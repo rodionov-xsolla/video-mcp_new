@@ -165,8 +165,9 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
 2. **Upload to YouTube.**
 
    **Channel routing.** Read `youtube_channel` from the game config metadata (`games/{GAME_TAG}/{GAME_TAG}.md`):
-   - `star-trek-timelines` → `gamepulse`
+   - `star-trek-timelines` → `starfleetarchive`
    - `roblox` → `yellowguy`
+   - `genshin-impact` → `genshinsnap`
    - No `youtube_channel` field → no channel mapped yet. Do NOT guess. Skip the YT upload and tell the user which channel to map (Supabase URL stays the deliverable).
 
    **Metadata.** Title: `storyboard.json → title` (fallback: idea). Description: `storyboard.json → description` (fallback: empty). Tags: `GAME_TAG + format_slug + storyboard.json → youtube_tags`.
@@ -174,7 +175,7 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
    **Privacy is always `public`** for the routed channel (per user). The `YOUTUBE_PRIVACY` env var is no longer the gate.
 
    ```bash
-   CHANNEL="<resolved from game config>"   # gamepulse | yellowguy
+   CHANNEL="<resolved from game config>"   # starfleetarchive | yellowguy | genshinsnap
    YOUTUBE_URL=$(bash queue/youtube-upload.sh \
      --channel "$CHANNEL" \
      "$OUTPUT_DIR/final.mp4" \
