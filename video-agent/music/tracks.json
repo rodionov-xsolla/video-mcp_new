@@ -97,8 +97,9 @@
       "duration_sec": 144,
       "mood": "energetic",
       "bpm": 130,
-      "use_for": ["gameplay-ai-avatar", "reddit-story", "news"],
-      "description": "Brazilian beat, upbeat rhythm, versatile energy for any format"
+      "use_for": ["gameplay-ai-avatar", "reddit-story"],
+      "not_for": ["fun-news"],
+      "description": "Brazilian beat, upbeat rhythm, versatile energy for any format. NOT for fun-news — confirmed too gloomy/dark for satirical ironic news tone (Genshin EP1 pilot feedback)"
     },
     {
       "name": "energetic-kompa-pasion",

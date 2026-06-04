@@ -404,9 +404,11 @@ If a collision is found — scenarist regenerates research.json with cooldown ap
   },
   "scenes": [
     {"index": 1, "role": "anchor",     "satire_angle": "hook-intro",       "tts": "Hi, I'm {Anchor} with {Show}. {Hook}. {R1 name} is on the line."},
-    {"index": 2, "role": "reporter_1", "satire_angle": "dry-deadpan",      "news_item_index": 1, "tts": "..."},
+    {"index": 2, "role": "reporter_1", "satire_angle": "dry-deadpan",      "news_item_index": 1, "tts": "...",
+     "scene_ambient": {"label": "location-slug", "description": "...", "volume": 0.10}},
     {"index": 3, "role": "anchor",     "satire_angle": "sarcastic-handoff", "tts": "{Reaction} — {R2 name}, you're up."},
-    {"index": 4, "role": "reporter_2", "satire_angle": "clinical-absurdism", "news_item_index": 2, "tts": "..."},
+    {"index": 4, "role": "reporter_2", "satire_angle": "clinical-absurdism", "news_item_index": 2, "tts": "...",
+     "scene_ambient": {"label": "location-slug", "description": "...", "volume": 0.10}},
     {"index": 5, "role": "anchor",     "satire_angle": "satirical-wrap",   "tts": "..."}
   ],
   "subtitles": {"method": "ass-emit-only", "word_highlight": true, "emphasis": {"scene_1": "...", "scene_2": "...", "scene_3": "...", "scene_4": "...", "scene_5": "..."}, "atempo": 1.3},
@@ -510,6 +512,15 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 - Anti-repetition vs story bible `topic_rotation`.
 - `research.json.news_items[].location` must be populated — used by Storyboarder for on-location bg generation.
 - `research.json.news_items[].kicker_phrases` — used by Sound for ASS word-highlight.
+- **`scene_ambient` (MANDATORY for reporter scenes 2 and 4):** every on-location reporter scene must include a `scene_ambient` block:
+  ```json
+  "scene_ambient": {
+    "label": "location-slug",
+    "description": "Brief ambient description — e.g. 'Market crowd chatter, distant cart wheels, seagull calls, Liyue harbor wind'. No music. No clear speech.",
+    "volume": 0.10
+  }
+  ```
+  The ambient description must match the **specific location** of the news item (not a generic outdoor sound). Editor mixes this at `volume` under the TTS track.
 - **`subtitles.emphasis.scene_K` length cap: ≤14 characters per phrase (UPPERCASE on Helvetica Bold 96px overflows the 1080-wide frame above that).** Prefer punchy short kickers (`"COOKED"`, `"NO CAP"`, `"73%"`, `"BHLF"`, `"SKILL ISSUE"`). For longer concepts, trim to the key word or split into two emphasis entries. See `rules/roles/scenarist.md` § `subtitle_emphasis` for full word-budget rules.
 - General rules — `rules/roles/scenarist.md`.
 
@@ -534,10 +545,12 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 ### Sound
 - ElevenLabs TTS for each of the 5 dialogue scenes. Voice settings: `stability: 0.55`, `style: omit` for anchor; `stability: 0.55` for reporters.
 - Use `voice` (name string), not `voice_id` hash.
+- **TTS speed MUST be 1.0 (or omit the field).** NEVER set `speed > 1.0` to compensate for a long line. The only permitted speedup is Editor's `atempo=1.3`. If TTS at natural speed exceeds the word-budget window → shorten the text, do not touch speed.
 - Replace periods with commas/em-dashes in anchor lines where natural — periods bloat duration via TTS pause inflation.
 - Upload mp3s to Supabase `scenes/{date}/fun-news/scene-N.mp3` for use by Avatar v2 (permanent URLs).
 - ASS subtitles per-scene via `tools/add_subtitles.py --emit-ass-only --atempo 1.3 --emphasis "<kicker phrases from research.json>"`. Each scene's ASS lives at `build/scene-N.ass` and is burned in by Editor.
-- Music: pick from `music/tracks.json` where `use_for` includes `news` or mood is `fun/energetic/comedic`. The chosen track plays **only during opener and CTA** — upbeat, not jarring. Write `music.start_offset_sec` into storyboard.json (pick the most energetic section of the track). Editor will use this offset when building `music-timed.wav`.
+- **Location ambient SFX (MANDATORY for scenes 2 and 4):** read `scene_ambient.description` and `scene_ambient.volume` from each reporter scene in storyboard.json. Source an appropriate ambient file (wind, crowd, market, nature, etc.) or synthesise via `ffmpeg -f lavfi -i "anoise=r=44100" ...`. Mix at `scene_ambient.volume` under the TTS in Editor's filter_complex. This is the location's "интершум" — without it on-location scenes sound like a studio recording.
+- Music: pick from `music/tracks.json` where `use_for` includes `news` or mood is `fun/energetic/comedic` **and** `not_for` does NOT include `fun-news`. The chosen track plays **only during opener and CTA** — upbeat, not jarring. Write `music.start_offset_sec` into storyboard.json (pick the most energetic section of the track). Editor will use this offset when building `music-timed.wav`.
 - General rules — `rules/roles/sound.md`.
 
 ### Editor
@@ -561,6 +574,8 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 - [ ] Reporters chosen by topic; **on-location backgrounds generated this episode** (not bare base avatars).
 - [ ] On-location refs uploaded to Supabase (so debug runs and re-renders can refer to them).
 - [ ] Opener and CTA downloaded from Supabase (not generated this run).
+- [ ] Reporter scenes 2 and 4 have `scene_ambient` block with location-specific description and volume 0.08–0.12.
+- [ ] All TTS generated at `speed=1.0` (no compensatory TTS speedup).
 - [ ] All 5 dialogue scenes — Kling Avatar v2 with `image_url` + `audio_url` only.
 - [ ] 5-scene structure: anchor → R1 → anchor → R2 → anchor.
 - [ ] Adjacent reporter scenes (2 and 4) have different `satire_angle`.
@@ -601,6 +616,9 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 - ❌ Audio concat **without** per-scene `apad=whole_dur=<sped_video_dur>` — Avatar v2's trailing silence in video makes the audio run shorter than video per scene; concat without padding stacks the drift across all 5 scenes (up to 4s by the outro).
 - ❌ Bash off-by-one in scene-id arrays during download — prefer `declare -a IDS; IDS[N]=...` indexing or named structs over `IDS=("" "a" "b")` + `IDS[$((N-1))]`.
 - ❌ `-shortest` in FFmpeg (use `apad` and `-t TOTAL_DUR`).
+- ❌ `energetic-simulacao` track for fun-news — confirmed too gloomy/dark for satirical ironic news tone (Genshin EP1 pilot). Pick a track with a clearly upbeat comedic feel; `energetic-simulacao` is in `tracks.json` `not_for: ["fun-news"]`.
+- ❌ No location ambient SFX on reporter scenes — every on-location reporter scene must have a `scene_ambient` block describing the background noise of the location (market crowd, wind, city bustle, nature, etc.) at volume 0.08–0.12. Silence on location feels unnatural. See Scenarist brief below.
+- ❌ TTS `speed` parameter > 1.0 to compensate for a long reporter line — the only permitted speedup is Editor's `atempo=1.3`. If a reporter's TTS duration at `speed=1.0` exceeds the word-budget window, shorten the text. Setting `speed=1.3` in the TTS call + `atempo=1.3` in the Editor produces a double-speedup (~1.7×) that makes the voice sound chipmunk-fast. Always generate TTS at `speed=1.0` (or omit the field entirely).
 
 ---
 
