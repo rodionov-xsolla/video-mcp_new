@@ -1,0 +1,442 @@
+{
+  "series_id": "genshin-dont-save-me-en",
+  "game_tag": "genshin impact",
+  "language": "en",
+  "title": "Don't Save Me",
+  "style_tags": "Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, soft outline anime aesthetic, magical elemental effects, Teyvat world environment, clean detailed character illustration, Liyue Harbor setting, cinematic 9:16 vertical composition",
+  "created_at": "2026-06-04",
+  "last_episode": 0,
+  "planned_arc": {
+    "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion only, all combat/running/chases = CUT between clips not animation, protagonist always faces camera, cliffhanger spoken line = Avatar TTS). Childe is the reluctant protector — his every action should read as either threat or sacrifice until the last episode. No on-screen text. After shipping an episode, fold its loops/status into characters[], active_loops, episode_summaries. Do NOT re-invent episodes while this arc has unshipped entries.",
+    "episodes": [
+      {
+        "episode": 1,
+        "title": "The Order",
+        "link": "Series opening. Lumine witnesses Fatui giving Childe the order to bring her in.",
+        "beats": [
+          "Northland Bank at night. A Fatui Agent hands Childe a sealed scroll.",
+          "Childe breaks the seal, reads it. His expression darkens.",
+          "He drops the scroll into a candle flame.",
+          "Lumine watches from the shadows — she saw everything.",
+          "Childe senses her presence and turns. The Agent turns too.",
+          "Childe steps between Lumine and the Agent."
+        ],
+        "key_lines": [
+          { "speaker": "Agent", "line": "Bring me the Traveler." },
+          { "speaker": "Lumine", "line": "This is about me?" },
+          { "speaker": "Childe", "line": "You shouldn't have come here." },
+          { "speaker": "Lumine", "line": "Too late." }
+        ],
+        "cliffhanger": {
+          "scene": "The Agent stares at Childe, waiting. Cold silence.",
+          "line_speaker": "Agent",
+          "line": "Prove she matters less than your orders."
+        },
+        "loops": [
+          "what exactly the order says",
+          "why Fatui want Lumine now",
+          "whether Childe will obey"
+        ]
+      },
+      {
+        "episode": 2,
+        "title": "Leave Liyue",
+        "link": "After EP1 Childe is caught between orders and his own choice. He tries to push Lumine away — harshly.",
+        "beats": [
+          "Rain-soaked street in Liyue Harbor.",
+          "Lumine follows Childe. He stops abruptly.",
+          "She demands answers. He tells her to leave the city today.",
+          "She refuses.",
+          "A Fatui watcher is spotted on the rooftop above.",
+          "Childe draws his weapon — aimed at Lumine."
+        ],
+        "key_lines": [
+          { "speaker": "Childe", "line": "Leave today." },
+          { "speaker": "Lumine", "line": "You're giving me orders now?" },
+          { "speaker": "Childe", "line": "I'm giving you a warning." },
+          { "speaker": "Lumine", "line": "Then look me in the eye when you say it." }
+        ],
+        "cliffhanger": {
+          "scene": "Childe's blade points at Lumine. Rooftop watcher still watching.",
+          "line_speaker": "Childe",
+          "line": "I'm sorry. They're watching."
+        },
+        "loops": [
+          "whether Childe is threatening her or protecting her",
+          "how much the Fatui watcher saw",
+          "what happens if Lumine doesn't leave"
+        ]
+      },
+      {
+        "episode": 3,
+        "title": "Fake Fight",
+        "link": "Childe stages a fake attack on Lumine to fool the Fatui — without telling her.",
+        "beats": [
+          "Narrow street. Childe strikes first — fast and deliberate.",
+          "Lumine blocks. She doesn't know if it's real.",
+          "Childe whispers one word: 'Play along.'",
+          "Lumine fights back harder — genuinely angry.",
+          "The Fatui watcher on the rooftop takes aim at Lumine.",
+          "Childe sees the rifle. He steps into the shot."
+        ],
+        "key_lines": [
+          { "speaker": "Lumine", "line": "Are you actually doing this?" },
+          { "speaker": "Childe", "line": "Trust me." },
+          { "speaker": "Lumine", "line": "After the Golden House?" },
+          { "speaker": "Childe", "line": "Especially after it." }
+        ],
+        "cliffhanger": {
+          "scene": "Childe drops to one knee. His shoulder is bleeding.",
+          "line_speaker": "Lumine",
+          "line": "They were aiming at me?"
+        },
+        "loops": [
+          "how badly Childe is hurt",
+          "whether Lumine forgives the deception",
+          "if the watcher reported back to the Agent"
+        ]
+      },
+      {
+        "episode": 4,
+        "title": "Not Your Mission",
+        "link": "Lumine hides the wounded Childe. She bandages him — and finally forces out the truth.",
+        "beats": [
+          "Empty teahouse after closing. Lumine wraps Childe's shoulder.",
+          "He tries to make light of it. She pulls the bandage tighter.",
+          "Childe admits: the order was always about her.",
+          "Lumine pulls her hands away. Silence.",
+          "The Fatui Agent enters through the door.",
+          "Childe stands up and puts himself between them."
+        ],
+        "key_lines": [
+          { "speaker": "Lumine", "line": "I'm not your mission." },
+          { "speaker": "Childe", "line": "I know." },
+          { "speaker": "Lumine", "line": "Then why do you keep lying?" },
+          { "speaker": "Childe", "line": "Because the truth wouldn't stop you." }
+        ],
+        "cliffhanger": {
+          "scene": "The Agent looks at Childe's bandaged shoulder. His eyes say everything.",
+          "line_speaker": "Agent",
+          "line": "You protected her."
+        },
+        "loops": [
+          "whether the Agent reports Childe's defection to Snezhnaya",
+          "what Lumine decides to do now that she knows",
+          "how far Fatui will escalate"
+        ]
+      },
+      {
+        "episode": 5,
+        "title": "The Betrayal",
+        "link": "To save Lumine, Childe pretends to hand her over — without warning her.",
+        "beats": [
+          "Childe slowly steps back from Lumine, toward the Agent.",
+          "The Agent orders him to bring her closer.",
+          "Lumine stares at Childe — pure hatred.",
+          "Childe grips her wrist. She almost breaks free.",
+          "He leans close and whispers in her ear.",
+          "The Agent steps forward. Childe meets his eyes and blinks."
+        ],
+        "key_lines": [
+          { "speaker": "Agent", "line": "Good choice." },
+          { "speaker": "Lumine", "line": "I trusted you." },
+          { "speaker": "Childe", "line": "I know." },
+          { "speaker": "Childe", "line": "When I blink — hit him." }
+        ],
+        "cliffhanger": {
+          "scene": "Lumine's fist connects with the Agent. Childe smiles.",
+          "line_speaker": "Childe",
+          "line": "Now I believe you."
+        },
+        "loops": [
+          "whether the Agent is truly down or just subdued",
+          "if Lumine forgives the setup",
+          "how many more Fatui are nearby"
+        ]
+      },
+      {
+        "episode": 6,
+        "title": "Run With Me",
+        "link": "They escape together — but Lumine is furious that Childe made the call without her again.",
+        "beats": [
+          "Night port. Lumine and Childe sprint through the docks. Fatui behind them.",
+          "Childe is running on the wounded shoulder. She notices.",
+          "She grabs his arm to help him. She's still angry.",
+          "They duck into the shadow of the Golden House entrance.",
+          "Lumine demands he stop deciding things for her.",
+          "Childe says without the setup she wouldn't have played along.",
+          "The Golden House doors open from inside."
+        ],
+        "key_lines": [
+          { "speaker": "Lumine", "line": "You chose for me again." },
+          { "speaker": "Childe", "line": "I chose a chance." },
+          { "speaker": "Lumine", "line": "I'm not a piece on your board." },
+          { "speaker": "Childe", "line": "Not to me, no." }
+        ],
+        "cliffhanger": {
+          "scene": "Inside the Golden House, Fatui are already waiting.",
+          "line_speaker": "Agent",
+          "line": "How romantic. You both came yourselves."
+        },
+        "loops": [
+          "how Fatui got inside Golden House first",
+          "whether Childe's shoulder holds for another fight",
+          "what Lumine decides about trusting him"
+        ]
+      },
+      {
+        "episode": 7,
+        "title": "Golden House Again",
+        "link": "Fatui trap them in the Golden House and order Childe to prove loyalty by fighting Lumine for real.",
+        "beats": [
+          "Inside the Golden House. Childe and Lumine face each other across the chamber floor.",
+          "The Agent orders Childe to prove his loyalty.",
+          "Childe raises his weapon.",
+          "Lumine holds his gaze. No fear.",
+          "Combat begins. Childe strikes near her — not at her.",
+          "Lumine notices the pattern. Behind her a Fatui soldier charges."
+        ],
+        "key_lines": [
+          { "speaker": "Agent", "line": "Defeat her." },
+          { "speaker": "Lumine", "line": "Don't you dare go easy on me." },
+          { "speaker": "Childe", "line": "I'm not going easy on you." },
+          { "speaker": "Lumine", "line": "Then what are you doing?" }
+        ],
+        "cliffhanger": {
+          "scene": "Childe's blade flies past Lumine — and pins the charging Fatui soldier to the wall.",
+          "line_speaker": "Lumine",
+          "line": "You were protecting me the whole time?"
+        },
+        "loops": [
+          "how many Fatui are in the chamber",
+          "whether the Agent accepts what just happened or escalates",
+          "what Lumine does with this revelation"
+        ]
+      },
+      {
+        "episode": 8,
+        "title": "Choose Her",
+        "link": "The Fatui realize Childe has chosen Lumine over Snezhnaya. He is declared a traitor.",
+        "beats": [
+          "Fatui soldiers fan out around them.",
+          "Childe is breathing hard but smiling.",
+          "The Agent gives him a final ultimatum.",
+          "Lumine tells Childe not to do anything reckless.",
+          "Childe tears the Fatui insignia from his coat.",
+          "The Agent's expression turns to ice. Fatui charge.",
+          "Childe and Lumine fight side by side for the first time."
+        ],
+        "key_lines": [
+          { "speaker": "Agent", "line": "Snezhnaya or her." },
+          { "speaker": "Lumine", "line": "Don't sacrifice yourself." },
+          { "speaker": "Childe", "line": "Don't flatter yourself." },
+          { "speaker": "Childe", "line": "I choose the fight." }
+        ],
+        "cliffhanger": {
+          "scene": "The Agent retreats toward the exit, calm.",
+          "line_speaker": "Agent",
+          "line": "The port is already sealed. She can't leave."
+        },
+        "loops": [
+          "how Childe plans to get Lumine out of a sealed port",
+          "what Snezhnaya does when they learn he defected",
+          "whether the Agent has more soldiers waiting outside"
+        ]
+      },
+      {
+        "episode": 9,
+        "title": "Don't Follow",
+        "link": "Childe draws the Fatui off alone so Lumine can reach the ships.",
+        "beats": [
+          "Dawn. Liyue Harbor port.",
+          "Lumine spots Fatui soldiers blocking every ship.",
+          "Childe shows her a shortcut through the warehouse — a clear path to the water.",
+          "She understands: he isn't coming with her.",
+          "He smiles and pulls the warehouse door closed between them.",
+          "She hears the clash of battle on the other side.",
+          "She starts toward the ships.",
+          "She stops. She turns back."
+        ],
+        "key_lines": [
+          { "speaker": "Lumine", "line": "You're coming with me." },
+          { "speaker": "Childe", "line": "I'll slow them down." },
+          { "speaker": "Lumine", "line": "That's not a plan." },
+          { "speaker": "Childe", "line": "It's very much my style though." }
+        ],
+        "cliffhanger": {
+          "scene": "Lumine re-enters through the warehouse. Childe is on his knees before a ring of Fatui soldiers.",
+          "line_speaker": "Childe",
+          "line": "I said don't follow."
+        },
+        "loops": [
+          "whether Childe can still fight",
+          "how many Fatui soldiers remain",
+          "what Lumine does next"
+        ]
+      },
+      {
+        "episode": 10,
+        "title": "Come Back Without Orders",
+        "link": "Lumine returns and saves Childe herself. The season ends on an open promise.",
+        "beats": [
+          "Lumine charges into the Fatui circle.",
+          "Childe tries to push himself upright.",
+          "She steps in front of him.",
+          "The Agent arrives. He surveys the scene — too many witnesses at the open port.",
+          "He orders the Fatui to fall back.",
+          "The soldiers leave. The port goes silent.",
+          "Childe and Lumine stand alone on the empty docks.",
+          "He reaches into his coat and returns something she dropped — her travel pouch.",
+          "He turns to leave first."
+        ],
+        "key_lines": [
+          { "speaker": "Childe", "line": "You were supposed to go." },
+          { "speaker": "Lumine", "line": "You were supposed to be the enemy." },
+          { "speaker": "Childe", "line": "I tried." },
+          { "speaker": "Lumine", "line": "Not hard enough." }
+        ],
+        "cliffhanger": {
+          "scene": "SEASON CLIFF. Childe steps back. One last look over his shoulder.",
+          "line_speaker": "Childe",
+          "line": "Next time I'll come back without orders."
+        },
+        "loops": [
+          "CLOSE: Fatui threat to Lumine in Liyue — RESOLVED",
+          "OPEN for season 2: what Childe does now that he is Fatui-branded traitor",
+          "OPEN for season 2: whether Lumine waits for him"
+        ]
+      }
+    ]
+  },
+  "characters": [
+    {
+      "name": "Childe",
+      "role": "protagonist",
+      "character_description": "male Fatui Harbinger Tartaglia, dark blue and red Fatui uniform with hydro-red accents, short bright orange hair, sharp confident grin softening into something genuine, hydro blades manifested at his sides, athletic lean build",
+      "voice": "chatterbox",
+      "voice_ref": "games/genshin impact/Childe.mp3",
+      "voice_ref_url": null,
+      "status": "EP0: Pre-series. Received direct order to bring in the Traveler. Burned it. Lumine witnessed everything.",
+      "aura_points": 0,
+      "relationships": {
+        "Lumine": "complicated — enemy by faction, ally by choice",
+        "Agent": "uneasy subordinate turned open defector by EP8",
+        "Fatui": "loyal until the moment he isn't"
+      }
+    },
+    {
+      "name": "Lumine",
+      "role": "protagonist",
+      "character_description": "female Traveler Lumine, white and gold traveler outfit with star constellation motifs and flowing white sash, long blonde hair with signature silver star-shaped hair clip, sharp determined expression with a hint of wariness, one-handed sword at her side, graceful athletic build",
+      "voice": "chatterbox",
+      "voice_ref": "games/genshin impact/Traveller.mp3",
+      "voice_ref_url": null,
+      "status": "EP0: Pre-series. Doesn't yet know Fatui have an active order targeting her.",
+      "aura_points": 0,
+      "relationships": {
+        "Childe": "distrusts him — Golden House is not forgotten",
+        "Agent": "unknown threat, seen for the first time in EP1"
+      }
+    },
+    {
+      "name": "Agent",
+      "role": "antagonist",
+      "character_description": "male Fatui Agent, dark charcoal and black Fatui operative coat with deep crimson Fatui insignia, silver Fatui half-mask obscuring the upper face, cold calculating expression, hands clasped behind his back, average compact build radiating controlled menace",
+      "voice": "chatterbox",
+      "voice_ref": "games/genshin impact/Fatui_dottore.mp3",
+      "voice_ref_url": null,
+      "status": "EP0: Pre-series. Carrying direct orders from Snezhnaya regarding the Traveler.",
+      "aura_points": 0,
+      "relationships": {
+        "Childe": "superior until Childe defects",
+        "Lumine": "the target"
+      }
+    }
+  ],
+  "active_loops": [
+    "eternal: Childe's loyalty is always a question — faction vs. personal choice",
+    "eternal: Lumine does not trust Childe unconditionally — Golden House is the baseline"
+  ],
+  "closed_loops": [],
+  "world_state": {
+    "location": "Liyue Harbor — Northland Bank district, port, Golden House",
+    "important_items": [
+      "Burned Fatui order — seen by Lumine, now ash",
+      "Childe's Fatui insignia — torn off in EP8, marks him as defector",
+      "Lumine's travel pouch — lost during chase, returned by Childe in EP10"
+    ],
+    "key_events": []
+  },
+  "anti_repetition": {
+    "recent_phrases": [
+      "Bring me the Traveler.",
+      "This is about me?",
+      "You shouldn't have come here.",
+      "Too late.",
+      "Prove she matters less than your orders.",
+      "Leave today.",
+      "You're giving me orders now?",
+      "I'm giving you a warning.",
+      "Then look me in the eye when you say it.",
+      "I'm sorry. They're watching.",
+      "Are you actually doing this?",
+      "Trust me.",
+      "After the Golden House?",
+      "Especially after it.",
+      "They were aiming at me?",
+      "I'm not your mission.",
+      "I know.",
+      "Then why do you keep lying?",
+      "Because the truth wouldn't stop you.",
+      "You protected her.",
+      "Good choice.",
+      "I trusted you.",
+      "When I blink — hit him.",
+      "Now I believe you.",
+      "You chose for me again.",
+      "I chose a chance.",
+      "I'm not a piece on your board.",
+      "Not to me, no.",
+      "How romantic. You both came yourselves.",
+      "Defeat her.",
+      "Don't you dare go easy on me.",
+      "I'm not going easy on you.",
+      "Then what are you doing?",
+      "You were protecting me the whole time?",
+      "Snezhnaya or her.",
+      "Don't sacrifice yourself.",
+      "Don't flatter yourself.",
+      "I choose the fight.",
+      "The port is already sealed. She can't leave.",
+      "You're coming with me.",
+      "I'll slow them down.",
+      "That's not a plan.",
+      "It's very much my style though.",
+      "I said don't follow.",
+      "You were supposed to go.",
+      "You were supposed to be the enemy.",
+      "I tried.",
+      "Not hard enough.",
+      "Next time I'll come back without orders."
+    ],
+    "recent_hooks": [
+      "burning-scroll-reveal",
+      "blade-drawn-on-ally",
+      "whisper-in-ear-setup",
+      "insignia-tear-defection",
+      "season-cliff-open-promise"
+    ],
+    "recent_cliffhangers": [
+      "agent-ultimatum-prove-loyalty",
+      "childe-blade-at-lumine",
+      "childe-takes-the-shot",
+      "agent-enters-teahouse",
+      "fatui-inside-golden-house",
+      "blade-pins-soldier-protection-reveal",
+      "agent-declares-port-sealed",
+      "childe-kneeling-before-fatui",
+      "season-cliff-next-time-without-orders"
+    ]
+  },
+  "episode_summaries": []
+}

@@ -45,6 +45,7 @@ Tracking: after each generation, record the cost. Before the next one — check 
 | Veo3 T2V 8s (with audio) | fal-ai/veo3 | $3.20 |
 | Veo3 T2V 8s (no audio) | fal-ai/veo3 | $1.60 |
 | MiniMax TTS | fal-ai/minimax/speech-2.8-hd | ~$0.10/1k chars (~$0.001–0.005/phrase). `voice_setting.voice_id`, `emotion` |
+| Chatterbox TTS (Genshin only) | fal-ai/resemble-ai/chatterbox | ~$0.05–0.08/phrase. Zero-shot voice clone from reference MP3. |
 | Kling Lipsync | fal-ai/kling-video/lipsync/audio-to-video | ~$0.10/s |
 | HeyGen Avatar IV | fal-ai/heygen/avatar4/image-to-video | $0.10/s |
 | Kling Avatar v2 Standard | fal-ai/kling-video/ai-avatar/v2/standard | $0.056/s |

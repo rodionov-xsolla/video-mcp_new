@@ -24,7 +24,16 @@ From Manager:
 
 ---
 
-## 1. MiniMax TTS via fal.ai
+## 1. TTS engine selection
+
+| Condition | Engine |
+|---|---|
+| `game_tag == "genshin impact"` + serial-drama | **Chatterbox** (§1b) — voice cloned from reference MP3 |
+| All other games and formats | **MiniMax** (§1a) — preset voices |
+
+---
+
+## 1a. MiniMax TTS via fal.ai
 
 **Endpoint:**
 ```
@@ -95,6 +104,84 @@ RESULT_URL="https://queue.fal.run/fal-ai/minimax/requests/${REQUEST_ID}"
 - ❌ Kokoro TTS — low quality
 - ❌ ElevenLabs (`fal-ai/elevenlabs`) — replaced by MiniMax
 - ❌ Kling Lipsync — that's Avatar, not TTS
+
+---
+
+## 1b. Chatterbox TTS via fal.ai (Genshin Impact serial-drama only)
+
+Zero-shot voice cloning — no training, no extra cost. Pass the reference MP3 on every call.
+
+**Endpoint:**
+```
+POST https://queue.fal.run/fal-ai/resemble-ai/chatterbox
+```
+
+Auth: `Authorization: Key $FAL_KEY`
+
+### Body
+
+```bash
+cat > /tmp/tts-K.json <<EOF
+{
+  "text": "You shouldn't have come here.",
+  "audio_url": "https://<supabase>/assets/genshin-impact/voices/Childe.mp3",
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5
+}
+EOF
+
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/resemble-ai/chatterbox" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d @/tmp/tts-K.json)
+```
+
+### Parameters
+
+| Parameter | What |
+|---|---|
+| `text` | Text to synthesize. Field is `text` (not `prompt` — different from MiniMax). ≤25 words per line. |
+| `audio_url` | Supabase public URL of the character's reference MP3. **Must be Supabase URL, not local path.** |
+| `exaggeration` | 0.0–1.0. Emotional intensity. Dramatic dialogue: `0.6–0.7`. Whispers/calm: `0.3–0.4`. Default `0.5`. |
+| `cfg_weight` | 0.0–1.0. Pacing adherence. Higher = closer to reference cadence. Default `0.5`. |
+
+### Response
+
+```json
+{ "audio": { "url": "https://fal.media/files/xxx/audio.mp3" } }
+```
+
+### Reference voice files — upload once per series, reuse URL
+
+Reference MP3s live in `games/genshin impact/`. Upload each to Supabase **once** and store the permanent URL in the story bible `voice_ref_url` field. Do NOT re-upload every episode.
+
+```bash
+# One-time upload per character (run manually before EP1):
+queue/upload-asset.sh --kind character-voice --game "genshin impact" \
+  --name Childe.mp3 "games/genshin impact/Childe.mp3"
+# → store returned URL in story_bible.json characters[].voice_ref_url
+```
+
+Subsequent episodes: read `voice_ref_url` from the story bible, pass directly as `audio_url`.
+
+### Polling (same pattern as MiniMax)
+
+```bash
+STATUS_URL="https://queue.fal.run/fal-ai/resemble-ai/chatterbox/requests/${REQUEST_ID}/status"
+RESULT_URL="https://queue.fal.run/fal-ai/resemble-ai/chatterbox/requests/${REQUEST_ID}"
+```
+
+### Emotion guide for Genshin characters
+
+| Character | Scene type | exaggeration | cfg_weight |
+|---|---|---|---|
+| Childe | casual / cocky | 0.55 | 0.5 |
+| Childe | intense / combat | 0.70 | 0.45 |
+| Childe | whisper (secret) | 0.35 | 0.55 |
+| Lumine | determined | 0.55 | 0.5 |
+| Lumine | angry / betrayed | 0.65 | 0.45 |
+| Agent | cold orders | 0.40 | 0.6 |
+| Agent | threatening | 0.55 | 0.55 |
 
 ---
 
