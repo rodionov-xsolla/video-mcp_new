@@ -115,9 +115,9 @@
         "adopt-me", "pet-economy", "shadow-dragon", "candy-corn", "pizza-place-wages"
       ],
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/roblox/2026-06-04/fun-news_final.mp4",
-      "duration_sec": 34.36,
-      "cost_usd": 2.56,
-      "notes": "First episode under 'Roblox Gag News' branding. New opener generated (gag-news-opener-card.png). Music: energetic-kompa-pasion. Ambient SFX for reporter scenes used silent filler (no external SFX files available)."
+      "duration_sec": 44.37,
+      "cost_usd": 3.12,
+      "notes": "First episode under 'Roblox Gag News' branding. New opener generated (gag-news-opener-card.png). Music: energetic-kompa-pasion. No speedup (atempo=1.0) — natural TTS speed. Scene 2 rebuilt: shorter line (22 words), pants added to Sarah, fixed AV sync (apad without amix). CTA: cta.mp4 (not news-cta.mp4)."
     }
   ],
   "opener_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/branding/gag-news-opener-card.png",
