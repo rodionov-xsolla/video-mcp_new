@@ -97,3 +97,13 @@ Roblox-inspired Pixar-style 3D animation, blocky stylized characters, smooth pla
 
 ### Builder
 `Roblox-style blocky humanoid wearing bright orange safety vest over blue work shirt, yellow hard hat with scratches, tool belt with hammer and wrench, brown work boots, determined focused expression, slightly dusty texture, practical sturdy build proportions`
+
+---
+
+## CTA
+
+- **Статус:** ready
+- **Supabase URL:** `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/branding/cta.mp4`
+- **Текст:** "TOP UP YOUR BALANCE · VIA LINK IN BIO"
+- **Формат:** 720×1280, 30fps, ~5s — idle animation, Roblox cubes floating
+- **Использование:** Editor скачивает, нормализует (scale+pad 1080×1920+30fps+AAC), конкатенирует в конец после всех сцен

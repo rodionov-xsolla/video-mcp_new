@@ -172,7 +172,7 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
 
    **Metadata.** Title: `storyboard.json → title` (fallback: idea). Description: `storyboard.json → description` (fallback: empty). Tags: `GAME_TAG + format_slug + storyboard.json → youtube_tags`.
 
-   **Privacy is always `public`** for the routed channel (per user). The `YOUTUBE_PRIVACY` env var is no longer the gate.
+   **Privacy is always `private`** — videos are uploaded privately so the user can review before publishing.
 
    ```bash
    CHANNEL="<resolved from game config>"   # starfleetarchive | yellowguy | genshinsnap
@@ -181,18 +181,18 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
      "$OUTPUT_DIR/final.mp4" \
      "$TITLE" \
      "$DESCRIPTION" \
-     "public" \
+     "private" \
      "$TAGS")
    echo "YouTube: $YOUTUBE_URL"
    ```
 
-   **Debug vs non-debug — the gate on going public:**
-   - **Non-debug:** upload straight to `public` on the routed channel. No questions.
+   **Debug vs non-debug:**
+   - **Non-debug:** upload as `private` on the routed channel. No questions.
    - **Debug mode:** STOP before the YT upload. Show the user:
      - the Supabase **public URL** (clickable — this is how they watch the result),
      - the **destination channel**, the **title**, **description**, and **tags**.
 
-     Ask: «Заливаю в паблик на `<channel>`?» Wait for OK. Apply any metadata edits the user gives, then run the upload. The script re-checks `channelId` against `YOUTUBE_CHANNEL_ID_<CHANNEL>` and warns on mismatch.
+     Ask: «Заливаю как private на `<channel>`?» Wait for OK. Apply any metadata edits the user gives, then run the upload. The script re-checks `channelId` against `YOUTUBE_CHANNEL_ID_<CHANNEL>` and warns on mismatch.
 
    - On error — log and continue (Supabase URL is the primary deliverable).
 
@@ -207,7 +207,10 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
    ```
    - `--video-url` is the Supabase public URL from step 1 (stable per game/date/format → the upsert key, mapped to `output_video_url`).
    - `--title` lands in `input_idea` (the table's NOT NULL title field). `--format` and `--youtube-url` in their own columns.
+   - When `--youtube-url` is provided, `yt_published` is automatically set to the current UTC timestamp.
    - Requires `UNIQUE(output_video_url)` + `format`/`youtube_url` columns — see `queue/setup.sql` (run the ALTERs once in the SQL editor).
+
+   **Publication timestamp fields** (`yt_published`, `tt_published`, `inst_published`): each stores the UTC datetime when the video was published to that platform, `NULL` = not yet published. The manager only ever sets `yt_published` (via `log-video.sh`). **TikTok and Instagram publishing is a separate process — the manager does NOT trigger it and does NOT mention it to the user after generation.** Those platforms are handled by a dedicated mobile-mcp posting agent launched independently via its own command — runbook: `rules/roles/publisher.md` (triggered by «Опубликовать в тик-ток» / «Опубликовать в инстаграм»; uses `queue/fetch-for-publish.sh` to stage the video on the phone, then `queue/log-publish.sh` to mark it published).
 
 4. **Update story bible** (if the format uses one) — characters, aura, relationships, active_loops, episode_summary, cliffhanger, anti_repetition.
 

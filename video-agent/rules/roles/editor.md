@@ -237,6 +237,34 @@ There is **no quality reason** to prefer multi-stage. Every multi-stage run = N 
 
 I2V (Kling) is 24fps, Avatar (Kling Avatar) is 30fps → normalize EVERYTHING to 30fps.
 
+### 1.0a Avatar silence trim — BEFORE concat
+
+Avatar clips render to exactly TTS duration, but may contain a silent tail (Avatar MP4 container is slightly longer than the speech). Trim **both video AND audio** before feeding into concat:
+
+```python
+# In filter_complex — for each Avatar clip (input index i, TTS duration = tts_dur):
+f"[{i}:v]trim=end={tts_dur},setpts=PTS-STARTPTS,scale=...,fps=30,setsar=1[sv{i}]"
+f"[{i}:a]atrim=end={tts_dur},asetpts=PTS-STARTPTS,aformat=sample_rates=44100:channel_layouts=stereo[sa{i}]"
+```
+
+**I2V clips: NEVER trim.** Their declared duration is intentional. Only Avatar (dialogue) clips are trimmed.
+
+### 1.0b Joint v+a concat for formats with embedded Avatar audio
+
+When Avatar clips carry embedded lipsync audio (serial-drama, character-story), **never split video and audio into two separate concat chains** — they will drift under any A/V processing. Instead use a single `concat=n=N:v=1:a=1` with interleaved pairs:
+
+```python
+# Interleaved: [sv0][sa0][sv1][sa1]...[svN-1][saN-1]
+pairs = "".join(f"[sv{i}][sa{i}]" for i in range(n))
+f"{pairs}concat=n={n}:v=1:a=1[vconcat][aconcat]"
+```
+
+- I2V clips: pair `[sv_i]` (scaled video) with `[sa_i]` generated from `anullsrc` (they have no audio).
+- Avatar clips: pair `[sv_i]` (scaled+trimmed) with `[sa_i]` (trimmed audio from embedded stream).
+- CTA: pair scaled video with `anullsrc,atrim=duration={CTA_DUR}`.
+
+Overlay narrator VO + bg-music on `[aconcat]` via `amix=inputs=3:duration=first:normalize=0`. `duration=first` anchors output to scene audio length; `normalize=0` prevents volume division.
+
 ### 1.1 I2V clips — add silent audio
 
 I2V clips **do not contain an audio stream**. Before concat, mandatory: add silence — otherwise ffmpeg concat skips empty audio packets and all subsequent dialogue shifts left.

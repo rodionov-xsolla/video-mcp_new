@@ -139,3 +139,23 @@ ALTER TABLE game_assets ADD CONSTRAINT game_assets_asset_type_check
 -- Бакет "music" (фоновые треки):
 --   music/{track-name}.mp3
 -- ============================================
+
+-- ============================================
+-- Migration: agent_plan/approach_used/model_used → yt/tt/inst published timestamps
+-- Run once in Supabase SQL Editor:
+-- https://supabase.com/dashboard/project/txckerrkubbvmzlionjf/sql
+-- ============================================
+
+ALTER TABLE video_agent_runs RENAME COLUMN agent_plan    TO yt_published;
+ALTER TABLE video_agent_runs RENAME COLUMN approach_used TO tt_published;
+ALTER TABLE video_agent_runs RENAME COLUMN model_used    TO inst_published;
+
+ALTER TABLE video_agent_runs ALTER COLUMN yt_published   TYPE timestamptz USING NULL;
+ALTER TABLE video_agent_runs ALTER COLUMN tt_published   TYPE timestamptz USING NULL;
+ALTER TABLE video_agent_runs ALTER COLUMN inst_published TYPE timestamptz USING NULL;
+
+-- Index for mobile-mcp agent: find oldest video not yet published to a platform
+CREATE INDEX IF NOT EXISTS idx_runs_tt_unpublished
+  ON video_agent_runs (created_at ASC) WHERE tt_published IS NULL;
+CREATE INDEX IF NOT EXISTS idx_runs_inst_unpublished
+  ON video_agent_runs (created_at ASC) WHERE inst_published IS NULL;
