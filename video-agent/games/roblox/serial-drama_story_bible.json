@@ -5,7 +5,7 @@
   "language": "en",
   "style_tags": "Roblox-inspired Pixar-style 3D animation, blocky stylized characters, smooth plastic-like skin texture, expressive exaggerated cartoon faces, vibrant saturated colors, soft ambient lighting, cinematic depth of field, toy-like proportions, dramatic emotional expressions",
   "created_at": "2026-04-24",
-  "last_episode": 6,
+  "last_episode": 7,
   "planned_arc": {
     "note": "Pre-locked arc EP7-EP10 (the 3-step exposE heist from EP6). Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion only, all running/chases/hammer-swings = CUT between clips not animation, protagonist always faces camera, cliffhanger spoken line = Avatar TTS). Bacon Bob is comic-chaos engine: most loops turn on his accidents. After shipping an episode fold its loops/status into characters[], active_loops, episode_summaries. Do NOT re-invent episodes while this arc has unshipped entries. Non-cast speakers: 'Computer' = robotic server-announcer voice; 'Crowd kid' = one-off background child line (can be TTS overlay, no on-screen lipsync needed).",
     "episodes": [
@@ -190,22 +190,22 @@
       }
     ]
   },
-  "synopsis": "Noob Dave arrives at LUXURIA, the most exclusive Roblox trading server where wealth is power. King Rex rules the plaza with an iron crown. Nobody gives Dave a second look — until they do. Because Dave isn't just a noob. He's sitting on the rarest inventory anyone has ever seen. The question isn't IF he'll reveal it. It's WHEN... and what happens after.",
+  "synopsis": "Noob Dave arrives at LUXURIA, the most exclusive Roblox trading server where wealth is power. King Rex rules the plaza with an iron crown. Nobody gives Dave a second look \u2014 until they do. Because Dave isn't just a noob. He's sitting on the rarest inventory anyone has ever seen. The question isn't IF he'll reveal it. It's WHEN... and what happens after.",
   "characters": [
     {
       "name": "Noob Dave",
       "role": "protagonist",
       "character_description": "Roblox-style blocky humanoid character, bright yellow smooth plastic skin, simple blue torso shirt with no details, bright green pants, round compact head proportional to body width with wide innocent eyes with tiny black pupils, small curved mouth, stubby short limbs, standard blocky proportions, matte plastic texture, clean simple design",
       "voice": "Casual_Guy",
-      "speech_pattern": "Hesitant, pauses — then sudden confident sigma drops. 'I... I don't think... actually, nah.'",
-      "status": "Walked away from plaza into an abandoned Roblox training room. Started physical preparation — parkour drills + punching bag combos. Shadow's voice (flashback callbacks from EP2/EP3) plays in his head — Dave is internalizing what he learned. Bella has tracked him to the training room. She knows who he is despite the default skin.",
+      "speech_pattern": "Hesitant, pauses \u2014 then sudden confident sigma drops. 'I... I don't think... actually, nah.'",
+      "status": "Walked away from plaza into an abandoned Roblox training room. Started physical preparation \u2014 parkour drills + punching bag combos. Shadow's voice (flashback callbacks from EP2/EP3) plays in his head \u2014 Dave is internalizing what he learned. Bella has tracked him to the training room. She knows who he is despite the default skin.",
       "aura_points": 220,
-      "personality": "Plan moving from thought to action. First episode of physical self-prep. Internal monologue is now Shadow's voice — he's metabolizing the manipulation, not rejecting it.",
+      "personality": "Plan moving from thought to action. First episode of physical self-prep. Internal monologue is now Shadow's voice \u2014 he's metabolizing the manipulation, not rejecting it.",
       "relationships": {
-        "Shadow": "rejected — told Shadow 'I'm not Bob. And I'm not yours.' Doesn't trust Shadow but knows about the real crown",
-        "King Rex": "confronted directly — Dave called Rex down, Rex beat him. Dave is on the ground but saw the crown up close. Knows it's fake. Planning something.",
+        "Shadow": "rejected \u2014 told Shadow 'I'm not Bob. And I'm not yours.' Doesn't trust Shadow but knows about the real crown",
+        "King Rex": "confronted directly \u2014 Dave called Rex down, Rex beat him. Dave is on the ground but saw the crown up close. Knows it's fake. Planning something.",
         "Bella": "Bella was with Rex during the confrontation. Dave saw her sympathy but can't act on it yet.",
-        "Bacon Bob": "bonded through truth — Bob showed Dave what Shadow's tools become. Bob left the alcove separately"
+        "Bacon Bob": "bonded through truth \u2014 Bob showed Dave what Shadow's tools become. Bob left the alcove separately"
       }
     },
     {
@@ -213,14 +213,14 @@
       "role": "antagonist",
       "character_description": "Roblox-style blocky humanoid with oversized golden crown with embedded red and blue jewels, thick diamond chain necklace with large dollar sign pendant, white fluffy fur coat draped over gold vest, dark designer sunglasses pushed up on forehead, smug arrogant expression with raised left eyebrow, glossy shiny plastic texture, golden particle shimmer around body, wide power stance",
       "voice": "Deep_Voice_Man",
-      "speech_pattern": "Short commands, ultimatums. Never explains — orders. 'Get him. Now.' / 'Wrong answer.' / 'You think this is funny?'",
-      "status": "Descended from VIP to confront Dave personally. Put Dave on the ground and told him to never show his face again. Public dominance reasserted — but Dave didn't break, and Rex doesn't know why.",
+      "speech_pattern": "Short commands, ultimatums. Never explains \u2014 orders. 'Get him. Now.' / 'Wrong answer.' / 'You think this is funny?'",
+      "status": "Descended from VIP to confront Dave personally. Put Dave on the ground and told him to never show his face again. Public dominance reasserted \u2014 but Dave didn't break, and Rex doesn't know why.",
       "aura_points": 600,
       "personality": "Loud, flashy, insecure underneath. Flexes constantly. Terrified of losing status.",
       "relationships": {
-        "Noob Dave": "target — publicly humiliated him, now wants him found for fanum tax",
-        "Shadow": "fearful enemy — Rex knows Shadow is dangerous but doesn't know Shadow has the real crown",
-        "Bella": "arm candy / ally — Bella hangs with Rex's crew but was seen alone watching Dave in EP3"
+        "Noob Dave": "target \u2014 publicly humiliated him, now wants him found for fanum tax",
+        "Shadow": "fearful enemy \u2014 Rex knows Shadow is dangerous but doesn't know Shadow has the real crown",
+        "Bella": "arm candy / ally \u2014 Bella hangs with Rex's crew but was seen alone watching Dave in EP3"
       }
     },
     {
@@ -229,13 +229,13 @@
       "character_description": "Roblox-style tall slim humanoid, jet black emo hair covering left eye with sharp spiky tips, dark black hoodie with glowing purple circuit pattern on chest, ripped dark jeans with chain, one visible glowing cyan eye through hair gap, thin angular face with neutral unreadable expression, elongated limbs, matte dark plastic texture, subtle purple particle aura",
       "voice": "Imposing_Manner",
       "speech_pattern": "Maximum 3-5 words per line. Every word hits. 'You're not ready.' Silence = power.",
-      "status": "Dave rejected his offer — 'I'm not yours.' Shadow admitted he used Bob the same way ('Bob was weak. You're not.'). His manipulation was exposed but he didn't deny it. Now watching from the shadows as Dave acts independently.",
+      "status": "Dave rejected his offer \u2014 'I'm not yours.' Shadow admitted he used Bob the same way ('Bob was weak. You're not.'). His manipulation was exposed but he didn't deny it. Now watching from the shadows as Dave acts independently.",
       "aura_points": 999,
       "personality": "Says very little but every word hits. Sigma energy. Knows secrets about everyone. Now for the first time, someone has rejected his playbook.",
       "relationships": {
-        "Noob Dave": "rejected by Dave — first person to say no and walk away. Watching to see what Dave does on his own",
-        "King Rex": "hidden rival — holds the real crown that would destroy Rex's power",
-        "Bacon Bob": "exposed history — Bob revealed Shadow's pattern to Dave"
+        "Noob Dave": "rejected by Dave \u2014 first person to say no and walk away. Watching to see what Dave does on his own",
+        "King Rex": "hidden rival \u2014 holds the real crown that would destroy Rex's power",
+        "Bacon Bob": "exposed history \u2014 Bob revealed Shadow's pattern to Dave"
       }
     },
     {
@@ -244,12 +244,12 @@
       "character_description": "Roblox-style female blocky humanoid, bright blonde ponytail with large pink satin bow on top, pastel pink crop top with small white heart pattern, white pleated mini skirt, pink heart-shaped sunglasses pushed on top of head, rosy round cheeks with wide cheerful smile showing teeth, small button nose, smooth glossy pink-tinted plastic texture, bubbly energetic pose with hands on hips",
       "voice": "Inspirational_girl",
       "speech_pattern": "Fake-naive, questioning intonation, hidden manipulation. 'Wait, like, seriously? That's so... interesting.'",
-      "status": "Tracked Dave to the abandoned training room — found him despite his default skin. Walked in alone, asked 'Hey… are you Dave?' First active move toward Dave without Rex around. Bella made the choice to seek Dave out — she's the one initiating contact now.",
+      "status": "Tracked Dave to the abandoned training room \u2014 found him despite his default skin. Walked in alone, asked 'Hey\u2026 are you Dave?' First active move toward Dave without Rex around. Bella made the choice to seek Dave out \u2014 she's the one initiating contact now.",
       "aura_points": 380,
       "personality": "Seems like a basic preppy but is actually manipulative and smart. Plays all sides.",
       "relationships": {
-        "King Rex": "public ally — but was seen alone, not with his crew, watching Dave",
-        "Noob Dave": "intrigued and escalating — watched his plaza entrance with recognition, not fear"
+        "King Rex": "public ally \u2014 but was seen alone, not with his crew, watching Dave",
+        "Noob Dave": "intrigued and escalating \u2014 watched his plaza entrance with recognition, not fear"
       }
     },
     {
@@ -258,13 +258,13 @@
       "character_description": "Roblox-style default blocky avatar, distinctive orange-brown wavy bacon-strip hair flat on top of round head, plain grey torso shirt with small coffee stain, dark navy blue pants slightly too short, generic default face with small dot eyes, permanently slightly downturned mouth giving tired resigned expression, standard blocky proportions, worn scratched matte plastic texture, slightly slouched posture",
       "voice": "Determined_Man",
       "speech_pattern": "Self-deprecating humor, long rambling phrases, accidental wisdom. 'Man, I've been here six months and I still can't...'",
-      "status": "Revealed Shadow's pattern to Dave — 'Same speech. Six months ago.' Showed himself as living proof of Shadow's failed experiment. Left the alcove separately. Location unknown — traumatized and a liability.",
+      "status": "Revealed Shadow's pattern to Dave \u2014 'Same speech. Six months ago.' Showed himself as living proof of Shadow's failed experiment. Left the alcove separately. Location unknown \u2014 traumatized and a liability.",
       "aura_points": -50,
       "personality": "Defeated energy but surprisingly wise. Drops truth bombs wrapped in self-deprecation.",
       "relationships": {
-        "Shadow": "exposed — told Dave the truth about Shadow's pattern, making himself a target",
-        "Noob Dave": "ally by shared truth — both are underdogs, but Bob showed Dave the cost of trusting Shadow",
-        "King Rex": "submissive — terrified of Rex, has been paying fanum tax obediently"
+        "Shadow": "exposed \u2014 told Dave the truth about Shadow's pattern, making himself a target",
+        "Noob Dave": "ally by shared truth \u2014 both are underdogs, but Bob showed Dave the cost of trusting Shadow",
+        "King Rex": "submissive \u2014 terrified of Rex, has been paying fanum tax obediently"
       }
     }
   ],
@@ -272,16 +272,16 @@
     {
       "id": "dave-sigma-awakening",
       "type": "major",
-      "description": "Dave rejected both Shadow and Bob's paths. Walking into the WANTED on his own terms — what is HIS plan?",
+      "description": "Dave rejected both Shadow and Bob's paths. Walking into the WANTED on his own terms \u2014 what is HIS plan?",
       "opened_ep": 2,
-      "status": "active — escalated in EP3, Dave now acts independently"
+      "status": "active \u2014 escalated in EP3, Dave now acts independently"
     },
     {
       "id": "real-crown",
       "type": "major",
       "description": "Shadow holds the real Admin Crown. Rex's is fake. Only Dave, Shadow, and Bob know.",
       "opened_ep": 2,
-      "status": "active"
+      "status": "ESCALATED \u2014 SHADOW/CROWN RENTAL/KING REX contract file now physically in Bob's hands."
     },
     {
       "id": "dave-secret-inventory",
@@ -293,43 +293,64 @@
     {
       "id": "shadow-pattern",
       "type": "major",
-      "description": "Shadow used Bob the same way six months ago — same words, same plan. Dave rejected the pattern. How does Shadow respond to someone who said no?",
+      "description": "Shadow used Bob the same way six months ago \u2014 same words, same plan. Dave rejected the pattern. How does Shadow respond to someone who said no?",
       "opened_ep": 3,
       "status": "active"
     },
     {
       "id": "dave-revenge-plan",
       "type": "major",
-      "description": "Dave is physically training in an abandoned room — first concrete action. Plan moving from thought to body. What is the trigger that pulls him out of the room?",
+      "description": "Dave is physically training in an abandoned room \u2014 first concrete action. Plan moving from thought to body. What is the trigger that pulls him out of the room?",
       "opened_ep": 4,
-      "status": "active — escalated in EP6 to concrete 3-step heist plan (vault drain → crown smash → billboard broadcast). EP7 executes Step 1."
+      "status": "active \u2014 escalated in EP6 to concrete 3-step heist plan (vault drain \u2192 crown smash \u2192 billboard broadcast). EP7 executes Step 1."
     },
     {
       "id": "bella-double-agent",
       "type": "major",
-      "description": "Bella tracked Dave down to the training room. She recognized him through default skin. First active move — initiated contact alone. Is she here to help, betray, or test him?",
+      "description": "Bella tracked Dave down to the training room. She recognized him through default skin. First active move \u2014 initiated contact alone. Is she here to help, betray, or test him?",
       "opened_ep": 4,
-      "status": "RESOLVED in EP6 — Bella chose Dave's side. Admitted she's not what Rex made her. Proposed the heist plan herself. Now an active ally."
+      "status": "RESOLVED in EP6 \u2014 Bella chose Dave's side. Admitted she's not what Rex made her. Proposed the heist plan herself. Now an active ally."
     },
     {
       "id": "dave-identity-known",
       "type": "minor",
       "description": "Bella saw past the default skin and asked 'are you Dave?' His cover (anonymity in the default skin) is cracking. How many others can see through it?",
       "opened_ep": 5,
-      "status": "RESOLVED in EP6 — Dave confirmed identity to Bella. Cover dropped internally. The two-person alliance now built on known identities."
+      "status": "RESOLVED in EP6 \u2014 Dave confirmed identity to Bella. Cover dropped internally. The two-person alliance now built on known identities."
     },
     {
       "id": "ep6-heist-locked-in",
       "type": "major",
-      "description": "Dave and Bella committed to a 3-step exposé heist: (1) drain Rex's Robux vault — every coin stolen via Fanum Tax; (2) smash the fake crown publicly on the plaza; (3) broadcast the REAL Admin Crown on every server screen so the whole server turns on Rex. EP7 executes Step 1.",
+      "description": "Dave and Bella committed to a 3-step expos\u00e9 heist: (1) drain Rex's Robux vault \u2014 every coin stolen via Fanum Tax; (2) smash the fake crown publicly on the plaza; (3) broadcast the REAL Admin Crown on every server screen so the whole server turns on Rex. EP7 executes Step 1.",
       "opened_ep": 6,
-      "status": "active — plan committed, execution pending"
+      "status": "Step 1 (vault drain) executed in EP7. Step 2 (crown smash) and Step 3 (broadcast) pending."
     },
     {
       "id": "bob-liability",
       "type": "minor",
       "description": "Bob knows about the crown and Shadow's pattern. He left the alcove traumatized. Where is he and can he keep quiet?",
       "opened_ep": 2,
+      "status": "ESCALATED \u2014 Bob is now WANTED alongside Dave and Bella. No longer just a liability, now a target."
+    },
+    {
+      "id": "rex-shadow-contract",
+      "type": "major",
+      "description": "SHADOW/CROWN RENTAL/KING REX black file now exists in the world \u2014 in Bob's hands. Rex's power was always rented.",
+      "opened_ep": 7,
+      "status": "active"
+    },
+    {
+      "id": "bob-accidental-witness",
+      "type": "major",
+      "description": "Bob grabbed the single most critical file and was logged by cameras. Now WANTED. Chaos engine.",
+      "opened_ep": 7,
+      "status": "active"
+    },
+    {
+      "id": "rex-betrayal-bob",
+      "type": "minor",
+      "description": "Rex's reaction to Bob specifically \u2014 'Even YOU betrayed me?' \u2014 implies Bob meant something personal to Rex. Unexplored.",
+      "opened_ep": 7,
       "status": "active"
     }
   ],
@@ -337,7 +358,7 @@
     {
       "id": "bella-double-agent",
       "resolved_ep": 6,
-      "resolution": "Bella chose Dave — broke from Rex, admitted the mask, proposed the heist plan herself. Alliance formed under mutual need, not trust."
+      "resolution": "Bella chose Dave \u2014 broke from Rex, admitted the mask, proposed the heist plan herself. Alliance formed under mutual need, not trust."
     },
     {
       "id": "dave-identity-known",
@@ -348,13 +369,13 @@
   "world_rules": [
     {
       "rule": "Only one Admin Crown exists on the server",
-      "implication": "Whoever holds it controls the server — absolute power, can ban anyone instantly",
-      "status": "active — but Rex's crown is FAKE. Shadow has the real one."
+      "implication": "Whoever holds it controls the server \u2014 absolute power, can ban anyone instantly",
+      "status": "active \u2014 but Rex's crown is FAKE. Shadow has the real one."
     },
     {
-      "rule": "Fanum Tax is mandatory — every new player pays 30% of inventory to Rex",
+      "rule": "Fanum Tax is mandatory \u2014 every new player pays 30% of inventory to Rex",
       "implication": "Refusing = public humiliation + server-wide bounty on your head",
-      "status": "active — Dave refused, WANTED bounty issued"
+      "status": "active \u2014 Dave refused, WANTED bounty issued"
     },
     {
       "rule": "Trade Duels are binding contracts",
@@ -368,18 +389,19 @@
     }
   ],
   "world_state": {
-    "location": "Abandoned Roblox-style training room — cracked plates, scattered obby blocks, worn punching bag on a chain, low parkour scaffolding, golden dust in shafts of light from broken windows. Dave inside, mid-training. Bella in the doorway, having just walked in. Rex still in plaza/VIP. Shadow location unknown.",
+    "location": "Post-vault-heist. Dave, Bella, Bob are fugitives with the SHADOW/CROWN RENTAL/KING REX contract file. Rex is aware of all three and has publicly declared the hunt. LUXURIA plaza is now hostile territory.",
     "important_items": [
-      "Real Admin Crown — hidden inside Shadow's hoodie",
-      "Fake Admin Crown — worn by Rex (nobody except Dave, Shadow, Bob know it's fake)",
-      "Dave's secret inventory — contents unknown, Shadow suspects it exists, Dave has not revealed it yet"
+      "Real Admin Crown \u2014 hidden inside Shadow's hoodie",
+      "Fake Admin Crown \u2014 worn by Rex (nobody except Dave, Shadow, Bob know it's fake)",
+      "Dave's secret inventory \u2014 contents unknown, Shadow suspects it exists, Dave has not revealed it yet"
     ],
     "key_events": [
       "EP1: Dave arrived, got humiliated by Rex over Bella, Shadow recruited Dave in the alcove",
       "EP2: Shadow revealed the real crown, Bob stumbled in and became a witness, Rex issued WANTED",
       "EP3: Bob revealed Shadow's pattern (used him same way 6mo ago), Shadow admitted it ('Bob was weak'), Dave rejected both ('I'm not Bob. I'm not yours'), walked into plaza under WANTED screens. Bella watched alone with recognition.",
       "EP4: Dave walked through the plaza, called Rex down from VIP. Rex descended, confronted Dave face to face at the staircase. Rex put Dave on the ground. Rex: 'Don't even think about showing your face here again, punk.' Bella showed hidden sympathy. Dave on the ground studied the crown, internal monologue: 'This ain't over for me. But it is for you.'",
-      "EP5: Dave left the plaza, found an abandoned training room. Trained — parkour drills (wall-run, vault, drop) + heavy punching bag combos until the bag split open. Shadow's voice echoed in his head (flashback callbacks: 'Rex's crown is a fake', 'Same speech. Six months ago.', 'Bob was weak. You're not.'). At the end Dave leaned forehead on the broken bag, breathing heavy. Bella entered the doorway, recognized him through the default skin, asked 'Hey… are you Dave?'"
+      "EP5: Dave left the plaza, found an abandoned training room. Trained \u2014 parkour drills (wall-run, vault, drop) + heavy punching bag combos until the bag split open. Shadow's voice echoed in his head (flashback callbacks: 'Rex's crown is a fake', 'Same speech. Six months ago.', 'Bob was weak. You're not.'). At the end Dave leaned forehead on the broken bag, breathing heavy. Bella entered the doorway, recognized him through the default skin, asked 'Hey\u2026 are you Dave?'",
+      "EP7: Dave and Bella broke into Rex's vault. Bob was already inside (upside-down, looking for a hot dog). Bob accidentally triggered the service lift and grabbed the SHADOW/CROWN RENTAL/KING REX black file. Vault cameras logged all three faces. Rex appeared on the security screen: 'Bob? Even you betrayed me?'"
     ]
   },
   "anti_repetition": {
@@ -398,23 +420,34 @@
       "Don't even think about showing your face here again, punk.",
       "Poor guy... wish I could help him.",
       "Just you wait... this ain't over for me. But it is for you.",
-      "Hey… are you Dave?"
+      "Hey\u2026 are you Dave?",
+      "I was literally just looking for a free hot dog!",
+      "He's not with us. He's a problem.",
+      "That's what Rex says about noobs.",
+      "Did I press death or luck?",
+      "Worse. You pressed plot.",
+      "Rex isn't a king. He's a renter.",
+      "Shadow sold him power.",
+      "Three intruders identified.",
+      "Bob? Even you betrayed me?"
     ],
     "recent_hooks": [
-      "EP1: visual contrast — tiny noob arrives at luxury mega-server (contrast hook)",
-      "EP2: dramatic reveal — Shadow shows the real crown (reveal hook)",
-      "EP3: size contrast — tiny scared Dave vs giant WANTED screen (contrast/scale hook)",
-      "EP4: confidence walk — Dave walks through plaza from behind, crowd parts (action/swagger hook)",
-      "EP5: departure — Dave pushes up from plaza tiles, turns his back on WANTED screens, walks into the dark archway (departure hook)",
-      "EP6: emotional-confession — Bella breaks her own mask in the training-room doorway, voice cracking (emotional-confession hook)"
+      "EP1: visual contrast \u2014 tiny noob arrives at luxury mega-server (contrast hook)",
+      "EP2: dramatic reveal \u2014 Shadow shows the real crown (reveal hook)",
+      "EP3: size contrast \u2014 tiny scared Dave vs giant WANTED screen (contrast/scale hook)",
+      "EP4: confidence walk \u2014 Dave walks through plaza from behind, crowd parts (action/swagger hook)",
+      "EP5: departure \u2014 Dave pushes up from plaza tiles, turns his back on WANTED screens, walks into the dark archway (departure hook)",
+      "EP6: emotional-confession \u2014 Bella breaks her own mask in the training-room doorway, voice cracking (emotional-confession hook)",
+      "EP7: Bob upside-down between laser tripwires eating a hot dog \u2014 absurd-calm hook"
     ],
     "recent_cliffhangers": [
-      "EP1: mysterious object reveal — Shadow pulls glowing object from hoodie, golden light, cut to black",
-      "EP2: character transformation — Dave smiles cold for the first time, WANTED screen blazes behind",
-      "EP3: dramatic entrance — Dave walks into blazing plaza voluntarily, Bella watches with recognition, cut to black",
-      "EP4: defeated but not broken — Dave on the ground studying the crown, internal monologue 'this ain't over for me but it is for you', cut to black",
-      "EP5: verbal recognition — Bella in doorway of training room sees through default skin, 'Hey… are you Dave?', cut to black",
-      "EP6: quiet-determination two-shot — Dave and Bella in training-room doorway light, looking into lit corridor, Dave cold half-smile, 'Yeah. I think it might.' NO cut to black — first lit ending in the series"
+      "EP1: mysterious object reveal \u2014 Shadow pulls glowing object from hoodie, golden light, cut to black",
+      "EP2: character transformation \u2014 Dave smiles cold for the first time, WANTED screen blazes behind",
+      "EP3: dramatic entrance \u2014 Dave walks into blazing plaza voluntarily, Bella watches with recognition, cut to black",
+      "EP4: defeated but not broken \u2014 Dave on the ground studying the crown, internal monologue 'this ain't over for me but it is for you', cut to black",
+      "EP5: verbal recognition \u2014 Bella in doorway of training room sees through default skin, 'Hey\u2026 are you Dave?', cut to black",
+      "EP6: quiet-determination two-shot \u2014 Dave and Bella in training-room doorway light, looking into lit corridor, Dave cold half-smile, 'Yeah. I think it might.' NO cut to black \u2014 first lit ending in the series",
+      "EP7: Rex on security screen, cold fury, crown gleaming, looking directly at Bob \u2014 'Bob? Even you betrayed me?' \u2014 personal-betrayal cliffhanger"
     ]
   },
   "episode_summaries": [
@@ -423,7 +456,7 @@
       "title": "Zero Rizz",
       "date": "2026-04-24",
       "summary": "Dave arrives at LUXURIA, stunned by the luxury. Sees Bella, tries to talk to her ('your bow is really cool'). Rex steps in, publicly humiliates Dave ('default skin AND no rizz, negative aura'). Crowd laughs. Dave walks away crushed. Shadow beckons him into a dark alcove. Shadow pulls out a glowing object.",
-      "cliffhanger": "Shadow pulls glowing object from hoodie — golden light on Dave's face, eyes go wide, cut to black.",
+      "cliffhanger": "Shadow pulls glowing object from hoodie \u2014 golden light on Dave's face, eyes go wide, cut to black.",
       "clips": 8,
       "new_characters": [
         "Noob Dave",
@@ -437,8 +470,8 @@
       "episode": 2,
       "title": "The Real Crown",
       "date": "2026-04-28",
-      "summary": "Shadow reveals Rex's crown is fake — he holds the real Admin Crown. Dave's expression transforms from shocked noob to cold calculation for the first time. Shadow asks 'What are YOU hiding?' Bacon Bob stumbles into the alcove, sees everything, reveals he lost everything to Shadow in a Trade Duel six months ago. Rex issues server-wide WANTED for Dave.",
-      "cliffhanger": "Rex's WANTED announcement blazes across plaza screens. Dave smiles cold — first time in the series. Cut to black.",
+      "summary": "Shadow reveals Rex's crown is fake \u2014 he holds the real Admin Crown. Dave's expression transforms from shocked noob to cold calculation for the first time. Shadow asks 'What are YOU hiding?' Bacon Bob stumbles into the alcove, sees everything, reveals he lost everything to Shadow in a Trade Duel six months ago. Rex issues server-wide WANTED for Dave.",
+      "cliffhanger": "Rex's WANTED announcement blazes across plaza screens. Dave smiles cold \u2014 first time in the series. Cut to black.",
       "clips": 7,
       "new_characters": [
         "Bacon Bob"
@@ -450,8 +483,8 @@
       "episode": 3,
       "title": "Found",
       "date": "2026-04-30",
-      "summary": "Bob reveals Shadow used him the same way six months ago — same speech, same promises. Shadow doesn't deny it: 'Bob was weak. You're not.' Dave, alone in the alcove, rejects both paths: 'I'm not Bob. And I'm not yours.' Then walks voluntarily into the blazing LUXURIA plaza under his own WANTED screens.",
-      "cliffhanger": "Dave steps into the plaza, WANTED screens blazing, players freezing. Through the crowd — Bella, alone, watching. Not shock. Recognition. Cut to black.",
+      "summary": "Bob reveals Shadow used him the same way six months ago \u2014 same speech, same promises. Shadow doesn't deny it: 'Bob was weak. You're not.' Dave, alone in the alcove, rejects both paths: 'I'm not Bob. And I'm not yours.' Then walks voluntarily into the blazing LUXURIA plaza under his own WANTED screens.",
+      "cliffhanger": "Dave steps into the plaza, WANTED screens blazing, players freezing. Through the crowd \u2014 Bella, alone, watching. Not shock. Recognition. Cut to black.",
       "clips": 7,
       "new_characters": [],
       "cost": "~$3.17",
@@ -472,13 +505,26 @@
       "episode": 5,
       "title": "Ghost in His Head",
       "date": "2026-05-20",
-      "summary": "Dave got up from the plaza tiles, turned his back on the WANTED screens, walked into an abandoned Roblox training room. Trained — parkour (wall-run, vault, drop) + heavy punching bag combos until the bag split open and sand spilled. Shadow's voice echoed in his head throughout (flashback callbacks from EP2/EP3 about Rex's fake crown and Bob's defeat). Dave finished leaning forehead on the broken bag, breathing heavy. Bella appeared in the doorway alone, saw through his default skin, asked: 'Hey… are you Dave?'",
-      "cliffhanger": "Bella in the doorway of the training room, looking past the default skin at Dave by the broken bag. Verbal recognition: 'Hey… are you Dave?' Cut to black.",
+      "summary": "Dave got up from the plaza tiles, turned his back on the WANTED screens, walked into an abandoned Roblox training room. Trained \u2014 parkour (wall-run, vault, drop) + heavy punching bag combos until the bag split open and sand spilled. Shadow's voice echoed in his head throughout (flashback callbacks from EP2/EP3 about Rex's fake crown and Bob's defeat). Dave finished leaning forehead on the broken bag, breathing heavy. Bella appeared in the doorway alone, saw through his default skin, asked: 'Hey\u2026 are you Dave?'",
+      "cliffhanger": "Bella in the doorway of the training room, looking past the default skin at Dave by the broken bag. Verbal recognition: 'Hey\u2026 are you Dave?' Cut to black.",
       "clips": 3,
-      "structural_note": "Scene 2 = single i2v_multishot via Kling v3 Standard multi_prompt (2 calls × max-15s, concatenated to 25s with 5 internal shots: jabs → wall-run → drop stance → spin-kick → catch & forehead). 3 Shadow flashback voiceovers as TTS overlays with strong aecho+lowpass treatment, italic cyan subtitles.",
+      "structural_note": "Scene 2 = single i2v_multishot via Kling v3 Standard multi_prompt (2 calls \u00d7 max-15s, concatenated to 25s with 5 internal shots: jabs \u2192 wall-run \u2192 drop stance \u2192 spin-kick \u2192 catch & forehead). 3 Shadow flashback voiceovers as TTS overlays with strong aecho+lowpass treatment, italic cyan subtitles.",
       "new_characters": [],
       "cost": "~$3.42",
       "assembly_note": "EP4 scenes 5-6 (Bella sympathy + Dave on tiles cliffhanger) prepended as recap before Scene 1."
+    },
+    {
+      "episode": 7,
+      "title": "The Vault Job",
+      "date": "2026-06-02",
+      "summary": "Dave, Bella and Bob break into Rex's vault beneath LUXURIA plaza. Bob was already there \u2014 hanging upside-down between laser tripwires looking for a free hot dog. Dave saves Bob (against Bella's objections), Bob accidentally triggers a hidden service lift by pressing a wall button on the fall. Inside the near-empty vault they find contracts and a black file: SHADOW / CROWN RENTAL / KING REX. Bob accidentally grabs the most critical file. Ceiling cameras log all three faces. Rex appears on the security screen: 'Bob? Even you betrayed me?'",
+      "cliffhanger": "Rex on the vault security screen, cold fury, crown gleaming: 'Bob? Even you betrayed me?' The word 'even' hangs in the air. Cut to black.",
+      "clips": 11,
+      "new_characters": [],
+      "cost": "~$5.04",
+      "assembly_note": "Scene 2 removed (merged into scene 1 as Avatar lipsync). GPT Image 2 used instead of NB2 (queue overflow). multi_prompt + elements used for action clips.",
+      "yt_url": "https://www.youtube.com/watch?v=3kzMdEoGXQc",
+      "yt_publish_at": "2026-06-06T20:59:00Z"
     }
   ],
   "supabase_assets": {
