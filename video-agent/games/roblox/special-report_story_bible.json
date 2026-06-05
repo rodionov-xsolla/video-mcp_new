@@ -1,0 +1,83 @@
+{
+  "series_id": "special-report-roblox",
+  "game_tag": "roblox",
+  "title": "Roblox Special Report",
+  "created_at": "2026-06-05",
+  "last_episode": 1,
+  "anchor": {
+    "character_name": "chad-sigma",
+    "display_name": "Chad",
+    "voice": "Elegant_Man",
+    "stability": 0.55,
+    "style": null,
+    "tone_signature": "deadpan sigma anchor energy, delivers absurd Robloxia investigations with zero irony, square jaw set, arms crossed, treats brainrot events as breaking economic crises",
+    "supabase_avatar_url": null
+  },
+  "reporter": {
+    "character_name": "noob",
+    "display_name": "Noob",
+    "voice": "Young_Knight",
+    "voice_settings": {
+      "emotion": "happy",
+      "speed": 1.1
+    },
+    "voice_deprecated": "Casual_Guy — confirmed too sluggish for brainrot delivery (EP1 feedback)",
+    "stability": 0.55,
+    "style": null,
+    "tone_signature": "wide-eyed earnest field reporter, main character energy, calls everything 'no cap fr fr', genuinely alarmed by sigma violations and aura deficits, holds mic with both stubby hands",
+    "supabase_avatar_url": null
+  },
+  "voice_mapping": {
+    "anchor": "Elegant_Man",
+    "reporter": "Young_Knight"
+  },
+  "style_tone": "brainrot|mock-journalistic|deadpan-absurd",
+  "notes": {
+    "character_swap": "Chad/Sigma = studio anchor (NOT fun-news reporter); Noob = field reporter. Jake/Sarah/Chad from fun-news stay exclusively with Roblox Gag News.",
+    "image_generator": "NB2 (standard) — fal-ai/nano-banana-2/edit with chain refs. Existing refs: chad-sigma/sheet.png, noob/sheet.png in Supabase.",
+    "music_default": "badass-brodyaga-phonk — phonk sigma vibes, BPM 140. NOT energetic-kompa-pasion (fun-news) or energetic-simulacao (too gloomy)"
+  },
+  "topic_rotation": {
+    "recent_topic_tags": [
+      "jawline-economy",
+      "sigma-hiring",
+      "pizza-place",
+      "bloxburg-job-board",
+      "adopt-me-plaza",
+      "negative-aura",
+      "brainrot"
+    ],
+    "recent_canon_facts": [
+      "Robloxia employers require jawline inspection before hiring — Pizza Place, Bloxburg, Adopt Me all confirmed screening for sigma compliance and aura levels"
+    ],
+    "cooldown_episodes": 5
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-06-05",
+      "anchor": "Chad/Sigma",
+      "reporter": "Noob",
+      "investigation_title": "The Sigma Economy: Why Every Robloxia Employer Demands a Jawline Inspection Before Hiring",
+      "locations": [
+        "Pizza Place hiring board, Robloxia",
+        "Bloxburg official job board kiosk",
+        "Adopt Me trading plaza checkpoint"
+      ],
+      "topic_tags": [
+        "jawline-economy",
+        "sigma-hiring",
+        "pizza-place",
+        "bloxburg-job-board",
+        "adopt-me-plaza",
+        "negative-aura",
+        "brainrot"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/roblox/2026-06-05/special-report_final.mp4",
+      "duration_sec": 57,
+      "pilot_notes": "Pilot EP1. NB2 images. Avatar v2 lipsync. Opener animated via Kling I2V (3s trim). Music: badass-brodyaga-phonk vol 0.15. Voices: Elegant_Man (Chad), Casual_Guy (Noob — EP2+ switches to Young_Knight speed 1.1). Scene-5 PNG = copy of scene-1 PNG (same studio shot). Rules written: anchor PNG reuse, reporter gaze into camera, voice fix."
+    }
+  ],
+  "opener_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/branding/special-report-opener.mp4",
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/branding/cta.mp4"
+}
