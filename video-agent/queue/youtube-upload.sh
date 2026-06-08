@@ -2,14 +2,17 @@
 # Upload a video to YouTube via Data API v3 (resumable upload).
 #
 # Usage:
-#   youtube-upload.sh [--channel NAME] [--publish-at ISO8601] <video_path> <title> <description> <privacy> [<tags>]
+#   youtube-upload.sh [--channel NAME] [--publish-at ISO8601] [--thumbnail PATH] <video_path> <title> <description> <privacy> [<tags>]
 #
 #   --channel:    gamepulse | yellowguy | <name matching .env suffix>.
 #                 Selects YOUTUBE_REFRESH_TOKEN_<NAME> / YOUTUBE_CHANNEL_ID_<NAME>.
 #                 Omit to use the default YOUTUBE_REFRESH_TOKEN / YOUTUBE_CHANNEL_ID.
-#   --publish-at: ISO 8601 UTC datetime for scheduled publishing, e.g. "2026-06-03T20:00:00Z".
-#                 Forces privacyStatus=private; YouTube auto-publishes at the given time.
-#   privacy:      public | unlisted | private (default: private)
+#   --publish-at: ISO 8601 UTC datetime, e.g. "2026-06-03T20:59:00Z".
+#                 If omitted, auto-schedules at the nearest free date at 20:59 UTC (23:59 MSK).
+#                 Pass "now" to publish immediately as public.
+#   --thumbnail:  Path to thumbnail image (JPG/PNG). Uploaded after video.
+#   privacy:      ignored when auto-scheduling (always private+publishAt).
+#                 Honoured only when --publish-at=now.
 #   tags:         comma-separated, e.g. "roblox,gaming,shorts"
 #
 # Requires in .env (shared OAuth client, per-channel refresh tokens):
@@ -25,6 +28,7 @@ set -euo pipefail
 # ── args ────────────────────────────────────────────────────────────────────
 CHANNEL=""
 PUBLISH_AT=""
+THUMBNAIL=""
 POSITIONAL=()
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -32,12 +36,14 @@ while [ $# -gt 0 ]; do
     --channel=*) CHANNEL="${1#*=}"; shift ;;
     --publish-at) PUBLISH_AT="$2"; shift 2 ;;
     --publish-at=*) PUBLISH_AT="${1#*=}"; shift ;;
+    --thumbnail) THUMBNAIL="$2"; shift 2 ;;
+    --thumbnail=*) THUMBNAIL="${1#*=}"; shift ;;
     *) POSITIONAL+=("$1"); shift ;;
   esac
 done
 set -- "${POSITIONAL[@]}"
 
-VIDEO_PATH="${1:?Usage: youtube-upload.sh [--channel NAME] <video_path> <title> <description> <privacy> [<tags>]}"
+VIDEO_PATH="${1:?Usage: youtube-upload.sh [--channel NAME] [--thumbnail PATH] <video_path> <title> <description> <privacy> [<tags>]}"
 TITLE="${2:?title required}"
 DESCRIPTION="${3:-}"
 PRIVACY="${4:-private}"
@@ -71,6 +77,13 @@ else
   : "${REFRESH_TOKEN:?YOUTUBE_REFRESH_TOKEN not set in .env (and no --channel given)}"
 fi
 
+# ── handle --publish-at=now ───────────────────────────────────────────────────
+PUBLISH_NOW=false
+if [ "$PUBLISH_AT" = "now" ]; then
+  PUBLISH_NOW=true
+  PUBLISH_AT=""
+fi
+
 # ── get access token ──────────────────────────────────────────────────────────
 echo "[youtube-upload] Refreshing access token..."
 TOKEN_RESPONSE=$(curl -s -X POST https://oauth2.googleapis.com/token \
@@ -84,6 +97,63 @@ if [ -z "$ACCESS_TOKEN" ]; then
   echo "[youtube-upload] ERROR: failed to get access token"
   echo "$TOKEN_RESPONSE"
   exit 1
+fi
+
+# ── auto-schedule: find nearest free date at 20:59 UTC (23:59 MSK) ───────────
+if [ "$PUBLISH_NOW" = false ] && [ -z "$PUBLISH_AT" ]; then
+  echo "[youtube-upload] Auto-scheduling: finding nearest free date..."
+  TAKEN_DATES=$(python3 - "$ACCESS_TOKEN" <<'PYEOF'
+import sys, json, re, urllib.request, urllib.parse, datetime
+
+token = sys.argv[1]
+
+def yt_get(url):
+    req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
+    with urllib.request.urlopen(req) as r:
+        raw = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', r.read().decode('utf-8', 'replace'))
+        return json.loads(raw)
+
+# get uploads playlist
+ch = yt_get("https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true")
+playlist_id = ch["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
+
+# get last 50 video IDs
+pl = yt_get(f"https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId={playlist_id}&maxResults=50")
+ids = ",".join(it["contentDetails"]["videoId"] for it in pl.get("items", []))
+
+if not ids:
+    sys.exit(0)
+
+# fetch statuses
+vids = yt_get(f"https://www.googleapis.com/youtube/v3/videos?part=status&id={ids}")
+taken = set()
+for it in vids.get("items", []):
+    pub = it["status"].get("publishAt", "")
+    if pub:
+        taken.add(pub[:10])  # YYYY-MM-DD
+
+print(" ".join(sorted(taken)))
+PYEOF
+  )
+
+  # Find nearest free date starting from today
+  PUBLISH_AT=$(python3 - "$TAKEN_DATES" <<'PYEOF'
+import sys, datetime
+
+taken = set(sys.argv[1].split()) if sys.argv[1] else set()
+today = datetime.date.today()
+candidate = today
+for _ in range(60):
+    if candidate.isoformat() not in taken:
+        print(f"{candidate.isoformat()}T20:59:00Z")
+        sys.exit(0)
+    candidate += datetime.timedelta(days=1)
+
+# Fallback: 60 days out
+print(f"{candidate.isoformat()}T20:59:00Z")
+PYEOF
+  )
+  echo "[youtube-upload] Auto-scheduled for: ${PUBLISH_AT}"
 fi
 
 # ── build metadata JSON ───────────────────────────────────────────────────────
@@ -101,10 +171,9 @@ fi
 
 METADATA=$(python3 -c "
 import json
-privacy = '${PRIVACY}'
-publish_at = '${PUBLISH_AT}'
-if publish_at:
-    privacy = 'private'
+publish_now = '${PUBLISH_NOW}' == 'true'
+privacy = '${PRIVACY}' if publish_now else 'private'
+publish_at = '' if publish_now else '${PUBLISH_AT}'
 status = {
     'privacyStatus': privacy,
     'selfDeclaredMadeForKids': False
@@ -165,9 +234,35 @@ if [ -n "$EXPECTED_CHANNEL_ID" ]; then
 fi
 
 YOUTUBE_URL="https://www.youtube.com/watch?v=${VIDEO_ID}"
-if [ -n "$PUBLISH_AT" ]; then
-  echo "[youtube-upload] SUCCESS (scheduled at ${PUBLISH_AT}): ${YOUTUBE_URL}"
+if [ "$PUBLISH_NOW" = true ]; then
+  echo "[youtube-upload] SUCCESS (public now): ${YOUTUBE_URL}"
+elif [ -n "$PUBLISH_AT" ]; then
+  echo "[youtube-upload] SUCCESS (scheduled ${PUBLISH_AT}): ${YOUTUBE_URL}"
 else
   echo "[youtube-upload] SUCCESS: ${YOUTUBE_URL}"
 fi
+
+# ── upload thumbnail (optional) ───────────────────────────────────────────────
+if [ -n "$THUMBNAIL" ]; then
+  if [ ! -f "$THUMBNAIL" ]; then
+    echo "[youtube-upload] WARNING: thumbnail file not found: $THUMBNAIL — skipping"
+  else
+    MIME="image/jpeg"
+    case "${THUMBNAIL##*.}" in png|PNG) MIME="image/png" ;; esac
+    echo "[youtube-upload] Uploading thumbnail: $(basename "$THUMBNAIL")"
+    THUMB_RESPONSE=$(curl -s -X POST \
+      "https://www.googleapis.com/upload/youtube/v3/thumbnails/set?videoId=${VIDEO_ID}&uploadType=media" \
+      -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+      -H "Content-Type: ${MIME}" \
+      --data-binary "@${THUMBNAIL}")
+    THUMB_KIND=$(echo "$THUMB_RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin).get('kind',''))" 2>/dev/null || true)
+    if [ "$THUMB_KIND" = "youtube#thumbnailSetResponse" ]; then
+      echo "[youtube-upload] Thumbnail uploaded OK"
+    else
+      echo "[youtube-upload] WARNING: thumbnail upload may have failed"
+      echo "$THUMB_RESPONSE"
+    fi
+  fi
+fi
+
 echo "$YOUTUBE_URL"
