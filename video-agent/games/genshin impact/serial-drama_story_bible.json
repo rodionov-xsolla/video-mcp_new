@@ -600,7 +600,9 @@
       "cliffhanger": "Childe's blade extended toward Lumine. He whispers: 'I'm sorry. They're watching.'",
       "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-08/serial-drama_final.mp4",
       "duration_sec": 27.0,
-      "notes": "6 clips: 2 I2V action (scenes 2+3, multi-prompt dynamic shots) + 4 Avatar dialogue (scenes 1+4+5+6, Chatterbox emotion-tuned). New opening hook: Lumine 'Wait! Don't go!' Added in debug session."
+      "notes": "6 clips: 2 I2V action (scenes 2+3, multi-prompt dynamic shots) + 4 Avatar dialogue (scenes 1+4+5+6, Chatterbox emotion-tuned). New opening hook: Lumine 'Wait! Don't go!' Added in debug session.",
+      "youtube_url": "https://www.youtube.com/watch?v=AyTNvQq7xh8",
+      "scheduled_at": "2026-06-09T20:55:00Z"
     }
   ]
 }
