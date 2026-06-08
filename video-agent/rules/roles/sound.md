@@ -141,7 +141,7 @@ RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/chatterbox/text-to-spee
 
 | Parameter | What |
 |---|---|
-| `text` | Text to synthesize. Field is `text`. ≤25 words per line. |
+| `text` | Text to synthesize. Field is `text`. Per-clip dialogue: ≤25 words. Full monologue: ≤35 words per chunk — see §"Long-text monologue" below. |
 | `audio_url` | Supabase public URL of the character's reference MP3. **Must be Supabase URL, not local path.** |
 | `exaggeration` | 0.0–1.0. Emotional intensity. Dramatic dialogue: `0.6–0.7`. Whispers/calm: `0.3–0.4`. Default `0.25`. |
 | `cfg` | 0.1–1.0. Guidance weight (pacing adherence). Higher = closer to reference cadence. Default `0.5`. ⚠️ Field is `cfg`, NOT `cfg_weight`. |
@@ -191,6 +191,40 @@ with open("/tmp/tts-K.json", "w") as f:
     json.dump(body, f)
 # Then: curl -s -X POST "..." -H "..." -d @/tmp/tts-K.json
 ```
+
+### ⚠️ Long-text monologue: 90+ words → mandatory chunking
+
+Chatterbox **silently fails** on inputs of 90+ words. Symptoms: phrases shuffle order, later fragments appear at 8–10s, clips 6-7 become garbled repetitions or hallucinations. The output audio is shorter than expected (~29s for 90w instead of ~37s) and missing large sections.
+
+**Root cause:** Chatterbox has an internal context window; it does not error — it produces broken audio without warning.
+
+**Mandatory fix for character-story and any full-monologue TTS > 80 words:**
+
+1. Split the monologue into chunks of **≤35 words** each
+2. Generate each chunk as a **separate Chatterbox request** (same `audio_url`, `exaggeration`, `cfg`, `temperature`)
+3. Download each chunk as `.wav`
+4. Concatenate with ffmpeg:
+
+```bash
+# write concat list
+printf "file '/tmp/chunk1.wav'\nfile '/tmp/chunk2.wav'\nfile '/tmp/chunk3.wav'\n" > /tmp/chunks.txt
+
+ffmpeg -y -f concat -safe 0 -i /tmp/chunks.txt \
+  -codec:a libmp3lame -qscale:a 2 \
+  /tmp/tts-full.mp3
+```
+
+5. Measure combined duration (`ffprobe -i /tmp/tts-full.mp3 -show_entries format=duration`). If `dur(tts) > dur(timeline)` — apply `atempo` ≤ 1.1× in the final FFmpeg assembly (cap at 1.4× total).
+6. **Verify with Whisper** if available: `faster-whisper /tmp/tts-full.mp3 --model medium` — all N clips must appear in order and in full.
+
+**Chunk boundaries for 7-clip character-story (~90 words):**
+- Chunk 1: clips 1–3 (~38 words)
+- Chunk 2: clips 4–5 (~26 words)
+- Chunk 3: clips 6–7 (~26 words)
+
+Never pass the whole monologue as a single Chatterbox call if total word count > 80. No exception.
+
+---
 
 ### Emotion guide for Genshin characters
 

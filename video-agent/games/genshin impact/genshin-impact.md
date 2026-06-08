@@ -81,6 +81,9 @@ Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, so
 ### Beidou
 `female captain Beidou, dark navy and gold pirate-style outfit, black hair in a high bun, confident fierce expression, large claymore sword, tall muscular build`
 
+### Dehya
+`female mercenary Dehya, red and gold warrior outfit with flame motifs and braided details, silver-white hair, fierce protective expression, pyro claymore, tall muscular dark-skinned build`
+
 ### Diluc
 `male knight Diluc, dark red and black noble outfit, long dark red hair tied back, serious brooding expression, large claymore, tall imposing build`
 
