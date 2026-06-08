@@ -43,7 +43,7 @@
   .tag-accent { color: var(--accent); border-color: var(--accent-dim); }
   .tag-green { color: var(--green); border-color: #2e4a35; }
   .muted { color: var(--muted); }
-  .pipeline { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin: 12px 0 24px; font-size: 13px; }
+  .pipeline { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin: 12px 0 24px; font-size: 13px; }
   .pipeline .step { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; text-align: center; }
   .pipeline .step .role { color: var(--accent); font-weight: 600; }
   .pipeline .step .model { color: var(--muted); font-size: 11px; font-family: ui-monospace, monospace; margin-top: 2px; }
@@ -106,6 +106,11 @@
     <div class="role" style="color: var(--green);">Manager</div>
     <div class="model">opus (parent)</div>
     <div class="out">git push +<br><span class="muted">cost report</span></div>
+  </div>
+  <div class="step" style="background: var(--panel-2);">
+    <div class="role" style="color: var(--green);">Publisher</div>
+    <div class="model">main session</div>
+    <div class="out">TikTok / IG<br><span class="muted">(mobile-mcp)</span></div>
   </div>
 </div>
 
@@ -313,10 +318,29 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
     </ul>
     <p><span class="tag">rules/roles/editor.md</span> · <span class="tag">prompts/editor.txt</span></p>
   </div>
+
+  <div class="card">
+    <h3>Publisher <span class="tag tag-green">main session</span></h3>
+    <p class="muted">Публикует <code>final.mp4</code> в TikTok / Instagram через mobile-mcp (Android по USB). НЕ суб-агент — MCP-инструменты телефона доступны только главной сессии.</p>
+    <h4>Что делает</h4>
+    <ul class="tight">
+      <li>Триггер — команда пользователя: «опубликовать в тик-ток starfleet» / «публикуй в инстаграм genshin»</li>
+      <li><code>fetch-for-publish.sh --platform tt|inst --game &lt;game_tag&gt;</code> — скачивает ролик из Supabase, кладёт в галерею через adb</li>
+      <li>mobile-mcp открывает TikTok/Instagram, выбирает нужный аккаунт и видео</li>
+      <li>Генерирует подпись (хук + хэштеги) под площадку в момент публикации</li>
+      <li>Поддерживает YouTube автозагрузку + thumbnail: <code>youtube-upload.sh</code></li>
+    </ul>
+    <h4>Аккаунты</h4>
+    <ul class="tight">
+      <li><code>star-trek-timelines</code> → TikTok: @game_pulse0 · IG: lookscool1337</li>
+      <li><code>genshin-impact</code> → TikTok: genshin snap · IG: game_pulse.gg</li>
+    </ul>
+    <p><span class="tag">rules/roles/publisher.md</span> · <span class="tag">queue/fetch-for-publish.sh</span> · <span class="tag">queue/youtube-upload.sh</span></p>
+  </div>
 </div>
 
 <h2>Форматы</h2>
-<p class="lead">11 playbook'ов — каждый описывает структуру ролика, целевую длительность, какие Kling-модели и какие role-briefs применяются.</p>
+<p class="lead">18 playbook'ов — каждый описывает структуру ролика, целевую длительность, какие Kling-модели и какие role-briefs применяются.</p>
 
 <table>
   <tr>
@@ -338,6 +362,16 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
     <td>Avatar v2</td><td>да</td>
   </tr>
   <tr>
+    <td><b>fun-news</b></td><td>20–30s</td>
+    <td>Вымышленные иронично-сатирические новости из лора игры. Постоянный анкор + 1–2 ротируемых репортёра, 2–3 выдуманных заголовка</td>
+    <td>Avatar v2</td><td>да</td>
+  </tr>
+  <tr>
+    <td><b>streettalk</b></td><td>20–35s</td>
+    <td>Vox-pop уличное интервью из вселенной игры: репортёр + 3 прохожих. Без студии, только улица. Иронично/абсурдно</td>
+    <td>Avatar v2</td><td>да</td>
+  </tr>
+  <tr>
     <td><b>gameplay-ai-avatar</b></td><td>25–40s</td>
     <td>Split-screen: 60% gameplay сверху + 40% talking-head внизу, голос 1.3× speedup</td>
     <td>Avatar v2 + gameplay-mp4</td><td>да</td>
@@ -354,8 +388,33 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
   </tr>
   <tr>
     <td><b>what-if-real-life</b></td><td>20–30s</td>
-    <td>Персонаж игры в обычном мире (Спок-бариста, Кирк в Starbucks)</td>
+    <td>Персонаж игры в обычном мире (Спок-бариста, Кирк в Starbucks). Комедийный тон</td>
     <td>I2V + Avatar</td><td>да</td>
+  </tr>
+  <tr>
+    <td><b>what-if-lore</b></td><td>25–40s</td>
+    <td>Cinematic «What If?» — одна точка расхождения в каноне, альтернативная судьба персонажа от первого лица. Трагедия/ужас/триумф (не комедия)</td>
+    <td>I2V</td><td>да (overlay)</td>
+  </tr>
+  <tr>
+    <td><b>redcon</b></td><td>25–40s</td>
+    <td>Alternate-universe история с расхождением в лоре — синоним what-if-lore, отдельный playbook с иной структурой сцен</td>
+    <td>I2V</td><td>да (overlay)</td>
+  </tr>
+  <tr>
+    <td><b>in-game-pov</b></td><td>20–35s</td>
+    <td>Зритель — протагонист: POV-камера в лор/геймплей-ситуации. Title card с survival %, тактический нарратор, live HUD-счётчик. Конец может быть смертью</td>
+    <td>I2V</td><td>да (overlay)</td>
+  </tr>
+  <tr>
+    <td><b>top-list</b></td><td>20–35s</td>
+    <td>Countdown TOP-5 персонажей/локаций/предметов. Title card + 5 сцен 5→1. Graphic overlay с номером (#N) и названием. Нарратор — одна панчлайн на позицию</td>
+    <td>I2V</td><td>да (overlay)</td>
+  </tr>
+  <tr>
+    <td><b>wild-documentary</b></td><td>20–35s</td>
+    <td>Существа игры как настоящая дикая природа: шейк-кам, телеобъектив, hushed David Attenborough нарратор. 3–5 существ. Финал — знак CTA в лапе/пасти</td>
+    <td>I2V</td><td>да (overlay)</td>
   </tr>
   <tr>
     <td><b>dance-battle</b></td><td>15–25s</td>
@@ -386,19 +445,43 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
     <h3>roblox</h3>
     <p class="muted">Блочный voxel-стиль, Roblox-noob, preppy-girl, builderman.</p>
     <p><span class="tag">games/roblox/roblox.md</span></p>
-    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">character-story</span><span class="tag tag-accent">motion-dance</span><span class="tag tag-accent">news</span></p>
+    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">character-story</span><span class="tag tag-accent">motion-dance</span><span class="tag tag-accent">news</span><span class="tag tag-accent">streettalk</span></p>
   </div>
   <div class="card">
     <h3>star-trek-timelines</h3>
-    <p class="muted">Канон ST, TOS/TNG/DS9/VOY/ENT эры, корабли.</p>
+    <p class="muted">Канон ST, TOS/TNG/DS9/VOY/ENT эры, корабли. Активная серия: Mirror Kirk arc (EP9–15).</p>
     <p><span class="tag">games/star-trek-timelines/star-trek-timelines.md</span></p>
-    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">character-story</span><span class="tag tag-accent">what-if-real-life</span><span class="tag tag-accent">gameplay-ai-avatar</span></p>
+    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">character-story</span><span class="tag tag-accent">what-if-real-life</span><span class="tag tag-accent">gameplay-ai-avatar</span><span class="tag tag-accent">fun-news</span><span class="tag tag-accent">streettalk</span></p>
+  </div>
+  <div class="card">
+    <h3>genshin impact</h3>
+    <p class="muted">Open-world Action RPG. TTS — Chatterbox (voice-cloned), не ElevenLabs. Активная серия: «Don't Save Me» (EP2 shipped).</p>
+    <p><span class="tag">games/genshin impact/genshin-impact.md</span></p>
+    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">what-if-real-life</span><span class="tag tag-accent">streettalk</span></p>
   </div>
   <div class="card">
     <h3>marvel snap</h3>
     <p class="muted">Карточная игра Marvel, гэймплей-клипы + reddit-story bibles.</p>
     <p><span class="tag">games/marvel snap/</span></p>
     <p><span class="tag tag-accent">reddit-story</span></p>
+  </div>
+  <div class="card">
+    <h3>got-conquest</h3>
+    <p class="muted">Game of Thrones: Conquest — Strategy/MMO.</p>
+    <p><span class="tag">games/got-conquest/got-conquest.md</span></p>
+    <p><span class="tag tag-accent">fun-news</span></p>
+  </div>
+  <div class="card">
+    <h3>pokemon-go</h3>
+    <p class="muted">AR Mobile / Creature Collector. Лучший fit для wild-documentary.</p>
+    <p><span class="tag">games/pokemon-go/pokemon-go.md</span></p>
+    <p><span class="tag tag-accent">fun-news</span><span class="tag tag-accent">wild-documentary</span></p>
+  </div>
+  <div class="card">
+    <h3>wwe-champions</h3>
+    <p class="muted">Match-3 Puzzle RPG / Sports Brawler (Gacha).</p>
+    <p><span class="tag">games/wwe-champions/wwe-champions.md</span></p>
+    <p><span class="tag tag-accent">fun-news</span></p>
   </div>
   <div class="card">
     <h3>mlbb</h3>
@@ -425,7 +508,7 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
 <div class="grid grid-2">
   <div class="card">
     <h3>fal.ai</h3>
-    <p class="muted">Прокси к моделям. Три семейства: NB2 (картинки), Kling (видео), ElevenLabs (голос).</p>
+    <p class="muted">Прокси к моделям. Четыре семейства: NB2 (картинки), Kling (видео), ElevenLabs (голос), Chatterbox (voice-clone TTS).</p>
     <h4>Эндпоинты в работе</h4>
     <ul class="tight">
       <li><code>fal-ai/nano-banana-2</code> — text-to-image</li>
@@ -433,7 +516,8 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
       <li><code>fal-ai/kling-video/v3/standard/image-to-video</code> — I2V primary</li>
       <li><code>fal-ai/kling-video/v2.6/pro/image-to-video</code> — I2V fallback</li>
       <li><code>fal-ai/kling-video/ai-avatar/v2/standard</code> — Avatar lipsync</li>
-      <li><code>fal-ai/elevenlabs/tts/eleven-v3</code> — TTS</li>
+      <li><code>fal-ai/elevenlabs/tts/eleven-v3</code> — TTS (все игры кроме Genshin)</li>
+      <li><code>fal-ai/chatterbox/text-to-speech</code> — voice-clone TTS (Genshin serial-drama)</li>
     </ul>
     <p>Async очередь. fal.ai temp-URLs живут часами — поэтому всё перезаливаем в Supabase до Kling-вызова.</p>
   </div>
@@ -456,12 +540,13 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
   </div>
 
   <div class="card">
-    <h3>ElevenLabs</h3>
-    <p class="muted">Доступ через fal.ai. Голос eleven-v3, 29 языков. stability/style — per-voice.</p>
+    <h3>ElevenLabs / Chatterbox</h3>
+    <p class="muted">Два TTS-бэкенда через fal.ai. Выбор по game_tag: Chatterbox для Genshin serial-drama (voice-clone из reference MP3), ElevenLabs eleven-v3 для всех остальных.</p>
     <h4>Голоса</h4>
     <ul class="tight">
       <li>Voice mapping в <code>sound.md</code> + per-game в game config</li>
-      <li>Per-character settings (Kirk: stable, Spock: flat, Worf: harsh)</li>
+      <li>Per-character settings ElevenLabs (Kirk: stable, Spock: flat, Worf: harsh)</li>
+      <li>Chatterbox: JSON-тело пишется через Python (не bash heredoc — апострофы убивают аудио)</li>
     </ul>
   </div>
 
@@ -488,12 +573,16 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
 │   ├── roles/             ─ craft sub-agent'ов (format-agnostic)
 │   │   ├── manager.md     ─ оркестрация
 │   │   ├── scenarist.md   ─ storyboard.json
-│   │   ├── sound.md       ─ TTS + субтитры
+│   │   ├── sound.md       ─ TTS (ElevenLabs / Chatterbox) + субтитры
 │   │   ├── storyboarder.md─ NB2 + chain refs
 │   │   ├── animator.md    ─ Kling I2V/Avatar
-│   │   └── editor.md      ─ FFmpeg сборка
-│   ├── formats/           ─ 11 format playbooks
-│   │   └── {character-story, serial-drama, news, ...}.md
+│   │   ├── editor.md      ─ FFmpeg сборка
+│   │   └── publisher.md   ─ TikTok / Instagram / YouTube через mobile-mcp
+│   ├── formats/           ─ 18 format playbooks
+│   │   └── {character-story, serial-drama, news, fun-news, streettalk,
+│   │       gameplay-ai-avatar, reddit-story, standard, what-if-real-life,
+│   │       what-if-lore, redcon, in-game-pov, top-list, wild-documentary,
+│   │       dance-battle, motion-dance, dual-style, object-character}.md
 │   └── main/
 │       ├── budgets.md     ─ цены моделей
 │       ├── fallback.md    ─ обработка ошибок
@@ -523,9 +612,11 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
 │       ├── scenes/scene-K/scene-K.{png,mp4,mp3}
 │       └── final.mp4
 │
-├── queue/                 ─ worker для Supabase video_tasks
+├── queue/                 ─ worker + публикация
 │   ├── worker.py
-│   └── upload-asset.sh
+│   ├── upload-asset.sh
+│   ├── fetch-for-publish.sh   ─ скачать ролик из Supabase → adb → галерея телефона
+│   └── youtube-upload.sh      ─ авто-загрузка на YouTube + thumbnail + расписание
 │
 └── legacy/                ─ архив старых правил (fallback only)
 </code></pre>
@@ -551,6 +642,7 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
       <li><a href="video-agent/rules/roles/storyboarder.md">storyboarder.md</a></li>
       <li><a href="video-agent/rules/roles/animator.md">animator.md</a></li>
       <li><a href="video-agent/rules/roles/editor.md">editor.md</a></li>
+      <li><a href="video-agent/rules/roles/publisher.md">publisher.md</a></li>
     </ul>
   </div>
   <div class="card">
@@ -559,10 +651,17 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
       <li><a href="video-agent/rules/formats/character-story.md">character-story.md</a></li>
       <li><a href="video-agent/rules/formats/serial-drama.md">serial-drama.md</a></li>
       <li><a href="video-agent/rules/formats/news.md">news.md</a></li>
+      <li><a href="video-agent/rules/formats/fun-news.md">fun-news.md</a></li>
+      <li><a href="video-agent/rules/formats/streettalk.md">streettalk.md</a></li>
       <li><a href="video-agent/rules/formats/gameplay-ai-avatar.md">gameplay-ai-avatar.md</a></li>
       <li><a href="video-agent/rules/formats/reddit-story.md">reddit-story.md</a></li>
       <li><a href="video-agent/rules/formats/standard.md">standard.md</a></li>
       <li><a href="video-agent/rules/formats/what-if-real-life.md">what-if-real-life.md</a></li>
+      <li><a href="video-agent/rules/formats/what-if-lore.md">what-if-lore.md</a></li>
+      <li><a href="video-agent/rules/formats/redcon.md">redcon.md</a></li>
+      <li><a href="video-agent/rules/formats/in-game-pov.md">in-game-pov.md</a></li>
+      <li><a href="video-agent/rules/formats/top-list.md">top-list.md</a></li>
+      <li><a href="video-agent/rules/formats/wild-documentary.md">wild-documentary.md</a></li>
       <li><a href="video-agent/rules/formats/dance-battle.md">dance-battle.md</a></li>
       <li><a href="video-agent/rules/formats/motion-dance.md">motion-dance.md</a></li>
       <li><a href="video-agent/rules/formats/dual-style.md">dual-style.md</a></li>
@@ -590,7 +689,7 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
 
 <hr>
 <p class="muted" style="font-size: 12px; text-align: center;">
-  video-mcp pipeline · обновлено вручную при правках правил
+  video-mcp pipeline · обновлено 2026-06-08
 </p>
 
 </div>
