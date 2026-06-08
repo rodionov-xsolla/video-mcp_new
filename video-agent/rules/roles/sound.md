@@ -194,15 +194,21 @@ with open("/tmp/tts-K.json", "w") as f:
 
 ### Emotion guide for Genshin characters
 
-| Character | Scene type | exaggeration | cfg_weight |
+| Character | Scene type | exaggeration | cfg |
 |---|---|---|---|
-| Childe | casual / cocky | 0.55 | 0.5 |
+| Childe | casual / cocky | 0.55 | 0.50 |
 | Childe | intense / combat | 0.70 | 0.45 |
-| Childe | whisper (secret) | 0.35 | 0.55 |
-| Lumine | determined | 0.55 | 0.5 |
+| Childe | cold threat / menace | 0.30 | 0.70 |
+| Childe | whisper (secret, apology) | 0.18–0.20 | 0.72–0.75 |
+| Childe | cliffhanger reveal | 0.55 | 0.50 |
+| Lumine | determined / composed | 0.55 | 0.50 |
+| Lumine | desperate / raw urgency | 0.82–0.85 | 0.35–0.40 |
+| Lumine | defiant anger | 0.68–0.72 | 0.42–0.45 |
 | Lumine | angry / betrayed | 0.65 | 0.45 |
-| Agent | cold orders | 0.40 | 0.6 |
+| Agent | cold orders | 0.40 | 0.60 |
 | Agent | threatening | 0.55 | 0.55 |
+
+**Rule: never use default `exaggeration 0.25` for serial-drama dialogue.** Every line has an emotional register — look at `facial_expression` and `character_state` in storyboard.json to pick the row above. If a scene has no clear match, use `exaggeration 0.45` (neutral drama floor).
 
 ---
 

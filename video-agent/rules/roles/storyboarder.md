@@ -263,6 +263,12 @@ With 2 characters in frame, ALWAYS specify in `image_prompt`:
 
 **Rule:** `gaze_direction` matches the speech addressee. If Kirk speaks to Worf — he looks at Worf.
 
+**Secondary character hands/arms — NB2 extra-limb rule.** When 2 characters share the frame, DO NOT describe hands or arms of the secondary (background) character. NB2 renders limbs for both characters; if you also describe arms/hands of the secondary, it generates a third hand or grafts limbs onto the primary. Pattern to follow:
+- Primary (foreground): describe hands/arms explicitly — `"ONE hand pressed flat against pillar"`.
+- Secondary (background): describe only torso + face, e.g. `"Lumine shown from shoulders up only — NO arms visible, NO hands visible"`.
+- If the secondary must hold something (weapon, prop): put them in their own clip as the primary. Do not describe held objects on background figures.
+Burn-tested EP2 scene-3 (2026-06-08): `"arms slightly angled"` on Lumine produced 3 visible hands in the frame.
+
 **180° rule:** in dialogue between two characters, the camera stays on one side of the axis between them. If the master shot has A on the left and B on the right — in singles A looks RIGHT, B looks LEFT. Violation → viewer loses spatial orientation. Verify gaze direction at every angle change inside the same dialogue scene.
 
 **Anti-bleeding:** with 2 characters, describe each as one continuous block in the prompt, do not interleave attributes. JSON isolation template — see section 2.1 "Two characters".

@@ -228,6 +228,21 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 - **NO title cards / brainrot tags / character names overlays** — only dialogue subtitles + TBC
 - General script rules — `rules/roles/scenarist.md`
 
+**MANDATORY YouTube metadata** — Scenarist MUST write these top-level fields in storyboard.json (Manager cannot publish without them):
+
+```json
+"title":        "{series_title} — EP {N}: {episode_title} | {Game Name}",
+"description":  "{1-2 sentence hook describing the episode cliffhanger}\n\n{series_title} — EP {N} of {total}\n\n#{GameTag} #{Character1} #{Character2} #Shorts",
+"youtube_tags": ["{Game Name}", "{Character1}", "{Character2}", "serial drama", "{series_title}", "Shorts", "anime", "{game} shorts", "{episode_title}"],
+"thumbnail_url": ""
+```
+
+Convention examples (series "Don't Save Me", Genshin Impact):
+- `title`: `"Don't Save Me — EP 2: Leave Liyue | Genshin Impact"`
+- `description`: first line = cliffhanger hook (≤120 chars), then blank line, then series credit, then hashtags
+- `youtube_tags`: 8–12 tags, mix broad (`Genshin Impact`, `Shorts`) + specific (`Childe`, `Leave Liyue`, `Fatui`)
+- `thumbnail_url`: leave empty string — Manager fills it after extracting frame from the cliffhanger scene
+
 ### Storyboarder
 
 - Pixar/Disney 3D style (`style_tags` from story bible)
@@ -241,7 +256,9 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 
 ### Animator
 
-- I2V clips via Kling v3 Standard (`generate_audio: false`, always) — micro motion only. Fallback to v2.6 Pro only on v3 artifacts.
+- I2V clips via Kling v3 Standard — micro motion only. Fallback to v2.6 Pro only on v3 artifacts.
+  - **`generate_audio: false`** for I2V clips that have DIALOGUE overlaid (TTS/narrator — the voice track replaces Kling audio anyway).
+  - **`generate_audio: true`** for atmospheric I2V action clips with NO voice: rain, night streets, ambient rooms, battle ambience. Costs $0.126/s instead of $0.084/s but adds rain/wind/footstep sound that significantly raises drama. Default for silent action clips in serial-drama is `true`. Override to `false` only if the scene is purely visual with no natural ambient layer.
 - Avatar clips via Kling Avatar v2 Standard (with TTS audio_url)
 - Motion prompt = technical (positions, camera, physical actions), without names/moods
 - One I2V model for the whole episode — do not mix Kling I2V versions within one episode
@@ -259,6 +276,13 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 
 - TTS via fal.ai MiniMax — `voice_setting.voice_id` from story bible, `emotion` per mood, field is `prompt` not `text`. For Genshin Impact serial-drama: Chatterbox TTS (`fal-ai/chatterbox/text-to-speech`) — see `sound.md §1`.
 - One character = one voice across the whole series (locked in story bible)
+- **Chatterbox `exaggeration` is mandatory per scene mood — never use default 0.25 for drama.** Sound agent must differentiate by emotional register:
+  - Desperate / raw urgency: `exaggeration 0.80–0.85`
+  - Defiant anger: `exaggeration 0.65–0.72`
+  - Cold threat / menace: `exaggeration 0.28–0.35`, `cfg 0.65–0.72`
+  - Pained whisper / apology: `exaggeration 0.15–0.20`, `cfg 0.70–0.75`
+  - Cliffhanger reveal: `exaggeration 0.55–0.65`
+  - Default neutral if no emotion context: `exaggeration 0.45`
 - **Narrator VO (optional):** off-screen series intro voice over I2V action clips. Store as `narrator_vo` top-level field in storyboard.json: `{text, voice, tts_url, duration_sec, overlay_clips, volume}`. Sound generates the MP3; Editor overlays it via amix starting at t=0. Generate with `faster-whisper` for timing (offset=0 per clip, then +cumulative_start for ASS timecodes).
 - **Subtitles:** ASS via `ffmpeg-full` (libass required; stock ffmpeg lacks it). Use sentence-level Whisper timing — NOT word-by-word. Dialogue style: Bold=1, Outline=6, Fontsize=70, white, MarginV=520. Narrator style: Bold=1, Outline=4, italic, warm color `#EDE0C8`, Fontsize=65, MarginV=540.
 - ONLY dialogue subs + narrator + TBC. No title cards, brainrot tags, character names.
@@ -278,6 +302,12 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 - **CTA included in concat list** as the last clip (not a separate re-encode)
 - TBC overlay 2s before the end (before fade)
 - Fade out 1.0s on MAIN_DUR (before CTA); CTA goes after fade in silence
+- **Episode title strip — mandatory for every episode.** Pillow PNG overlay (NOT drawtext — `.ttf` on macOS works but `.ttc` produces squares). Apply via ffmpeg `-loop 1` on the PNG with `[1:v]trim=duration=TOTAL,fade=in:d=0.3,fade=out:st=4.5:d=0.5[strip]; [0:v][strip]overlay=x=0:y=40`. Duration: visible **5 seconds** total (fade-in 0.3s at t=0, fade-out 0.5s starting at t=4.5s). Strip spec:
+  - Canvas: 1080×110 px, semi-transparent dark background (black, alpha ~200)
+  - Line 1 (top): series name, 32px Arial Bold, gold `#f5d060`, centered
+  - Line 2 (bottom): `EP. N — EPISODE TITLE`, 54px Arial Bold, white, centered
+  - y=8 for line 1, y=48 for line 2
+  - Generate with Pillow, save as `build/title-strip.png`, apply in final ffmpeg pass
 - General rules — `rules/roles/editor.md`
 
 ---
