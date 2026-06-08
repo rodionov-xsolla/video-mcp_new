@@ -5,9 +5,9 @@
   "title": "Don't Save Me",
   "style_tags": "Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, soft outline anime aesthetic, magical elemental effects, Teyvat world environment, clean detailed character illustration, Liyue Harbor setting, cinematic 9:16 vertical composition",
   "created_at": "2026-06-04",
-  "last_episode": 1,
+  "last_episode": 2,
   "planned_arc": {
-    "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion only, all combat/running/chases = CUT between clips not animation, protagonist always faces camera, cliffhanger spoken line = Avatar TTS). Childe is the reluctant protector \u2014 his every action should read as either threat or sacrifice until the last episode. No on-screen text. After shipping an episode, fold its loops/status into characters[], active_loops, episode_summaries. Do NOT re-invent episodes while this arc has unshipped entries.",
+    "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion only, all combat/running/chases = CUT between clips not animation, protagonist always faces camera, cliffhanger spoken line = Avatar TTS). Childe is the reluctant protector — his every action should read as either threat or sacrifice until the last episode. No on-screen text. After shipping an episode, fold its loops/status into characters[], active_loops, episode_summaries. Do NOT re-invent episodes while this arc has unshipped entries.",
     "episodes": [
       {
         "episode": 1,
@@ -17,7 +17,7 @@
           "Northland Bank at night. A Fatui Agent hands Childe a sealed scroll.",
           "Childe breaks the seal, reads it. His expression darkens.",
           "He drops the scroll into a candle flame.",
-          "Lumine watches from the shadows \u2014 she saw everything.",
+          "Lumine watches from the shadows — she saw everything.",
           "Childe senses her presence and turns. The Agent turns too.",
           "Childe steps between Lumine and the Agent."
         ],
@@ -53,14 +53,14 @@
       {
         "episode": 2,
         "title": "Leave Liyue",
-        "link": "After EP1 Childe is caught between orders and his own choice. He tries to push Lumine away \u2014 harshly.",
+        "link": "After EP1 Childe is caught between orders and his own choice. He tries to push Lumine away — harshly.",
         "beats": [
           "Rain-soaked street in Liyue Harbor.",
           "Lumine follows Childe. He stops abruptly.",
           "She demands answers. He tells her to leave the city today.",
           "She refuses.",
           "A Fatui watcher is spotted on the rooftop above.",
-          "Childe draws his weapon \u2014 aimed at Lumine."
+          "Childe draws his weapon — aimed at Lumine."
         ],
         "key_lines": [
           {
@@ -94,12 +94,12 @@
       {
         "episode": 3,
         "title": "Fake Fight",
-        "link": "Childe stages a fake attack on Lumine to fool the Fatui \u2014 without telling her.",
+        "link": "Childe stages a fake attack on Lumine to fool the Fatui — without telling her.",
         "beats": [
-          "Narrow street. Childe strikes first \u2014 fast and deliberate.",
+          "Narrow street. Childe strikes first — fast and deliberate.",
           "Lumine blocks. She doesn't know if it's real.",
           "Childe whispers one word: 'Play along.'",
-          "Lumine fights back harder \u2014 genuinely angry.",
+          "Lumine fights back harder — genuinely angry.",
           "The Fatui watcher on the rooftop takes aim at Lumine.",
           "Childe sees the rifle. He steps into the shot."
         ],
@@ -135,7 +135,7 @@
       {
         "episode": 4,
         "title": "Not Your Mission",
-        "link": "Lumine hides the wounded Childe. She bandages him \u2014 and finally forces out the truth.",
+        "link": "Lumine hides the wounded Childe. She bandages him — and finally forces out the truth.",
         "beats": [
           "Empty teahouse after closing. Lumine wraps Childe's shoulder.",
           "He tries to make light of it. She pulls the bandage tighter.",
@@ -176,11 +176,11 @@
       {
         "episode": 5,
         "title": "The Betrayal",
-        "link": "To save Lumine, Childe pretends to hand her over \u2014 without warning her.",
+        "link": "To save Lumine, Childe pretends to hand her over — without warning her.",
         "beats": [
           "Childe slowly steps back from Lumine, toward the Agent.",
           "The Agent orders him to bring her closer.",
-          "Lumine stares at Childe \u2014 pure hatred.",
+          "Lumine stares at Childe — pure hatred.",
           "Childe grips her wrist. She almost breaks free.",
           "He leans close and whispers in her ear.",
           "The Agent steps forward. Childe meets his eyes and blinks."
@@ -200,7 +200,7 @@
           },
           {
             "speaker": "Childe",
-            "line": "When I blink \u2014 hit him."
+            "line": "When I blink — hit him."
           }
         ],
         "cliffhanger": {
@@ -217,7 +217,7 @@
       {
         "episode": 6,
         "title": "Run With Me",
-        "link": "They escape together \u2014 but Lumine is furious that Childe made the call without her again.",
+        "link": "They escape together — but Lumine is furious that Childe made the call without her again.",
         "beats": [
           "Night port. Lumine and Childe sprint through the docks. Fatui behind them.",
           "Childe is running on the wounded shoulder. She notices.",
@@ -265,7 +265,7 @@
           "The Agent orders Childe to prove his loyalty.",
           "Childe raises his weapon.",
           "Lumine holds his gaze. No fear.",
-          "Combat begins. Childe strikes near her \u2014 not at her.",
+          "Combat begins. Childe strikes near her — not at her.",
           "Lumine notices the pattern. Behind her a Fatui soldier charges."
         ],
         "key_lines": [
@@ -287,7 +287,7 @@
           }
         ],
         "cliffhanger": {
-          "scene": "Childe's blade flies past Lumine \u2014 and pins the charging Fatui soldier to the wall.",
+          "scene": "Childe's blade flies past Lumine — and pins the charging Fatui soldier to the wall.",
           "line_speaker": "Lumine",
           "line": "You were protecting me the whole time?"
         },
@@ -346,7 +346,7 @@
         "beats": [
           "Dawn. Liyue Harbor port.",
           "Lumine spots Fatui soldiers blocking every ship.",
-          "Childe shows her a shortcut through the warehouse \u2014 a clear path to the water.",
+          "Childe shows her a shortcut through the warehouse — a clear path to the water.",
           "She understands: he isn't coming with her.",
           "He smiles and pulls the warehouse door closed between them.",
           "She hears the clash of battle on the other side.",
@@ -390,11 +390,11 @@
           "Lumine charges into the Fatui circle.",
           "Childe tries to push himself upright.",
           "She steps in front of him.",
-          "The Agent arrives. He surveys the scene \u2014 too many witnesses at the open port.",
+          "The Agent arrives. He surveys the scene — too many witnesses at the open port.",
           "He orders the Fatui to fall back.",
           "The soldiers leave. The port goes silent.",
           "Childe and Lumine stand alone on the empty docks.",
-          "He reaches into his coat and returns something she dropped \u2014 her travel pouch.",
+          "He reaches into his coat and returns something she dropped — her travel pouch.",
           "He turns to leave first."
         ],
         "key_lines": [
@@ -421,7 +421,7 @@
           "line": "Next time I'll come back without orders."
         },
         "loops": [
-          "CLOSE: Fatui threat to Lumine in Liyue \u2014 RESOLVED",
+          "CLOSE: Fatui threat to Lumine in Liyue — RESOLVED",
           "OPEN for season 2: what Childe does now that he is Fatui-branded traitor",
           "OPEN for season 2: whether Lumine waits for him"
         ]
@@ -436,11 +436,11 @@
       "voice": "chatterbox",
       "voice_ref": "games/genshin impact/Childe.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/voice-ref.mp3",
-      "status": "EP1: Received sealed Fatui order to bring in Lumine. Read it, expression darkened, burned the scroll in candle flame. Lumine witnessed from the alcove. When Agent spotted her, Childe stepped between them. Has not executed the order nor openly defied it yet.",
-      "aura_points": 100,
+      "status": "EP2: Tried to push Lumine away on a rain-soaked Liyue street. Told her to leave the city. When she refused and demanded he look her in the eye, drew his hydro blade aimed at her — a performance for the Fatui watcher on the rooftop. Whispered 'I'm sorry. They're watching.' His allegiance remains ambiguous to any observer.",
+      "aura_points": 85,
       "relationships": {
-        "Lumine": "complicated \u2014 she witnessed him burn the order; he stepped in front of her",
-        "Agent": "subordinate under ultimatum \u2014 has not answered yet",
+        "Lumine": "tension escalating — she demanded truth, he gave threat; blade between them, apology whispered",
+        "Agent": "subordinate still performing loyalty for the watcher — but the performance is cracking",
         "Fatui": "loyal until the moment he isn't"
       }
     },
@@ -451,11 +451,11 @@
       "voice": "chatterbox",
       "voice_ref": "games/genshin impact/Traveller.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/voice-ref.mp3",
-      "status": "EP1: Witnessed Fatui order to capture her at Northland Bank. Was discovered in the shadow alcove. Stepped out when Agent spotted her. Has not left Liyue. Knows Childe burned the order but has no certainty why.",
-      "aura_points": 50,
+      "status": "EP2: Followed Childe through the rain demanding answers. Refused to leave. Pushed him to look her in the eye. Now has Childe's blade aimed at her and his whispered apology — she does not yet know what to make of it.",
+      "aura_points": 60,
       "relationships": {
-        "Childe": "deep distrust \u2014 Golden House baseline; watched him burn an order but doesn't know his intent",
-        "Agent": "active threat \u2014 directly targeted"
+        "Childe": "confused anger — demanded honesty, got a blade and an apology; unclear if threat or protection",
+        "Agent": "active threat — directly targeted"
       }
     },
     {
@@ -465,36 +465,45 @@
       "voice": "chatterbox",
       "voice_ref": "games/genshin impact/Fatui_dottore.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fatui-agent/voice-ref.mp3",
-      "status": "EP1: Delivered sealed order to Childe at Northland Bank. Spotted Lumine in the alcove. Issued ultimatum to Childe: 'Prove she matters less than your orders.'",
+      "status": "EP2: Watcher (proxy/subordinate) observed the confrontation from the rooftop. Whether the Agent received a report is unknown. Childe's performance may or may not have been convincing.",
       "aura_points": 0,
       "relationships": {
-        "Childe": "superior issuing an ultimatum \u2014 waiting for Childe's answer",
-        "Lumine": "active target \u2014 now confirmed present in Liyue"
+        "Childe": "superior issuing an ultimatum — waiting for Childe's answer",
+        "Lumine": "active target — now confirmed present in Liyue"
       }
     }
   ],
   "active_loops": [
-    "major: what exactly the Fatui order demands and how far Snezhnaya's interest in Lumine goes",
-    "major: why Snezhnaya wants Lumine captured right now \u2014 what changed",
-    "major: whether Childe will obey the order or protect her \u2014 his answer is due in EP2",
-    "eternal: Childe's loyalty is always a question \u2014 faction vs. personal choice",
-    "eternal: Lumine does not trust Childe unconditionally \u2014 Golden House is the baseline"
+    "major: whether Childe's blade-draw fooled the Fatui watcher — and what was reported to the Agent",
+    "major: what Lumine decides now — leave or stay, trust or distrust",
+    "major: how far Fatui will escalate after this public confrontation",
+    "eternal: Childe's loyalty — faction vs. personal choice (performance vs. reality)",
+    "eternal: Lumine does not trust Childe unconditionally — Golden House + blade = two betrayals"
   ],
-  "closed_loops": [],
+  "closed_loops": [
+    "minor: will Childe acknowledge Lumine in public — YES, violently and apologetically"
+  ],
   "world_state": {
-    "location": "Northland Bank interior, Liyue Harbor \u2014 night (EP1)",
+    "location": "Rain-soaked cobblestone lane, Liyue Harbor — night (EP2)",
     "important_items": [
-      "Burned Fatui order \u2014 ash on Northland Bank desk; Lumine witnessed it being read and destroyed",
-      "Lumine's presence in Liyue \u2014 now known to the Agent",
-      "Agent's ultimatum \u2014 'Prove she matters less than your orders' \u2014 unanswered going into EP2"
+      "Burned Fatui order — ash on Northland Bank desk; Lumine witnessed it being read and destroyed",
+      "Lumine's presence in Liyue — now known to the Agent",
+      "Agent's ultimatum — 'Prove she matters less than your orders' — unanswered going into EP2",
+      "Childe's blade drawn at Lumine in public — Fatui watcher on rooftop witnessed the confrontation"
     ],
     "key_events": [
       "EP1: Fatui Agent delivered sealed order to Childe at Northland Bank reception counter",
-      "EP1: Childe read the order \u2014 expression hardened \u2014 burned the scroll in the desk candle",
-      "EP1: Lumine watched from shadow alcove \u2014 witnessed the order and its destruction",
+      "EP1: Childe read the order — expression hardened — burned the scroll in the desk candle",
+      "EP1: Lumine watched from shadow alcove — witnessed the order and its destruction",
       "EP1: Childe sensed Lumine's presence and turned; Agent turned too",
       "EP1: Childe stepped between Lumine and the Agent",
-      "EP1: Agent issued ultimatum: 'Prove she matters less than your orders.' \u2014 cliffhanger"
+      "EP1: Agent issued ultimatum: 'Prove she matters less than your orders.' — cliffhanger",
+      "EP2: Lumine called out to Childe on rain-soaked street — 'Wait! Don't go!'",
+      "EP2: Childe stopped and told Lumine to leave the city today — she refused",
+      "EP2: Lumine demanded he look her in the eye — 'Then look me in the eye when you say it.'",
+      "EP2: Fatui watcher spotted crouched on rooftop above",
+      "EP2: Childe drew hydro blade aimed at Lumine — performed threat for watcher",
+      "EP2: Cliffhanger — Childe whispered 'I'm sorry. They're watching.' blade still raised"
     ]
   },
   "anti_repetition": {
@@ -521,7 +530,7 @@
       "You protected her.",
       "Good choice.",
       "I trusted you.",
-      "When I blink \u2014 hit him.",
+      "When I blink — hit him.",
       "Now I believe you.",
       "You chose for me again.",
       "I chose a chance.",
@@ -557,7 +566,9 @@
       "season-cliff-open-promise",
       "lumine-eye-in-shadow-teaser",
       "scroll-read-expression-shift",
-      "childe-steps-between-two-parties"
+      "childe-steps-between-two-parties",
+      "lumine-desperate-opening-call",
+      "blade-drawn-as-protection-performance"
     ],
     "recent_cliffhangers": [
       "agent-ultimatum-prove-loyalty",
@@ -568,18 +579,28 @@
       "blade-pins-soldier-protection-reveal",
       "agent-declares-port-sealed",
       "childe-kneeling-before-fatui",
-      "season-cliff-next-time-without-orders"
+      "season-cliff-next-time-without-orders",
+      "blade-at-lumine-whispered-apology-watcher"
     ]
   },
   "episode_summaries": [
     {
       "episode": 1,
       "language": "en",
-      "summary": "Teaser hook: Lumine's face half-hidden in shadow, watching something unseen. Northland Bank interior at night \u2014 Agent hands Childe a sealed scroll. Childe reads it, expression darkens, drops it into candle flame. Lumine witnesses from alcove shadows. Agent speaks the order aloud. Lumine steps partially out: 'This is about me?' Childe puts himself between them: 'You shouldn't have come here.' Lumine: 'Too late.'",
+      "summary": "Teaser hook: Lumine's face half-hidden in shadow, watching something unseen. Northland Bank interior at night — Agent hands Childe a sealed scroll. Childe reads it, expression darkens, drops it into candle flame. Lumine witnesses from alcove shadows. Agent speaks the order aloud. Lumine steps partially out: 'This is about me?' Childe puts himself between them: 'You shouldn't have come here.' Lumine: 'Too late.'",
       "cliffhanger": "Agent cold and measured: 'Prove she matters less than your orders.'",
       "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-04/serial-drama_final.mp4",
       "duration_sec": 31.5,
       "notes": "8 clips: 3 I2V action (clips 1-3, 5+7+5s) + 5 Avatar dialogue (clips 4-8, trimmed to TTS). Chatterbox voice clone. Narrator VO overlay on clips 1-3."
+    },
+    {
+      "episode": 2,
+      "language": "en",
+      "summary": "Opening: Lumine calls out to Childe's retreating figure in the rain — raw desperation. Wide establishing shot: both figures on rain-soaked Liyue lane, rooftop watcher silhouette spotted. Childe turns and confronts. He orders her to leave today. She refuses and demands he look her in the eye. He draws his hydro blade — aimed at her.",
+      "cliffhanger": "Childe's blade extended toward Lumine. He whispers: 'I'm sorry. They're watching.'",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-08/serial-drama_final.mp4",
+      "duration_sec": 27.0,
+      "notes": "6 clips: 2 I2V action (scenes 2+3, multi-prompt dynamic shots) + 4 Avatar dialogue (scenes 1+4+5+6, Chatterbox emotion-tuned). New opening hook: Lumine 'Wait! Don't go!' Added in debug session."
     }
   ]
 }

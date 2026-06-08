@@ -228,6 +228,21 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 - **NO title cards / brainrot tags / character names overlays** — only dialogue subtitles + TBC
 - General script rules — `rules/roles/scenarist.md`
 
+**MANDATORY YouTube metadata** — Scenarist MUST write these top-level fields in storyboard.json (Manager cannot publish without them):
+
+```json
+"title":        "{series_title} — EP {N}: {episode_title} | {Game Name}",
+"description":  "{1-2 sentence hook describing the episode cliffhanger}\n\n{series_title} — EP {N} of {total}\n\n#{GameTag} #{Character1} #{Character2} #Shorts",
+"youtube_tags": ["{Game Name}", "{Character1}", "{Character2}", "serial drama", "{series_title}", "Shorts", "anime", "{game} shorts", "{episode_title}"],
+"thumbnail_url": ""
+```
+
+Convention examples (series "Don't Save Me", Genshin Impact):
+- `title`: `"Don't Save Me — EP 2: Leave Liyue | Genshin Impact"`
+- `description`: first line = cliffhanger hook (≤120 chars), then blank line, then series credit, then hashtags
+- `youtube_tags`: 8–12 tags, mix broad (`Genshin Impact`, `Shorts`) + specific (`Childe`, `Leave Liyue`, `Fatui`)
+- `thumbnail_url`: leave empty string — Manager fills it after extracting frame from the cliffhanger scene
+
 ### Storyboarder
 
 - Pixar/Disney 3D style (`style_tags` from story bible)
