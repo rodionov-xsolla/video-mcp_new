@@ -5,7 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 8,
+  "last_episode": 9,
   "planned_arc": {
     "note": "Season 1 arc EP9–EP16. Core emotional engine: Kirk saves the monster that tried to kill Chekov — and every time he does 'the right thing', his crew gets more afraid. Mirror Kirk envies Kirk's loyal crew. Admiral pressures Kirk to eject the double or face Enterprise quarantine. Scenarist follows the beats and key_lines below as RAILS: keep cliffhanger spoken lines verbatim, adapt each episode into 3–5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion, protagonist always faces camera, cliffhanger line = Avatar TTS). Fold completed episodes into characters[], active_loops, episode_summaries as usual. Do NOT invent complex conspiracies or test protocols — the drama is simple: Kirk's mercy costs him his crew's trust.",
     "new_characters": [
@@ -378,7 +378,7 @@
       "character_description": "semi-realistic Pixar 3D Ensign Pavel Chekov, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
       "voice": "Charlie",
       "elevenlabs_voice": "Charlie",
-      "status": "EP8: Survived — pulled back from the airlock gap when the door sealed. Mirror Kirk ejected. Beginning to fear not just the double, but Kirk's decisions.",
+      "status": "EP9: Survived. Begged Kirk not to go after Mirror Kirk — 'He wanted to kill me. Don't go after him, Captain.' Kirk ordered Scotty to retrieve him anyway. Chekov's trust in Kirk is cracking.",
       "aura_points": 200,
       "relationships": {
         "Kirk": "trusted captain completely — that trust is cracking now that Kirk wants to retrieve Mirror Kirk"
@@ -415,7 +415,7 @@
       "voice": "Daniel",
       "elevenlabs_voice": "Daniel",
       "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery.",
-      "status": "EP8: Ejected through the airlock into open space. Drifting in the debris field of the allied ship. Kirk wants to retrieve him. Mirror Kirk knows Kirk will come.",
+      "status": "EP9: Still in the debris field. Scotty lost the transporter lock. Voice came through static: 'You'll come for me anyway, Jim.' Kirk has not given up.",
       "aura_points": 0,
       "relationships": {
         "Kirk": "mirror double — envies Kirk's loyal crew; knows Kirk will try to save him",
@@ -520,7 +520,13 @@
       "Take one step and I'll break your neck.",
       "You're slower than my Worf.",
       "Why Chekov?",
-      "Because you'll always save the boy."
+      "Because you'll always save the boy.",
+      "He wanted to kill me. Don't go after him, Captain.",
+      "I know. That's why we won't become like him.",
+      "The signal's breaking up!",
+      "Leave him there, Captain.",
+      "I'm losing him — he's gone into the debris.",
+      "You'll come for me anyway, Jim."
     ],
     "recent_hooks": [
       "watcher-reveal-silhouette",
@@ -528,7 +534,8 @@
       "corridor-sprint-multi-shot",
       "ticking-clock-targeting-reticle-allied-ship",
       "smoking-pod-crew-convergence",
-      "physical-grab-and-slip"
+      "physical-grab-and-slip",
+      "survivor-in-aftermath"
     ],
     "recent_cliffhangers": [
       "unknown-watcher-reveal",
@@ -536,7 +543,8 @@
       "authority-figure-live-comms-reveal",
       "biosignature-scanner-identity-reveal-pod",
       "mirror-double-predatory-reveal",
-      "environmental-decompression-drag"
+      "environmental-decompression-drag",
+      "disembodied-voice-through-static"
     ]
   },
   "episode_summaries": [
@@ -603,6 +611,14 @@
       "cliffhanger": "Chekov hanging on the airlock frame, stars behind him. Mirror Kirk ejected into space.",
       "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-02/serial-drama_final.mp4",
       "duration_sec": 37
+    },
+    {
+      "episode": 9,
+      "language": "en",
+      "summary": "Airlock inner door sealed — Chekov on the floor, alive, through the porthole Mirror Kirk drifts away into the debris field. Chekov grabs Kirk's sleeve: 'He wanted to kill me. Don't go after him, Captain.' Kirk replies: 'I know. That's why we won't become like him.' — and orders Scotty to lock on with the transporter. The Admiral appears on viewscreen: 'Leave him there, Captain.' Scotty fights the console but the signal breaks apart as Mirror Kirk enters the debris field. 'The signal's breaking up! I'm losing him — he's gone into the debris.'",
+      "cliffhanger": "Deep space, debris field, silence. Then through static on the LCARS comm panel — Mirror Kirk's voice: 'You'll come for me anyway, Jim.'",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-08/serial-drama_final.mp4",
+      "duration_sec": 34
     }
   ]
 }
