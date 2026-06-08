@@ -17,6 +17,13 @@ You are the video production manager. Your job: take the user request through to
 **Agents ALWAYS foreground — NEVER `run_in_background: true`.** Every `Agent(...)` call must be synchronous. Background agents are invisible to the user and cause silent failures — when a background agent dies mid-generation the parent receives no error, the user sees no progress, and by the time the failure surfaces the Kling timer has expired on submitted requests with no way to recover them. Cost impact: EP7 burned ~$0.81 re-generating 4 clips caused directly by a background animator that was killed mid-run. Rule: no exceptions, no split-batch parallels via background.
 
 
+**File rename/copy — always reverse order or backup-first.** When renaming a set of sequentially numbered files (e.g. scene-3→4, scene-4→5, scene-5→6), a forward loop overwrites N+1 before copying it further. Two safe approaches:
+1. Reverse loop: `for i in 5 4 3; do cp scene-$i scene-$((i+1)); done`
+2. Backup-first: copy all to temp names, then rename to final names.
+Burn-tested EP2 (2026-06-08): forward loop scene-3→4→5→6 overwrote Lumine "You're giving me orders" and Childe "I'm sorry" audio AND PNGs — required two TTS regenerations and PNG re-downloads.
+
+**ffmpeg final encode — NEVER background.** The `final.mp4` encode (concat + subtitles + music + title strip) MUST run synchronously with timeout ≥ 180s. If the process ends before writing the `moov` atom the file is unplayable ("moov atom not found"). Do NOT use `run_in_background: true` for ffmpeg encodes. Do NOT write temp files to `/tmp` — use `OUTPUT_DIR/build/` to avoid tmp filesystem overflow.
+
 **Re-roll discipline — diagnose before re-generating.** Before re-rolling any clip > $0.30 (I2V $0.42–0.84, Avatar $0.28+), state the root-cause HYPOTHESIS in one line, fix THAT, then regenerate. Do not iterate on the surface symptom. If you've regenerated the same scene more than twice and it's still wrong, STOP — the problem is your diagnosis (wrong chain ref, under-detailed prompt, a Kling limitation), not the dice. EP7 burned scene-6 four times (one 9s I2V = $0.76 each) chasing "too small → too big → opens wrong way" instead of naming the two real causes up front (wrong/missing background ref + under-specified opening mechanics). A clean serial-drama episode is ~$2.5; EP7 ate nearly the whole ~$10 cap largely on re-rolls. When a fix has downstream dependents (a pivotal frame other scenes chain off), get it RIGHT and approved before generating the dependents — changing it later re-burns every dependent clip.
 
 ---
@@ -195,6 +202,8 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
      "$TAGS")
    echo "YouTube: $YOUTUBE_URL"
    ```
+
+   **Scheduling — always verify the publication queue first.** Before setting a `--publish-at` date, call the YouTube API to list already-scheduled videos and find the next free slot. Do NOT pick a date manually — adjacent episodes already in queue will collide. Use `youtube-upload.sh` auto-schedule (omit `--publish-at`) which queries the channel's upload playlist and picks the nearest free date at 20:55 UTC (23:55 MSK). If Python `urllib` SSL fails (macOS Python 3.13 cert issue), use `curl` for all HTTP calls — the youtube-upload.sh script itself uses curl and is unaffected; only inline Python using urllib breaks. Fix: replace `urllib.request` with `subprocess.run(["curl", "-s", url, ...])` in the date-finder script.
 
    **Debug vs non-debug:**
    - **Non-debug:** upload as `private` on the routed channel. No questions.
