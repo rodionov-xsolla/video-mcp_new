@@ -1,11 +1,29 @@
 {
   "game_tag": "star-trek-timelines",
-  "total_stories": 0,
-  "stories": [],
+  "total_stories": 1,
+  "stories": [
+    {
+      "id": 1,
+      "date": "2026-06-08",
+      "tone": "dramatic",
+      "theme": "gauntlet-comeback-behold-seven-of-nine",
+      "headline": "I almost quit Star Trek Timelines \u2014 then one Behold changed everything",
+      "offerwall_angle": "performed offerwall tasks \u2014 surveys, app trials, small jobs inside the game",
+      "output_dir": "output/2026-06-08/star-trek-timelines/reddit-story/",
+      "youtube_url": "https://www.youtube.com/watch?v=3j8ylpVG9sI",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-08/reddit-story_final.mp4"
+    }
+  ],
   "anti_repetition": {
-    "recent_themes": [],
-    "recent_tones": [],
-    "recent_hooks": [],
+    "recent_themes": [
+      "gauntlet-comeback-behold-seven-of-nine"
+    ],
+    "recent_tones": [
+      "dramatic"
+    ],
+    "recent_hooks": [
+      "three years playing, hit a wall with Gauntlet, offerwall tasks, Behold pull"
+    ],
     "banned_combos": []
   }
 }
