@@ -65,7 +65,7 @@ Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, so
 
 ---
 
-## Ключевые персонажи (Character Prompt Blocks)
+## Character Prompt Blocks
 
 Готовые `character_description` для вставки в visual_identity. Копируй дословно.
 
@@ -113,6 +113,9 @@ Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, so
 
 ### Lisa
 `female librarian Lisa, purple and green elegant witch outfit with wide-brim hat, purple wavy hair, alluring relaxed expression, magical book, tall voluptuous build`
+
+### Lumine (Traveller)
+`female Traveler Lumine, white and gold traveler outfit with star constellation motifs and flowing white sash, long blonde hair with signature silver star-shaped hair clip, sharp determined expression with hint of wariness, one-handed sword at her side, graceful athletic build`
 
 ### Mona
 `female astrologer Mona, black and dark blue magical outfit with star motifs, black hair with star hairpins, proud mysterious expression, catalyst, petite elegant build`

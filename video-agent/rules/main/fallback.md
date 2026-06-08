@@ -50,12 +50,15 @@ base = "/".join(endpoint.split("/")[:2])
 ### Images
 
 ```
-Nano Banana 2 ──FAIL──→ retry once ──FAIL──→ GPT Image 1 (fal-ai/gpt-image-1/text-to-image) ──FAIL──→ status 'failed'
+Nano Banana 2 ──QUEUE>5000──→ GPT Image 2 (primary fallback, fast)
+Nano Banana 2 ──FAIL──→ retry once ──FAIL──→ GPT Image 2 ──FAIL──→ GPT Image 1 ──FAIL──→ status 'failed'
 ```
 
 **Nano Banana 2 — primary model.** For the first scene (no reference) — first generate a character ref through Nano Banana 2 with a neutral prompt, use its URL as `image_urls[0]`. Do NOT switch to flux-pro or other models without an explicit error.
 
-**GPT Image 1 — fallback.** Available via fal.ai (same FAL_KEY). Endpoint: `fal-ai/gpt-image-1/text-to-image`. Sizes: `1024x1536` (vertical). Does not support `image_urls` — use a detailed prompt with a character description for consistency.
+**GPT Image 2 — primary fallback when NB2 queue > 5000.** Check queue position after first submit: `queue_position > 5000` → cancel immediately, switch to GPT Image 2 for ALL remaining images in this run (don't mix models mid-episode). Endpoint: `fal-ai/gpt-image-2`. Key difference from GPT Image 1: **supports `image_urls` for chain reference** (same semantics as NB2 — bg-ref first, then character sheet). Size: `portrait_16_9` for 9:16 (outputs 608×1088). Burn-tested 2026-06-05, works with chain ref, ~$0.10/image. Typical time 1.5–3 min per image. Do NOT use `end_image_url` with Avatar (Avatar v2 doesn't use it anyway).
+
+**GPT Image 1 — last resort fallback.** No chain reference support. Only if GPT Image 2 also fails.
 
 **If `fal.run` sync endpoint is unresponsive** — use the `queue.fal.run` async endpoint with polling.
 
