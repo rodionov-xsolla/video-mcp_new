@@ -1,5 +1,5 @@
 ---
-subtitle_style: none
+subtitle_style: bold
 subtitle_offset_s: 0
 subtitle_mask: false
 subtitle_highlight: false
@@ -292,7 +292,7 @@ Example: `"RESIN ENERGY.\nDOESN'T RESTORE RESIN. HELPS YOU OUTLIVE THE WAIT."`
 - ElevenLabs TTS for each scene with non-empty `tts` (all 5 scenes in this format).
 - Voice from `voices.announcer` in storyboard — use `voice` name string, NOT `voice_id` hash.
 - Upload each `.mp3` to Supabase → write `tts_url` back into scene in storyboard.json.
-- **NO subtitles in this format** (`subtitle_style: none`). The announcer VO is not captioned — the packshot text is handled by Editor as drawtext overlays, not subtitle burn-in.
+- **Subtitles: announcer VO only** (`subtitle_style: bold`). Only the main `tts` field per scene is captioned — character reactions (`character_reactions[*].tts`) are NOT subtitled. Packshot text is handled separately as drawtext overlays.
 - Music bed: upbeat commercial mood, `volume: 0.25`, continuous through ALL scenes including packshot. **NO music gate** (unlike fun-news/special-report, music does NOT go silent for dialogue — this is a commercial, VO rides on top of the music).
 - General rules — `rules/roles/sound.md`
 
@@ -305,7 +305,7 @@ Example: `"RESIN ENERGY.\nDOESN'T RESTORE RESIN. HELPS YOU OUTLIVE THE WAIT."`
   - Read `disclaimer` from `storyboard.json scenes[4].disclaimer` → drawtext overlay, bottom @ y=1800, Arial 28px, white 60% opacity, appears at 1.0s.
   - If `disclaimer` is null or empty — skip it.
 - **Music:** continuous `amix` across all 5 scenes. `volume=0.25`. **NO `-shortest`.**
-- **NO subtitle burn-in** (`SUBTITLE_STYLE=none`). Do not run `add_subtitles.py`.
+- **Subtitles: `bold` style**, announcer VO only. Run `add_subtitles.py` for scenes 0–4 using `tts` field text. Do NOT subtitle `character_reactions` lines.
 - Normalize: 1080×1920, 30fps, `-c:v libx264 -preset slow -crf 20`, AAC 128k stereo.
 - Fade-to-black on scene 4 (packshot) last 1.0s.
 - General rules — `rules/roles/editor.md`
@@ -347,7 +347,7 @@ output/YYYY-MM-DD/{GAME_TAG}/fake-ad/
 - [ ] `final.mp4` duration 20–30s (5 × 5s + transitions)
 - [ ] Slogan drawtext overlay applied to scene 4 (visible in final.mp4)
 - [ ] Music runs continuously through ALL 5 clips including scene 4 (no gap, no gate)
-- [ ] No subtitle burn-in on any scene
+- [ ] Subtitles (`bold`) burned on scenes 0–4 for announcer VO only — character reactions NOT captioned
 - [ ] Twist (scene 3) shows the FAILURE completely — character actually falls/fails, not just starts to fall
 - [ ] Budget ≤ $3.50
 
