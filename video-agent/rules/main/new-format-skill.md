@@ -32,7 +32,7 @@ Ask the user **in one block**:
 
 ### Tier 1 validation
 
-- [ ] `slug` — kebab-case, doesn't match: `serial-drama`, `gameplay-ai-avatar`, `reddit-story`, `news`, `standard`, `dance-battle`, `dual-style`, `object-character`
+- [ ] `slug` — kebab-case, doesn't match: `serial-drama`, `gameplay-ai-avatar`, `reddit-story`, `news`, `dual-style`
 - [ ] `keywords` — DO NOT overlap with keywords in `manager.md:137-146`. Check each word.
 - [ ] `budget_max` — in the range $1–$20
 - [ ] Compute `budget_stop` = round(`budget_max` × 0.90, 2)
@@ -357,7 +357,7 @@ If the format has variants (single/series, I2V/T2V), add separate rows.
 Find lines 36-37:
 ```
 │   └── {serial-drama, gameplay-ai-avatar, news, standard,
-│       reddit-story, dance-battle, object-character, dual-style}.md
+│       reddit-story, dual-style}.md
 ```
 Add `{slug}` into the list inside `{}`.
 

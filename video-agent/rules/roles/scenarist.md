@@ -163,7 +163,7 @@ Optional list of words or phrases that Editor will emphasize in the subtitle (ye
 
 If the field is missing or empty — subtitle renders as plain white text.
 
-**Word-budget per emphasis phrase (bold preset — applies to fun-news, serial-drama, news, dance-battle, standard, top-list).** Subtitles render in UPPERCASE on Helvetica Bold 96px over a 1080-wide frame with MarginL/R=100 (usable text width ~880px). Safe limit: **≤14 characters per emphasis phrase, including spaces**. Longer phrases overflow horizontally — libass does NOT auto-wrap a 2-word chunk.
+**Word-budget per emphasis phrase (bold preset — applies to fun-news, serial-drama, news, top-list).** Subtitles render in UPPERCASE on Helvetica Bold 96px over a 1080-wide frame with MarginL/R=100 (usable text width ~880px). Safe limit: **≤14 characters per emphasis phrase, including spaces**. Longer phrases overflow horizontally — libass does NOT auto-wrap a 2-word chunk.
 
 - Bad (overflow): `"SYSTEMIC OPPRESSION"` (19), `"MAIN CHARACTER ENERGY"` (21), `"GREY TORSO STRIKES AGAIN"` (24), `"REPARATIONS HOLDERS"` (19).
 - Good (fits): `"COOKED"` (6), `"NO CAP"` (6), `"73%"` (3), `"SKILL ISSUE"` (11), `"NEGATIVE AURA"` (13), `"BHLF"` (4).

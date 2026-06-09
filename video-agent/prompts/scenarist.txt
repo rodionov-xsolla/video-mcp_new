@@ -30,7 +30,7 @@ Write a complete storyboard.json at ${OUTPUT_DIR}/storyboard.json with all narra
 
 CONSTRAINTS:
 - 5s default clip duration; 10s only with `duration_reason` filled
-- DEFAULT 3 clips for standard / dual-style / dance-battle / etc.; format playbooks may override
+- DEFAULT 3 clips for dual-style / etc.; format playbooks may override
 - Multi-character: max 2 in frame; describe interaction in action_description
 - I2V clips: action_description must NOT contain walking/running/hits — micro motion only
 - Avatar clips: tts text ≤25 words to fit 5s; longer → split into 2×5s

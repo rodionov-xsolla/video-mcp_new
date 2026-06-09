@@ -491,11 +491,11 @@ This preserves narrative continuity AND keeps each call within the 15s cap. Tota
 
 ### Seamless-loop clips — `loop_hint` (⚠️ UNVERIFIED, burn-test pending)
 
-For loop formats (`motion-dance`, `dance-battle`) where the clip must autoplay seamlessly, production T2V prompts append a loop directive so the last frames settle back toward the first: `"hold final 6 frames for seamless autoplay"` / `"loop_hint: motion returns to the start pose for a clean cut"`. The idea maps onto our final `multi_prompt` shot — its endpoint should land on the same pose/framing as the start frame so concat/loop has no visible jump.
+For loop formats (`motion-dance`) where the clip must autoplay seamlessly, production T2V prompts append a loop directive so the last frames settle back toward the first: `"hold final 6 frames for seamless autoplay"` / `"loop_hint: motion returns to the start pose for a clean cut"`. The idea maps onto our final `multi_prompt` shot — its endpoint should land on the same pose/framing as the start frame so concat/loop has no visible jump.
 
 **Not yet burn-tested on Kling I2V** — fal.ai's `image-to-video` schema has no dedicated `loop_hint` field, so this would live inside the last shot's `prompt` text (e.g. final shot endpoint = `"…returns to the opening stance, holds steady on the last beat"`). Before relying on it in a real episode:
 - one $0.42 burn test on a single dance clip — does the last beat actually settle to the start pose, or drift?
-- if it works, promote this to a verified rule and add to `motion-dance.md` / `dance-battle.md`. If not, fall back to ffmpeg crossfade-loop in Editor.
+- if it works, promote this to a verified rule and add to `motion-dance.md`. If not, fall back to ffmpeg crossfade-loop in Editor.
 
 Do NOT spend the budget assuming it works — flag to Manager that the loop is "soft" until tested.
 
