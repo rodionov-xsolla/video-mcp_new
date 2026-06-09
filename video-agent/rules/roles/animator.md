@@ -181,6 +181,7 @@ Kling **does not understand** character names, motivations, emotions. Understand
 - ❌ Moods: "tension fills the room", "dramatic moment" → does not convert
 - ❌ Motivations: "realizing the truth", "betrayed by his captain" → abstract
 - ❌ Literature: "the weight of command presses on his shoulders" → zero visual
+- ❌ Passive freeze phrases: "remains still", "holds position", "stays motionless", "does not move", "freezes in place" — мёртвый кадр, Kling воспроизводит как статику. Каждый элемент кадра должен что-то делать каждую секунду.
 
 ### Mandatory
 
@@ -189,6 +190,15 @@ Kling **does not understand** character names, motivations, emotions. Understand
 - ✅ "Hand rises from waist to chest level, fingers spread"
 - ✅ "Indicator light on the wall panel changes from red to green"
 - ✅ "Both figures shift weight, the one on the left leans slightly toward the door"
+
+### Three concurrent layers (mandatory for every clip)
+
+Every motion_prompt must drive **three simultaneous action layers**:
+1. **Camera** — push-in / pull-back / tilt / pan / orbit / drift (always moving unless object-transformation exception applies)
+2. **Primary subject** — character micro-action or environment primary element (eyes open, stone cracks, light pulses, fragments fly)
+3. **Atmospheric layer** — secondary ambient action (particles drift, light flickers, dust falls, energy churns, fabric moves)
+
+All three layers use **continuous present-tense verbs** with an endpoint. A prompt with only one or two active layers produces flat, static-feeling footage even if technically "moving".
 
 ### motion_prompt length
 

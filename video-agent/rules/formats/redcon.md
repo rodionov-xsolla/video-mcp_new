@@ -165,20 +165,19 @@ Same as `character-story`: character does NOT speak on camera (no lipsync). I2V 
 ### Animator
 
 - All clips via **Kling v3 Standard I2V** (`generate_audio: false`); fallback v2.6 Pro only on v3 artifacts
-- For multi-beat clips (e.g. coda) use v3's native `multi_prompt` array — split a 10s clip into 2×5s prompts so visual transitions are deliberate, not interpolated
+- For multi-beat clips use v3's native `multi_prompt` array. **Segment length: 2–3s each. Max clip duration: 7s.** Never use 5+5=10s — 7s is the hard cap per pass. Example: divergence + transformation → 3s+3s=6s per clip.
 - **Start frame only.** No `tail_image_url`.
 - Title card clip: very slow camera drift (parallax or gentle push-in). Minimal motion — text must remain readable throughout 5s.
-- Story clips: same motion rules as `character-story` — three concurrent layers, continuous verbs, no freeze phrases.
-- Duration: 5s for all clips
+- Story clips: **active, dynamic prompts only** — three concurrent layers (camera + primary action + atmosphere), continuous present-tense verbs, no freeze phrases ("remains still", "holds position", "stays motionless" are banned).
+- Duration: 5s for standard clips, up to 7s for multi-prompt clips
 - General rules — `rules/roles/animator.md`
 
 ### Sound
 
-- **TTS:** full monologue in ONE request (all `tts_segment` values joined in order, skipping clip 1 which is null)
-- Voice = alternate-self identity (not canonical voice)
-- For Borg characters: Daniel, stability 0.05, style 0.9 — flat metallic with slight echo
-- Generate `tts-output.mp3`, upload to Supabase
-- **Subtitles:** `add_subtitles.py` ONCE on `build/concat-noaudio.mp4` — but with `--offset {title_card_duration}` so subtitle timing starts after the title card
+- **TTS:** full monologue as ONE audio file (`tts-output.mp3`). All `tts_segment` values joined in order, clip 1 skipped (null). Mandatory chunking per `sound.md §1b` if total > 80 words.
+- **Voice engine:** `game_tag == "genshin impact"` → **Chatterbox** with character's `voice-1.mp3` from Supabase (`assets/genshin-impact/characters/{slug}/voice-1.mp3`). All other games → MiniMax preset voice matching the alternate-self identity. See `rules/roles/sound.md §1`.
+- Generate `tts-output.mp3`, upload to Supabase as episode-tts asset
+- **Subtitles:** `add_subtitles.py` with `--offset 5` (title card) and **NO `--text`** — always faster-whisper for timing (per `rules/roles/editor.md`)
 - Music: from `video-agent/music/Dark/` only — never Fun/
 - General rules — `rules/roles/sound.md`
 
