@@ -1,11 +1,43 @@
 {
   "game_tag": "star-trek-timelines",
-  "total_stories": 0,
-  "stories": [],
+  "total_stories": 2,
+  "stories": [
+    {
+      "id": 1,
+      "date": "2026-06-08",
+      "tone": "dramatic",
+      "theme": "gauntlet-comeback-behold-seven-of-nine",
+      "headline": "I almost quit Star Trek Timelines — then one Behold changed everything",
+      "offerwall_angle": "performed offerwall tasks — surveys, app trials, small jobs inside the game",
+      "output_dir": "output/2026-06-08/star-trek-timelines/reddit-story/",
+      "youtube_url": "https://www.youtube.com/watch?v=3j8ylpVG9sI",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-08/reddit-story_final.mp4"
+    },
+    {
+      "id": 2,
+      "date": "2026-06-08",
+      "tone": "warm",
+      "theme": "real-life-friendship-fleet-surgeon",
+      "headline": "My Star Trek teammate turned out to be a 52-year-old surgeon. We have dinner now.",
+      "offerwall_angle": null,
+      "output_dir": "output/2026-06-08/star-trek-timelines/reddit-story/",
+      "youtube_url": "https://www.youtube.com/watch?v=KHAj4ChPkHs",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-08/reddit-story_final.mp4"
+    }
+  ],
   "anti_repetition": {
-    "recent_themes": [],
-    "recent_tones": [],
-    "recent_hooks": [],
+    "recent_themes": [
+      "gauntlet-comeback-behold-seven-of-nine",
+      "real-life-friendship-fleet-surgeon"
+    ],
+    "recent_tones": [
+      "dramatic",
+      "warm"
+    ],
+    "recent_hooks": [
+      "three years playing, hit a wall with Gauntlet, offerwall tasks, Behold pull",
+      "LogicOverFear username, best fleet tactician, surgeon reveal, COVID lockdowns, pasta dinner"
+    ],
     "banned_combos": []
   }
 }

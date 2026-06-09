@@ -585,13 +585,44 @@ python3 tools/add_subtitles.py \
   ${SUBTITLE_EXTRAS}
 ```
 
-**Источник текста ВСЕГДА `storyboard.json`** (поле `tts` / `narrative_text` / `character_line` в зависимости от формата). Никогда не транскрибируй через faster-whisper известный текст. Whisper остаётся только как fallback внутри `add_subtitles.py` если `--text` не передан.
+**Источник текста и таймингов — зависит от формата:**
+
+- **reddit-story (и любой монолог с `--highlight-words`)** → **НЕ передавай `--text`**. Пусть `add_subtitles.py` прогонит аудио через faster-whisper и получит реальные word-level тайминги. Пропорциональные тайминги из текста дают равномерный ритм, но не попадают в реальные паузы и интонации — на highlight это сразу видно. `--verify-audio` в этом режиме **не нужен**: тайминги получены ИЗ того же аудио, дрейф невозможен по конструкции; хвостовая тишина после последнего слова — норма.
+
+- **Все остальные форматы** (serial-drama, character-story, what-if-lore, news и т.д.) → передавай `--text "$FULL_NARRATION"` для быстрого пути без Whisper. `--verify-audio` обязателен.
+
+**Whisper-путь для reddit-story — канонический вызов:**
+```bash
+python3 tools/add_subtitles.py \
+  - "$OUTPUT_DIR/tts-output.mp3" "$OUTPUT_DIR/build/subs.ass" \
+  --emit-ass-only \
+  --style narrative \
+  --highlight-words \
+  --highlight-color 00FFFF
+# НЕТ --text, НЕТ --verify-audio, НЕТ --atempo
+```
 
 **Антидрейф by construction (вместо ручного `--atempo`).** ASS генерим из **того же аудио, что идёт в микс** — `build/tts-fast.mp3` (уже после `atempo`) для single-voice, `scene-$K.mp3` для per-scene. Тайминги тогда считаются по реальной длительности и не могут разойтись с фактическим звучанием. Флаг **`--atempo` устарел** — не передавай его: множитель уже запечён в длительности файла, а ручной множитель — это и был источник «съезжания» (несовпал с `filter_complex` → субтитры уезжали к концу клипа). Если файл по какой-то причине ещё не ускорен — сначала сделай `tts-fast.mp3` (§3b), потом генери ASS.
 
 **`--verify-audio` ОБЯЗАТЕЛЕН** и указывает на то же финальное аудио. `add_subtitles.py` падает (exit 1), если конец последнего слова расходится с `offset + длина(аудио)` больше чем на 0.30с. Это code-guard: любой рассинхрон становится ошибкой билда, а не молча уезжает в прод. Не игнорируй его падение «ретраем» — чини источник (не то аудио / лишний `--atempo` / ASS сгенерён до финального speed).
 
 **ASS генерится ПОСЛЕДНИМ — после того как форма аудио заморожена** (после любого `atempo`/whole-video speedup §3d). Если сначала собрал ASS, а потом поменял скорость — пересобери ASS.
+
+**`ass=` фильтр, НЕ `subtitles=`.** На macOS ffmpeg-full `subtitles=` может не найти системные шрифты и вернуть чёрный кадр без ошибки. Всегда используй `ass='path/to/subs.ass'` — этот фильтр читает шрифты напрямую из ASS-файла. Пример:
+```bash
+# ПРАВИЛЬНО:
+-vf "ass='$OUTPUT_DIR/build/subs.ass'"
+# НЕПРАВИЛЬНО (может дать чёрный кадр):
+-vf "subtitles='$OUTPUT_DIR/build/subs.ass':fontsdir=/System/Library/Fonts"
+```
+
+**reddit-story — трёхшаговая сборка (фон + субтитры + аудио раздельно):**
+```
+1. Нормализовать gameplay → build/gameplay-normalized.mp4   (scale 1080×1920, fps 30, -an, -t TTS_DUR)
+2. Сжечь субтитры        → build/gameplay-with-subs.mp4    (-vf "ass='...subs.ass'")
+3. Смикшировать аудио    → final.mp4                       (TTS + bg-music 0.05, apad, amix, -c:v copy)
+```
+Одиночный проход с `subtitles=` в filter_complex рвёт видеострим при concat. Три шага — надёжно.
 
 **`--offset`** должен совпадать с `adelay` в filter_complex (в секундах). Например, для what-if-lore с титульной 5-секундной карточкой: `adelay=5000|5000` ↔ `--offset 5.0`.
 

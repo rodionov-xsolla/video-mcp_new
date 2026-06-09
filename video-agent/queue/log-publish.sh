@@ -1,11 +1,17 @@
 #!/bin/bash
-# log-publish.sh — mark a video as published to TikTok or Instagram.
+# log-publish.sh — mark a video as published/scheduled.
 #
 # Usage:
+#   # TikTok / Instagram (post-now — sets timestamp to now):
 #   log-publish.sh --platform tt|inst --video-url <supabase_video_url>
 #
-# Sets tt_published or inst_published to now() in video_agent_runs.
-# Intended for use by the mobile-mcp posting agent after a successful upload.
+#   # YouTube (scheduled — sets yt_published to the planned open date):
+#   log-publish.sh --platform yt --video-url <supabase_video_url> \
+#                  --publish-at <ISO8601_UTC> --youtube-url <yt_url>
+#
+#   --publish-at: required for --platform yt. Scheduled open date on YouTube,
+#                 e.g. "2026-06-13T20:59:00Z". Stored in yt_published.
+#   --youtube-url: optional. Stored in youtube_url column.
 #
 # Requires in .env: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
 
@@ -23,27 +29,44 @@ for VAR in SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY; do
   fi
 done
 
-PLATFORM=""; VIDEO_URL=""
+PLATFORM=""; VIDEO_URL=""; PUBLISH_AT=""; YOUTUBE_URL=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --platform)  PLATFORM="$2"; shift 2 ;;
-    --video-url) VIDEO_URL="$2"; shift 2 ;;
+    --platform)    PLATFORM="$2";    shift 2 ;;
+    --video-url)   VIDEO_URL="$2";   shift 2 ;;
+    --publish-at)  PUBLISH_AT="$2";  shift 2 ;;
+    --youtube-url) YOUTUBE_URL="$2"; shift 2 ;;
     *) echo "ERROR: unknown arg $1" >&2; exit 1 ;;
   esac
 done
 
-[ -n "$PLATFORM" ]  || { echo "ERROR: --platform tt|inst required" >&2; exit 1; }
+[ -n "$PLATFORM" ]  || { echo "ERROR: --platform tt|inst|yt required" >&2; exit 1; }
 [ -n "$VIDEO_URL" ] || { echo "ERROR: --video-url required" >&2; exit 1; }
 
 case "$PLATFORM" in
+  yt)   FIELD="yt_published" ;;
   tt)   FIELD="tt_published" ;;
   inst) FIELD="inst_published" ;;
-  *) echo "ERROR: --platform must be tt or inst" >&2; exit 1 ;;
+  *) echo "ERROR: --platform must be tt|inst|yt" >&2; exit 1 ;;
 esac
 
-TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-BODY="{\"${FIELD}\": \"${TS}\"}"
+# YouTube requires explicit --publish-at (the planned open date, not upload time)
+if [ "$PLATFORM" = "yt" ]; then
+  [ -n "$PUBLISH_AT" ] || { echo "ERROR: --publish-at ISO8601 required for --platform yt" >&2; exit 1; }
+  TS="$PUBLISH_AT"
+else
+  TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+fi
+
+BODY=$(python3 -c "
+import json
+d = {'${FIELD}': '${TS}'}
+if '${YOUTUBE_URL}':
+    d['youtube_url'] = '${YOUTUBE_URL}'
+print(json.dumps(d))
+")
+
 FILTER="output_video_url=eq.$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1],safe=''))" "$VIDEO_URL")"
 
 HTTP=$(/usr/bin/curl -sS -o /tmp/log-publish-resp.$$ -w "%{http_code}" -X PATCH \

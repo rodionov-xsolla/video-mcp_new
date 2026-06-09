@@ -103,15 +103,17 @@ fi
 if [ "$PUBLISH_NOW" = false ] && [ -z "$PUBLISH_AT" ]; then
   echo "[youtube-upload] Auto-scheduling: finding nearest free date..."
   TAKEN_DATES=$(python3 - "$ACCESS_TOKEN" <<'PYEOF'
-import sys, json, re, urllib.request, urllib.parse, datetime
+import sys, json, re, subprocess, datetime
 
 token = sys.argv[1]
 
 def yt_get(url):
-    req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
-    with urllib.request.urlopen(req) as r:
-        raw = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', r.read().decode('utf-8', 'replace'))
-        return json.loads(raw)
+    result = subprocess.run(
+        ["curl", "-s", "-H", f"Authorization: Bearer {token}", url],
+        capture_output=True, text=True
+    )
+    raw = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', result.stdout)
+    return json.loads(raw)
 
 # get uploads playlist
 ch = yt_get("https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true")
