@@ -1,0 +1,61 @@
+{
+  "series_id": "special-report-genshin-impact",
+  "game_tag": "genshin-impact",
+  "title": "Genshin Special Report",
+  "created_at": "2026-06-04",
+  "last_episode": 1,
+  "anchor": {
+    "character_name": "fischl",
+    "display_name": "Fischl",
+    "voice": "Exuberant_Girl",
+    "stability": 0.55,
+    "style": null,
+    "tone_signature": "theatrical self-importance, addresses herself in third person as 'the Prinzessin', treats fictional lore investigations as royal decrees requiring immediate investigation",
+    "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fischl/avatar-special-report-anchor.png"
+  },
+  "reporter": {
+    "character_name": "hu-tao",
+    "display_name": "Hu Tao",
+    "voice": "Lively_Girl",
+    "stability": 0.55,
+    "style": null,
+    "tone_signature": "mischievous funeral-parlor energy, peppers reports with morbid humor, genuinely enthusiastic about absurd discoveries, occasional poetry references",
+    "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/hu-tao/avatar-special-report-reporter.png"
+  },
+  "voice_mapping": {
+    "anchor": "Exuberant_Girl",
+    "reporter": "Lively_Girl"
+  },
+  "style_tone": "ironic|mock-journalistic|absurd",
+  "notes": {
+    "character_swap": "Fischl and Hu Tao swap roles vs. fun-news (where both were reporters under Zhongli). Here Fischl = studio anchor, Hu Tao = field reporter. Zhongli remains exclusively with Genshin Funtasy News.",
+    "music_default": "heroic-neptune — epic orchestral, opener+CTA only, vol 0.15"
+  },
+  "topic_rotation": {
+    "recent_topic_tags": ["hilichurl", "adventurers-guild", "wangshu-inn", "yuehai-pavilion", "mondstadt-plains", "liyue-economy", "wangsheng-funeral-parlor"],
+    "recent_canon_facts": [
+      "Adventurers' Guild daily Hilichurl mask commissions reset infinitely with camp respawns, creating an unclaimed mask accumulation loop"
+    ],
+    "cooldown_episodes": 5
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-06-04",
+      "anchor": "Fischl",
+      "reporter": "Hu Tao",
+      "investigation_title": "The Infinite Mask Economy: Who Is Really Funding Teyvat?",
+      "locations": [
+        "Mondstadt Plains — Stormterror's Lair outskirts (Hilichurl camp, Guild commission board)",
+        "Wangshu Inn basement storage room, Liyue (floor-to-ceiling unclaimed Hilichurl masks)",
+        "Yuehai Pavilion courtyard, Liyue Harbor (Qixing ledger with Wangsheng Funeral Parlor stamp)"
+      ],
+      "topic_tags": ["hilichurl", "adventurers-guild", "wangshu-inn", "yuehai-pavilion", "mondstadt-plains", "liyue-economy", "wangsheng-funeral-parlor"],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-04/special-report_final.mp4",
+      "duration_sec": 59.5,
+      "pilot_notes": "Pilot episode. Opener animated via Kling I2V (3s trim). Fischl studio avatar + Hu Tao reporter avatar generated one-time. Music: heroic-neptune. Total cost: $3.88 (within $4.50 cap). MiniMax voices: Exuberant_Girl (Fischl), Lively_Girl (Hu Tao)."
+    }
+  ],
+  "opener_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/special-report-opener.mp4",
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4"
+}

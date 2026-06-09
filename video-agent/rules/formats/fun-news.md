@@ -226,7 +226,7 @@ For each dialogue scene:
    - `audio_url` = TTS mp3 **from Supabase** (not fal.ai temp URL).
    - Note: Avatar v2 currently accepts only `image_url` + `audio_url` per fal docs — no `motion_prompt` or `negative_prompt` are sent (the ones in `storyboard.json` are documentation hints for future Lipsync model upgrades).
 3. **Avatar v2 output duration ≈ input audio duration**, with a small trailing-silence buffer (often 0.05–1.8s where video continues with mouth-closed pose). This trailing buffer matters for assembly — Editor must `apad` per-scene audio to the **video** duration, not the **audio** duration, or lipsync drifts (see Phase 5 + Anti-patterns).
-4. **1.3× speedup applied in Editor's filter_complex** (not pre-encoded as a separate mp4). The Avatar v2 raw output goes straight into the canonical pipeline.
+4. **No speedup.** Avatar v2 raw output goes straight into the Editor's canonical pipeline at natural TTS speed. Applying atempo=1.3 makes characters sound unnatural and creates AV sync drift when combined with Avatar v2's trailing-silence tail.
 
 ### Phase 5: Assembly (FFmpeg)
 
@@ -241,13 +241,13 @@ Inputs:
 
 VIDEO branch:
   [5:v]  scale/pad/fps,setpts=PTS-STARTPTS                          → [vop]
-  [k:v]  scale/pad/fps,setpts=(PTS-STARTPTS)/1.3,ass=build/scene-k.ass [vk]   (k=0..4)
-  [4:v]  + fade=t=out:st=SPED_DUR-1:d=1.0 on scene-5 only
+  [k:v]  scale/pad/fps,setpts=PTS-STARTPTS,ass=build/scene-k.ass [vk]   (k=0..4)
+  [4:v]  + fade=t=out:st=RAW_DUR-1:d=1.0 on scene-5 only
   [6:v]  scale/pad/fps,setpts=PTS-STARTPTS                          → [vct]
   [vop][v0][v1][v2][v3][v4][vct] concat=n=7:v=1:a=0                 → [vout]
 
-AUDIO branch (per-scene apad to match sped VIDEO duration):
-  [k:a]  atempo=1.3,asetpts=PTS-STARTPTS,apad=whole_dur=<sped_video_dur_k>  [ak]
+AUDIO branch (per-scene apad to match raw VIDEO duration):
+  [k:a]  asetpts=PTS-STARTPTS,apad=whole_dur=<raw_video_dur_k>  [ak]
   [a0][a1][a2][a3][a4] concat=n=5:v=0:a=1                            → [adlg]
   [adlg] adelay=2000|2000                                            → [atts]   (2s for opener silence prefix)
   [7:a]  (music-timed.wav — pre-built with real silence; see below) → [amus]
@@ -261,9 +261,9 @@ Output:
   build/final.tmp.mp4   → mv final.mp4 after ffprobe-validate
 ```
 
-**Critical:** the per-scene `apad=whole_dur=<sped_video_dur>` is **mandatory**. Avatar v2 returns video that is 0.05–1.8s longer than the input audio (trailing silence with mouth-closed pose). Without `apad`, the concat audio runs ahead of concat video, accumulating a multi-second lip-sync drift by scene 5. See Anti-patterns.
+**Critical:** the per-scene `apad=whole_dur=<raw_video_dur>` is **mandatory**. Avatar v2 returns video that is 0.05–1.8s longer than the input audio (trailing silence with mouth-closed pose). Without `apad`, the concat audio runs ahead of concat video, accumulating a multi-second lip-sync drift by scene 5. See Anti-patterns.
 
-**ASS subtitles** — one ASS per scene via `tools/add_subtitles.py --emit-ass-only --atempo 1.3 --emphasis "<kicker phrases>"`, burned into the corresponding `[vk]` branch BEFORE concat. Per-scene burn-in (rather than one ASS over concat) keeps timings local and trivially correct.
+**ASS subtitles** — one ASS per scene via `tools/add_subtitles.py --emit-ass-only --emphasis "<kicker phrases>"`, burned into the corresponding `[vk]` branch BEFORE concat. Per-scene burn-in (rather than one ASS over concat) keeps timings local and trivially correct.
 
 **Music** — Sound picks from `music/tracks.json` filtered by `use_for` including `news` or `mood ∈ {fun, energetic, comedic}`. Default volume `0.15`. Music plays **only during opener (~2s) and CTA (~5s)** — NOT during dialogue. Editor pre-builds `build/music-timed.wav`:
 
@@ -404,9 +404,11 @@ If a collision is found — scenarist regenerates research.json with cooldown ap
   },
   "scenes": [
     {"index": 1, "role": "anchor",     "satire_angle": "hook-intro",       "tts": "Hi, I'm {Anchor} with {Show}. {Hook}. {R1 name} is on the line."},
-    {"index": 2, "role": "reporter_1", "satire_angle": "dry-deadpan",      "news_item_index": 1, "tts": "..."},
+    {"index": 2, "role": "reporter_1", "satire_angle": "dry-deadpan",      "news_item_index": 1, "tts": "...",
+     "scene_ambient": {"label": "location-slug", "description": "...", "volume": 0.10}},
     {"index": 3, "role": "anchor",     "satire_angle": "sarcastic-handoff", "tts": "{Reaction} — {R2 name}, you're up."},
-    {"index": 4, "role": "reporter_2", "satire_angle": "clinical-absurdism", "news_item_index": 2, "tts": "..."},
+    {"index": 4, "role": "reporter_2", "satire_angle": "clinical-absurdism", "news_item_index": 2, "tts": "...",
+     "scene_ambient": {"label": "location-slug", "description": "...", "volume": 0.10}},
     {"index": 5, "role": "anchor",     "satire_angle": "satirical-wrap",   "tts": "..."}
   ],
   "subtitles": {"method": "ass-emit-only", "word_highlight": true, "emphasis": {"scene_1": "...", "scene_2": "...", "scene_3": "...", "scene_4": "...", "scene_5": "..."}, "atempo": 1.3},
@@ -510,6 +512,15 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 - Anti-repetition vs story bible `topic_rotation`.
 - `research.json.news_items[].location` must be populated — used by Storyboarder for on-location bg generation.
 - `research.json.news_items[].kicker_phrases` — used by Sound for ASS word-highlight.
+- **`scene_ambient` (MANDATORY for reporter scenes 2 and 4):** every on-location reporter scene must include a `scene_ambient` block:
+  ```json
+  "scene_ambient": {
+    "label": "location-slug",
+    "description": "Brief ambient description — e.g. 'Market crowd chatter, distant cart wheels, seagull calls, Liyue harbor wind'. No music. No clear speech.",
+    "volume": 0.10
+  }
+  ```
+  The ambient description must match the **specific location** of the news item (not a generic outdoor sound). Editor mixes this at `volume` under the TTS track.
 - **`subtitles.emphasis.scene_K` length cap: ≤14 characters per phrase (UPPERCASE on Helvetica Bold 96px overflows the 1080-wide frame above that).** Prefer punchy short kickers (`"COOKED"`, `"NO CAP"`, `"73%"`, `"BHLF"`, `"SKILL ISSUE"`). For longer concepts, trim to the key word or split into two emphasis entries. See `rules/roles/scenarist.md` § `subtitle_emphasis` for full word-budget rules.
 - General rules — `rules/roles/scenarist.md`.
 
@@ -534,10 +545,12 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 ### Sound
 - ElevenLabs TTS for each of the 5 dialogue scenes. Voice settings: `stability: 0.55`, `style: omit` for anchor; `stability: 0.55` for reporters.
 - Use `voice` (name string), not `voice_id` hash.
+- **TTS speed MUST be 1.0 (or omit the field).** NEVER set `speed > 1.0` to compensate for a long line. The only permitted speedup is Editor's `atempo=1.3`. If TTS at natural speed exceeds the word-budget window → shorten the text, do not touch speed.
 - Replace periods with commas/em-dashes in anchor lines where natural — periods bloat duration via TTS pause inflation.
 - Upload mp3s to Supabase `scenes/{date}/fun-news/scene-N.mp3` for use by Avatar v2 (permanent URLs).
 - ASS subtitles per-scene via `tools/add_subtitles.py --emit-ass-only --atempo 1.3 --emphasis "<kicker phrases from research.json>"`. Each scene's ASS lives at `build/scene-N.ass` and is burned in by Editor.
-- Music: pick from `music/tracks.json` where `use_for` includes `news` or mood is `fun/energetic/comedic`. The chosen track plays **only during opener and CTA** — upbeat, not jarring. Write `music.start_offset_sec` into storyboard.json (pick the most energetic section of the track). Editor will use this offset when building `music-timed.wav`.
+- **Location ambient SFX (MANDATORY for scenes 2 and 4):** read `scene_ambient.description` and `scene_ambient.volume` from each reporter scene in storyboard.json. Source an appropriate ambient file (wind, crowd, market, nature, etc.) or synthesise via `ffmpeg -f lavfi -i "anoise=r=44100" ...`. Mix at `scene_ambient.volume` under the TTS in Editor's filter_complex. This is the location's "интершум" — without it on-location scenes sound like a studio recording.
+- Music: pick from `music/tracks.json` where `use_for` includes `news` or mood is `fun/energetic/comedic` **and** `not_for` does NOT include `fun-news`. The chosen track plays **only during opener and CTA** — upbeat, not jarring. Write `music.start_offset_sec` into storyboard.json (pick the most energetic section of the track). Editor will use this offset when building `music-timed.wav`.
 - General rules — `rules/roles/sound.md`.
 
 ### Editor
@@ -561,6 +574,8 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 - [ ] Reporters chosen by topic; **on-location backgrounds generated this episode** (not bare base avatars).
 - [ ] On-location refs uploaded to Supabase (so debug runs and re-renders can refer to them).
 - [ ] Opener and CTA downloaded from Supabase (not generated this run).
+- [ ] Reporter scenes 2 and 4 have `scene_ambient` block with location-specific description and volume 0.08–0.12.
+- [ ] All TTS generated at `speed=1.0` (no compensatory TTS speedup).
 - [ ] All 5 dialogue scenes — Kling Avatar v2 with `image_url` + `audio_url` only.
 - [ ] 5-scene structure: anchor → R1 → anchor → R2 → anchor.
 - [ ] Adjacent reporter scenes (2 and 4) have different `satire_angle`.
@@ -591,16 +606,19 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 - ❌ Daniel voice with `style: 0.8` / `stability: 0.2` — theatrical, slow. Use `stability: 0.55` + no `style`. Validated on pilot.
 - ❌ Too many periods in anchor lines — each `.` adds ~0.5s of TTS pause. Use commas and em-dashes.
 - ❌ Subtitles on a concatenated video — burn ASS **per-scene** inside the single-pass filter_complex.
-- ❌ 1.18× or 1.0× speedup — Fun News uses **1.3×** (ironic energetic delivery). 1.5× is the max where voice quality holds.
+- ❌ Any atempo speedup on dialogue scenes — Fun News uses **1.0× (no speedup)**. Characters must sound natural. atempo=1.3 was tried in EP1–2 and sounds unnatural; it also causes AV sync drift with Avatar v2's trailing-silence tail.
 - ❌ fal.ai temp URLs for Kling — only Supabase permanent URLs.
 - ❌ `voice_id` hash — use `voice` name string.
 - ❌ Repeating a canon fact or topic_tag used in the last 5 episodes.
 - ❌ Same `satire_angle` on adjacent reporter scenes.
 - ❌ Avatar v2 cost estimate based on "N × 5s clip" — **WRONG**. Avatar v2 is billed per **second of input audio**. A 17s mp3 input costs $0.95, not $0.28. Compute from word-budget table.
-- ❌ Pre-encoding `-fast.mp4` per scene (legacy multi-stage). Apply speedup inside Editor's single-pass `filter_complex` via `setpts=PTS/1.3` + `atempo=1.3` per `[vk]`/`[k:a]` branch.
+- ❌ Pre-encoding `-fast.mp4` per scene — no speedup is applied; Avatar v2 raw output is used as-is.
 - ❌ Audio concat **without** per-scene `apad=whole_dur=<sped_video_dur>` — Avatar v2's trailing silence in video makes the audio run shorter than video per scene; concat without padding stacks the drift across all 5 scenes (up to 4s by the outro).
 - ❌ Bash off-by-one in scene-id arrays during download — prefer `declare -a IDS; IDS[N]=...` indexing or named structs over `IDS=("" "a" "b")` + `IDS[$((N-1))]`.
 - ❌ `-shortest` in FFmpeg (use `apad` and `-t TOTAL_DUR`).
+- ❌ `energetic-simulacao` track for fun-news — confirmed too gloomy/dark for satirical ironic news tone (Genshin EP1 pilot). Pick a track with a clearly upbeat comedic feel; `energetic-simulacao` is in `tracks.json` `not_for: ["fun-news"]`.
+- ❌ No location ambient SFX on reporter scenes — every on-location reporter scene must have a `scene_ambient` block describing the background noise of the location (market crowd, wind, city bustle, nature, etc.) at volume 0.08–0.12. Silence on location feels unnatural. See Scenarist brief below.
+- ❌ TTS `speed` parameter > 1.0 — always generate TTS at `speed=1.0` (or omit the field). There is no Editor-side speedup to "absorb" a fast TTS. If a reporter's line sounds too long, shorten the text.
 
 ---
 

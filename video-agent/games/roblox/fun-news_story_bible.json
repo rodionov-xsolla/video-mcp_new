@@ -1,17 +1,17 @@
 {
   "series_id": "fun-news-roblox",
   "game_tag": "roblox",
-  "title": "Robloxia Lore Newsflash",
+  "title": "Roblox Gag News",
   "created_at": "2026-05-28",
-  "last_episode": 1,
+  "last_episode": 2,
   "anchor": {
     "character_name": "jake-news",
     "display_name": "Jake",
-    "voice": "Deep_Voice_Man",
+    "voice_id": "Deep_Voice_Man",
     "stability": 0.55,
     "style": null,
     "tone_signature": "fast snappy news-anchor energy, dry sarcastic delivery, treats absurd Robloxia events as routine breaking news",
-    "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/avatars/jake-news-avatar-ref.png"
+    "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/characters/jake-news/avatar.png"
   },
   "voice_mapping": {
     "anchor": "Deep_Voice_Man",
@@ -24,18 +24,18 @@
     {
       "character_name": "sarah-news",
       "display_name": "Sarah",
-      "voice": "Inspirational_girl",
+      "voice_id": "Inspirational_girl",
       "stability": 0.55,
-      "tone_signature": "earnest field reporter, slightly worried tone, takes Bacon Hair plight very seriously",
-      "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/avatars/sarah-news-avatar-ref.png"
+      "tone_signature": "earnest field reporter, slightly worried tone, takes Robloxia events very seriously",
+      "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/characters/sarah-news/avatar.png"
     },
     {
       "character_name": "chad-news",
       "display_name": "Chad",
-      "voice": "Determined_Man",
+      "voice_id": "Determined_Man",
       "stability": 0.55,
       "tone_signature": "deadpan analyst-correspondent, dry delivery, treats absurd statistics as serious data journalism",
-      "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/avatars/chad-news-avatar-ref.png"
+      "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/characters/chad-news/avatar.png"
     }
   ],
   "style_tone": "satirical|dry-deadpan|absurd",
@@ -49,12 +49,22 @@
       "university-of-robloxia",
       "mewing",
       "protest",
-      "academic-satire"
+      "academic-satire",
+      "obby",
+      "obstacle-course",
+      "difficulty-regulation",
+      "adopt-me",
+      "pet-economy",
+      "shadow-dragon",
+      "candy-corn",
+      "pizza-place-wages"
     ],
     "recent_canon_facts": [
       "bacon-hair-default-avatar-archetype",
       "robux-currency-as-status-marker",
-      "mewing-meme-from-roblox-brainrot"
+      "mewing-meme-from-roblox-brainrot",
+      "adopt-me-pet-economy-shadow-dragon-candy-corn-currency",
+      "obby-respawn-death-mechanic"
     ],
     "cooldown_episodes": 5
   },
@@ -62,42 +72,62 @@
     {
       "episode": 1,
       "date": "2026-05-28",
+      "show_name": "Robloxia Lore Newsflash",
       "anchor": "Jake",
-      "reporters": [
-        "Sarah",
-        "Chad"
-      ],
+      "reporters": ["Sarah", "Chad"],
       "structure": "5 scenes — anchor intro → reporter 1 (Bacon Hair Liberation Front protest) → anchor reaction → reporter 2 (University 73% mewing study) → anchor outro",
       "news_items": [
-        {
-          "index": 1,
-          "headline": "Bacon Hair Liberation Front Demands Reparations from Robux Holders",
-          "reporter": "Sarah"
-        },
-        {
-          "index": 2,
-          "headline": "Sociologist: 73% of Bacon Hairs Still Mewing on Default Jawline — A Structural Problem",
-          "reporter": "Chad"
-        }
+        {"index": 1, "headline": "Bacon Hair Liberation Front Demands Reparations from Robux Holders", "reporter": "Sarah"},
+        {"index": 2, "headline": "Sociologist: 73% of Bacon Hairs Still Mewing on Default Jawline — A Structural Problem", "reporter": "Chad"}
       ],
       "topic_tags": [
-        "bacon-hair",
-        "robux-inequality",
-        "default-avatar",
-        "robloxia-society",
-        "bacon-hair-liberation-front",
-        "university-of-robloxia",
-        "mewing",
-        "protest",
-        "academic-satire"
+        "bacon-hair", "robux-inequality", "default-avatar", "robloxia-society",
+        "bacon-hair-liberation-front", "university-of-robloxia", "mewing", "protest", "academic-satire"
       ],
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/roblox/2026-05-28/fun-news_final.mp4",
       "duration_sec": 47.45,
       "cost_usd": 3.36,
-      "notes": "Pilot episode. Reused existing news.md assets (Jake/Sarah/Chad avatars + opener/CTA) — saved ~$0.98 one-time prep cost vs full fresh fun-news setup."
+      "notes": "Pilot episode. Reused existing news.md assets. Show was called 'Robloxia Lore Newsflash' — rebranded to 'Roblox Gag News' from EP2."
+    },
+    {
+      "episode": 2,
+      "date": "2026-06-04",
+      "show_name": "Roblox Gag News",
+      "anchor": "Jake",
+      "reporters": ["Sarah", "Chad"],
+      "structure": "5 scenes — anchor intro → reporter 1 (obby safety regulation) → anchor reaction → reporter 2 (Adopt Me pet economy collapse) → anchor outro",
+      "news_items": [
+        {
+          "index": 1,
+          "headline": "Robloxian Safety Commission Declares Stage 100 an Unregulated Hazard Zone — Respawn Trauma Up 4000%",
+          "reporter": "Sarah",
+          "satire_angle": "absurd"
+        },
+        {
+          "index": 2,
+          "headline": "Adopt Me Shadow Dragon Values Crash 40 Candy Corn Overnight — Full Pet Economy Collapse, Pizza Wage Workers Cooked",
+          "reporter": "Chad",
+          "satire_angle": "dry-deadpan"
+        }
+      ],
+      "topic_tags": [
+        "obby", "obstacle-course", "difficulty-regulation",
+        "adopt-me", "pet-economy", "shadow-dragon", "candy-corn", "pizza-place-wages"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/roblox/2026-06-04/fun-news_final.mp4",
+      "duration_sec": 44.37,
+      "cost_usd": 3.12,
+      "notes": "First episode under 'Roblox Gag News' branding. New opener generated (gag-news-opener-card.png). Music: energetic-kompa-pasion. No speedup (atempo=1.0) — natural TTS speed. Scene 2 rebuilt: shorter line (22 words), pants added to Sarah, fixed AV sync (apad without amix). CTA: cta.mp4 (not news-cta.mp4)."
     }
   ],
-  "opener_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/news-title-card.mp4",
-  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/refs/news-cta.mp4",
-  "notes": "Pilot episode reuses existing news.md assets (opener/CTA/anchor/reporters) instead of generating fresh fun-news prep — saves ~$0.98 one-time cost. Visually identical Roblox-style block-head avatars; only the editorial framing (fictional satirical headlines vs real patch notes) distinguishes fun-news from news."
+  "opener_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/branding/gag-news-opener-card.png",
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/branding/news-cta.mp4",
+  "music": {
+    "track_name": "energetic-kompa-pasion",
+    "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/energetic-kompa-pasion.mp3",
+    "bpm": 135,
+    "start_offset_sec": 5,
+    "notes": "Selected from EP2 — BPM 135 catchy kompa, fun Roblox energy, not harsh. Previous track energetic-simulacao was banned for fun-news (too gloomy)."
+  },
+  "notes": "Show rebranded to 'Roblox Gag News' from EP2 (2026-06-04). EP1 was 'Robloxia Lore Newsflash'. New opener generated with 'Roblox Gag News' title in news-format design style."
 }

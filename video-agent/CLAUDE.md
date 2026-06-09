@@ -63,7 +63,7 @@ rules/
 │       reddit-story, dance-battle, object-character, dual-style,
 │       character-story, motion-dance, what-if-real-life, what-if-lore,
 │       top-list, fun-news, streettalk, in-game-pov, redcon,
-│       wild-documentary}.md
+│       wild-documentary, special-report, fake-ad}.md
 └── main/
     ├── budgets.md             — model pricing
     ├── fallback.md            — error handling

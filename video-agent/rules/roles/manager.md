@@ -183,8 +183,9 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
 2. **Upload to YouTube.**
 
    **Channel routing.** Read `youtube_channel` from the game config metadata (`games/{GAME_TAG}/{GAME_TAG}.md`):
-   - `star-trek-timelines` → `gamepulse`
+   - `star-trek-timelines` → `starfleetarchive`
    - `roblox` → `yellowguy`
+   - `genshin-impact` → `genshinsnap`
    - No `youtube_channel` field → no channel mapped yet. Do NOT guess. Skip the YT upload and tell the user which channel to map (Supabase URL stays the deliverable).
 
    **Metadata.** Title: `storyboard.json → title` (fallback: idea). Description: `storyboard.json → description` (fallback: empty). Tags: `GAME_TAG + format_slug + storyboard.json → youtube_tags`.
@@ -192,7 +193,7 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
    **Privacy is always `private`** — videos are uploaded privately so the user can review before publishing.
 
    ```bash
-   CHANNEL="<resolved from game config>"   # gamepulse | yellowguy
+   CHANNEL="<resolved from game config>"   # starfleetarchive | yellowguy | genshinsnap
    YOUTUBE_URL=$(bash queue/youtube-upload.sh \
      --channel "$CHANNEL" \
      "$OUTPUT_DIR/final.mp4" \
@@ -275,10 +276,12 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 | "what if", "real life", "real world", "real-world", "что если", "в реальной жизни", "реальная жизнь", "fish out of water", "cameo", "mundane job", "ordinary life" | What If... Real Life | `rules/formats/what-if-real-life.md` |
 | "redcon", "what if lore", "alternate universe", "alternate history", "what if they", "divergence", "alternate fate", "elseworlds", "другая судьба", "альтернативная история" | Redcon | `rules/formats/redcon.md` |
 | "top-5", "top 5", "топ-5", "топ 5", "top list", "топ", "топ персонажей", "top characters", "top heroes", "top locations", "top items", "best characters", "ranking", "рейтинг", "countdown" | TOP List | `rules/formats/top-list.md` |
+| "special report", "спецрепортаж", "специальный репортаж", "расследование", "field investigation", "investigative report", "one reporter three locations", "on-location investigation", "genshin special report" | Special Report | `rules/formats/special-report.md` |
 | "fun news", "fictional news", "fake news", "lore news", "ироничные новости", "выдуманные новости", "фейковые новости", "satire news", "lore satire" | Fun News | `rules/formats/fun-news.md` |
 | "streettalk", "street talk", "street-talk", "vox pop", "vox-pop", "уличное интервью", "стрит-ток", "прохожие", "мнения прохожих", "опрос на улице" | Streettalk | `rules/formats/streettalk.md` |
 | "in-game pov", "pov", "от первого лица", "first person", "ты оказался", "вы оказались", "тебя зажали", "survival guide", "survival manual", "как выжить", "how to survive", "survive the", "выживание", "you wake up", "ты очнулся" | In-Game POV | `rules/formats/in-game-pov.md` |
 | "documentary", "wildlife", "дикая природа", "документалка", "натуралист", "naturalist", "nature doc", "hidden camera", "скрытая камера", "wild creatures", "wild pokemon", "wild pokémon", "дикие покемоны", "как выглядели бы в природе", "creatures in the wild" | Wild Documentary | `rules/formats/wild-documentary.md` |
+| "fake ad", "fake commercial", "рекламный ролик", "фейковая реклама", "реклама", "commercial", "advertisement", "ad for", "реклама предмета", "obby energy", "in-game ad", "item ad", "рекламный", "ролик" | Fake Ad | `rules/formats/fake-ad.md` |
 | Anything else | Standard | `rules/formats/standard.md` |
 
 **Do not load format files unrelated to the task.**
