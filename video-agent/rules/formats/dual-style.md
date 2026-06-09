@@ -70,12 +70,24 @@ Without these markers AI will make both realistic.
 - Same key details (pink bandana on cartoon → pink on realistic)
 
 ### 3. Positioning
-- Cartoon **always** on the left, realistic **always** on the right (or fixed the other way around — one decision for the whole video)
+- Anime/cartoon version **always** on the left, realistic **always** on the right (or fixed the other way around — one decision for the whole video)
 - `side by side`, not one behind the other
 
 ### 4. Sizes in frame
 - Cartoon may be **smaller** (chibi = small), realistic larger
 - This enhances the contrast, do not try to align by height
+
+### 5. Single shared space — no panel divide (mandatory, 2026-06-09)
+
+Both versions must occupy **one continuous environment**. A visible dividing line or split-panel effect means the prompt used positional language ("on the left half / on the right half") that forced the AI into a diptych layout.
+
+**WRONG — causes split panels:**
+> "on the left [anime character] …, on the right [realistic character] …"
+
+**CORRECT — shared space:**
+> "[anime-style character] stands side by side with their photorealistic counterpart in [unified environment], both sharing the same continuous space, no dividing line"
+
+The environment description, lighting, and ground plane must be written as **one scene** that both figures inhabit together. The positioning words `left` / `right` may still appear to anchor each figure within the description, but the scene framing must never imply two separate panels or halves.
 
 ---
 
@@ -99,8 +111,8 @@ Without these markers AI will make both realistic.
       "index": 1,
       "character_speech": null,
       "negative_prompt": "blur, distort, merged characters, single character, text overlay, watermark",
-      "image_prompt": "[ENV], on the left a cartoon chibi [CHAR] with bold black outlines bright flat saturated colors [DETAILS], on the right a photorealistic human [MATCHING OUTFIT] real skin textures [DETAILS], both [ACTION], [LIGHTING], [CAMERA], vertical composition, 9:16 aspect ratio",
-      "motion_prompt": "The cartoon [CHAR] on the left [EXAGGERATED ACTION]. The realistic [CHAR] on the right [GROUNDED MATCHING ACTION]."
+      "image_prompt": "[ENV, one continuous background], anime cel-shaded [CHAR] [DETAILS] stands to the left, their photorealistic counterpart [MATCHING OUTFIT real skin textures DETAILS] stands to the right, both sharing the same continuous space no dividing line, [MATCHING POSE], [UNIFIED LIGHTING], [CAMERA], vertical composition, 9:16 aspect ratio",
+      "motion_prompt": "The anime-style [CHAR] on the left [SUBTLE ACTION]. The photorealistic [CHAR] on the right [MATCHING GROUNDED ACTION]. Both in the same continuous environment."
     }
   ]
 }
@@ -160,7 +172,8 @@ If these blocks are missing — Manager must flag and stop until they are added.
 
 ### Editor
 - Scale 1080×1920, 30fps, concat with re-encode, hard cuts (no crossfade)
-- Music via `amix`; **NEVER `-shortest`**
+- **Animated CTA mandatory at the end** — fetch from `game_assets` where `tags` contains `cta` and `video`. Append after the last scene clip. If CTA is missing in Supabase — STOP and notify the Manager.
+- Music via `amix` (volume=0.15); **NEVER `-shortest`**
 - General rules — `rules/roles/editor.md`
 
 ---
@@ -192,6 +205,7 @@ output/YYYY-MM-DD/{GAME_TAG}/dual-style/
 - [ ] `style_tags` include both styles; `lighting`/`color_palette` unified
 - [ ] For multi-character: chain reference does not cross between different characters
 - [ ] `negative_prompt` filled
+- [ ] Animated CTA appended at the end (from Supabase `tags: cta + video`)
 - [ ] Budget ≤$5
 
 ---
@@ -199,7 +213,7 @@ output/YYYY-MM-DD/{GAME_TAG}/dual-style/
 ## Anti-patterns
 
 - ❌ "cartoon style" without concrete markers (bold outlines, flat colors) — AI will make semi-realistic
-- ❌ A single prompt without `on the left / on the right` — AI will merge into one character
+- ❌ Framing as "on the left half / on the right half" of the image — AI renders a split-panel diptych with a visible dividing line. Use shared-space language: both figures in one continuous environment.
 - ❌ Realistic without "live" details (skin, textures) — you get a 3D render, not a human
 - ❌ Chain reference between different characters — breaks appearance
 - ❌ Trying to align cartoon and realistic by height — let chibi stay smaller

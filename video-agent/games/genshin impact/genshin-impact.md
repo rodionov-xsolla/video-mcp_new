@@ -185,6 +185,36 @@ Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, so
 
 ---
 
+## Dual-Style Character Blocks
+
+Двойные описания для формата dual-style: anime game-style (левая сторона) + photorealistic (правая сторона). Без чиби — используется стандартный anime cel-shaded стиль игры.
+
+### Venti (game-style)
+`anime cel-shaded male bard Venti, teal and blue bard outfit with wind motifs and laurel wreath crown, short teal hair with two braids, clean bold anime outlines, vibrant flat saturated colors, playful carefree expression, bow slung over shoulder, slender androgynous build, glowing anemo wind particles`
+
+### Venti (realistic counterpart)
+`photorealistic young androgynous male, teal and blue bard outfit with wind motifs and laurel wreath crown, short teal hair with two small braids, natural skin textures, fair complexion, playful carefree expression, bow, slender lean build`
+
+### Hu Tao (game-style)
+`anime cel-shaded female funeral director Hu Tao, dark red and black traditional Chinese outfit with golden talisman ornaments, brown hair in twin tails with red flower pins, clean bold anime outlines, vibrant flat saturated colors, mischievous grinning expression, polearm with ghost flame motifs, petite energetic build, swirling crimson pyro flames`
+
+### Hu Tao (realistic counterpart)
+`photorealistic young East Asian woman, dark red and black traditional Chinese outfit with golden talisman ornaments, brown hair in twin tails with red flower pins, natural skin textures, warm tan complexion, mischievous grinning expression, ornate polearm, petite energetic build`
+
+### Zhongli (game-style)
+`anime cel-shaded male Geo Archon Zhongli, dark brown and gold traditional Chinese scholar coat with geo rock motifs, dark brown hair with gold ornamental accents, clean bold anime outlines, vibrant flat saturated colors, composed dignified expression, tall imposing build, geo polearm, amber glowing geo particles`
+
+### Zhongli (realistic counterpart)
+`photorealistic tall East Asian man, dark brown and gold traditional Chinese scholar coat with ornate geo motifs, dark brown hair with gold accents, natural skin textures, olive complexion, composed sophisticated expression, ornate polearm, tall dignified build`
+
+### Diluc (game-style)
+`anime cel-shaded male knight Diluc, dark red and black noble overcoat with silver buttons and cape, long dark red hair tied back with ribbon, clean bold anime outlines, vibrant flat saturated colors, serious brooding expression, large greatsword claymore, tall imposing build, fierce pyro fire aura`
+
+### Diluc (realistic counterpart)
+`photorealistic tall European man, dark red and black noble overcoat with silver buttons and dark cape, long dark red hair tied back, natural skin textures, pale complexion, serious brooding expression, large greatsword, tall muscular build`
+
+---
+
 ## Tone of Voice
 
 - Волшебный, эпичный, эмоциональный
