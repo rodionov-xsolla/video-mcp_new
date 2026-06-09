@@ -24,6 +24,7 @@
 | What If... Lore | **$6.00** | Spend > $5.40 |
 | Wild Documentary | **$5.00** | Spend > $4.50 |
 | Special Report | **$4.50** | Spend > $4.00 (pilot allowance; EP2+ target ~$2.85) |
+| Fake Ad | **$3.50** | Spend > $3.00 |
 
 Tracking: after each generation, record the cost. Before the next one — check the limit.
 

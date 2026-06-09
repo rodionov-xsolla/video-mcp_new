@@ -272,6 +272,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 | "streettalk", "street talk", "street-talk", "vox pop", "vox-pop", "уличное интервью", "стрит-ток", "прохожие", "мнения прохожих", "опрос на улице" | Streettalk | `rules/formats/streettalk.md` |
 | "in-game pov", "pov", "от первого лица", "first person", "ты оказался", "вы оказались", "тебя зажали", "survival guide", "survival manual", "как выжить", "how to survive", "survive the", "выживание", "you wake up", "ты очнулся" | In-Game POV | `rules/formats/in-game-pov.md` |
 | "documentary", "wildlife", "дикая природа", "документалка", "натуралист", "naturalist", "nature doc", "hidden camera", "скрытая камера", "wild creatures", "wild pokemon", "wild pokémon", "дикие покемоны", "как выглядели бы в природе", "creatures in the wild" | Wild Documentary | `rules/formats/wild-documentary.md` |
+| "fake ad", "fake commercial", "рекламный ролик", "фейковая реклама", "реклама", "commercial", "advertisement", "ad for", "реклама предмета", "obby energy", "in-game ad", "item ad", "рекламный", "ролик" | Fake Ad | `rules/formats/fake-ad.md` |
 | Anything else | Standard | `rules/formats/standard.md` |
 
 **Do not load format files unrelated to the task.**
