@@ -140,7 +140,7 @@ Example:
 - **`top-list`** — tier lists and rankings
 - **`serial-drama`** — episodic story arcs
 - **`news`** — patch notes, events, meta updates
-- **`what-if-lore`** — "what if X happened in the game world"
+- **`redcon`** — "what if X happened in the game world"
 ```
 
 If a format needs game-specific rules, note it:
