@@ -380,14 +380,14 @@ Use only the supported emotive tags from §1 (`(laughs)`, `(groans)`, etc.). Any
 
 ## 8. Subtitles — твоя задача только эмитить тайминги, бёрнит Editor
 
-**Sound не запускает Whisper, не генерирует PNG, не бёрнит ASS.** Стилевой выбор делает оркестратор по front-matter формата (см. `rules/roles/manager.md`). Editor читает стиль от оркестратора и бёрнит ASS канонически. Подробнее — `rules/roles/editor.md` §0 + §subtitles.
+**Sound не генерирует PNG, не бёрнит ASS.** Стилевой выбор делает оркестратор по front-matter формата (см. `rules/roles/manager.md`). Editor читает стиль от оркестратора и бёрнит ASS канонически. Подробнее — `rules/roles/editor.md` §0 + §subtitles.
 
 **Твой единственный артефакт по сабам — `scene-K.timings.json` рядом с каждым `scene-K.mp3` (см. §11 ниже).**
 
 ### Запрещено
 
 - ❌ Генерация PNG-сабов на границу `tts_segment` (нечитаемо).
-- ❌ Прямой запуск `faster-whisper` (он у нас в fallback и медленный — мы знаем текст из `tts`).
+- ❌ Пропорциональные тайминги без Whisper — не попадают в реальные паузы Chatterbox.
 - ❌ Любая запись `*.ass` файлов из sound — это работа editor'а.
 
 ### Audio/video duration mismatch — speed control
@@ -458,7 +458,7 @@ If the format is comedic and the picked track is melancholic/ambient — the who
 
 ## 12. `scene-K.timings.json` — word-level тайминги для Editor
 
-После генерации каждого `scene-K.mp3` (TTS) — рядом сохрани `scene-K.timings.json`. **Без Whisper.** Тайминги вычисляются пропорционально из известного текста (поле `tts` в storyboard.json) и длительности MP3.
+После генерации каждого `scene-K.mp3` (TTS) — рядом сохрани `scene-K.timings.json`. Тайминги получаются через **faster-whisper** по реальному аудио — пропорциональный подход (`--text`) запрещён во всём пайплайне (не попадает в реальные паузы и интонации, особенно у Chatterbox).
 
 ### Команда
 

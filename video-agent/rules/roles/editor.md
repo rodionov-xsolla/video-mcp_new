@@ -585,22 +585,25 @@ python3 tools/add_subtitles.py \
   ${SUBTITLE_EXTRAS}
 ```
 
-**Источник текста и таймингов — зависит от формата:**
+**Источник таймингов — ВСЕГДА faster-whisper, без исключений:**
 
-- **reddit-story (и любой монолог с `--highlight-words`)** → **НЕ передавай `--text`**. Пусть `add_subtitles.py` прогонит аудио через faster-whisper и получит реальные word-level тайминги. Пропорциональные тайминги из текста дают равномерный ритм, но не попадают в реальные паузы и интонации — на highlight это сразу видно. `--verify-audio` в этом режиме **не нужен**: тайминги получены ИЗ того же аудио, дрейф невозможен по конструкции; хвостовая тишина после последнего слова — норма.
+**НЕ передавай `--text`** ни для одного формата. Пропорциональные тайминги из текста дают равномерный ритм но не попадают в реальные паузы, акценты и интонации — особенно критично для Chatterbox (голосовые клоны добавляют непредсказуемые паузы). Whisper выравнивает субтитры по реальному звучанию.
 
-- **Все остальные форматы** (serial-drama, character-story, news и т.д.) → передавай `--text "$FULL_NARRATION"` для быстрого пути без Whisper. `--verify-audio` обязателен.
+`--verify-audio` **не нужен** в Whisper-режиме: тайминги получены из того же аудио, дрейф невозможен по конструкции.
 
-**Whisper-путь для reddit-story — канонический вызов:**
+**Канонический вызов — ВСЕ форматы:**
 ```bash
 python3 tools/add_subtitles.py \
-  - "$OUTPUT_DIR/tts-output.mp3" "$OUTPUT_DIR/build/subs.ass" \
+  - build/tts-fast.mp3 build/subs.ass \
   --emit-ass-only \
-  --style narrative \
-  --highlight-words \
-  --highlight-color 00FFFF
+  --style "${SUBTITLE_STYLE}" \
+  --offset "${SUBTITLE_OFFSET_S}" \
+  $EXTRA_FLAGS \
+  ${SUBTITLE_EXTRAS}
 # НЕТ --text, НЕТ --verify-audio, НЕТ --atempo
 ```
+
+Для форматов с `--highlight-words` (reddit-story): добавь `--highlight-words --highlight-color 00FFFF` — Whisper уже используется, флаги совместимы.
 
 **Антидрейф by construction (вместо ручного `--atempo`).** ASS генерим из **того же аудио, что идёт в микс** — `build/tts-fast.mp3` (уже после `atempo`) для single-voice, `scene-$K.mp3` для per-scene. Тайминги тогда считаются по реальной длительности и не могут разойтись с фактическим звучанием. Флаг **`--atempo` устарел** — не передавай его: множитель уже запечён в длительности файла, а ручной множитель — это и был источник «съезжания» (несовпал с `filter_complex` → субтитры уезжали к концу клипа). Если файл по какой-то причине ещё не ускорен — сначала сделай `tts-fast.mp3` (§3b), потом генери ASS.
 
