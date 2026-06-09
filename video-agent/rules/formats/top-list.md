@@ -23,7 +23,7 @@ Keywords: `"top-5"`, `"top 5"`, `"топ-5"`, `"топ 5"`, `"top list"`, `"то
 
 Typical themes: top-5 women characters, top-5 starfleet ships, top-5 villains, top-5 maps/locations, top-5 weapons/skins/items, top-5 ultimates.
 
-Not for: news / patch recaps (use `news`), lore monologue (use `character-story`), single hero action scene (use `standard`).
+Not for: news / patch recaps (use `news`), lore monologue (use `character-story`), single hero action scene.
 
 ---
 
@@ -67,7 +67,7 @@ Not for: news / patch recaps (use `news`), lore monologue (use `character-story`
 | Worst case (2 new anchor refs to generate) | ~$3.96 |
 | Fallback (2.6 Pro) | ~$3.31 |
 
-Slightly more than the previous 6-clip layout because rank-1 is split into 2 clips for the climax. Still cheaper than `standard` ($5).
+Slightly more than the previous 6-clip layout because rank-1 is split into 2 clips for the climax. 
 
 ---
 

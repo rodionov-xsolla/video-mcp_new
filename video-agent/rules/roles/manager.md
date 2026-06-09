@@ -266,10 +266,8 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 |---|---|---|
 | "news", "новости", "game news", "patch recap", "обновление" | News | `rules/formats/news.md` |
 | "serial", "episode", "series", "ep1", "ep2", "сериал" | Serial Drama | `rules/formats/serial-drama.md` |
-| "object character", "talking object", "антропоморф" | Object Character | `rules/formats/object-character.md` |
 | "dual-style", "game vs reality" | Dual-style | `rules/formats/dual-style.md` |
 | "gameplay ai avatar", "ai avatar", "talking head", "offerwall", "offer", "оффер", "бонус" | Gameplay AI Avatar | `rules/formats/gameplay-ai-avatar.md` |
-| "dance battle", "dance off", "танцевальный батл", "танец" | Dance Battle | `rules/formats/dance-battle.md` |
 | "reddit story", "storytime", "история игрока", "narrated gameplay" | Reddit Story | `rules/formats/reddit-story.md` |
 | "character story", "история персонажа", "лор", "lore", "backstory", "origin story", "предыстория" | Character Story | `rules/formats/character-story.md` |
 | "motion dance", "motion control", "моушн", "motion transfer", "танцует под видео" | Motion Dance | `rules/formats/motion-dance.md` |
@@ -282,7 +280,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 | "in-game pov", "pov", "от первого лица", "first person", "ты оказался", "вы оказались", "тебя зажали", "survival guide", "survival manual", "как выжить", "how to survive", "survive the", "выживание", "you wake up", "ты очнулся" | In-Game POV | `rules/formats/in-game-pov.md` |
 | "documentary", "wildlife", "дикая природа", "документалка", "натуралист", "naturalist", "nature doc", "hidden camera", "скрытая камера", "wild creatures", "wild pokemon", "wild pokémon", "дикие покемоны", "как выглядели бы в природе", "creatures in the wild" | Wild Documentary | `rules/formats/wild-documentary.md` |
 | "fake ad", "fake commercial", "рекламный ролик", "фейковая реклама", "реклама", "commercial", "advertisement", "ad for", "реклама предмета", "obby energy", "in-game ad", "item ad", "рекламный", "ролик" | Fake Ad | `rules/formats/fake-ad.md` |
-| Anything else | Standard | `rules/formats/standard.md` |
+| Anything else | ask user to clarify the format |
 
 **Do not load format files unrelated to the task.**
 

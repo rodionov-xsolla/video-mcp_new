@@ -460,7 +460,7 @@ Save as `games/{GAME_TAG}/assets/refs/{slug}-sheet.png`.
 
 Every new character in any format requires its own character sheet (16:9) + avatar ref (9:16 for Kling Avatar). Never reuse one character's ref for another — style, face, and proportions will drift.
 
-**Sheet is mandatory even for "ad-hoc" characters in single-clip formats** (motion-dance, dance-battle, object-character one-offs). It's tempting to skip the sheet and render the character straight into the scene — DON'T. The next run that wants the same character will only have your wide-shot scene render to chain off, and NB2 will copy its composition (wide shot → wide-shot output, regardless of text prompt). One $0.04 sheet now saves $1+ of mis-framed Kling Motion Control / Avatar calls later. Treat the sheet as the deliverable, the scene render as a downstream artifact.
+**Sheet is mandatory even for "ad-hoc" characters in single-clip formats** (motion-dance one-offs). It's tempting to skip the sheet and render the character straight into the scene — DON'T. The next run that wants the same character will only have your wide-shot scene render to chain off, and NB2 will copy its composition (wide shot → wide-shot output, regardless of text prompt). One $0.04 sheet now saves $1+ of mis-framed Kling Motion Control / Avatar calls later. Treat the sheet as the deliverable, the scene render as a downstream artifact.
 
 Order:
 1. **First — check the series story bible** (`games/{GAME_TAG}/{format}_story_bible.json` → `supabase_assets.char_refs`). If a canonical character sheet exists there (e.g. `noob-sheet`, `preppy-girl-sheet`, `shadow-sheet`), **use its Supabase URL as the `image_urls` chain reference for any new per-episode character ref or scene PNG**. The prompt should describe a single full-body front view extracted from the reference sheet. **Never regenerate the character from text alone when a canon sheet exists** — text-only generation drifts (e.g. Roblox-noob arms can render as green instead of yellow, accessories like Bella's sunglasses get dropped). One $0.04 wasted ref is cheap; downstream scene PNGs and Kling clips that drift cost much more.
@@ -488,7 +488,7 @@ Order:
 
    > Per-episode scene PNG / TTS — **другой kind**: `--kind episode-scene` / `episode-tts` с `--episode {YYYY-MM-DD}-{format}`. Эти файлы пишутся в bucket `episodes/`, в `game_assets` НЕ регистрируются (одноразовый эпизодный мусор).
 
-Applies to ALL formats: news (anchor + co-anchor), serial-drama (multiple characters), gameplay-ai-avatar (avatar), character-story (hero), standard (characters).
+Applies to ALL formats: news (anchor + co-anchor), serial-drama (multiple characters), gameplay-ai-avatar (avatar), character-story (hero).
 
 ---
 
@@ -595,7 +595,7 @@ Standard pattern for one character in a scene:
 | 1st in location | `[bg-{location}, character-sheet]` |
 | Subsequent in location | `[bg-{location}, character-sheet, prev-scene]` |
 
-For formats without bg ref (standard, news, gameplay-ai-avatar):
+For formats without bg ref (news, gameplay-ai-avatar):
 | Scene | `image_urls` |
 |---|---|
 | 1 | `[character-sheet]` |

@@ -342,7 +342,7 @@ There is no format without music. Pick a track to fit the scene mood and pass it
 | **serial-drama** | `0.15` | Drama/cinematic enhances tension |
 | **gameplay-ai-avatar** | `0.10` | Quieter — avatar voice is primary |
 | **reddit-story** | `0.05` | Even quieter — narration must be clear |
-| **news, standard, others** | `0.10–0.15` | By mood |
+| **news, others** | `0.10–0.15` | By mood |
 
 ### Selection
 
@@ -445,9 +445,9 @@ Pick `bg-music.mp3` from the folder that matches the format's emotional register
 
 | Mood folder | Use for |
 |---|---|
-| `music/Fun/` | comedy-sketch, dance-battle, lighthearted reaction |
+| `music/Fun/` | comedy-sketch, lighthearted reaction |
 | `music/Dark/` | serial-drama (tense beats), horror, news (somber) |
-| `music/Neutral/` (or Drama) | standard, news, reddit-story (calm narration) |
+| `music/Neutral/` (or Drama) | news, reddit-story (calm narration) |
 | `music/Tense/` | serial-drama (cliffhanger), action recap |
 
 If the format is comedic and the picked track is melancholic/ambient — the whole video reads wrong. Re-pick before handing off.

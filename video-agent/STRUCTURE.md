@@ -118,13 +118,10 @@ video-agent/
 │   │   ├── fallback.md         # Обработка ошибок
 │   │   └── new-format-skill.md # Скилл создания нового формата
 │   └── formats/
-│       ├── standard.md          # I2V / T2V (по умолчанию)
 │       ├── news.md              # Новости (ведущий + репортёр)
 │       ├── serial-drama.md      # Сериальные микро-драмы
-│       ├── object-character.md  # Антропоморфные объекты
 │       ├── dual-style.md        # Cartoon + realistic
 │       ├── gameplay-ai-avatar.md # Говорящая голова + геймплей
-│       ├── dance-battle.md      # Комедийные танцевальные батлы
 │       ├── character-story.md   # Лор-монолог персонажа
 │       ├── motion-dance.md     # Motion transfer танец с реф-видео
 │       ├── what-if-real-life.md # «Что если бы персонаж попал в реальную жизнь» (Spock-бариста, Kratos-воспитатель, ...)
