@@ -24,9 +24,7 @@ Keywords: "dual-style", "game vs reality", "meet your character IRL", cosplay co
 
 - **Cartoon left + realistic right** (positioning fixed for the whole video)
 - **3 clips × 5–10s** → 15–30s total
-- **Model:** Kling 2.6 Pro I2V, `generate_audio: true` (SFX)
-
-> ⚠️ **FORMAT NEEDS REFACTOR (2026-05-26 audit).** `animator.md` line 74 and `tools/fal-ai.md` lines 190, 218, 378 state Kling I2V cannot generate audio in any version — `generate_audio: true` yields garbled noise, not SFX. Refactor options: switch to Veo3 T2V for embedded audio, or keep Kling silent and add SFX as separate audio layer in Editor. Do NOT run unmodified.
+- **Model:** Kling v3 Standard I2V, `generate_audio: true` (встроенный аудио Kling — ambient SFX прямо в клипе)
 - **Speech:** NO, `character_speech: null` everywhere
 - **Budget:** $5 max
 
@@ -48,21 +46,30 @@ Multi-character video: 1 clip = 1 pair (cartoon + realistic of one character), c
 
 ## Key prompting rules
 
-### 1. Cartoon and realistic markers (mandatory)
+### 1. Style isolation markers (mandatory, 2026-06-09)
 
-Without these markers AI will make both realistic.
+The character sheet chain-ref is anime-style — without explicit style isolation, NB2 applies anime style to BOTH figures.
 
-**Cartoon:**
+**Left figure (game-style) markers:**
+- `anime cel-shaded style`
 - `bold black outlines`
 - `bright flat saturated colors`
-- `exaggerated chibi proportions`
-- `large head, small body` (if chibi)
+- `vibrant flat anime colors`
 
-**Realistic:**
-- `photorealistic`
-- `real skin textures`
-- `natural proportions`
-- `weathered / sun-darkened / tanned`
+**Right figure (realistic) markers — must be explicit and strong:**
+- `photorealistic photograph`
+- `live-action movie still`
+- `real human being`
+- `real skin textures, natural skin pores`
+- `cinema quality lighting`
+- `NOT anime, NOT cartoon, NOT illustrated`
+
+**Style isolation in image_prompt (mandatory):**
+Explicitly bind each style to its side using the phrase:
+> `anime cel-shaded style on the LEFT figure only, photorealistic live-action style on the RIGHT figure only`
+
+**Negative prompt must include:**
+> `anime style on right figure, cartoon right side, cel-shaded right side, illustrated right figure, anime on both sides`
 
 ### 2. Connection between versions
 - Same costume (colors, type of clothing, accessories)
@@ -70,12 +77,42 @@ Without these markers AI will make both realistic.
 - Same key details (pink bandana on cartoon → pink on realistic)
 
 ### 3. Positioning
-- Cartoon **always** on the left, realistic **always** on the right (or fixed the other way around — one decision for the whole video)
+- Anime/cartoon version **always** on the left, realistic **always** on the right (or fixed the other way around — one decision for the whole video)
 - `side by side`, not one behind the other
 
 ### 4. Sizes in frame
 - Cartoon may be **smaller** (chibi = small), realistic larger
 - This enhances the contrast, do not try to align by height
+
+### 6. Actor-as-realistic counterpart (optional, 2026-06-09)
+
+Instead of a generic photorealistic human, the realistic side can depict a **specific real-world actor** who resembles the character and could play them in a live-action film. This dramatically increases virality ("Raiden Shogun = real-life Wonder Woman").
+
+**Game config:** the `(realistic counterpart)` block must then describe the actor's real appearance + the character's costume:
+```
+### Hero Name (realistic counterpart)
+`photorealistic [ACTOR NAME], [actor's real physical features: ethnicity, build, eye color, face structure], wearing [CHARACTER COSTUME matching game-style version exactly], [emotion matching game-style pose]`
+```
+
+**Scenarist:** `action_description` must name the actor explicitly: "…her photorealistic counterpart, played by [Actor Name], stands…"
+
+**Rules:**
+- Only use publicly known actors — no private individuals
+- The actor's costume must identically match the game-style version (same colors, accessories, weapon)
+- Do NOT alter the actor's face (no heavy makeup or distortion in the prompt)
+- `style_tags`: add `live-action cast, [Actor Name] as [Character]`
+
+### 5. Single shared space — no panel divide (mandatory, 2026-06-09)
+
+Both versions must occupy **one continuous environment**. A visible dividing line or split-panel effect means the prompt used positional language ("on the left half / on the right half") that forced the AI into a diptych layout.
+
+**WRONG — causes split panels:**
+> "on the left [anime character] …, on the right [realistic character] …"
+
+**CORRECT — shared space:**
+> "[anime-style character] stands side by side with their photorealistic counterpart in [unified environment], both sharing the same continuous space, no dividing line"
+
+The environment description, lighting, and ground plane must be written as **one scene** that both figures inhabit together. The positioning words `left` / `right` may still appear to anchor each figure within the description, but the scene framing must never imply two separate panels or halves.
 
 ---
 
@@ -94,13 +131,15 @@ Without these markers AI will make both realistic.
     "color_palette": "[one palette for both versions]",
     "lighting": "[unified lighting across all scenes]"
   },
+  "sfx": true,
   "scenes": [
     {
       "index": 1,
       "character_speech": null,
       "negative_prompt": "blur, distort, merged characters, single character, text overlay, watermark",
-      "image_prompt": "[ENV], on the left a cartoon chibi [CHAR] with bold black outlines bright flat saturated colors [DETAILS], on the right a photorealistic human [MATCHING OUTFIT] real skin textures [DETAILS], both [ACTION], [LIGHTING], [CAMERA], vertical composition, 9:16 aspect ratio",
-      "motion_prompt": "The cartoon [CHAR] on the left [EXAGGERATED ACTION]. The realistic [CHAR] on the right [GROUNDED MATCHING ACTION]."
+      "sfx_description": "[ambient environment sound + character action sound, e.g. 'howling wind and rustling fabric, bow string tension release']",
+      "image_prompt": "[ENV, one continuous background], anime cel-shaded style on the LEFT figure only — [CHAR] [DETAILS bold black outlines vibrant flat anime colors], photorealistic live-action style on the RIGHT figure only — [ACTOR/PERSON NAME real skin textures natural skin pores cinema lighting NOT anime NOT cartoon], both sharing the same continuous space no dividing line, [MATCHING POSE], [UNIFIED LIGHTING], [CAMERA], vertical composition, 9:16 aspect ratio",
+      "motion_prompt": "The anime-style [CHAR] on the left [SUBTLE ACTION]. The photorealistic [CHAR] on the right [MATCHING GROUNDED ACTION]. Both in the same continuous environment."
     }
   ]
 }
@@ -146,7 +185,7 @@ If these blocks are missing — Manager must flag and stop until they are added.
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
-- **Kling 2.6 Pro I2V**, `generate_audio: true` (SFX), `aspect_ratio: "9:16"`
+- **Kling v3 Standard I2V**, `generate_audio: true` (встроенный ambient SFX), `aspect_ratio: "9:16"`
 - `duration`: "5" or "10"; without `end_image_url`
 - `character_speech: null` → Kling does not receive speech text
 - One model for the whole video
@@ -154,13 +193,23 @@ If these blocks are missing — Manager must flag and stop until they are added.
 
 ### Sound
 - TTS **not needed** (no speech)
-- Optional music: Kling SFX `volume=0.6`, music `volume=0.15`
+- **SFX per scene via CassetteAI on fal.ai** (optional, enabled when `sfx: true` in storyboard.json):
+  - Endpoint: `https://queue.fal.run/cassetteai/sound-effects-generator` (async, polling base = `cassetteai/sound-effects-generator`)
+  - Auth: `Authorization: Key $FAL_KEY`
+  - Body (JSON file): `{"prompt": "[sfx_description from scene]", "duration": 5}`
+  - Poll every 15s until COMPLETED; download WAV from `audio_file.url`
+  - Save to: `OUTPUT_DIR/scenes/scene-K/scene-K-sfx.wav`; convert to mp3 via ffmpeg if needed
+  - One SFX file per scene; write `sfx_url` (local path) back into storyboard.json
+  - Cost: **$0.01 per generation** (4 scenes = $0.04)
+- Music mood: **`energetic` or `fun`** (not `heroic`/`ethereal`) — pick from `music/tracks.json`
 - Subtitles do not apply
 - General rules — `rules/roles/sound.md`
 
 ### Editor
 - Scale 1080×1920, 30fps, concat with re-encode, hard cuts (no crossfade)
-- Music via `amix`; **NEVER `-shortest`**
+- **Animated CTA mandatory at the end** — fetch from `game_assets` where `tags` contains `cta` and `video`. Append after the last scene clip. If CTA is missing in Supabase — STOP and notify the Manager.
+- **SFX mixing** (when `scene-K-sfx.mp3` files present): mix each SFX file aligned to its scene start time using `amix` or per-stream `adelay`. SFX volume: `0.15`. Music volume: `0.40`. NEVER `-shortest`.
+- **Music plays through the full video including CTA** — do not cut music before the CTA clip. Apply `afade=t=out` only at the very end of the last clip.
 - General rules — `rules/roles/editor.md`
 
 ---
@@ -192,6 +241,9 @@ output/YYYY-MM-DD/{GAME_TAG}/dual-style/
 - [ ] `style_tags` include both styles; `lighting`/`color_palette` unified
 - [ ] For multi-character: chain reference does not cross between different characters
 - [ ] `negative_prompt` filled
+- [ ] Animated CTA appended at the end (from Supabase `tags: cta + video`)
+- [ ] If `sfx: true`: `scene-K-sfx.mp3` present for every scene; `sfx_url` written to storyboard.json
+- [ ] If actor-as-realistic: actor name in `action_description` and `style_tags`
 - [ ] Budget ≤$5
 
 ---
@@ -199,7 +251,8 @@ output/YYYY-MM-DD/{GAME_TAG}/dual-style/
 ## Anti-patterns
 
 - ❌ "cartoon style" without concrete markers (bold outlines, flat colors) — AI will make semi-realistic
-- ❌ A single prompt without `on the left / on the right` — AI will merge into one character
+- ❌ Framing as "on the left half / on the right half" of the image — AI renders a split-panel diptych with a visible dividing line. Use shared-space language: both figures in one continuous environment.
+- ❌ Missing style isolation — without "anime cel-shaded style on LEFT figure only, photorealistic on RIGHT figure only", the character sheet chain-ref bleeds anime style onto both sides. Always add explicit per-side style binding and negative_prompt entries.
 - ❌ Realistic without "live" details (skin, textures) — you get a 3D render, not a human
 - ❌ Chain reference between different characters — breaks appearance
 - ❌ Trying to align cartoon and realistic by height — let chibi stay smaller
