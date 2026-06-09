@@ -17,8 +17,8 @@ The agent takes a game tag and an idea, writes the script, generates character i
 | Images | Nano Banana 2 (`fal-ai/nano-banana-2/edit`) |
 | I2V Animation | Kling v3 Standard (`fal-ai/kling-video/v3/standard/image-to-video`) |
 | Lipsync Avatar | Kling Avatar v2 (`fal-ai/kling-video/ai-avatar/v2/standard`) |
-| TTS (most games) | MiniMax Speech 2.8 HD (`fal-ai/minimax/speech-2.8-hd`) |
-| TTS (Genshin) | Chatterbox (`fal-ai/chatterbox/text-to-speech`) |
+| TTS | MiniMax Speech 2.8 HD (`fal-ai/minimax/speech-2.8-hd`) |
+| TTS (Genshin serial-drama only) | Chatterbox (`fal-ai/chatterbox/text-to-speech`) — zero-shot voice clone from reference MP3 |
 | Assembly | FFmpeg (local) |
 | Storage | Supabase Storage (`videos/`, `assets/`) |
 | Task queue | Supabase `video_tasks` table |
