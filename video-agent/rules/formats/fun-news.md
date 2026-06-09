@@ -14,7 +14,7 @@ This file is the **playbook**: when to use, pipeline, role briefs. Craft rules �
 
 **Distinct from:**
 - `news.md` — real game news (web search for actual patch notes / events). Fun News is **fictional** — invented headlines extrapolated from canon lore.
-- `what-if-lore.md` — alternate-history one-shots about a single character/event. Fun News is a recurring newsroom format with multiple short items per episode.
+- `redcon.md` — alternate-history one-shots about a single character/event. Fun News is a recurring newsroom format with multiple short items per episode.
 
 ---
 
@@ -180,7 +180,7 @@ Upload each scene's on-location png to Supabase as `refs/{character}-on-location
 3. Upload both to Supabase via `queue/upload-asset.sh` with tags `fun-news,avatar`
 4. In future episodes this reporter is already in Supabase
 
-**Style consistency:** Avatar v2 closely tracks the reference image. If you use a stylized/cartoonish base ref (e.g. one tagged `what-if-lore` or `comedy-sketch`), the rendered video will look stylized too. **Prefer photoreal-tagged refs** for reporters when the game style is semi-realistic. If you must use a stylized base, the NB2 on-location edit prompt above explicitly counters with "NOT cartoon, NOT illustration".
+**Style consistency:** Avatar v2 closely tracks the reference image. If you use a stylized/cartoonish base ref (e.g. one tagged `redcon` or `comedy-sketch`), the rendered video will look stylized too. **Prefer photoreal-tagged refs** for reporters when the game style is semi-realistic. If you must use a stylized base, the NB2 on-location edit prompt above explicitly counters with "NOT cartoon, NOT illustration".
 
 ### Phase 3: Script → `storyboard.json`
 

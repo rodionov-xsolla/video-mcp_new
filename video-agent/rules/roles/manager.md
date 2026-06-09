@@ -150,7 +150,7 @@ Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude
 ```yaml
 ---
 subtitle_style: bold        # bold | narrative | none | custom
-subtitle_offset_s: 0        # 5 для redcon / what-if-lore (титульная карточка)
+subtitle_offset_s: 0        # 5 для redcon  (титульная карточка)
 subtitle_mask: false        # true для what-if-real-life (маска артефактов)
 subtitle_highlight: false   # true для gameplay-ai-avatar, reddit-story (word-by-word)
 subtitle_extras: []         # дополнительные CLI-флаги, напр. ["--secondary-style", "Customer=lightgray,52,1,120"]

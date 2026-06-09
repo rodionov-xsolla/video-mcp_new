@@ -107,9 +107,9 @@ OUTPUT:
   final.mp4
 ```
 
-### 0.2 Worked example (redcon / what-if-lore, 8 scenes + CTA)
+### 0.2 Worked example (redcon , 8 scenes + CTA)
 
-This is the exact command that ships our redcon/what-if-lore Spock-Borg video (50s output, 1:28 wall-clock, 23 MB):
+This is the exact command that ships our redcon/Spock-Borg video (50s output, 1:28 wall-clock, 23 MB):
 
 ```bash
 FF=/usr/local/bin/ffmpeg-full/ffmpeg     # libass + libfreetype required
@@ -175,7 +175,7 @@ mv build/final.tmp.mp4 final.mp4
 
 The ASS file from `tools/add_subtitles.py` is timed against the **final** TTS shape after atempo + adelay. The filter graph must apply the same operations in the same order. If you re-trim TTS or change atempo after generating ASS, subtitles will drift — regenerate the ASS.
 
-Order is `atempo` → `adelay`. atempo first compresses speech to fit the picture window; adelay then offsets it so TTS starts after any title-card silence (e.g. 5000 ms for redcon/what-if-lore's title card).
+Order is `atempo` → `adelay`. atempo first compresses speech to fit the picture window; adelay then offsets it so TTS starts after any title-card silence (e.g. 5000 ms for redcon's title card).
 
 #### 0.4.1 Audio PTS hygiene — `asetpts=N/SR/TB` + `aresample=async=1` (MANDATORY)
 
@@ -569,7 +569,7 @@ python3 tools/add_subtitles.py \
   $EXTRA_FLAGS \
   ${SUBTITLE_EXTRAS}
 
-# Single-voice (один TTS на весь концат — character-story, reddit-story, what-if-lore, redcon):
+# Single-voice (один TTS на весь концат — character-story, reddit-story, redcon):
 # ВАЖНО: audio-аргумент = ФИНАЛЬНОЕ аудио, которое реально идёт в микс (tts-fast.mp3,
 # уже после atempo). НЕ передаём --atempo — множитель уже «запечён» в длительности файла,
 # и подавать его нечем ошибиться. --verify-audio с тем же файлом ставит code-guard на дрейф.
@@ -589,7 +589,7 @@ python3 tools/add_subtitles.py \
 
 - **reddit-story (и любой монолог с `--highlight-words`)** → **НЕ передавай `--text`**. Пусть `add_subtitles.py` прогонит аудио через faster-whisper и получит реальные word-level тайминги. Пропорциональные тайминги из текста дают равномерный ритм, но не попадают в реальные паузы и интонации — на highlight это сразу видно. `--verify-audio` в этом режиме **не нужен**: тайминги получены ИЗ того же аудио, дрейф невозможен по конструкции; хвостовая тишина после последнего слова — норма.
 
-- **Все остальные форматы** (serial-drama, character-story, what-if-lore, news и т.д.) → передавай `--text "$FULL_NARRATION"` для быстрого пути без Whisper. `--verify-audio` обязателен.
+- **Все остальные форматы** (serial-drama, character-story, news и т.д.) → передавай `--text "$FULL_NARRATION"` для быстрого пути без Whisper. `--verify-audio` обязателен.
 
 **Whisper-путь для reddit-story — канонический вызов:**
 ```bash
@@ -624,7 +624,7 @@ python3 tools/add_subtitles.py \
 ```
 Одиночный проход с `subtitles=` в filter_complex рвёт видеострим при concat. Три шага — надёжно.
 
-**`--offset`** должен совпадать с `adelay` в filter_complex (в секундах). Например, для what-if-lore с титульной 5-секундной карточкой: `adelay=5000|5000` ↔ `--offset 5.0`.
+**`--offset`** должен совпадать с `adelay` в filter_complex (в секундах). Например, для с титульной 5-секундной карточкой: `adelay=5000|5000` ↔ `--offset 5.0`.
 
 ### 6.3 ASS-инварианты (от Sound сюда, см. предыдущую версию `sound.md` §10)
 

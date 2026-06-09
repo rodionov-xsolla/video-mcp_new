@@ -255,7 +255,7 @@ Star Trek Timelines style, semi-realistic sci-fi character portrait, cinematic F
 - **Размер при overlay:** 110×110 px (downscale из 512×512 через `scale=110:110` в filter_complex)
 - **Прозрачность:** альфа уже зашита в PNG (~70% эффективная); если нужно сильнее погасить — `colorchannelmixer=aa=0.7` в overlay цепочке
 - **Поведение:** static, full-video duration (без fade in/out)
-- **Применимо к форматам:** ВСЕ ST-Timelines форматы (streettalk, fun-news, news, character-story, what-if-lore, redcon, ...). Editor читает `channel_bug_url` из game config и применяет автоматически — см. `rules/roles/editor.md` §13a.
+- **Применимо к форматам:** ВСЕ ST-Timelines форматы (streettalk, fun-news, news, character-story, redcon, ...). Editor читает `channel_bug_url` из game config и применяет автоматически — см. `rules/roles/editor.md` §13a.
 - **Когда НЕ применять:** если game config не содержит `channel_bug_url` (другие игры — Roblox, MLBB и пр.), а также если конкретный формат явно отключает через свой playbook (нет таких форматов на момент 2026-05-29).
 
 **Анти-паттерны:**
