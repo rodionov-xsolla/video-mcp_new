@@ -523,12 +523,12 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
   </div>
 
   <div class="card">
-    <h3>ElevenLabs / Chatterbox</h3>
-    <p class="muted">Два TTS-бэкенда через fal.ai. Выбор по game_tag: Chatterbox для Genshin serial-drama (voice-clone из reference MP3), ElevenLabs eleven-v3 для всех остальных.</p>
+    <h3>MiniMax / Chatterbox</h3>
+    <p class="muted">Два TTS-бэкенда через fal.ai. Выбор по game_tag + формату: Chatterbox только для <code>genshin-impact</code> serial-drama (voice-clone из reference MP3). Всё остальное — MiniMax Speech 2.8 HD, включая Star Trek serial-drama.</p>
     <h4>Голоса</h4>
     <ul class="tight">
       <li>Voice mapping в <code>sound.md</code> + per-game в game config</li>
-      <li>Per-character settings ElevenLabs (Kirk: stable, Spock: flat, Worf: harsh)</li>
+      <li>MiniMax: preset voices (Deep_Voice_Man, Determined_Man, Calm_Woman и т.д.), emotion + speed</li>
       <li>Chatterbox: JSON-тело пишется через Python (не bash heredoc — апострофы убивают аудио)</li>
     </ul>
   </div>
