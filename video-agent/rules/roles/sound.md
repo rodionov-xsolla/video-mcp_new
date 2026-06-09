@@ -28,8 +28,10 @@ From Manager:
 
 | Condition | Engine |
 |---|---|
-| `game_tag == "genshin impact"` + serial-drama | **Chatterbox** (§1b) — voice cloned from reference MP3 |
+| `game_tag == "genshin impact"` (ANY format) | **Chatterbox** (§1b) — voice cloned from reference MP3 |
 | All other games and formats | **MiniMax** (§1a) — preset voices |
+
+**Genshin voice refs** live in Supabase Storage at `assets/genshin-impact/characters/{slug}/voice-1.mp3` (also voice-2.mp3, voice-3.mp3 where available). Use `voice-1.mp3` as the primary `audio_url` for Chatterbox. **105+ characters confirmed to have refs** — effectively the entire playable roster. For the rare character without a voice ref → fall back to MiniMax.
 
 ---
 
