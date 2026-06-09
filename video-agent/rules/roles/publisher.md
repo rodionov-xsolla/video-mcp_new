@@ -1,168 +1,272 @@
-# Publisher — публикация роликов в TikTok / Instagram через mobile-mcp
+# Publisher — posting to TikTok / Instagram via mobile-mcp + YouTube scheduling
 
-Роль исполняет **главный агент** (не суб-агент): MCP-инструменты телефона доступны
-только главной сессии. Триггер — команда пользователя в чате:
+Executed by the **main agent** (not a sub-agent): phone MCP tools are only available in the main session. Triggered by a user command in chat:
 
-| Команда | Площадка | `--platform` | Режим |
+| Command | Platform | `--platform` | Mode |
 |---|---|---|---|
-| «Опубликовать в тик-ток» / "Publish to TikTok" | TikTok | `tt` | **post-now** (планировщика в приложении нет) |
-| «Опубликовать в инстаграм» / "Publish to Instagram" | Instagram | `inst` | **post-now** (Reels). Нативный планировщик есть, но требует Professional-аккаунт — по умолчанию постим сразу |
+| "Publish to TikTok" | TikTok | `tt` | **post-now** (no in-app scheduler) |
+| "Publish to Instagram" | Instagram | `inst` | **post-now** (Reels). Native scheduler exists but requires a Professional account — post immediately by default |
 
-Телефон — **Android**, подключён по USB. Постим **по одному ролику за вызов**.
+Phone is **Android**, connected via USB. Post **one video per call**.
 
-## Аккаунты на телефоне ↔ game_tag (важно!)
-На телефоне несколько аккаунтов в одном приложении. Публиковать нужно **только ролик
-того game_tag, что соответствует целевому аккаунту**, и постить именно из этого
-аккаунта. Поэтому `fetch-for-publish.sh` всегда вызывается с `--game <game_tag>`, а
-перед постингом убеждаемся, что в приложении активен нужный аккаунт.
+## Phone accounts ↔ game_tag (important!)
 
-| `--game` (game_tag) | TikTok аккаунт | Instagram аккаунт |
+Multiple accounts exist in the same app on the phone. Only post the video matching the target account's game_tag, and always post from that account. `fetch-for-publish.sh` is always called with `--game <game_tag>`; verify the correct account is active in the app before posting.
+
+| `--game` (game_tag) | TikTok account | Instagram account |
 |---|---|---|
 | `star-trek-timelines` | **starfleet archives** (@game_pulse0) | **lookscool1337** |
 | `genshin-impact` | **genshin snap** | **game_pulse.gg** |
 
-Команда пользователя указывает аккаунт, напр. «Опубликовать в тик-ток **starfleet**»
-или «… **genshin**». Если аккаунт не назван и в очереди есть несколько game_tag —
-уточни у пользователя. game_tag без своего аккаунта на телефоне (напр. `wwe-champions`,
-`roblox`) сейчас **не публикуем** — сообщи об этом и остановись.
+The user's command specifies the account, e.g. "Publish to TikTok **starfleet**" or "… **genshin**". If no account is named and multiple game_tags are in the queue — ask the user. game_tags without a phone account (e.g. `wwe-champions`, `roblox`) are **not published** — inform the user and stop.
 
-## Архитектура (важно понимать)
-mobile-mcp управляет только UI телефона и **не переносит файлы**. Видео живёт в Supabase
-Storage. Поэтому: сначала `fetch-for-publish.sh` скачивает ролик и кладёт его в галерею
-телефона через adb, затем mobile-mcp выбирает это видео в приложении.
+## Architecture
+
+mobile-mcp controls only the phone UI and **does not transfer files**. Video lives in Supabase Storage. Flow: `fetch-for-publish.sh` downloads the video and pushes it to the phone gallery via adb; then mobile-mcp selects it in the app.
 
 ## Pre-flight
-1. `bash video-agent/queue/fetch-for-publish.sh` сам проверяет наличие adb и
-   авторизованного устройства. Но до постинга убедись, что телефон виден:
-   `~/Library/Android/platform-tools/adb devices -l` → статус `device`
-   (не `unauthorized` / пусто). Если пусто — попроси пользователя включить
-   «Отладку по USB» и подтвердить RSA-запрос на телефоне.
-2. `mobile_list_available_devices` — телефон должен быть в списке. (MCP-сервер
-   `mobile-mcp` подхватывается только после перезапуска сессии Claude Code.)
 
-## Шаг 1 — достать ролик и положить на телефон
+1. `bash video-agent/queue/fetch-for-publish.sh` checks for adb and an authorized device on its own. But before posting, verify the phone is visible: `~/Library/Android/platform-tools/adb devices -l` → status `device` (not `unauthorized` / empty). If empty — ask the user to enable USB Debugging and accept the RSA prompt on the phone.
+2. `mobile_list_available_devices` — phone must be in the list. (The `mobile-mcp` server is only picked up after restarting the Claude Code session.)
+
+## Step 1 — fetch the video and push to phone
+
 ```bash
 bash video-agent/queue/fetch-for-publish.sh --platform tt --game <game_tag>   # tt|inst
-# напр.: --game star-trek-timelines  (starfleet archives)
+# e.g.: --game star-trek-timelines  (starfleet archives)
 #        --game genshin-impact       (genshin snap)
 ```
-- `--game` обязателен — он гарантирует, что ролик пойдёт в правильный аккаунт.
-- Если вывод содержит `NOTHING_TO_PUBLISH=1` — сообщи пользователю, что
-  неопубликованных роликов для этого game_tag нет, и остановись.
-- Иначе распарси из stdout: `VIDEO_URL`, `DEVICE_PATH`, `CAPTION_SOURCE`,
-  `GAME_TAG`, `FORMAT`. `VIDEO_URL` понадобится в шаге 4.
 
-## Шаг 2 — сгенерировать подпись (в момент публикации, под площадку)
-База — `CAPTION_SOURCE` (input_idea) + `GAME_TAG` / `FORMAT`. Сочини подпись сам:
-- **TikTok:** короткий цепляющий хук (1 строка) + 3–5 хэштегов в стиле TikTok
-  (`#fyp` уместен), упомяни игру.
-- **Instagram (Reels):** чуть более описательная подпись (1–2 строки) + хэштеги под IG,
-  без `#fyp`.
-Не используй `input_idea` дословно — переработай под площадку. Эмодзи — умеренно.
+- `--game` is required — it ensures the clip goes to the correct account.
+- If output contains `NOTHING_TO_PUBLISH=1` — tell the user there are no unpublished videos for this game_tag and stop.
+- Otherwise parse from stdout: `VIDEO_URL`, `DEVICE_PATH`, `CAPTION_SOURCE`, `GAME_TAG`, `FORMAT`. `VIDEO_URL` is needed in step 4.
 
-## Шаг 3 — провести через UI приложения (mobile-mcp)
-Общий приём: **не хардкодим координаты**. На каждом экране сперва
-`mobile_list_elements_on_screen`, находим нужный элемент по тексту/описанию, кликаем
-`mobile_click_on_screen_at_coordinates` по его центру. После ключевых шагов —
-`mobile_take_screenshot` для самопроверки. Текст вводим `mobile_type_keys`. Системная
-навигация назад — `mobile_press_button` (BACK).
+## Step 2 — generate caption (at publish time, per platform)
+
+Base: `CAPTION_SOURCE` (input_idea) + `GAME_TAG` / `FORMAT`. Write the caption yourself:
+- **TikTok:** short punchy hook (1 line) + 3–5 TikTok-style hashtags (`#fyp` is fine), mention the game.
+- **Instagram (Reels):** slightly more descriptive (1–2 lines) + IG hashtags, no `#fyp`.
+
+Don't use `input_idea` verbatim — rewrite it for the platform. Emojis in moderation.
+
+## Step 3 — navigate through the app UI (mobile-mcp)
+
+General approach: **never hardcode coordinates**. On each screen: `mobile_list_elements_on_screen` first, find the target element by text/description, click at its center with `mobile_click_on_screen_at_coordinates`. After key steps — `mobile_take_screenshot` for self-check. Enter text with `mobile_type_keys`. System back navigation — `mobile_press_button` (BACK).
 
 ### TikTok (post-now)
-1. `mobile_launch_app` TikTok (пакет обычно `com.zhiliaoapp.musically`; уточни через
-   `mobile_list_apps`).
-2. **Проверить активный аккаунт** (на телефоне их несколько!). Вкладка «Profile» →
-   `mobile_list_elements_on_screen` → прочитать имя текущего аккаунта вверху. Если это
-   не целевой аккаунт (по таблице маппинга) — тапнуть имя/переключатель аккаунтов и
-   выбрать нужный (**starfleet archives** для `star-trek-timelines`, **genshin snap**
-   для `genshin-impact`). `mobile_take_screenshot` для подтверждения, что активен
-   правильный аккаунт, **до** загрузки видео.
-4. Нижняя панель → кнопка «+» (создать).
-5. Перейти на вкладку «Upload» / «Загрузить» → выбрать только что добавленное видео
-   (самое свежее в галерее, `DEVICE_PATH`). → Next.
-6. На экране публикации: тапнуть поле подписи → `mobile_type_keys` (подпись из шага 2).
-7. Нажать «Post» / «Опубликовать». Дождаться экрана профиля/ленты как подтверждения.
 
-#### TikTok — fast-path по координатам (телефон Redmi `23129RN51X`, экран 720×1650)
-Эти координаты сняты с живого прогона и стабильны для этого устройства + текущей версии
-TikTok. Можно кликать сразу, **без** `mobile_list_elements_on_screen`/скриншотов на
-каждом шаге. Между шагами ждать 2–5 сек (`sleep`). Скриншот делать только для двух
-проверок (отмечены 📸). Если экран не совпал с ожидаемым — откатиться к чтению
-элементов (координаты могли «уехать» после обновления приложения).
+1. `mobile_launch_app` TikTok (package usually `com.zhiliaoapp.musically`; confirm via `mobile_list_apps`).
+2. **Verify active account** (multiple on the phone!). Profile tab → `mobile_list_elements_on_screen` → read account name at the top. If it's not the target account (per mapping table) — tap the name/account switcher and select the correct one (**starfleet archives** for `star-trek-timelines`, **genshin snap** for `genshin-impact`). `mobile_take_screenshot` to confirm the right account is active **before** uploading.
+3. Bottom bar → **+** button (create).
+4. Switch to the **Upload** tab → select the freshly pushed video (newest in gallery, `DEVICE_PATH`). → Next.
+5. On the publish screen: tap the caption field → `mobile_type_keys` (caption from step 2).
+6. Tap **Post**. Wait for the profile/feed screen as confirmation.
 
-| # | Действие | Тап (x, y) | Примечание |
+#### TikTok — coordinate fast-path (Redmi `23129RN51X`, screen 720×1650)
+
+These coordinates were captured from a live run and are stable for this device + current TikTok version. Tap directly **without** `mobile_list_elements_on_screen`/screenshots at each step. Wait 2–5s between steps. Screenshots only at two checkpoints (marked 📸). If the screen doesn't match expectations — fall back to reading elements (coordinates may have shifted after an app update).
+
+| # | Action | Tap (x, y) | Note |
 |---|---|---|---|
-| 1 | Launch TikTok | — | `mobile_launch_app com.zhiliaoapp.musically`, ждать ~3с |
-| 2 | Вкладка **Profile** | `648, 1500` | 📸 проверить активный аккаунт (Starfleet Archives / genshin snap). Не тот — переключить через стрелку у имени, см. шаг про аккаунты выше |
-| 3 | Кнопка **«+»** (Create) | `360, 1485` | камера; иногда нужен 2-й тап + `sleep 5` (первый раз грузится дольше, экран чёрный) |
-| 4 | **Upload** (галерея, слева внизу) | `80, 1465` | `upload_hot_area` |
-| 5 | Выбрать **свежий ролик** (верх-лево) | `121, 377` | Recents сортирует по дате; только что запушенный = верхний-левый |
-| 6 | Превью → **Next** | `528, 1478` | кнопка `id/ooo` |
-| 7 | Редактор → **Next** | `530, 1481` | кнопка `id/op0` |
-| 8 | Поле **описания** | `221, 250` | затем `mobile_type_keys` (подпись ASCII — эмодзи/тире adb коверкает) |
-| 9 | Скрыть клавиатуру | — | `mobile_press_button BACK` |
-| 10 | **More options** | `360, 1245` | открыть лист доп.настроек |
-| 11 | Тумблер **AI-generated content** | `640, 843` | включить (станет синим); обязательно для AI-роликов |
-| 12 | **Закрыть** лист More options | `664, 451` | крестик |
-| 13 | **Post** | `532, 1482` | 📸 перед нажатием свериться: видео/подпись/Public/AI-метка. Необратимо |
-| 14 | Дождаться аплоада | — | кружок прогресса вверху слева; ждать 100%. Затем `log-publish.sh --platform tt --video-url $VIDEO_URL` |
+| 1 | Launch TikTok | — | `mobile_launch_app com.zhiliaoapp.musically`, wait ~3s |
+| 2 | **Profile** tab | `648, 1500` | 📸 verify active account (Starfleet Archives / genshin snap). Wrong one — switch via arrow next to name |
+| 3 | **+** (Create) button | `360, 1485` | camera; sometimes needs a 2nd tap + `sleep 5` (first load is slow, black screen) |
+| 4 | **Upload** (gallery, bottom-left) | `80, 1465` | `upload_hot_area` |
+| 5 | Select **fresh video** (top-left) | `121, 377` | Recents sorted by date; just-pushed = top-left |
+| 6 | Preview → **Next** | `528, 1478` | button `id/ooo` |
+| 7 | Editor → **Next** | `530, 1481` | button `id/op0` |
+| 8 | **Caption** field | `221, 250` | then `mobile_type_keys` (ASCII caption — emojis/dashes get mangled by adb) |
+| 9 | Hide keyboard | — | `mobile_press_button BACK` |
+| 10 | **More options** | `360, 1245` | open extra settings sheet |
+| 11 | **AI-generated content** toggle | `640, 843` | enable (turns blue); required for AI videos |
+| 12 | **Close** More options sheet | `664, 451` | X button |
+| 13 | **Post** | `532, 1482` | 📸 verify before tapping: video/caption/Public/AI label. Irreversible |
+| 14 | Wait for upload | — | progress spinner top-left; wait for 100%. Then run `log-publish.sh --platform tt --video-url $VIDEO_URL` |
 
-**Pre-flight связи:** TikTok тут работает через VPN (`v2box`). Перед постингом проверить,
-что интернет реально жив (а не просто туннель поднят):
-`adb shell ping -c 2 8.8.8.8` — должны идти пакеты. Если 100% loss / DNS не резолвит —
-аплоад зависнет (наблюдали стоп на 60%); попросить пользователя переподключить VPN-ноду,
-**не** проставлять `tt_published`, пока пост не подтверждён.
+**Network pre-flight:** TikTok here runs through VPN (`v2box`). Before posting, verify internet is actually alive (not just the tunnel is up): `adb shell ping -c 2 8.8.8.8` — packets must go through. If 100% loss / DNS doesn't resolve — the upload will stall (observed stalling at 60%); ask the user to reconnect the VPN node, **do not** set `tt_published` until the post is confirmed.
 
 ### Instagram (post-now, Reels)
-1. `mobile_launch_app` Instagram (пакет `com.instagram.android`).
-2. **Проверить активный аккаунт**: вкладка «Profile» (нав-бар) → имя вверху должно быть
-   целевым (**lookscool1337** для `star-trek-timelines`, **game_pulse.gg** для
-   `genshin-impact`). 📸 Если не тот — переключить через стрелку у имени.
-3. «+» (создать) → **Reel** → выбрать свежее видео (самое новое = первая видео-миниатюра
-   после плитки камеры) → редактор → **Next**.
-4. Экран «New reel»: поле «Write a caption…» → `mobile_type_keys` (подпись из шага 2),
-   подтвердить **OK**.
-5. Включить тумблер **«Add AI label»** (для AI-роликов).
-6. Нажать **«Share»**. Дождаться тоста «Posted to <аккаунт>».
 
-> ⚠️ **Instagram блокирует UIAutomator** — `mobile_list_elements_on_screen` на экранах IG
-> падает с ошибкой `Cannot read properties of undefined (reading 'node')`. Поэтому в IG
-> работаем **только по координатам + скриншотам**, элементы не читаем.
+1. `mobile_launch_app` Instagram (package `com.instagram.android`).
+2. **Verify active account**: Profile tab (nav bar) → name at the top must be the target (**lookscool1337** for `star-trek-timelines`, **game_pulse.gg** for `genshin-impact`). 📸 If wrong — switch via arrow next to name.
+3. **+** (create) → **Reel** → select newest video (first video thumbnail after the camera tile) → editor → **Next**.
+4. "New reel" screen: tap "Write a caption…" field → `mobile_type_keys` (caption from step 2), confirm **OK**.
+5. Enable the **Add AI label** toggle (for AI-generated videos).
+6. Tap **Share**. Wait for "Posted to <account>" toast.
 
-#### Instagram — fast-path по координатам (Redmi `23129RN51X`, 720×1650)
-Скриншот делать только в точках 📸. Между шагами `sleep` 2–4с. Координаты сетки/кнопок —
-с живого прогона (post-now Reel).
+> ⚠️ **Instagram blocks UIAutomator** — `mobile_list_elements_on_screen` on IG screens fails with `Cannot read properties of undefined (reading 'node')`. Work **only via coordinates + screenshots** in IG, do not read elements.
 
-| # | Действие | Тап (x, y) | Примечание |
+#### Instagram — coordinate fast-path (Redmi `23129RN51X`, 720×1650)
+
+Screenshots only at 📸 points. `sleep` 2–4s between steps. Coordinates from a live post-now Reel run.
+
+| # | Action | Tap (x, y) | Note |
 |---|---|---|---|
-| 1 | Launch Instagram | — | `com.instagram.android`, ждать ~4с |
-| 2 | Вкладка **Profile** (нав-бар, крайняя правая) | `648, 1505` | 📸 свериться с активным аккаунтом по таблице |
-| 3 | **«+»** создать (верх-лево) | `40, 120` | открывает меню Create |
-| 4 | Пункт **Reel** (первая строка меню) | `150, 862` | |
-| 5 | Выбрать **свежий ролик** | `360, 630` | 1-я видео-миниатюра (2-я колонка верх. ряда; 1-я ячейка — камера). Сверить по длительности/превью |
-| 6 | Редактор Reel → **Next →** | `646, 1515` | |
-| 7 | Поле **подписи** | `300, 830` | затем `mobile_type_keys` (ASCII). Закрыть подпись — **OK** `662, 125` |
-| 8 | Тумблер **Add AI label** | `662, 878` | включить (станет чёрным) |
-| 9 | **Share** | `542, 1481` | 📸 перед нажатием свериться. Необратимо |
-| 10 | Дождаться тоста «Posted to …» | — | затем `log-publish.sh --platform inst --video-url $VIDEO_URL` |
+| 1 | Launch Instagram | — | `com.instagram.android`, wait ~4s |
+| 2 | **Profile** tab (nav bar, far right) | `648, 1505` | 📸 verify active account per mapping table |
+| 3 | **+** create (top-left) | `40, 120` | opens Create menu |
+| 4 | **Reel** item (first row) | `150, 862` | |
+| 5 | Select **fresh video** | `360, 630` | 1st video thumbnail (2nd column, top row; 1st cell is camera). Confirm by duration/preview |
+| 6 | Reel editor → **Next →** | `646, 1515` | |
+| 7 | **Caption** field | `300, 830` | then `mobile_type_keys` (ASCII). Close caption — **OK** at `662, 125` |
+| 8 | **Add AI label** toggle | `662, 878` | enable (turns dark) |
+| 9 | **Share** | `542, 1481` | 📸 verify before tapping. Irreversible |
+| 10 | Wait for "Posted to …" toast | — | then run `log-publish.sh --platform inst --video-url $VIDEO_URL` |
 
-**Pre-flight связи (как для TikTok):** IG работает через VPN `v2box`. ICMP `ping` через этот
-VPN **блокируется** (даёт 100% loss даже когда интернет есть) — это ложный сигнал. Реальная
-проверка: `adb shell dumpsys connectivity | grep VALIDATED` (VPN-сеть должна быть `IS_VALIDATED`)
-или просто открыть IG и убедиться, что лента грузится. Нав-бар IG — на той же высоте, что и в
-TikTok (`y≈1505`).
+**Network pre-flight (same as TikTok):** IG runs through VPN `v2box`. ICMP `ping` is **blocked** through this VPN (100% loss even when internet is working) — this is a false signal. Real check: `adb shell dumpsys connectivity | grep VALIDATED` (VPN network must be `IS_VALIDATED`) or just open IG and verify the feed loads. IG nav bar is at the same height as TikTok (`y≈1505`).
 
-При любой неожиданности UI (другой экран, попап логина, кончились шаги) —
-`mobile_take_screenshot`, **останься и спроси пользователя**, не кликай вслепую.
+On any unexpected UI (wrong screen, login popup, steps exhausted) — `mobile_take_screenshot`, **stop and ask the user**, don't click blind.
 
-## Шаг 4 — отметить публикацию в Supabase
-Только после фактического успеха в приложении:
+## Step 4 — mark as published in Supabase
+
+Only after actual success in the app:
+
 ```bash
 bash video-agent/queue/log-publish.sh --platform tt   --video-url "$VIDEO_URL"
 bash video-agent/queue/log-publish.sh --platform inst --video-url "$VIDEO_URL"
 ```
-Это проставит `tt_published` / `inst_published = now()`, и следующий
-`fetch-for-publish.sh` этот ролик уже не вернёт (идемпотентность).
 
-## Итог пользователю
-Сообщи: какой ролик опубликован (заголовок/URL), на какую площадку, post-now или
-запланировано (и на какое время), и сколько неопубликованных ещё осталось в очереди.
+This sets `tt_published` / `inst_published = now()`, so the next `fetch-for-publish.sh` call won't return this video (idempotency).
+
+## Summary to user
+
+Report: which video was published (title/URL), to which platform, post-now or scheduled (and at what time), and how many unpublished videos remain in the queue.
+
+---
+
+## YouTube — scheduled upload after video generation
+
+Separate flow: triggered **after generation completes** (Editor saved `final.mp4` to Supabase) or by a direct user command.
+
+**No-exception rule:** no immediate publishing. Private upload with a scheduled open date only. Every upload requires explicit user confirmation — **even when debug mode is off**.
+
+### YouTube channels ↔ game_tag
+
+| game_tag | `--channel` |
+|---|---|
+| `star-trek-timelines` | `starfleet` |
+| `genshin-impact` | `genshin` |
+
+If game_tag is not in the table — inform the user that the channel is not configured and stop.
+
+### YT step 1 — ask for confirmation
+
+Before any upload, query Supabase and show the user:
+
+```python
+import subprocess, json, os
+
+url = os.environ["SUPABASE_URL"]
+key = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+game_tag = "GAME_TAG_HERE"
+
+# Last scheduled date for this game_tag
+resp = subprocess.run([
+    "curl", "-sS",
+    f"{url}/rest/v1/video_agent_runs"
+    f"?game_tag=eq.{game_tag}&yt_published=not.is.null"
+    f"&order=yt_published.desc&limit=1"
+    f"&select=yt_published,input_idea",
+    "-H", f"apikey: {key}", "-H", f"Authorization: Bearer {key}",
+], capture_output=True, text=True)
+last = json.loads(resp.stdout)
+
+# How many videos are waiting to be uploaded
+resp2 = subprocess.run([
+    "curl", "-sS",
+    f"{url}/rest/v1/video_agent_runs"
+    f"?game_tag=eq.{game_tag}&yt_published=is.null&status=eq.completed"
+    f"&output_video_url=not.is.null&select=id",
+    "-H", f"apikey: {key}", "-H", f"Authorization: Bearer {key}",
+], capture_output=True, text=True)
+pending = json.loads(resp2.stdout)
+
+print(json.dumps({"last": last[0] if last else None, "pending_count": len(pending)}))
+```
+
+Show the user:
+> 4 videos in queue. Last one scheduled for June 12 (11:59 PM MSK). Next slot: June 13. How many to upload?
+
+**Wait for the answer. Do not upload anything before confirmation.**
+
+### YT step 2 — calculate publish date
+
+```python
+import datetime
+
+def next_publish_date(last_yt_published: str | None) -> str:
+    if last_yt_published:
+        last = datetime.datetime.fromisoformat(last_yt_published.replace("Z", "+00:00"))
+        next_date = last.date() + datetime.timedelta(days=1)
+    else:
+        next_date = datetime.date.today() + datetime.timedelta(days=1)
+    return f"{next_date.isoformat()}T20:59:00Z"
+```
+
+- Time is always `20:59:00Z` (11:59 PM MSK)
+- Each subsequent video in the batch = previous date + 1 day
+- If no `yt_published` records exist for this game_tag — start from tomorrow
+
+### YT step 3 — fetch videos from queue
+
+```bash
+curl -sS \
+  "${SUPABASE_URL}/rest/v1/video_agent_runs\
+?game_tag=eq.${GAME_TAG}&yt_published=is.null&status=eq.completed\
+&output_video_url=not.is.null&order=created_at.asc&limit=${N}\
+&select=id,output_video_url,input_idea,format" \
+  -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
+  -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY"
+```
+
+If the list is empty — inform the user and stop.
+
+### YT step 4 — download and upload
+
+For each video in the batch:
+
+```bash
+# Download
+LOCAL_PATH="/tmp/yt_upload_${i}.mp4"
+curl -sSL -o "$LOCAL_PATH" "$VIDEO_URL"
+
+# Upload (private + scheduled open date)
+YOUTUBE_URL=$(bash video-agent/queue/youtube-upload.sh \
+  --channel "$CHANNEL" \
+  --publish-at "$PUBLISH_AT" \
+  "$LOCAL_PATH" \
+  "$TITLE" \
+  "$DESCRIPTION" \
+  "private" | tail -1)
+```
+
+- `--publish-at` — date from step 2, **always explicit** (do not omit, do not pass `now`)
+- `privacy` = `"private"` always
+- The script returns the YouTube URL as the last line of stdout
+
+### YT step 5 — write to Supabase
+
+```bash
+bash video-agent/queue/log-publish.sh \
+  --platform yt \
+  --video-url "$SUPABASE_VIDEO_URL" \
+  --publish-at "$PUBLISH_AT" \
+  --youtube-url "$YOUTUBE_URL"
+```
+
+### YT step 6 — summary to user
+
+```
+Uploaded 2 videos to YouTube:
+- "I Almost Quit Star Trek" → youtube.com/watch?v=xxx — goes public June 13 at 11:59 PM MSK
+- "My teammate was a surgeon" → youtube.com/watch?v=yyy — goes public June 14 at 11:59 PM MSK
+
+2 videos still in queue.
+```
+
+### Forbidden (YT)
+
+- ❌ `--publish-at=now` — no immediate publishing
+- ❌ Omitting `--publish-at` (the script will auto-pick a date via YT API — slower and ignores our Supabase queue)
+- ❌ Uploading without explicit user confirmation
+- ❌ Skipping the `yt_published` write to Supabase after a successful upload
