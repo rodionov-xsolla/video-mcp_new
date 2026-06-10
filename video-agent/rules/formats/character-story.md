@@ -193,7 +193,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
   - `stability` and `style` per character traits
   - Generate the full monologue in **one request** (it's a single continuous voice; one request keeps prosody coherent and gets a single mp3 the subtitle pipeline can whisper-align in one pass)
   - Save full mp3 → upload to Supabase. Editor mixes it over the concatenated picture.
-- **Subtitles: ASS via `tools/add_subtitles.py` (Pipeline 8B in `sound.md`)**
+- **Subtitles: one universal style (editor.md §6)**
   - **NEVER** generate one PIL PNG per `tts_segment` — produces unreadable 13-word slabs glued to 5s clip duration. Banned.
   - Run `add_subtitles.py` ONCE on the full `tts-output.mp3` against the picture-only concat (Editor produces it before audio mix).
   - One universal style (editor.md §6): `add_subtitles.py build/voice-final.wav build/subs.ass --storyboard storyboard.json --lang en --main-dur {MAIN_DUR}`. No `--chunk`/`--fontsize`/`--marginv`/`--no-scale`/`--emphasis`.
