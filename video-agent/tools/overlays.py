@@ -1,47 +1,47 @@
 #!/usr/bin/env python3
 """
-Генератор ОРИГИНАЛЬНЫХ графических оверлеев (НЕ субтитры).
+Generator of ORIGINAL graphic overlays (NOT subtitles).
 
-Субтитры — это произнесённая речь, единый универсальный стиль, отдельный скрипт
-(tools/add_subtitles.py). ЭТОТ скрипт рисует всё остальное «фирменное»:
-название серии / title card, счётчик выживаемости (in-game POV), плашку исхода
-(YOU DIED / YOU SURVIVED), номера топ-листа (#5..#1), имена позиций, слоган и
-дисклеймер (fake-ad), и channel-bug (PNG-лого канала).
+Subtitles are spoken speech, one universal style, a separate script
+(tools/add_subtitles.py). THIS script draws everything else "branded":
+series title / title card, survival counter (in-game POV), outcome plate
+(YOU DIED / YOU SURVIVED), top-list numbers (#5..#1), item names, slogan and
+disclaimer (fake-ad), and channel-bug (the channel's PNG logo).
 
-Контракт:
-  • Спеки оверлеев лежат в storyboard.json: per-scene массив `overlays[]`
-    (см. схему ниже) и опциональное top-level поле `channel_bug`.
-  • Скрипт ЭМИТИТ filter_complex-фрагмент (drawtext-цепочку) на сцену — его
-    editor вплетает в `[vk]`-ветку ДО concat (single-pass §0, без лишних
-    перекодировок). channel_bug — PNG overlay ПОСЛЕ concat и ПОСЛЕ субтитров.
-  • Скрипт НЕ запускает ffmpeg сам (кроме --check). Он печатает строку фильтра
-    в stdout; пустой stdout = у сцены нет оверлеев (pass-through).
+Contract:
+  - Overlay specs live in storyboard.json: a per-scene `overlays[]` array
+    (schema below) and an optional top-level `channel_bug` field.
+  - The script EMITS a filter_complex fragment (a drawtext chain) per scene —
+    the editor splices it into the `[vk]` branch BEFORE concat (single-pass §0,
+    no extra re-encodes). channel_bug is a PNG overlay AFTER concat and AFTER subtitles.
+  - The script does NOT run ffmpeg itself (except --check). It prints the filter
+    string to stdout; empty stdout = the scene has no overlays (pass-through).
 
-Схема overlays[] (в каждом clip/scene storyboard.json):
+overlays[] schema (in each clip/scene of storyboard.json):
   {
     "type": "title|hud_counter|outcome_plate|rank_number|item_name|slogan|disclaimer",
-    "text": "OSIAL\\nRISES",          // \\n → стопка drawtext-строк
+    "text": "OSIAL\\nRISES",          // \\n -> stacked drawtext lines
     "position": "center|top-left|top-right|bottom-center|{x},{y}",
-    "font": "ULT|TRJ|MED|ARI|IMPACT|MONT_BLACK|BEBAS",  // логический ключ (FONTS)
+    "font": "ULT|TRJ|MED|ARI|IMPACT|MONT_BLACK|BEBAS",  // logical key (FONTS)
     "size": 130,
-    "color": "white",                 // имя или RRGGBB
+    "color": "white",                 // name or RRGGBB
     "stroke": {"color": "black", "width": 4},
-    "enable": [0.0, 5.0],             // [start,end] → between(t,..); ["gte", 13.5]; omit = весь клип
-    "fade_in": 0.3,                   // опц. alpha-рампа от 0
-    "opacity": 1.0,                   // опц. постоянная прозрачность
-    "line_gap": 160                   // опц. шаг по y между строками (\\n), по умолчанию = size*1.25
+    "enable": [0.0, 5.0],             // [start,end] -> between(t,..); ["gte", 13.5]; omit = whole clip
+    "fade_in": 0.3,                   // optional alpha ramp from 0
+    "opacity": 1.0,                   // optional constant opacity
+    "line_gap": 160                   // optional y step between \\n lines (default = size*1.25)
   }
 
 Usage:
-  # фрагмент для одной сцены (editor зовёт в цикле K=1..N):
+  # fragment for one scene (editor calls it in a loop K=1..N):
   python3 overlays.py storyboard.json --scene-index 3 --workdir build \\
       --input-label "[v3pre]" --output-label "[v3]"
-  # все сцены разом (по строке на сцену с непустыми оверлеями):
+  # all scenes at once (one line per scene with non-empty overlays):
   python3 overlays.py storyboard.json --emit-all --workdir build
-  # channel-bug (после concat+ASS):
+  # channel-bug (after concat+ASS):
   python3 overlays.py storyboard.json --channel-bug --bug-png build/channel-bug.png \\
       --input-label "[vsub]" --output-label "[vout]"
-  # валидация шрифтов до дорогого encode:
+  # font validation before the expensive encode:
   python3 overlays.py storyboard.json --check
 """
 
@@ -52,12 +52,12 @@ import sys
 
 
 # ---------------------------------------------------------------------------
-# Шрифты: логический ключ → список путей-кандидатов (первый существующий).
-# Хардкод абсолютных путей в правилах непортативен — резолвим с фолбэками.
+# Fonts: logical key -> list of candidate paths (first existing one).
+# Hardcoding absolute paths in the rules is not portable — resolve with fallbacks.
 # ---------------------------------------------------------------------------
 
 FONTS = {
-    # «ультра» дисплейный — заголовки. Trajan/Impact как практичный фолбэк.
+    # "ultra" display — titles. Trajan/Impact as a practical fallback.
     "ULT": [
         "/Library/Fonts/TrajanPro-Bold.otf",
         os.path.expanduser("~/Library/Fonts/TrajanPro-Bold.otf"),
@@ -70,12 +70,12 @@ FONTS = {
         "/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf",
         "/System/Library/Fonts/Supplemental/Impact.ttf",
     ],
-    "MED": [  # средний вес для подплашек (hook_plate)
+    "MED": [  # medium weight for sub-plates (hook_plate)
         "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
         "/System/Library/Fonts/Helvetica.ttc",
         "/System/Library/Fonts/Supplemental/Arial.ttf",
     ],
-    "ARI": [  # Arial Unicode — нужен для ％ U+FF05 в счётчиках
+    "ARI": [  # Arial Unicode — needed for ％ U+FF05 in counters
         "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
         "/Library/Fonts/Arial Unicode.ttf",
         "/System/Library/Fonts/Supplemental/Arial.ttf",
@@ -96,14 +96,14 @@ FONTS = {
     ],
 }
 
-# Имя цвета → ffmpeg-совместимое (ffmpeg понимает имена, но фиксируем набор)
+# Color name -> ffmpeg-compatible (ffmpeg understands names, but we fix the set)
 NAMED_COLORS = {
     "white": "white", "black": "black", "red": "red", "green": "green",
     "yellow": "yellow", "blue": "blue", "gray": "gray", "lightgray": "0xBFBFBF",
     "orange": "orange",
 }
 
-# Именованные позиции → (x_expr, y_expr). Для title/outcome y часто переопределяется.
+# Named positions -> (x_expr, y_expr). For title/outcome y is often overridden.
 NAMED_POS = {
     "center": ("(w-text_w)/2", "(h-text_h)/2"),
     "top-left": ("40", "40"),
@@ -114,7 +114,7 @@ NAMED_POS = {
 
 
 def resolve_font(key: str) -> str | None:
-    """Логический ключ или абсолютный путь → существующий путь шрифта."""
+    """Logical key or absolute path -> existing font file path."""
     if key and os.path.isabs(key) and os.path.isfile(key):
         return key
     for cand in FONTS.get(key, []):
@@ -146,11 +146,11 @@ def _enable_expr(enable) -> str | None:
 
 
 def _alpha_expr(fade_in: float, opacity: float, enable) -> str | None:
-    """alpha для drawtext (0..1). fade_in рампит от начала enable-окна."""
+    """alpha for drawtext (0..1). fade_in ramps from the start of the enable window."""
     base = opacity if opacity is not None else 1.0
     if not fade_in:
         return f"{base}" if base != 1.0 else None
-    # старт окна
+    # window start
     t0 = 0.0
     if isinstance(enable, (list, tuple)) and len(enable) == 2 and enable[0] != "gte":
         t0 = float(enable[0])
@@ -168,10 +168,10 @@ def _write_textfile(workdir: str, scene_idx, oi, li, text: str) -> str:
 
 
 def build_overlay_drawtexts(ov: dict, scene_idx, oi: int, workdir: str) -> list[str]:
-    """Один overlay-объект → список drawtext-фильтров (по строке на \\n)."""
+    """One overlay object -> list of drawtext filters (one per \\n line)."""
     font = resolve_font(ov.get("font", "IMPACT"))
     if font is None:
-        print(f"  [warn] шрифт '{ov.get('font')}' не найден — fallback Impact", file=sys.stderr)
+        print(f"  [warn] font '{ov.get('font')}' not found — falling back to Impact", file=sys.stderr)
         font = resolve_font("IMPACT")
     size = int(ov.get("size", 72))
     color = resolve_color(ov.get("color", "white"))
@@ -182,7 +182,7 @@ def build_overlay_drawtexts(ov: dict, scene_idx, oi: int, workdir: str) -> list[
     en = _enable_expr(enable)
     alpha = _alpha_expr(ov.get("fade_in", 0), ov.get("opacity", 1.0), enable)
 
-    # позиция
+    # position
     pos = ov.get("position", "center")
     if isinstance(pos, str) and pos in NAMED_POS:
         x_expr, y_base = NAMED_POS[pos]
@@ -204,7 +204,7 @@ def build_overlay_drawtexts(ov: dict, scene_idx, oi: int, workdir: str) -> list[
         if not line.strip():
             continue
         tf = _write_textfile(workdir, scene_idx, oi, li, line)
-        # y для многострочных: смещаем вниз; для center-выражений добавляем offset
+        # y for multi-line: shift down; for center expressions add an offset
         if li == 0:
             y_expr = y_base
         else:
@@ -231,8 +231,8 @@ def build_overlay_drawtexts(ov: dict, scene_idx, oi: int, workdir: str) -> list[
 
 def scene_fragment(scene: dict, scene_idx, workdir: str,
                    in_label: str, out_label: str) -> str:
-    """Все оверлеи сцены → один filter-фрагмент '[in]drawtext,...[out]'.
-    Пусто, если оверлеев нет."""
+    """All overlays of a scene -> one filter fragment '[in]drawtext,...[out]'.
+    Empty if there are no overlays."""
     overlays = scene.get("overlays") or []
     all_dt = []
     for oi, ov in enumerate(overlays):
@@ -243,7 +243,7 @@ def scene_fragment(scene: dict, scene_idx, workdir: str,
 
 
 def scene_idx(s: dict):
-    """Индекс сцены/клипа: поддержка `index` (scenes) и `call_index` (in-game-pov clips)."""
+    """Scene/clip index: supports `index` (scenes) and `call_index` (in-game-pov clips)."""
     return s.get("index", s.get("call_index", 0))
 
 
@@ -253,11 +253,11 @@ def find_scenes(sb: dict) -> list[dict]:
 
 
 def channel_bug_fragment(bug_label: str, in_label: str, out_label: str) -> str:
-    """channel-bug: PNG 110×110, top-left 40,40, после concat+ASS.
-    bug_label — РЕАЛЬНЫЙ лейбл входа PNG в ffmpeg (напр. '[5:v]', где 5 = индекс
-    последнего '-i build/channel-bug.png'). Editor обязан добавить этот вход и
-    передать его индекс через --bug-input-label.
-    Фрагмент: [5:v]scale=110:110[bug];[vsub][bug]overlay=40:40[vout]
+    """channel-bug: PNG 110×110, top-left 40,40, after concat+ASS.
+    bug_label is the REAL ffmpeg input label of the PNG (e.g. '[5:v]', where 5 = index
+    of the last '-i build/channel-bug.png'). The editor must add this input and pass
+    its index via --bug-input-label.
+    Fragment: [5:v]scale=110:110[bug];[vsub][bug]overlay=40:40[vout]
     """
     return (f"{bug_label}scale=110:110[bug];"
             f"{in_label}[bug]overlay=40:40:format=auto{out_label}")
@@ -266,21 +266,21 @@ def channel_bug_fragment(bug_label: str, in_label: str, out_label: str) -> str:
 def main():
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("storyboard", help="путь к storyboard.json")
+    ap.add_argument("storyboard", help="path to storyboard.json")
     ap.add_argument("--scene-index", type=int, default=None,
-                    help="индекс сцены (1-based) — эмит фрагмента для неё")
+                    help="scene index (1-based) — emit the fragment for it")
     ap.add_argument("--emit-all", action="store_true",
-                    help="по строке на каждую сцену с оверлеями: 'IDX<TAB>fragment'")
+                    help="one line per scene with overlays: 'IDX<TAB>fragment'")
     ap.add_argument("--channel-bug", action="store_true",
-                    help="эмит channel-bug overlay (после concat)")
-    ap.add_argument("--bug-png", default=None, help="путь к PNG лого (для --channel-bug; проверка наличия)")
+                    help="emit the channel-bug overlay (after concat)")
+    ap.add_argument("--bug-png", default=None, help="path to the logo PNG (for --channel-bug; existence check)")
     ap.add_argument("--bug-input-label", default="[BUG:v]",
-                    help="РЕАЛЬНЫЙ лейбл входа PNG в ffmpeg, напр. '[5:v]' (индекс -i channel-bug.png)")
-    ap.add_argument("--workdir", default="build", help="куда писать textfile'ы")
+                    help="REAL ffmpeg input label of the PNG, e.g. '[5:v]' (index of -i channel-bug.png)")
+    ap.add_argument("--workdir", default="build", help="where to write the textfiles")
     ap.add_argument("--input-label", default="[vin]")
     ap.add_argument("--output-label", default="[vout]")
     ap.add_argument("--check", action="store_true",
-                    help="проверить наличие всех шрифтов, упомянутых в storyboard")
+                    help="check that all fonts referenced in the storyboard exist")
     args = ap.parse_args()
 
     with open(args.storyboard, encoding="utf-8") as f:
@@ -296,19 +296,19 @@ def main():
         for k in sorted(used):
             print(f"  font {k}: {resolve_font(k) or 'MISSING'}", file=sys.stderr)
         if missing:
-            print(f"ERROR: шрифты не найдены: {missing}", file=sys.stderr)
+            print(f"ERROR: fonts not found: {missing}", file=sys.stderr)
             sys.exit(1)
-        print("  [check] все шрифты найдены", file=sys.stderr)
+        print("  [check] all fonts found", file=sys.stderr)
         return
 
     if args.channel_bug:
         if not args.bug_png or not os.path.isfile(args.bug_png):
-            print(f"ERROR: --bug-png не найден: {args.bug_png}", file=sys.stderr)
+            print(f"ERROR: --bug-png not found: {args.bug_png}", file=sys.stderr)
             sys.exit(1)
         if args.bug_input_label == "[BUG:v]":
-            print("  [warn] --bug-input-label не задан: подставь РЕАЛЬНЫЙ индекс входа PNG "
-                  "(напр. '[5:v]' где 5 = позиция '-i build/channel-bug.png' среди -i). "
-                  "Сейчас в фрагменте плейсхолдер [BUG:v] — ffmpeg его не примет.", file=sys.stderr)
+            print("  [warn] --bug-input-label not set: pass the REAL PNG input index "
+                  "(e.g. '[5:v]' where 5 = position of '-i build/channel-bug.png' among -i). "
+                  "The fragment currently has the placeholder [BUG:v] — ffmpeg will reject it.", file=sys.stderr)
         print(channel_bug_fragment(args.bug_input_label, args.input_label, args.output_label))
         return
 
@@ -324,16 +324,16 @@ def main():
     if args.scene_index is not None:
         match = next((s for s in scenes if scene_idx(s) == args.scene_index), None)
         if match is None:
-            print(f"ERROR: сцена index={args.scene_index} не найдена", file=sys.stderr)
+            print(f"ERROR: scene index={args.scene_index} not found", file=sys.stderr)
             sys.exit(1)
         frag = scene_fragment(match, args.scene_index, args.workdir,
                               args.input_label, args.output_label)
         if frag:
             print(frag)
-        # пустой stdout = нет оверлеев (editor делает pass-through)
+        # empty stdout = no overlays (editor does pass-through)
         return
 
-    print("ERROR: укажи --scene-index, --emit-all, --channel-bug или --check", file=sys.stderr)
+    print("ERROR: specify --scene-index, --emit-all, --channel-bug or --check", file=sys.stderr)
     sys.exit(1)
 
 
