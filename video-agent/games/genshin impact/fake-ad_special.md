@@ -72,15 +72,8 @@ Resin Energy drink can: tall sleek energy drink can with matte pale blue and whi
 
 ## Packshot slogan overlay style
 
-For Genshin fake ads, Editor should use:
-
-- Font: **Bebas Neue** (fallback: Montserrat Black)
-- Size: **96px**
-- Color: **white** (`#FFFFFF`) with **6px amber-gold stroke** (`#F5D060`)
-- Drop shadow: **4px black**
-- Position: centered horizontal, `y=1300`
-
-The amber-gold stroke matches Genshin's resin icon color and fantasy gold palette.
+Slogan/disclaimer overlay styling — see `## Overlay brand` in `genshin-impact.md` (font_display=BEBAS,
+accent_color=#F5D060 amber-gold matching the resin icon). Layout (position/size/timing) — `fake-ad.md` → `## Overlays`.
 
 ## Music mood
 

@@ -499,71 +499,72 @@ CTA (custom or fallback) is added AFTER the last clip in the concat list.
 
 ---
 
-## 6. Subtitles — ОДИН универсальный стиль, тайминги по Whisper
+## 6. Subtitles — ONE universal style, whisper-timed
 
-Субтитры **одинаковы во всех форматах**: единый стиль/размер/позиция, тайминги всегда по
-faster-whisper. Никаких per-format пресетов, масок, secondary-style, marginv/offset/atempo.
-Графические оверлеи (название серии, % выживания, номера топ-листа, слоганы) — это НЕ субтитры,
-их рисует отдельный скрипт `tools/overlays.py` (см. §6.5).
+Subtitles are **identical across all formats**: one style/size/position, always timed by faster-whisper.
+No per-format presets, masks, secondary-style, marginv/offset/atempo. Graphic overlays (series title,
+survival %, top-list numbers, slogans) are NOT subtitles — a separate script `tools/overlays.py` draws
+them (see §6.5).
 
-`manager` передаёт тебе единственный субтитровый флаг: `SUBTITLES` (`true`/`false`). Если
-`false` (motion-dance, dual-style) — ASS не генерим, в `filter_complex` нет токена `ass=`.
-Отдельные немые сцены (silent I2V / physical-gag) определяются пустым `tts` в сцене storyboard,
-а не флагом формата — whisper по финальной речи их просто не озвучит.
+`manager` passes you one subtitle flag: `SUBTITLES` (`true`/`false`). If `false` (motion-dance,
+dual-style) — no ASS is generated, no `ass=` token in `filter_complex`. Individual silent scenes
+(silent I2V / physical-gag) are detected by an empty `tts` in the storyboard scene, not by a format
+flag — whisper simply finds no speech there in the final voice track.
 
-### 6.0 Три hard-rule
+### 6.0 Three hard rules
 
-**SUB-1 — `ass=build/subs.ass` это ПОСЛЕДНИЙ видеофильтр.** После `concat` и после всех overlay-
-токенов из §6.5 (кроме channel-bug, который идёт после саба). Проверка: `ass=` — последний токен
-видеоцепочки перед `-map [v…]`.
+**SUB-1 — `ass=build/subs.ass` is the LAST video filter.** After `concat` and after all overlay tokens
+from §6.5 (except channel-bug, which goes after the subtitle). Check: `ass=` is the last token of the
+video chain before `-map [v…]`.
 
-**SUB-2 — Loudnorm 2-pass на финальном аудио** (−14 LUFS / −1 dBTP / 11 LU). Двухпроходно
-(measure → apply), иначе соцсети неравномерно понизят громкость по сценам.
+**SUB-2 — Loudnorm 2-pass on the final audio** (-14 LUFS / -1 dBTP / 11 LU). Two passes (measure →
+apply), otherwise social platforms drop the volume unevenly across scenes.
 
-**SUB-3 — никаких порезов внутри слова.** Если режешь хвост сцены под музыку / `-t TOTAL_DUR`,
-snap к границе слова. Источник границ — события `build/subs.ass` (они уже выровнены по whisper),
-отдельный `timings.json` больше не нужен.
+**SUB-3 — never cut inside a word.** If you trim a scene tail for music / `-t TOTAL_DUR`, snap to a word
+boundary. The boundaries come from `build/subs.ass` events (already whisper-aligned); no separate
+`timings.json` is needed.
 
-### 6.1 build/voice-final.wav — ключевой шаг (тайминги корректны ПО ПОСТРОЕНИЮ)
+### 6.1 build/voice-final.wav — the key step (timings correct BY CONSTRUCTION)
 
-Whisper гоняется по **той же речевой дорожке, что идёт в финал** (пост-atempo, пост-adelay,
-пост-concat, до bg-music). Тогда субтитровый и аудио-таймлайн не могут разойтись — нет второго
-таймлайна. Поэтому `--offset/--atempo/--verify-audio` больше НЕ существуют.
+Whisper runs on **the exact voice track that ships in the final** (post-atempo, post-adelay, post-concat,
+pre-bg-music). Then the subtitle and audio timelines cannot diverge — there is no second timeline. That
+is why `--offset/--atempo/--verify-audio` no longer exist.
 
-`build/voice-final.wav` = аудио-ветка `[aout]` из §0 **минус bg-music**, замороженная на диск.
+`build/voice-final.wav` = the `[aout]` audio branch of §0 **minus bg-music**, frozen to disk.
 
-**Single-voice** (character-story, reddit-story, redcon — один `tts-output.mp3` на весь концат):
+**Single-voice** (character-story, reddit-story, redcon — one `tts-output.mp3` over the whole concat):
 ```bash
-# та же пара atempo→adelay, что §0 запекает в видео:
+# same atempo->adelay pair that §0 bakes into the video:
 $FFMPEG -y -i build/tts-output.mp3 \
   -af "atempo=${SPEED},adelay=${PRE_MS}|${PRE_MS},aresample=48000" \
   -ac 1 build/voice-final.wav
 ```
-Лид-тишина от `adelay` сдвигает первое слово на `${PRE_MS}` — whisper видит реальную позицию,
-никакого `--offset` не надо.
+The `adelay` lead silence shifts the first word to `${PRE_MS}` — whisper sees the real position, no
+`--offset` needed.
 
 **Multi-voice** (serial-drama, news, gameplay-ai-avatar, what-if-real-life, fun-news, special-report):
 ```bash
-# Для КАЖДОЙ сцены K по порядку index собрать её речевой слот ДЛИНОЙ РОВНО в длительность сцены:
-#   • немой I2V / action / physical-gag → anullsrc на длину клипа (тишина-плейсхолдер)
-#   • Avatar/dialogue → ИЗВЛЕЧЬ аудио из САМОГО scene-K.mp4 (встроенная lipsync-дорожка Avatar),
-#       НЕ из исходного scene-K.mp3. Avatar мог чуть сдвинуть/обрезать тайминг при рендере —
-#       берём то, что реально в видео, иначе саб поедет относительно губ.
-#   • + off-screen VO (customer.mp3 и т.п.) — тем же amix, что в §0
-#   • применить тот же per-scene atempo/apad, что и в §0 (длина слота == длина видео-клипа)
-# затем concat в порядке index, без bg-music:
+# For EACH scene K in index order, build its speech slot EXACTLY as long as the scene:
+#   - silent I2V / action / physical-gag -> anullsrc for the clip length (silence placeholder)
+#   - Avatar/dialogue -> EXTRACT audio from scene-K.mp4 ITSELF (Avatar's embedded lipsync track),
+#       NOT from the source scene-K.mp3. Avatar may shift/trim timing at render — take what is
+#       actually in the video, otherwise the subtitle drifts against the lips.
+#   - + off-screen VO (customer.mp3 etc.) — same amix as in §0
+#   - apply the same per-scene atempo/apad as in §0 (slot length == video clip length)
+# then concat in index order, no bg-music:
 $FFMPEG -y <per-scene inputs> \
   -filter_complex "<per-scene shaping, slot_k == clip_dur_k>,concat=n=${N}:v=0:a=1[a]" \
   -map "[a]" -ac 1 build/voice-final.wav
 ```
-**Критично:** каждый слот == длительность своей сцены (тишина под немые). Тогда сумма ≈ `MAIN_DUR`,
-и `add_subtitles.py` это проверяет (падает, если `voice-final` сильно короче `--main-dur` — частый
-баг «склеили реплики подряд без тишины»). `voice-final.wav` — это в точности речь, что слышит зритель
-(bg-music исключаем: тайминги речи она не двигает, а whisper чище транскрибирует без музыки).
+**Critical:** each slot == its scene length (silence under silent scenes). Then the sum ≈ `MAIN_DUR`,
+and `add_subtitles.py` checks this (it fails if `voice-final` is far shorter than `--main-dur` — the
+common "glued the lines back-to-back without silence" bug). `voice-final.wav` is exactly the speech the
+viewer hears (bg-music excluded: it does not move speech timing, and whisper transcribes cleaner without
+music).
 
-Это убирает различие single-voice / multi-voice: оба дают один `voice-final.wav`, оба зовут скрипт одинаково.
+This removes the single-voice / multi-voice split: both produce one `voice-final.wav`, both call the script identically.
 
-### 6.2 Канонический вызов (единственный)
+### 6.2 Canonical call (the only one)
 
 ```bash
 python3 tools/add_subtitles.py \
@@ -574,38 +575,38 @@ python3 tools/add_subtitles.py \
   --main-dur "${MAIN_DUR}"
 ```
 
-- **Whisper даёт только тайм-коды. Бёрним текст сценариста** (forced alignment): скрипт читает
-  канонический текст из `storyboard.json` (`scenes[].tts` по порядку для multi-voice; top-level
-  `tts.full_text` для single-voice) и выравнивает его по whisper-таймингам. Whisper-транскрипт
-  (с галлюцинациями Chatterbox) на экран НЕ попадает.
-- **НЕТ** `--text`, `--style`, `--offset`, `--atempo`, `--verify-audio`, `--mask`,
-  `--secondary-style`, `--marginv`, `--highlight-words` — все удалены из скрипта.
-- `--main-dur ${MAIN_DUR}` (конец последнего story-клипа до CTA) — скрипт сам клампит последнее
-  событие, чтобы саб не залез на CTA. Ручной `sed` по ASS больше не нужен.
-- Стиль фиксирован в скрипте: Helvetica 72, CAPS, белый + чёрная обводка, MarginV=520, чанки по 4.
+- **Whisper gives timecodes only. We burn the scenarist's text** (forced alignment): the script reads
+  the canonical text from `storyboard.json` (`scenes[].tts` in order for multi-voice; top-level
+  `tts.full_text` for single-voice) and aligns it to the whisper timings. The whisper transcript
+  (with Chatterbox hallucinations) never reaches the screen.
+- **NO** `--text`, `--style`, `--offset`, `--atempo`, `--verify-audio`, `--mask`, `--secondary-style`,
+  `--marginv`, `--highlight-words` — all removed from the script.
+- `--main-dur ${MAIN_DUR}` (end of the last story clip before CTA) — the script clamps the last event
+  itself so the subtitle never runs onto the CTA. No manual `sed` on the ASS.
+- Style is fixed in the script: Helvetica 72, CAPS, white + black outline, MarginV=520, 4-word chunks.
 
-Бёрн — `ass=` фильтр, НЕ `subtitles=` (на macOS ffmpeg-full `subtitles=` может вернуть чёрный
-кадр). И только через `/usr/local/bin/ffmpeg-full/ffmpeg` (libass), см. §11.
+Burn with the `ass=` filter, NOT `subtitles=` (on macOS ffmpeg-full `subtitles=` can return a black
+frame). And only via `/usr/local/bin/ffmpeg-full/ffmpeg` (libass), see §11.
 
 ```bash
 -vf "ass='$OUTPUT_DIR/build/subs.ass'"
 ```
 
-### 6.3 ASS-инварианты
+### 6.3 ASS invariants
 
-1. **No event overlap** — `add_subtitles.py` гарантирует by construction (каждый чанк живёт до
-   старта следующего).
-2. **Субтитры не заходят на CTA** — гарантируется `--main-dur`.
-3. **Без opaque-box / drawbox во всю ширину** — стиль использует обводку (borderstyle=1), не бокс.
+1. **No event overlap** — `add_subtitles.py` guarantees it by construction (each chunk lives until the
+   next one starts).
+2. **Subtitles never reach the CTA** — guaranteed by `--main-dur`.
+3. **No opaque box / full-width drawbox** — the style uses an outline (borderstyle=1), not a box.
 
-### 6.4 Программный self-eval после бёрна
+### 6.4 Programmatic self-eval after the burn
 
-1. **Длительность:** `ffprobe duration final.mp4 ≈ sum(scene_durations)[+ CTA] ± 200мс`.
-2. **Loudness:** `input_i` в [−15.0, −13.0].
-3. **Bottom-strip variance** (только если `SUBTITLES=true`): для каждой сцены с непустым `tts`
-   сэмплировать кадр в `scene_mid + 0.5s`, посчитать stddev в нижних 25% кадра; > порога ⇒ саб
-   прорендерился. Если полоса пустая — бёрн провалился (libass не подцепился / битый fonts.conf).
-   До 3 ретраев, потом fail Manager'у.
+1. **Duration:** `ffprobe duration final.mp4 ≈ sum(scene_durations)[+ CTA] ± 200ms`.
+2. **Loudness:** `input_i` in [-15.0, -13.0].
+3. **Bottom-strip variance** (only if `SUBTITLES=true`): for each scene with non-empty `tts`, sample a
+   frame at `scene_mid + 0.5s`, compute stddev of the bottom 25% of the frame; > threshold => the
+   subtitle rendered. An empty strip => the burn failed (libass not picked up / broken fonts.conf).
+   Up to 3 retries, then fail to Manager.
 
 ```bash
 $FFMPEG -y -ss "$SCENE_MID" -i final.mp4 -frames:v 1 -q:v 2 build/probe-$K.jpg
@@ -617,38 +618,38 @@ print(f'scene {sys.argv[2]} variance={v:.1f}'); sys.exit(0 if v>15 else 1)
 " build/probe-$K.jpg "$K"
 ```
 
-### 6.5 Графические оверлеи — `tools/overlays.py` (НЕ субтитры)
+### 6.5 Graphic overlays — `tools/overlays.py` (NOT subtitles)
 
-Если `manager` передал `OVERLAYS=true`, рисуем фирменные графические оверлеи из
-`storyboard.json` (`scenes[].overlays[]` — title card / название серии, hud_counter (% выживания),
-outcome_plate (YOU DIED/SURVIVED), rank_number (#5..#1), item_name, slogan, disclaimer). Скрипт
-эмитит drawtext-фрагмент **на сцену**, который ты вплетаешь в `[vk]`-ветку **ДО concat** (single-pass §0):
+If `manager` passed `OVERLAYS=true`, draw the branded graphic overlays from `storyboard.json`
+(`scenes[].overlays[]` — title card / series title, hud_counter (survival %), outcome_plate
+(YOU DIED/SURVIVED), rank_number (#5..#1), item_name, slogan, disclaimer). The script emits a drawtext
+fragment **per scene** that you splice into the `[vk]` branch **before concat** (single-pass §0):
 
 ```bash
 for K in $(seq 1 $N); do
   FRAG=$(python3 tools/overlays.py storyboard.json --scene-index $K --workdir build \
            --input-label "[v${K}pre]" --output-label "[v${K}]")
-  # пустой FRAG = у сцены нет оверлеев → ветка остаётся [v${K}pre]→[v${K}] passthrough
+  # empty FRAG = the scene has no overlays -> the branch stays [v${K}pre]->[v${K}] passthrough
 done
-# фрагменты вставляются в filter_complex между scale/pad/fps ([v${K}pre]) и concat
+# fragments are inserted into filter_complex between scale/pad/fps ([v${K}pre]) and concat
 ```
 
-Перед дорогим encode: `python3 tools/overlays.py storyboard.json --check` (валидация шрифтов).
+Before the expensive encode: `python3 tools/overlays.py storyboard.json --check` (font validation).
 
-**channel-bug** (если `CHANNEL_BUG_URL` непустой) — PNG 110×110, top-left 40,40, применяется
-**после concat и после `ass=`** (последним), не per-scene:
+**channel-bug** (if `CHANNEL_BUG_URL` is non-empty) — PNG 110×110, top-left 40,40, applied
+**after concat and after `ass=`** (last), not per-scene:
 ```bash
 curl -sLo build/channel-bug.png "$CHANNEL_BUG_URL"
-# PNG добавляется ПОСЛЕДНИМ '-i' → его индекс = (число всех предыдущих -i). Напр. если до него
-# было 11 входов (0..10), то PNG = вход 11 → лейбл "[11:v]". Передай ЭТОТ индекс:
+# The PNG is the LAST '-i' -> its index = (number of all previous -i). E.g. if there were 11 inputs
+# before it (0..10), the PNG = input 11 -> label "[11:v]". Pass THAT index:
 BUG=$(python3 tools/overlays.py storyboard.json --channel-bug --bug-png build/channel-bug.png \
         --bug-input-label "[11:v]" --input-label "[vsub]" --output-label "[vout]")
-# В ffmpeg: ... -i build/channel-bug.png (последним),  $BUG в хвост filter_complex,  -map "[vout]"
-# ⚠️ --bug-input-label ОБЯЗАН быть реальным индексом входа PNG, иначе ffmpeg отвергнет граф.
+# In ffmpeg: ... -i build/channel-bug.png (last),  $BUG appended to filter_complex,  -map "[vout]"
+# WARNING: --bug-input-label MUST be the real PNG input index, otherwise ffmpeg rejects the graph.
 ```
 
-Правила drawtext (macOS): только `ffmpeg-full` (libfreetype); скрипт уже использует `textfile=`
-и `expansion=none` (escape `:` и `%`), `fontfile=` резолвится из FONTS-map с фолбэками.
+drawtext rules (macOS): only `ffmpeg-full` (libfreetype); the script already uses `textfile=` and
+`expansion=none` (escapes `:` and `%`), `fontfile=` resolved from the FONTS map with fallbacks.
 
 
 ## 7. Split-screen (gameplay-ai-avatar) — 3-зонный layout

@@ -19,13 +19,19 @@ All Star Trek top-list videos MUST reuse ONE locked title-card design instead of
 - This reference is brand-locked and is the SAME design regardless of the episode's photoreal/3D style choice — the title card is consistent channel branding; per-episode `style_tags` only flavor the added theme text and any subtle background grade, never the layout.
 
 ## Title card text
-- `top_font`: "Eurostile Bold Extended" (used for any Editor-side text; the baked TOP-5 in the reference already defines the look)
-- `accent_color`: `#ff9900` (LCARS orange) for Editor `#N` overlays
-- `title_card_style`: brushed-metal chrome + cool blue edge-light + deep-space starfield (matches the locked reference)
+- `title_card_style`: brushed-metal chrome + cool blue edge-light + deep-space starfield (matches the locked reference; the baked TOP-5 in the reference already defines the look)
 
-## Numbers / names
-- `number_font`: Montserrat Black (Editor `#N` overlay)
-- `name_font`: Bebas Neue, uppercase (Editor `{NAME}` plate at y=1300 — see format collision note)
+## Overlay brand
+
+Brand styling for graphic overlays (scenarist fills `overlays[]`; layout from `top-list.md` → `## Overlays`).
+
+- font_display: MONT_BLACK    # rank numbers `#N`, outcome/title text
+- font_name: BEBAS            # `item_name` plate (uppercase, y=1130)
+- font_label: MED             # small text
+- text_color: "#FFFFFF"
+- accent_color: "#ff9900"     # LCARS orange — `#N` stroke/accent
+- stroke_width: 4
+- channel_bug_url:            # see star-trek-timelines.md (applies to non-overlay formats)
 
 ## Narrator
 - `narrator_voice`: "George"

@@ -46,13 +46,8 @@ Obby Energy drink can: tall sleek energy drink can with matte neon-yellow body, 
 
 ## Packshot slogan overlay style
 
-For Roblox fake ads, Editor should use these font parameters on the slogan overlay (scene 4):
-
-- Font: **Bebas Neue** (fallback: Montserrat Black)
-- Size: **96px**
-- Color: **white** (`#FFFFFF`) with **6px neon-yellow stroke** (`#FFD700`)
-- Drop shadow: **4px black**
-- Position: centered horizontal, `y=1300`
+Slogan/disclaimer overlay styling — see `## Overlay brand` in `roblox.md` (font_display=BEBAS,
+accent_color=#FFD700 neon-yellow). Layout (position/size/timing) — `fake-ad.md` → `## Overlays`.
 
 The neon-yellow stroke matches Roblox's brand yellow (`#FFD700` from game palette).
 
