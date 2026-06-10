@@ -185,6 +185,60 @@ Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, so
 
 ---
 
+## Dual-Style Character Blocks
+
+Двойные описания для формата dual-style: anime game-style (левая сторона) + photorealistic (правая сторона). Без чиби — используется стандартный anime cel-shaded стиль игры.
+
+### Venti (game-style)
+`anime cel-shaded male bard Venti, teal and blue bard outfit with wind motifs and laurel wreath crown, short teal hair with two braids, clean bold anime outlines, vibrant flat saturated colors, playful carefree expression, bow slung over shoulder, slender androgynous build, glowing anemo wind particles`
+
+### Venti (realistic counterpart)
+`photorealistic young androgynous male, teal and blue bard outfit with wind motifs and laurel wreath crown, short teal hair with two small braids, natural skin textures, fair complexion, playful carefree expression, bow, slender lean build`
+
+### Hu Tao (game-style)
+`anime cel-shaded female funeral director Hu Tao, dark red and black traditional Chinese outfit with golden talisman ornaments, brown hair in twin tails with red flower pins, clean bold anime outlines, vibrant flat saturated colors, mischievous grinning expression, polearm with ghost flame motifs, petite energetic build, swirling crimson pyro flames`
+
+### Hu Tao (realistic counterpart)
+`photorealistic young East Asian woman, dark red and black traditional Chinese outfit with golden talisman ornaments, brown hair in twin tails with red flower pins, natural skin textures, warm tan complexion, mischievous grinning expression, ornate polearm, petite energetic build`
+
+### Zhongli (game-style)
+`anime cel-shaded male Geo Archon Zhongli, dark brown and gold traditional Chinese scholar coat with geo rock motifs, dark brown hair with gold ornamental accents, clean bold anime outlines, vibrant flat saturated colors, composed dignified expression, tall imposing build, geo polearm, amber glowing geo particles`
+
+### Zhongli (realistic counterpart)
+`photorealistic tall East Asian man, dark brown and gold traditional Chinese scholar coat with ornate geo motifs, dark brown hair with gold accents, natural skin textures, olive complexion, composed sophisticated expression, ornate polearm, tall dignified build`
+
+### Diluc (game-style)
+`anime cel-shaded male knight Diluc, dark red and black noble overcoat with silver buttons and cape, long dark red hair tied back with ribbon, clean bold anime outlines, vibrant flat saturated colors, serious brooding expression, large greatsword claymore, tall imposing build, fierce pyro fire aura`
+
+### Diluc (realistic counterpart)
+`photorealistic tall European man, dark red and black noble overcoat with silver buttons and dark cape, long dark red hair tied back, natural skin textures, pale complexion, serious brooding expression, large greatsword, tall muscular build`
+
+### Raiden Shogun (game-style)
+`anime cel-shaded female Electro Archon Raiden Shogun, purple and violet shogun armor with intricate lightning bolt motifs and ornate shoulder guards, long dark purple hair flowing down, clean bold anime outlines, vibrant flat saturated colors, cold commanding expression, electro polearm crackling with purple lightning, tall imposing regal build, electro purple particle glow`
+
+### Raiden Shogun (realistic counterpart — Gal Gadot)
+`photorealistic Gal Gadot, tall athletic Israeli actress with strong jaw sharp cheekbones and intense dark eyes, wearing purple and violet shogun armor with lightning motifs and ornate shoulder guards, long dark purple hair wig flowing down, natural skin textures olive complexion, cold commanding regal expression, ornate electro polearm, tall powerful build`
+
+### Tartaglia (game-style)
+`anime cel-shaded male Fatui Harbinger Tartaglia, dark blue and crimson red Fatui uniform with silver insignia and high collar, bright orange styled hair, clean bold anime outlines, vibrant flat saturated colors, wide aggressive grin, hydro bow crackling with blue water energy, athletic lean energetic build`
+
+### Tartaglia (realistic counterpart — Tom Holland)
+`photorealistic Tom Holland, young British actor with expressive brown eyes athletic lean build and boyish features, wearing dark blue and crimson red Fatui Harbinger uniform with silver insignia and high collar, bright orange styled hair, natural skin textures fair complexion, wide aggressive confident grin, hydro bow, energetic lean build`
+
+### Furina (realistic counterpart — Florence Pugh)
+`photorealistic Florence Pugh, British actress with expressive wide-set blue eyes and natural charisma, wearing teal and white elegant performer tailcoat with theatrical flair and top hat, light blue curled wig, natural skin textures fair complexion, dramatic theatrical wide-eyed expression, petite lively build`
+
+### Furina (game-style)
+`anime cel-shaded female Hydro Archon Furina, teal and white elegant performer tailcoat with theatrical flair and top hat, light blue curled hair, clean bold anime outlines, vibrant flat saturated colors, dramatic theatrical wide-eyed expression, hydro catalyst with water droplet effects, petite lively build, shimmering hydro blue aura`
+
+### Arlecchino (game-style)
+`anime cel-shaded female Fatui Harbinger Arlecchino, black and white sharply asymmetric tailcoat with red cross markings on collar, pale white hair with dark streaks, clean bold anime outlines, vibrant flat saturated colors, cold calculating half-smile, pyro polearm with flame tip, tall imposing build, subtle crimson fire glow`
+
+### Arlecchino (realistic counterpart — Eva Green)
+`photorealistic Eva Green, French actress with striking pale complexion intense dark eyes high cheekbones and magnetic presence, wearing black and white asymmetric tailcoat with red cross markings, pale white hair with dark streaks, natural skin textures, cold calculating half-smile, ornate polearm, tall imposing build`
+
+---
+
 ## Tone of Voice
 
 - Волшебный, эпичный, эмоциональный
