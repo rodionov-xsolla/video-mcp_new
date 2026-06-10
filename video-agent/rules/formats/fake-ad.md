@@ -298,7 +298,7 @@ Example: `"RESIN ENERGY.\nDOESN'T RESTORE RESIN. HELPS YOU OUTLIVE THE WAIT."`
 - ElevenLabs TTS for each scene with non-empty `tts` (all 5 scenes in this format).
 - Voice from `voices.announcer` in storyboard — use `voice` name string, NOT `voice_id` hash.
 - Upload each `.mp3` to Supabase → write `tts_url` back into scene in storyboard.json.
-- **Subtitles: announcer VO only** — единый универсальный стиль (editor.md §6). Только основной `tts` каждой сцены попадает в `voice-final.wav` и субтитруется; реакции (`character_reactions[*].tts`) НЕ субтитруются (их нет в voice-final). Слоган/дисклеймер пэкшота — графический оверлей через `tools/overlays.py` (типы `slogan`, `disclaimer`), НЕ субтитр.
+- **Subtitles: announcer VO only** — the one universal style (editor.md §6). Only each scene's main `tts` goes into `voice-final.wav` and gets subtitled; reactions (`character_reactions[*].tts`) are NOT subtitled (they are not in voice-final). The packshot slogan/disclaimer is a graphic overlay via `tools/overlays.py` (types `slogan`, `disclaimer`), NOT a subtitle.
 - Music bed: upbeat commercial mood, `volume: 0.25`, continuous through ALL scenes including packshot. **NO music gate** (unlike fun-news/special-report, music does NOT go silent for dialogue — this is a commercial, VO rides on top of the music).
 - General rules — `rules/roles/sound.md`
 
@@ -370,4 +370,4 @@ output/YYYY-MM-DD/{GAME_TAG}/fake-ad/
 - ❌ Explaining the twist in the VO. Let the visual speak. Scene 3 VO may be minimal ("And then…") or even empty.
 - ❌ `-shortest` in FFmpeg. Always `apad`.
 - ❌ `voice_id` hash in ElevenLabs. Use `voice` name string.
-- ❌ Subtitle burn-in on any scene. No captions — this is a TV commercial. (Но во front-matter `subtitles: true` для announcer VO — если канал хочет сабы; если совсем без — поставь `subtitles: false`. По умолчанию рекламный announcer субтитруется.)
+- ❌ Subtitle burn-in on any scene. No captions — this is a TV commercial. (Front-matter has `subtitles: true` for the announcer VO — if the channel wants captions; for none, set `subtitles: false`. By default the ad announcer is subtitled.)

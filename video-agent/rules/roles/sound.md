@@ -18,7 +18,7 @@ From Manager:
 
 - `scenes/scene-K/scene-K.mp3` — TTS audio per dialogue clip (for Animator → Kling Avatar)
 - `bg-music.mp3` — background music (optional)
-- (субтитры — НЕ артефакт Sound; Editor генерит их сам по whisper, см. §8)
+- (subtitles are NOT a Sound artifact; Editor generates them itself via whisper, see §8)
 
 ---
 
@@ -378,26 +378,26 @@ Use only the supported emotive tags from §1 (`(laughs)`, `(groans)`, etc.). Any
 
 ---
 
-## 8. Subtitles — Sound НЕ касается субтитров вообще
+## 8. Subtitles — Sound does NOT touch subtitles at all
 
-**Sound не генерирует PNG, не бёрнит ASS, не пишет `timings.json`.** Субтитры полностью на Editor:
-он гоняет faster-whisper по финальной речевой дорожке (`build/voice-final.wav`) и бёрнит единый
-универсальный ASS. Текст — канонический из storyboard. Подробнее — `rules/roles/editor.md` §6.
+**Sound generates no PNG, burns no ASS, writes no `timings.json`.** Subtitles are entirely on Editor:
+it runs faster-whisper on the final voice track (`build/voice-final.wav`) and burns the one universal
+ASS. The text is the canonical text from the storyboard. Details — `rules/roles/editor.md` §6.
 
-Твоя единственная задача — качественные `scene-K.mp3` (TTS) и `bg-music.mp3`. Всё.
+Your only job — quality `scene-K.mp3` (TTS) and `bg-music.mp3`. That's it.
 
-### Запрещено
+### Forbidden
 
-- ❌ Генерация PNG-сабов / запись `*.ass` / `*.timings.json` из sound — это работа editor'а.
-- ❌ Пропорциональные тайминги (`--text`) — удалены из пайплайна вообще (whisper по реальному звуку).
+- ❌ Generating PNG subs / writing `*.ass` / `*.timings.json` from sound — that is Editor's job.
+- ❌ Proportional timings (`--text`) — removed from the pipeline entirely (whisper on the real audio).
 
 ### Audio/video duration mismatch — speed control
 
-Если `dur(tts) > dur(video_timeline)` — Editor применит `atempo` к TTS (cap **1.4×**; выше деградирует
-голос). Субтитры считаются по УЖЕ ускоренной речи (`voice-final.wav`), так что съехать не могут —
-тебе ничего пересчитывать не нужно.
+If `dur(tts) > dur(video_timeline)` — Editor applies `atempo` to the TTS (cap **1.4×**; higher degrades
+the voice). Subtitles are computed from the ALREADY sped-up speech (`voice-final.wav`), so they cannot
+drift — you don't recompute anything.
 
-Если `dur(tts) < dur(video_timeline)` — Editor расширит последний клип freeze-frame'ом; **не** допы тишиной в начале TTS.
+If `dur(tts) < dur(video_timeline)` — Editor extends the last clip with a freeze-frame; do **not** pad with leading silence at the start of the TTS.
 
 Если несоответствие > 40% — обратно к Scenarist, не маскировать atempo.
 
@@ -440,9 +440,9 @@ Hand off to Editor:
 
 ---
 
-## 10. ASS subtitle invariants — переехали в editor.md
+## 10. ASS subtitle invariants — moved to editor.md
 
-ASS-инварианты (no event overlap, last-event reaches clip end, MarginV direction, opaque box не во всю ширину) — это работа Editor, см. `rules/roles/editor.md` §subtitles. Sound не пишет ASS.
+ASS invariants (no event overlap, last event reaches clip end, MarginV direction, no full-width opaque box) are Editor's job, see `rules/roles/editor.md` §6. Sound writes no ASS.
 
 ## 11. Music tone must match format mood
 
@@ -459,10 +459,10 @@ If the format is comedic and the picked track is melancholic/ambient — the who
 
 ---
 
-## 12. `timings.json` — УДАЛЁН из пайплайна
+## 12. `timings.json` — REMOVED from the pipeline
 
-Раньше Sound писал `scene-K.timings.json`. Больше **не нужно**: Editor гоняет faster-whisper по
-финальной речевой дорожке (`build/voice-final.wav`) и берёт границы слов прямо из событий
-`build/subs.ass`. Никаких `--emit-timings`, никаких `--text`. Sound не создаёт `*.timings.json`.
+Sound used to write `scene-K.timings.json`. No longer **needed**: Editor runs faster-whisper on the
+final voice track (`build/voice-final.wav`) and takes word boundaries straight from the
+`build/subs.ass` events. No `--emit-timings`, no `--text`. Sound creates no `*.timings.json`.
 
-Snap-to-word-boundary при тримминге хвоста (если был нужен) Editor делает по `subs.ass`-событиям.
+Snap-to-word-boundary on a tail trim (if ever needed) is done by Editor from the `subs.ass` events.

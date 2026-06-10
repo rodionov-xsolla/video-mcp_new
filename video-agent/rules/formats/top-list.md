@@ -325,7 +325,7 @@ If file absent → defaults from this playbook.
 
 - Exactly **7 scenes**: 1 title + 4 items (ranks 5..2) + 2 climax clips (both rank 1, `part` 1 and 2).
 - Title scene fields: `role: "title_card"`, `clip_type: "title"`, `title_text`, `subtitle_text`, optional `tts`.
-- Item scene fields: `rank` (int), `name`, `character_description` (8+ visual details), `camera_angle`, `motion_hint`, `tts`, **`overlays[]`** (два объекта: `rank_number` `"#{rank}"` + `item_name` `"{NAME}"` uppercase — см. секцию «Text overlays»).
+- Item scene fields: `rank` (int), `name`, `character_description` (8+ visual details), `camera_angle`, `motion_hint`, `tts`, **`overlays[]`** (two objects: `rank_number` `"#{rank}"` + `item_name` `"{NAME}"` uppercase — see the `## Overlays` section).
 - Rank-1 climax: TWO scenes (indices 5 and 6) BOTH with `rank: 1`. Index 5 = `part: 1`, `clip_type: "item_climax"`. Index 6 = `part: 2`, `clip_type: "item_climax"`. Same `name` and `character_description`. Different `camera_angle` (wide → close), `motion_hint`, and `tts` text.
 - `tts` for ranks 5..2: **8–15 words**, must START with the rank phrase ("In fifth place: / Number four: / At three: / And the runner-up:"). Include name + one-line reason.
 - `tts` for rank 1: **two short lines (≤10 words each)**. Part 1 starts with `"Topping the list:"` + name + a pacing-setup beat. Part 2 = emotional/legacy beat + literal closing `"Follow for more tops."`
