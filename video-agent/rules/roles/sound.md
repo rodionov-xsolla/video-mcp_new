@@ -28,8 +28,10 @@ From Manager:
 
 | Condition | Engine |
 |---|---|
-| `game_tag == "genshin impact"` + serial-drama | **Chatterbox** (§1b) — voice cloned from reference MP3 |
+| `game_tag == "genshin impact"` (ANY format) | **Chatterbox** (§1b) — voice cloned from reference MP3 |
 | All other games and formats | **MiniMax** (§1a) — preset voices |
+
+**Genshin voice refs** live in Supabase Storage at `assets/genshin-impact/characters/{slug}/voice-1.mp3` (also voice-2.mp3, voice-3.mp3 where available). Use `voice-1.mp3` as the primary `audio_url` for Chatterbox. **105+ characters confirmed to have refs** — effectively the entire playable roster. For the rare character without a voice ref → fall back to MiniMax.
 
 ---
 
@@ -378,14 +380,14 @@ Use only the supported emotive tags from §1 (`(laughs)`, `(groans)`, etc.). Any
 
 ## 8. Subtitles — твоя задача только эмитить тайминги, бёрнит Editor
 
-**Sound не запускает Whisper, не генерирует PNG, не бёрнит ASS.** Стилевой выбор делает оркестратор по front-matter формата (см. `rules/roles/manager.md`). Editor читает стиль от оркестратора и бёрнит ASS канонически. Подробнее — `rules/roles/editor.md` §0 + §subtitles.
+**Sound не генерирует PNG, не бёрнит ASS.** Стилевой выбор делает оркестратор по front-matter формата (см. `rules/roles/manager.md`). Editor читает стиль от оркестратора и бёрнит ASS канонически. Подробнее — `rules/roles/editor.md` §0 + §subtitles.
 
 **Твой единственный артефакт по сабам — `scene-K.timings.json` рядом с каждым `scene-K.mp3` (см. §11 ниже).**
 
 ### Запрещено
 
 - ❌ Генерация PNG-сабов на границу `tts_segment` (нечитаемо).
-- ❌ Прямой запуск `faster-whisper` (он у нас в fallback и медленный — мы знаем текст из `tts`).
+- ❌ Пропорциональные тайминги без Whisper — не попадают в реальные паузы Chatterbox.
 - ❌ Любая запись `*.ass` файлов из sound — это работа editor'а.
 
 ### Audio/video duration mismatch — speed control
@@ -456,7 +458,7 @@ If the format is comedic and the picked track is melancholic/ambient — the who
 
 ## 12. `scene-K.timings.json` — word-level тайминги для Editor
 
-После генерации каждого `scene-K.mp3` (TTS) — рядом сохрани `scene-K.timings.json`. **Без Whisper.** Тайминги вычисляются пропорционально из известного текста (поле `tts` в storyboard.json) и длительности MP3.
+После генерации каждого `scene-K.mp3` (TTS) — рядом сохрани `scene-K.timings.json`. Тайминги получаются через **faster-whisper** по реальному аудио — пропорциональный подход (`--text`) запрещён во всём пайплайне (не попадает в реальные паузы и интонации, особенно у Chatterbox).
 
 ### Команда
 

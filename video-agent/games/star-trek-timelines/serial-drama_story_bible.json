@@ -5,7 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 9,
+  "last_episode": 10,
   "planned_arc": {
     "note": "Season 1 arc EP9–EP16. Core emotional engine: Kirk saves the monster that tried to kill Chekov — and every time he does 'the right thing', his crew gets more afraid. Mirror Kirk envies Kirk's loyal crew. Admiral pressures Kirk to eject the double or face Enterprise quarantine. Scenarist follows the beats and key_lines below as RAILS: keep cliffhanger spoken lines verbatim, adapt each episode into 3–5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion, protagonist always faces camera, cliffhanger line = Avatar TTS). Fold completed episodes into characters[], active_loops, episode_summaries as usual. Do NOT invent complex conspiracies or test protocols — the drama is simple: Kirk's mercy costs him his crew's trust.",
     "new_characters": [
@@ -96,7 +96,7 @@
       {
         "episode": 9,
         "title": "Man Outside",
-        "status": "unshipped",
+        "status": "shipped",
         "link": "EP8 ended: Chekov hanging on the airlock door frame, Mirror Kirk ejected into open space.",
         "emotion": "Chekov's fear + Kirk's guilt",
         "beats": [
@@ -127,7 +127,7 @@
       {
         "episode": 10,
         "title": "Don't Save Him",
-        "status": "unshipped",
+        "status": "shipped",
         "link": "Mirror Kirk's voice came through static: 'You'll come for me anyway, Jim.'",
         "emotion": "Chekov feels betrayed",
         "beats": [
@@ -350,7 +350,7 @@
       "character_description": "semi-realistic Pixar 3D Captain James T. Kirk, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
       "voice": "Daniel",
       "elevenlabs_voice": "Daniel",
-      "status": "EP8: Shielded Chekov, Mirror Kirk ejected through the open airlock. Chekov saved — inner door sealed. Kirk knows Mirror Kirk is still out there in the debris field and wants to retrieve him.",
+      "status": "EP10: Enterprise under quarantine. Kirk refused to promise Chekov that Mirror Kirk would stay away — chose mercy in silence. Chekov saw the answer and fled aboard an emergency shuttle into the debris field.",
       "aura_points": 1100,
       "relationships": {
         "Worf": "uneasy alliance — Worf told the truth at great personal cost",
@@ -366,7 +366,7 @@
       "character_description": "semi-realistic Pixar 3D Commander Worf, imposing Klingon-Human, prominent forehead ridges, dark skin, fierce disciplined expression, TNG Starfleet command red uniform with lieutenant commander pips, broad shoulders, intense dark eyes",
       "voice": "George",
       "elevenlabs_voice": "George",
-      "status": "EP8: Confronted Mirror Kirk physically — grabbed him, Mirror Kirk slipped the hold. Loyal, but concerned at Kirk's instinct to retrieve the double.",
+      "status": "EP10: Followed Chekov from the bridge into the corridor but could not stop him. Watched Chekov board the emergency shuttle. Reported it to Kirk: 'Fear makes fast mistakes.'",
       "aura_points": 600,
       "relationships": {
         "Kirk": "follows the captain, not the face — loyalty absolute but with growing unease"
@@ -378,7 +378,7 @@
       "character_description": "semi-realistic Pixar 3D Ensign Pavel Chekov, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
       "voice": "Charlie",
       "elevenlabs_voice": "Charlie",
-      "status": "EP9: Survived. Begged Kirk not to go after Mirror Kirk — 'He wanted to kill me. Don't go after him, Captain.' Kirk ordered Scotty to retrieve him anyway. Chekov's trust in Kirk is cracking.",
+      "status": "EP10: Trust in Kirk broken. Asked for a promise — Kirk couldn't give it. Boarded an emergency shuttle and flew into the debris field alone. Last words: 'Better space than that airlock again.'",
       "aura_points": 200,
       "relationships": {
         "Kirk": "trusted captain completely — that trust is cracking now that Kirk wants to retrieve Mirror Kirk"
@@ -437,11 +437,11 @@
     }
   ],
   "active_loops": [
-    "major: Mirror Kirk ejected into space — Kirk wants to retrieve him; Chekov wants him left to die",
-    "major: Kirk's mercy is fracturing crew trust — Chekov beginning to fear the captain's decisions",
-    "major: Fleet Admiral threatening Enterprise quarantine — demands Kirk abandon Mirror Kirk",
+    "major: Chekov alone in the debris field — his shuttle is in the same zone where Mirror Kirk vanished",
+    "major: Kirk's mercy broke Chekov's trust — crew fracture is now a crew departure",
+    "major: Enterprise under quarantine — Admiral's stranglehold tightens; weapons offline",
+    "major: Mirror Kirk still unaccounted for in the debris field — his last known position is where Chekov's shuttle just entered",
     "major: Scotty still nominally under suspicion — conspiracy role unresolved",
-    "major: Enterprise weapons offline — phaser array destroyed by Kirk's own hand",
     "eternal: Kirk always fights for his crew against the system"
   ],
   "closed_loops": [
@@ -455,11 +455,11 @@
   "world_state": {
     "location": "Enterprise Airlock Bay + Bridge",
     "important_items": [
-      "Mirror Kirk — ejected into open space, in the debris field of the allied ship",
+      "Mirror Kirk — missing in debris field, last heard via static comm EP9; now Chekov's shuttle is in the same zone",
       "Enterprise phaser array — DESTROYED (weapons offline)",
-      "Black escape pod — opened, empty, in airlock bay",
-      "Chekov — alive, on the airlock bay floor, beginning to fear Kirk's decisions",
-      "Fleet Admiral — threatening Enterprise quarantine"
+      "Chekov — alone in emergency shuttle inside the debris field; his shuttle's last known heading",
+      "Enterprise — under quarantine by Fleet Admiral order",
+      "Fleet Admiral — quarantine enforced; Kirk cannot pursue Chekov without violating quarantine"
     ],
     "key_events": [
       "EP1: Worf executed airlock procedure on Chekov on Fleet Admiral's orders",
@@ -495,18 +495,19 @@
       "EP8: Mirror Kirk: 'Because you'll always save the boy.' — pressed LCARS emergency panel.",
       "EP8: Outer airlock door cracked open — explosive decompression dragged Chekov toward space.",
       "EP8: Chekov grabbed the door frame; Mirror Kirk also pulled out through the gap he opened.",
-      "EP8: Cliffhanger — Chekov hanging on frame, Mirror Kirk ejected into space."
+      "EP8: Cliffhanger — Chekov hanging on frame, Mirror Kirk ejected into space.",
+      "EP9: Chekov begged Kirk not to retrieve Mirror Kirk. Kirk ordered transporter lock anyway. Scotty lost the signal in the debris field. Mirror Kirk's voice came through static: 'You'll come for me anyway, Jim.'",
+      "EP10: Admiral announced Enterprise quarantine on the bridge viewscreen.",
+      "EP10: Chekov asked Kirk to promise Mirror Kirk would never return. Kirk could not answer.",
+      "EP10: Chekov: 'If he comes back, I'll be at the airlock again.'",
+      "EP10: Kirk: 'I won't let a man die.' — the answer Chekov feared.",
+      "EP10: Worf followed Chekov from the bridge saying 'Fear makes fast mistakes.' Could not stop him.",
+      "EP10: Chekov boarded an emergency shuttle and broke free of the dock into the debris field.",
+      "EP10: Cliffhanger — Chekov: 'Better space than that airlock again.' Shuttle enters debris field."
     ]
   },
   "anti_repetition": {
     "recent_phrases": [
-      "Captain... it's someone on your crew.",
-      "Now you see, Captain. We are both dead.",
-      "The order. Show me.",
-      "Worf. You stay with him. No one in or out.",
-      "Scotty. Step away from that console.",
-      "Captain — I didn't arm them. Someone locked me out.",
-      "Eleven seconds, Captain. Fire.",
       "Captain, that ship must not survive.",
       "Then you should have told me why.",
       "We'll lose the phasers!",
@@ -526,25 +527,30 @@
       "The signal's breaking up!",
       "Leave him there, Captain.",
       "I'm losing him — he's gone into the debris.",
-      "You'll come for me anyway, Jim."
+      "You'll come for me anyway, Jim.",
+      "If he comes back, I'll be at the airlock again.",
+      "I won't let a man die.",
+      "Fear makes fast mistakes.",
+      "Better space than that airlock again."
     ],
     "recent_hooks": [
-      "watcher-reveal-silhouette",
       "vulcan-corridor-reveal",
       "corridor-sprint-multi-shot",
       "ticking-clock-targeting-reticle-allied-ship",
       "smoking-pod-crew-convergence",
       "physical-grab-and-slip",
-      "survivor-in-aftermath"
+      "survivor-in-aftermath",
+      "authority-edict-coldopen",
+      "betrayal-silence-beat"
     ],
     "recent_cliffhangers": [
-      "unknown-watcher-reveal",
       "ship-weapons-locked-on-allied-vessel",
       "authority-figure-live-comms-reveal",
       "biosignature-scanner-identity-reveal-pod",
       "mirror-double-predatory-reveal",
       "environmental-decompression-drag",
-      "disembodied-voice-through-static"
+      "disembodied-voice-through-static",
+      "shuttle-escape-into-debris"
     ]
   },
   "episode_summaries": [
@@ -621,6 +627,16 @@
       "youtube_url": "https://www.youtube.com/watch?v=q4npuzJxF3o",
       "yt_publish_at": "2026-06-11T20:00:00Z",
       "duration_sec": 34
+    },
+    {
+      "episode": 10,
+      "language": "en",
+      "summary": "Enterprise under quarantine — Admiral on the viewscreen. Chekov confronts Kirk on the bridge: asks him to promise Mirror Kirk will never come back. Kirk stays silent too long. Chekov understands and runs. Worf follows but cannot stop him. Chekov boards an emergency shuttle and breaks free of the dock.",
+      "cliffhanger": "Chekov's shuttle accelerates into the debris field. His last words: 'Better space than that airlock again.'",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-09/serial-drama_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=ywC6Ab834JI",
+      "yt_publish_at": "2026-06-18T20:59:00Z",
+      "duration_sec": 26
     }
   ]
 }

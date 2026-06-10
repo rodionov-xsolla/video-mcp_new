@@ -240,6 +240,24 @@ There is **no quality reason** to prefer multi-stage. Every multi-stage run = N 
 
 I2V (Kling) is 24fps, Avatar (Kling Avatar) is 30fps → normalize EVERYTHING to 30fps.
 
+**CRITICAL — concat.txt requires ABSOLUTE paths.** The `-f concat` demuxer resolves `file` entries relative to the concat.txt location, not the ffmpeg cwd. If you write `file 'norm-1.mp4'` and run ffmpeg from a different directory, it silently fails (exit 137, OOM kill, or "No such file"). Always write absolute paths:
+
+```bash
+# Правильно — абсолютные пути:
+cat > "$B/concat.txt" << EOF
+file '$B/norm-1.mp4'
+file '$B/norm-2.mp4'
+EOF
+
+# Неправильно — relative paths вызывают exit 137:
+cat > build/concat.txt << 'EOF'
+file 'norm-1.mp4'
+file 'norm-2.mp4'
+EOF
+```
+
+**CRITICAL — filter_complex stream indices.** Когда передаёшь N входных файлов в ffmpeg, каждый `-i` получает свой индекс [0], [1], [2]... Если все клипы нормализованы и конкатенированы в один `concat-base.mp4`, то в финальном проходе overlay-оверлеи — ТОЛЬКО ОДИН видеовход `[0:v]`. Не смешивай: отдельные клипы как входы → filter_complex с concat; уже склеенный base → только overlays + subtitles.
+
 ### 1.0a Avatar silence trim — BEFORE concat
 
 Avatar clips render to exactly TTS duration, but may contain a silent tail (Avatar MP4 container is slightly longer than the speech). Trim **both video AND audio** before feeding into concat:
@@ -585,22 +603,25 @@ python3 tools/add_subtitles.py \
   ${SUBTITLE_EXTRAS}
 ```
 
-**Источник текста и таймингов — зависит от формата:**
+**Источник таймингов — ВСЕГДА faster-whisper, без исключений:**
 
-- **reddit-story (и любой монолог с `--highlight-words`)** → **НЕ передавай `--text`**. Пусть `add_subtitles.py` прогонит аудио через faster-whisper и получит реальные word-level тайминги. Пропорциональные тайминги из текста дают равномерный ритм, но не попадают в реальные паузы и интонации — на highlight это сразу видно. `--verify-audio` в этом режиме **не нужен**: тайминги получены ИЗ того же аудио, дрейф невозможен по конструкции; хвостовая тишина после последнего слова — норма.
+**НЕ передавай `--text`** ни для одного формата. Пропорциональные тайминги из текста дают равномерный ритм но не попадают в реальные паузы, акценты и интонации — особенно критично для Chatterbox (голосовые клоны добавляют непредсказуемые паузы). Whisper выравнивает субтитры по реальному звучанию.
 
-- **Все остальные форматы** (serial-drama, character-story, news и т.д.) → передавай `--text "$FULL_NARRATION"` для быстрого пути без Whisper. `--verify-audio` обязателен.
+`--verify-audio` **не нужен** в Whisper-режиме: тайминги получены из того же аудио, дрейф невозможен по конструкции.
 
-**Whisper-путь для reddit-story — канонический вызов:**
+**Канонический вызов — ВСЕ форматы:**
 ```bash
 python3 tools/add_subtitles.py \
-  - "$OUTPUT_DIR/tts-output.mp3" "$OUTPUT_DIR/build/subs.ass" \
+  - build/tts-fast.mp3 build/subs.ass \
   --emit-ass-only \
-  --style narrative \
-  --highlight-words \
-  --highlight-color 00FFFF
+  --style "${SUBTITLE_STYLE}" \
+  --offset "${SUBTITLE_OFFSET_S}" \
+  $EXTRA_FLAGS \
+  ${SUBTITLE_EXTRAS}
 # НЕТ --text, НЕТ --verify-audio, НЕТ --atempo
 ```
+
+Для форматов с `--highlight-words` (reddit-story): добавь `--highlight-words --highlight-color 00FFFF` — Whisper уже используется, флаги совместимы.
 
 **Антидрейф by construction (вместо ручного `--atempo`).** ASS генерим из **того же аудио, что идёт в микс** — `build/tts-fast.mp3` (уже после `atempo`) для single-voice, `scene-$K.mp3` для per-scene. Тайминги тогда считаются по реальной длительности и не могут разойтись с фактическим звучанием. Флаг **`--atempo` устарел** — не передавай его: множитель уже запечён в длительности файла, а ручной множитель — это и был источник «съезжания» (несовпал с `filter_complex` → субтитры уезжали к концу клипа). Если файл по какой-то причине ещё не ускорен — сначала сделай `tts-fast.mp3` (§3b), потом генери ASS.
 

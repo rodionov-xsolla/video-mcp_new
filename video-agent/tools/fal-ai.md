@@ -652,6 +652,71 @@ RESULT_URL="https://queue.fal.run/fal-ai/minimax/requests/${REQUEST_ID}"
 
 ---
 
+## 4a. ElevenLabs TTS — через fal.ai (override MiniMax по запросу юзера)
+
+**Endpoint:** `https://queue.fal.run/fal-ai/elevenlabs/tts/eleven-v3`
+**Polling base:** `fal-ai/elevenlabs`
+**Стоимость:** ~$0.03–0.05 за фразу
+
+> Используется когда юзер явно просит ElevenLabs вместо MiniMax. ELEVENLABS_API_KEY в .env не нужен — fal.ai использует свой аккаунт.
+
+### Запрос
+
+```bash
+cat > /tmp/el-body.json << 'EOF'
+{
+  "text": "Enterprise. You are under quarantine.",
+  "voice": "Liam"
+}
+EOF
+
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/elevenlabs/tts/eleven-v3" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d @/tmp/el-body.json)
+
+REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
+```
+
+### ⚠️ КРИТИЧНО: правильные параметры
+
+| Параметр | Тип | Обязательный | Описание |
+|----------|-----|-------------|----------|
+| `text` | string | Да | Текст для озвучки |
+| `voice` | string | Да | **Имя голоса** (не UUID, не `voice_id`!) |
+
+**Правильно:** `{"text": "...", "voice": "Liam"}`
+**Неправильно:** `{"text": "...", "voice_id": "Liam"}` — игнорируется, fallback на дефолтный голос
+**Неправильно:** `{"text": "...", "voice_id": "TX3LPaxmHKxFdv7VOQHJ"}` — UUID не работает
+
+### Голоса (соответствие персонажей)
+
+| Персонаж | `voice` |
+|----------|---------|
+| Kirk, Mirror Kirk | `Daniel` |
+| Chekov | `Charlie` |
+| Fleet Admiral | `Liam` |
+| Worf, Scotty | `George` |
+| Spock | `Brian` |
+
+### Polling и ответ
+
+```bash
+# Polling base = fal-ai/elevenlabs (2 сегмента)
+STATUS_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}/status"
+RESULT_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}"
+
+# Ответ
+{
+  "audio": {
+    "url": "https://v3b.fal.media/files/abc123/output.mp3",
+    "content_type": "audio/mpeg"
+  }
+}
+```
+
+---
+
 ## Общий паттерн polling (для ВСЕХ fal.ai endpoints)
 
 > ⚠️ **КРИТИЧНО:** Polling ВСЕГДА по **базовому 2-сегментному пути**, НЕ по полному submit endpoint.
