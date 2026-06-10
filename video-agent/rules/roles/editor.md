@@ -67,7 +67,7 @@ This rule applies regardless of format. A reader of `OUTPUT_DIR` should see four
 
 ## 0. Canonical pipeline — single-pass `filter_complex` (DEFAULT)
 
-**This is the path. Use it for every format unless a section below explicitly overrides for that format (split-screen gameplay-ai-avatar). Субтитры — единый стиль для всех (§6), не override.**
+**This is the path. Use it for every format unless a section below explicitly overrides for that format (split-screen gameplay-ai-avatar). Subtitles are one style for all formats (§6), not an override.**
 
 Multi-stage assembly (sections 1–5) is **legacy**: kept for debugging when you need to inspect an intermediate, or when a clip-specific filter (e.g. per-scene drawtext) cannot be expressed inside one filter graph. The legacy path is what made editor runs take 12–32 minutes for 50s output. Single-pass on the same hardware: **~90 seconds**.
 
@@ -218,8 +218,8 @@ WWE Champions fun-news pilot (2026-06-01) burned 1× re-render because the origi
 
 - **gameplay-ai-avatar split-screen** (§7) — the per-scene 60/40 stack cannot be expressed across N scene inputs cleanly inside one concat. Two-stage: first build each split-scene composite (§7), then feed those composites as inputs into the §0 canonical pipeline.
 - **serial-drama "behind glass" TTS overlay** (§3) — per-scene aecho is a pre-mix on the I2V scene before §0. Treat output of §3 as the canonical input `[k:v]/[k:a]` for the main pipeline.
-- **Subtitle generation** (§6) — ОДИН универсальный ASS на весь ролик, тайминги по whisper из `build/voice-final.wav`. `§0` подхватывает его последним видеофильтром `ass=build/subs.ass`. Никаких per-format стилей.
-- **Графические оверлеи** (§6.5) — `tools/overlays.py` эмитит per-scene `drawtext`-фрагменты, вплетаемые в `[vk]`-ветку BEFORE concat. channel-bug — `overlay=` после `ass=`. Отдельного прохода нет.
+- **Subtitle generation** (§6) — ONE universal ASS for the whole video, whisper-timed from `build/voice-final.wav`. `§0` picks it up as the last video filter `ass=build/subs.ass`. No per-format styles.
+- **Graphic overlays** (§6.5) — `tools/overlays.py` emits per-scene `drawtext` fragments spliced into the `[vk]` branch BEFORE concat. channel-bug — `overlay=` after `ass=`. No separate pass.
 
 ### 0.6 When NOT to use the canonical pipeline
 
@@ -381,9 +381,9 @@ $FFMPEG -y -i tts-output.mp3 -filter:a "atempo=$SPEED" tts-fast.mp3
 
 > ⚠️ **OVERRIDE — for `serial-drama` and any format whose playbook lists `❌ Title cards / brainrot tags / character name overlays` in anti-patterns: SKIP this section entirely.** No "EPISODE N" drawtext. The episode opens cold on the recap clip. The block below remains for legacy formats that explicitly request an episode card in their playbook.
 
-Эпизодная/серийная плашка («EPISODE N», название серии) — это **графический оверлей**, а не
-субтитр. Её рисует `tools/overlays.py` (тип `title`) из `scenes[].overlays[]` в storyboard, см.
-§6.5. Никакого ручного drawtext здесь. Для serial-drama её вообще нет (cold open на recap).
+An episode/series plate ("EPISODE N", series title) is a **graphic overlay**, not a subtitle.
+`tools/overlays.py` draws it (`title` type) from `scenes[].overlays[]` in the storyboard, see §6.5.
+No manual drawtext here. For serial-drama there is none at all (cold open on the recap).
 
 ---
 
@@ -402,16 +402,16 @@ $FFMPEG -y -i final-base.mp4 \
   final-speed.mp4
 ```
 
-**Pipeline order (с учётом нового субтитрового потока):**
+**Pipeline order (with the new subtitle flow):**
 1. Normalize clips (section 1)
-2. Per-scene графические оверлеи (§6.5) на `[vk]` ДО concat
+2. Per-scene graphic overlays (§6.5) on `[vk]` BEFORE concat
 3. Concat → `final-base.mp4`
-4. **Speed up (this section, legacy-форматы)** → `final-speed.mp4`
-5. Собрать `build/voice-final.wav` из УЖЕ ускоренной речи (§6.1) и сгенерить `build/subs.ass` (§6.2)
-6. Бёрн `ass=` (последний видеофильтр) + channel-bug overlay (§6.5)
-7. Music (section 4), mix ПОСЛЕ speedup (иначе плывёт питч)
+4. **Speed up (this section, legacy formats)** → `final-speed.mp4`
+5. Build `build/voice-final.wav` from the ALREADY sped-up speech (§6.1) and generate `build/subs.ass` (§6.2)
+6. Burn `ass=` (last video filter) + channel-bug overlay (§6.5)
+7. Music (section 4), mixed AFTER speedup (otherwise the pitch shifts)
 
-Субтитры всегда генерятся из ФИНАЛЬНОЙ (пост-speed) речи и жгутся последними — съехать не могут.
+Subtitles are always generated from the FINAL (post-speed) speech and burned last — they cannot drift.
 
 ---
 
@@ -652,18 +652,18 @@ drawtext rules (macOS): only `ffmpeg-full` (libfreetype); the script already use
 `expansion=none` (escapes `:` and `%`), `fontfile=` resolved from the FONTS map with fallbacks.
 
 
-## 7. Split-screen (gameplay-ai-avatar) — 3-зонный layout
+## 7. Split-screen (gameplay-ai-avatar) — 3-zone layout
 
-Универсальный саб сидит в фиксированной позиции MarginV=520 → реально занимает **y≈1256–1400**
-(2 строки) на канвасе 1920. Раньше тут был seam-трюк `--marginv 800`; теперь позиция фиксирована,
-поэтому layout подгоняем под неё: **3-зонный vstack**, где caption-полоса ложится ровно на y1256–1400.
-Только `crop`, никогда `pad`.
+The universal subtitle sits at a fixed MarginV=520 → it actually occupies **y≈1256–1400**
+(2 lines) on the 1920 canvas. There used to be a `--marginv 800` seam trick here; now the position is
+fixed, so we fit the layout to it: a **3-zone vstack** where the caption band lands exactly on y1256–1400.
+Only `crop`, never `pad`.
 
 - Gameplay top: 1080×1255 (crop) — y0–1255
-- **Caption band: 1080×150 (y1255–1405)** — затемнённая полоса; саб (y1256–1400) ложится ровно сюда
+- **Caption band: 1080×150 (y1255–1405)** — a darkened strip; the subtitle (y1256–1400) lands right here
 - Avatar bottom: 1080×515 (crop) — y1405–1920
 
-Сумма 1255+150+515 = 1920 ✓. Саб не залезает ни на gameplay, ни на лицо аватара — он на своей полосе.
+Sum 1255+150+515 = 1920 ✓. The subtitle covers neither gameplay nor the avatar's face — it has its own band.
 
 ```bash
 $FFMPEG -y -i avatar-speedup.mp4 -i gameplay-trimmed.mp4 \
@@ -679,10 +679,10 @@ $FFMPEG -y -i avatar-speedup.mp4 -i gameplay-trimmed.mp4 \
   final-base.mp4
 ```
 
-- Саб бёрнится `ass=` ПОСЛЕ этого composite (см. §6) — он попадёт на тёмную полосу при MarginV=520.
+- The subtitle is burned with `ass=` AFTER this composite (see §6) — at MarginV=520 it lands on the dark band.
 - Avatar audio = 100%, gameplay audio = 25% (background)
 - Avatar already arrived from Animator with 1.3x speedup (setpts + atempo) — Editor does not touch the speed
-- Никакого `--marginv 800`/seam-трюка — позиция саба единая для всех форматов.
+- No `--marginv 800`/seam trick — the subtitle position is the same for all formats.
 
 ---
 
@@ -843,22 +843,22 @@ $FFMPEG -i final.mp4 -ss 1.5 -t 2.0 -af "volumedetect" -f null - 2>&1 | grep mea
 
 ---
 
-## 13a. Channel bug overlay (надканальный бренд)
+## 13a. Channel bug overlay (channel-wide brand)
 
-Channel-bug (постоянное лого канала, TV-station style) теперь рисует `tools/overlays.py`, а не
-ручной filter_complex. Manager парсит `channel_bug_url` из `games/{GAME_TAG}/{GAME_TAG}.md` и
-передаёт `CHANNEL_BUG_URL`. Если он непустой — см. §6.5: скачать PNG, получить фрагмент через
-`overlays.py --channel-bug`, применить **после concat и после `ass=`** (overlay 110×110, top-left
-40,40, на всю длину). Если `CHANNEL_BUG_URL` пуст — шага нет.
+The channel bug (a persistent channel logo, TV-station style) is now drawn by `tools/overlays.py`,
+not by hand-written filter_complex. Manager parses `channel_bug_url` from `games/{GAME_TAG}/{GAME_TAG}.md`
+and passes `CHANNEL_BUG_URL`. If non-empty — see §6.5: download the PNG, get the fragment via
+`overlays.py --channel-bug`, apply it **after concat and after `ass=`** (overlay 110×110, top-left
+40,40, full duration). If `CHANNEL_BUG_URL` is empty — no step.
 
-Валидация: сэмпл кадра t=1.0, stddev верхнего-левого 200×200 региона > 25 ⇒ бренд на месте.
+Validation: sample a frame at t=1.0, stddev of the top-left 200×200 region > 25 ⇒ the brand is present.
 
-## 13. Артефакты Kling — чинить промптами, НЕ маскировать
+## 13. Kling artifacts — fix with prompts, do NOT mask
 
-Маскировка артефактов субтитровым боксом (старый `--mask` / BorderStyle=4) **удалена**. Артефакты
-Kling (CJK-галлюцинации, мусорный текст у низа кадра) предотвращаются на уровне промпта —
-negative_prompt в плейбуке формата (см. what-if-real-life.md). Никаких full-width `drawbox` и
-opaque-box субтитров: единый стиль использует только обводку.
+Masking artifacts with a subtitle box (the old `--mask` / BorderStyle=4) is **removed**. Kling
+artifacts (CJK hallucinations, garbled text near the frame bottom) are prevented at the prompt level —
+the format playbook's negative_prompt (see what-if-real-life.md). No full-width `drawbox` and no
+opaque-box subtitles: the one style uses an outline only.
 
 ## 14. Speedup is a mandatory step, not optional
 

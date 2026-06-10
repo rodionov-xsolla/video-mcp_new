@@ -141,29 +141,29 @@ If output of one stage (TTS, images) is needed as input for the next expensive s
 **Output:** `scenes/scene-K/scene-K.mp4` + `.mp3` per dialogue clip.
 
 ### PHASE 4 — Assembly
-Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude/agents/editor.md`). Sub-agent loads `rules/roles/editor.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute), `OPENER_PATH` / `CTA_PATH` if applicable, `LANGUAGE`, `CHANNEL_BUG_URL` (if set), **+ два булевых флага из front-matter (см. ниже)**. All scene MP4s and audio tracks are already on disk in `OUTPUT_DIR/scenes/`. Template: `prompts/editor.txt`.
+Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude/agents/editor.md`). Sub-agent loads `rules/roles/editor.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute), `OPENER_PATH` / `CTA_PATH` if applicable, `LANGUAGE`, `CHANNEL_BUG_URL` (if set), **+ two booleans from the front-matter (see below)**. All scene MP4s and audio tracks are already on disk in `OUTPUT_DIR/scenes/`. Template: `prompts/editor.txt`.
 
-**Субтитры универсальны — оркестратор передаёт только вкл/выкл.**
+**Subtitles are universal — the orchestrator only passes on/off.**
 
-Субтитры одинаковы во всех форматах (единый стиль, тайминги по whisper — `rules/roles/editor.md` §6).
-Никаких per-format стилей/масок/offset/marginv больше нет. В начале каждого `rules/formats/${FORMAT}.md`
-лежит минимальный YAML front-matter:
+Subtitles are identical across all formats (one style, whisper-timed — `rules/roles/editor.md` §6).
+No per-format styles/masks/offset/marginv anymore. Each `rules/formats/${FORMAT}.md` starts with a
+minimal YAML front-matter:
 
 ```yaml
 ---
-subtitles: true     # true = универсальные whisper-сабы | false = нет (motion-dance, dual-style)
-overlays: false     # true = графические оверлеи из storyboard.json через tools/overlays.py
+subtitles: true     # true = universal whisper subtitles | false = none (motion-dance, dual-style)
+overlays: false     # true = graphic overlays from storyboard.json via tools/overlays.py
 ---
 ```
 
-Перед запуском editor sub-agent'а:
-1. Прочитай первые ~5 строк `rules/formats/${FORMAT}.md`, извлеки front-matter (между двумя `---`).
-2. Прокинь editor'у в `prompt` ровно две переменные: `SUBTITLES` (`true`/`false`), `OVERLAYS` (`true`/`false`).
-   Никакой сборки строк/escaping — параметры оверлеев editor берёт сам из `storyboard.json` (`scenes[].overlays[]`).
-3. Editor НЕ читает `rules/formats/*.md` ради субтитров/оверлеев — у него только эти два булевых флага + storyboard.
+Before launching the editor sub-agent:
+1. Read the first ~5 lines of `rules/formats/${FORMAT}.md`, extract the front-matter (between the two `---`).
+2. Pass the editor exactly two variables in `prompt`: `SUBTITLES` (`true`/`false`), `OVERLAYS` (`true`/`false`).
+   No string assembly/escaping — the editor reads overlay params itself from `storyboard.json` (`scenes[].overlays[]`).
+3. The editor does NOT read `rules/formats/*.md` for subtitles/overlays — it only has these two booleans + the storyboard.
 
-Если у формата **нет** front-matter с обоими ключами — **STOP, попроси меня (юзера) обновить формат.**
-Никакого silent-дефолта в bold. Все 16 форматов обязаны иметь `subtitles` + `overlays`.
+If a format has **no** front-matter with both keys — **STOP, ask me (the user) to update the format.**
+No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
 
 **Post-Editor layout check.** After the sub-agent returns, run `ls "$OUTPUT_DIR"` and verify only `final.mp4`, `storyboard.json`, `scenes/`, optional `recap/` / `_archive/` are at the root. Any other file (concat lists, intermediate renders, temp audio, ad-hoc scripts/logs) must live under `OUTPUT_DIR/build/`. If something leaked to root, move it into `build/` yourself before Phase 5 — do not re-invoke the sub-agent for this.
 

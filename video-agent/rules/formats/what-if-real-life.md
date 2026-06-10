@@ -243,7 +243,7 @@ Other scene types have no overlays (subtitles only).
 
 - Per-scene burn-in pipeline:
   - `title-card`: a GRAPHIC OVERLAY (`title` type in `scenes[].overlays[]`), rendered by `tools/overlays.py` (see `## Overlays`), NOT a subtitle. 4 lines: "What if..." / character name / "Becomes a" / role. No audio → anullsrc. MANDATORY.
-  - `dialogue-offscreen`: scale → amix(Avatar audio, customer.mp3). Обе реплики (character + off-screen customer) попадают в `voice-final.wav` и субтитруются ОДНИМ универсальным стилем — отдельного Customer-стиля больше нет. Бёрн — общий `build/subs.ass` (editor.md §6).
+  - `dialogue-offscreen`: scale → amix(Avatar audio, customer.mp3). Both lines (character + off-screen customer) go into `voice-final.wav` and are subtitled in ONE universal style — there is no separate Customer style anymore. Burn — the shared `build/subs.ass` (editor.md §6).
   - `dialogue-on-screen`: assemble shot-reverse-shot cuts → burn ASS.
   - `monologue` / `inner-thought`: silent I2V → overlay TTS (scene-K.mp3) via amix → burn ASS with Default style timed from 0:00:00.00.
   - `physical-gag`: I2V with Kling SFX baked → keep audio → no subtitles.
@@ -306,8 +306,8 @@ output/YYYY-MM-DD/{GAME_TAG}/what-if-real-life/
 - ❌ Two vignettes with the same gag mechanic (two "absurd customer order" gags, two "boss screams at toddlers" gags)
 - ❌ Calling Avatar v2 with non-padded audio when the gag needs customer-first rhythm
 - ❌ Forgetting to mix off-screen / narrator VO into the final audio (RMS check catches it)
-- ❌ Маскировать CJK-артефакт боксом субтитра/drawbox — маска удалена; чинить усиленным negative_prompt
-- ❌ Трогать MarginV субтитров — позиция фиксирована универсальным стилем (editor.md §6)
+- ❌ Masking the CJK artifact with a subtitle box/drawbox — the mask is removed; fix it with the hardened negative_prompt
+- ❌ Touching the subtitle MarginV — the position is fixed by the universal style (editor.md §6)
 - ❌ Music from `Dark/` or `Drama/` — mood mismatch
 - ❌ Skipping the 1.18× speedup step
 - ❌ Burning ASS subtitles with stock ffmpeg (lacks libass — subtitles silently dropped)
