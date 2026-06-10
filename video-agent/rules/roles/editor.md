@@ -240,6 +240,24 @@ There is **no quality reason** to prefer multi-stage. Every multi-stage run = N 
 
 I2V (Kling) is 24fps, Avatar (Kling Avatar) is 30fps → normalize EVERYTHING to 30fps.
 
+**CRITICAL — concat.txt requires ABSOLUTE paths.** The `-f concat` demuxer resolves `file` entries relative to the concat.txt location, not the ffmpeg cwd. If you write `file 'norm-1.mp4'` and run ffmpeg from a different directory, it silently fails (exit 137, OOM kill, or "No such file"). Always write absolute paths:
+
+```bash
+# Правильно — абсолютные пути:
+cat > "$B/concat.txt" << EOF
+file '$B/norm-1.mp4'
+file '$B/norm-2.mp4'
+EOF
+
+# Неправильно — relative paths вызывают exit 137:
+cat > build/concat.txt << 'EOF'
+file 'norm-1.mp4'
+file 'norm-2.mp4'
+EOF
+```
+
+**CRITICAL — filter_complex stream indices.** Когда передаёшь N входных файлов в ffmpeg, каждый `-i` получает свой индекс [0], [1], [2]... Если все клипы нормализованы и конкатенированы в один `concat-base.mp4`, то в финальном проходе overlay-оверлеи — ТОЛЬКО ОДИН видеовход `[0:v]`. Не смешивай: отдельные клипы как входы → filter_complex с concat; уже склеенный base → только overlays + subtitles.
+
 ### 1.0a Avatar silence trim — BEFORE concat
 
 Avatar clips render to exactly TTS duration, but may contain a silent tail (Avatar MP4 container is slightly longer than the speech). Trim **both video AND audio** before feeding into concat:

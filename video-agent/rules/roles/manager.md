@@ -173,6 +173,8 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
 
 **Output:** `final.mp4` (1080×1920).
 
+**MANDATORY — show user Supabase URL before Phase 5.** After Editor uploads `final.mp4` to Supabase, STOP and show the user the public URL. Wait for explicit OK before proceeding to YouTube upload, git push, and `log-video.sh`. This applies in BOTH debug and non-debug mode. "Non-debug: no questions" applies only to the YouTube upload channel/privacy — not to the user review gate. Lesson burned EP10 (2026-06-09): pushed git and logged before user watched → had to redo voices and rebuild 3 times.
+
 ### PHASE 5 — Upload and logging
 
 1. Upload `final.mp4` to Supabase Storage:
