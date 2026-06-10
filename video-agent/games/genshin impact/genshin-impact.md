@@ -259,3 +259,14 @@ Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, so
 - **Mood:** ethereal, epic, emotional
 - **BPM:** 90-130
 - **Рекомендуемые треки из tracks.json:** epic-orchestral, ethereal-ambient, emotional-drama
+
+## Overlay brand
+
+Brand styling for graphic overlays (consumed by the scenarist when filling `overlays[]`; layout comes from the format's `## Overlays` section).
+
+- font_display: BEBAS        # titles, rank numbers, slogans, names, outcome plates
+- font_label: MED            # small text: hud counter, disclaimer, hook plate
+- text_color: "#FFFFFF"
+- accent_color: "#F5D060"    # amber-gold stroke/accent on display overlays (matches resin icon)
+- stroke_width: 6
+- channel_bug_url:           # none

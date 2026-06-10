@@ -107,3 +107,14 @@ Roblox-inspired Pixar-style 3D animation, blocky stylized characters, smooth pla
 - **Текст:** "TOP UP YOUR BALANCE · VIA LINK IN BIO"
 - **Формат:** 720×1280, 30fps, ~5s — idle animation, Roblox cubes floating
 - **Использование:** Editor скачивает, нормализует (scale+pad 1080×1920+30fps+AAC), конкатенирует в конец после всех сцен
+
+## Overlay brand
+
+Brand styling for graphic overlays (consumed by the scenarist when filling `overlays[]`; layout comes from the format's `## Overlays` section).
+
+- font_display: BEBAS        # titles, rank numbers, slogans, names, outcome plates
+- font_label: MED            # small text: hud counter, disclaimer, hook plate
+- text_color: "#FFFFFF"
+- accent_color: "#FFD700"    # neon-yellow stroke/accent on display overlays
+- stroke_width: 6
+- channel_bug_url:           # none

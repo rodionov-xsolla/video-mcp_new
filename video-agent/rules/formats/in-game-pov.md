@@ -5,8 +5,6 @@ overlays: true
 
 # Format "In-Game POV" — you are dropped into a lore/gameplay situation, first person, survive or die
 
-<!-- HUD-оверлеи (`SURVIVAL: X%` счётчик, title-card оверлей, outcome-плашка) — это НЕ субтитры, а graphic overlays. Их рисует `tools/overlays.py` из `scenes[].overlays[]` (типы `title`, `hud_counter`, `outcome_plate`) per-scene ДО concat (editor.md §6.5). НЕ запекаются в NB2. Субтитры — единый универсальный стиль (editor.md §6). -->
-
 The viewer **is** the protagonist. A pure environmental first-person camera drops them into a specific situation from the game's lore (a famous battle, a canon event) or from its gameplay (a clutch firefight, a raid wipe). The video opens with a **game-styled title card** (situation name + survival %) that establishes the stakes before the first POV scene. A second-person narrator — a tense tactical instructor — then walks through what to do to survive. It plays as a **survival manual**: situation → threats → moves → outcome. But following the manual does not guarantee life — the story can end in death. The signature gimmick is a **live survival-% HUD counter** that moves across the clips and resolves on the final outcome plate.
 
 This file is the **playbook**: when to use, concept, budget, role briefs. Craft rules (NB2 chain, Kling I2V, TTS, ffmpeg) — in `rules/roles/*.md`.
@@ -57,20 +55,24 @@ The answer is passed to Scenarist as `OUTCOME` and locked into `storyboard.json 
 
 ---
 
-## Survival HUD (the signature element)
+## Overlays
 
-Two overlay layers, отрисовываются `tools/overlays.py` из `clips[].overlays[]` (сценарист заполняет) **per-scene before concat**. **None of these are ever baked into NB2** — NB2 `negative_prompt` must forbid on-screen text/HUD/numbers.
+Graphic overlays (NOT subtitles) — rendered by `tools/overlays.py` from `clips[].overlays[]`,
+per-scene before concat. **LAYOUT (type/position/size/timing) is defined here; font/color/stroke come
+from `games/{tag}/{tag}.md` → `## Overlay brand` (font role → brand font).** Never bake into NB2 —
+`negative_prompt` must forbid on-screen text/HUD/numbers. Schema: `rules/roles/scenarist.md`.
 
-| Layer | Where | Source field | When |
-|---|---|---|---|
-| **Persistent counter** | Top-right corner, y≈80, right-aligned, small (fs~52), monospace look | `survival_pct` (int 0–100) per shot → `hud_counter.text` | every POV clip (scenes 1–N), full duration. NOT on title card. |
-| **Outcome plate** | Center, large (fs~110) | `outcome_plate` (`YOU SURVIVED` green / `YOU DIED` red) — always EN | final POV clip, fade in over last 1.5s |
+| # | type | position | size | enable | font role | text source |
+|---|------|----------|------|--------|-----------|-------------|
+| 1 | `title` | `(w-text_w)/2,680` (+`\n` → y840) | 130 | whole title-card clip | display | situation name (2 lines) |
+| 2 | `title` (hook) | `(w-text_w)/2,1030` | 60 | whole title-card clip | label (accent color) | `"SURVIVAL CHANCE: N%"` |
+| 3 | `hud_counter` | `top-right` | 52 | shot window `[t0,t1]` | label | `"SURVIVAL N%"`, N = shot `survival_pct` |
+| 4 | `outcome_plate` | `center` | 110 | `["gte", clip_dur-1.5]`, fade_in 0.4 | display | `YOU SURVIVED`/`YOU DIED` (always EN) |
 
-Counter behaviour: starts at the value stated in the title card, and **moves with the narration** — up when the narrator's step succeeds, down when a new threat hits. It must reach a value consistent with the locked `outcome` on the last non-CTA scene (`survive` → ends high like 71%; `death` → ends at `0%`). Scenarist кладёт значения в `hud_counter` overlay'и (с enable-окнами по shot'ам); overlays.py рендерит.
-
-Layout safety: HUD counter lives in the **top-right**, outcome plate in the **center**, narrator subtitles — единый универсальный стиль внизу (MarginV 520, editor.md §6). No collision (HUD top-right, outcome center, subs bottom).
-
-**Title card HUD (scene 0 only):** Editor draws the situation title + survival % via drawtext directly on the title card image (see Editor brief for exact spec). These are separate from the per-scene counter.
+- The counter **moves with the narration**: starts at the title-card value, up on a successful step,
+  down on a new threat, lands on the locked `outcome` on the last scene (`survive`→71%, `death`→0%).
+  One `hud_counter` per shot with its `enable` window (5s: [0,5]/[5,10]/[10,15]).
+- Subtitle band (universal MarginV 520, y≈1256–1400) stays clear: HUD top-right, outcome center.
 
 ---
 
@@ -158,11 +160,11 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
   - `survival_pct` — integer 0–100. Starts at the hook value matching `hook_plate`, moves per narration step, lands at 0 (`death`) or 60–85 (`survive`) on the final shot.
   - `tts_segment` — 10–15 word narration fragment. Second person, present tense, imperative.
   - `action_description` — what the viewer sees and feels from first person. Three layers: camera movement + environment reaction + atmospheric element. No hands, no body, no weapon barrels.
-- **Графические оверлеи → `clips[].overlays[]`** (рисует `tools/overlays.py`, НЕ субтитры — см. схему overlays[] в `rules/roles/scenarist.md`):
-  - **Title card (call 0):** два `title`-оверлея — название ситуации (fs130, 2 строки через `\n`, y680/840) + hook_plate `"SURVIVAL CHANCE: N%"` (fs60 red, y1030). `action_description` — wide cinematic, NOT POV. Нет `tts_segment`.
-  - **POV call:** по одному `hud_counter` на каждый shot — `text:"SURVIVAL N%"`, top-right, `enable:[t0,t1]` (5-сек окно shot'а внутри call-файла: shot 0 → [0,5], shot 1 → [5,10], shot 2 → [10,15]). N = `survival_pct` этого shot'а.
-  - **Final POV call:** добавь `outcome_plate` (`"YOU SURVIVED"` green / `"YOU DIED"` red — всегда EN), center, `enable:["gte", call_dur-1.5]`, fade_in 0.4.
-  - `survival_pct` в shots оставляешь (нарративная логика арки); значения дублируешь в `hud_counter.text`.
+- **Graphic overlays → `clips[].overlays[]`** (rendered by `tools/overlays.py`, NOT subtitles — layout in the `## Overlays` section above, schema in `rules/roles/scenarist.md`; font/color/stroke from game `## Overlay brand`):
+  - **Title card (call 0):** two `title` overlays — situation name (size 130, 2 lines via `\n`, y680/840) + hook plate `"SURVIVAL CHANCE: N%"` (size 60, label role, y1030). `action_description` = wide cinematic, NOT POV. No `tts_segment`.
+  - **POV call:** one `hud_counter` per shot — `text:"SURVIVAL N%"`, top-right, `enable:[t0,t1]` (5s shot window inside the call file: shot 0 → [0,5], shot 1 → [5,10], shot 2 → [10,15]). N = that shot's `survival_pct`.
+  - **Final POV call:** add `outcome_plate` (`"YOU SURVIVED"` green / `"YOU DIED"` red — always EN), center, `enable:["gte", call_dur-1.5]`, fade_in 0.4.
+  - Keep `survival_pct` in shots (arc logic); mirror the value into `hud_counter.text`.
 - **`elements[]` per POV call:** if a significant entity (boss, monster part, enemy group) enters a specific shot, list it in the call's `elements[]` array with a `slug` and `description`. Storyboarder will generate refs; Animator wires them via `@Element1` in the shot prompt.
 - **Narrator starts on shot 0 of call 1** (after title card). First `tts_segment` opens: "Ты оказался…". All `tts_segment` values concatenated in index order → `tts.full_text`.
 - **No character-face ref. No prop/vehicle ref** unless absolutely required for continuity.

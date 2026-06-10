@@ -109,18 +109,20 @@ Scene 4 is always the packshot. Specific rules:
 - `generate_audio: false`
 - `negative_prompt`: `"on-screen text, captions, character, hands, walking, warped logo"`
 
-### Editor overlays for packshot
+## Overlays
 
-**Slogan is MANDATORY on every fake-ad packshot.** A packshot without a slogan is not this format — it's just a product shot. The slogan is the final punchline delivery. Never ship without it.
+Graphic overlays (NOT subtitles) — rendered by `tools/overlays.py` from `overlays[]` of scene 4
+(packshot), before concat. **LAYOUT here; font/color/stroke from `games/{tag}/{tag}.md` →
+`## Overlay brand`.** Never bake into NB2. Schema: `rules/roles/scenarist.md`.
 
-Два графических оверлея на сцене 4 — в `overlays[]` этой сцены (рисует `tools/overlays.py`,
-editor.md §6.5; НЕ субтитры):
+**Slogan is MANDATORY on every fake-ad packshot.** A packshot without a slogan is just a product shot — never ship without it.
 
-| Overlay (тип) | Position | Style | Content |
-|---|---|---|---|
-| `slogan` (main) | center @ y=1300 | `BEBAS` ~110px, white + 6px black stroke, fade_in 0.3 | `\n`-двустрочный слоган |
-| `disclaimer` (legal humor) | bottom @ y=1800 | `MED` 28px, white, opacity 0.6 | юмор-дисклеймер |
+| # | type | position | size | enable | font role | text source |
+|---|------|----------|------|--------|-----------|-------------|
+| 1 | `slogan` | `(w-text_w)/2,1300` | 110 | whole clip, fade_in 0.3 | display | `\n` two-line slogan |
+| 2 | `disclaimer` | `(w-text_w)/2,1800` | 28 | whole clip | label (opacity 0.6) | legal-humor line |
 
+Example (brand fields from game config):
 ```json
 "overlays": [
   {"type":"slogan","text":"DOESN'T GUARANTEE SKILL.\nJUST CONFIDENCE.","position":"(w-text_w)/2,1300","font":"BEBAS","size":110,"color":"white","stroke":{"color":"black","width":6},"fade_in":0.3},
@@ -141,8 +143,8 @@ Example: `"RESIN ENERGY.\nDOESN'T RESTORE RESIN. HELPS YOU OUTLIVE THE WAIT."`
 
 - **Line 1:** Product name in caps — anchors the brand
 - **Line 2:** The tagline — the official acknowledgement that the product is absurd/useless
-- Use `\n` as the line break — `overlays.py` стопкой рисует строки слогана
-- Scenarist кладёт `slogan` и `disclaimer` в `overlays[]` сцены 4 (типы `slogan`/`disclaimer`). Если оверлеев нет — Scenarist re-run.
+- Use `\n` as the line break — `overlays.py` stacks the slogan lines
+- Scenarist puts `slogan` and `disclaimer` into scene 4 `overlays[]` (types `slogan`/`disclaimer`). If missing — Scenarist re-run.
 
 ---
 

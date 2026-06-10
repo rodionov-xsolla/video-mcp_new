@@ -152,38 +152,40 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
 - **Kling Avatar v2** (lipsync ElevenLabs TTS): `character_speech` = null; `tts` = text for ElevenLabs
 - **Kling I2V** (no voice): both null
 
-### `subtitle_emphasis` — БОЛЬШЕ НЕ ИСПОЛЬЗУЕТСЯ
+### `subtitle_emphasis` — NO LONGER USED
 
-Субтитры теперь единого универсального стиля во всех форматах (плоский белый CAPS, чанки по 4
-слова, тайминги по whisper — Editor генерит их сам по реальной речи, см. `rules/roles/editor.md` §6).
-Никакого жёлтого/italic-акцента и стилевых переопределений сценарист не задаёт. Поле можно не
-заполнять — оно игнорируется. Качество субтитра целиком зависит от текста `tts`, который ты пишешь.
+Subtitles are one universal style across all formats (flat white CAPS, 4-word chunks, whisper-timed —
+Editor generates them from the real speech, see `rules/roles/editor.md` §6). The scenarist sets no
+emphasis/italic/style overrides. Leave the field empty — it is ignored. Subtitle quality depends
+entirely on the `tts` text you write.
 
-### `overlays` — графические оверлеи (ТОЛЬКО для overlay-форматов)
+### `overlays[]` — graphic overlays (overlay-formats only)
 
-Для форматов с `overlays: true` во front-matter (top-list, in-game-pov, fake-ad, what-if-real-life)
-сценарист заполняет per-scene массив `overlays[]` — это ФИРМЕННАЯ ГРАФИКА (название серии, %
-выживания, номер топа, слоган), НЕ субтитры. Её рисует `tools/overlays.py`. Схема:
+For formats with `overlays: true` in front-matter (top-list, in-game-pov, fake-ad, what-if-real-life)
+the scenarist fills a per-scene `overlays[]` array — branded GRAPHICS (series title, survival %, rank
+number, slogan), NOT subtitles. Rendered by `tools/overlays.py`.
 
+**Split of responsibility:** the format's `## Overlays` section defines LAYOUT (type / position / size /
+`enable` timing / font role). Font, color and stroke are BRAND — read them from
+`games/{tag}/{tag}.md` (or `{format}_special.md`) → `## Overlay brand` and write the concrete values
+into each overlay object. Block fields: `font_display` (display role), `font_label` (label role),
+optional `font_name`, `text_color`, `accent_color` (stroke/accent on display), `stroke_width`,
+`channel_bug_url`. If the game has no `## Overlay brand`, fall back to font `IMPACT`, white text,
+black stroke width 4.
+
+Object schema:
 ```json
-"overlays": [
-  { "type": "title", "text": "OSIAL\nRISES", "position": "top-center",
-    "font": "ULT", "size": 130, "color": "white",
-    "stroke": {"color": "black", "width": 4}, "enable": [0.0, 5.0] },
-  { "type": "hud_counter", "text": "SURVIVAL 15%", "position": "top-right",
-    "font": "ARI", "size": 52, "color": "white",
-    "stroke": {"color":"black","width":4}, "enable": [0, 5] },
-  { "type": "outcome_plate", "text": "YOU DIED", "position": "center",
-    "font": "TRJ", "size": 110, "color": "red",
-    "stroke": {"color":"black","width":5}, "enable": ["gte", 13.5], "fade_in": 0.4 }
-]
+{ "type": "title|hud_counter|outcome_plate|rank_number|item_name|slogan|disclaimer",
+  "text": "OSIAL\nRISES",            // \n → stacked lines
+  "position": "center|top-left|top-right|top-center|bottom-center|\"x,y\"",
+  "size": 130,                        // px, from the format LAYOUT
+  "font": "<brand font key from game config>",     // FONTS key or absolute path
+  "color": "<brand text color>", "stroke": {"color": "<brand>", "width": 4},
+  "enable": [0.0, 5.0],               // [t0,t1]→between; ["gte",13.5]; omit = whole clip (t is clip-local)
+  "fade_in": 0.3, "opacity": 1.0, "line_gap": 160 }   // optional
 ```
-
-Типы: `title` (название серии/title card), `hud_counter` (% выживания — отдельный объект на каждый
-интервал `enable`), `outcome_plate` (YOU DIED/SURVIVED), `rank_number` (#5..#1), `item_name`,
-`slogan`, `disclaimer`. Позиции: `center|top-left|top-right|bottom-center|top-center` или `"x,y"`.
-Шрифты — логические ключи (`ULT|TRJ|MED|ARI|IMPACT|MONT_BLACK|BEBAS`). Для форматов с
-`overlays: false` массив не нужен.
+Font keys known to `tools/overlays.py`: `ULT|TRJ|MED|ARI|IMPACT|MONT_BLACK|BEBAS` (or an absolute path).
+Formats with `overlays: false` need no array.
 
 ### `clip_type`
 - `action` — I2V clip (no dialogue, micro motion)
