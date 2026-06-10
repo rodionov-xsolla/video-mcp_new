@@ -1,9 +1,6 @@
 ---
-subtitle_style: none
-subtitle_offset_s: 0
-subtitle_mask: false
-subtitle_highlight: false
-subtitle_extras: []
+subtitles: false
+overlays: false
 ---
 
 # Format "Dual-Style" — cartoon + realistic

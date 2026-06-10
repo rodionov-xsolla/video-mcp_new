@@ -1,3 +1,8 @@
+---
+subtitles: true
+overlays: false
+---
+
 # Format "Wild Documentary" — game creatures filmed as real wildlife, narrated by an elderly naturalist
 
 A short-form nature documentary where iconic game creatures are portrayed as real animals discovered in their natural habitat. Hidden-camera footage aesthetic: shaky handheld, telephoto lens, found footage grain. An elderly male naturalist (David Attenborough register) provides hushed, awe-filled VO over each clip. No lipsync, no dialogue — just ambient sound, creature behavior, and the narrator quietly observing. Ends with the last creature holding a white sign in its mouth/paw (in-scene CTA hook).
@@ -240,29 +245,14 @@ ATEMPO=$(python3 -c "print(round($TTS_DUR/$VID_DUR, 3))")
 ffmpeg -y -i tts-narration.mp3 -af "atempo=$ATEMPO" build/tts-fast.mp3
 ```
 
-**Pass 2 — subtitles (via ffmpeg-full):**
-```bash
-FF_FULL=/usr/local/bin/ffmpeg-full/ffmpeg   # required — local ffmpeg lacks libfreetype
-
-# Generate ASS with the SAME atempo used on the TTS
-python3 tools/add_subtitles.py \
-  build/concat_audio.mp4 tts-narration.mp3 build/subs.ass \
-  --emit-ass-only --style narrative --atempo $ATEMPO \
-  --text "{tts.full_text from storyboard.json, pause tags stripped}"
-
-# Burn subtitles
-$FF_FULL -y -i build/concat_audio.mp4 \
-  -vf "ass=build/subs.ass" \
-  -c:v libx264 -preset slow -crf 20 -pix_fmt yuv420p -c:a copy \
-  build/final.tmp.mp4
-# validate, then mv to final.mp4
-```
+**Pass 2 — subtitles:** единый универсальный путь, см. `rules/roles/editor.md` §6. Editor собирает
+`build/voice-final.wav` из непрерывной наррации (уже после `atempo`), гоняет whisper, бёрнит
+универсальный ASS. Никаких `--style`/`--text`/`--atempo` — тайминги корректны по построению.
 
 **Key rules:**
 - **No speedup** on video (`setpts` NOT applied) — documentary pace is deliberate.
 - **No drawtext sign text overlay** — the sign exists only in the visual (NB2/Kling). Never burn "follow for more" or any CTA text as a drawtext/subtitle overlay.
-- **Subtitles use `narrative` style** (`tools/add_subtitles.py --style narrative`).
-- **ASS must be generated with the same `--atempo` as the TTS** — otherwise subtitles drift.
+- **Subtitles — универсальный стиль**, генерятся Editor'ом по whisper (editor.md §6). Single-voice: `voice-final.wav` = TTS после atempo.
 - **Concat order:** creature clips in storyboard index order. No standard CTA clip appended (Pokemon GO has no CTA in Supabase — CTA is entirely in-scene via clip 4).
 - bg-music: SKIP unless `music` block present in storyboard.json.
 - General rules — `rules/roles/editor.md`
@@ -303,7 +293,7 @@ output/YYYY-MM-DD/{GAME_TAG}/wild-documentary/
 - [ ] Kling ambient audio attenuated to vol 0.20 in final mix
 - [ ] TTS narration continuous (not cut per-clip), audible — RMS > -30 dB
 - [ ] `atempo` applied to TTS: `TTS_DUR / VID_DUR` in range 0.95–1.10
-- [ ] ASS subtitles generated with same `--atempo` as TTS (`--style narrative`)
+- [ ] ASS subtitles — универсальный стиль по whisper (editor.md §6), текст совпадает с наррацией
 - [ ] No drawtext "follow for more" or any sign text overlay burned on video
 - [ ] No speedup on video — `ffprobe duration` ≈ sum of clip durations
 - [ ] No two adjacent clips with same camera distance AND same lighting
@@ -319,7 +309,7 @@ output/YYYY-MM-DD/{GAME_TAG}/wild-documentary/
 - ❌ `generate_audio: false` — ambient sounds are the atmosphere; silence kills the format
 - ❌ Cutting TTS per-clip — severs words at clip boundaries; use ONE continuous TTS over full concat
 - ❌ Skipping atempo normalization — TTS duration ≠ video duration; without atempo the narration is cut or runs long
-- ❌ Generating ASS without `--atempo` flag — subtitles drift vs actual speech
+- ❌ Ручная генерация ASS с `--text`/`--atempo`/`--style` — флаги удалены; Editor делает универсально по whisper
 - ❌ Using local ffmpeg (`/usr/local/bin/ffmpeg`) for subtitle burn — it lacks libfreetype; use `ffmpeg-full`
 - ❌ Burning "follow for more" or any sign text as drawtext/subtitle overlay — breaks documentary immersion
 - ❌ Trying to get Kling to render readable sign text — unreliable; text belongs in NB2 image_prompt

@@ -1,14 +1,11 @@
 ---
-subtitle_style: narrative
-subtitle_offset_s: 0
-subtitle_mask: false
-subtitle_highlight: false
-subtitle_extras: []
+subtitles: true
+overlays: true
 ---
 
 # Format "In-Game POV" — you are dropped into a lore/gameplay situation, first person, survive or die
 
-<!-- HUD-оверлеи (`SURVIVAL: X%` счётчик, title-card оверлей, outcome-плашка) — это НЕ субтитры, а graphic overlays формата. Их рисует Editor через drawtext (ffmpeg-full, libfreetype) per-scene ДО concat. Они НЕ запекаются в NB2. subtitle_style=narrative относится только к нарраторским сабам. SUBTITLE_OFFSET_S = duration_sec title-card клипа (выставляет Manager). -->
+<!-- HUD-оверлеи (`SURVIVAL: X%` счётчик, title-card оверлей, outcome-плашка) — это НЕ субтитры, а graphic overlays. Их рисует `tools/overlays.py` из `scenes[].overlays[]` (типы `title`, `hud_counter`, `outcome_plate`) per-scene ДО concat (editor.md §6.5). НЕ запекаются в NB2. Субтитры — единый универсальный стиль (editor.md §6). -->
 
 The viewer **is** the protagonist. A pure environmental first-person camera drops them into a specific situation from the game's lore (a famous battle, a canon event) or from its gameplay (a clutch firefight, a raid wipe). The video opens with a **game-styled title card** (situation name + survival %) that establishes the stakes before the first POV scene. A second-person narrator — a tense tactical instructor — then walks through what to do to survive. It plays as a **survival manual**: situation → threats → moves → outcome. But following the manual does not guarantee life — the story can end in death. The signature gimmick is a **live survival-% HUD counter** that moves across the clips and resolves on the final outcome plate.
 
@@ -62,16 +59,16 @@ The answer is passed to Scenarist as `OUTCOME` and locked into `storyboard.json 
 
 ## Survival HUD (the signature element)
 
-Two overlay layers, drawn by Editor via `drawtext` (ffmpeg-full) **per-scene before concat**, values read from storyboard fields. **None of these are ever baked into NB2** — NB2 `negative_prompt` must forbid on-screen text/HUD/numbers.
+Two overlay layers, отрисовываются `tools/overlays.py` из `clips[].overlays[]` (сценарист заполняет) **per-scene before concat**. **None of these are ever baked into NB2** — NB2 `negative_prompt` must forbid on-screen text/HUD/numbers.
 
 | Layer | Where | Source field | When |
 |---|---|---|---|
-| **Persistent counter** | Top-right corner, y≈80, right-aligned, small (fs~52), monospace look | `survival_pct` (int 0–100) per scene | every POV clip (scenes 1–N), full duration. NOT on title card. |
+| **Persistent counter** | Top-right corner, y≈80, right-aligned, small (fs~52), monospace look | `survival_pct` (int 0–100) per shot → `hud_counter.text` | every POV clip (scenes 1–N), full duration. NOT on title card. |
 | **Outcome plate** | Center, large (fs~110) | `outcome_plate` (`YOU SURVIVED` green / `YOU DIED` red) — always EN | final POV clip, fade in over last 1.5s |
 
-Counter behaviour: starts at the value stated in the title card, and **moves with the narration** — up when the narrator's step succeeds, down when a new threat hits. It must reach a value consistent with the locked `outcome` on the last non-CTA scene (`survive` → ends high like 71%; `death` → ends at `0%`). Scenarist sets `survival_pct` per clip; Editor just renders it.
+Counter behaviour: starts at the value stated in the title card, and **moves with the narration** — up when the narrator's step succeeds, down when a new threat hits. It must reach a value consistent with the locked `outcome` on the last non-CTA scene (`survive` → ends high like 71%; `death` → ends at `0%`). Scenarist кладёт значения в `hud_counter` overlay'и (с enable-окнами по shot'ам); overlays.py рендерит.
 
-Layout safety: HUD counter lives in the **top-right**, outcome plate in the **center**, narrator subtitles in the **lower third** (narrative MarginV 420). No collision.
+Layout safety: HUD counter lives in the **top-right**, outcome plate in the **center**, narrator subtitles — единый универсальный стиль внизу (MarginV 520, editor.md §6). No collision (HUD top-right, outcome center, subs bottom).
 
 **Title card HUD (scene 0 only):** Editor draws the situation title + survival % via drawtext directly on the title card image (see Editor brief for exact spec). These are separate from the per-scene counter.
 
@@ -161,8 +158,11 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
   - `survival_pct` — integer 0–100. Starts at the hook value matching `hook_plate`, moves per narration step, lands at 0 (`death`) or 60–85 (`survive`) on the final shot.
   - `tts_segment` — 10–15 word narration fragment. Second person, present tense, imperative.
   - `action_description` — what the viewer sees and feels from first person. Three layers: camera movement + environment reaction + atmospheric element. No hands, no body, no weapon barrels.
-- **Title card (call 0):** top-level fields only (no `shots[]`). Set `title_card_text` (situation name), `hook_plate` (e.g. `"SURVIVAL CHANCE: 5%"`), `action_description` (wide cinematic, NOT first-person POV). No `tts_segment`, no `survival_pct`.
-- **Final POV shot:** add `outcome_plate` (`"YOU SURVIVED"` green / `"YOU DIED"` red — always EN, regardless of video language).
+- **Графические оверлеи → `clips[].overlays[]`** (рисует `tools/overlays.py`, НЕ субтитры — см. схему overlays[] в `rules/roles/scenarist.md`):
+  - **Title card (call 0):** два `title`-оверлея — название ситуации (fs130, 2 строки через `\n`, y680/840) + hook_plate `"SURVIVAL CHANCE: N%"` (fs60 red, y1030). `action_description` — wide cinematic, NOT POV. Нет `tts_segment`.
+  - **POV call:** по одному `hud_counter` на каждый shot — `text:"SURVIVAL N%"`, top-right, `enable:[t0,t1]` (5-сек окно shot'а внутри call-файла: shot 0 → [0,5], shot 1 → [5,10], shot 2 → [10,15]). N = `survival_pct` этого shot'а.
+  - **Final POV call:** добавь `outcome_plate` (`"YOU SURVIVED"` green / `"YOU DIED"` red — всегда EN), center, `enable:["gte", call_dur-1.5]`, fade_in 0.4.
+  - `survival_pct` в shots оставляешь (нарративная логика арки); значения дублируешь в `hud_counter.text`.
 - **`elements[]` per POV call:** if a significant entity (boss, monster part, enemy group) enters a specific shot, list it in the call's `elements[]` array with a `slug` and `description`. Storyboarder will generate refs; Animator wires them via `@Element1` in the shot prompt.
 - **Narrator starts on shot 0 of call 1** (after title card). First `tts_segment` opens: "Ты оказался…". All `tts_segment` values concatenated in index order → `tts.full_text`.
 - **No character-face ref. No prop/vehicle ref** unless absolutely required for continuity.
@@ -191,9 +191,11 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
       "call_type": "title_card",
       "duration_total": "5",
       "anchor_image": "scene-anchor-0.png",
-      "title_card_text": "OSIAL RISES",
-      "hook_plate": "SURVIVAL CHANCE: 5%",
       "location": "Liyue Harbor — sea exterior",
+      "overlays": [
+        {"type":"title","text":"OSIAL\nRISES","position":"(w-text_w)/2,680","font":"ULT","size":130,"color":"white","stroke":{"color":"black","width":4},"line_gap":160},
+        {"type":"title","text":"SURVIVAL CHANCE: 5%","position":"(w-text_w)/2,1030","font":"MED","size":60,"color":"red"}
+      ],
       "action_description": "Wide cinematic: Osial tentacles towering over Liyue Harbor, ships capsizing, distant explosions, massive wave forming"
     },
     {
@@ -208,6 +210,11 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
           "frontal_image_url": "{supabase url — filled by Storyboarder}",
           "reference_image_urls": ["{supabase url side angle}"]
         }
+      ],
+      "overlays": [
+        {"type":"hud_counter","text":"SURVIVAL 5%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4},"enable":[0,5]},
+        {"type":"hud_counter","text":"SURVIVAL 5%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4},"enable":[5,10]},
+        {"type":"hud_counter","text":"SURVIVAL 15%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4},"enable":[10,15]}
       ],
       "shots": [
         {
@@ -242,6 +249,12 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
       "duration_total": "15",
       "anchor_image": "bridge-frame-1.png",
       "elements": [],
+      "overlays": [
+        {"type":"hud_counter","text":"SURVIVAL 25%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4},"enable":[0,5]},
+        {"type":"hud_counter","text":"SURVIVAL 10%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4},"enable":[5,10]},
+        {"type":"hud_counter","text":"SURVIVAL 0%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4},"enable":[10,15]},
+        {"type":"outcome_plate","text":"YOU DIED","position":"center","font":"TRJ","size":110,"color":"red","stroke":{"color":"black","width":5},"enable":["gte",13.5],"fade_in":0.4}
+      ],
       "shots": [
         {
           "index": 3, "duration": "5",
@@ -264,7 +277,6 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
           "type": "outcome",
           "location": "seawall — wave impact",
           "survival_pct": 0,
-          "outcome_plate": "YOU DIED",
           "tts_segment": "Ты не успел.",
           "action_description": "Massive wave crashes over seawall, camera tumbles in churning whitewater, vision darkens to black"
         }
@@ -358,11 +370,8 @@ Polling: base `fal-ai/kling-video`, every 15s, max 10 min. General rules — `ru
   - `voice` = name string (Daniel/George/Adam), NOT voice_id. One voice for the whole video.
   - Generate narration from `tts.full_text` (which covers clips 1–N only — title card has no TTS). One request, one mp3.
   - Save → upload to Supabase.
-- **Subtitles:** ASS via `tools/add_subtitles.py`, run ONCE on the full `tts-output.mp3` against the picture-only concat.
-  - Args: `--style narrative --chunk 4 --marginv 420 --lang {lang} --no-scale`. Pass `--text` with the narration text.
-  - `--offset` = title card duration in seconds (so subs align to when TTS actually starts in the concat).
-  - Add `--atempo N` if Editor sped up the narration.
-- **Speed control:** if TTS duration > POV-clips timeline, Editor applies `atempo` (cap 1.4×); pass the same `--atempo` to the subtitle script. If mismatch > 40% → back to Scenarist to shorten.
+- **Subtitles:** НЕ задача Sound. Единый универсальный стиль, генерит Editor по whisper из `build/voice-final.wav` (см. `rules/roles/editor.md` §6). Никаких `--style`/`--chunk`/`--text`/`--offset`/`--atempo`.
+- **Speed control:** if TTS duration > POV-clips timeline, Editor applies `atempo` (cap 1.4×). Субтитры считаются по уже ускоренной речи — пересчитывать ничего не надо. If mismatch > 40% → back to Scenarist to shorten.
 - **Music:** mood `tense`/`drama` from `music/tracks.json`, `volume` from storyboard (default 0.12). Never `Fun/`. Music starts from t=0 (over the title card and through the whole video).
 - General rules — `rules/roles/sound.md`.
 
@@ -370,62 +379,20 @@ Polling: base `fal-ai/kling-video`, every 15s, max 10 min. General rules — `ru
 
 Three-stage assembly (HUD drawtext per-call-file before concat, then subtitles, then final audio mix).
 
-**Stage 0 — HUD overlays (per-call-file, BEFORE concat, ffmpeg-full / libfreetype):**
-- Use `$FFMPEG = /usr/local/bin/ffmpeg-full/ffmpeg` (drawtext needs libfreetype).
-- **3 input files from Animator:** `call-0.mp4` (5s title card), `call-1.mp4` (15s POV shots 0–2), `call-2.mp4` (15s POV shots 3–5).
-- **`call-0.mp4` — title card HUD:** draw **three** text layers centered, all via `textfile=`:
-  - Line 1 — first half of `title_card_text` (e.g. `"OSIAL"`): `fontfile=FONT_ULT:fontsize=130:fontcolor=white:x=(w-text_w)/2:y=680`
-  - Line 2 — second half of `title_card_text` (e.g. `"RISES"`): `fontfile=FONT_ULT:fontsize=130:fontcolor=white:x=(w-text_w)/2:y=840`
-  - Line 3 — `hook_plate`: `fontfile=FONT_MED:fontsize=60:fontcolor=red:x=(w-text_w)/2:y=1030:expansion=none`
-  - No `survival_pct` counter on the title card.
-- **`call-1.mp4` and `call-2.mp4` — POV HUD:** each file covers multiple shots with **different `survival_pct` per shot**. Use **time-range `enable=between(t,T1,T2)`** to switch the counter value per shot (each shot = 5s):
-  ```bash
-  # call-1.mp4: shots at t=0–5, 5–10, 10–15 with pcts from storyboard shots[0..2]
-  printf "SURVIVAL ${PCT0}${PCT_ARI}" > /tmp/pct0.txt
-  printf "SURVIVAL ${PCT1}${PCT_ARI}" > /tmp/pct1.txt
-  printf "SURVIVAL ${PCT2}${PCT_ARI}" > /tmp/pct2.txt
-
-  $FFMPEG -i call-1.mp4 -vf "
-    drawtext=textfile='/tmp/pct0.txt':fontfile='$FONT_ARI':fontsize=52:fontcolor=white:borderw=4:bordercolor=black:x=w-text_w-40:y=80:enable='between(t,0,5)',
-    drawtext=textfile='/tmp/pct1.txt':fontfile='$FONT_ARI':fontsize=52:fontcolor=white:borderw=4:bordercolor=black:x=w-text_w-40:y=80:enable='between(t,5,10)',
-    drawtext=textfile='/tmp/pct2.txt':fontfile='$FONT_ARI':fontsize=52:fontcolor=white:borderw=4:bordercolor=black:x=w-text_w-40:y=80:enable='between(t,10,15)'
-  " call-1-hud.mp4
-
-  # call-2.mp4: same pattern for shots[3..5]
-  # For the outcome shot (last 5s, t=10–15 within call-2.mp4):
-  # add outcome plate enable='gte(t,13.5)' (fade-in over last 1.5s of that shot)
-  ```
-  - **Outcome plate** (final POV shot, last 1.5s of `call-2.mp4`): `fontsize=110`, green/red per `outcome`, center `x=(w-text_w)/2:y=(h-text_h)/2`, `enable='gte(t,13.5)'`. Font: `FONT_TRJ` (Trajan Pro Bold).
-- Fonts: `FONT_TRJ="/Users/daniil.efimov/Library/Fonts/TrajanPro-Bold.otf"`, `FONT_ARI="/System/Library/Fonts/Supplemental/Arial Unicode.ttf"`
-- **MANDATORY drawtext rules (macOS ffmpeg 8.x):**
-  1. Use `textfile=` not `text=` — inline `text=` breaks on `:` (colon is treated as option separator even inside single quotes).
-  2. Always specify `fontfile=` explicitly — without it, text renders invisible on macOS.
-  3. The `%` character in drawtext format strings: **two approaches depending on context:**
-     - For Trajan Pro Bold (title card): add `expansion=none` to the drawtext filter — this disables format-string parsing so a literal `%` in the textfile renders correctly.
-     - For Arial Unicode (HUD counter): use the **fullwidth percent `％` (U+FF05, UTF-8: `\xef\xbc\x85`)** — Arial Unicode has it; Trajan Pro Bold may not.
-  ```bash
-  FONT_TRJ="/Users/daniil.efimov/Library/Fonts/TrajanPro-Bold.otf"
-  FONT_ARI="/System/Library/Fonts/Supplemental/Arial Unicode.ttf"
-  PCT_ARI="\xef\xbc\x85"   # ％ U+FF05 — for Arial Unicode counter only
-
-  # Title card — split title_card_text into two lines manually
-  printf "BATTLE" > /tmp/ing_l1.txt
-  printf "OF WOLF 359" > /tmp/ing_l2.txt
-  echo 'SURVIVAL CHANCE: 2%' > /tmp/ing_hook.txt   # literal %, expansion=none handles it
-
-  # drawtext=textfile='/tmp/ing_l1.txt':fontfile='$FONT_TRJ':fontsize=130:fontcolor=white:x=(w-text_w)/2:y=680,
-  # drawtext=textfile='/tmp/ing_l2.txt':fontfile='$FONT_TRJ':fontsize=130:fontcolor=white:x=(w-text_w)/2:y=840,
-  # drawtext=textfile='/tmp/ing_hook.txt':fontfile='$FONT_TRJ':fontsize=60:fontcolor=red:x=(w-text_w)/2:y=1030:expansion=none
-
-  # HUD counter (Arial Unicode + ％)
-  printf "SURVIVAL ${pct}${PCT_ARI}" > /tmp/ing_counter.txt
-  # Outcome plate text (always EN)
-  printf "YOU DIED" > /tmp/ing_outcome.txt   # death
-  # printf "YOU SURVIVED" > /tmp/ing_outcome.txt   # survive
-  # drawtext=textfile='/tmp/ing_counter.txt':fontfile='$FONT_ARI':...
-  # drawtext=textfile='/tmp/ing_outcome.txt':fontfile='$FONT_TRJ':fontsize=110:fontcolor=red:borderw=5:bordercolor=black:x=(w-text_w)/2:y=(h-text_h)/2:enable='gte(t,13.5)'
-  ```
-- HUD goes ONLY here — never ask NB2/Kling to draw it.
+**Stage 0 — графические оверлеи (per-call-file, BEFORE concat):** рисует `tools/overlays.py` из
+`clips[].overlays[]` (НЕ ручной drawtext, НЕ запекать в NB2). Для каждого call'а:
+```bash
+FRAG=$(python3 tools/overlays.py storyboard.json --scene-index $CALL_INDEX --workdir build \
+         --input-label "[v${CALL_INDEX}pre]" --output-label "[v${CALL_INDEX}]")
+# FRAG вплетается в filter_complex между scale/pad/fps и concat (editor.md §6.5)
+```
+- Позиции/стиль заданы в `overlays[]` сценаристом (см. «Survival HUD» и схему storyboard):
+  title card — две строки fs130 white (y680/840) + hook_plate fs60 red (y1030); HUD-счётчик —
+  top-right fs52 white с обводкой, по одному `hud_counter` на каждый shot с `enable:[t0,t1]`
+  (5-секундные окна внутри call-файла); outcome plate — center fs110 green/red, `enable:["gte",13.5]`.
+- Шрифты резолвит overlays.py (FONTS-map, фолбэки) — никаких захардкоженных путей. `%` обрабатывается
+  через `expansion=none` (автоматически). Перед encode — `overlays.py storyboard.json --check`.
+- Оверлеи — ТОЛЬКО через overlays.py; никогда не проси NB2/Kling рисовать HUD/числа/текст.
 
 **Stage 1 — Picture-only concat:**
 - Normalize each HUD'd file: scale 1080×1920, 30fps, `preset slow`, `crf 20`. Kling I2V is 24fps → normalize to 30fps before concat.
@@ -434,9 +401,7 @@ Three-stage assembly (HUD drawtext per-call-file before concat, then subtitles, 
 - Output: `build/concat-noaudio.mp4` (silent, 35s; CTA NOT yet appended).
 - `MAIN_DUR` = 35s (5 + 15 + 15). `TTS_OFFSET` = 5s (title card duration).
 
-**Stage 2 — Subtitle burn-in:**
-- `add_subtitles.py build/concat-noaudio.mp4 tts-output.mp3 build/concat-subbed.mp4 --style narrative --chunk 4 --marginv 420 --lang {lang} --no-scale --offset {TTS_OFFSET} --text "..." [--atempo N]`
-- `--offset {TTS_OFFSET}` delays subtitles past the title card. Output: `build/concat-subbed.mp4`.
+**Stage 2 — Subtitle burn-in:** канонический путь editor.md §6 — `python3 tools/add_subtitles.py build/voice-final.wav build/subs.ass --storyboard storyboard.json --lang {lang} --main-dur {MAIN_DUR}`, затем `ass=build/subs.ass` последним видеофильтром. Лид-тишина title card уже в `voice-final.wav` (adelay), поэтому `--offset` не нужен.
 
 **Stage 3 — Final audio mix (one ffmpeg pass):**
 - Inputs: `build/concat-subbed.mp4` + `tts-output.mp3` + Kling SFX (baked in each clip's audio — preserve) + music + `cta-scaled.mp4`.
@@ -502,7 +467,7 @@ output/YYYY-MM-DD/{GAME_TAG}/in-game-pov/
 - [ ] No on-screen text/HUD/numbers baked into any NB2 image
 - [ ] HUD rendered by Editor: title card has situation name + survival %; POV call files have time-range counter (top-right); final call has outcome plate at t≥13.5s
 - [ ] **No warning plates** (removed from this format — center overlays are confusing and out-of-style)
-- [ ] HUD (top-right) and narrator subtitles (lower third, MarginV 420) do not overlap
+- [ ] HUD (top-right) и субтитры (низ, универсальный MarginV 520) не пересекаются
 - [ ] All images 608×1080 (9:16); one PNG per scene (start frame only)
 - [ ] No character-face ref; no prop-ref unless explicitly needed
 - [ ] Kling I2V `generate_audio: true`; `negative_prompt` forbids voices/speech/music/on-screen-text/hands/protagonist
@@ -515,7 +480,7 @@ output/YYYY-MM-DD/{GAME_TAG}/in-game-pov/
 - [ ] Bridge frame extracted from last frame of call-1.mp4 and used as `start_image_url` for call 2
 - [ ] HUD drawtext: call-1/call-2 MP4s use `enable='between(t,T1,T2)'` per shot for time-varying survival_pct
 - [ ] TTS via fal.ai ElevenLabs (`voice` name, not `voice_id`), one request for the whole narration
-- [ ] Subtitles via `add_subtitles.py --style narrative --offset 5` — subs skip the title card
+- [ ] Subtitles — универсальный стиль по whisper (editor.md §6); лид-тишина title card в voice-final.wav, отдельный offset не нужен
 - [ ] fps normalized to 30 before concat; exactly 3 entries in concat-list (call-0/1/2 + CTA); single-pass audio mix; music fade before CTA
 - [ ] `-shortest` NOT used (use `apad`)
 

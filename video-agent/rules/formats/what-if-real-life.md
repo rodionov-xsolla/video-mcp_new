@@ -1,19 +1,14 @@
 ---
-subtitle_style: narrative
-subtitle_offset_s: 0
-subtitle_mask: true
-subtitle_highlight: false
-subtitle_extras: ["--marginv", "120", "--secondary-style", "Customer=lightgray,52,1,120"]
+subtitles: true
+overlays: true
 ---
 
 # Format "What If... Real Life" — game characters dropped into the mundane real world
 
-<!-- Subtitle config:
-  --mask (BorderStyle=4) — закрывает CJK-артефакты Kling Avatar v2 у низа кадра.
-  --marginv 120 — опускает бокс прямо на артефакт (направление от низа: меньше=ниже).
-  --secondary-style Customer=lightgray,52,1,120 — второй стиль для off-screen ребёнка
-    в dialogue-offscreen сценах (легкосерый italic 52px, тот же MarginV=120).
--->
+<!-- Субтитры — единый универсальный стиль (editor.md §6), общий для всех форматов.
+  Маскировка артефактов (старый --mask/BorderStyle=4) УДАЛЕНА — артефакты Kling
+  предотвращаются усиленным negative_prompt (см. ниже). Второй спикер (off-screen
+  ребёнок) субтитруется тем же универсальным стилем — отдельного стиля нет. -->
 
 
 A recognizable game character is placed into a banal real-world situation or job — the contrast between who they ARE (their game persona, abilities, mannerisms, way of speaking) and who they have to BE in this context generates the comedy. Examples: Spock as a coffee barista, Kratos as a kindergarten teacher, a blocky Roblox guy trying to shop at a luxury boutique, Master Chief at a DMV counter, Geralt as a vet's receptionist.
@@ -42,10 +37,10 @@ The chosen tone is fixed for the whole video in `visual_identity.reaction_mode` 
 
 - **Aspect ratio:** 9:16, 1080×1920, 30 fps
 - **Style:** Photorealistic — even if the character is from a stylized source (Roblox block, low-poly MMO avatar). The character is rendered as if **physically present** in a real-world location: a Roblox guy is real cubic plastic in a real boutique, not a screenshot. Realism amplifies the absurd.
-- **Subtitles:** ASS `BorderStyle=4` opaque box hugging text, Montserrat Bold 58–60, Alignment=2, MarginV=120 (low — also designed to mask any Kling Avatar v2 CJK bottom-strip artifact). See `rules/roles/sound.md` §10.
+- **Subtitles:** единый универсальный стиль (editor.md §6), генерит Editor по whisper из `build/voice-final.wav`. Никакого BorderStyle=4/MarginV=120/маски.
 - **Speedup:** 1.18× at the end (snappier than the standard 1.15× — comedy timing). Applied BEFORE music mix. See `rules/roles/editor.md` §14.
 - **Music:** From `video-agent/music/Fun/` only — upbeat, light. Volume 0.08. Tracks from `Dark/` or `Drama/` will tank the mood. See `rules/roles/sound.md` §10.5.
-- **Negative prompt (all Avatar clips):** `extra characters facing camera, lipsync on background extras, CJK text, subtitle text in scene, watermark`
+- **Negative prompt (all Avatar clips) — УСИЛЕН (вместо удалённой маски артефактов):** `extra characters facing camera, lipsync on background extras, CJK text, Chinese characters, Japanese characters, Korean characters, hanzi, kanji, hangul, garbled text, gibberish glyphs, on-screen captions, bottom-bar text, UI overlay, station ID, ticker text, signage with text, any text at frame bottom, subtitle text in scene, watermark`
 
 ### Variable per video
 
@@ -141,7 +136,7 @@ This silence-padded mp3 is what Kling Avatar v2 ingests. **Kling Avatar v2 holds
 References:
 - Off-screen voice mix protocol: `rules/roles/sound.md` §9
 - Audio amix + RMS sanity check: `rules/roles/editor.md` §12
-- ASS subtitle invariants (anti-overlap, MarginV direction, BorderStyle=4 box, last-sub-to-clip-end): `rules/roles/sound.md` §10
+- Субтитры — единый универсальный стиль по whisper: `rules/roles/editor.md` §6
 
 ---
 
@@ -165,7 +160,12 @@ References:
     {
       "index": 1,
       "scene_type": "title-card",
-      "title_lines": ["What if...", "SPOCK", "Becomes", "BARISTA"]
+      "overlays": [
+        {"type":"title","text":"What if...","position":"(w-text_w)/2,620","font":"MED","size":48,"color":"white"},
+        {"type":"title","text":"SPOCK","position":"(w-text_w)/2,760","font":"ULT","size":120,"color":"white","stroke":{"color":"black","width":4}},
+        {"type":"title","text":"Becomes a","position":"(w-text_w)/2,940","font":"MED","size":48,"color":"white"},
+        {"type":"title","text":"BARISTA","position":"(w-text_w)/2,1060","font":"ULT","size":90,"color":"white","stroke":{"color":"black","width":4}}
+      ]
     },
     {
       "index": 2,
@@ -224,15 +224,15 @@ References:
   - `over-the-top-heroic` → `Adam` stability 0.15 style 0.7
 - For each `dialogue-offscreen` scene: produce `customer.mp3` AND the silence-padded `scene-K.mp3` for Avatar.
 - For each `monologue` / `inner-thought` scene: produce a single TTS track for Editor to overlay.
-- ASS subtitles: per-scene, BorderStyle=4, MarginV=120, no event overlap, last event to clip end. See `rules/roles/sound.md` §10.
+- Субтитры — НЕ задача Sound. Editor генерит единый универсальный ASS по whisper (editor.md §6).
 - Music: from `video-agent/music/Fun/`, volume 0.08. Never `Dark/` or `Drama/`.
 - General rules — `rules/roles/sound.md` (especially §9 off-screen voices, §10 ASS invariants).
 
 ### Editor
 
 - Per-scene burn-in pipeline:
-  - `title-card`: scale → burn **title_lines** from storyboard.json as 4-stacked-line centered ASS text (Alignment=5). Style: line 1 "What if..." small italic (fs36), line 2 character name large bold (fs80), line 3 "Becomes a" small (fs36), line 4 role name large bold (fs52). No audio → add anullsrc. This overlay is MANDATORY — without it the title card is a blank shot.
-  - `dialogue-offscreen`: scale → amix(Avatar audio, customer.mp3) → burn ASS via **ffmpeg-full** (libass required). ASS MUST contain TWO styles: **Default** (Worf lines, white bold 58, BorderStyle=4, MarginV=120) AND **Customer** (off-screen child lines, light-gray italic 52, BorderStyle=4, MarginV=120). Customer events are timed 0:00:00.30 → `duration(customer.mp3)`. Default events start after the silence gap (= `duration(customer.mp3)` + 0.6s). Text from `customer_line` and `character_line` in storyboard.json — verbatim, no re-transcription.
+  - `title-card`: это ГРАФИЧЕСКИЙ ОВЕРЛЕЙ (тип `title` в `scenes[].overlays[]`), рисует `tools/overlays.py` (editor.md §6.5), НЕ субтитр. 4 строки: "What if..." / имя персонажа / "Becomes a" / роль. No audio → anullsrc. MANDATORY.
+  - `dialogue-offscreen`: scale → amix(Avatar audio, customer.mp3). Обе реплики (character + off-screen customer) попадают в `voice-final.wav` и субтитруются ОДНИМ универсальным стилем — отдельного Customer-стиля больше нет. Бёрн — общий `build/subs.ass` (editor.md §6).
   - `dialogue-on-screen`: assemble shot-reverse-shot cuts → burn ASS.
   - `monologue` / `inner-thought`: silent I2V → overlay TTS (scene-K.mp3) via amix → burn ASS with Default style timed from 0:00:00.00.
   - `physical-gag`: I2V with Kling SFX baked → keep audio → no subtitles.
@@ -279,7 +279,7 @@ output/YYYY-MM-DD/{GAME_TAG}/what-if-real-life/
 - [ ] No two vignettes share the same gag mechanic
 - [ ] For every `dialogue-offscreen` scene: off-screen voice audible (RMS > -30 dB on the dialogue interval)
 - [ ] For every `dialogue-offscreen` scene: customer's face is NOT turned to camera
-- [ ] Subtitles BorderStyle=4 box (no full-width black bar), MarginV=120, no event overlap within a Style, last event in each scene reaches clip end
+- [ ] Субтитры — единый универсальный стиль (editor.md §6), no event overlap, текст совпадает со сценаристским
 - [ ] No visible Kling Avatar v2 CJK artifact in any sampled frame (check at 1s and `clip_end − 0.3s` of each Avatar scene)
 - [ ] Music is from `Fun/`, volume 0.08, audible but not overpowering
 - [ ] 1.18× speedup applied (NOT 1.15×)
@@ -295,8 +295,8 @@ output/YYYY-MM-DD/{GAME_TAG}/what-if-real-life/
 - ❌ Two vignettes with the same gag mechanic (two "absurd customer order" gags, two "boss screams at toddlers" gags)
 - ❌ Calling Avatar v2 with non-padded audio when the gag needs customer-first rhythm
 - ❌ Forgetting to mix off-screen / narrator VO into the final audio (RMS check catches it)
-- ❌ Full-width drawbox to hide CJK artifact (cuts the picture — use ASS `BorderStyle=4` box only)
-- ❌ MarginV=480 thinking "raise subtitle higher" — Alignment=2 MarginV grows UP from bottom, so big MarginV moves text AWAY from a bottom-strip artifact
+- ❌ Маскировать CJK-артефакт боксом субтитра/drawbox — маска удалена; чинить усиленным negative_prompt
+- ❌ Трогать MarginV субтитров — позиция фиксирована универсальным стилем (editor.md §6)
 - ❌ Music from `Dark/` or `Drama/` — mood mismatch
 - ❌ Skipping the 1.18× speedup step
 - ❌ Burning ASS subtitles with stock ffmpeg (lacks libass — subtitles silently dropped)

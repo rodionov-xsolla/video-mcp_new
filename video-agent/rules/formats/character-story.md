@@ -1,9 +1,6 @@
 ---
-subtitle_style: narrative
-subtitle_offset_s: 0
-subtitle_mask: false
-subtitle_highlight: false
-subtitle_extras: []
+subtitles: true
+overlays: false
 ---
 
 # Format "Character Story" — first-person lore monologue with visualization
@@ -199,9 +196,8 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - **Subtitles: ASS via `tools/add_subtitles.py` (Pipeline 8B in `sound.md`)**
   - **NEVER** generate one PIL PNG per `tts_segment` — produces unreadable 13-word slabs glued to 5s clip duration. Banned.
   - Run `add_subtitles.py` ONCE on the full `tts-output.mp3` against the picture-only concat (Editor produces it before audio mix).
-  - Args: `--chunk 3 --fontsize 72 --marginv 200 --lang en --no-scale`. Pass `--emphasis "phrase1,phrase2"` if scenarist marked beats.
-  - Output: `build/concat-subbed.mp4` → Editor then overlays TTS + music on it.
-- **Speed control:** if TTS duration > timeline (7×5 = 35s for 6-clip; 8×5 = 40s for 8-clip), Editor applies `atempo` (cap 1.4×). Pass `--atempo` to the subtitle script so ASS timestamps scale. If mismatch > 40% — return to Scenarist to shorten text, don't paper over.
+  - Единый универсальный стиль (editor.md §6): `add_subtitles.py build/voice-final.wav build/subs.ass --storyboard storyboard.json --lang en --main-dur {MAIN_DUR}`. Никаких `--chunk`/`--fontsize`/`--marginv`/`--no-scale`/`--emphasis`.
+- **Speed control:** if TTS duration > timeline (7×5 = 35s for 6-clip; 8×5 = 40s for 8-clip), Editor applies `atempo` (cap 1.4×). Субтитры считаются по уже ускоренной речи (`voice-final.wav`) — пересчёт не нужен. If mismatch > 40% — return to Scenarist to shorten text.
 - **Music:** by mood from storyboard (`music.mood`)
   - Pick a track from `music/tracks.json` by mood
   - `volume` from storyboard (default 0.15)
@@ -217,8 +213,7 @@ Two-stage assembly because subtitles need a picture-only concat to whisper-align
 - Output: `build/concat-noaudio.mp4` (silent, full main duration; CTA NOT yet appended).
 
 **Stage 2 — Subtitle burn-in (delegated to Sound, see `sound.md` § 8B):**
-- `add_subtitles.py build/concat-noaudio.mp4 tts-output.mp3 build/concat-subbed.mp4 --chunk 3 --fontsize 72 --marginv 200 --lang en --no-scale [--atempo N]`
-- Output: `build/concat-subbed.mp4` (still silent picture, but with burned ASS).
+- `add_subtitles.py build/voice-final.wav build/subs.ass --storyboard storyboard.json --lang en --main-dur {MAIN_DUR}` → бёрн `ass=build/subs.ass` последним видеофильтром (editor.md §6). Universal style, без legacy-флагов.
 
 **Stage 3 — Final audio mix (one ffmpeg pass):**
 - Inputs: `build/concat-subbed.mp4` + `tts-output.mp3` (atempo-adjusted if needed) + music + `cta-scaled.mp4`
@@ -228,7 +223,7 @@ Two-stage assembly because subtitles need a picture-only concat to whisper-align
 - `-t TOTAL_DUR` where `TOTAL_DUR = MAIN_DUR + CTA_DUR`
 
 **Speed control:**
-- If `dur(tts) > MAIN_DUR` → apply `atempo` (cap 1.4×). Pass same `--atempo` to `add_subtitles.py` so ASS times scale.
+- If `dur(tts) > MAIN_DUR` → apply `atempo` (cap 1.4×). Субтитры считаются по уже ускоренному `voice-final.wav` — пересчёт не нужен.
 - If `dur(tts) < MAIN_DUR` → freeze-frame extend the last (or lowest-motion) clip; do NOT pad TTS with leading silence.
 - If mismatch > 40% → reject, ask Manager to send Scenarist back.
 
@@ -282,7 +277,7 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 - [ ] motion_prompt contains NONE of the banned freeze phrases (then settles / then steady / then holds / hold position / no morphing / camera holds steady)
 - [ ] TTS via fal.ai ElevenLabs (`voice` name, not `voice_id`)
 - [ ] Subtitles via `add_subtitles.py` (ASS, chunk 3, fontsize 72, marginv 200) — NOT PIL PNG by `tts_segment`
-- [ ] If TTS longer than picture timeline: `--atempo` ≤ 1.4× applied in BOTH the script and Editor's audio mix (same value)
+- [ ] If TTS longer than picture timeline: `atempo` ≤ 1.4× in audio mix; субтитры по whisper из voice-final.wav (без ручного --atempo)
 - [ ] fps normalized to 30 before concat
 - [ ] One ffmpeg pipeline, not layered
 - [ ] Music fade out before CTA

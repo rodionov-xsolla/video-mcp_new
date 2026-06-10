@@ -1,9 +1,6 @@
 ---
-subtitle_style: bold
-subtitle_offset_s: 0
-subtitle_mask: false
-subtitle_highlight: false
-subtitle_extras: []
+subtitles: true
+overlays: false
 ---
 
 # Format "Fun News" — Fictional ironic news from a game's lore
@@ -548,7 +545,7 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 - **TTS speed MUST be 1.0 (or omit the field).** NEVER set `speed > 1.0` to compensate for a long line. The only permitted speedup is Editor's `atempo=1.3`. If TTS at natural speed exceeds the word-budget window → shorten the text, do not touch speed.
 - Replace periods with commas/em-dashes in anchor lines where natural — periods bloat duration via TTS pause inflation.
 - Upload mp3s to Supabase `scenes/{date}/fun-news/scene-N.mp3` for use by Avatar v2 (permanent URLs).
-- ASS subtitles per-scene via `tools/add_subtitles.py --emit-ass-only --atempo 1.3 --emphasis "<kicker phrases from research.json>"`. Each scene's ASS lives at `build/scene-N.ass` and is burned in by Editor.
+- ASS subtitles — единый универсальный стиль, генерит Editor по whisper из `build/voice-final.wav` (editor.md §6). Без `--atempo`/`--emphasis`. Один `build/subs.ass` на весь ролик.
 - **Location ambient SFX (MANDATORY for scenes 2 and 4):** read `scene_ambient.description` and `scene_ambient.volume` from each reporter scene in storyboard.json. Source an appropriate ambient file (wind, crowd, market, nature, etc.) or synthesise via `ffmpeg -f lavfi -i "anoise=r=44100" ...`. Mix at `scene_ambient.volume` under the TTS in Editor's filter_complex. This is the location's "интершум" — without it on-location scenes sound like a studio recording.
 - Music: pick from `music/tracks.json` where `use_for` includes `news` or mood is `fun/energetic/comedic` **and** `not_for` does NOT include `fun-news`. The chosen track plays **only during opener and CTA** — upbeat, not jarring. Write `music.start_offset_sec` into storyboard.json (pick the most energetic section of the track). Editor will use this offset when building `music-timed.wav`.
 - General rules — `rules/roles/sound.md`.

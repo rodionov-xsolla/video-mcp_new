@@ -34,8 +34,8 @@ Assemble ${OUTPUT_DIR}/final.mp4 (1080×1920, 30fps, AAC 128k stereo). DEFAULT p
 
 Pre-flight (off the main pipeline):
 1. Download + ffprobe-validate CTA (do NOT pre-normalize; §0 ingests it raw via scale/pad/fps).
-2. Generate ASS subtitles via `tools/add_subtitles.py` against the SAME audio shaping (atempo + adelay) that §0 will apply. The script emits build/subs.ass; §0 burns it in via the `ass=` filter inside the main graph.
-3. Per format, compute MAIN_DUR (sum of scene durations), TOTAL_DUR (= MAIN_DUR + CTA_DUR), atempo value (= TTS_DUR / TTS_WINDOW), title-card pre-delay (PRE_MS, e.g. 5000 for redcon).
+2. Собери `build/voice-final.wav` (финальная речь после atempo+adelay+concat, до bg-music — editor.md §6.1), затем `tools/add_subtitles.py build/voice-final.wav build/subs.ass --storyboard storyboard.json --lang ${LANGUAGE} --main-dur ${MAIN_DUR}`. Whisper даёт тайминги, текст канонический из storyboard. §0 бёрнит `ass=build/subs.ass` последним видеофильтром.
+3. Per format, compute MAIN_DUR (sum of scene durations), TOTAL_DUR (= MAIN_DUR + CTA_DUR), atempo value (= TTS_DUR / TTS_WINDOW), title-card pre-delay (PRE_MS, e.g. 5000 for redcon — он запекается в voice-final.wav через adelay).
 
 Main pipeline = ONE ffmpeg-full invocation per §0.2. Encoder is `-preset medium -crf 22`. Hard cap with `-t TOTAL_DUR` (NEVER -shortest, NEVER unbounded amix).
 
@@ -51,16 +51,15 @@ PARAMETERS:
 - Output dir: ${OUTPUT_DIR}
 - Task ID (for status updates): ${TASK_ID:-<none>}
 
-SUBTITLE PARAMETERS (от оркестратора — не читай ради этого формат-файл):
-- SUBTITLE_STYLE: ${SUBTITLE_STYLE:-bold}        # bold | narrative | none | custom
-- SUBTITLE_OFFSET_S: ${SUBTITLE_OFFSET_S:-0}     # pre-delay в секундах (5 для титульной карточки)
-- SUBTITLE_MASK: ${SUBTITLE_MASK:-false}         # true → BorderStyle=4 (маска артефактов)
-- SUBTITLE_HIGHLIGHT: ${SUBTITLE_HIGHLIGHT:-false} # true → word-by-word акцент
-- SUBTITLE_EXTRAS: ${SUBTITLE_EXTRAS:-}          # доп. CLI-флаги: "--secondary-style Customer=lightgray,52,1,120"
+СУБТИТРЫ И ОВЕРЛЕИ (от оркестратора — два булевых флага, не читай ради этого формат-файл):
+- SUBTITLES: ${SUBTITLES:-true}    # true → единый универсальный ASS по whisper (editor.md §6); false → без субтитров (motion-dance, dual-style)
+- OVERLAYS: ${OVERLAYS:-false}     # true → графические оверлеи из storyboard.json через tools/overlays.py (editor.md §6.5)
+- LANGUAGE: ${LANGUAGE:-en}
+- CHANNEL_BUG_URL: ${CHANNEL_BUG_URL:-}   # непустой → channel-bug overlay после concat+ASS
 
-Если SUBTITLE_STYLE = `none` → не генерируй ASS, не добавляй `ass=` фильтр в filter_complex.
-Если SUBTITLE_STYLE = `custom` → форматные drawtext-оверлеи (top-list графика #N + {NAME}) описаны в правиле формата как graphic overlays (не путать с субтитрами).
-Иначе → вызывай `tools/add_subtitles.py` с этими параметрами (см. editor.md §6.2).
+Если SUBTITLES = `false` → не генерируй ASS, не добавляй `ass=` в filter_complex.
+Иначе → единый канонический вызов (editor.md §6.2), один стиль для всех форматов. Никаких per-format стилей/масок/offset.
+Если OVERLAYS = `true` → per-scene drawtext-фрагменты через `tools/overlays.py` (editor.md §6.5), вплетаются в [vk] ДО concat.
 
 CONSTRAINTS:
 - WORKSPACE LAYOUT: write every scratch file (concat lists, intermediate MP4s, normalized assets, temp audio, ad-hoc scripts/logs) under ${OUTPUT_DIR}/build/. The OUTPUT_DIR root must end up with only final.mp4, storyboard.json, scenes/, and optional recap/_archive/. See editor.md "Workspace layout (MANDATORY)" + final checklist.

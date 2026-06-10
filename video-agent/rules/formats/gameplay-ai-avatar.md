@@ -1,14 +1,11 @@
 ---
-subtitle_style: bold
-subtitle_offset_s: 0
-subtitle_mask: false
-subtitle_highlight: true
-subtitle_extras: ["--marginv", "800"]
+subtitles: true
+overlays: false
 ---
 
 # Format "Gameplay AI Avatar" — Talking Head + Gameplay
 
-<!-- Subtitle override: `--marginv 800` опускает сабы на split-seam между gameplay (top 60%, y=0..1152) и avatar (bottom 40%, y=1152..1920). MarginV=800 ≈ baseline на y=1120, прямо над seam'ом. -->
+<!-- Субтитры — единый универсальный стиль (editor.md §6), фикс-позиция MarginV=520. Split-screen НЕ двигает сабы: layout 3-зонный (gameplay 1100 + avatar 560 + нижняя caption-полоса 260), саб рендерится на чистой полосе. См. editor.md §7. -->
 
 
 An AI avatar (talking head) at the bottom of the screen tells about a game offer/bonus, while gameplay plays at the top. Format for promoting offers via TikTok/Shorts.

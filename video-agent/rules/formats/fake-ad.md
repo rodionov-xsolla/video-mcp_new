@@ -1,9 +1,6 @@
 ---
-subtitle_style: bold
-subtitle_offset_s: 0
-subtitle_mask: false
-subtitle_highlight: false
-subtitle_extras: []
+subtitles: true
+overlays: true
 ---
 
 # Format "Fake Ad" — Absurd fake commercial for in-game items with a mandatory twist ending
@@ -116,15 +113,20 @@ Scene 4 is always the packshot. Specific rules:
 
 **Slogan is MANDATORY on every fake-ad packshot.** A packshot without a slogan is not this format — it's just a product shot. The slogan is the final punchline delivery. Never ship without it.
 
-Two text overlays on scene 4:
+Два графических оверлея на сцене 4 — в `overlays[]` этой сцены (рисует `tools/overlays.py`,
+editor.md §6.5; НЕ субтитры):
 
-| Overlay | Position | Style | Content |
+| Overlay (тип) | Position | Style | Content |
 |---|---|---|---|
-| **Slogan** (main) | vertically centered @ ~y=1300, centered horizontal | Bebas Neue / Montserrat Black, ~96–120px, white + 6px black stroke | `slogan` field from storyboard scene 4 |
-| **Disclaimer** (legal humor) | bottom safe zone @ ~y=1800, centered | Arial 28px, white, 60% opacity | `disclaimer` field from storyboard scene 4 (e.g. `"May cause overconfidence. Not responsible for lava deaths."`) |
+| `slogan` (main) | center @ y=1300 | `BEBAS` ~110px, white + 6px black stroke, fade_in 0.3 | `\n`-двустрочный слоган |
+| `disclaimer` (legal humor) | bottom @ y=1800 | `MED` 28px, white, opacity 0.6 | юмор-дисклеймер |
 
-- Slogan fades in at 0.3s (fade duration 0.2s), stays through end of clip
-- Disclaimer appears at 1.0s, no fade
+```json
+"overlays": [
+  {"type":"slogan","text":"DOESN'T GUARANTEE SKILL.\nJUST CONFIDENCE.","position":"(w-text_w)/2,1300","font":"BEBAS","size":110,"color":"white","stroke":{"color":"black","width":6},"fade_in":0.3},
+  {"type":"disclaimer","text":"May cause overconfidence. Not responsible for lava deaths.","position":"(w-text_w)/2,1800","font":"MED","size":28,"color":"white","opacity":0.6}
+]
+```
 
 ### Slogan structure (HARD rule)
 
@@ -139,8 +141,8 @@ Example: `"RESIN ENERGY.\nDOESN'T RESTORE RESIN. HELPS YOU OUTLIVE THE WAIT."`
 
 - **Line 1:** Product name in caps — anchors the brand
 - **Line 2:** The tagline — the official acknowledgement that the product is absurd/useless
-- Use `\n` as the line break — Editor splits on it for two drawtext calls
-- Scenarist writes `slogan` and `disclaimer` fields in scene 4. If either is missing, Scenarist must be re-run.
+- Use `\n` as the line break — `overlays.py` стопкой рисует строки слогана
+- Scenarist кладёт `slogan` и `disclaimer` в `overlays[]` сцены 4 (типы `slogan`/`disclaimer`). Если оверлеев нет — Scenarist re-run.
 
 ---
 
@@ -206,8 +208,10 @@ Example: `"RESIN ENERGY.\nDOESN'T RESTORE RESIN. HELPS YOU OUTLIVE THE WAIT."`
       "beat": "packshot",
       "duration_sec": 5,
       "tts": "Obby Energy. Doesn't guarantee skill. Just confidence.",
-      "slogan": "DOESN'T GUARANTEE SKILL.\nJUST CONFIDENCE.",
-      "disclaimer": "May cause overconfidence. Not responsible for lava deaths.",
+      "overlays": [
+        {"type":"slogan","text":"DOESN'T GUARANTEE SKILL.\nJUST CONFIDENCE.","position":"(w-text_w)/2,1300","font":"BEBAS","size":110,"color":"white","stroke":{"color":"black","width":6},"fade_in":0.3},
+        {"type":"disclaimer","text":"May cause overconfidence. Not responsible for lava deaths.","position":"(w-text_w)/2,1800","font":"MED","size":28,"color":"white","opacity":0.6}
+      ],
       "image_prompt": "...",
       "motion_prompt": "..."
     }
@@ -292,7 +296,7 @@ Example: `"RESIN ENERGY.\nDOESN'T RESTORE RESIN. HELPS YOU OUTLIVE THE WAIT."`
 - ElevenLabs TTS for each scene with non-empty `tts` (all 5 scenes in this format).
 - Voice from `voices.announcer` in storyboard — use `voice` name string, NOT `voice_id` hash.
 - Upload each `.mp3` to Supabase → write `tts_url` back into scene in storyboard.json.
-- **Subtitles: announcer VO only** (`subtitle_style: bold`). Only the main `tts` field per scene is captioned — character reactions (`character_reactions[*].tts`) are NOT subtitled. Packshot text is handled separately as drawtext overlays.
+- **Subtitles: announcer VO only** — единый универсальный стиль (editor.md §6). Только основной `tts` каждой сцены попадает в `voice-final.wav` и субтитруется; реакции (`character_reactions[*].tts`) НЕ субтитруются (их нет в voice-final). Слоган/дисклеймер пэкшота — графический оверлей через `tools/overlays.py` (типы `slogan`, `disclaimer`), НЕ субтитр.
 - Music bed: upbeat commercial mood, `volume: 0.25`, continuous through ALL scenes including packshot. **NO music gate** (unlike fun-news/special-report, music does NOT go silent for dialogue — this is a commercial, VO rides on top of the music).
 - General rules — `rules/roles/sound.md`
 
@@ -364,4 +368,4 @@ output/YYYY-MM-DD/{GAME_TAG}/fake-ad/
 - ❌ Explaining the twist in the VO. Let the visual speak. Scene 3 VO may be minimal ("And then…") or even empty.
 - ❌ `-shortest` in FFmpeg. Always `apad`.
 - ❌ `voice_id` hash in ElevenLabs. Use `voice` name string.
-- ❌ Subtitle burn-in on any scene (`SUBTITLE_STYLE=none`). No captions — this is a TV commercial, not a captioned video.
+- ❌ Subtitle burn-in on any scene. No captions — this is a TV commercial. (Но во front-matter `subtitles: true` для announcer VO — если канал хочет сабы; если совсем без — поставь `subtitles: false`. По умолчанию рекламный announcer субтитруется.)

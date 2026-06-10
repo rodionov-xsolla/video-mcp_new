@@ -17,8 +17,8 @@ From Manager:
 ## Outputs
 
 - `scenes/scene-K/scene-K.mp3` — TTS audio per dialogue clip (for Animator → Kling Avatar)
-- `scenes/scene-K/scene-K.timings.json` — word-level timings (для редактора, см. §11)
 - `bg-music.mp3` — background music (optional)
+- (субтитры — НЕ артефакт Sound; Editor генерит их сам по whisper, см. §8)
 
 ---
 
@@ -378,21 +378,24 @@ Use only the supported emotive tags from §1 (`(laughs)`, `(groans)`, etc.). Any
 
 ---
 
-## 8. Subtitles — твоя задача только эмитить тайминги, бёрнит Editor
+## 8. Subtitles — Sound НЕ касается субтитров вообще
 
-**Sound не генерирует PNG, не бёрнит ASS.** Стилевой выбор делает оркестратор по front-matter формата (см. `rules/roles/manager.md`). Editor читает стиль от оркестратора и бёрнит ASS канонически. Подробнее — `rules/roles/editor.md` §0 + §subtitles.
+**Sound не генерирует PNG, не бёрнит ASS, не пишет `timings.json`.** Субтитры полностью на Editor:
+он гоняет faster-whisper по финальной речевой дорожке (`build/voice-final.wav`) и бёрнит единый
+универсальный ASS. Текст — канонический из storyboard. Подробнее — `rules/roles/editor.md` §6.
 
-**Твой единственный артефакт по сабам — `scene-K.timings.json` рядом с каждым `scene-K.mp3` (см. §11 ниже).**
+Твоя единственная задача — качественные `scene-K.mp3` (TTS) и `bg-music.mp3`. Всё.
 
 ### Запрещено
 
-- ❌ Генерация PNG-сабов на границу `tts_segment` (нечитаемо).
-- ❌ Пропорциональные тайминги без Whisper — не попадают в реальные паузы Chatterbox.
-- ❌ Любая запись `*.ass` файлов из sound — это работа editor'а.
+- ❌ Генерация PNG-сабов / запись `*.ass` / `*.timings.json` из sound — это работа editor'а.
+- ❌ Пропорциональные тайминги (`--text`) — удалены из пайплайна вообще (whisper по реальному звуку).
 
 ### Audio/video duration mismatch — speed control
 
-Если `dur(tts) > dur(video_timeline)` — Editor применит `atempo` к TTS (cap **1.4×**; выше деградирует голос). Тайминги в `timings.json` пишутся для **оригинального** mp3 (без atempo) — Editor сам пересчитает через `--atempo` в `add_subtitles.py`.
+Если `dur(tts) > dur(video_timeline)` — Editor применит `atempo` к TTS (cap **1.4×**; выше деградирует
+голос). Субтитры считаются по УЖЕ ускоренной речи (`voice-final.wav`), так что съехать не могут —
+тебе ничего пересчитывать не нужно.
 
 Если `dur(tts) < dur(video_timeline)` — Editor расширит последний клип freeze-frame'ом; **не** допы тишиной в начале TTS.
 
@@ -456,48 +459,10 @@ If the format is comedic and the picked track is melancholic/ambient — the who
 
 ---
 
-## 12. `scene-K.timings.json` — word-level тайминги для Editor
+## 12. `timings.json` — УДАЛЁН из пайплайна
 
-После генерации каждого `scene-K.mp3` (TTS) — рядом сохрани `scene-K.timings.json`. Тайминги получаются через **faster-whisper** по реальному аудио — пропорциональный подход (`--text`) запрещён во всём пайплайне (не попадает в реальные паузы и интонации, особенно у Chatterbox).
+Раньше Sound писал `scene-K.timings.json`. Больше **не нужно**: Editor гоняет faster-whisper по
+финальной речевой дорожке (`build/voice-final.wav`) и берёт границы слов прямо из событий
+`build/subs.ass`. Никаких `--emit-timings`, никаких `--text`. Sound не создаёт `*.timings.json`.
 
-### Команда
-
-```bash
-python3 tools/add_subtitles.py \
-  - scenes/scene-K/scene-K.mp3 scenes/scene-K/scene-K.timings.json \
-  --emit-timings \
-  --text "$(jq -r '.clips[K].tts' storyboard.json)"
-```
-
-Аргумент `video` = `-` (его нет на этом этапе). Длительность MP3 берётся через `ffprobe`. Текст обязателен.
-
-### Формат файла
-
-```json
-{
-  "duration_s": 4.23,
-  "text": "Точный текст, поданный в TTS.",
-  "words": [
-    {"text": "Точный", "start": 0.000, "end": 0.825},
-    {"text": "текст,", "start": 0.825, "end": 1.587},
-    {"text": "поданный", "start": 1.587, "end": 2.762},
-    {"text": "в",        "start": 2.762, "end": 2.987},
-    {"text": "TTS.",     "start": 2.987, "end": 4.230}
-  ]
-}
-```
-
-`words[*].text` — токен ровно как в исходном тексте (с пунктуацией). Тайминги покрывают `[0, duration_s]` без зазоров.
-
-### Зачем это нужно Editor'у
-
-1. **Бёрн ASS без Whisper-fallback** — Editor вызывает `add_subtitles.py --text "..."` напрямую (или читает уже готовый JSON, если он есть).
-2. **Snap-to-word-boundary при тримминге** — если Editor подрезает хвост клипа под музыку, он snap'ит к ближайшей `word.end ≤ target`.
-
-### Контракт
-
-- ОБЯЗАТЕЛЬНО для каждой сцены с непустым `tts`.
-- Пишется в `scenes/scene-K/scene-K.timings.json` (рядом с mp3).
-- Перед handoff Manager'у — `ls scenes/scene-*/scene-*.timings.json` должен совпадать по количеству с `scene-*.mp3` (тех, что имеют диалог).
-- **`timings.json.text` ОБЯЗАН совпадать с `clips[K].tts`** для той же сцены. Если не совпадает — файл стейл (остался от прошлой структуры/перенумерации) и поведёт субтитры мимо аудио. Перегенери timings для текущего текста, не оставляй старый. (В EP6 `scene-3.timings.json` описывал реплику Кирка, а в `scene-3.mp4` звучал Адмирал.)
-- Если у сцены `tts` пустой (silent I2V / physical-gag) — `timings.json` НЕ пишется.
+Snap-to-word-boundary при тримминге хвоста (если был нужен) Editor делает по `subs.ass`-событиям.
