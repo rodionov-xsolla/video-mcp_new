@@ -17,3 +17,4 @@ concat-list.txt
 
 # Keep config and text files
 !music/tracks.json
+tools/__pycache__/

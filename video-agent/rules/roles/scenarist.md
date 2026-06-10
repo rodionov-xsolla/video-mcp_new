@@ -152,23 +152,38 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
 - **Kling Avatar v2** (lipsync ElevenLabs TTS): `character_speech` = null; `tts` = text for ElevenLabs
 - **Kling I2V** (no voice): both null
 
-### `subtitle_emphasis`
-Optional list of words or phrases that Editor will emphasize in the subtitle (yellow + italic). Pick dramatically important moments — no more than 1–2 elements per clip.
+### `subtitle_emphasis` — БОЛЬШЕ НЕ ИСПОЛЬЗУЕТСЯ
+
+Субтитры теперь единого универсального стиля во всех форматах (плоский белый CAPS, чанки по 4
+слова, тайминги по whisper — Editor генерит их сам по реальной речи, см. `rules/roles/editor.md` §6).
+Никакого жёлтого/italic-акцента и стилевых переопределений сценарист не задаёт. Поле можно не
+заполнять — оно игнорируется. Качество субтитра целиком зависит от текста `tts`, который ты пишешь.
+
+### `overlays` — графические оверлеи (ТОЛЬКО для overlay-форматов)
+
+Для форматов с `overlays: true` во front-matter (top-list, in-game-pov, fake-ad, what-if-real-life)
+сценарист заполняет per-scene массив `overlays[]` — это ФИРМЕННАЯ ГРАФИКА (название серии, %
+выживания, номер топа, слоган), НЕ субтитры. Её рисует `tools/overlays.py`. Схема:
 
 ```json
-"subtitle_emphasis": ["IN YOUR CREW"]
-"subtitle_emphasis": ["betrayed", "Command"]
-"subtitle_emphasis": ["CHEKOV"]
+"overlays": [
+  { "type": "title", "text": "OSIAL\nRISES", "position": "top-center",
+    "font": "ULT", "size": 130, "color": "white",
+    "stroke": {"color": "black", "width": 4}, "enable": [0.0, 5.0] },
+  { "type": "hud_counter", "text": "SURVIVAL 15%", "position": "top-right",
+    "font": "ARI", "size": 52, "color": "white",
+    "stroke": {"color":"black","width":4}, "enable": [0, 5] },
+  { "type": "outcome_plate", "text": "YOU DIED", "position": "center",
+    "font": "TRJ", "size": 110, "color": "red",
+    "stroke": {"color":"black","width":5}, "enable": ["gte", 13.5], "fade_in": 0.4 }
+]
 ```
 
-If the field is missing or empty — subtitle renders as plain white text.
-
-**Word-budget per emphasis phrase (bold preset — applies to fun-news, serial-drama, news, top-list).** Subtitles render in UPPERCASE on Helvetica Bold 96px over a 1080-wide frame with MarginL/R=100 (usable text width ~880px). Safe limit: **≤14 characters per emphasis phrase, including spaces**. Longer phrases overflow horizontally — libass does NOT auto-wrap a 2-word chunk.
-
-- Bad (overflow): `"SYSTEMIC OPPRESSION"` (19), `"MAIN CHARACTER ENERGY"` (21), `"GREY TORSO STRIKES AGAIN"` (24), `"REPARATIONS HOLDERS"` (19).
-- Good (fits): `"COOKED"` (6), `"NO CAP"` (6), `"73%"` (3), `"SKILL ISSUE"` (11), `"NEGATIVE AURA"` (13), `"BHLF"` (4).
-
-If you need to emphasize a long concept — either trim to the key word (`"SYSTEMIC OPPRESSION"` → `"OPPRESSION"`) or split into two emphasis entries (`["systemic", "oppression"]`) so Editor renders each as a separate chunk.
+Типы: `title` (название серии/title card), `hud_counter` (% выживания — отдельный объект на каждый
+интервал `enable`), `outcome_plate` (YOU DIED/SURVIVED), `rank_number` (#5..#1), `item_name`,
+`slogan`, `disclaimer`. Позиции: `center|top-left|top-right|bottom-center|top-center` или `"x,y"`.
+Шрифты — логические ключи (`ULT|TRJ|MED|ARI|IMPACT|MONT_BLACK|BEBAS`). Для форматов с
+`overlays: false` массив не нужен.
 
 ### `clip_type`
 - `action` — I2V clip (no dialogue, micro motion)

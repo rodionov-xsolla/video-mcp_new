@@ -1,9 +1,6 @@
 ---
-subtitle_style: narrative
-subtitle_offset_s: 5
-subtitle_mask: false
-subtitle_highlight: false
-subtitle_extras: []
+subtitles: true
+overlays: false
 ---
 
 # Format "Redcon" — alternate-universe character story with lore divergence
@@ -177,7 +174,7 @@ Same as `character-story`: character does NOT speak on camera (no lipsync). I2V 
 - **TTS:** full monologue as ONE audio file (`tts-output.mp3`). All `tts_segment` values joined in order, clip 1 skipped (null). Mandatory chunking per `sound.md §1b` if total > 80 words.
 - **Voice engine:** `game_tag == "genshin impact"` → **Chatterbox** with character's `voice-1.mp3` from Supabase (`assets/genshin-impact/characters/{slug}/voice-1.mp3`). All other games → MiniMax preset voice matching the alternate-self identity. See `rules/roles/sound.md §1`.
 - Generate `tts-output.mp3`, upload to Supabase as episode-tts asset
-- **Subtitles:** `add_subtitles.py` with `--offset 5` (title card) and **NO `--text`** — always faster-whisper for timing (per `rules/roles/editor.md`)
+- **Subtitles:** единый универсальный стиль по whisper из `build/voice-final.wav` (лид-тишина title card уже внутри через adelay) — `rules/roles/editor.md` §6. Никаких `--offset`/`--text`.
 - Music: from `video-agent/music/Dark/` only — never Fun/
 - General rules — `rules/roles/sound.md`
 

@@ -1,9 +1,6 @@
 ---
-subtitle_style: bold
-subtitle_offset_s: 0
-subtitle_mask: false
-subtitle_highlight: false
-subtitle_extras: []
+subtitles: true
+overlays: false
 ---
 
 # Format "Game News"

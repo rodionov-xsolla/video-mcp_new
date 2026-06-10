@@ -67,7 +67,7 @@ This rule applies regardless of format. A reader of `OUTPUT_DIR` should see four
 
 ## 0. Canonical pipeline — single-pass `filter_complex` (DEFAULT)
 
-**This is the path. Use it for every format unless a section below explicitly overrides for that format (split-screen gameplay-ai-avatar, format-specific subtitle burn-in styles).**
+**This is the path. Use it for every format unless a section below explicitly overrides for that format (split-screen gameplay-ai-avatar). Субтитры — единый стиль для всех (§6), не override.**
 
 Multi-stage assembly (sections 1–5) is **legacy**: kept for debugging when you need to inspect an intermediate, or when a clip-specific filter (e.g. per-scene drawtext) cannot be expressed inside one filter graph. The legacy path is what made editor runs take 12–32 minutes for 50s output. Single-pass on the same hardware: **~90 seconds**.
 
@@ -218,8 +218,8 @@ WWE Champions fun-news pilot (2026-06-01) burned 1× re-render because the origi
 
 - **gameplay-ai-avatar split-screen** (§7) — the per-scene 60/40 stack cannot be expressed across N scene inputs cleanly inside one concat. Two-stage: first build each split-scene composite (§7), then feed those composites as inputs into the §0 canonical pipeline.
 - **serial-drama "behind glass" TTS overlay** (§3) — per-scene aecho is a pre-mix on the I2V scene before §0. Treat output of §3 as the canonical input `[k:v]/[k:a]` for the main pipeline.
-- **Subtitle generation** (§6) — different formats use different styles (PIL PNG word-highlight vs ASS chunked vs drawtext). All emit a file (PNG sequence / ASS / drawtext expr) that §0 ingests via `ass=`, `overlay=`, or `drawtext=`. The principle holds: generate the asset off-pipeline, burn in **inside** §0.
-- **Per-scene drawtext / TBC / episode card** — express as `drawtext` filters chained onto the affected `[vk]` branch BEFORE concat. Do not run a separate pass.
+- **Subtitle generation** (§6) — ОДИН универсальный ASS на весь ролик, тайминги по whisper из `build/voice-final.wav`. `§0` подхватывает его последним видеофильтром `ass=build/subs.ass`. Никаких per-format стилей.
+- **Графические оверлеи** (§6.5) — `tools/overlays.py` эмитит per-scene `drawtext`-фрагменты, вплетаемые в `[vk]`-ветку BEFORE concat. channel-bug — `overlay=` после `ass=`. Отдельного прохода нет.
 
 ### 0.6 When NOT to use the canonical pipeline
 
@@ -381,17 +381,9 @@ $FFMPEG -y -i tts-output.mp3 -filter:a "atempo=$SPEED" tts-fast.mp3
 
 > ⚠️ **OVERRIDE — for `serial-drama` and any format whose playbook lists `❌ Title cards / brainrot tags / character name overlays` in anti-patterns: SKIP this section entirely.** No "EPISODE N" drawtext. The episode opens cold on the recap clip. The block below remains for legacy formats that explicitly request an episode card in their playbook.
 
-For non-serial-drama formats that DO request an episode card: the first clip gets the episode number overlaid (e.g. `EPISODE 1`, `EPISODE 2`) via drawtext. Text in the upper third of the frame, white, with a black stroke, appearing at 1-3 seconds of the clip.
-
-```bash
-EP_NUM="EPISODE 1"  # from storyboard.json → episode_number
-$FFMPEG_FULL -y -i scenes/scene-1/scene-1-scaled.mp4 \
-  -vf "drawtext=fontfile='$IMPACT':text='$EP_NUM':fontsize=80:fontcolor=white:borderw=4:bordercolor=black:x=(w-text_w)/2:y=h*0.15:enable='between(t,0.5,2.5)'" \
-  -c:v libx264 -preset slow -crf 20 -pix_fmt yuv420p -c:a copy \
-  scenes/scene-1/scene-1-scaled.mp4
-```
-
-Font: Impact or equivalent. Use `$FFMPEG_FULL` (with libfreetype).
+Эпизодная/серийная плашка («EPISODE N», название серии) — это **графический оверлей**, а не
+субтитр. Её рисует `tools/overlays.py` (тип `title`) из `scenes[].overlays[]` в storyboard, см.
+§6.5. Никакого ручного drawtext здесь. Для serial-drama её вообще нет (cold open на recap).
 
 ---
 
@@ -410,16 +402,16 @@ $FFMPEG -y -i final-base.mp4 \
   final-speed.mp4
 ```
 
-**Pipeline order:**
+**Pipeline order (с учётом нового субтитрового потока):**
 1. Normalize clips (section 1)
-2. Subtitles on dialogue clips (section 6)
-3. Episode number on the first clip (section 3c)
-4. TBC on the last clip (section 5)
-5. Concat (section 2) → `final-base.mp4`
-6. **Speed up 1.15x (this section)** → `final-speed.mp4`
-7. Music (section 4) → `final.mp4`
+2. Per-scene графические оверлеи (§6.5) на `[vk]` ДО concat
+3. Concat → `final-base.mp4`
+4. **Speed up (this section, legacy-форматы)** → `final-speed.mp4`
+5. Собрать `build/voice-final.wav` из УЖЕ ускоренной речи (§6.1) и сгенерить `build/subs.ass` (§6.2)
+6. Бёрн `ass=` (последний видеофильтр) + channel-bug overlay (§6.5)
+7. Music (section 4), mix ПОСЛЕ speedup (иначе плывёт питч)
 
-Music is overlaid AFTER speedup — otherwise the music pitch shifts.
+Субтитры всегда генерятся из ФИНАЛЬНОЙ (пост-speed) речи и жгутся последними — съехать не могут.
 
 ---
 
@@ -507,202 +499,178 @@ CTA (custom or fallback) is added AFTER the last clip in the concat list.
 
 ---
 
-## 6. Subtitles — единый канонический путь
+## 6. Subtitles — ОДИН универсальный стиль, тайминги по Whisper
 
-Стиль субтитров определяет **оркестратор** через front-matter формата (`subtitle_style`, `subtitle_offset_s`, `subtitle_mask`, `subtitle_highlight`, `subtitle_extras`). Editor получает их в виде плейсхолдеров `${SUBTITLE_*}` и просто прокидывает в `tools/add_subtitles.py`. Никаких форматных таблиц «serial-drama vs reddit-story» здесь больше нет — это работа `manager.md`.
+Субтитры **одинаковы во всех форматах**: единый стиль/размер/позиция, тайминги всегда по
+faster-whisper. Никаких per-format пресетов, масок, secondary-style, marginv/offset/atempo.
+Графические оверлеи (название серии, % выживания, номера топ-листа, слоганы) — это НЕ субтитры,
+их рисует отдельный скрипт `tools/overlays.py` (см. §6.5).
 
-### 6.0 Три hard-rules (нарушение → silent failure)
+`manager` передаёт тебе единственный субтитровый флаг: `SUBTITLES` (`true`/`false`). Если
+`false` (motion-dance, dual-style) — ASS не генерим, в `filter_complex` нет токена `ass=`.
+Отдельные немые сцены (silent I2V / physical-gag) определяются пустым `tts` в сцене storyboard,
+а не флагом формата — whisper по финальной речи их просто не озвучит.
 
-**Rule SUB-1 — субтитры это ПОСЛЕДНИЙ фильтр в `filter_complex`.**
-В graph'е `ass=build/subs.ass[vsub]` идёт после `concat` и после ВСЕХ overlay-токенов (CTA-фильтры, маски, drawtext). Если бёрн саба попадёт ДО overlay'я — оверлей нарисуется поверх текста, в логах чисто. Проверка перед запуском ffmpeg: `grep -nE 'ass=|subtitles=' <filter_complex>` должна быть последним токеном в видеоцепочке перед `-map [v…]`.
+### 6.0 Три hard-rule
 
-**Rule SUB-2 — Loudnorm 2-pass на финальном аудио ДО сборки final.mp4.**
-Цель: -14 LUFS integrated / -1 dBTP peak / 11 LU range (стандарт TikTok/YouTube/Reels/X). Двухпроходно:
+**SUB-1 — `ass=build/subs.ass` это ПОСЛЕДНИЙ видеофильтр.** После `concat` и после всех overlay-
+токенов из §6.5 (кроме channel-bug, который идёт после саба). Проверка: `ass=` — последний токен
+видеоцепочки перед `-map [v…]`.
+
+**SUB-2 — Loudnorm 2-pass на финальном аудио** (−14 LUFS / −1 dBTP / 11 LU). Двухпроходно
+(measure → apply), иначе соцсети неравномерно понизят громкость по сценам.
+
+**SUB-3 — никаких порезов внутри слова.** Если режешь хвост сцены под музыку / `-t TOTAL_DUR`,
+snap к границе слова. Источник границ — события `build/subs.ass` (они уже выровнены по whisper),
+отдельный `timings.json` больше не нужен.
+
+### 6.1 build/voice-final.wav — ключевой шаг (тайминги корректны ПО ПОСТРОЕНИЮ)
+
+Whisper гоняется по **той же речевой дорожке, что идёт в финал** (пост-atempo, пост-adelay,
+пост-concat, до bg-music). Тогда субтитровый и аудио-таймлайн не могут разойтись — нет второго
+таймлайна. Поэтому `--offset/--atempo/--verify-audio` больше НЕ существуют.
+
+`build/voice-final.wav` = аудио-ветка `[aout]` из §0 **минус bg-music**, замороженная на диск.
+
+**Single-voice** (character-story, reddit-story, redcon — один `tts-output.mp3` на весь концат):
 ```bash
-# pass 1: measurement
-$FFMPEG -i build/aout.wav -af loudnorm=I=-14:TP=-1:LRA=11:print_format=json -f null - 2>&1 \
-  | sed -n '/^{$/,/^}$/p' > build/loudnorm.json
-
-# pass 2: apply with measured params
-M_I=$(jq -r .input_i build/loudnorm.json)
-M_TP=$(jq -r .input_tp build/loudnorm.json)
-M_LRA=$(jq -r .input_lra build/loudnorm.json)
-M_THRESH=$(jq -r .input_thresh build/loudnorm.json)
-OFFSET=$(jq -r .target_offset build/loudnorm.json)
-
-$FFMPEG -y -i build/aout.wav \
-  -af "loudnorm=I=-14:TP=-1:LRA=11:measured_I=$M_I:measured_TP=$M_TP:measured_LRA=$M_LRA:measured_thresh=$M_THRESH:offset=$OFFSET:linear=true" \
-  -ar 44100 -ac 2 -c:a aac -b:a 128k build/aout-norm.m4a
+# та же пара atempo→adelay, что §0 запекает в видео:
+$FFMPEG -y -i build/tts-output.mp3 \
+  -af "atempo=${SPEED},adelay=${PRE_MS}|${PRE_MS},aresample=48000" \
+  -ac 1 build/voice-final.wav
 ```
-Затем `aout-norm.m4a` идёт в final.mp4 (через `-i build/aout-norm.m4a -map …:a -c:a copy`). Без 2-pass соцсети сами понизят громкость неравномерно по сценам, и микс «прыгает».
+Лид-тишина от `adelay` сдвигает первое слово на `${PRE_MS}` — whisper видит реальную позицию,
+никакого `--offset` не надо.
 
-**Rule SUB-3 — никаких порезов внутри слова.**
-Если Editor подрезает хвост сцены под музыку / `-t TOTAL_DUR` / cliffhanger — snap к ближайшей `word.end ≤ target` из `scenes/scene-K/scene-K.timings.json` (Sound пишет этот файл, см. `sound.md` §12). Без snap'а последний саб обрывается на полуслове.
-
-### 6.1 Обоснование MarginV safe-zone (для всех пресетов)
-
-UI TikTok/Reels/Shorts (caption-bar, username, right-rail actions) перекрывает нижние 25-30% кадра 1080×1920. При `PlayResY=1920`:
-
-| Пресет | MarginV | Позиция от низа | Когда применять |
-|---|---|---|---|
-| `bold` | 520 | ~27% | Фастпейс, punchy, конкурирует с UI — нужен запас |
-| `narrative` | 420 | ~22% | Длинные строки, спокойный темп, ниже допустимо |
-
-**Меньшие значения трогать только если у формата есть конкретная причина** (например, `--mask` для перекрытия артефактов Kling у самого низа кадра в `what-if-real-life`: MarginV=120 при mask=true опускает бокс прямо на артефакт). Это override от оркестратора через `SUBTITLE_EXTRAS`, а не дефолт.
-
-⚠️ **Alignment=2 + MarginV — направление ОТ низа.** Бóльший MarginV = выше на экране. Меньший = ниже. Если задача — закрыть артефакт у самого низа, нужен МАЛЕНЬКИЙ MarginV (70-150), не большой.
-
-### 6.2 Канонический вызов из editor pipeline
-
-Editor получает от manager'а:
-- `${SUBTITLE_STYLE}` — `bold` / `narrative` / `none` / `custom`
-- `${SUBTITLE_OFFSET_S}` — число (pre-delay титульной карточки, 0 если её нет)
-- `${SUBTITLE_MASK}` — `true` / `false`
-- `${SUBTITLE_HIGHLIGHT}` — `true` / `false`
-- `${SUBTITLE_EXTRAS}` — строка с дополнительными CLI-флагами (например `--secondary-style Customer=lightgray,52,1,120 --marginv 800`)
-
-Если `${SUBTITLE_STYLE}` = `none` — НЕ генерировать ASS, в `filter_complex` нет `ass=` токена, переход сразу к audio map. Это `motion-dance`, `dual-style`, любая сцена с `scene_type: physical-gag`.
-
-Если `${SUBTITLE_STYLE}` = `custom` — формат сам описывает per-scene drawtext-логику в своём правиле (это режим для `top-list` номеров/имён — там это graphic overlay, а не субтитры).
-
-Иначе — для каждого диалогового клипа (или одного master.ass на весь концат) генерируем ASS:
-
+**Multi-voice** (serial-drama, news, gameplay-ai-avatar, what-if-real-life, fun-news, special-report):
 ```bash
-# Per-scene вариант (multi-voice форматы — serial-drama, news, gameplay-ai-avatar, what-if-real-life):
-TTS_TEXT=$(jq -r ".clips[$((K-1))].tts" storyboard.json)
-DUR=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 scenes/scene-$K/scene-$K.mp4)
-
-EXTRA_FLAGS=""
-[ "${SUBTITLE_MASK}" = "true" ] && EXTRA_FLAGS="$EXTRA_FLAGS --mask"
-[ "${SUBTITLE_HIGHLIGHT}" = "true" ] && EXTRA_FLAGS="$EXTRA_FLAGS --highlight-words"
-
-python3 tools/add_subtitles.py \
-  - scenes/scene-$K/scene-$K.mp3 build/subs-scene-$K.ass \
-  --emit-ass-only \
-  --duration "$DUR" \
-  --text "$TTS_TEXT" \
-  --style "${SUBTITLE_STYLE}" \
-  --offset "${SUBTITLE_OFFSET_S}" \
-  --verify-audio scenes/scene-$K/scene-$K.mp3 \
-  $EXTRA_FLAGS \
-  ${SUBTITLE_EXTRAS}
-
-# Single-voice (один TTS на весь концат — character-story, reddit-story, redcon):
-# ВАЖНО: audio-аргумент = ФИНАЛЬНОЕ аудио, которое реально идёт в микс (tts-fast.mp3,
-# уже после atempo). НЕ передаём --atempo — множитель уже «запечён» в длительности файла,
-# и подавать его нечем ошибиться. --verify-audio с тем же файлом ставит code-guard на дрейф.
-python3 tools/add_subtitles.py \
-  - build/tts-fast.mp3 build/subs.ass \
-  --emit-ass-only \
-  --duration "$MAIN_DUR" \
-  --text "$FULL_NARRATION" \
-  --style "${SUBTITLE_STYLE}" \
-  --offset "${SUBTITLE_OFFSET_S}" \
-  --verify-audio build/tts-fast.mp3 \
-  $EXTRA_FLAGS \
-  ${SUBTITLE_EXTRAS}
+# Для КАЖДОЙ сцены K по порядку index собрать её речевой слот ДЛИНОЙ РОВНО в длительность сцены:
+#   • немой I2V / action / physical-gag → anullsrc на длину клипа (тишина-плейсхолдер)
+#   • Avatar/dialogue → ИЗВЛЕЧЬ аудио из САМОГО scene-K.mp4 (встроенная lipsync-дорожка Avatar),
+#       НЕ из исходного scene-K.mp3. Avatar мог чуть сдвинуть/обрезать тайминг при рендере —
+#       берём то, что реально в видео, иначе саб поедет относительно губ.
+#   • + off-screen VO (customer.mp3 и т.п.) — тем же amix, что в §0
+#   • применить тот же per-scene atempo/apad, что и в §0 (длина слота == длина видео-клипа)
+# затем concat в порядке index, без bg-music:
+$FFMPEG -y <per-scene inputs> \
+  -filter_complex "<per-scene shaping, slot_k == clip_dur_k>,concat=n=${N}:v=0:a=1[a]" \
+  -map "[a]" -ac 1 build/voice-final.wav
 ```
+**Критично:** каждый слот == длительность своей сцены (тишина под немые). Тогда сумма ≈ `MAIN_DUR`,
+и `add_subtitles.py` это проверяет (падает, если `voice-final` сильно короче `--main-dur` — частый
+баг «склеили реплики подряд без тишины»). `voice-final.wav` — это в точности речь, что слышит зритель
+(bg-music исключаем: тайминги речи она не двигает, а whisper чище транскрибирует без музыки).
 
-**Источник таймингов — ВСЕГДА faster-whisper, без исключений:**
+Это убирает различие single-voice / multi-voice: оба дают один `voice-final.wav`, оба зовут скрипт одинаково.
 
-**НЕ передавай `--text`** ни для одного формата. Пропорциональные тайминги из текста дают равномерный ритм но не попадают в реальные паузы, акценты и интонации — особенно критично для Chatterbox (голосовые клоны добавляют непредсказуемые паузы). Whisper выравнивает субтитры по реальному звучанию.
+### 6.2 Канонический вызов (единственный)
 
-`--verify-audio` **не нужен** в Whisper-режиме: тайминги получены из того же аудио, дрейф невозможен по конструкции.
-
-**Канонический вызов — ВСЕ форматы:**
 ```bash
 python3 tools/add_subtitles.py \
-  - build/tts-fast.mp3 build/subs.ass \
-  --emit-ass-only \
-  --style "${SUBTITLE_STYLE}" \
-  --offset "${SUBTITLE_OFFSET_S}" \
-  $EXTRA_FLAGS \
-  ${SUBTITLE_EXTRAS}
-# НЕТ --text, НЕТ --verify-audio, НЕТ --atempo
+  build/voice-final.wav \
+  build/subs.ass \
+  --storyboard storyboard.json \
+  --lang "${LANGUAGE}" \
+  --main-dur "${MAIN_DUR}"
 ```
 
-Для форматов с `--highlight-words` (reddit-story): добавь `--highlight-words --highlight-color 00FFFF` — Whisper уже используется, флаги совместимы.
+- **Whisper даёт только тайм-коды. Бёрним текст сценариста** (forced alignment): скрипт читает
+  канонический текст из `storyboard.json` (`scenes[].tts` по порядку для multi-voice; top-level
+  `tts.full_text` для single-voice) и выравнивает его по whisper-таймингам. Whisper-транскрипт
+  (с галлюцинациями Chatterbox) на экран НЕ попадает.
+- **НЕТ** `--text`, `--style`, `--offset`, `--atempo`, `--verify-audio`, `--mask`,
+  `--secondary-style`, `--marginv`, `--highlight-words` — все удалены из скрипта.
+- `--main-dur ${MAIN_DUR}` (конец последнего story-клипа до CTA) — скрипт сам клампит последнее
+  событие, чтобы саб не залез на CTA. Ручной `sed` по ASS больше не нужен.
+- Стиль фиксирован в скрипте: Helvetica 72, CAPS, белый + чёрная обводка, MarginV=520, чанки по 4.
 
-**Антидрейф by construction (вместо ручного `--atempo`).** ASS генерим из **того же аудио, что идёт в микс** — `build/tts-fast.mp3` (уже после `atempo`) для single-voice, `scene-$K.mp3` для per-scene. Тайминги тогда считаются по реальной длительности и не могут разойтись с фактическим звучанием. Флаг **`--atempo` устарел** — не передавай его: множитель уже запечён в длительности файла, а ручной множитель — это и был источник «съезжания» (несовпал с `filter_complex` → субтитры уезжали к концу клипа). Если файл по какой-то причине ещё не ускорен — сначала сделай `tts-fast.mp3` (§3b), потом генери ASS.
+Бёрн — `ass=` фильтр, НЕ `subtitles=` (на macOS ffmpeg-full `subtitles=` может вернуть чёрный
+кадр). И только через `/usr/local/bin/ffmpeg-full/ffmpeg` (libass), см. §11.
 
-**`--verify-audio` ОБЯЗАТЕЛЕН** и указывает на то же финальное аудио. `add_subtitles.py` падает (exit 1), если конец последнего слова расходится с `offset + длина(аудио)` больше чем на 0.30с. Это code-guard: любой рассинхрон становится ошибкой билда, а не молча уезжает в прод. Не игнорируй его падение «ретраем» — чини источник (не то аудио / лишний `--atempo` / ASS сгенерён до финального speed).
-
-**ASS генерится ПОСЛЕДНИМ — после того как форма аудио заморожена** (после любого `atempo`/whole-video speedup §3d). Если сначала собрал ASS, а потом поменял скорость — пересобери ASS.
-
-**`ass=` фильтр, НЕ `subtitles=`.** На macOS ffmpeg-full `subtitles=` может не найти системные шрифты и вернуть чёрный кадр без ошибки. Всегда используй `ass='path/to/subs.ass'` — этот фильтр читает шрифты напрямую из ASS-файла. Пример:
 ```bash
-# ПРАВИЛЬНО:
 -vf "ass='$OUTPUT_DIR/build/subs.ass'"
-# НЕПРАВИЛЬНО (может дать чёрный кадр):
--vf "subtitles='$OUTPUT_DIR/build/subs.ass':fontsdir=/System/Library/Fonts"
 ```
 
-**reddit-story — трёхшаговая сборка (фон + субтитры + аудио раздельно):**
-```
-1. Нормализовать gameplay → build/gameplay-normalized.mp4   (scale 1080×1920, fps 30, -an, -t TTS_DUR)
-2. Сжечь субтитры        → build/gameplay-with-subs.mp4    (-vf "ass='...subs.ass'")
-3. Смикшировать аудио    → final.mp4                       (TTS + bg-music 0.05, apad, amix, -c:v copy)
-```
-Одиночный проход с `subtitles=` в filter_complex рвёт видеострим при concat. Три шага — надёжно.
+### 6.3 ASS-инварианты
 
-**`--offset`** должен совпадать с `adelay` в filter_complex (в секундах). Например, для с титульной 5-секундной карточкой: `adelay=5000|5000` ↔ `--offset 5.0`.
+1. **No event overlap** — `add_subtitles.py` гарантирует by construction (каждый чанк живёт до
+   старта следующего).
+2. **Субтитры не заходят на CTA** — гарантируется `--main-dur`.
+3. **Без opaque-box / drawbox во всю ширину** — стиль использует обводку (borderstyle=1), не бокс.
 
-### 6.3 ASS-инварианты (от Sound сюда, см. предыдущую версию `sound.md` §10)
+### 6.4 Программный self-eval после бёрна
 
-1. **No event overlap within the same Style.** Два `Dialogue:` события одного стиля с пересекающимися временами рендерятся одновременно — текст ломается. `add_subtitles.py` гарантирует это by construction (каждый чанк живёт до начала следующего), но если ты редактируешь ASS вручную — проверяй.
-
-2. **Last subtitle reaches clip end when masking.** При `--mask` последнее событие должно дотягиваться до `clip_duration - 0.05s`. Иначе во время хвостовой тишины артефакт под боксом снова виден. `add_subtitles.py` делает это автоматически (`out[-1] = (start, duration, word)`).
-
-3. **Opaque box (BorderStyle=4) — НЕ во всю ширину кадра.** Бокс ASS обрамляет только текст + outline-padding. Никаких `drawbox` во всю ширину 1080 — это режет картинку. Если артефакт шире саба — увеличь `--secondary-style` font size или разбей фразу на длиннее чанк, но не делай full-width drawbox.
-
-4. **Субтитры НЕ должны заходить на CTA.** Последнее ASS-событие в `subs.ass` должно заканчиваться не позже `MAIN_DUR` (конец последнего story-клипа, до CTA). `add_subtitles.py` генерирует тайминги по TTS, и если TTS-аудио после atempo+adelay длиннее `MAIN_DUR`, последний chunk автоматически вылазит за границу. После генерации ASS **всегда проверяй** конечный таймкод последнего `Dialogue:` события: если он > `MAIN_DUR`, обрежь его:
-   ```bash
-   # Пример: MAIN_DUR=40s → обрезать последний event
-   sed -i '' "s/\(Dialogue:.*\),0:MM:SS\.ss,\(Default.*\)$/.../" build/subs.ass
-   # Или вручную отредактируй последнюю строку в build/subs.ass
-   ```
-   CTA — отдельный branded ролик без субтитров. Субтитры на CTA = брак.
-
-### 6.4 Programmatic self-eval после бёрна
-
-После того как final.mp4 собран, перед handoff Manager'у — три программные проверки:
-
-1. **Длительность.** `ffprobe duration final.mp4 ≈ sum(scene_durations) [+ CTA_dur] ± 200мс`. Иначе encode был прерван или amix утянул хвост в music.
-
-2. **Loudness.** `ffmpeg -i final.mp4 -af loudnorm=I=-14:TP=-1:LRA=11:print_format=json -f null -` → `input_i` должен быть в [-15.0, -13.0]. Иначе loudnorm 2-pass не сработал.
-
-3. **Bottom-strip variance per dialogue scene** (если `${SUBTITLE_STYLE} != none`). Для каждой сцены с непустым `tts` сэмплировать 1 кадр в `scene_midpoint + 0.5s`, посчитать pixel variance в bottom 25% кадра. Variance > порог (~500) ⇒ субтитр действительно прорендерился. Если хоть одна сцена даёт пустую полосу — бёрн саба провалился (libass не подцепился, fonts.conf битый, что-то ещё).
+1. **Длительность:** `ffprobe duration final.mp4 ≈ sum(scene_durations)[+ CTA] ± 200мс`.
+2. **Loudness:** `input_i` в [−15.0, −13.0].
+3. **Bottom-strip variance** (только если `SUBTITLES=true`): для каждой сцены с непустым `tts`
+   сэмплировать кадр в `scene_mid + 0.5s`, посчитать stddev в нижних 25% кадра; > порога ⇒ саб
+   прорендерился. Если полоса пустая — бёрн провалился (libass не подцепился / битый fonts.conf).
+   До 3 ретраев, потом fail Manager'у.
 
 ```bash
-# вариант проверки: один кадр через ffmpeg + variance через ImageMagick / Python+PIL
 $FFMPEG -y -ss "$SCENE_MID" -i final.mp4 -frames:v 1 -q:v 2 build/probe-$K.jpg
 python3 -c "
-import sys
-from PIL import Image, ImageStat
-img = Image.open(sys.argv[1]).convert('L')
-w, h = img.size
-strip = img.crop((0, int(h*0.75), w, h))
-v = ImageStat.Stat(strip).stddev[0]
-print(f'scene {sys.argv[2]} variance={v:.1f}')
-sys.exit(0 if v > 15 else 1)
+from PIL import Image, ImageStat; import sys
+img = Image.open(sys.argv[1]).convert('L'); w,h = img.size
+v = ImageStat.Stat(img.crop((0,int(h*0.75),w,h))).stddev[0]
+print(f'scene {sys.argv[2]} variance={v:.1f}'); sys.exit(0 if v>15 else 1)
 " build/probe-$K.jpg "$K"
 ```
 
-До **3 ретраев** перепрожига с поправкой (например, на повторе передать `--marginv` ниже если variance подозрительно низкий). После 3 неуспешных — fail Manager'у, не молча.
+### 6.5 Графические оверлеи — `tools/overlays.py` (НЕ субтитры)
 
-
-## 7. Split-screen (gameplay-ai-avatar)
-
-Layout: 60% gameplay top + 40% avatar bottom. Only `crop`, never `pad`.
+Если `manager` передал `OVERLAYS=true`, рисуем фирменные графические оверлеи из
+`storyboard.json` (`scenes[].overlays[]` — title card / название серии, hud_counter (% выживания),
+outcome_plate (YOU DIED/SURVIVED), rank_number (#5..#1), item_name, slogan, disclaimer). Скрипт
+эмитит drawtext-фрагмент **на сцену**, который ты вплетаешь в `[vk]`-ветку **ДО concat** (single-pass §0):
 
 ```bash
-# Avatar part: 1080×768
-# Gameplay part: 1080×1152
+for K in $(seq 1 $N); do
+  FRAG=$(python3 tools/overlays.py storyboard.json --scene-index $K --workdir build \
+           --input-label "[v${K}pre]" --output-label "[v${K}]")
+  # пустой FRAG = у сцены нет оверлеев → ветка остаётся [v${K}pre]→[v${K}] passthrough
+done
+# фрагменты вставляются в filter_complex между scale/pad/fps ([v${K}pre]) и concat
+```
+
+Перед дорогим encode: `python3 tools/overlays.py storyboard.json --check` (валидация шрифтов).
+
+**channel-bug** (если `CHANNEL_BUG_URL` непустой) — PNG 110×110, top-left 40,40, применяется
+**после concat и после `ass=`** (последним), не per-scene:
+```bash
+curl -sLo build/channel-bug.png "$CHANNEL_BUG_URL"
+# PNG добавляется ПОСЛЕДНИМ '-i' → его индекс = (число всех предыдущих -i). Напр. если до него
+# было 11 входов (0..10), то PNG = вход 11 → лейбл "[11:v]". Передай ЭТОТ индекс:
+BUG=$(python3 tools/overlays.py storyboard.json --channel-bug --bug-png build/channel-bug.png \
+        --bug-input-label "[11:v]" --input-label "[vsub]" --output-label "[vout]")
+# В ffmpeg: ... -i build/channel-bug.png (последним),  $BUG в хвост filter_complex,  -map "[vout]"
+# ⚠️ --bug-input-label ОБЯЗАН быть реальным индексом входа PNG, иначе ffmpeg отвергнет граф.
+```
+
+Правила drawtext (macOS): только `ffmpeg-full` (libfreetype); скрипт уже использует `textfile=`
+и `expansion=none` (escape `:` и `%`), `fontfile=` резолвится из FONTS-map с фолбэками.
+
+
+## 7. Split-screen (gameplay-ai-avatar) — 3-зонный layout
+
+Универсальный саб сидит в фиксированной позиции MarginV=520 → реально занимает **y≈1256–1400**
+(2 строки) на канвасе 1920. Раньше тут был seam-трюк `--marginv 800`; теперь позиция фиксирована,
+поэтому layout подгоняем под неё: **3-зонный vstack**, где caption-полоса ложится ровно на y1256–1400.
+Только `crop`, никогда `pad`.
+
+- Gameplay top: 1080×1255 (crop) — y0–1255
+- **Caption band: 1080×150 (y1255–1405)** — затемнённая полоса; саб (y1256–1400) ложится ровно сюда
+- Avatar bottom: 1080×515 (crop) — y1405–1920
+
+Сумма 1255+150+515 = 1920 ✓. Саб не залезает ни на gameplay, ни на лицо аватара — он на своей полосе.
+
+```bash
 $FFMPEG -y -i avatar-speedup.mp4 -i gameplay-trimmed.mp4 \
   -filter_complex "
-    [1:v]scale=-1:1152:force_original_aspect_ratio=increase,crop=1080:1152[gp];
-    [0:v]scale=-1:768:force_original_aspect_ratio=increase,crop=1080:768[av];
-    [gp][av]vstack=inputs=2[v];
+    [1:v]scale=1080:1255:force_original_aspect_ratio=increase,crop=1080:1255[gp];
+    [0:v]scale=1080:515:force_original_aspect_ratio=increase,crop=1080:515[av];
+    color=c=black@0.60:s=1080x150:d=1[band];
+    [gp][band][av]vstack=inputs=3[v];
     [1:a]volume=0.25[bg];
     [0:a][bg]amix=inputs=2:duration=first[aout]
   " \
@@ -710,8 +678,10 @@ $FFMPEG -y -i avatar-speedup.mp4 -i gameplay-trimmed.mp4 \
   final-base.mp4
 ```
 
+- Саб бёрнится `ass=` ПОСЛЕ этого composite (см. §6) — он попадёт на тёмную полосу при MarginV=520.
 - Avatar audio = 100%, gameplay audio = 25% (background)
 - Avatar already arrived from Animator with 1.3x speedup (setpts + atempo) — Editor does not touch the speed
+- Никакого `--marginv 800`/seam-трюка — позиция саба единая для всех форматов.
 
 ---
 
@@ -872,123 +842,22 @@ $FFMPEG -i final.mp4 -ss 1.5 -t 2.0 -af "volumedetect" -f null - 2>&1 | grep mea
 
 ---
 
-## 12a. Off-screen speaker subtitles — через `--secondary-style`
-
-Если у формата есть второй голос (off-screen NPC, customer, narrator поверх Avatar'а — `dialogue-offscreen` сцены), оркестратор передаёт `SUBTITLE_EXTRAS` с флагом `--secondary-style`, например:
-
-```
---secondary-style "Customer=lightgray,52,1,120"
-```
-
-(`Name=color,size,italic,marginv`). `add_subtitles.py` добавит второй ASS-стиль в тот же файл (см. `tools/add_subtitles.py` функцию `parse_secondary_style`).
-
-**Тайминги** двух событий (Default + secondary) editor рассчитывает сам по `timings.json` (Sound пишет timings и для основного TTS, и для off-screen mp3 — `scene-K.timings.json` для `scene-K.mp3`, `scene-K.customer.timings.json` для `customer.mp3`). События обоих стилей попадают в один ASS:
-- Customer events: `0:00:00.30` → `duration(customer.mp3)` (текст из `storyboard.json[scene].customer_line`)
-- Default events: с `duration(customer.mp3) + 0.6s` (после паузы) (текст из `character_line` / `tts`)
-
-Между Customer и Default диапазонами — без перекрытий (§6.3 invariant 1).
-
----
-
 ## 13a. Channel bug overlay (надканальный бренд)
 
-Some games carry a permanent channel brand bug — a small static logo overlaid on every video like a TV station identifier (CNN/BBC/GLN style). Manager parses `channel_bug_url` from `games/{GAME_TAG}/{GAME_TAG}.md` and passes it as `CHANNEL_BUG_URL` in the editor prompt.
+Channel-bug (постоянное лого канала, TV-station style) теперь рисует `tools/overlays.py`, а не
+ручной filter_complex. Manager парсит `channel_bug_url` из `games/{GAME_TAG}/{GAME_TAG}.md` и
+передаёт `CHANNEL_BUG_URL`. Если он непустой — см. §6.5: скачать PNG, получить фрагмент через
+`overlays.py --channel-bug`, применить **после concat и после `ass=`** (overlay 110×110, top-left
+40,40, на всю длину). Если `CHANNEL_BUG_URL` пуст — шага нет.
 
-**Contract:**
-- `CHANNEL_BUG_URL` empty / unset → NO overlay step. Skip this section entirely; pipeline runs as if channel branding does not exist.
-- `CHANNEL_BUG_URL` non-empty → mandatory overlay. Apply per below.
+Валидация: сэмпл кадра t=1.0, stddev верхнего-левого 200×200 региона > 25 ⇒ бренд на месте.
 
-### Positioning + sizing (universal — same across all formats / games)
+## 13. Артефакты Kling — чинить промптами, НЕ маскировать
 
-| Parameter | Value | Why |
-|---|---|---|
-| Anchor corner | top-left | TikTok/Reels right-rail UI conflicts with right side; top-left stays clear of TikTok native UI + youtube Shorts cards. |
-| Margin from edges | 40 px | Safe inside iPhone notch / mobile bezel. |
-| Size at overlay | 110×110 | TV-bug subtlety. Larger = watermark, smaller = unreadable on 6" screens. |
-| Source PNG | square RGBA, ≥256×256 (downscaled in filter) | Pre-baked alpha so we don't need to colorchannelmixer in the chain. |
-| Opacity behavior | use PNG's baked alpha | If the source PNG was authored at 100% alpha and we need 70%, add `colorchannelmixer=aa=0.7` before overlay. |
-| Lifetime | static, full video duration | No fade in/out; brand bug doesn't blink. |
-| Apply position in graph | **after concat, before audio mapping** | One overlay over the whole timeline. NOT per-scene (would have to apply 5× and burn 5× more pixel work). |
-
-### Single-pass filter_complex addendum
-
-Add to §0 canonical pipeline when `CHANNEL_BUG_URL` is non-empty:
-
-```bash
-# In phase 0 (manager OR editor pre-flight): download to build/
-curl -sLo build/channel-bug.png "$CHANNEL_BUG_URL"
-[ -s build/channel-bug.png ] || { echo "ERROR: channel-bug.png empty"; exit 1; }
-
-# In the ffmpeg invocation: add as last input
-$FF -y \
-  -i scenes/scene-1/scene-1.mp4 \
-  ...  # all scenes
-  -i build/cta-raw.mp4 \
-  -i tts.mp3 \
-  -i bg-music.mp3 \
-  -i build/channel-bug.png \           # <-- NEW input, last position
-  -filter_complex "\
-    ...  # scene normalizes, concat → [vcat]
-    [vcat]<existing video tail filters → [vsub]>; \
-    [N+3:v]scale=110:110[bug]; \         # N+3 = channel-bug index (after cta, tts, music)
-    [vsub][bug]overlay=40:40:format=auto[vout]; \
-    ...  # audio branch unchanged → [aout]
-  " \
-  -map "[vout]" -map "[aout]" \
-  ...
-```
-
-**Critical:** the overlay goes **AFTER** the ASS burn (`[vsub]`). Subtitles do not appear on top of the bug (bug is in top-left corner where subs never go), but visually it's cleaner to compose bug last so any pixel work on subtitles happens before the bug pixel is written.
-
-If your specific format burns ASS per-scene inside each `[vk]` (fun-news / streettalk pattern), the overlay still goes after concat:
-
-```
-[vk] ... ass=build/scene-k.ass → [vk]   (per scene, k=1..N)
-[v0..vN] concat=...→[vcat]
-[vcat][bug]overlay=40:40[vout]          # bug applied to whole concat once
-```
-
-### Validation
-
-Programmatic self-check after final.mp4 build:
-
-```bash
-# Sample one frame at t=1.0s, check top-left 200×200 region has non-empty pixel variance
-$FFMPEG -y -ss 1.0 -i final.mp4 -frames:v 1 build/probe-bug.png 2>&1 | tail -3
-python3 -c "
-from PIL import Image, ImageStat
-img = Image.open('build/probe-bug.png').convert('L')
-strip = img.crop((30, 30, 230, 230))  # 200×200 area around bug
-v = ImageStat.Stat(strip).stddev[0]
-print(f'top-left variance: {v:.1f}')
-import sys; sys.exit(0 if v > 25 else 1)
-" || { echo "ERROR: channel bug missing or near-uniform"; exit 1; }
-```
-
-Variance > 25 means the bug is visually present (logo has structure → non-uniform luminance). Near-zero variance → bug overlay silently failed (likely chain error in filter_complex labels, or PNG was empty).
-
-### Anti-patterns
-
-- ❌ Bug per-scene (5 separate `[vk][bug]overlay` chains) — wastes pixel work, identical visual result.
-- ❌ Bug on the CTA (visible double-brand) — the CTA is its own branded artifact; bug ends with the concat-before-CTA boundary OR runs through everything depending on game policy. Default: bug runs over entire timeline including CTA (consistent TV-bug behavior). If the game's CTA already has its own brand mark, override in format playbook.
-- ❌ Bug fade in/out at scene transitions — looks broken, not TV-broadcast.
-- ❌ Reading PNG via subprocess to "verify alpha" — programmatic variance check above is the standard. Do NOT visually Read the PNG in role-agent context (manager rule, `CLAUDE.md`).
-- ❌ Bug position varying between videos in the same channel — kills brand recognition. Always top-left 40,40 at 110×110.
-- ❌ Audio filter chain (`concat → adelay → amix`, or per-scene `amix` for ambient SFX) without `asetpts=N/SR/TB` after each stage and `aresample=async=1:first_pts=0` on inputs — produces a final.mp4 whose audio bitstream is correct but container timestamps are garbage (`start_time` ≈ 6.6 million years, `nb_frames` ≈ 2/sec instead of ~40/sec). Players ignore the audio → video appears silent. See §0.4.1 for the canonical recipe. Self-check: `ffprobe -select_streams a -show_entries stream=start_time,nb_frames final.mp4` — `start_time` MUST be ~0.
-
----
-
-## 13. Artifact masking — never full-frame drawbox
-
-Some clips arrive with generation artifacts (Kling Avatar v2 CJK hallucinations near the bottom of the frame, garbled UI text, etc.). To hide them, the right tool is:
-
-1. **Preferred:** Subtitle ASS box (`BorderStyle=4`, через `--mask` от оркестратора) sized and positioned to cover exactly the artifact region (см. §6.1 для MarginV direction).
-2. **Acceptable:** Narrow `drawbox` slightly wider than the artifact bbox (padding ≤ +40 px on each side).
-3. **Forbidden:** Full-width `drawbox` covering the entire bottom strip — it crops the picture for no reason and users will reject the result.
-
-Workflow: extract one frame at the artifact's timestamp, measure the artifact bbox, design the mask to cover the bbox + small padding, then re-encode all affected scenes — once.
-
----
+Маскировка артефактов субтитровым боксом (старый `--mask` / BorderStyle=4) **удалена**. Артефакты
+Kling (CJK-галлюцинации, мусорный текст у низа кадра) предотвращаются на уровне промпта —
+negative_prompt в плейбуке формата (см. what-if-real-life.md). Никаких full-width `drawbox` и
+opaque-box субтитров: единый стиль использует только обводку.
 
 ## 14. Speedup is a mandatory step, not optional
 

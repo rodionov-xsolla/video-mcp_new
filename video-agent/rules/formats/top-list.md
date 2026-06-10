@@ -1,9 +1,6 @@
 ---
-subtitle_style: bold
-subtitle_offset_s: 0
-subtitle_mask: false
-subtitle_highlight: false
-subtitle_extras: ["--marginv", "240"]
+subtitles: true
+overlays: true
 ---
 
 # Format "TOP List" — countdown of top-5 characters / locations / items in a game
@@ -127,16 +124,26 @@ Kling I2V `motion_prompt`: ≥2 distinct micro-motions, e.g. `"hair drifts in lo
 
 ---
 
-## Text overlays (Editor)
+## Text overlays — `clips[].overlays[]` → `tools/overlays.py`
 
-Two overlays per item clip (drawtext or PIL), applied **per-scene before concat**:
+Сценарист кладёт два оверлея в `overlays[]` каждого item-клипа (рисует `tools/overlays.py`
+per-scene before concat, editor.md §6.5 — НЕ ручной drawtext, НЕ запекать в NB2):
 
-| Overlay | Position | Style | Timing |
+| Overlay (тип) | Position | Style | Timing |
 |---|---|---|---|
-| Number `"#5"` (huge) | top-left @ x=80, y=200 | game font (or Montserrat Black), ~220px, accent color stroke 4px, black drop-shadow | 0.0s–5.0s (whole clip) |
-| Name `"T'POL"` (uppercase) | bottom third @ **y=1300** (sits ABOVE the narrator subtitle) | game font (or Bebas Neue), ~96px, white with 6px black stroke | 0.3s–5.0s (slide-in from left 0.0–0.3s) |
+| `rank_number` `"#5"` (huge) | top-left @ x=80, y=200 | `MONT_BLACK` ~220px, accent stroke 4px | весь клип |
+| `item_name` `"T'POL"` (uppercase) | @ **y=1130** (ВЫШЕ субтитра, который занимает y≈1256–1400) | `BEBAS` ~96px, white + 6px black stroke | весь клип |
 
-> ⚠️ **Name / subtitle collision (recurring bug — fixed by construction).** The bold-subtitle preset in `tools/add_subtitles.py` defaults to `MarginV=520`, which anchors the narrator caption at ≈y1400 — exactly where the `{NAME}` plate used to sit, so the subtitle landed directly on top of / above the battle name. Fix: the format front-matter now ships `subtitle_extras: ["--marginv", "240"]` (orchestrator passes it to Editor automatically → narrator caption drops to the bottom safe zone ≈y1488–1680), and the `{NAME}` plate moved up to **y=1300**. Result: three non-overlapping zones — `#N` top-left (y200), `{NAME}` (y1300), narrator subtitle (marginv240). Do NOT revert either value without re-checking the gap.
+Пример overlay-объектов в item-клипе:
+```json
+"overlays": [
+  {"type":"rank_number","text":"#5","position":"80,200","font":"MONT_BLACK","size":220,"color":"yellow","stroke":{"color":"black","width":4}},
+  {"type":"item_name","text":"T'POL","position":"(w-text_w)/2,1130","font":"BEBAS","size":96,"color":"white","stroke":{"color":"black","width":6}}
+]
+```
+(`color` для `#N` — accent-цвет игры; см. `games/{tag}/{tag}.md`.)
+
+> ⚠️ **Name / subtitle collision — решено позиционированием оверлеев.** Универсальный субтитр сидит на фиксированном `MarginV=520` (≈y1400, нижняя safe-zone). Графические оверлеи `tools/overlays.py` ставятся ВЫШЕ: `#N` top-left (y200), `{NAME}` (y1130). Субтитр (1 строка y≈1328–1400, 2 строки y≈1256–1400) ниже плашки имени — зазор ~120px, коллизии нет. Позицию субтитра не трогаем (единый стиль, editor.md §6); номера/имена — это overlays.py, не субтитры.
 
 ### CTA — pack-shot from Supabase (preferred)
 
@@ -155,15 +162,10 @@ If no Supabase CTA video exists for the game: drawtext on the rank-1 part-2 clip
 
 ## Subtitles
 
-Narrator subtitles per-scene (drawtext on each `-scaled.mp4` BEFORE concat — never on the concatenated final, whisper misses voices on concat).
-
-- Method: drawtext ffmpeg (single-line, may auto-wrap to 2)
-- Font: **Montserrat Bold 44px** (or game-specified)
-- Position: bottom safe zone via `--marginv 240` (already in front-matter `subtitle_extras`), centered. MUST sit BELOW the `{NAME}` plate (y=1300) — never reuse the bold preset's default MarginV=520, which collides with the name. See the collision note in "Text overlays".
-- Color: white, stroke 4px black
-- Timing: matches TTS line, with `adelay=200ms` (TTS starts 0.2s into clip so visual lands first)
-
-Title card subtitle is optional (skip if title intro line is empty).
+Субтитры нарратора — **единый универсальный стиль** (editor.md §6), генерит Editor по whisper из
+`build/voice-final.wav` (конкатенация per-scene TTS в порядке сцен). Один `build/subs.ass` на весь
+ролик, бёрн последним видеофильтром. CAPS 72px, MarginV=520 (саб занимает y≈1256–1400) — сидит
+НИЖЕ плашки `{NAME}` (y=1130). Никакого per-scene drawtext / ручного стиля / переопределения позиции.
 
 ---
 
@@ -287,7 +289,11 @@ If file absent → defaults from this playbook.
       "character_description": "Vulcan woman, dark hair, blue Enterprise NX-01 uniform...",
       "tts": "In fifth place: T'Pol from Enterprise — Vulcan grace and a logic-defying figure.",
       "image_prompt": "...",
-      "motion_prompt": "eyes blink subtly, hair drifts, camera arcs slowly to the right"
+      "motion_prompt": "eyes blink subtly, hair drifts, camera arcs slowly to the right",
+      "overlays": [
+        {"type":"rank_number","text":"#5","position":"80,200","font":"MONT_BLACK","size":220,"color":"yellow","stroke":{"color":"black","width":4}},
+        {"type":"item_name","text":"T'POL","position":"(w-text_w)/2,1130","font":"BEBAS","size":96,"color":"white","stroke":{"color":"black","width":6}}
+      ]
     },
     {"index": 2, "rank": 4, "name": "...", "...": "..."},
     {"index": 3, "rank": 3, "name": "...", "...": "..."},
@@ -302,7 +308,11 @@ If file absent → defaults from this playbook.
       "tts": "Topping the list: Seven of Nine. The queen of Borg-meets-bombshell. Follow for more tops.",
       "image_prompt": "...",
       "motion_prompt": "camera zooms in, screen flash, particles burst from behind, hair drifts",
-      "cta_overlay": true
+      "cta_overlay": true,
+      "overlays": [
+        {"type":"rank_number","text":"#1","position":"80,200","font":"MONT_BLACK","size":220,"color":"yellow","stroke":{"color":"black","width":4}},
+        {"type":"item_name","text":"SEVEN OF NINE","position":"(w-text_w)/2,1130","font":"BEBAS","size":96,"color":"white","stroke":{"color":"black","width":6}}
+      ]
     }
   ]
 }
@@ -316,7 +326,7 @@ If file absent → defaults from this playbook.
 
 - Exactly **7 scenes**: 1 title + 4 items (ranks 5..2) + 2 climax clips (both rank 1, `part` 1 and 2).
 - Title scene fields: `role: "title_card"`, `clip_type: "title"`, `title_text`, `subtitle_text`, optional `tts`.
-- Item scene fields: `rank` (int), `name`, `character_description` (8+ visual details), `camera_angle`, `motion_hint`, `tts`.
+- Item scene fields: `rank` (int), `name`, `character_description` (8+ visual details), `camera_angle`, `motion_hint`, `tts`, **`overlays[]`** (два объекта: `rank_number` `"#{rank}"` + `item_name` `"{NAME}"` uppercase — см. секцию «Text overlays»).
 - Rank-1 climax: TWO scenes (indices 5 and 6) BOTH with `rank: 1`. Index 5 = `part: 1`, `clip_type: "item_climax"`. Index 6 = `part: 2`, `clip_type: "item_climax"`. Same `name` and `character_description`. Different `camera_angle` (wide → close), `motion_hint`, and `tts` text.
 - `tts` for ranks 5..2: **8–15 words**, must START with the rank phrase ("In fifth place: / Number four: / At three: / And the runner-up:"). Include name + one-line reason.
 - `tts` for rank 1: **two short lines (≤10 words each)**. Part 1 starts with `"Topping the list:"` + name + a pacing-setup beat. Part 2 = emotional/legacy beat + literal closing `"Follow for more tops."`
@@ -371,9 +381,9 @@ If file absent → defaults from this playbook.
 
 ### Editor
 
-- For each item clip with a `rank` (scenes 1–6), apply **two drawtext overlays** before concat:
-  - `#{N}` huge top-left (game/Montserrat Black ~220px, accent stroke 4px, drop shadow), full duration
-  - `{NAME}` uppercase bottom-third @ y=1300 (game/Bebas Neue ~96px, white + 6px black stroke), 0.3s slide-in — must sit ABOVE the narrator subtitle (which is at `--marginv 240`); see the collision note in "Text overlays"
+- For each item clip with a `rank` (scenes 1–6), `clips[].overlays[]` несёт **два оверлея** (рисует `tools/overlays.py` before concat):
+  - `rank_number` `#{N}` huge top-left (`MONT_BLACK` ~220px, accent stroke 4px), full duration
+  - `item_name` `{NAME}` uppercase @ y=1130 (`BEBAS` ~96px, white + 6px black stroke). Сидит ВЫШЕ субтитра (он занимает y≈1256–1400) — зазор ~120px, коллизии нет.
 - Rank-1 pair (scenes 5 + 6) both show `#1` + `{NAME}` overlays. They are visually continuous (same number, same name), but distinct shots.
 - Title card (scene 0): NO number/name overlay (text is in NB2). Only subtitle if `tts` present.
 - Per-scene pipeline: subtitles → number+name overlay → normalize (1080×1920, 30fps, `-c:v libx264 -preset slow -crf 20`, AAC 128k).

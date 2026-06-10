@@ -1,9 +1,6 @@
 ---
-subtitle_style: bold
-subtitle_offset_s: 0
-subtitle_mask: false
-subtitle_highlight: true
-subtitle_extras: []
+subtitles: true
+overlays: false
 ---
 
 # Format "Streettalk" — Vox-pop street interview from the universe's «street»
@@ -205,7 +202,7 @@ ElevenLabs TTS for each of the 5 scenes. Voice settings:
 
 Use `voice` (name string), not `voice_id` hash.
 
-Sound also emits `scenes/scene-K/scene-K.timings.json` per scene (word-level timings for ASS) — see `sound.md` §12.
+Субтитры — НЕ задача Sound. Editor генерит единый универсальный ASS по whisper из `build/voice-final.wav` (editor.md §6). Никаких `timings.json`.
 
 **Ambient SFX (MANDATORY — silence is not OK for vox-pop):**
 
@@ -250,7 +247,7 @@ List planned 5 Kling Avatar clips with per-clip cost (`audio_dur × $0.056`). Co
 
 **Inputs to editor sub-agent prompt (manager parses + passes):**
 - Standard: scene mp4s, opener.mp4, cta.mp4, bg-music.mp3, storyboard.json
-- Subtitle params: `SUBTITLE_STYLE=bold`, `SUBTITLE_OFFSET_S=0`, `SUBTITLE_MASK=false`, `SUBTITLE_HIGHLIGHT=true`, `SUBTITLE_EXTRAS=""`
+- Субтитры: единый универсальный стиль (editor.md §6), оркестратор передаёт только `SUBTITLES=true`. Karaoke-подсветка отключена архитектурно.
 - **`CHANNEL_BUG_URL`** — from game config's `channel_bug_url` field (e.g. `https://.../assets/star-trek-timelines/branding/gln-bug.png`). Empty string if game has no channel branding.
 
 **Canonical single-pass `filter_complex` (per `editor.md` §0):**
@@ -315,7 +312,7 @@ Run `volumedetect` on a 1-second window of the FIRST dialogue scene at the dialo
 
 **Per-scene `apad=whole_dur=<sped_video_dur>` is MANDATORY** — Avatar v2 trailing silence stacks lipsync drift across 5 scenes (~4s by scene 5) without it.
 
-**ASS subtitles** — per-scene via `tools/add_subtitles.py --emit-ass-only --duration <sped_dur> --text "<TTS_TEXT>" --style bold --highlight-words --verify-audio scenes/scene-K/scene-K.mp3`. Burned into each `[vk]` BEFORE concat.
+**ASS subtitles** — единый универсальный стиль, генерит Editor по whisper из `build/voice-final.wav` (editor.md §6). Без `--text`/`--style`/`--highlight-words`/`--verify-audio`. Karaoke-подсветка отключена архитектурно (единый белый стиль во всех форматах).
 
 **Lower-third title cards (drawtext).** For each scene K where `storyboard.json → scenes[K].title_card.show == true`, add to that scene's `[vk]` branch (BEFORE the ASS burn-in):
 
@@ -560,7 +557,6 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 │   ├── scene-1/                  # reporter intro
 │   │   ├── scene-1.png           # on-location NB2 edit
 │   │   ├── scene-1.mp3           # TTS
-│   │   ├── scene-1.timings.json  # word timings (Sound)
 │   │   └── scene-1.mp4           # Avatar v2 raw
 │   ├── scene-2/  ...             # interviewee 1
 │   ├── scene-3/  ...             # interviewee 2
@@ -612,7 +608,6 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 - `stability: 0.55`, `style` omitted, `voice` = name (not voice_id).
 - Replace periods with commas/em-dashes in reporter lines (anchor anti-pattern from fun-news).
 - Upload mp3s to Supabase `episodes/{game}/{date}-streettalk/tts/scene-K.mp3`.
-- Emit `scene-K.timings.json` per scene for ASS (word-level timings).
 - Pick music: read game config `music.mood`, find best-matching track in `music/tracks.json` (prefer `use_for` containing `news`); fallback to `energetic-simulacao` if no mood match. Volume `0.06`.
 - General rules — `rules/roles/sound.md`.
 
