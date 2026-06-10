@@ -206,7 +206,31 @@ subtitle_extras: []         # дополнительные CLI-флаги, на�
    echo "YouTube: $YOUTUBE_URL"
    ```
 
-   **Scheduling — always verify the publication queue first.** Before setting a `--publish-at` date, call the YouTube API to list already-scheduled videos and find the next free slot. Do NOT pick a date manually — adjacent episodes already in queue will collide. Use `youtube-upload.sh` auto-schedule (omit `--publish-at`) which queries the channel's upload playlist and picks the nearest free date at 20:55 UTC (23:55 MSK). If Python `urllib` SSL fails (macOS Python 3.13 cert issue), use `curl` for all HTTP calls — the youtube-upload.sh script itself uses curl and is unaffected; only inline Python using urllib breaks. Fix: replace `urllib.request` with `subprocess.run(["curl", "-s", url, ...])` in the date-finder script.
+   **Scheduling — always verify the publication queue first.** Before setting a `--publish-at` date:
+
+   **Step 1 — check Supabase `video_agent_runs`:**
+   ```bash
+   curl -s -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+     -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
+     "${SUPABASE_URL}/rest/v1/video_agent_runs?select=game_tag,input_idea,yt_published&yt_published=not.is.null&order=yt_published.desc&limit=5"
+   ```
+   Last `yt_published` + 1 day = candidate for next slot. If all NULL (logging not yet active) → go to Step 2.
+
+   **Step 2 — YouTube API fallback (check actual scheduled videos on the channel):**
+   Get access token, then:
+   ```bash
+   # List private videos with publishAt to see what's already queued
+   curl "https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId={UPLOADS_PLAYLIST}&maxResults=20" \
+     -H "Authorization: Bearer $ACCESS"
+   # Then check video status:
+   curl "https://www.googleapis.com/youtube/v3/videos?part=status&id={comma-separated-ids}" \
+     -H "Authorization: Bearer $ACCESS"
+   # → items[].status.publishAt shows scheduled dates. Pick first date not taken at 20:59 UTC.
+   ```
+
+   **Channel token lookup:** `star-trek-timelines` → channel key is `GAMEPULSE` in .env (= "Starfleet Archives", UCwpoM7-Sr7waXUxLfPRosGA). The .env key name does NOT match the game config channel name — always verify via `channels?part=snippet&mine=true`.
+
+   Do NOT pick a date manually — adjacent episodes in queue will collide. Use `youtube-upload.sh` auto-schedule (omit `--publish-at`) which queries the channel's upload playlist and picks the nearest free date at 20:55 UTC (23:55 MSK). If Python `urllib` SSL fails (macOS Python 3.13 cert issue), use `curl` for all HTTP calls.
 
    **Debug vs non-debug:**
    - **Non-debug:** upload as `private` on the routed channel. No questions.
