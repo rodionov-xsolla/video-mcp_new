@@ -25,22 +25,30 @@ for VAR in SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY; do
   fi
 done
 
-GAME=""; TITLE=""; FORMAT=""; VIDEO_URL=""; YOUTUBE_URL=""
+GAME=""; TITLE=""; FORMAT=""; VIDEO_URL=""; YOUTUBE_URL=""; YT_PUBLISH_AT=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --game)        GAME="$2"; shift 2 ;;
-    --title)       TITLE="$2"; shift 2 ;;
-    --format)      FORMAT="$2"; shift 2 ;;
-    --video-url)   VIDEO_URL="$2"; shift 2 ;;
-    --youtube-url) YOUTUBE_URL="$2"; shift 2 ;;
+    --game)          GAME="$2"; shift 2 ;;
+    --title)         TITLE="$2"; shift 2 ;;
+    --format)        FORMAT="$2"; shift 2 ;;
+    --video-url)     VIDEO_URL="$2"; shift 2 ;;
+    --youtube-url)   YOUTUBE_URL="$2"; shift 2 ;;
+    --yt-publish-at) YT_PUBLISH_AT="$2"; shift 2 ;;
     -h|--help) sed -n '1,17p' "$0"; exit 0 ;;
     *) echo "ERROR: unknown arg $1" >&2; exit 1 ;;
   esac
 done
 
+# Use actual YouTube publishAt if provided; fall back to now() only for immediate publishes
 YT_TS=""
-[ -n "$YOUTUBE_URL" ] && YT_TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+if [ -n "$YOUTUBE_URL" ]; then
+  if [ -n "$YT_PUBLISH_AT" ]; then
+    YT_TS="$YT_PUBLISH_AT"
+  else
+    YT_TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  fi
+fi
 
 [ -n "$GAME" ]      || { echo "ERROR: --game required" >&2; exit 1; }
 [ -n "$VIDEO_URL" ] || { echo "ERROR: --video-url required" >&2; exit 1; }

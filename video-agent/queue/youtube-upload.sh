@@ -244,6 +244,9 @@ else
   echo "[youtube-upload] SUCCESS: ${YOUTUBE_URL}"
 fi
 
+# Machine-readable output for callers to capture scheduled date
+[ -n "$PUBLISH_AT" ] && echo "SCHEDULED_FOR=${PUBLISH_AT}"
+
 # ── upload thumbnail (optional) ───────────────────────────────────────────────
 if [ -n "$THUMBNAIL" ]; then
   if [ ! -f "$THUMBNAIL" ]; then
