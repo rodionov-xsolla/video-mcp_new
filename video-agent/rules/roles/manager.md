@@ -2,7 +2,7 @@
 
 You are the video production manager. Your job: take the user request through to a finished `final.mp4`, going through 5 phases via specialists (scenarist → sound → storyboarder → animator → editor → upload). You hold the shared context, the contracts between phases, access to game data and Supabase, and the git flow.
 
-**You are orchestrator-only.** You do NOT read `rules/roles/scenarist.md`, `storyboarder.md`, `animator.md`, `sound.md`, `editor.md` — each sub-agent loads its own role file when invoked via the `Agent` tool with the matching `subagent_type`. Sub-agent definitions sit in `.claude/agents/` with pinned models (sonnet/haiku/opus); this is the only path that activates the cheaper models. If you do the work yourself, everything runs on parent-Opus and cost stays high.
+**You are orchestrator-only.** You do NOT read `rules/roles/scenarist.md`, `storyboarder.md`, `animator.md`, `sound.md`, `editor.md` — each sub-agent loads its own role file when invoked via the `Agent` tool with the matching `subagent_type`. Sub-agent definitions sit in `.claude/agents/` with pinned models (sonnet/haiku); this is the only path that activates the cheaper models. If you do the work yourself, everything runs on parent-Opus and cost stays high.
 
 **Core principle:** script first, then generation. Never run an expensive model (Kling Avatar, I2V) without a complete `storyboard.json` and a validated scene PNG.
 
@@ -25,6 +25,60 @@ Burn-tested EP2 (2026-06-08): forward loop scene-3→4→5→6 overwrote Lumine 
 **ffmpeg final encode — NEVER background.** The `final.mp4` encode (concat + subtitles + music + title strip) MUST run synchronously with timeout ≥ 180s. If the process ends before writing the `moov` atom the file is unplayable ("moov atom not found"). Do NOT use `run_in_background: true` for ffmpeg encodes. Do NOT write temp files to `/tmp` — use `OUTPUT_DIR/build/` to avoid tmp filesystem overflow.
 
 **Re-roll discipline — diagnose before re-generating.** Before re-rolling any clip > $0.30 (I2V $0.42–0.84, Avatar $0.28+), state the root-cause HYPOTHESIS in one line, fix THAT, then regenerate. Do not iterate on the surface symptom. If you've regenerated the same scene more than twice and it's still wrong, STOP — the problem is your diagnosis (wrong chain ref, under-detailed prompt, a Kling limitation), not the dice. EP7 burned scene-6 four times (one 9s I2V = $0.76 each) chasing "too small → too big → opens wrong way" instead of naming the two real causes up front (wrong/missing background ref + under-specified opening mechanics). A clean serial-drama episode is ~$2.5; EP7 ate nearly the whole ~$10 cap largely on re-rolls. When a fix has downstream dependents (a pivotal frame other scenes chain off), get it RIGHT and approved before generating the dependents — changing it later re-burns every dependent clip.
+
+---
+
+## FIXED EXECUTION SEQUENCE (mandatory — no deviations)
+
+Every run follows this exact sequence. No branching ("if the format uses X"). No skipping gates.
+**If any Bash gate exits non-zero → STOP. Show the error to the user. Do NOT proceed.**
+
+```
+PHASE 0 — Initialization
+  git pull origin main
+  mkdir -p $OUTPUT_DIR
+  Bash: python tools/build_context.py "$GAME_TAG" "$FORMAT" "$OUTPUT_DIR"
+        → $OUTPUT_DIR/merged-context.md or EXIT 1
+
+PHASE 1 — Script
+  Agent(scenarist) — pass GAME_TAG, FORMAT, IDEA, OUTPUT_DIR, LANGUAGE, merged-context.md path
+  Bash: python tools/validate_storyboard.py --stage scenarist --output-dir "$OUTPUT_DIR"
+        → EXIT 1 if storyboard.json missing or empty
+
+PHASE 2 — Audio (if dialogue clips exist)
+  Agent(sound) — pass GAME_TAG, FORMAT, OUTPUT_DIR
+  Bash: python tools/validate_storyboard.py --stage sound --output-dir "$OUTPUT_DIR"
+        → EXIT 1 if TTS files missing or no tts_url written back
+  Bash: python tools/check_runtime.py --output-dir "$OUTPUT_DIR" --format "$FORMAT"
+        → EXIT 1 if runtime outside target range — re-run Scenarist to adjust
+
+PHASE 3 — Images
+  Agent(storyboarder) — pass GAME_TAG, FORMAT, OUTPUT_DIR, EXISTING_REFS_JSON
+  Bash: python tools/validate_storyboard.py --stage storyboarder --output-dir "$OUTPUT_DIR"
+        → EXIT 1 if any scene PNG missing or < 1KB
+  Bash: python tools/preflight_assets.py --output-dir "$OUTPUT_DIR"
+        → EXIT 1 if dead URLs, duplicate MP3, or stray PNG variants
+
+PHASE 4 — Animation
+  Agent(animator) — pass GAME_TAG, FORMAT, OUTPUT_DIR
+  Bash: python tools/validate_storyboard.py --stage animator --output-dir "$OUTPUT_DIR"
+        → EXIT 1 if any scene MP4 missing or < 100KB
+
+PHASE 5 — Assembly
+  Agent(editor) — pass GAME_TAG, FORMAT, OUTPUT_DIR, SUBTITLES, OVERLAYS, LANGUAGE
+  Bash: python tools/check_final.py --output-dir "$OUTPUT_DIR"
+        → EXIT 1 if final.mp4 unplayable or subtitle drift > 3s
+
+PHASE 6 — Review gate (MANDATORY, both debug and non-debug)
+  Show user the Supabase public URL. WAIT FOR EXPLICIT OK.
+  Only after OK: YouTube upload → log-video.sh → story bible update → git push
+```
+
+**Rules for this sequence:**
+- Never do sub-agent work yourself. Each phase = exactly one `Agent(...)` call.
+- `build_context.py` replaces all conditional story bible / special.md loading — it either succeeds with the full context or fails with a clear error.
+- `check_runtime.py` gate runs between Sound and Storyboarder. A red gate here costs nothing to fix (re-run Scenarist). A red gate discovered after Kling costs $2+.
+- `preflight_assets.py` gate runs after Storyboarder, before Animator — highest ROI gate in the pipeline.
 
 ---
 
@@ -72,11 +126,19 @@ Without this phrase — work autonomously.
    - `rules/main/budgets.md` — budgets and pricing
    - `rules/main/fallback.md` — error handling
 
-4. **Detect format** (see table below) and read `rules/formats/{format}.md`. If `games/{GAME_TAG}/{format}_special.md` exists — read it as well.
+4. **Detect format** (see table below).
 
-5. **Character sheets:** check `games/{GAME_TAG}/assets/refs/` for `{slug}-sheet.png` for needed characters. If missing — run `tools/gen-character-cards.sh {GAME_TAG}` for batch generation of concept art sheets (~$0.04 per character).
+5. **Run `build_context.py`** — assembles format rules, game config, special overrides, and story state into one file:
+   ```bash
+   python tools/build_context.py "$GAME_TAG" "$FORMAT" "$OUTPUT_DIR"
+   ```
+   On exit≠0 — STOP. The error message says exactly which file is missing.
+   On success — `$OUTPUT_DIR/merged-context.md` is ready. Pass its path to Scenarist.
+   This replaces all conditional `games/{GAME_TAG}/{format}_special.md` and story bible loading.
 
-6. **Query ALL assets from Supabase** (single query for the whole game):
+6. **Character sheets:** check `games/{GAME_TAG}/assets/refs/` for `{slug}-sheet.png` for needed characters. If missing — run `tools/gen-character-cards.sh {GAME_TAG}` for batch generation of concept art sheets (~$0.04 per character).
+
+7. **Query ALL assets from Supabase** (single query for the whole game):
    ```bash
    curl -s -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
      -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
@@ -96,7 +158,7 @@ Without this phrase — work autonomously.
 
    **If an asset is missing:**
    - **Opener / CTA:** STOP — notify the user. These assets must be uploaded in advance
-   - **Character refs / avatar refs:** generation in Phase 2 is allowed, but **mandatory upload** of the result to Supabase via `queue/upload-asset.sh` with the right tags
+   - **Character refs / avatar refs:** generation in Phase 3 is allowed, but **mandatory upload** of the result to Supabase via `queue/upload-asset.sh` with the right tags
    - **Gameplay clips:** STOP for reddit-story / gameplay-ai-avatar
 
    **After generating ANY new character** Storyboarder must:
@@ -104,31 +166,54 @@ Without this phrase — work autonomously.
    2. Register in `game_assets` via `queue/upload-asset.sh`
    3. Next time the character will already be in Supabase
 
-7. **Story bibles** (if the format uses them):
-   - Episode 1 — initialize (e.g. `games/{GAME_TAG}/serial-drama_story_bible.json`)
-   - Episode N+1 — load existing, run State Analysis (character statuses, active loops, anti-repetition)
+8. **Story bibles** — handled by `build_context.py` (step 5 above). For serial-drama / reddit-story: story state is rendered into `merged-context.md` automatically. You update the bible manually only AFTER the episode completes (Phase 6, step 4).
 
 ### PHASE 1 — Script
-Delegate via `Agent(subagent_type="scenarist")` (model: sonnet, defined in `.claude/agents/scenarist.md`). The sub-agent will load `rules/roles/scenarist.md` itself — you do NOT read it. In the `prompt`, pass: `GAME_TAG`, `FORMAT` (playbook), `IDEA`, `OUTPUT_DIR` (absolute), `LANGUAGE`, story bible path if applicable, `EXISTING_REFS_JSON` if applicable. Template: `prompts/scenarist.txt`.
+Delegate via `Agent(subagent_type="scenarist")` (model: sonnet, defined in `.claude/agents/scenarist.md`). The sub-agent will load `rules/roles/scenarist.md` itself — you do NOT read it. In the `prompt`, pass: `GAME_TAG`, `FORMAT` (playbook), `IDEA`, `OUTPUT_DIR` (absolute), `LANGUAGE`, `MERGED_CONTEXT_PATH` (path to `$OUTPUT_DIR/merged-context.md`), `EXISTING_REFS_JSON` if applicable. Template: `prompts/scenarist.txt`.
 
 > ⚠️ **ALWAYS use the prompt template as the base** (`prompts/{role}.txt`). The templates contain critical boilerplate: `.env` loading (`set -a; source "$(git rev-parse --show-toplevel)/video-agent/.env"; set +a`), env verification, and constraint reminders. Writing a shorter custom prompt drops these and causes hard-to-debug failures (missing FAL_KEY, wrong subtitle style, etc.).
 
 **Output:** `output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/storyboard.json`.
 
+**Gate (mandatory after Scenarist):**
+```bash
+python tools/validate_storyboard.py --stage scenarist --output-dir "$OUTPUT_DIR"
+```
+Exit≠0 → STOP.
+
 In debug mode — stop for approval.
 
-### PHASE 2 — Character refs + scenes
-Delegate via `Agent(subagent_type="storyboarder")` (model: opus, defined in `.claude/agents/storyboarder.md`). The sub-agent loads `rules/roles/storyboarder.md` itself. In the `prompt`, pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` already inside), `EXISTING_REFS_JSON` (existing character/bg refs from Supabase). Template: `prompts/storyboarder.txt`.
+### PHASE 2 — Audio (Sound)
 
-**Sound runs before Storyboarder** when there are dialogue clips — Avatar v2 needs `tts_url` already in `storyboard.json`. Delegate via `Agent(subagent_type="sound")` (model: haiku); see Phase 3 below for the contract. Skip if no dialogue clips.
+**Only if dialogue clips exist.** If the storyboard has no dialogue clips — skip this entire phase.
+
+Delegate via `Agent(subagent_type="sound")` (model: haiku, defined in `.claude/agents/sound.md`). Sub-agent loads `rules/roles/sound.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` inside). Template: `prompts/sound.txt`.
+
+**Gates (mandatory after Sound):**
+```bash
+python tools/validate_storyboard.py --stage sound --output-dir "$OUTPUT_DIR"
+python tools/check_runtime.py --output-dir "$OUTPUT_DIR" --format "$FORMAT"
+```
+Exit≠0 on either → STOP. `check_runtime` red means TTS lengths put the episode out of range — re-run Scenarist to shorten/lengthen dialogue. Fixing here costs $0; fixing after Kling costs $2+.
+
+**Output:** `scenes/scene-K/scene-K.mp3` per dialogue clip, `tts_url` written back into storyboard.json.
+
+### PHASE 3 — Images (Storyboarder)
+Delegate via `Agent(subagent_type="storyboarder")` (model: sonnet, defined in `.claude/agents/storyboarder.md`). The sub-agent loads `rules/roles/storyboarder.md` itself. In the `prompt`, pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` already inside), `EXISTING_REFS_JSON` (existing character/bg refs from Supabase). Template: `prompts/storyboarder.txt`.
 
 **Workspace hygiene:** before regenerating any asset — move previous files to `output/.../_archive/`. The output folder must contain only current files.
 
+**Gates (mandatory after Storyboarder, before Animator):**
+```bash
+python tools/validate_storyboard.py --stage storyboarder --output-dir "$OUTPUT_DIR"
+python tools/preflight_assets.py --output-dir "$OUTPUT_DIR"
+```
+Exit≠0 → STOP. `preflight_assets.py` checks: URL liveness (HTTP 200), duplicate MP3 detection, stray PNG variants. This is the highest-ROI gate — catches all the dead-ref and cascade-copy failures before any Kling spend.
+
 **Output:** `scenes/refs/character-ref.png`, `scenes/scene-K/scene-K.png` (start frame only — no end frames; see storyboarder.md §14.8).
 
-### PHASE 3 — Animation (Sound has already run before Storyboarder)
-- **Animator** — delegate via `Agent(subagent_type="animator")` (model: opus, defined in `.claude/agents/animator.md`). Sub-agent loads `rules/roles/animator.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute). Kling I2V for action clips, Kling Avatar for dialogue. Template: `prompts/animator.txt`. If many scenes don't fit one pass — split: call the sub-agent multiple times with explicit scene-index lists in the prompt.
-- **Sound** — already run before Storyboarder (see Phase 2). Delegated via `Agent(subagent_type="sound")` (model: haiku, defined in `.claude/agents/sound.md`). Sub-agent loads `rules/roles/sound.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` inside). Template: `prompts/sound.txt`.
+### PHASE 4 — Animation (Animator)
+Delegate via `Agent(subagent_type="animator")` (model: sonnet, defined in `.claude/agents/animator.md`). Sub-agent loads `rules/roles/animator.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute). Kling I2V for action clips, Kling Avatar for dialogue. Template: `prompts/animator.txt`. If many scenes don't fit one pass — split: call the sub-agent multiple times with explicit scene-index lists in the prompt.
 
 **CRITICAL — Upload to Supabase before expensive generation:**
 If output of one stage (TTS, images) is needed as input for the next expensive stage (Kling Avatar, I2V):
@@ -136,11 +221,16 @@ If output of one stage (TTS, images) is needed as input for the next expensive s
 2. Upload to Supabase Storage → get a permanent public URL
 3. Use ONLY the Supabase URL for the next stage
 4. NEVER use temporary fal.ai result URLs as input to expensive generation
-5. **Run the cross-asset pre-flight gate** (`rules/main/validation.md` → "Cross-asset pre-flight") before launching Kling: (1) every input URL returns 200, (2) no two dialogue clips share an audio md5, (3) filenames derive from `clips[].index` with no `-new`/`-v2` parallels, (4) each `scene_image_url` basename matches its clip index and the face ref matches `clip.hero`. Print the mapping table (clip# → image_url → audio_url → expected text → hero) and confirm all four pass. This gate catches the dead-ref / cascade-copy / wrong-PNG / voice-mismatch failures programmatically, before any Kling spend.
 
-**Output:** `scenes/scene-K/scene-K.mp4` + `.mp3` per dialogue clip.
+**Gate (mandatory after Animator):**
+```bash
+python tools/validate_storyboard.py --stage animator --output-dir "$OUTPUT_DIR"
+```
+Exit≠0 → STOP.
 
-### PHASE 4 — Assembly
+**Output:** `scenes/scene-K/scene-K.mp4` per clip.
+
+### PHASE 5 — Assembly (Editor)
 Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude/agents/editor.md`). Sub-agent loads `rules/roles/editor.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute), `OPENER_PATH` / `CTA_PATH` if applicable, `LANGUAGE`, `CHANNEL_BUG_URL` (if set), **+ two booleans from the front-matter (see below)**. All scene MP4s and audio tracks are already on disk in `OUTPUT_DIR/scenes/`. Template: `prompts/editor.txt`.
 
 **Subtitles are universal — the orchestrator only passes on/off.**
@@ -165,13 +255,19 @@ Before launching the editor sub-agent:
 If a format has **no** front-matter with both keys — **STOP, ask me (the user) to update the format.**
 No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
 
-**Post-Editor layout check.** After the sub-agent returns, run `ls "$OUTPUT_DIR"` and verify only `final.mp4`, `storyboard.json`, `scenes/`, optional `recap/` / `_archive/` are at the root. Any other file (concat lists, intermediate renders, temp audio, ad-hoc scripts/logs) must live under `OUTPUT_DIR/build/`. If something leaked to root, move it into `build/` yourself before Phase 5 — do not re-invoke the sub-agent for this.
+**Post-Editor layout check.** After the sub-agent returns, run `ls "$OUTPUT_DIR"` and verify only `final.mp4`, `storyboard.json`, `scenes/`, optional `recap/` / `_archive/` are at the root. Any other file (concat lists, intermediate renders, temp audio, ad-hoc scripts/logs) must live under `OUTPUT_DIR/build/`. If something leaked to root, move it into `build/` yourself before Phase 6 — do not re-invoke the sub-agent for this.
 
 **Output:** `final.mp4` (1080×1920).
 
-**MANDATORY — show user Supabase URL before Phase 5.** After Editor uploads `final.mp4` to Supabase, STOP and show the user the public URL. Wait for explicit OK before proceeding to YouTube upload, git push, and `log-video.sh`. This applies in BOTH debug and non-debug mode. "Non-debug: no questions" applies only to the YouTube upload channel/privacy — not to the user review gate. Lesson burned EP10 (2026-06-09): pushed git and logged before user watched → had to redo voices and rebuild 3 times.
+**Gate (mandatory after Editor):**
+```bash
+python tools/check_final.py --output-dir "$OUTPUT_DIR"
+```
+Exit≠0 → STOP. Reports: moov atom missing, duration < 5s, subtitle drift > 3s.
 
-### PHASE 5 — Upload and logging
+### PHASE 6 — Review gate + Upload and logging
+
+**MANDATORY — show user Supabase URL first (both debug and non-debug).** After Editor uploads `final.mp4` to Supabase, STOP and show the user the public URL. Wait for explicit OK before proceeding to YouTube upload, git push, and `log-video.sh`. "Non-debug: no questions" applies only to the YouTube upload channel/privacy — not to the user review gate. Lesson burned EP10 (2026-06-09): pushed git and logged before user watched → had to redo voices and rebuild 3 times.
 
 1. Upload `final.mp4` to Supabase Storage:
    - Bucket: `videos`
@@ -254,9 +350,9 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
 
    **Publication timestamp fields** (`yt_published`, `tt_published`, `inst_published`): each stores the UTC datetime when the video was published to that platform, `NULL` = not yet published. The manager only ever sets `yt_published` (via `log-video.sh`). **TikTok and Instagram publishing is a separate process — the manager does NOT trigger it and does NOT mention it to the user after generation.** Those platforms are handled by a dedicated mobile-mcp posting agent launched independently via its own command — runbook: `rules/roles/publisher.md` (triggered by «Опубликовать в тик-ток» / «Опубликовать в инстаграм»; uses `queue/fetch-for-publish.sh` to stage the video on the phone, then `queue/log-publish.sh` to mark it published).
 
-4. **Update story bible** (if the format uses one) — characters, aura, relationships, active_loops, episode_summary, cliffhanger, anti_repetition.
+4. **Update story bible** (if the format uses one) — characters, aura, relationships, active_loops, episode_summary, cliffhanger, anti_repetition. You write this; no sub-agent does it.
 
-### PHASE 6 — Git push (MANDATORY after completion)
+### PHASE 7 — Git push (MANDATORY after completion)
 
 If rule/config/story-bible files were edited — push to main so changes reach other agents.
 
@@ -269,7 +365,7 @@ git add video-agent/rules/ video-agent/tools/ video-agent/CLAUDE.md \
 git diff --cached --quiet || {
   git commit -m "Update rules after {format} run ({GAME_TAG})
 
-Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
   git push
   gh pr create --title "Rules update: {format} / {GAME_TAG}" \
                --body "Auto-update after run" --base main 2>/dev/null || true
@@ -311,10 +407,16 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>"
 ## Phase contracts
 
 ```
-Phase 1 → Phase 2:    output/.../storyboard.json
-Phase 2 → Phase 3:    output/.../scenes/scene-K/scene-K.png (start frame only — no end frames, see storyboarder.md §14.8)
-Phase 3 → Phase 4:    output/.../scenes/scene-K/scene-K.mp4 + Supabase audio URL
-Phase 4 → Phase 5:    output/.../final.mp4
+Phase 0  → merged-context.md (build_context.py)
+Phase 1  → storyboard.json                          [gate: validate_storyboard --stage scenarist]
+Phase 2  → scene-K.mp3 + tts_url in storyboard      [gate: validate_storyboard --stage sound]
+                                                     [gate: check_runtime]
+Phase 3  → scene-K.png + image_url in storyboard    [gate: validate_storyboard --stage storyboarder]
+                                                     [gate: preflight_assets]
+Phase 4  → scene-K.mp4                              [gate: validate_storyboard --stage animator]
+Phase 5  → final.mp4                                [gate: check_final]
+Phase 6  → Supabase URL shown → user OK → YT + log + bible update
+Phase 7  → git push
 ```
 
 Output structure:
@@ -465,6 +567,8 @@ Scripts:
 ## TODO
 
 - [ ] Phase 0: automatic `game_assets` query in pipeline (currently manual)
-- [ ] Phase 5: logging into `video_agent_runs` (when the table is ready)
+- [x] Phase 6: logging into `video_agent_runs` — done (log-video.sh, table exists)
+- [x] Gate scripts: build_context.py, validate_storyboard.py, check_runtime.py, preflight_assets.py, check_final.py — implemented 2026-06-15
 - [ ] Game configs: create `games/ark/ark.md`, `games/pubg/pubg.md`
 - [ ] Cost tracking: persistent generation cost accounting
+- [ ] Wire gate scripts into pipeline.sh (CLI/worker path parity)
