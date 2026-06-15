@@ -186,6 +186,7 @@ If these blocks are missing — Manager must flag and stop until they are added.
 - `duration`: "5" or "10"; without `end_image_url`
 - `character_speech: null` → Kling does not receive speech text
 - One model for the whole video
+- **⚠️ NO HEAD/FACE MOVEMENT for the photorealistic figure — MANDATORY.** Any head turn, chin lift, eye shift, or facial expression change causes face distortion in Kling I2V. motion_prompt must explicitly state: "photorealistic figure on the right: NO head movement, NO neck rotation, NO chin lift, NO eye movement — face remains completely locked forward throughout entire clip." Only body, costume, hair, and elemental effects may move.
 - General rules — `rules/roles/animator.md`
 
 ### Sound

@@ -237,6 +237,30 @@ Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, so
 ### Arlecchino (realistic counterpart — Eva Green)
 `photorealistic Eva Green, French actress with striking pale complexion intense dark eyes high cheekbones and magnetic presence, wearing black and white asymmetric tailcoat with red cross markings, pale white hair with dark streaks, natural skin textures, cold calculating half-smile, ornate polearm, tall imposing build`
 
+### Wriothesley (game-style)
+`anime cel-shaded male Duke Wriothesley, grey and blue prison warden coat with dark accents and handcuff chain accessory, white and grey styled hair, clean bold anime outlines, vibrant flat saturated colors, cold handsome expression with slight smirk, cryo gauntlets with frost shimmer, tall muscular build, faint cryo ice crystal aura`
+
+### Wriothesley (realistic counterpart — Henry Cavill)
+`photorealistic Henry Cavill, British actor with strong jaw piercing blue eyes broad shoulders and athletic muscular build, wearing grey and blue prison warden coat with handcuff chain accessory, white and grey styled hair, natural skin textures fair complexion, cold confident expression with slight smirk, cryo gauntlets, tall powerful build`
+
+### Yae Miko (game-style)
+`anime cel-shaded female Guuji Yae Miko, pink and white kitsune shrine maiden outfit with decorative fox ears and flowing wide sleeves, long pink hair with ornamental pins, clean bold anime outlines, vibrant flat saturated colors, confident sly expression with subtle smirk, electro catalyst glowing with violet sparks, fox tail visible, tall elegant build, soft pink electro aura`
+
+### Yae Miko (realistic counterpart — Margot Robbie)
+`photorealistic Margot Robbie, Australian actress with expressive bright blue eyes high cheekbones natural charisma and radiant smile, wearing pink and white kitsune shrine maiden outfit with fox ear headpiece and flowing wide sleeves, long pink styled wig with ornamental pins, natural skin textures fair complexion, confident playful expression, tall elegant build`
+
+### Neuvillette (game-style)
+`anime cel-shaded male Chief Justice Neuvillette, white and blue elegant long coat with intricate dragon scale patterns and hydro water motifs, long silver-blue hair flowing down, clean bold anime outlines, vibrant flat saturated colors, dignified austere expression with cold authority, hydro catalyst with shimmering water droplets, tall imposing regal build, soft hydro blue luminescent aura`
+
+### Neuvillette (realistic counterpart — Timothée Chalamet)
+`photorealistic Timothée Chalamet, French-American actor with sharp jawline expressive dark eyes lean elegant frame and distinctive refined features, wearing white and blue elegant long coat with intricate dragon scale patterns, long silver-blue styled wig flowing down, natural skin textures fair complexion, dignified austere expression with quiet authority, tall slender elegant build`
+
+### Navia (game-style)
+`anime cel-shaded female Spina di Rosula leader Navia, white and gold Victorian ball gown with intricate rose motifs and layered ruffles, long curly blonde hair with rose ornaments, clean bold anime outlines, vibrant flat saturated colors, warm radiant confident smile, ornate geo shotgun with golden filigree details, tall elegant regal build, warm golden geo shimmer`
+
+### Navia (realistic counterpart — Sydney Sweeney)
+`photorealistic Sydney Sweeney, American actress with expressive blue eyes natural curly blonde hair warm radiant smile and charismatic presence, wearing white and gold Victorian ball gown with rose motifs and layered ruffles, long curly blonde hair with rose ornaments, natural skin textures fair complexion, warm confident smile, tall elegant build`
+
 ---
 
 ## Tone of Voice
