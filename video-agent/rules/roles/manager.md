@@ -479,38 +479,38 @@ assets/{GAME_TAG}/
 │       ├── sheet.png                       canonical character ref
 │       ├── variants/{variant}.png          young, mature, borg, child, prophet, ...
 │       └── avatar.png                      Kling Avatar v2 ref
-├── locations/{slug}.png                    background / location (без префикса bg-)
+├── locations/{slug}.png                    background / location (no bg- prefix)
 ├── branding/{name}.{png|mp4}               cta.mp4, opener-{format}.mp4, title-card-{format}.png
 └── gameplay/{filename}.mp4                 gameplay recording
 
 episodes/{GAME_TAG}/{YYYY-MM-DD}-{format}/
 ├── scenes/scene-K.{png|mp4}                per-episode scene PNG (+ I2V mp4) — start frame only, no end frames
 └── tts/clip-K.mp3                          per-episode TTS
-                                           ↑ episode-* files НЕ регистрируются в game_assets
+                                           ↑ episode files are NOT registered in game_assets
 
 videos/{GAME_TAG}/{YYYY-MM-DD}/{format}_final.mp4   final video
 
 music/{Mood}/{track}.mp3                    Drama/, Fun/, Tense/, Dark/, Neutral/
 ```
 
-**NOT in storage:** story bibles (JSON) — local только в `games/`.
+**NOT in storage:** story bibles (JSON) — local only in `games/`.
 
 ### Table `game_assets` (long-lived refs only)
 
 Fields: `game_tag`, `character_name`, `asset_type`, `url`, `prompt_block`, `tags`. UNIQUE `(game_tag, character_name, asset_type)`.
 
-Только reusable ассеты. Эпизодные сцены/TTS — НЕ сюда.
+Reusable assets only. Per-episode scenes/TTS — do NOT register here.
 
-| `asset_type` | Когда | Storage path | `character_name` convention |
+| `asset_type` | When | Storage path | `character_name` convention |
 |---|---|---|---|
-| `reference_image` | Persistent character ref / variant | `characters/{slug}/sheet.png` или `characters/{slug}/variants/{var}.png` | `slug` (для sheet) или `slug-variant` |
+| `reference_image` | Persistent character ref / variant | `characters/{slug}/sheet.png` or `characters/{slug}/variants/{var}.png` | `slug` (for sheet) or `slug-variant` |
 | `avatar_ref` | Kling Avatar v2 ref | `characters/{slug}/avatar.png` | `slug` |
-| `generated_ref` | Location или branding (cta/opener/title-card) | `locations/{slug}.png` или `branding/{name}.{ext}` | `location:{slug}` или `branding:{name}` |
-| `gameplay_clip` | MP4 геймплея | `gameplay/{filename}.mp4` | имя клипа |
+| `generated_ref` | Location or branding (cta/opener/title-card) | `locations/{slug}.png` or `branding/{name}.{ext}` | `location:{slug}` or `branding:{name}` |
+| `gameplay_clip` | Gameplay MP4 | `gameplay/{filename}.mp4` | clip name |
 
-`character_card`, `screenshot`, `promo_art` — легаси типы, не использовать в новых загрузках (текущий DB constraint их ещё допускает).
+`character_card`, `screenshot`, `promo_art` — legacy types, do not use for new uploads (current DB constraint still allows them).
 
-**Tags** для фильтрации: `cta`, `opener`, `title-card`, `location`, `branding`, формат (`news`, `serial-drama`, ...). Editor находит CTA/opener по тегам `cta`/`opener`. Animator — `avatar` + формат.
+**Tags** for filtering: `cta`, `opener`, `title-card`, `location`, `branding`, format slug (`news`, `serial-drama`, ...). Editor finds CTA/opener by `cta`/`opener` tags. Animator finds refs by `avatar` + format.
 
 ### Upload helper
 
@@ -521,7 +521,7 @@ queue/upload-asset.sh --kind location   --game GAME --slug ds9-ops ./file.png
 queue/upload-asset.sh --kind branding   --game GAME --name cta ./file.mp4
 queue/upload-asset.sh --kind gameplay   --game GAME ./file.mp4
 
-# Эпизодные — only Storage, no DB row:
+# Per-episode — Storage only, no DB row:
 queue/upload-asset.sh --kind episode-scene --game GAME --episode 2026-05-28-redcon --name scene-1.png ./file.png
 queue/upload-asset.sh --kind episode-tts   --game GAME --episode 2026-05-28-redcon --name clip-1.mp3 ./file.mp3
 ```
