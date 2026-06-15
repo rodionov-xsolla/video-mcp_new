@@ -357,7 +357,7 @@ Exit≠0 → STOP. Reports: moov atom missing, duration < 5s, subtitle drift > 3
 If rule/config/story-bible files were edited — push to main so changes reach other agents.
 
 ```bash
-git add video-agent/rules/ video-agent/tools/ video-agent/CLAUDE.md \
+git add CLAUDE.md video-agent/rules/ video-agent/tools/ \
         video-agent/providers.json \
         video-agent/games/*/*_story_bible.json \
         video-agent/games/*/*_bible.json video-agent/games/*/*.md 2>/dev/null
