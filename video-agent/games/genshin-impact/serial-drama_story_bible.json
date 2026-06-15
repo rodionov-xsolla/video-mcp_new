@@ -1,11 +1,11 @@
 {
   "series_id": "genshin-dont-save-me-en",
-  "game_tag": "genshin impact",
+  "game_tag": "genshin-impact",
   "language": "en",
   "title": "Don't Save Me",
   "style_tags": "Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, soft outline anime aesthetic, magical elemental effects, Teyvat world environment, clean detailed character illustration, Liyue Harbor setting, cinematic 9:16 vertical composition",
   "created_at": "2026-06-04",
-  "last_episode": 2,
+  "last_episode": 3,
   "planned_arc": {
     "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion only, all combat/running/chases = CUT between clips not animation, protagonist always faces camera, cliffhanger spoken line = Avatar TTS). Childe is the reluctant protector — his every action should read as either threat or sacrifice until the last episode. No on-screen text. After shipping an episode, fold its loops/status into characters[], active_loops, episode_summaries. Do NOT re-invent episodes while this arc has unshipped entries.",
     "episodes": [
@@ -434,13 +434,13 @@
       "role": "protagonist",
       "character_description": "male Fatui Harbinger Tartaglia, dark blue and red Fatui uniform with hydro-red accents, short bright orange hair, sharp confident grin softening into something genuine, hydro blades manifested at his sides, athletic lean build",
       "voice": "chatterbox",
-      "voice_ref": "games/genshin impact/Childe.mp3",
+      "voice_ref": "games/genshin-impact/Childe.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/voice-ref.mp3",
-      "status": "EP2: Tried to push Lumine away on a rain-soaked Liyue street. Told her to leave the city. When she refused and demanded he look her in the eye, drew his hydro blade aimed at her — a performance for the Fatui watcher on the rooftop. Whispered 'I'm sorry. They're watching.' His allegiance remains ambiguous to any observer.",
-      "aura_points": 85,
+      "status": "EP3: Staged a fake fight against Lumine to fool the Fatui watcher — without warning her. Whispered 'Trust me' mid-fight. When the rooftop watcher took a shot aimed at Lumine, stepped into the bullet. Now on one knee, shoulder bleeding. His sacrifice exposed: he protects her even at cost to himself.",
+      "aura_points": 95,
       "relationships": {
-        "Lumine": "tension escalating — she demanded truth, he gave threat; blade between them, apology whispered",
-        "Agent": "subordinate still performing loyalty for the watcher — but the performance is cracking",
+        "Lumine": "sacrificed himself for her — she now knows he's been protecting her; question is whether she forgives the deception",
+        "Agent": "staged loyalty performance succeeded — watcher fired at Lumine not Childe, meaning Childe appeared to be the threat; but now Childe is down",
         "Fatui": "loyal until the moment he isn't"
       }
     },
@@ -449,12 +449,12 @@
       "role": "protagonist",
       "character_description": "female Traveler Lumine, white and gold traveler outfit with star constellation motifs and flowing white sash, long blonde hair with signature silver star-shaped hair clip, sharp determined expression with a hint of wariness, one-handed sword at her side, graceful athletic build",
       "voice": "chatterbox",
-      "voice_ref": "games/genshin impact/Traveller.mp3",
+      "voice_ref": "games/genshin-impact/Traveller.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/voice-ref.mp3",
-      "status": "EP2: Followed Childe through the rain demanding answers. Refused to leave. Pushed him to look her in the eye. Now has Childe's blade aimed at her and his whispered apology — she does not yet know what to make of it.",
-      "aura_points": 60,
+      "status": "EP3: Fought back in what she believed was a real attack — genuinely furious. Realized mid-sequence it was staged only when Childe took the bullet aimed at her. Now watching him bleed. Anger and confusion colliding with something she doesn't want to name.",
+      "aura_points": 70,
       "relationships": {
-        "Childe": "confused anger — demanded honesty, got a blade and an apology; unclear if threat or protection",
+        "Childe": "he took a bullet for her after deceiving her — the deception and the sacrifice are both true at once; she doesn't know what to do with that",
         "Agent": "active threat — directly targeted"
       }
     },
@@ -463,7 +463,7 @@
       "role": "antagonist",
       "character_description": "male Fatui Agent, dark charcoal and black Fatui operative coat with deep crimson Fatui insignia, silver Fatui half-mask obscuring the upper face, cold calculating expression, hands clasped behind his back, average compact build radiating controlled menace",
       "voice": "chatterbox",
-      "voice_ref": "games/genshin impact/Fatui_dottore.mp3",
+      "voice_ref": "games/genshin-impact/Fatui_dottore.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fatui-agent/voice-ref.mp3",
       "status": "EP2: Watcher (proxy/subordinate) observed the confrontation from the rooftop. Whether the Agent received a report is unknown. Childe's performance may or may not have been convincing.",
       "aura_points": 0,
@@ -474,22 +474,26 @@
     }
   ],
   "active_loops": [
-    "major: whether Childe's blade-draw fooled the Fatui watcher — and what was reported to the Agent",
-    "major: what Lumine decides now — leave or stay, trust or distrust",
-    "major: how far Fatui will escalate after this public confrontation",
-    "eternal: Childe's loyalty — faction vs. personal choice (performance vs. reality)",
-    "eternal: Lumine does not trust Childe unconditionally — Golden House + blade = two betrayals"
+    "major: how badly Childe is hurt — shoulder wound, can he still fight",
+    "major: whether Lumine forgives the deception — fake fight was not explained in advance",
+    "major: if the rooftop watcher reported back to the Agent — and what they reported",
+    "eternal: Childe's loyalty — his sacrifice just showed Lumine where his choice really lies",
+    "eternal: Lumine does not trust Childe unconditionally — Golden House + blade + fake fight = three deceits, one bullet"
   ],
   "closed_loops": [
-    "minor: will Childe acknowledge Lumine in public — YES, violently and apologetically"
+    "minor: will Childe acknowledge Lumine in public — YES, violently and apologetically",
+    "EP2: whether Childe's blade-draw fooled the Fatui watcher — YES, staged; watcher stayed in position until EP3 shot",
+    "EP2: whether Childe will choose Lumine over orders — answered implicitly: stepped into bullet"
   ],
   "world_state": {
-    "location": "Rain-soaked cobblestone lane, Liyue Harbor — night (EP2)",
+    "location": "Narrow street, Liyue Harbor — day (EP3)",
     "important_items": [
       "Burned Fatui order — ash on Northland Bank desk; Lumine witnessed it being read and destroyed",
       "Lumine's presence in Liyue — now known to the Agent",
       "Agent's ultimatum — 'Prove she matters less than your orders' — unanswered going into EP2",
-      "Childe's blade drawn at Lumine in public — Fatui watcher on rooftop witnessed the confrontation"
+      "Childe's blade drawn at Lumine in public — Fatui watcher on rooftop witnessed the confrontation",
+      "Childe's gunshot wound — shoulder, left side; inflicted by Fatui watcher's rifle",
+      "Fake fight staging — Childe orchestrated the confrontation without telling Lumine; whether the watcher believed it is unknown"
     ],
     "key_events": [
       "EP1: Fatui Agent delivered sealed order to Childe at Northland Bank reception counter",
@@ -503,7 +507,13 @@
       "EP2: Lumine demanded he look her in the eye — 'Then look me in the eye when you say it.'",
       "EP2: Fatui watcher spotted crouched on rooftop above",
       "EP2: Childe drew hydro blade aimed at Lumine — performed threat for watcher",
-      "EP2: Cliffhanger — Childe whispered 'I'm sorry. They're watching.' blade still raised"
+      "EP2: Cliffhanger — Childe whispered 'I'm sorry. They're watching.' blade still raised",
+      "EP3: Childe struck first on a narrow street — fast and deliberate, staging a fake attack",
+      "EP3: Lumine blocked, not knowing if the attack was real",
+      "EP3: Childe whispered 'Trust me' mid-fight; Lumine: 'After the Golden House?' Childe: 'Especially after it.'",
+      "EP3: Fatui watcher on rooftop aimed at Lumine",
+      "EP3: Childe saw the rifle and stepped into the shot — took the bullet in the shoulder",
+      "EP3: Cliffhanger — Childe on one knee, shoulder bleeding; Lumine: 'They were aiming at me?'"
     ]
   },
   "anti_repetition": {
@@ -603,6 +613,17 @@
       "notes": "6 clips: 2 I2V action (scenes 2+3, multi-prompt dynamic shots) + 4 Avatar dialogue (scenes 1+4+5+6, Chatterbox emotion-tuned). New opening hook: Lumine 'Wait! Don't go!' Added in debug session.",
       "youtube_url": "https://www.youtube.com/watch?v=AyTNvQq7xh8",
       "scheduled_at": "2026-06-12T20:55:00Z"
+    },
+    {
+      "episode": 3,
+      "language": "en",
+      "summary": "Narrow street. Childe strikes first — deliberate and fast. Lumine blocks, not knowing if it's real. Mid-fight Childe whispers 'Trust me.' She fights back harder, genuinely furious. 'After the Golden House?' He says: 'Especially after it.' Fatui watcher on rooftop takes aim at Lumine. Childe sees the rifle. He steps into the shot. Drops to one knee, shoulder bleeding. Lumine stares: 'They were aiming at me?'",
+      "cliffhanger": "Childe on one knee, shoulder bleeding. Lumine: 'They were aiming at me?'",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/videos/genshin-impact/2026-06-15/serial-drama_final.mp4",
+      "duration_sec": 41.4,
+      "notes": "8 clips: 3 I2V action (scenes 2, 4, 7 — multi-prompt dynamic, generate_audio:true) + 5 Avatar dialogue (scenes 1, 3, 5, 6, 8 — Chatterbox voice clone). Subtitles capped to Avatar clip windows. Title strip y=328.",
+      "youtube_url": "https://www.youtube.com/watch?v=WNM4sqbEzwM",
+      "scheduled_at": "2026-06-20T20:59:00Z"
     }
   ]
 }

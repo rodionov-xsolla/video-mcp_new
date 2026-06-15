@@ -8,7 +8,7 @@
 - **Аудитория:** Global, фанаты Star Trek, gacha/RPG игроки 25-45 лет
 - **Стиль арта:** Sci-fi LCARS UI, полуреалистичные 2D-портреты, 3D-корабли
 - **Премьера:** Январь 2016 (10+ лет активной работы)
-- **youtube_channel:** starfleetarchive
+- **youtube_channel:** starfleet
 
 ---
 

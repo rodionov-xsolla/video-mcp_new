@@ -16,27 +16,35 @@ What you personally do:
 ## Startup order
 
 1. **`git pull origin main`** — first thing. Team repo, rules change. On conflict — stop and ask the user; do not auto-merge.
-2. **Read `rules/roles/manager.md`** — orchestration, contracts between roles, Supabase, git push after episode. This is the only role file you read.
-3. **Detect format** from the user request → read `rules/formats/{format}.md` (only the "Manager" section and overall structure; role briefs you skip — each sub-agent reads its own).
-4. **Read `rules/main/budgets.md` and `rules/main/fallback.md`** — limits and error handling.
-5. **Phase 0 — prep:** create `OUTPUT_DIR` (`output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/`, e.g. `output/2026-05-12/roblox/motion-dance/`), gather `EXISTING_REFS_JSON` from Supabase (if the format uses persisted assets), path to story bible for serial-drama / reddit-story.
-6. **Delegate phases via the `Agent` tool** in this order:
+2. **Read `rules/roles/manager.md`** — format detection table, Supabase upload details, YouTube routing, phase contracts, Debug mode rules, API table. The FIXED EXECUTION SEQUENCE with gate commands is in the root `CLAUDE.md` (already in your context).
+3. **Read `rules/main/budgets.md` and `rules/main/fallback.md`** — limits and error handling.
+4. **Phase 0 — prep:**
+   - Detect format from the user request (format detection table is in `manager.md`).
+   - Create `OUTPUT_DIR` (`output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/`).
+   - Run `build_context.py` — assembles format rules, game config, special overrides, story state:
+     ```bash
+     python tools/build_context.py "$GAME_TAG" "$FORMAT" "$OUTPUT_DIR"
+     ```
+     On exit≠0 → STOP. On success → `$OUTPUT_DIR/merged-context.md` ready.
+   - Gather `EXISTING_REFS_JSON` from Supabase (game assets query).
+5. **Delegate phases via the `Agent` tool** per the fixed sequence in `manager.md`:
 
    | Phase | subagent_type | Model | Purpose |
    |---|---|---|---|
    | 1. Script | `scenarist` | sonnet | writes `storyboard.json` (narrative + visual_identity) |
-   | 2. Audio (TTS) | `sound` | haiku | TTS for dialogue clips, Supabase URLs written back into storyboard.json. Skip if there are no dialogue clips |
+   | 2. Audio (TTS) | `sound` | haiku | TTS for dialogue clips; skip if no dialogue |
    | 3. Images | `storyboarder` | sonnet | NB2 PNGs per scene, image_prompt + scene_image into storyboard.json |
-   | 4. Animation | `animator` | sonnet | Kling I2V/Avatar v2 → MP4 per scene. Expensive ($0.42–1.26/clip v3 Standard, Avatar v2 ~$0.28/5s) — validate after |
+   | 4. Animation | `animator` | sonnet | Kling I2V/Avatar v2 → MP4 per scene |
    | 5. Assembly | `editor` | sonnet | ffmpeg concat → `final.mp4`, subtitles, music, CTA, upload to Supabase |
 
-7. **For every sub-agent, pass in `prompt`** (it does not see your context):
+6. **For every sub-agent, pass in `prompt`** (it does not see your context):
    - `GAME_TAG`, `FORMAT`, `IDEA`, `OUTPUT_DIR`, `LANGUAGE` (default `en`)
-   - For serial-drama / reddit-story: path to story bible
+   - Scenarist: also `MERGED_CONTEXT_PATH` (path to `$OUTPUT_DIR/merged-context.md`)
+   - Editor: also `SUBTITLES` and `OVERLAYS` booleans (read from format front-matter)
    - For formats with prebuilt assets: `EXISTING_REFS_JSON`, `OPENER_PATH`, `CTA_PATH`
-   - Prompt templates already exist in `prompts/*.txt` — reuse them as a base.
-8. **After every phase** — programmatic validation (file exists, size > 0, ffprobe duration). If red → read `rules/main/fallback.md` and decide: retry the same sub-agent with a tightened brief, or escalate to the user.
-9. **After Editor** — git add/commit/push; for serial-drama / reddit-story update the story bible (you do this, not the sub-agent); print the cost report.
+   - Prompt templates in `prompts/*.txt` — always use as the base.
+7. **After every phase — run the gate script** (see fixed sequence in `manager.md`). If red → STOP, show error to user.
+8. **After Editor** — git add/commit/push; for serial-drama / reddit-story update the story bible (you do this, not the sub-agent); print the cost report.
 
 ## Universal principles
 

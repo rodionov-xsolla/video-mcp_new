@@ -145,10 +145,10 @@ video-agent/
 │   │   └── oxide.md
 │   ├── kekele/
 │   │   └── kekele.md
-│   ├── marvel snap/
+│   ├── marvel-snap/
 │   │   ├── gameplay/
 │   │   └── reddit-story_bible.json
-│   ├── genshin impact/
+│   ├── genshin-impact/
 │   │   ├── genshin-impact.md
 │   │   └── assets/
 │   ├── wwe-champions/

@@ -28,7 +28,7 @@ From Manager:
 
 | Condition | Engine |
 |---|---|
-| `game_tag == "genshin impact"` (ANY format) | **Chatterbox** (§1b) — voice cloned from reference MP3 |
+| `game_tag == "genshin-impact"` (ANY format) | **Chatterbox** (§1b) — voice cloned from reference MP3 |
 | All other games and formats | **MiniMax** (§1a) — preset voices |
 
 **Genshin voice refs** live in Supabase Storage at `assets/genshin-impact/characters/{slug}/voice-1.mp3` (also voice-2.mp3, voice-3.mp3 where available). Use `voice-1.mp3` as the primary `audio_url` for Chatterbox. **105+ characters confirmed to have refs** — effectively the entire playable roster. For the rare character without a voice ref → fall back to MiniMax.
@@ -164,7 +164,7 @@ ffmpeg -i /tmp/tts-K.wav -codec:a libmp3lame -qscale:a 2 scenes/scene-K/scene-K.
 
 ### Reference voice files — upload once per series, reuse URL
 
-Reference MP3s live in `games/genshin impact/`. Upload each to Supabase **once** before EP1 and store the permanent URL in the story bible `voice_ref_url` field.
+Reference MP3s live in `games/genshin-impact/`. Upload each to Supabase **once** before EP1 and store the permanent URL in the story bible `voice_ref_url` field.
 
 Subsequent episodes: read `voice_ref_url` from the story bible, pass directly as `audio_url`.
 

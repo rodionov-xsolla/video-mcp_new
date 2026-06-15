@@ -5,7 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 10,
+  "last_episode": 11,
   "planned_arc": {
     "note": "Season 1 arc EP9–EP16. Core emotional engine: Kirk saves the monster that tried to kill Chekov — and every time he does 'the right thing', his crew gets more afraid. Mirror Kirk envies Kirk's loyal crew. Admiral pressures Kirk to eject the double or face Enterprise quarantine. Scenarist follows the beats and key_lines below as RAILS: keep cliffhanger spoken lines verbatim, adapt each episode into 3–5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion, protagonist always faces camera, cliffhanger line = Avatar TTS). Fold completed episodes into characters[], active_loops, episode_summaries as usual. Do NOT invent complex conspiracies or test protocols — the drama is simple: Kirk's mercy costs him his crew's trust.",
     "new_characters": [
@@ -158,7 +158,7 @@
       {
         "episode": 11,
         "title": "The Shuttle",
-        "status": "unshipped",
+        "status": "shipped",
         "link": "Chekov's shuttle flew into the debris field.",
         "emotion": "Sympathy for Chekov + Kirk's guilt deepens",
         "beats": [
@@ -378,7 +378,7 @@
       "character_description": "semi-realistic Pixar 3D Ensign Pavel Chekov, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
       "voice": "Charlie",
       "elevenlabs_voice": "Charlie",
-      "status": "EP10: Trust in Kirk broken. Asked for a promise — Kirk couldn't give it. Boarded an emergency shuttle and flew into the debris field alone. Last words: 'Better space than that airlock again.'",
+      "status": "EP11: Rescued by Scotty's tractor beam from the debris field — but Mirror Kirk's capsule was dragged in alongside. Returned to Enterprise against his will. Last words on landing: 'No. No, no, no.' Cornered again.",
       "aura_points": 200,
       "relationships": {
         "Kirk": "trusted captain completely — that trust is cracking now that Kirk wants to retrieve Mirror Kirk"
@@ -402,7 +402,7 @@
       "character_description": "semi-realistic Pixar 3D Chief Engineer Montgomery Scott, stocky build, round friendly face now tense and alarmed, swept-back dark hair with grey temples and short sideburns, wide desperate eyes, TOS red engineering tunic with black collar and Starfleet delta badge, hands raised in protest",
       "voice": "George",
       "elevenlabs_voice": "George",
-      "status": "EP6: Loyalty confirmed — destroyed phaser array on Kirk's order. Still nominally under suspicion for prior weapons lock. Key role in EP9: transporter attempt to catch Mirror Kirk.",
+      "status": "EP11: Locked tractor beam on Chekov's shuttle and pulled it home — but the second signal in the debris rode in alongside it. Scotty accidentally brought Mirror Kirk back aboard. Did not realize until the capsule opened.",
       "aura_points": 450,
       "relationships": {
         "Kirk": "loyal engineer — will execute Kirk's orders even the ones that scare him"
@@ -415,7 +415,7 @@
       "voice": "Daniel",
       "elevenlabs_voice": "Daniel",
       "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery.",
-      "status": "EP9: Still in the debris field. Scotty lost the transporter lock. Voice came through static: 'You'll come for me anyway, Jim.' Kirk has not given up.",
+      "status": "EP11: Back aboard Enterprise. Scotty's tractor beam pulled his emergency capsule in alongside Chekov's shuttle. Stepped out and said 'Miss me, boy?' directly to Chekov. Location: transporter room.",
       "aura_points": 0,
       "relationships": {
         "Kirk": "mirror double — envies Kirk's loyal crew; knows Kirk will try to save him",
@@ -437,11 +437,11 @@
     }
   ],
   "active_loops": [
-    "major: Chekov alone in the debris field — his shuttle is in the same zone where Mirror Kirk vanished",
-    "major: Kirk's mercy broke Chekov's trust — crew fracture is now a crew departure",
-    "major: Enterprise under quarantine — Admiral's stranglehold tightens; weapons offline",
-    "major: Mirror Kirk still unaccounted for in the debris field — his last known position is where Chekov's shuttle just entered",
-    "major: Scotty still nominally under suspicion — conspiracy role unresolved",
+    "major: Mirror Kirk back aboard Enterprise — now in the transporter room, face-to-face with Chekov",
+    "major: Chekov cornered again — came home to find his nightmare waiting for him",
+    "major: Scotty accidentally caused Mirror Kirk's return — guilt unknown to crew yet",
+    "major: Kirk's mercy cost Chekov his escape — crew fracture deepens",
+    "major: Enterprise still under quarantine — Admiral's stranglehold; weapons offline",
     "eternal: Kirk always fights for his crew against the system"
   ],
   "closed_loops": [
@@ -508,49 +508,32 @@
   },
   "anti_repetition": {
     "recent_phrases": [
-      "Captain, that ship must not survive.",
-      "Then you should have told me why.",
-      "We'll lose the phasers!",
-      "Better the weapons than my conscience.",
-      "Captain... it's you in there.",
-      "Do not open it. That is a direct order.",
-      "You already lied to me once.",
-      "I saw that pod before the airlock.",
-      "Hello, Jim. You're late again.",
-      "And that one was supposed to die first.",
-      "Take one step and I'll break your neck.",
-      "You're slower than my Worf.",
-      "Why Chekov?",
-      "Because you'll always save the boy.",
-      "He wanted to kill me. Don't go after him, Captain.",
       "I know. That's why we won't become like him.",
       "The signal's breaking up!",
       "Leave him there, Captain.",
-      "I'm losing him — he's gone into the debris.",
       "You'll come for me anyway, Jim.",
       "If he comes back, I'll be at the airlock again.",
       "I won't let a man die.",
+      "He's not a man to me.",
       "Fear makes fast mistakes.",
-      "Better space than that airlock again."
+      "Better space than that airlock again.",
+      "I've got Chekov... and something else.",
+      "Pull them both.",
+      "No. No, no, no.",
+      "Miss me, boy?"
     ],
     "recent_hooks": [
-      "vulcan-corridor-reveal",
-      "corridor-sprint-multi-shot",
-      "ticking-clock-targeting-reticle-allied-ship",
-      "smoking-pod-crew-convergence",
-      "physical-grab-and-slip",
-      "survivor-in-aftermath",
       "authority-edict-coldopen",
-      "betrayal-silence-beat"
+      "betrayal-silence-beat",
+      "shuttle-escape-into-debris",
+      "tractor-beam-double-signal",
+      "dual-transporter-beam-reveal",
+      "capsule-hatch-opening-reveal"
     ],
     "recent_cliffhangers": [
-      "ship-weapons-locked-on-allied-vessel",
-      "authority-figure-live-comms-reveal",
-      "biosignature-scanner-identity-reveal-pod",
-      "mirror-double-predatory-reveal",
-      "environmental-decompression-drag",
       "disembodied-voice-through-static",
-      "shuttle-escape-into-debris"
+      "shuttle-escape-into-debris",
+      "mirror-double-resurface-transporter"
     ]
   },
   "episode_summaries": [
@@ -637,6 +620,16 @@
       "youtube_url": "https://www.youtube.com/watch?v=ywC6Ab834JI",
       "yt_publish_at": "2026-06-18T20:59:00Z",
       "duration_sec": 26
+    },
+    {
+      "episode": 11,
+      "language": "en",
+      "summary": "Chekov's shuttle is adrift in the debris field. Scotty locks the tractor beam — Kirk orders 'Pull them both.' when a second signal appears. Chekov is dragged back to Enterprise. Two beams materialize in the transporter room side by side. Chekov sees the second capsule and starts backing away. It opens. Mirror Kirk steps out and smiles at him: 'Miss me, boy?'",
+      "cliffhanger": "Mirror Kirk is back aboard Enterprise. Chekov cornered in the transporter room.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/star-trek-timelines/serial-drama/ep11-the-shuttle.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=tpfUdqQcEDw",
+      "yt_publish_at": "2026-06-21T20:59:00Z",
+      "duration_sec": 39
     }
   ]
 }
