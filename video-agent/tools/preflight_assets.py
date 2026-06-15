@@ -18,14 +18,26 @@ import json
 import hashlib
 import pathlib
 import argparse
+import ssl
 import urllib.request
 import urllib.error
+
+
+def _ssl_ctx():
+    try:
+        import certifi
+        return ssl.create_default_context(cafile=certifi.where())
+    except ImportError:
+        pass
+    ctx = ssl.create_default_context()
+    ctx.load_default_certs()
+    return ctx
 
 
 def http_head_ok(url: str, timeout: int = 12) -> bool:
     try:
         req = urllib.request.Request(url, method="HEAD")
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
+        with urllib.request.urlopen(req, timeout=timeout, context=_ssl_ctx()) as resp:
             return 200 <= resp.status < 400
     except Exception:
         return False
@@ -44,15 +56,19 @@ def clip_index(clip):
 
 
 def is_dialogue(clip):
-    return (clip.get("clip_type") == "dialogue"
-            or clip.get("type") == "dialogue"
-            or clip.get("generate_audio") is True)
+    ct = clip.get("clip_type") or clip.get("type", "")
+    if ct == "action":
+        return False
+    return ct == "dialogue" or clip.get("generate_audio") is True
 
 
 def get_image_url(clip):
-    return (clip.get("scene_image")
-            or clip.get("scene_image_url")
-            or clip.get("image_url", ""))
+    # Prefer scene_image_url (Supabase HTTP URL) over scene_image (may be local path)
+    url = clip.get("scene_image_url") or clip.get("scene_image") or clip.get("image_url", "")
+    # Skip local filesystem paths — they can't be HTTP-checked
+    if url and not url.startswith("http"):
+        url = clip.get("scene_image_url") or clip.get("image_url", "")
+    return url
 
 
 def get_tts_url(clip):

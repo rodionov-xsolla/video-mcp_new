@@ -16,7 +16,7 @@ What you personally do:
 ## Startup order
 
 1. **`git pull origin main`** — first thing. Team repo, rules change. On conflict — stop and ask the user; do not auto-merge.
-2. **Read `rules/roles/manager.md`** — the fixed execution sequence, gate scripts, contracts between roles, Supabase, git push. This is the only role file you read.
+2. **Read `rules/roles/manager.md`** — format detection table, Supabase upload details, YouTube routing, phase contracts, Debug mode rules, API table. The FIXED EXECUTION SEQUENCE with gate commands is in the root `CLAUDE.md` (already in your context).
 3. **Read `rules/main/budgets.md` and `rules/main/fallback.md`** — limits and error handling.
 4. **Phase 0 — prep:**
    - Detect format from the user request (format detection table is in `manager.md`).

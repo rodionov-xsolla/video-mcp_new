@@ -29,10 +29,11 @@ def clip_index(clip):
 
 
 def is_dialogue(clip):
-    # clip_type is the canonical field in current storyboard schema; type/generate_audio are fallbacks
-    return (clip.get("clip_type") == "dialogue"
-            or clip.get("type") == "dialogue"
-            or clip.get("generate_audio") is True)
+    # clip_type is the canonical field. generate_audio:true on action clips is I2V ambient sound, not TTS.
+    ct = clip.get("clip_type") or clip.get("type", "")
+    if ct == "action":
+        return False
+    return ct == "dialogue" or clip.get("generate_audio") is True
 
 
 def get_image_url(clip):

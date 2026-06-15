@@ -172,7 +172,7 @@ Same as `character-story`: character does NOT speak on camera (no lipsync). I2V 
 ### Sound
 
 - **TTS:** full monologue as ONE audio file (`tts-output.mp3`). All `tts_segment` values joined in order, clip 1 skipped (null). Mandatory chunking per `sound.md §1b` if total > 80 words.
-- **Voice engine:** `game_tag == "genshin impact"` → **Chatterbox** with character's `voice-1.mp3` from Supabase (`assets/genshin-impact/characters/{slug}/voice-1.mp3`). All other games → MiniMax preset voice matching the alternate-self identity. See `rules/roles/sound.md §1`.
+- **Voice engine:** `game_tag == "genshin-impact"` → **Chatterbox** with character's `voice-1.mp3` from Supabase (`assets/genshin-impact/characters/{slug}/voice-1.mp3`). All other games → MiniMax preset voice matching the alternate-self identity. See `rules/roles/sound.md §1`.
 - Generate `tts-output.mp3`, upload to Supabase as episode-tts asset
 - **Subtitles:** the one universal whisper style from `build/voice-final.wav` (the title-card lead silence is already inside via adelay) — `rules/roles/editor.md` §6. No `--offset`/`--text`.
 - Music: from `video-agent/music/Dark/` only — never Fun/

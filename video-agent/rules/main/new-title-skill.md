@@ -9,7 +9,7 @@ Step-by-step instructions for the agent. Describes what to ask the user, in what
 ## Step 0. Preparation
 
 Read before starting:
-1. `games/genshin impact/genshin-impact.md` — reference for Visual Style Guide + Character Prompt Blocks format
+1. `games/genshin-impact/genshin-impact.md` — reference for Visual Style Guide + Character Prompt Blocks format
 2. `games/pokemon-go/pokemon-go.md` — reference for CTA section + Trainer-style character blocks
 3. `rules/roles/manager.md` lines 167–170 — Channel routing table (existing youtube_channel mappings)
 

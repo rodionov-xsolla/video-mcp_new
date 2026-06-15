@@ -287,42 +287,34 @@ Exit≠0 → STOP. Reports: moov atom missing, duration < 5s, subtitle drift > 3
    **Privacy is always `private`** — videos are uploaded privately so the user can review before publishing.
 
    ```bash
-   CHANNEL="<resolved from game config>"   # starfleetarchive | yellowguy | genshinsnap
-   YOUTUBE_URL=$(bash queue/youtube-upload.sh \
+   CHANNEL="<resolved from game config>"   # gamepulse | yellowguy | genshinsnap
+   YT_OUTPUT=$(bash queue/youtube-upload.sh \
      --channel "$CHANNEL" \
      "$OUTPUT_DIR/final.mp4" \
      "$TITLE" \
      "$DESCRIPTION" \
      "private" \
      "$TAGS")
-   echo "YouTube: $YOUTUBE_URL"
+   YOUTUBE_URL=$(echo "$YT_OUTPUT" | grep '^https://')
+   YT_PUBLISH_AT=$(echo "$YT_OUTPUT" | grep '^SCHEDULED_FOR=' | cut -d= -f2-)
+   echo "YouTube: $YOUTUBE_URL (scheduled: $YT_PUBLISH_AT)"
    ```
 
-   **Scheduling — always verify the publication queue first.** Before setting a `--publish-at` date:
+   **Scheduling — the script auto-schedules.** `youtube-upload.sh` (omit `--publish-at`) queries the channel's upload playlist, finds all taken `publishAt` dates, and picks the nearest free slot at 20:59 UTC. Do NOT pick a date manually — you will collide with already-queued videos.
 
-   **Step 1 — check Supabase `video_agent_runs`:**
+   **Before uploading — always verify the current queue on the channel** so you know what's already scheduled:
    ```bash
-   curl -s -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
-     -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
-     "${SUPABASE_URL}/rest/v1/video_agent_runs?select=game_tag,input_idea,yt_published&yt_published=not.is.null&order=yt_published.desc&limit=5"
+   # Quick check: what dates are already taken?
+   python3 - <<'EOF'
+   import urllib.request, urllib.parse, json, ssl, subprocess, os
+   # ... get access token via refresh token from .env, then:
+   # GET https://www.googleapis.com/youtube/v3/videos?part=status&id=<playlist-video-ids>
+   # print items[].status.publishAt for private videos
+   EOF
    ```
-   Last `yt_published` + 1 day = candidate for next slot. If all NULL (logging not yet active) → go to Step 2.
+   This tells you the next free slot before you commit to an upload.
 
-   **Step 2 — YouTube API fallback (check actual scheduled videos on the channel):**
-   Get access token, then:
-   ```bash
-   # List private videos with publishAt to see what's already queued
-   curl "https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId={UPLOADS_PLAYLIST}&maxResults=20" \
-     -H "Authorization: Bearer $ACCESS"
-   # Then check video status:
-   curl "https://www.googleapis.com/youtube/v3/videos?part=status&id={comma-separated-ids}" \
-     -H "Authorization: Bearer $ACCESS"
-   # → items[].status.publishAt shows scheduled dates. Pick first date not taken at 20:59 UTC.
-   ```
-
-   **Channel token lookup:** `star-trek-timelines` → channel key is `GAMEPULSE` in .env (= "Starfleet Archives", UCwpoM7-Sr7waXUxLfPRosGA). The .env key name does NOT match the game config channel name — always verify via `channels?part=snippet&mine=true`.
-
-   Do NOT pick a date manually — adjacent episodes in queue will collide. Use `youtube-upload.sh` auto-schedule (omit `--publish-at`) which queries the channel's upload playlist and picks the nearest free date at 20:55 UTC (23:55 MSK). If Python `urllib` SSL fails (macOS Python 3.13 cert issue), use `curl` for all HTTP calls.
+   **Channel token lookup:** `star-trek-timelines` → channel key `GAMEPULSE` in .env (= "Starfleet Archives", UCwpoM7-Sr7waXUxLfPRosGA). The .env key name does NOT match the game config channel name — always verify via `channels?part=snippet&mine=true`. If Python `urllib` SSL fails (macOS Python 3.13 cert issue), use `curl` for all HTTP calls.
 
    **Debug vs non-debug:**
    - **Non-debug:** upload as `private` on the routed channel. No questions.
@@ -341,11 +333,12 @@ Exit≠0 → STOP. Reports: moov atom missing, duration < 5s, subtitle drift > 3
      --title "$TITLE" \
      --format "$format_slug" \
      --video-url "$SUPABASE_VIDEO_URL" \
-     --youtube-url "$YOUTUBE_URL"   # omit if YT upload was skipped
+     --youtube-url "$YOUTUBE_URL" \        # omit if YT upload was skipped
+     --yt-publish-at "$YT_PUBLISH_AT"      # actual YouTube publishAt date from upload output
    ```
    - `--video-url` is the Supabase public URL from step 1 (stable per game/date/format → the upsert key, mapped to `output_video_url`).
    - `--title` lands in `input_idea` (the table's NOT NULL title field). `--format` and `--youtube-url` in their own columns.
-   - When `--youtube-url` is provided, `yt_published` is automatically set to the current UTC timestamp.
+   - `--yt-publish-at` is the actual scheduled date captured from `youtube-upload.sh` output (`SCHEDULED_FOR=...`). This is what gets stored in `yt_published` — NOT the current timestamp. If omitted, falls back to `now()` (immediate publish case).
    - Requires `UNIQUE(output_video_url)` + `format`/`youtube_url` columns — see `queue/setup.sql` (run the ALTERs once in the SQL editor).
 
    **Publication timestamp fields** (`yt_published`, `tt_published`, `inst_published`): each stores the UTC datetime when the video was published to that platform, `NULL` = not yet published. The manager only ever sets `yt_published` (via `log-video.sh`). **TikTok and Instagram publishing is a separate process — the manager does NOT trigger it and does NOT mention it to the user after generation.** Those platforms are handled by a dedicated mobile-mcp posting agent launched independently via its own command — runbook: `rules/roles/publisher.md` (triggered by «Опубликовать в тик-ток» / «Опубликовать в инстаграм»; uses `queue/fetch-for-publish.sh` to stage the video on the phone, then `queue/log-publish.sh` to mark it published).
