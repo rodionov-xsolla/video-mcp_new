@@ -68,6 +68,48 @@ def main():
         print(f"ERROR: storyboard.json is not valid JSON: {e}", file=sys.stderr)
         sys.exit(1)
 
+    # reddit-story uses a flat schema (narrative_text + top-level tts) with no scenes array.
+    # Storyboarder and Animator phases are skipped for this format.
+    flat_formats = {"reddit-story"}
+    is_flat = sb.get("format") in flat_formats
+
+    if is_flat:
+        # ── scenarist gate (flat) ──────────────────────────────────────────────
+        if args.stage == "scenarist":
+            if not sb.get("narrative_text"):
+                errors.append("missing narrative_text field")
+            if not sb.get("headline"):
+                errors.append("missing headline field")
+            if not sb.get("tts"):
+                errors.append("missing tts field")
+            if not errors:
+                wc = len(sb.get("narrative_text", "").split())
+                print(f"GATE PASSED scenarist: reddit-story flat format — {wc} words")
+
+        # ── sound gate (flat) ─────────────────────────────────────────────────
+        elif args.stage == "sound":
+            mp3 = output_dir / "tts-output.mp3"
+            tts_url = sb.get("tts_url") or sb.get("audio_url")
+            if not mp3.exists():
+                errors.append(f"tts-output.mp3 not found in {output_dir}")
+            elif mp3.stat().st_size < 5_000:
+                errors.append(f"tts-output.mp3 suspiciously small ({mp3.stat().st_size} bytes)")
+            elif not tts_url:
+                errors.append("storyboard.json missing tts_url/audio_url (Sound must write it back)")
+            else:
+                print(f"GATE PASSED sound: tts-output.mp3 present ({mp3.stat().st_size} bytes), tts_url written")
+
+        # ── storyboarder / animator gates (flat) ──────────────────────────────
+        elif args.stage in ("storyboarder", "animator"):
+            print(f"GATE PASSED {args.stage}: reddit-story skips this phase (gameplay-only format)")
+
+        if errors:
+            print(f"\nGATE FAILED ({args.stage}, {len(errors)} error(s)):", file=sys.stderr)
+            for e in errors:
+                print(f"  ✗ {e}", file=sys.stderr)
+            sys.exit(1)
+        return
+
     clips = sb.get("scenes", sb.get("clips", []))
     if not clips:
         print("ERROR: storyboard.json has no scenes/clips", file=sys.stderr)

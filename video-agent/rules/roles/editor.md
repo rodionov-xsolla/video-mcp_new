@@ -435,6 +435,94 @@ $FFMPEG -y -i final-base.mp4 -i bg-music.mp3 \
 
 ---
 
+## 4a. reddit-story — canonical assembly (three steps, DO NOT skip or reorder)
+
+reddit-story has no scene MP4s — only `tts-output.mp3` + raw gameplay clips + a game-specific background PNG.
+
+**Three encode passes total** (was four — steps 2+3+4 merged into one ffmpeg-full pass to halve CPU time).
+
+### Layout
+- **Background:** query Supabase `game_assets` where `game_tag = {GAME_TAG}` AND `tags @> ['reddit-story-bg']` → download to `build/bg.png`, scaled 1080×1920. If not found — STOP, ask Manager to upload one with tag `reddit-story-bg`.
+- **Gameplay panel:** 960×1280 (3:4), overlaid at x=60, y=320 — 60px side borders + 320px top/bottom of background visible
+- **Subtitles:** burned in the same pass as composite + audio (on top of overlay), MarginV=520 — correct
+
+### Step 0 — download background
+
+```bash
+source .env
+BG_URL=$(curl -s -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+  -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
+  "${SUPABASE_URL}/rest/v1/game_assets?game_tag=eq.${GAME_TAG}&tags=cs.{reddit-story-bg}&select=url" \
+  | python3 -c "import json,sys; d=json.load(sys.stdin); print(d[0]['url'] if d else '')")
+[ -z "$BG_URL" ] && { echo "ERROR: no reddit-story-bg asset for ${GAME_TAG}"; exit 1; }
+curl -s -o build/bg.png "$BG_URL"
+```
+
+### Step 1 — normalize gameplay clips (CRITICAL: crop-to-fill, never pad)
+
+Inspect actual clip dimensions first (`ffprobe -show_entries stream=width,height`). Scale to 960×1280 via crop-to-fill regardless of source resolution. If the source clip is longer than TTS_DUR, optionally use `-ss OFFSET` to start from a specific timestamp.
+
+```bash
+FFMPEG=/usr/local/bin/ffmpeg-full/ffmpeg
+# Example: start from 35s offset, take only TTS_DUR seconds
+ffmpeg -y -ss 35 -i games/${GAME_TAG}/gameplay/clip.mp4 -t "$TTS_DUR" \
+  -vf "scale=960:1280:force_original_aspect_ratio=increase,crop=960:1280,setsar=1,fps=30" \
+  -an -c:v libx264 -preset fast -crf 22 \
+  build/gp_norm.mp4
+```
+
+**NEVER use `force_original_aspect_ratio=decrease` + `pad` for gameplay** — pad fills with black, baking black bars into the file before compositing. Normalizing to 1080×810 (landscape) is also wrong — it inverts the aspect ratio.
+
+Also generate subtitles before Step 2 (needed by the single-pass encode):
+```bash
+# Whisper on tts-output.mp3 → build/subs.ass
+python3 tools/add_subtitles.py tts-output.mp3 build/subs.ass \
+  --storyboard storyboard.json --lang en --main-dur "$TTS_DUR"
+```
+
+### Step 2 — single-pass composite + subtitles + audio (ffmpeg-full required)
+
+Combines overlay, libass subtitle burn, and audio mix in one encode. Saves one full re-encode vs the old 4-step approach.
+
+```bash
+SUBS_ABS="$(pwd)/build/subs.ass"
+/usr/local/bin/ffmpeg-full/ffmpeg -y \
+  -loop 1 -framerate 30 -i build/bg.png \
+  -stream_loop -1 -i build/gp_norm.mp4 \
+  -i tts-output.mp3 \
+  -i bg-music.mp3 \
+  -filter_complex "
+    [0:v]scale=1080:1920,setsar=1[bg];
+    [1:v]setsar=1[gp];
+    [bg][gp]overlay=x=60:y=320,ass='${SUBS_ABS}',fps=30[vout];
+    [2:a]apad[tts];
+    [3:a]volume=0.05[mus];
+    [tts][mus]amix=inputs=2:duration=first[aout]
+  " \
+  -map "[vout]" -map "[aout]" \
+  -t "$TTS_DUR" \
+  -c:v libx264 -preset fast -crf 22 \
+  -c:a aac -b:a 128k -ar 44100 -ac 2 \
+  build/main-final.mp4
+```
+
+**MUST use `/usr/local/bin/ffmpeg-full/ffmpeg`** — system Homebrew ffmpeg has no libass → `ass=` filter silently fails, no subtitles burned.
+
+### Step 3 — concat CTA → final.mp4
+
+```bash
+printf "file 'main-final.mp4'\nfile 'cta-norm.mp4'\n" > build/concat-final.txt
+/usr/local/bin/ffmpeg-full/ffmpeg -y -f concat -safe 0 -i build/concat-final.txt \
+  -c:v libx264 -preset medium -crf 22 -c:a aac -b:a 128k -ar 44100 -ac 2 \
+  -movflags +faststart final.mp4
+```
+
+### CTA asset
+
+Query `game_assets` where `game_tag = {GAME_TAG}` AND `tags @> ['cta','video']`. Accept any `asset_type` — games use either `promo_art` (e.g. star-trek-timelines) or `generated_ref` (e.g. genshin-impact). Skip any record tagged `legacy`.
+
+---
+
 ## 5. Video ending: fade-to-black + CTA (MANDATORY)
 
 Every video ends with **fade-to-black → CTA text**. Two variants:

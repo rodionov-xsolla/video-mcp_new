@@ -22,8 +22,9 @@ Run parameters: `game_tag`, `topic` (optional), `language` (`EN` / `RU` / `PT-BR
 ## Concept
 
 - **Gameplay:** pre-made clips from `games/{GAME_TAG}/gameplay/`, random shuffle, **not tied to text** — pure background visual
-- **TTS:** ElevenLabs via fal.ai (expressive, `stability=0.3`, `style=0.7`, 29 languages)
-- **Subtitles:** word-highlight drawtext, mandatory
+- **Background:** static image from Supabase `game_assets` where `tags @> ['reddit-story-bg']` for this `game_tag`. Editor downloads it to `build/bg.png`. If not found — STOP and ask Manager to upload one.
+- **TTS:** MiniMax via fal.ai (`fal-ai/minimax/speech-2.8-hd`), narrator voice `Determined_Man`, emotion `neutral`, speed 0.90
+- **Subtitles:** word-highlight via Whisper ASS, mandatory
 - **Duration:** up to 60s (~150–170 words)
 - **No AI video generation** — only TTS + ffmpeg assembly
 - **Budget:** $2 max (typical $0.30–0.50)
@@ -139,18 +140,38 @@ Updated after each video (Manager, Phase 6). All lists FIFO, keep last 10.
 - **SKIP** — no Kling/Veo3, only random gameplay
 
 ### Sound
-- ElevenLabs via fal.ai (`fal-ai/elevenlabs/tts/eleven-v3`); `voice` name (not hash)
-- `stability=0.3`, `style=0.7` for storytelling expression
-- Voice `headline + narrative_text` as a single text → `tts-output.mp3`
-- **Do not generate an SRT file** — Editor computes timing from TTS_DUR
+- **MiniMax via fal.ai** (`fal-ai/minimax/speech-2.8-hd`) — ElevenLabs is no longer used
+- Narrator voice: `Determined_Man`, emotion `neutral`, speed `0.90`
+- Input text = `headline + "\n\n" + narrative_text` as a single prompt → `tts-output.mp3`
+- **Do not generate an SRT file** — Editor generates timings via Whisper in assembly
 - Music optional, `volume=0.05` (quieter than usual — narration must be clear)
 - General rules — `rules/roles/sound.md`
 
 ### Editor
-- Gameplay: `shuf` clips → concat → trim to `TTS_DUR + 2s`, `-an` (strip original audio)
-- Scale 1080×1920, 30fps; TTS overlay via `apad` (**NEVER `-shortest`**)
-- **Word-highlight subtitles** (drawtext, 3–5 words per segment, even timing across TTS_DUR, accent color from game config) — Editor builds the filters itself; for 30+ segments use `-filter_complex_script`. Details — `rules/roles/editor.md` "reddit-story — drawtext word-highlight" section
-- CTA overlay last 2s (`drawtext`, `enable='between(t,CTA_START,TOTAL_DUR)'`)
+
+**Layout (canonical — do not deviate):**
+- **Background:** query Supabase `game_assets` where `game_tag = {GAME_TAG}` AND `tags @> ['reddit-story-bg']` → download to `build/bg.png` → scaled to 1080×1920. If not found — STOP, ask Manager to upload a background asset with tag `reddit-story-bg` for this game.
+- **Gameplay panel:** 960×1280 (3:4), overlaid at x=60, y=320 → 60px side borders, 320px top/bottom borders of background visible
+- **Subtitles:** generated via Whisper on `tts-output.mp3` → `build/subs.ass`, then burned in the single-pass encode (step 2). MarginV=520 puts them inside the gameplay panel — correct.
+
+**Three-step assembly (steps 2+3+4 merged into one ffmpeg-full pass):**
+```
+1. Normalize gameplay  → scale each clip to 960×1280, crop-to-fill (NEVER pad — pad adds black bars)
+                          ffmpeg: scale=960:1280:force_original_aspect_ratio=increase,crop=960:1280
+                          Optional: -ss OFFSET to start gameplay from a specific timestamp.
+                          Also run Whisper on tts-output.mp3 → build/subs.ass before step 2.
+2. Single-pass encode  → /usr/local/bin/ffmpeg-full/ffmpeg:
+                          [bg 1080×1920][gameplay 960×1280]overlay=x=60:y=320,ass='subs.ass',fps=30
+                          + amix TTS(apad) + bg-music(vol=0.05), -t TTS_DUR → build/main-final.mp4
+                          MUST use ffmpeg-full (libass). Combines composite + subtitle burn + audio in one pass.
+3. Concat CTA          → ffmpeg-full concat main-final.mp4 + cta-norm.mp4 → final.mp4
+```
+
+**NEVER normalize gameplay to 1080×810** — that is landscape (4:3) applied to portrait (3:4) clips, produces massive black bars baked into gp_norm files.
+
+**CTA:** query `game_assets` where `tags @> ['cta','video']` for this `game_tag`. Accept any `asset_type` (`promo_art` or `generated_ref`) — skip records tagged `legacy`.
+
+- TTS overlay via `apad` (**NEVER `-shortest`**)
 - General rules — `rules/roles/editor.md`
 
 ---
@@ -188,7 +209,9 @@ Plus an update to `games/{GAME_TAG}/reddit-story_bible.json`.
 
 ## Anti-patterns
 
-- ❌ Kokoro TTS or direct ElevenLabs API — only `fal-ai/elevenlabs/tts/eleven-v3`
+- ❌ ElevenLabs or Kokoro — only MiniMax via `fal-ai/minimax/speech-2.8-hd`
+- ❌ Hardcoding a game-specific background URL — always query Supabase by tag `reddit-story-bg`
+- ❌ Normalizing gameplay to 1080×810 (landscape) — clips are portrait 3:4, panel is 960×1280
 - ❌ Tying gameplay to text — must be random
 - ❌ Starting with the purchase/offerwall — first a gripping story
 - ❌ `-shortest` in ffmpeg — use `apad + -t`
