@@ -437,39 +437,52 @@ $FFMPEG -y -i final-base.mp4 -i bg-music.mp3 \
 
 ## 4a. reddit-story — canonical assembly (four steps, DO NOT skip or reorder)
 
-reddit-story has no scene MP4s — only `tts-output.mp3` + raw gameplay clips + a starfield background PNG.
+reddit-story has no scene MP4s — only `tts-output.mp3` + raw gameplay clips + a game-specific background PNG.
 
 ### Layout
-- **Background:** Supabase `location:deep-space` → `build/bg-starfield.png`, scaled 1080×1920
-- **Gameplay panel:** 960×1280 (3:4), overlaid at x=60, y=320 — 60px side borders + 320px top/bottom borders of starfield
+- **Background:** query Supabase `game_assets` where `game_tag = {GAME_TAG}` AND `tags @> ['reddit-story-bg']` → download to `build/bg.png`, scaled 1080×1920. If not found — STOP, ask Manager to upload one with tag `reddit-story-bg`.
+- **Gameplay panel:** 960×1280 (3:4), overlaid at x=60, y=320 — 60px side borders + 320px top/bottom of background visible
 - **Subtitles:** burned last (on top of composite), MarginV=520 puts them inside the panel — correct
+
+### Step 0 — download background
+
+```bash
+source .env
+BG_URL=$(curl -s -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+  -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
+  "${SUPABASE_URL}/rest/v1/game_assets?game_tag=eq.${GAME_TAG}&tags=cs.{reddit-story-bg}&select=url" \
+  | python3 -c "import json,sys; d=json.load(sys.stdin); print(d[0]['url'] if d else '')")
+[ -z "$BG_URL" ] && { echo "ERROR: no reddit-story-bg asset for ${GAME_TAG}"; exit 1; }
+curl -s -o build/bg.png "$BG_URL"
+```
 
 ### Step 1 — normalize gameplay clips (CRITICAL: crop-to-fill, never pad)
 
-Star Trek Timelines clips are 720×960 and 480×640 — all 3:4. Target panel is 960×1280 — also 3:4. Scale is exact, zero padding.
+Inspect actual clip dimensions first (`ffprobe -show_entries stream=width,height`). Scale to 960×1280 via crop-to-fill regardless of source resolution.
 
 ```bash
 FFMPEG=/usr/local/bin/ffmpeg-full/ffmpeg   # must be ffmpeg-full for libass
-for i in 1 2 3 4 5 6; do
-  $FFMPEG -y -i "games/${GAME_TAG}/gameplay/clip_${i}.mp4" \
+for f in games/${GAME_TAG}/gameplay/*.mp4; do
+  name=$(basename "$f" .mp4)
+  $FFMPEG -y -i "$f" \
     -vf "scale=960:1280:force_original_aspect_ratio=increase,crop=960:1280,setsar=1,fps=30" \
     -an -c:v libx264 -preset fast -crf 22 \
-    "build/gp_960_${i}.mp4"
+    "build/gp_${name}.mp4"
 done
 ```
 
 **NEVER use `force_original_aspect_ratio=decrease` + `pad` for gameplay** — pad fills with black, baking black bars into the file before compositing. Normalizing to 1080×810 (landscape) is also wrong — it inverts the aspect ratio.
 
-### Step 2 — composite (starfield + gameplay, no audio)
+### Step 2 — composite (background + gameplay, no audio)
 
 ```bash
 # Shuffle and concat gameplay, loop to TTS_DUR
-printf "file 'gp_960_1.mp4'\n..." > build/gp-list.txt
+ls build/gp_*.mp4 | shuf | awk '{print "file \x27"$0"\x27"}' > build/gp-list.txt
 $FFMPEG -y -f concat -safe 0 -i build/gp-list.txt -c copy build/gp_all.mp4
 
 # Composite
 $FFMPEG -y \
-  -loop 1 -framerate 30 -i build/bg-starfield.png \
+  -loop 1 -framerate 30 -i build/bg.png \
   -stream_loop -1 -i build/gp_all.mp4 \
   -filter_complex "
     [0:v]scale=1080:1920,setsar=1,fps=30[bg];
