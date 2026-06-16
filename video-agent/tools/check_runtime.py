@@ -31,7 +31,7 @@ FORMAT_RANGES = {
     "gameplay-ai-avatar":(25, 65),
     "character-story":   (28, 65),
     "in-game-pov":       (25, 60),
-    "wild-documentary":  (28, 65),
+    "wild-documentary":  (20, 35),
     "fake-ad":           (15, 45),
     "dual-style":        (20, 50),
     "motion-dance":      (20, 50),
