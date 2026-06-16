@@ -75,6 +75,30 @@ def main():
         sys.exit(1)
 
     sb = json.loads(sb_file.read_text(encoding="utf-8"))
+
+    # reddit-story flat format: measure tts-output.mp3 directly
+    flat_formats = {"reddit-story"}
+    if sb.get("format") in flat_formats:
+        mp3 = output_dir / "tts-output.mp3"
+        lo, hi = FORMAT_RANGES.get(args.format_slug, DEFAULT_RANGE)
+        if mp3.exists():
+            dur = ffprobe_duration(mp3)
+            if dur and dur > 0:
+                print(f"Estimated runtime: {dur:.1f}s")
+                print(f"Target range [{args.format_slug}]: {lo}–{hi}s")
+                print(f"\nBreakdown:\n  tts-output.mp3  {dur:.1f}s")
+                if dur < lo:
+                    print(f"\nGATE FAILED: runtime {dur:.1f}s is BELOW minimum {lo}s", file=sys.stderr)
+                    sys.exit(1)
+                elif dur > hi:
+                    print(f"\nGATE FAILED: runtime {dur:.1f}s EXCEEDS maximum {hi}s", file=sys.stderr)
+                    sys.exit(1)
+                else:
+                    print(f"\nGATE PASSED: runtime {dur:.1f}s is within [{lo}–{hi}]s")
+                return
+        print("ERROR: tts-output.mp3 not found — run Sound phase first", file=sys.stderr)
+        sys.exit(1)
+
     clips = sb.get("scenes", sb.get("clips", []))
 
     total = 0.0

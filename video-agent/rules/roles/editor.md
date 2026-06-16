@@ -435,6 +435,94 @@ $FFMPEG -y -i final-base.mp4 -i bg-music.mp3 \
 
 ---
 
+## 4a. reddit-story — canonical assembly (four steps, DO NOT skip or reorder)
+
+reddit-story has no scene MP4s — only `tts-output.mp3` + raw gameplay clips + a starfield background PNG.
+
+### Layout
+- **Background:** Supabase `location:deep-space` → `build/bg-starfield.png`, scaled 1080×1920
+- **Gameplay panel:** 960×1280 (3:4), overlaid at x=60, y=320 — 60px side borders + 320px top/bottom borders of starfield
+- **Subtitles:** burned last (on top of composite), MarginV=520 puts them inside the panel — correct
+
+### Step 1 — normalize gameplay clips (CRITICAL: crop-to-fill, never pad)
+
+Star Trek Timelines clips are 720×960 and 480×640 — all 3:4. Target panel is 960×1280 — also 3:4. Scale is exact, zero padding.
+
+```bash
+FFMPEG=/usr/local/bin/ffmpeg-full/ffmpeg   # must be ffmpeg-full for libass
+for i in 1 2 3 4 5 6; do
+  $FFMPEG -y -i "games/${GAME_TAG}/gameplay/clip_${i}.mp4" \
+    -vf "scale=960:1280:force_original_aspect_ratio=increase,crop=960:1280,setsar=1,fps=30" \
+    -an -c:v libx264 -preset fast -crf 22 \
+    "build/gp_960_${i}.mp4"
+done
+```
+
+**NEVER use `force_original_aspect_ratio=decrease` + `pad` for gameplay** — pad fills with black, baking black bars into the file before compositing. Normalizing to 1080×810 (landscape) is also wrong — it inverts the aspect ratio.
+
+### Step 2 — composite (starfield + gameplay, no audio)
+
+```bash
+# Shuffle and concat gameplay, loop to TTS_DUR
+printf "file 'gp_960_1.mp4'\n..." > build/gp-list.txt
+$FFMPEG -y -f concat -safe 0 -i build/gp-list.txt -c copy build/gp_all.mp4
+
+# Composite
+$FFMPEG -y \
+  -loop 1 -framerate 30 -i build/bg-starfield.png \
+  -stream_loop -1 -i build/gp_all.mp4 \
+  -filter_complex "
+    [0:v]scale=1080:1920,setsar=1,fps=30[bg];
+    [1:v]setsar=1,fps=30[gp];
+    [bg][gp]overlay=x=60:y=320[vout]
+  " \
+  -map "[vout]" -t "$TTS_DUR" \
+  -c:v libx264 -preset fast -crf 22 \
+  build/composite-nobars.mp4
+```
+
+### Step 3 — burn subtitles with ffmpeg-full (libass required)
+
+```bash
+# Generate subs from voice-final.wav
+python3 tools/add_subtitles.py build/voice-final.wav build/subs.ass \
+  --storyboard storyboard.json --lang en --main-dur "$TTS_DUR"
+
+# Burn on top of composite — MUST use ffmpeg-full, not system ffmpeg
+SUBS_ABS="$(pwd)/build/subs.ass"
+$FFMPEG -y -i build/composite-nobars.mp4 \
+  -vf "ass='${SUBS_ABS}'" \
+  -c:v libx264 -preset fast -crf 22 -c:a copy \
+  build/composite-subs.mp4
+```
+
+Subtitles appear OVER the gameplay panel — that is correct and intentional.
+
+### Step 4 — add audio and concat CTA
+
+```bash
+$FFMPEG -y \
+  -i build/composite-subs.mp4 \
+  -i tts-output.mp3 \
+  -i build/bg-music.mp3 \
+  -filter_complex "[1:a]apad[tts];[2:a]volume=0.05[mus];[tts][mus]amix=inputs=2:duration=first[aout]" \
+  -map 0:v -map "[aout]" -t "$TTS_DUR" \
+  -c:v copy -c:a aac -b:a 128k -ar 44100 -ac 2 \
+  build/main-final.mp4
+
+# Concat with CTA
+printf "file 'main-final.mp4'\nfile 'cta-norm.mp4'\n" > build/concat-final.txt
+$FFMPEG -y -f concat -safe 0 -i build/concat-final.txt \
+  -c:v libx264 -preset medium -crf 22 -c:a aac -b:a 128k -ar 44100 -ac 2 \
+  -movflags +faststart final.mp4
+```
+
+### CTA asset
+
+Use `game_assets` where `tags @> ['cta','video']` AND `asset_type = 'generated_ref'` (url: `cta-link-in-bio.mp4`). The record with `asset_type = 'promo_art'` is tagged `legacy` — skip it.
+
+---
+
 ## 5. Video ending: fade-to-black + CTA (MANDATORY)
 
 Every video ends with **fade-to-black → CTA text**. Two variants:
