@@ -1,0 +1,38 @@
+{
+  "format": "in-game-pov",
+  "game_tag": "star-trek-timelines",
+  "last_updated": "2026-06-16",
+  "used_situations": [
+    {
+      "situation": "Battle of Wolf 359 — Borg cube attack, your Starfleet vessel is crippled",
+      "date": "2026-06-01",
+      "outcome": "death",
+      "threat_type": "Borg",
+      "published": false,
+      "status": "completed",
+      "comment": ""
+    },
+    {
+      "situation": "Battle of Wolf 359 — your ship (USS Saratoga) is crippled by the Borg",
+      "date": "2026-06-01",
+      "outcome": "death",
+      "threat_type": "Borg",
+      "published": false,
+      "status": "completed",
+      "comment": "Second version / v2 of same scenario"
+    },
+    {
+      "situation": "Borg Boarding — Borg drones breach your Starfleet vessel, crew member perspective",
+      "date": "2026-06-16",
+      "outcome": "survive",
+      "threat_type": "Borg",
+      "published": false,
+      "status": "error",
+      "comment": "В ролике ошибки с логикой повествования, ттс на русском языке, неправильный cta"
+    }
+  ],
+  "anti_repetition": {
+    "threat_types_used": ["Borg", "Borg", "Borg"],
+    "note": "Borg used 3 times in a row — next situation MUST use a completely different antagonist/threat. Good candidates: Dominion War assault (Jem'Hadar boarding), Klingon Bird-of-Prey ambush, Romulan Warbird attack, Breen energy dampener, Species 8472 in fluidic space, Cardassian raid on DS9, Hirogen hunting party, Temporal anomaly (Krenim weapon), Holodeck malfunction trapping crew. Avoid: anything involving Borg in any form."
+  }
+}
