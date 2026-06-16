@@ -72,12 +72,12 @@ from `games/{tag}/{tag}.md` → `## Overlay brand` (font role → brand font).**
 |---|------|----------|------|--------|-----------|-------------|
 | 1 | `title` | `(w-text_w)/2,680` (+`\n` → y840) | 130 | whole title-card clip | display | situation name (2 lines) |
 | 2 | `title` (hook) | `(w-text_w)/2,1030` | 60 | whole title-card clip | label (accent color) | `"SURVIVAL CHANCE: N%"` |
-| 3 | `hud_counter` | `top-right` | 52 | whole clip (no time range needed — each clip is 5s) | label | `"SURVIVAL N%"`, N = clip `survival_pct` |
-| 4 | `outcome_plate` | `center` | 110 | `["gte", 3.5]`, fade_in 0.4 | display | `YOU SURVIVED`/`YOU DIED` (always EN) — on last POV clip only |
+| 3 | `hud_counter` | `top-right` | 52 | shot window `[t0,t1]` | label | `"SURVIVAL N%"`, N = shot `survival_pct` |
+| 4 | `outcome_plate` | `center` | 110 | `["gte", clip_dur-1.5]`, fade_in 0.4 | display | `YOU SURVIVED`/`YOU DIED` (always EN) |
 
 - The counter **moves with the narration**: starts at the title-card value, up on a successful step,
   down on a new threat, lands on the locked `outcome` on the last scene (`survive`→71%, `death`→0%).
-  One `hud_counter` per clip (no time-range windows needed — each clip is its own 5s file).
+  One `hud_counter` per clip with enable window `[0,5]` (full 5s clip duration).
 - Subtitle band (universal MarginV 520, y≈1256–1400) stays clear: HUD top-right, outcome center.
 
 ---
@@ -202,10 +202,10 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
   - `survival_pct` — (pov only) integer 0–100. Starts at the hook value matching `hook_plate`, moves per narration step, lands at 0 (`death`) or 60–85 (`survive`) on the final clip.
   - `tts_segment` — (pov only) 10–15 word narration fragment. Second person, present tense, imperative. Opens by placing the viewer IN the new location.
   - `action_description` — what the viewer sees and feels from first person. Three layers: camera movement + environment reaction + atmospheric element. No hands, no body, no weapon barrels.
-- **Graphic overlays → `clips[].overlays[]`** (rendered by `tools/overlays.py`, NOT subtitles — layout in the `## Overlays` section above; font/color/stroke from game `## Overlay brand`):
-  - **Title card (clip 0):** two `title` overlays — situation name (size 130, 2 lines via `\n`, y680/840) + hook plate `"SURVIVAL CHANCE: N%"` (size 60, label role, y1030). No `tts_segment`. `action_description` = wide cinematic, NOT POV.
-  - **Each POV clip:** one `hud_counter` overlay — `text:"SURVIVAL N%"`, top-right, no `enable` (shows for whole 5s clip). N = that clip's `survival_pct`.
-  - **Last POV clip (outcome):** add `outcome_plate` (`"YOU SURVIVED"` green / `"YOU DIED"` red — always EN), center, `enable:["gte",3.5]`, fade_in 0.4.
+- **Graphic overlays → `clips[].overlays[]`** (rendered by `tools/overlays.py`, NOT subtitles — layout in the `## Overlays` section above, schema in `rules/roles/scenarist.md`; font/color/stroke from game `## Overlay brand`):
+  - **Title card (clip 0):** two `title` overlays — situation name (size 130, 2 lines via `\n`, y680/840) + hook plate `"SURVIVAL CHANCE: N%"` (size 60, label role, y1030). `action_description` = wide cinematic, NOT POV. No `tts_segment`.
+  - **Each POV clip:** one `hud_counter` overlay — `text:"SURVIVAL N%"`, top-right, `enable:[0,5]` (whole 5s clip). N = that clip's `survival_pct`.
+  - **Last POV clip (outcome):** add `outcome_plate` (`"YOU SURVIVED"` green / `"YOU DIED"` red — always EN), center, `enable:["gte", clip_dur-1.5]`, fade_in 0.4.
 - **Narrator starts on clip 1** (after title card). First `tts_segment` opens: "Ты оказался…". All `tts_segment` values concatenated in index order → `tts.full_text`.
 - **No character-face ref. No prop/vehicle ref** unless absolutely required for continuity.
 - Voice: pick from ElevenLabs by tone (tense tactical instructor — `Daniel` confident, `George` neutral-grave, `Adam` urgent). Lock in `tts.voice`.
