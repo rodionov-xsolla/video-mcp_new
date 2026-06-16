@@ -22,8 +22,9 @@ Run parameters: `game_tag`, `topic` (optional), `language` (`EN` / `RU` / `PT-BR
 ## Concept
 
 - **Gameplay:** pre-made clips from `games/{GAME_TAG}/gameplay/`, random shuffle, **not tied to text** — pure background visual
-- **TTS:** ElevenLabs via fal.ai (expressive, `stability=0.3`, `style=0.7`, 29 languages)
-- **Subtitles:** word-highlight drawtext, mandatory
+- **Background:** static image from Supabase `game_assets` where `tags @> ['reddit-story-bg']` for this `game_tag`. Editor downloads it to `build/bg.png`. If not found — STOP and ask Manager to upload one.
+- **TTS:** MiniMax via fal.ai (`fal-ai/minimax/speech-2.8-hd`), narrator voice `Determined_Man`, emotion `neutral`, speed 0.90
+- **Subtitles:** word-highlight via Whisper ASS, mandatory
 - **Duration:** up to 60s (~150–170 words)
 - **No AI video generation** — only TTS + ffmpeg assembly
 - **Budget:** $2 max (typical $0.30–0.50)
@@ -139,18 +140,18 @@ Updated after each video (Manager, Phase 6). All lists FIFO, keep last 10.
 - **SKIP** — no Kling/Veo3, only random gameplay
 
 ### Sound
-- ElevenLabs via fal.ai (`fal-ai/elevenlabs/tts/eleven-v3`); `voice` name (not hash)
-- `stability=0.3`, `style=0.7` for storytelling expression
-- Voice `headline + narrative_text` as a single text → `tts-output.mp3`
-- **Do not generate an SRT file** — Editor computes timing from TTS_DUR
+- **MiniMax via fal.ai** (`fal-ai/minimax/speech-2.8-hd`) — ElevenLabs is no longer used
+- Narrator voice: `Determined_Man`, emotion `neutral`, speed `0.90`
+- Input text = `headline + "\n\n" + narrative_text` as a single prompt → `tts-output.mp3`
+- **Do not generate an SRT file** — Editor generates timings via Whisper in assembly
 - Music optional, `volume=0.05` (quieter than usual — narration must be clear)
 - General rules — `rules/roles/sound.md`
 
 ### Editor
 
 **Layout (canonical — do not deviate):**
-- **Background:** starfield PNG from Supabase `location:deep-space` tag → `build/bg-starfield.png` → scaled to 1080×1920, loops for full duration
-- **Gameplay panel:** 960×1280 (3:4), overlaid at x=60, y=320 → 60px side borders, 320px top/bottom borders of starfield visible
+- **Background:** query Supabase `game_assets` where `game_tag = {GAME_TAG}` AND `tags @> ['reddit-story-bg']` → download to `build/bg.png` → scaled to 1080×1920. If not found — STOP, ask Manager to upload a background asset with tag `reddit-story-bg` for this game.
+- **Gameplay panel:** 960×1280 (3:4), overlaid at x=60, y=320 → 60px side borders, 320px top/bottom borders of background visible
 - **Subtitles:** burned on TOP of the composite last, via `ffmpeg-full` (libass required). MarginV=520 puts them inside the gameplay panel area — that is correct, they go over the gameplay.
 
 **Four-step assembly (required order):**
@@ -206,7 +207,9 @@ Plus an update to `games/{GAME_TAG}/reddit-story_bible.json`.
 
 ## Anti-patterns
 
-- ❌ Kokoro TTS or direct ElevenLabs API — only `fal-ai/elevenlabs/tts/eleven-v3`
+- ❌ ElevenLabs or Kokoro — only MiniMax via `fal-ai/minimax/speech-2.8-hd`
+- ❌ Hardcoding a game-specific background URL — always query Supabase by tag `reddit-story-bg`
+- ❌ Normalizing gameplay to 1080×810 (landscape) — clips are portrait 3:4, panel is 960×1280
 - ❌ Tying gameplay to text — must be random
 - ❌ Starting with the purchase/offerwall — first a gripping story
 - ❌ `-shortest` in ffmpeg — use `apad + -t`
