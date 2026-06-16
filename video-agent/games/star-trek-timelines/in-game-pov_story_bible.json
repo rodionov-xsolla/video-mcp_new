@@ -31,8 +31,18 @@
       "comment": "В ролике ошибки с логикой повествования, ттс на русском языке, неправильный cta"
     }
   ],
+    {
+      "situation": "Dominion War — Jem'Hadar boarding party breaches your Starfleet vessel, you must survive",
+      "date": "2026-06-16",
+      "outcome": "survive",
+      "threat_type": "Dominion",
+      "published": true,
+      "status": "completed",
+      "comment": "youtube: https://www.youtube.com/watch?v=xmCseaRhnCU (scheduled 2026-06-19). Survival arc: 12%→8%→18%→35%→52%→72%. 5 POV scenes: airlock→corridor→jefferies tube→engineering→transporter room."
+    }
+  ],
   "anti_repetition": {
-    "threat_types_used": ["Borg", "Borg", "Borg"],
-    "note": "Borg used 3 times in a row — next situation MUST use a completely different antagonist/threat. Good candidates: Dominion War assault (Jem'Hadar boarding), Klingon Bird-of-Prey ambush, Romulan Warbird attack, Breen energy dampener, Species 8472 in fluidic space, Cardassian raid on DS9, Hirogen hunting party, Temporal anomaly (Krenim weapon), Holodeck malfunction trapping crew. Avoid: anything involving Borg in any form."
+    "threat_types_used": ["Borg", "Borg", "Borg", "Dominion"],
+    "note": "Borg used 3 times, then Dominion. Next situation: avoid Borg and Dominion. Good candidates: Klingon Bird-of-Prey ambush, Romulan Warbird attack, Breen energy dampener, Species 8472 in fluidic space, Cardassian raid on DS9, Hirogen hunting party, Temporal anomaly (Krenim weapon), Holodeck malfunction trapping crew."
   }
 }
