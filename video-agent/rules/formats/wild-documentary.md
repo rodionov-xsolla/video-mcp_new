@@ -102,6 +102,33 @@ Total pre-speed: 20–30s. No speedup applied. Hard cap 35s.
 
 ---
 
+## Manager — Phase 0: Creature Research (mandatory before Scenarist)
+
+Before calling the Scenarist, the Manager must do a short web search for every creature in the request. The goal: correct biomes, real lore-accurate behaviors, canonical habitat. Never rely on training data alone — creature lore changes, wikis are authoritative.
+
+**For each creature:**
+1. Search `{creature name} {game name} habitat wiki` (Memory Alpha, Bulbapedia, Fandom, etc.)
+2. Extract:
+   - **Home planet / region / biome** — where they actually live in lore
+   - **Diet / foraging behavior** — what they eat, how they hunt or graze
+   - **Social behavior** — solitary, pack, colony, swarm, etc.
+   - **Characteristic behaviors** — the one thing they're famous for (purring, multiplying, elemental attacks, etc.)
+   - **Known environmental preferences** — temperature, humidity, terrain
+3. Write a **1-paragraph habitat summary** per creature (3–5 sentences max)
+4. Pass this summary to Scenarist in the prompt as `CREATURE_RESEARCH` block
+
+**What to do with the research:**
+- Use home biome as the primary biome for clip 1 (establishing shot)
+- Use characteristic behaviors as the basis for clip 2+ actions
+- If the canon habitat is a spaceship/interior (e.g. tribbles live on starbases, not planets) — use the closest real-world biome analogue that fits the creature's ecological niche (e.g. tribbles → warm granary, food storage, dense colony nest)
+- If no canonical habitat exists — note this explicitly and use a plausible analogue based on creature biology
+
+**Search tools:** use WebSearch. Two queries per creature is enough. If the wiki page is returned, read it.
+
+**Do NOT skip this step for "well-known" creatures** — training data has errors and omissions. EP1 tribbles were placed in a "Federation grassland" with no lore basis because this step was skipped.
+
+---
+
 ## Role briefs
 
 ### Scenarist
