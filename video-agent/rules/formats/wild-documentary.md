@@ -127,6 +127,22 @@ Before calling the Scenarist, the Manager must do a short web search for every c
 
 **Do NOT skip this step for "well-known" creatures** — training data has errors and omissions. EP1 tribbles were placed in a "Federation grassland" with no lore basis because this step was skipped.
 
+### Visual ref inspection (mandatory — read the local asset before describing anatomy)
+
+After the web search, open the local game art ref with the Read tool (`games/{GAME_TAG}/assets/` or wherever the user pointed you) and inspect it visually. Write an **anatomy checklist** covering every visible feature:
+
+- Eyes: present / absent / partially hidden / how many
+- Limbs: visible / count / type (paws, fins, tentacles)
+- Mouth / beak / snout: shape and visibility
+- Skin / fur / scales: texture, color patches, gradients
+- Horns / spines / wings / tail: shape, length, attachment point
+- Body proportions: relative head-to-body size, stance
+- Any distinctive markings
+
+Pass this checklist to Scenarist AND Storyboarder in the prompt as `CREATURE_ANATOMY` block. **This block overrides any training-data assumptions.** Storyboarder must use it verbatim in image_prompts — never invent or omit features that appear in the ref.
+
+Example error (EP1 tribbles): manager described "no visible eyes" from memory — original ref clearly shows small eyes. Anatomy was wrong in all 5 generated scenes as a result.
+
 ---
 
 ## Role briefs
