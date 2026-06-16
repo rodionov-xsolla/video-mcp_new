@@ -532,7 +532,7 @@ $FFMPEG -y -f concat -safe 0 -i build/concat-final.txt \
 
 ### CTA asset
 
-Use `game_assets` where `tags @> ['cta','video']` AND `asset_type = 'generated_ref'` (url: `cta-link-in-bio.mp4`). The record with `asset_type = 'promo_art'` is tagged `legacy` — skip it.
+Use `game_assets` where `tags @> ['cta','video']` AND `asset_type = 'promo_art'` (url: `cta.mp4`). The `generated_ref` record (`cta-link-in-bio.mp4`) is tagged `legacy` — skip it.
 
 ---
 
