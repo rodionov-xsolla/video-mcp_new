@@ -19,13 +19,18 @@ Best fit when the game has either (a) a **named canon event/battle** with high s
 
 **Single-shot per video** — no story bible, no continuity between videos. Each video is one situation, one POV, one predetermined outcome.
 
-### Manager asks ONE question before Scenarist runs
+### Manager asks before Scenarist runs
 
-The outcome is a creative decision made **at creation time**, not by the scenarist alone. In Phase 0 the Manager asks the user:
-
+**Step 1 — Outcome question (mandatory):**
 > **«Эта история — про выживание или про гибель?»** (survive / death)
 
 The answer is passed to Scenarist as `OUTCOME` and locked into `storyboard.json → outcome`. The whole script (which moves work, where the % lands, the final plate) is written to serve that predetermined ending. If the user does not specify and cannot be asked, default to a **50/50 author's choice**, leaning to `death` only when the situation is canonically lethal (e.g. a battle the faction historically lost).
+
+**Step 2 — Story bible check (mandatory, before Scenarist):**
+Read `games/{GAME_TAG}/in-game-pov_story_bible.json` if it exists. Pass the full `used_situations[]` array and `anti_repetition` block to Scenarist in the prompt. Scenarist must not repeat any situation or threat type from that list. If the file does not exist — create it after the video is published (see Phase 5).
+
+**Step 3 — After publishing (mandatory):**
+Update `games/{GAME_TAG}/in-game-pov_story_bible.json` — add the new situation entry with date, outcome, threat_type, and published: true. Push to git with the episode commit.
 
 ---
 
@@ -34,14 +39,14 @@ The answer is passed to Scenarist as `OUTCOME` and locked into `storyboard.json 
 - **Genre:** first-person survival manual / immersive POV
 - **Perspective:** pure environmental POV. Second person ("ты"/"вы"). The protagonist is **never shown** — no face, no reflection, no over-the-shoulder, **no hands**. The camera IS their eyes. We look at the world, we walk through it, we breathe.
 - **Style:** identical to the game (taken from `games/{GAME_TAG}/{GAME_TAG}.md`).
-- **Duration:** 35–45s (title card + 5–7 POV clips × 5s + CTA).
+- **Duration:** 35–45s (title card + 5–6 POV clips × 5s + CTA).
 - **Budget:** up to $7.00 per video. Stop if spend > $6.30.
 - **Frame format:** 9:16 (608×1080) for all scenes.
 
 ### Models
 
-- **Image:** NB2 (`fal-ai/nano-banana-2/edit`) — title card (atmospheric establishing shot) + POV scene frames. No character-face ref. No prop refs unless a specific object needs continuity.
-- **Video:** Kling v3 Standard I2V (`fal-ai/kling-video/v3/standard/image-to-video`) — `generate_audio: true` (POV combat SFX: explosions, alarms, gunfire, hull groan, heavy breathing). Fallback to v2.6 Pro only on v3 artifacts.
+- **Image:** NB2 (`fal-ai/nano-banana-2/edit`) — title card + one PNG per POV clip. No character-face ref. No prop refs unless a specific object needs continuity.
+- **Video:** Kling v3 Standard I2V (`fal-ai/kling-video/v3/standard/image-to-video`) — one 5s call per clip, `generate_audio: true` (POV combat SFX: explosions, alarms, gunfire, hull groan, heavy breathing). Fallback to v2.6 Pro only on v3 artifacts.
 - **Audio:** ElevenLabs TTS — second-person narrator (one voice, clips 1–N) overlaid on the picture. TTS does NOT start on title card. Kling SFX kept underneath at low volume. Music bed under everything.
 - **HUD overlays:** drawn by `tools/overlays.py` (NOT baked into NB2). See "## Overlays" below.
 
@@ -50,8 +55,9 @@ The answer is passed to Scenarist as `OUTCOME` and locked into `storyboard.json 
 1. **Title card first.** Scene 0 is a game-styled title card (not POV) that names the situation and shows the starting survival %. It plays 3–5s with Kling ambient SFX but NO narrator TTS. The hook lives here visually.
 2. **POV = environmental, never hands.** From clip 1 onward: pure look-around / walk-through / reaction POV. No hands gripping controls. No weapon barrels. Camera sees the world — corridors, consoles, windows, other crew, debris — as the viewer walks and breathes.
 3. **Location variety mandatory.** Each POV clip is a different space aboard the ship (or outside it): bridge, corridor, engineering, escape pod bay, airlock, porthole exterior view. Never two consecutive clips in the same location.
-4. **Live survival-% HUD.** A small persistent `SURVIVAL: X%` counter sits in the top-right corner and changes value per clip. It is a **programmatic drawtext overlay**, not an AI-rendered element.
-5. **Predetermined outcome.** `survive` or `death`, decided by the Manager's question. Arc written backwards from it.
+4. **Each shot is a CUT, not a camera pan.** Shots do not flow into each other — there is a hard cut between them, and the viewer is instantly dropped into a new location. The cut IS the movement between places; it is invisible. Within a shot, only the environment moves (alarms strobe, doors slam, crew runs past). `tts_segment` opens by placing the viewer IN the new situation: `"Вы на мостике — объявлена эвакуация."` NOT: `"Вы поворачиваете голову к мостику."` — head-turn narration implies one continuous camera; here every shot is a fresh location drop.
+5. **Live survival-% HUD.** A small persistent `SURVIVAL: X%` counter sits in the top-right corner and changes value per clip. It is a **programmatic drawtext overlay**, not an AI-rendered element.
+6. **Predetermined outcome.** `survive` or `death`, decided by the Manager's question. Arc written backwards from it.
 
 ---
 
@@ -71,7 +77,7 @@ from `games/{tag}/{tag}.md` → `## Overlay brand` (font role → brand font).**
 
 - The counter **moves with the narration**: starts at the title-card value, up on a successful step,
   down on a new threat, lands on the locked `outcome` on the last scene (`survive`→71%, `death`→0%).
-  One `hud_counter` per shot with its `enable` window (5s: [0,5]/[5,10]/[10,15]).
+  One `hud_counter` per clip with enable window `[0,5]` (full 5s clip duration).
 - Subtitle band (universal MarginV 520, y≈1256–1400) stays clear: HUD top-right, outcome center.
 
 ---
@@ -86,14 +92,14 @@ from `games/{tag}/{tag}.md` → `## Overlay brand` (font role → brand font).**
 
 | Component | Cost |
 |---|---|
-| ElevenLabs TTS (~35s second-person narration over POV clips) | ~$0.18 |
+| ElevenLabs TTS (~30s second-person narration over POV clips) | ~$0.18 |
 | Music (local) | $0.00 |
 | HUD overlays (Editor drawtext) | $0.00 |
 
 | Variant | Clips | Cost |
 |---|---|---|
-| Base (recommended) | title card + 5 POV × 5s + CTA | ~$4.50 |
-| Extended | title card + 7 POV × 5s + CTA | ~$5.80 |
+| Base (recommended) | title card + 5 POV × 5s + CTA | ~$4.44 |
+| Extended | title card + 6 POV × 5s + CTA | ~$5.15 |
 
 Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 
@@ -101,7 +107,7 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 
 ---
 
-## Video structure (title card + 5–7 POV clips, written backwards from the outcome)
+## Video structure (title card + 5–6 POV clips, written backwards from the outcome)
 
 | Phase | Timing | Goal | Clips |
 |---|---|---|---|
@@ -117,7 +123,7 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 - **Second-person imperative.** "Уводи нос вправо. Глуши реактор. У тебя три секунды." — direct orders to the viewer.
 - **A ticking clock.** Concrete time/resource pressure ("4 секунды до перегрева", "один заряд щита").
 - **The counter as a story beat.** A correct move visibly bumps the %; a new threat slashes it. The number tells the story alongside the voice.
-- **Each clip = a new location.** Bridge → corridor → engine room → escape pod bay. Never the same space twice. The journey through the ship *is* the narrative.
+- **Each clip = a new location (hard cut).** Bridge → corridor → engine room → escape pod bay. Never the same space twice. The journey through the ship *is* the narrative — each shot drops the viewer into a new place. `tts_segment` opens with where they ARE now, not how they got there: `"Вы на мостике — объявлена эвакуация."` / `"Вы бежите по коридору, но дверь закрывается."` / `"Вы нашли выход через вентиляцию."` Each sentence is a new world, new stakes.
 - **Environmental immersion.** Camera sees what the protagonist sees as they move: alarms strobing in a corridor, emergency doors slamming, other crew running past, smoke. No hands, no controls — just the world reacting.
 - **Honest stakes.** If the outcome is `death`, the manual should look almost-right — the viewer should feel they nearly made it.
 
@@ -126,6 +132,7 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 - ❌ Showing the protagonist (defeats POV)
 - ❌ Hands, weapon barrels, or cockpit controls in frame — pure environmental look/walk/breathe POV
 - ❌ Two consecutive clips in the same location — must show location variety
+- ❌ `tts_segment` describing HOW the viewer moves between locations ("вы поворачиваете голову вправо", "вы идёте к двери", "вы оглядываетесь") — each shot is a hard CUT; the viewer is already IN the new location when the segment starts. Narrate the new situation, not the transit.
 - ❌ Third-person or first-person-past narration ("I was in the battle") — second-person present ("ты в бою")
 - ❌ Narrator describing the picture ("на экране взрыв" — bad; "уклоняйся, слева ракета" — good)
 - ❌ A static % (the counter must move — that's the retention hook)
@@ -139,6 +146,42 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 - Starts on clip 1 (after the title card): "Ты оказался в битве при Wolf 359. Ваш корабль разрезает лазер. Бежишь по мостику."
 - Does NOT repeat the title card text verbatim — the visual established it; narration moves the story forward.
 - Each clip ≈ 10–15 words.
+- **Each `tts_segment` opens by placing the viewer IN the new location** — not describing how they arrived. The cut is the transport. Pattern: `"[Where you are] — [what is happening / immediate threat or action]."` Examples: `"Вы на мостике — объявлена эвакуация."` / `"Вы бежите по коридору — дверь закрывается."` / `"Вы нашли выход через вентиляцию."` / `"Вы выбрались — но это реакторный отсек. Он взрывается."` Each sentence = a new world.
+
+---
+
+## Story Bible
+
+`games/{GAME_TAG}/in-game-pov_story_bible.json` — tracks every situation ever used for this game in this format. Prevents repetition of threats, locations, and core premises.
+
+**Schema:**
+```json
+{
+  "format": "in-game-pov",
+  "game_tag": "{GAME_TAG}",
+  "last_updated": "YYYY-MM-DD",
+  "used_situations": [
+    {
+      "situation": "Human-readable description of the situation",
+      "date": "YYYY-MM-DD",
+      "outcome": "death",
+      "threat_type": "Borg",
+      "published": false,
+      "status": "completed",
+      "comment": ""
+    }
+  ],
+  "anti_repetition": {
+    "threat_types_used": ["Borg", "Dominion"],
+    "note": "Free-text reminder for Scenarist about what to avoid"
+  }
+}
+```
+
+**Rules:**
+- Scenarist reads this file before choosing a situation. Never reuse a `threat_type` from the last 3 entries. Never reuse the same core premise (even if the title differs).
+- Manager updates this file after the video is published (`published: true`, `status: "completed"`). If the video had errors and was never published, still log it with `published: false` and `status: "error"`.
+- If the file does not exist for a game, create it after the first in-game-pov for that game.
 
 ---
 
@@ -147,26 +190,23 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 ### Scenarist
 
 - Receive `OUTCOME` (`survive`/`death`) from Manager. Lock it in `storyboard.json → outcome`. Write the whole arc backwards from it.
+- **Read the story bible** passed by Manager (`used_situations[]` + `anti_repetition`). Choose a situation that has NOT been used before — different threat type, different setting, different core premise. If all obvious candidates are taken, escalate to Manager.
 - Pick the situation: lore event OR gameplay scenario, per the game (`games/{GAME_TAG}/{GAME_TAG}.md`). If the game has no usable lore, use a gameplay scenario; if neither reads well in POV, tell Manager this format is a weak fit.
-- **Video structure: 1 title-card call + 2 POV multi_prompt calls.** Total ~35s before CTA:
-  - `call_index: 0` — `call_type: "title_card"` — 5s single I2V. Wide cinematic shot (NOT POV). Sets situation name + starting survival %.
-  - `call_index: 1` — `call_type: "pov_multi_prompt"` — 15s, 3 POV shots × 5s. Covers HOOK → first THREAT locations.
-  - `call_index: 2` — `call_type: "pov_multi_prompt"` — 15s, 3 POV shots × 5s. Covers MOVES → OUTCOME.
-- **Write shots, not clips.** Each POV call has a `shots[]` sub-array. Fill per shot:
-  - `index` — global shot number (0 = first shot of call 1, continues across calls)
-  - `duration` — `"5"` (string; all shot durations in a call must sum to `duration_total`)
-  - `type` — `"hook"` | `"threat"` | `"moves"` | `"outcome"`
-  - `location` — human-readable location name. **MUST differ between adjacent shots** (location variety is the immersion engine).
-  - `survival_pct` — integer 0–100. Starts at the hook value matching `hook_plate`, moves per narration step, lands at 0 (`death`) or 60–85 (`survive`) on the final shot.
-  - `tts_segment` — 10–15 word narration fragment. Second person, present tense, imperative.
+- **Video structure: 1 title-card clip + 5–6 POV clips, each 5s, independent.** Total ~30–35s before CTA. Each clip = one Kling I2V call.
+- **Write flat clips, not nested shots.** Each entry in `clips[]` is one clip:
+  - `index` — integer, 0 = title card, 1–N = POV clips
+  - `clip_type` — `"title_card"` (index 0) | `"pov"` (index 1+)
+  - `type` — (pov only) `"hook"` | `"threat"` | `"moves"` | `"outcome"`
+  - `duration` — `"5"` (string)
+  - `location` — human-readable location name. **MUST differ between adjacent clips** (location variety is the immersion engine).
+  - `survival_pct` — (pov only) integer 0–100. Starts at the hook value matching `hook_plate`, moves per narration step, lands at 0 (`death`) or 60–85 (`survive`) on the final clip.
+  - `tts_segment` — (pov only) 10–15 word narration fragment. Second person, present tense, imperative. Opens by placing the viewer IN the new location.
   - `action_description` — what the viewer sees and feels from first person. Three layers: camera movement + environment reaction + atmospheric element. No hands, no body, no weapon barrels.
 - **Graphic overlays → `clips[].overlays[]`** (rendered by `tools/overlays.py`, NOT subtitles — layout in the `## Overlays` section above, schema in `rules/roles/scenarist.md`; font/color/stroke from game `## Overlay brand`):
-  - **Title card (call 0):** two `title` overlays — situation name (size 130, 2 lines via `\n`, y680/840) + hook plate `"SURVIVAL CHANCE: N%"` (size 60, label role, y1030). `action_description` = wide cinematic, NOT POV. No `tts_segment`.
-  - **POV call:** one `hud_counter` per shot — `text:"SURVIVAL N%"`, top-right, `enable:[t0,t1]` (5s shot window inside the call file: shot 0 → [0,5], shot 1 → [5,10], shot 2 → [10,15]). N = that shot's `survival_pct`.
-  - **Final POV call:** add `outcome_plate` (`"YOU SURVIVED"` green / `"YOU DIED"` red — always EN), center, `enable:["gte", call_dur-1.5]`, fade_in 0.4.
-  - Keep `survival_pct` in shots (arc logic); mirror the value into `hud_counter.text`.
-- **`elements[]` per POV call:** if a significant entity (boss, monster part, enemy group) enters a specific shot, list it in the call's `elements[]` array with a `slug` and `description`. Storyboarder will generate refs; Animator wires them via `@Element1` in the shot prompt.
-- **Narrator starts on shot 0 of call 1** (after title card). First `tts_segment` opens: "Ты оказался…". All `tts_segment` values concatenated in index order → `tts.full_text`.
+  - **Title card (clip 0):** two `title` overlays — situation name (size 130, 2 lines via `\n`, y680/840) + hook plate `"SURVIVAL CHANCE: N%"` (size 60, label role, y1030). `action_description` = wide cinematic, NOT POV. No `tts_segment`.
+  - **Each POV clip:** one `hud_counter` overlay — `text:"SURVIVAL N%"`, top-right, `enable:[0,5]` (whole 5s clip). N = that clip's `survival_pct`.
+  - **Last POV clip (outcome):** add `outcome_plate` (`"YOU SURVIVED"` green / `"YOU DIED"` red — always EN), center, `enable:["gte", clip_dur-1.5]`, fade_in 0.4.
+- **Narrator starts on clip 1** (after title card). First `tts_segment` opens: "Ты оказался…". All `tts_segment` values concatenated in index order → `tts.full_text`.
 - **No character-face ref. No prop/vehicle ref** unless absolutely required for continuity.
 - Voice: pick from ElevenLabs by tone (tense tactical instructor — `Daniel` confident, `George` neutral-grave, `Adam` urgent). Lock in `tts.voice`.
 - General script rules — `rules/roles/scenarist.md`.
@@ -180,7 +220,7 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
   "outcome": "death",
   "situation": "Osial rises — you are a Millelith soldier at Liyue Harbor",
   "tts": {
-    "full_text": "{all tts_segments from shots index 0–N, in order, space-joined}",
+    "full_text": "{all tts_segments from clips index 1–N, in order, space-joined}",
     "voice": "George",
     "stability": 0.30,
     "style": 0.65,
@@ -189,10 +229,9 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
   "music": { "mood": "tense", "volume": 0.12 },
   "clips": [
     {
-      "call_index": 0,
-      "call_type": "title_card",
-      "duration_total": "5",
-      "anchor_image": "scene-anchor-0.png",
+      "index": 0,
+      "clip_type": "title_card",
+      "duration": "5",
       "location": "Liyue Harbor — sea exterior",
       "overlays": [
         {"type":"title","text":"OSIAL\nRISES","position":"(w-text_w)/2,680","font":"ULT","size":130,"color":"white","stroke":{"color":"black","width":4},"line_gap":160},
@@ -201,87 +240,69 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
       "action_description": "Wide cinematic: Osial tentacles towering over Liyue Harbor, ships capsizing, distant explosions, massive wave forming"
     },
     {
-      "call_index": 1,
-      "call_type": "pov_multi_prompt",
-      "duration_total": "15",
-      "anchor_image": "scene-anchor-1.png",
-      "elements": [
-        {
-          "slug": "osial_tentacle",
-          "description": "massive black Geo-scarred sea tentacle, colossal scale, dripping dark seawater, ancient stone texture",
-          "frontal_image_url": "{supabase url — filled by Storyboarder}",
-          "reference_image_urls": ["{supabase url side angle}"]
-        }
-      ],
+      "index": 1,
+      "clip_type": "pov",
+      "type": "hook",
+      "duration": "5",
+      "location": "Liyue Harbor — main dock",
+      "survival_pct": 5,
+      "tts_segment": "Ты на доках Ли Юэ. Осиал пробудился. Беги.",
+      "action_description": "First-person dock level: tentacles rise from sea ahead, ships explode mid-distance, Millelith soldiers sprint past",
       "overlays": [
-        {"type":"hud_counter","text":"SURVIVAL 5%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4},"enable":[0,5]},
-        {"type":"hud_counter","text":"SURVIVAL 5%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4},"enable":[5,10]},
-        {"type":"hud_counter","text":"SURVIVAL 15%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4},"enable":[10,15]}
-      ],
-      "shots": [
-        {
-          "index": 0, "duration": "5",
-          "type": "hook",
-          "location": "Liyue Harbor — main dock",
-          "survival_pct": 5,
-          "tts_segment": "Ты на доках Ли Юэ. Осиал пробудился. Беги.",
-          "action_description": "First-person dock level: tentacles rise from sea ahead, ships explode mid-distance, Millelith soldiers sprint past"
-        },
-        {
-          "index": 1, "duration": "5",
-          "type": "threat",
-          "location": "burning dock planks",
-          "survival_pct": 5,
-          "tts_segment": "Уходи от края. Щупальце идёт справа.",
-          "action_description": "Camera stumbles forward over burning dock planks, @Element1 tentacle slams warehouse to the right, smoke and splinters burst"
-        },
-        {
-          "index": 2, "duration": "5",
-          "type": "moves",
-          "location": "flooding market street",
-          "survival_pct": 15,
-          "tts_segment": "В переулок. Вода поднимается.",
-          "action_description": "Camera turns left into narrow market street, knee-deep water surges toward viewer, market stalls collapse under wave pressure"
-        }
+        {"type":"hud_counter","text":"SURVIVAL 5%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4}}
       ]
     },
     {
-      "call_index": 2,
-      "call_type": "pov_multi_prompt",
-      "duration_total": "15",
-      "anchor_image": "bridge-frame-1.png",
-      "elements": [],
+      "index": 2,
+      "clip_type": "pov",
+      "type": "threat",
+      "duration": "5",
+      "location": "burning dock planks",
+      "survival_pct": 5,
+      "tts_segment": "Уходи от края. Щупальце идёт справа.",
+      "action_description": "Camera stumbles forward over burning dock planks, tentacle slams warehouse to the right, smoke and splinters burst",
       "overlays": [
-        {"type":"hud_counter","text":"SURVIVAL 25%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4},"enable":[0,5]},
-        {"type":"hud_counter","text":"SURVIVAL 10%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4},"enable":[5,10]},
-        {"type":"hud_counter","text":"SURVIVAL 0%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4},"enable":[10,15]},
-        {"type":"outcome_plate","text":"YOU DIED","position":"center","font":"TRJ","size":110,"color":"red","stroke":{"color":"black","width":5},"enable":["gte",13.5],"fade_in":0.4}
-      ],
-      "shots": [
-        {
-          "index": 3, "duration": "5",
-          "type": "moves",
-          "location": "warehouse — elevated crates",
-          "survival_pct": 25,
-          "tts_segment": "Вверх. На ящики. Держись.",
-          "action_description": "Camera scrambles up stacked cargo crates, warehouse interior opens above, floodwater rising below, rafters shaking"
-        },
-        {
-          "index": 4, "duration": "5",
-          "type": "moves",
-          "location": "harbor seawall top",
-          "survival_pct": 10,
-          "tts_segment": "До стены. Только до стены.",
-          "action_description": "Camera sprints along seawall top, massive tidal wave builds on the horizon, Millelith bodies floating in water far below"
-        },
-        {
-          "index": 5, "duration": "5",
-          "type": "outcome",
-          "location": "seawall — wave impact",
-          "survival_pct": 0,
-          "tts_segment": "Ты не успел.",
-          "action_description": "Massive wave crashes over seawall, camera tumbles in churning whitewater, vision darkens to black"
-        }
+        {"type":"hud_counter","text":"SURVIVAL 5%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4}}
+      ]
+    },
+    {
+      "index": 3,
+      "clip_type": "pov",
+      "type": "moves",
+      "duration": "5",
+      "location": "flooding market street",
+      "survival_pct": 15,
+      "tts_segment": "В переулок. Вода поднимается.",
+      "action_description": "Camera in narrow market street, knee-deep water surges toward viewer, market stalls collapse",
+      "overlays": [
+        {"type":"hud_counter","text":"SURVIVAL 15%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4}}
+      ]
+    },
+    {
+      "index": 4,
+      "clip_type": "pov",
+      "type": "moves",
+      "duration": "5",
+      "location": "warehouse — elevated crates",
+      "survival_pct": 25,
+      "tts_segment": "Вверх. На ящики. Держись.",
+      "action_description": "Camera scrambles up stacked cargo crates, floodwater rising below, rafters shaking",
+      "overlays": [
+        {"type":"hud_counter","text":"SURVIVAL 25%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4}}
+      ]
+    },
+    {
+      "index": 5,
+      "clip_type": "pov",
+      "type": "outcome",
+      "duration": "5",
+      "location": "seawall — wave impact",
+      "survival_pct": 0,
+      "tts_segment": "Ты не успел.",
+      "action_description": "Massive wave crashes over seawall, camera tumbles in churning whitewater, vision darkens to black",
+      "overlays": [
+        {"type":"hud_counter","text":"SURVIVAL 0%","position":"top-right","font":"ARI","size":52,"color":"white","stroke":{"color":"black","width":4}},
+        {"type":"outcome_plate","text":"YOU DIED","position":"center","font":"TRJ","size":110,"color":"red","stroke":{"color":"black","width":5},"enable":["gte",3.5],"fade_in":0.4}
       ]
     }
   ]
@@ -292,79 +313,69 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 
 - Style taken from `games/{GAME_TAG}/{GAME_TAG}.md` (identical to the game).
 - All frames 9:16 (608×1080).
-- **Generate anchor PNGs per call, not per shot** (fewer images than before):
-  - `call_index: 0` (title card) → `scene-anchor-0.png` — wide **cinematic establishing shot**, NOT first-person POV. Atmospheric crisis from a dramatic angle. Text will be overlaid by Editor. NB2 `negative_prompt` must include `text, captions, ui, hud, hands, person pov, first person view`.
-  - `call_index: 1` → `scene-anchor-1.png` — **first-person environmental view** of the first POV shot's starting location. This single anchor frame carries the whole 15s multi_prompt call; Kling transitions locations via motion prompts. NEVER show protagonist face, body, or hands.
-  - `call_index: 2+` — anchor = bridge frame extracted by Animator from the end of the previous call. **Do NOT generate a PNG for these calls.** Storyboarder's job ends at call 1.
-- **Elements:** for each `elements[]` entry in a call, generate a frontal reference PNG + at least one secondary-angle PNG. Upload both to Supabase. Write URLs into `elements[].frontal_image_url` and `elements[].reference_image_urls[]`. See `storyboarder.md §15.2`.
-- POV anchor `image_prompt` cues: emergency lighting, smoke, debris, other characters (running), environmental chaos — but **NO numbers/text/UI** (Editor overlays only).
-- **Every POV anchor `image_prompt` MUST end with:** `". Clean environmental first-person POV. NO hands, NO weapon barrels, NO controls in frame. NO on-screen text, NO HUD numbers, NO captions, NO UI labels, NO crosshair text, NO percentage counters."`
+- **Generate ONE PNG per clip** — title card + every POV clip. N clips → N PNGs.
+  - `clip 0` (title card) → `scene-0.png` — wide **cinematic establishing shot**, NOT first-person POV. Atmospheric crisis from a dramatic angle. NB2 `negative_prompt` must include `text, captions, ui, hud, hands, person pov, first person view`.
+  - `clip 1` → `scene-1.png` — **first-person environmental view** of that clip's location. NEVER show protagonist face, body, or hands.
+  - `clip 2+` → `scene-K.png` — same rules. Chain the previous clip's PNG as an `image_url` ref for visual consistency (environment lighting/tone carryover). Max 2 refs (bg-ref + prev-scene).
+- POV `image_prompt` cues: emergency lighting, smoke, debris, other characters (running), environmental chaos — but **NO numbers/text/UI** (Editor overlays only).
+- **Every POV `image_prompt` MUST end with:** `". Clean environmental first-person POV. NO hands, NO weapon barrels, NO controls in frame. NO on-screen text, NO HUD numbers, NO captions, NO UI labels, NO crosshair text, NO percentage counters."`
 - General rules — `rules/roles/storyboarder.md`.
 
 ### Animator
 
-**Architecture: whole-video `multi_prompt` chaining.** The entire video is produced by **3 Kling API calls** (1 title-card + 2 POV multi_prompt), not by one call per scene. Each POV call outputs a single 15s MP4 covering 3 shots; Editor concats 3 files total.
+**Architecture: one Kling v3 Standard I2V call per clip (5s each).** N clips → N Kling calls. Simple, controllable, no chaining artifacts.
 
-- All calls via **Kling v3 Standard I2V** (`generate_audio: true`). Fallback v2.6 Pro only on v3 artifacts.
+- All calls via **Kling v3 Standard I2V** (`fal-ai/kling-video/v3/standard/image-to-video`), `generate_audio: true`. Fallback v2.6 Pro only on v3 artifacts.
 
-**Call 0 — title card (single `motion_prompt`, 5s):**
-- Body: standard I2V (`prompt`, `start_image_url`, `duration: "5"`, `generate_audio: true`). **No `multi_prompt`.**
-- Derive `motion_prompt` from `action_description`: very slow camera push-in toward the crisis, atmospheric debris drifts and settles, distant explosions flare and hold.
+**Call structure per clip:**
+- `start_image_url` — Supabase URL of `scene-K.png` (Storyboarder uploaded it)
+- `duration: "5"` (string)
+- `generate_audio: true`
+- `prompt` — motion description derived from `action_description`
+- `negative_prompt` — see below
+- **No `multi_prompt`**, no `end_image_url`, no `shot_type`
 
-**Calls 1–2 — POV sequence (`multi_prompt`, 15s each):**
-- `start_image_url` = anchor PNG for call 1; bridge frame for call 2 (see chaining below).
-- `duration: "15"`, `shot_type: "customize"`, `generate_audio: true`.
-- `shots[]` — 3 shots × 5s each, built from storyboard `shots[]` of that call:
-  - Read each shot's `action_description`, translate to Kling technical language
-  - Every shot prompt starts with: `"Environmental first-person POV."` (style anchor — prevents late shots drifting to Kling's generic prior)
-  - Every shot prompt has an explicit endpoint verb: `dissipates`, `settles`, `clears`, `holds`, `pushes forward`
-  - Each shot prompt ≤ 512 chars — count before submitting (validated post-submit, fails with 422 costing the round-trip)
-  - No names, no moods, no hands, no weapon barrels, no protagonist body
-- **`elements[]`** — if the call's storyboard has `elements[]`, add to API body. Summon in the correct shot prompt via `@Element1`. See `animator.md §5a` for full schema.
-- **Body rules (strict):**
-  - **Pass ONLY `multi_prompt`. No top-level `prompt`** (fal.ai 422 pre-compute).
-  - **No `end_image_url`** (Kling 422 with multi_prompt).
-  - Shot durations (strings) must sum exactly to top-level `duration: "15"`.
+**Title card motion (clip 0):**
+- Very slow camera push-in toward the crisis. Atmospheric debris drifts and settles. Distant explosion flares and holds. Continuous verb tense throughout.
 
-**Chaining between calls:**
-```bash
-# After call 1 completes and call-1.mp4 is downloaded:
-ffmpeg -sseof -0.1 -i call-1.mp4 -frames:v 1 bridge-frame-1.png
-# Upload bridge-frame-1.png to Supabase
-# Use that URL as start_image_url for call 2
-```
+**POV clip motion (clips 1–N):**
+- Every prompt starts with: `"Environmental first-person POV."` (style anchor)
+- Every prompt ends with an explicit endpoint verb: `dissipates`, `settles`, `clears`, `holds`, `pushes forward`
+- No names, no moods, no hands, no weapon barrels, no protagonist body
+- Prompt ≤ 512 chars (count before submitting)
 
 **`negative_prompt` on every call:**
 `voices, speech, dialogue, vocals, singing, music, on-screen text, HUD numbers, percentage counter, captions, watermark, person facing camera, protagonist body, hands, arms, weapon, controls, cockpit controls, talking, photorealistic, film grain, realistic skin`
 
-**Banned phrases in shot prompts** (Kling reads as freeze): `then settles`, `then steady`, `then holds`, `camera holds steady`, `hold position`, `no morphing`. Use continuous verbs + endpoint cues.
+**Banned phrases in prompts** (Kling reads as freeze): `then settles`, `then steady`, `then holds`, `camera holds steady`, `hold position`, `no morphing`. Use continuous verbs + endpoint cues.
 
-**Pricing:** call 0 = $0.63 (5s × $0.126) + call 1 = $1.89 (15s × $0.126) + call 2 = $1.89 = **$4.41 total** (well within $6.30 cap). If garbled speech on a call: re-run with `generate_audio: false` (saves $0.63 per call).
-
-**Debug mode — full shot scenario before ANY Kling call (MANDATORY):**
+**Debug mode — full scenario table before ANY Kling call (MANDATORY):**
 ```
-=== ANIMATOR DEBUG: {SITUATION} — whole-video multi_prompt ===
+=== ANIMATOR DEBUG: {SITUATION} — per-clip I2V ===
 
-Call 0  title-card  /  anchor: scene-anchor-0.png  /  5s = $0.63
-  motion_prompt: "Slow camera push toward {crisis}, {debris} drifts and settles, distant explosion flares then holds."
+Clip 0  title-card  /  PNG: scene-0.png  /  5s = $0.63
+  prompt: "Slow camera push toward {crisis}, {debris} drifts and settles, distant explosion flares then holds."
 
-Call 1  pov-multi_prompt  /  anchor: scene-anchor-1.png  /  15s = $1.89
-  Shot 0 (0–5s,   {location}, {pct}%) "Environmental first-person POV. {≤512 chars, endpoint verb}"
-  Shot 1 (5–10s,  {location}, {pct}%) "Environmental first-person POV. {≤512 chars, endpoint verb}"
-  Shot 2 (10–15s, {location}, {pct}%) "Environmental first-person POV. {≤512 chars, endpoint verb}"
-  → extract bridge-frame-1.png at t=14.9s → upload to Supabase
+Clip 1  pov/hook    /  PNG: scene-1.png  /  5s = $0.63  /  {pct}%
+  prompt: "Environmental first-person POV. {≤512 chars, endpoint verb}"
 
-Call 2  pov-multi_prompt  /  anchor: bridge-frame-1.png  /  15s = $1.89
-  Shot 3 (0–5s,   {location}, {pct}%) "Environmental first-person POV. {≤512 chars, endpoint verb}"
-  Shot 4 (5–10s,  {location}, {pct}%) "Environmental first-person POV. {≤512 chars, endpoint verb}"
-  Shot 5 (10–15s, {location},   0%)   "Environmental first-person POV. {≤512 chars, endpoint verb}"
+Clip 2  pov/threat  /  PNG: scene-2.png  /  5s = $0.63  /  {pct}%
+  prompt: "Environmental first-person POV. {≤512 chars, endpoint verb}"
 
-elements (call 1): {slug} → @Element1 in shot {index}
-Total: $0.63 + $1.89 + $1.89 = $4.41  (cap $6.30)
+...
+
+Clip N  pov/outcome /  PNG: scene-N.png  /  5s = $0.63  /  {pct}%
+  prompt: "Environmental first-person POV. {≤512 chars, endpoint verb}"
+
+Total: {N+1} × $0.63 = ${total}  (cap $6.30)
 Proceed? (y/n)
 ```
 
-Polling: base `fal-ai/kling-video`, every 15s, max 10 min. General rules — `rules/roles/animator.md §5a` (multi_prompt limits, elements, chaining).
+**Per-clip output:** download to `scenes/scene-K.mp4`, validate (filesize > 100KB, ffprobe duration ~5s). On garbled speech: re-run that single clip with `generate_audio: false`.
+
+Polling: base `fal-ai/kling-video`, every 15s, max 10 min per clip.
+
+**Pricing:** (N+1) clips × $0.63 per clip. Base (6 clips total) = $3.78 + title card $0.63 = **$4.41** (well within $6.30 cap). If garbled speech on a clip: re-run with `generate_audio: false` (saves $0.21 per clip).
 
 ### Sound
 
@@ -379,29 +390,29 @@ Polling: base `fal-ai/kling-video`, every 15s, max 10 min. General rules — `ru
 
 ### Editor
 
-Three-stage assembly (HUD drawtext per-call-file before concat, then subtitles, then final audio mix).
+Three-stage assembly (HUD drawtext per-clip before concat, then subtitles, then final audio mix).
 
-**Stage 0 — graphic overlays (per-call-file, BEFORE concat):** drawn by `tools/overlays.py` from
-`clips[].overlays[]` (NOT manual drawtext, do NOT bake into NB2). For each call:
+**Stage 0 — graphic overlays (per-clip, BEFORE concat):** drawn by `tools/overlays.py` from
+`clips[].overlays[]` (NOT manual drawtext, do NOT bake into NB2). For each clip K:
 ```bash
-FRAG=$(python3 tools/overlays.py storyboard.json --scene-index $CALL_INDEX --workdir build \
-         --input-label "[v${CALL_INDEX}pre]" --output-label "[v${CALL_INDEX}]")
+FRAG=$(python3 tools/overlays.py storyboard.json --scene-index $K --workdir build \
+         --input-label "[v${K}pre]" --output-label "[v${K}]")
 # FRAG is spliced into filter_complex between scale/pad/fps and concat (editor.md §6.5)
 ```
-- Positions/style come from `overlays[]` written by the scenarist (see the `## Overlays` table and storyboard schema):
+- Positions/style come from `overlays[]` written by the scenarist (see the `## Overlays` table):
   title card — two lines fs130 white (y680/840) + hook_plate fs60 red (y1030); HUD counter —
-  top-right fs52 white with outline, one `hud_counter` per shot with `enable:[t0,t1]`
-  (5-second windows inside the call file); outcome plate — center fs110 green/red, `enable:["gte",13.5]`.
+  top-right fs52 white with outline (no time-range `enable` needed — each clip is 5s); outcome plate —
+  center fs110 green/red, `enable:["gte",3.5]`.
 - overlays.py resolves fonts (FONTS map, fallbacks) — no hardcoded paths. `%` is handled
   via `expansion=none` (automatically). Before the encode — `overlays.py storyboard.json --check`.
 - Overlays — ONLY via overlays.py; never ask NB2/Kling to draw HUD/numbers/text.
 
 **Stage 1 — Picture-only concat:**
-- Normalize each HUD'd file: scale 1080×1920, 30fps, `preset slow`, `crf 20`. Kling I2V is 24fps → normalize to 30fps before concat.
+- Normalize each HUD'd clip: scale 1080×1920, 30fps, `preset slow`, `crf 20`. Kling I2V is 24fps → normalize to 30fps before concat.
 - Hard cuts, no crossfade.
-- **Exactly 3 entries in concat-list:** `call-0-hud.mp4` (5s) + `call-1-hud.mp4` (15s) + `call-2-hud.mp4` (15s). No duplicates.
-- Output: `build/concat-noaudio.mp4` (silent, 35s; CTA NOT yet appended).
-- `MAIN_DUR` = 35s (5 + 15 + 15). `TTS_OFFSET` = 5s (title card duration).
+- Concat-list entries: `scene-0-hud.mp4` + `scene-1-hud.mp4` + … + `scene-N-hud.mp4`. No duplicates.
+- Output: `build/concat-noaudio.mp4` (silent; CTA NOT yet appended).
+- `MAIN_DUR` = (N+1) × 5s. `TTS_OFFSET` = 5s (title card duration).
 
 **Stage 2 — Subtitle burn-in:** the canonical path, editor.md §6 — `python3 tools/add_subtitles.py build/voice-final.wav build/subs.ass --storyboard storyboard.json --lang {lang} --main-dur {MAIN_DUR}`, then `ass=build/subs.ass` as the last video filter. The title-card lead silence is already in `voice-final.wav` (adelay), so `--offset` is not needed.
 
@@ -430,25 +441,20 @@ CTA video from Supabase `game_assets` (tag `cta` + `video`). Manager downloads i
 output/YYYY-MM-DD/{GAME_TAG}/in-game-pov/
 ├── storyboard.json
 ├── scenes/
-│   ├── scene-anchor-0.png          (title card — cinematic establishing shot, NOT POV)
-│   ├── scene-anchor-1.png          (POV anchor for call 1 — environment, NO hands)
-│   ├── bridge-frame-1.png          (extracted by Animator from last frame of call-1.mp4)
-│   ├── elements/
-│   │   ├── {slug}-front.png        (frontal ref for Kling elements)
-│   │   └── {slug}-side.png
-│   ├── call-0.mp4                  (Kling I2V title card, 5s, generate_audio: true)
-│   ├── call-0-hud.mp4              (after Stage 0 drawtext)
-│   ├── call-0-scaled.mp4
-│   ├── call-1.mp4                  (Kling multi_prompt POV shots 0–2, 15s)
-│   ├── call-1-hud.mp4              (after Stage 0 time-range drawtext)
-│   ├── call-1-scaled.mp4
-│   ├── call-2.mp4                  (Kling multi_prompt POV shots 3–5, 15s)
-│   ├── call-2-hud.mp4
-│   └── call-2-scaled.mp4
+│   ├── scene-0.png              (title card — cinematic establishing shot, NOT POV)
+│   ├── scene-0.mp4              (Kling I2V title card, 5s, generate_audio: true)
+│   ├── scene-0-hud.mp4          (after Stage 0 drawtext)
+│   ├── scene-1.png              (POV clip 1 start frame — environment, NO hands)
+│   ├── scene-1.mp4
+│   ├── scene-1-hud.mp4
+│   ├── ...
+│   ├── scene-N.png
+│   ├── scene-N.mp4              (final POV clip — outcome plate burned in)
+│   └── scene-N-hud.mp4
 ├── tts-output.mp3
 ├── build/
-│   ├── concat-noaudio.mp4          (3 files concat, HUD burned, 35s)
-│   └── concat-subbed.mp4           (after add_subtitles.py burn-in)
+│   ├── concat-noaudio.mp4       (N+1 clips concat, HUD burned)
+│   └── concat-subbed.mp4        (after add_subtitles.py burn-in)
 ├── concat-list.txt
 └── final.mp4
 ```
@@ -459,32 +465,31 @@ output/YYYY-MM-DD/{GAME_TAG}/in-game-pov/
 
 - [ ] `format: "in-game-pov"` in storyboard.json
 - [ ] `outcome` set to `survive` or `death` (the value the Manager asked the user for)
+- [ ] Story bible checked — situation is NOT a repeat of any `used_situations[]` entry (different threat type, premise, core scenario)
 - [ ] All narration is **second person, present tense** — no first-person, no past tense
-- [ ] `clips[0].call_type: "title_card"` — no `shots[]`, has `title_card_text` and `hook_plate`
-- [ ] `clips[1]` and `clips[2]` are `call_type: "pov_multi_prompt"`, each has `shots[]` × 3
-- [ ] First shot of call 1 `tts_segment` opens: "Ты оказался…" (does NOT repeat title card verbatim)
-- [ ] `survival_pct` set on every shot; moves with narration; final shot consistent with `outcome` (`death` → 0)
-- [ ] `location` set on every shot; no two consecutive shots share the same location
-- [ ] **Protagonist never shown** — no face, no body, **no hands**, no weapon barrel in any anchor PNG
+- [ ] `clips[0].clip_type: "title_card"` — no `tts_segment`, wide cinematic `action_description`
+- [ ] All other clips are `clip_type: "pov"`, each with `type`, `location`, `survival_pct`, `tts_segment`, `action_description`
+- [ ] First `tts_segment` (clip 1) opens: "Ты оказался…" (does NOT repeat title card verbatim)
+- [ ] No `tts_segment` describes head turns or movement TOWARD a location — each opens by placing viewer IN the new situation
+- [ ] `survival_pct` set on every pov clip; moves with narration; final clip consistent with `outcome` (`death` → 0, `survive` → 60–85)
+- [ ] `location` set on every clip; no two consecutive clips share the same location
+- [ ] **Protagonist never shown** — no face, no body, **no hands**, no weapon barrel in any PNG
 - [ ] No on-screen text/HUD/numbers baked into any NB2 image
-- [ ] HUD rendered by Editor: title card has situation name + survival %; POV call files have time-range counter (top-right); final call has outcome plate at t≥13.5s
+- [ ] HUD rendered by Editor: title card has situation name + survival %; each POV clip has its own `hud_counter` (always-on, no time range); last POV clip has `outcome_plate` at t≥3.5s
 - [ ] **No warning plates** (removed from this format — center overlays are confusing and out-of-style)
 - [ ] HUD (top-right) and subtitles (bottom, universal MarginV 520) do not overlap
-- [ ] All images 608×1080 (9:16); one PNG per scene (start frame only)
+- [ ] All images 608×1080 (9:16); one PNG per clip (start frame only)
 - [ ] No character-face ref; no prop-ref unless explicitly needed
 - [ ] Kling I2V `generate_audio: true`; `negative_prompt` forbids voices/speech/music/on-screen-text/hands/protagonist
 - [ ] No garbled speech in any clip (if found → re-run that clip with `generate_audio: false`)
 - [ ] Audio mix: narrator 1.0, Kling SFX ~0.30, music ~0.12; TTS delayed by title card duration
-- [ ] camera_angle differs between adjacent clips; every clip has an active camera move (no "holds steady")
-- [ ] Call 0: single `motion_prompt` (no `multi_prompt`), slow push-in, continuous-tense, none of the banned freeze phrases
-- [ ] Calls 1–2: `multi_prompt` 3 shots × 5s, top-level `duration: "15"`, no top-level `prompt`, no `end_image_url`
-- [ ] Every shot prompt starts with `"Environmental first-person POV."` style anchor; every shot has an explicit endpoint verb; every shot ≤ 512 chars
-- [ ] Bridge frame extracted from last frame of call-1.mp4 and used as `start_image_url` for call 2
-- [ ] HUD drawtext: call-1/call-2 MP4s use `enable='between(t,T1,T2)'` per shot for time-varying survival_pct
+- [ ] Every clip has an active camera move in the motion_prompt (no "holds steady") — endpoint verb present
+- [ ] Every motion_prompt starts with `"Environmental first-person POV."` for clips 1–N; title card uses slow push-in
 - [ ] TTS via fal.ai ElevenLabs (`voice` name, not `voice_id`), one request for the whole narration
 - [ ] Subtitles — universal whisper style (editor.md §6); title-card lead silence is in voice-final.wav, no separate offset needed
-- [ ] fps normalized to 30 before concat; exactly 3 entries in concat-list (call-0/1/2 + CTA); single-pass audio mix; music fade before CTA
+- [ ] fps normalized to 30 before concat; concat-list has exactly N+1 story clips + CTA; single-pass audio mix; music fade before CTA
 - [ ] `-shortest` NOT used (use `apad`)
+- [ ] After publishing: story bible updated in `games/{GAME_TAG}/in-game-pov_story_bible.json`
 
 ---
 
@@ -493,6 +498,7 @@ output/YYYY-MM-DD/{GAME_TAG}/in-game-pov/
 - ❌ Showing the protagonist's face/body/hands/reflection — kills POV
 - ❌ **Hands or weapon barrels in any POV clip** — this is a look/walk/breathe format, not a first-person shooter HUD format
 - ❌ Two consecutive POV clips in the same location — kills momentum and immersion
+- ❌ `tts_segment` describing a head turn or movement TOWARD a location ("вы поворачиваете голову вправо", "вы замечаете", "вы идёте к") — shots are hard cuts, the viewer is instantly IN the new location; narrate situation-on-arrival, not mid-transit
 - ❌ First-person-past or third-person narration — must be second-person present imperative
 - ❌ Narrator just describing the picture ("на экране взрыв") instead of giving survival orders
 - ❌ Baking the `SURVIVAL %`, outcome plate, or any HUD into NB2/Kling — Editor drawtext ONLY
@@ -503,20 +509,17 @@ output/YYYY-MM-DD/{GAME_TAG}/in-game-pov/
 - ❌ Dropping the Kling SFX track in the mix (it's the immersion bed — keep at ~0.30)
 - ❌ Moving narrator subtitles up into the HUD zone (HUD top-right, subs lower third)
 - ❌ TTS starting over the title card — TTS is `adelay`'d by the title card duration
-- ❌ Subtitles without `--offset` — they'll appear during the title card
 - ❌ **Duplicate scene in concat-list** — a freeze-extended scene REPLACES its entry; never append it as a second entry
 - ❌ Character-face ref or prop-ref without explicit Scenarist justification
 - ❌ End-frame PNGs or `tail_image_url` in Kling (causes freeze artifacts)
-- ❌ "Camera holds steady" / "then settles" / "then steady" / "hold position" / "no morphing" in any shot prompt (Kling reads as freeze)
-- ❌ One Kling call per scene (old architecture) — must use whole-video multi_prompt chaining (3 calls total)
-- ❌ Generating anchor PNGs for call 2+ — bridge frame is extracted from call-1.mp4 by Animator, NOT generated by Storyboarder
-- ❌ Single flat `motion_prompt` for POV calls — must use `multi_prompt` with `shots[]`
-- ❌ Top-level `prompt` alongside `multi_prompt` — fal.ai returns 422 pre-compute
-- ❌ `end_image_url` with `multi_prompt` — Kling returns 422
-- ❌ Missing style anchor `"Environmental first-person POV."` in any shot prompt — late shots drift to Kling's generic realistic prior
-- ❌ Shot prompt > 512 chars — validated post-submit, costs the round-trip before failing
-- ❌ Per-scene drawtext (old approach) — must use time-range `enable='between(t,T1,T2)'` on the 15s call-level MP4s
-- ❌ Skipping debug-mode multi-prompt scenario table — launch without it = no user visibility on timing/cost before spending $4.41
+- ❌ "Camera holds steady" / "then settles" / "then steady" / "hold position" / "no morphing" in any prompt (Kling reads as freeze)
+- ❌ **multi_prompt / pov_multi_prompt / shot chaining** — this format uses one 5s Kling call per clip; multi_prompt produces uncontrolled transitions and location drift across shots
+- ❌ Bridge frame extraction or start_image_url chaining between clips — each clip uses its own independently generated NB2 PNG as start frame
+- ❌ Missing style anchor `"Environmental first-person POV."` in any clip 1–N prompt — shots drift to Kling's generic realistic prior
+- ❌ Prompt > 512 chars — validated post-submit, costs the round-trip before failing
+- ❌ Skipping debug-mode scenario table — launch without it = no user visibility on per-clip timing/cost before spending $4.41+
 - ❌ Music from `Fun/` (wrong mood — use tense/drama)
 - ❌ Burning ASS subtitles with stock ffmpeg (lacks libass — use ffmpeg-full)
 - ❌ `-shortest` in any ffmpeg call (use `apad`)
+- ❌ **Choosing a situation already in the story bible** — always read `in-game-pov_story_bible.json` first; repeating threat type or core premise counts as a violation even if the title differs (e.g. "Borg cube" and "Borg boarding" are the same threat type)
+- ❌ Not updating the story bible after publishing — every completed (or errored) run must be logged so the next Scenarist has accurate anti_repetition data
