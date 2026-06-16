@@ -1,0 +1,21 @@
+{
+  "game_tag": "genshin-impact",
+  "total_stories": 1,
+  "stories": [
+    {
+      "id": 1,
+      "date": "2026-06-16",
+      "tone": "touching",
+      "theme": "sibling-reconnection",
+      "headline": "My sister and I didn't talk for two years. A video game fixed that.",
+      "offerwall_angle": "none",
+      "output_dir": "output/2026-06-16/genshin-impact/reddit-story"
+    }
+  ],
+  "anti_repetition": {
+    "recent_themes": ["sibling-reconnection"],
+    "recent_tones": ["touching"],
+    "recent_hooks": ["My sister and I used to be close. Then high school hit and we just drifted."],
+    "banned_combos": []
+  }
+}
