@@ -167,7 +167,7 @@ Updated after each video (Manager, Phase 6). All lists FIFO, keep last 10.
 
 **NEVER normalize gameplay to 1080×810** — that is landscape (4:3) applied to portrait (3:4) clips, produces massive black bars baked into gp_norm files.
 
-**CTA:** download from Supabase `game_assets` where `tags @> ['cta','video']` AND `asset_type = 'generated_ref'` (url ends in `cta-link-in-bio.mp4`). The `promo_art` CTA is tagged `legacy` — skip it.
+**CTA:** download from Supabase `game_assets` where `tags @> ['cta','video']` AND `asset_type = 'promo_art'` (url: `cta.mp4`). The `generated_ref` record (`cta-link-in-bio.mp4`) is tagged `legacy` — skip it.
 
 - TTS overlay via `apad` (**NEVER `-shortest`**)
 - General rules — `rules/roles/editor.md`
