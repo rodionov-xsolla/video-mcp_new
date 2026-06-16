@@ -54,7 +54,7 @@ Every clip: Kling generates the visual + ambient sound. MiniMax TTS generates th
 ### Variable per video
 
 - Which creatures (3–5), their characteristic behavior, their real-world biome analogue
-- CTA sign text (typically "Comment [WORD] for the prompt")
+- CTA sign text: always `"follow for more"` (locked)
 - Narration lines per creature (12–20 words each, 5s window)
 
 ---
@@ -108,7 +108,7 @@ Total pre-speed: 20–30s. No speedup applied. Hard cap 35s.
 
 - Choose 3–5 creatures. Each creature gets: biome analogue, ONE characteristic behavior to film, 1–2 naturalist sentences.
 - All narration is first-person plural ("we observe…", "notice how…") or impersonal ("the creature…"). Never second-person.
-- Last creature clip: `cta_in_scene: true`, `sign_text` field (e.g. `"Comment PROMPT and I'll send you the workflow"`).
+- Last creature clip: `cta_in_scene: true`, `sign_text: "follow for more"` — always this exact text.
 - `clip_type: "action"` for all clips — no dialogue, no Avatar.
 - `character_speech: null` for all clips — no lipsync anywhere.
 - No title card scene — cold open on creature.
@@ -291,7 +291,7 @@ Burn a two-line title card at the start of every episode:
 
 #### CTA sign text rule
 
-The in-scene CTA sign text (`sign_text` in storyboard.json) must match the episode's hook — it is NOT always "follow for more". Choose based on channel strategy: `"follow for more"`, `"Comment [WORD] for the prompt"`, `"link in bio"`. The Scenarist sets this per episode. Editor never invents sign text.
+The in-scene CTA sign text is **always `"follow for more"`** for this format. Scenarist sets `sign_text: "follow for more"` on the CTA clip — no exceptions, no channel-specific overrides unless the user explicitly instructs otherwise in the session.
 
 - General rules — `rules/roles/editor.md`
 
