@@ -1,0 +1,40 @@
+{
+  "format": "in-game-pov",
+  "game_tag": "genshin-impact",
+  "last_updated": "2026-06-17",
+  "used_situations": [
+    {
+      "situation": "Fatui forces raid Mondstadt — you are a civilian caught in the city streets as Fatui soldiers move in",
+      "date": "2026-06-01",
+      "outcome": "death",
+      "threat_type": "Fatui",
+      "published": true,
+      "status": "completed",
+      "comment": "Logged retroactively — run predates story bible creation"
+    },
+    {
+      "situation": "Osial awakens at Liyue Harbor — civilian dock worker POV trying to escape the flooding docks as the sea god rises",
+      "date": "2026-06-01",
+      "outcome": "death",
+      "threat_type": "Geo Colossus / Osial",
+      "published": true,
+      "status": "completed",
+      "comment": "Logged retroactively — run predates story bible creation"
+    }
+  ],
+    {
+      "situation": "Shouki no Kami (Scaramouche as mechanical god) attacks Sumeru Akademiya — Akademiya student POV trapped in collapsing lecture hall, staircase, archive, undercroft, and research vault",
+      "date": "2026-06-17",
+      "outcome": "death",
+      "threat_type": "Scaramouche / Shouki no Kami",
+      "published": false,
+      "status": "completed",
+      "youtube_url": "https://www.youtube.com/watch?v=8W3U7yFM8Bg",
+      "comment": "Scheduled private 2026-06-21T20:59:00Z on genshinsnap"
+    }
+  ],
+  "anti_repetition": {
+    "threat_types_used": ["Fatui", "Geo Colossus / Osial", "Scaramouche / Shouki no Kami"],
+    "note": "Mondstadt (Fatui streets), Liyue Harbor (Osial flood), Sumeru Akademiya (Shouki no Kami) used. Next: Inazuma (Vision Hunt / Shogunate), Fontaine (Primordial Sea), Natlan (Abyss siege). Avoid water flood, sea god, mechanical god, and city-center premises. Vary civilian anchor: next could be sailor, temple guard, courtroom clerk."
+  }
+}
