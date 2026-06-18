@@ -217,6 +217,7 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 
 - Episode structure: HOOK → CLIMAX (2–3 clips) → CLIFFHANGER
 - **5s default**, 10s dialogue = almost always a mistake (split into 2×5s)
+- **Avatar dialogue clips: bust shot only** — head fills 55–75% of frame, no feet, no full body. Do NOT describe pacing, standing figures, or full-body action in `action_description` for Avatar clips. Full-body framing produces face artifacts (EP6 Kirk scenes 3/5).
 - Balance ACTION/DIALOGUE ~ 50/50; at least 2 different characters speak per episode
 - Read the story bible: characters, voices (`voice` field), active loops, anti-repetition
 - **`retention_strategy` mandatory** in storyboard — why the cliffhanger pulls the next episode

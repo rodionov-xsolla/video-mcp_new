@@ -194,7 +194,7 @@ Example error (EP1 tribbles): manager described "no visible eyes" from memory â€
       "character_speech": null,
       "tts_segment": "It seems to be leaving us a message. Remarkable.",
       "cta_in_scene": true,
-      "sign_text": "Comment PROMPT and I'll send you the workflow",
+      "sign_text": "follow for more",
       "action_description": "...",
       "camera_style": "fixed trail camera, night vision tint, fisheye slight distortion",
       "image_prompt": "...",
