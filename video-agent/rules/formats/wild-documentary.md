@@ -102,6 +102,49 @@ Total pre-speed: 20–30s. No speedup applied. Hard cap 35s.
 
 ---
 
+## Manager — Phase 0: Creature Research (mandatory before Scenarist)
+
+Before calling the Scenarist, the Manager must do a short web search for every creature in the request. The goal: correct biomes, real lore-accurate behaviors, canonical habitat. Never rely on training data alone — creature lore changes, wikis are authoritative.
+
+**For each creature:**
+1. Search `{creature name} {game name} habitat wiki` (Memory Alpha, Bulbapedia, Fandom, etc.)
+2. Extract:
+   - **Home planet / region / biome** — where they actually live in lore
+   - **Diet / foraging behavior** — what they eat, how they hunt or graze
+   - **Social behavior** — solitary, pack, colony, swarm, etc.
+   - **Characteristic behaviors** — the one thing they're famous for (purring, multiplying, elemental attacks, etc.)
+   - **Known environmental preferences** — temperature, humidity, terrain
+3. Write a **1-paragraph habitat summary** per creature (3–5 sentences max)
+4. Pass this summary to Scenarist in the prompt as `CREATURE_RESEARCH` block
+
+**What to do with the research:**
+- Use home biome as the primary biome for clip 1 (establishing shot)
+- Use characteristic behaviors as the basis for clip 2+ actions
+- If the canon habitat is a spaceship/interior (e.g. tribbles live on starbases, not planets) — use the closest real-world biome analogue that fits the creature's ecological niche (e.g. tribbles → warm granary, food storage, dense colony nest)
+- If no canonical habitat exists — note this explicitly and use a plausible analogue based on creature biology
+
+**Search tools:** use WebSearch. Two queries per creature is enough. If the wiki page is returned, read it.
+
+**Do NOT skip this step for "well-known" creatures** — training data has errors and omissions. EP1 tribbles were placed in a "Federation grassland" with no lore basis because this step was skipped.
+
+### Visual ref inspection (mandatory — read the local asset before describing anatomy)
+
+After the web search, open the local game art ref with the Read tool (`games/{GAME_TAG}/assets/` or wherever the user pointed you) and inspect it visually. Write an **anatomy checklist** covering every visible feature:
+
+- Eyes: present / absent / partially hidden / how many
+- Limbs: visible / count / type (paws, fins, tentacles)
+- Mouth / beak / snout: shape and visibility
+- Skin / fur / scales: texture, color patches, gradients
+- Horns / spines / wings / tail: shape, length, attachment point
+- Body proportions: relative head-to-body size, stance
+- Any distinctive markings
+
+Pass this checklist to Scenarist AND Storyboarder in the prompt as `CREATURE_ANATOMY` block. **This block overrides any training-data assumptions.** Storyboarder must use it verbatim in image_prompts — never invent or omit features that appear in the ref.
+
+Example error (EP1 tribbles): manager described "no visible eyes" from memory — original ref clearly shows small eyes. Anatomy was wrong in all 5 generated scenes as a result.
+
+---
+
 ## Role briefs
 
 ### Scenarist
@@ -151,7 +194,7 @@ Total pre-speed: 20–30s. No speedup applied. Hard cap 35s.
       "character_speech": null,
       "tts_segment": "It seems to be leaving us a message. Remarkable.",
       "cta_in_scene": true,
-      "sign_text": "Comment PROMPT and I'll send you the workflow",
+      "sign_text": "follow for more",
       "action_description": "...",
       "camera_style": "fixed trail camera, night vision tint, fisheye slight distortion",
       "image_prompt": "...",
@@ -169,6 +212,24 @@ Total pre-speed: 20–30s. No speedup applied. Hard cap 35s.
 - **Game config style override:** if the game config specifies a cartoon or stylized art style (e.g. Pokémon GO cartoon 3D), IGNORE IT. Add `"style_override"` field to storyboard.json and state explicitly. The wildlife-photography style overrides ALL game config styles for this format.
 - NB2 image_prompt must include: `ultra-realistic, hidden camera documentary footage, telephoto lens, shallow depth of field, naturalistic lighting, grainy texture, 4K photorealistic`
 
+#### Ultra-realistic prompting (mandatory technique — learned from EP1 Seelie retry)
+
+The most common failure mode: the creature looks like a CGI asset pasted into a background — a clean glowing sphere or cartoon character floating in a realistic environment. This is wrong. The creature must feel physically present in nature, as if it were a real bioluminescent/biological organism photographed by a hidden camera.
+
+**Prompt structure — lead with camera/technical specs FIRST:**
+```
+RAW wildlife photography, Canon 5D Mark IV, [focal length], ISO 3200, heavy film grain and digital noise, natural light only — [creature anatomy + behavior] — [environment] — atmospheric haze, chromatic aberration at edges, no studio lighting, no post-processing
+```
+
+**Key elements that force photorealism:**
+1. **Film grain and noise** — always include: `"heavy film grain, digital noise, ISO 3200 grain texture"`. This is the single most effective realism signal.
+2. **Imperfect lighting** — `"natural ambient light only, no studio lighting, uneven exposure, underexposed background"`. Perfect lighting = CGI. The creature's glow should cast realistic light on nearby surfaces (grass, stone, leaves).
+3. **Environmental integration** — the creature must feel embedded in the scene, not pasted on top. Its glow should interact with the surroundings: `"bioluminescent glow casting soft light on surrounding grass/stone, atmospheric haze catching the light"`. A spirit or orb can still be smooth and glowing — the failure mode is when it looks like a flat cartoon asset with no environmental interaction.
+4. **Camera imperfections** — `"handheld camera shake, partial occlusion by foreground grass/branches, lens flare, chromatic aberration"`.
+5. **Strong negative prompt** — every scene must include: `"no cartoon shading, no cel shading, no flat colors, no anime outline, no game UI, no studio lighting, no video game render"`. Do NOT add "no smooth sphere" — the creature can legitimately be a smooth glowing orb/spirit.
+
+**Creature scale rule:** the creature should be SMALL relative to the environment. In wide and medium shots it occupies 5–15% of frame height. A creature that dominates the frame reads as a rendered asset, not a wild animal. Let the environment be primary.
+
 #### Creature ref workflow (mandatory — do this before generating any scene)
 
 1. **Read the original game art ref** (`games/{GAME_TAG}/assets/`) or search for authoritative creature descriptions (wiki, in-game codex). Do NOT rely on memory or training data — the creature may look nothing like you expect.
@@ -179,6 +240,8 @@ Total pre-speed: 20–30s. No speedup applied. Hard cap 35s.
    - **Face/close-up/CTA shots:** `image_urls: [scene with best horn/face profile]` (a profile or ridge shot showing correct features)
 
 **Prompt detail rule:** every image_prompt must describe the creature's key distinguishing features explicitly (horn shape, armor texture, fur color). Never write "a Sumpter Beast" without also describing what it looks like — NB2 will invent its own interpretation. Include: exact horn description ("two short curved horns growing outward from sides of skull, curving slightly upward at tips like a yak"), armor type ("rough stone-textured armor plates"), fur ("thick coarse dark grey-brown bristly fur mane"). If the prompt is vague, the creature will be wrong.
+
+**Creature vertical placement rule (mandatory — subtitle safe zone):** the creature must be positioned in the **central vertical zone of the frame (roughly 20%–75% from the top)**. Never place the creature in the bottom quarter of the frame — that area is covered by subtitles (ASS burn-in). In wide shots where the creature is small, keep it at mid-frame height, not hovering near the ground. In the image_prompt, use explicit placement language: `"creature at mid-frame, center of image, not near bottom edge"`. This applies to ALL clips including the CTA.
 
 **Scene visual contrast rule (mandatory):** adjacent clips must differ in at least TWO of the following — or the edit will look like a jump cut:
   - Camera distance (wide / medium / extreme close-up)
@@ -351,6 +414,10 @@ output/YYYY-MM-DD/{GAME_TAG}/wild-documentary/
 ## Anti-patterns
 
 - ❌ Game-art style NB2 images (cartoon proportions, smooth skin, bright colors) — requires photorealism
+- ❌ Creature looks like a cartoon/game asset pasted into a background — use film grain (ISO 3200), describe glow casting light on surroundings, "no cartoon shading, no cel shading, no flat colors" in negative prompt; lead prompt with RAW/Canon/ISO specs. A smooth glowing orb or spirit is fine — it just must interact with the environment realistically (cast light, catch in haze, be partially occluded by foreground)
+- ❌ Perfect studio lighting — always "natural ambient light only, no studio lighting, uneven exposure"
+- ❌ Creature too large / dominant in wide shots — should occupy 5–15% of frame height in establishing shots; let environment be primary
+- ❌ Creature placed in the bottom quarter of the frame — subtitles burn into that zone; always specify "creature at mid-frame, center of image, not near bottom edge" in image_prompt
 - ❌ Not overriding game config style — for stylized games (Pokémon GO etc.) MUST add `style_override` to storyboard
 - ❌ Vague creature description in image_prompt — write every feature explicitly (horn shape, armor texture, fur color, body proportions). "A Sumpter Beast" without description = NB2 invents a random animal
 - ❌ Skipping creature ref research — always read the original game asset or wiki before writing prompts. Never rely on training data for creature appearance
