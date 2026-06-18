@@ -217,6 +217,7 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 
 - Episode structure: HOOK → CLIMAX (2–3 clips) → CLIFFHANGER
 - **5s default**, 10s dialogue = almost always a mistake (split into 2×5s)
+- **Avatar dialogue clips: bust shot only** — head fills 55–75% of frame, no feet, no full body. Do NOT describe pacing, standing figures, or full-body action in `action_description` for Avatar clips. Full-body framing produces face artifacts (EP6 Kirk scenes 3/5).
 - Balance ACTION/DIALOGUE ~ 50/50; at least 2 different characters speak per episode
 - Read the story bible: characters, voices (`voice` field), active loops, anti-repetition
 - **`retention_strategy` mandatory** in storyboard — why the cliffhanger pulls the next episode
@@ -281,7 +282,8 @@ Convention examples (series "Don't Save Me", Genshin Impact):
   - Cliffhanger reveal: `exaggeration 0.55–0.65`
   - Default neutral if no emotion context: `exaggeration 0.45`
 - **Narrator VO (optional):** off-screen series intro voice over I2V action clips. Store as `narrator_vo` top-level field in storyboard.json: `{text, voice, tts_url, duration_sec, overlay_clips, volume}`. Sound generates the MP3; Editor overlays it via amix starting at t=0. Generate with `faster-whisper` for timing (offset=0 per clip, then +cumulative_start for ASS timecodes).
-- **Subtitles:** ASS via `ffmpeg-full` (libass required; stock ffmpeg lacks it). Use sentence-level Whisper timing — NOT word-by-word. Dialogue style: Bold=1, Outline=6, Fontsize=70, white, MarginV=520. Narrator style: Bold=1, Outline=4, italic, warm color `#EDE0C8`, Fontsize=65, MarginV=540.
+- **Subtitles:** ASS via `ffmpeg-full` (`/usr/local/bin/ffmpeg-full/ffmpeg`) — libass is required; stock Homebrew ffmpeg silently errors on `ass=` filter. Use sentence-level Whisper timing — NOT word-by-word. Dialogue style: Bold=1, Outline=6, Fontsize=70, white, MarginV=520. Narrator style: Bold=1, Outline=4, italic, warm color `#EDE0C8`, Fontsize=65, MarginV=540.
+- **Subtitle timing cap (mandatory):** After `add_subtitles.py` generates `build/subs.ass`, verify every Dialogue event: `End ≤ cumulative_start_of_scene + tts_duration_sec`. Whisper produces wildly wrong End-timestamps on short Avatar clips (<2.5s) — events can span entire I2V scenes. Cap formula: build the cumulative timeline first (Avatar trimmed to TTS, I2V at full Kling duration), then check each event window `[T_start, T_start + tts_dur]` and truncate any End that overshoots. Burned in EP3 serial-drama — subtitle "DOING THIS" ran from 1.20s to 12.20s, covering all of scene-2 I2V.
 - ONLY dialogue subs + narrator + TBC. No title cards, brainrot tags, character names.
 - Background music: drama/cinematic, `volume=0.15`; duck to `0.08–0.10` under narrator VO.
 - General rules — `rules/roles/sound.md`
@@ -292,6 +294,8 @@ Convention examples (series "Don't Save Me", Genshin Impact):
 - I2V clips: fps normalization 24 → 30 mandatory before concat. **NEVER trim I2V clips** — their declared duration is intentional and exact.
 - Avatar clips: trim **both video AND audio** to TTS_dur before concat. Use `trim=end=TTS_DUR,setpts=PTS-STARTPTS` (video) + `atrim=end=TTS_DUR,asetpts=PTS-STARTPTS` (audio). No apad needed — audio is embedded, not a separate track.
 - **A/V sync — joint concat mandatory:** when Avatar clips have embedded audio, use a single `concat=n=N:v=1:a=1` with interleaved `[sv_i][sa_i]` pairs (`[sv0][sa0][sv1][sa1]...`). Never split video and audio into two separate concat chains — they will drift. CTA (no audio) gets `anullsrc` paired with its video.
+- **I2V `generate_audio:true` audio must be preserved.** I2V clips with `generate_audio: true` contain Kling-generated action sounds (costs $0.042/s extra). Extract `[k:a]`, normalize to stereo, include in `concat=a=1`. Never use `concat=a=0` when I2V audio streams exist.
+- **`voice-final.wav` is NOT an audio source for the final encode.** It is a whisper-alignment artifact (TTS only, 16kHz mono). Final audio = scene `[k:a]` streams + `bg-music.m4a`. Passing `voice-final.wav` to the encode discards all I2V atmospheric sounds. Burned in EP3 — cost 3 re-renders.
 - **amix for overlay tracks:** narrator VO + bg-music overlay on top of joint concat via `amix=inputs=3:duration=first:normalize=0`. `normalize=0` is mandatory (prevents volume division by N). `duration=first` anchors output length to the scene audio, avoiding music bleed-through.
 - Off-screen narrator VO: overlay as separate amix input starting at t=0; music ducked during VO. See storyboard.json `narrator_vo` field.
 - TTS overlay "behind glass" (rare): `aecho=0.8:0.9:10:0.3`, `adelay=500`

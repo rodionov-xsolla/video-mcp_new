@@ -8,7 +8,7 @@
 - **Аудитория:** Global, фанаты Star Trek, gacha/RPG игроки 25-45 лет
 - **Стиль арта:** Sci-fi LCARS UI, полуреалистичные 2D-портреты, 3D-корабли
 - **Премьера:** Январь 2016 (10+ лет активной работы)
-- **youtube_channel:** starfleetarchive
+- **youtube_channel:** starfleet
 
 ---
 
@@ -255,8 +255,8 @@ Star Trek Timelines style, semi-realistic sci-fi character portrait, cinematic F
 - **Размер при overlay:** 110×110 px (downscale из 512×512 через `scale=110:110` в filter_complex)
 - **Прозрачность:** альфа уже зашита в PNG (~70% эффективная); если нужно сильнее погасить — `colorchannelmixer=aa=0.7` в overlay цепочке
 - **Поведение:** static, full-video duration (без fade in/out)
-- **Применимо к форматам:** ВСЕ ST-Timelines форматы (streettalk, fun-news, news, character-story, redcon, ...). Editor читает `channel_bug_url` из game config и применяет автоматически — см. `rules/roles/editor.md` §13a.
-- **Когда НЕ применять:** если game config не содержит `channel_bug_url` (другие игры — Roblox, MLBB и пр.), а также если конкретный формат явно отключает через свой playbook (нет таких форматов на момент 2026-05-29).
+- **Применимо к форматам:** ТОЛЬКО `fun-news`. Manager передаёт `CHANNEL_BUG_URL` editor'у исключительно когда `FORMAT == fun-news`. Для всех других форматов (streettalk, news, character-story, redcon, serial-drama, ...) `CHANNEL_BUG_URL` = пустая строка.
+- **Когда НЕ применять:** любой формат кроме `fun-news`, а также любая игра кроме Star Trek Timelines (Roblox, Genshin Impact и пр. не имеют `channel_bug_url`).
 
 **Анти-паттерны:**
 - ❌ Bug на CTA — CTA это отдельный branded ролик, bug на нём = двойной брендинг. Применять ТОЛЬКО на основном контенте (между opener и CTA, или на всём, если opener тоже свой — зависит от format-specific решения).
