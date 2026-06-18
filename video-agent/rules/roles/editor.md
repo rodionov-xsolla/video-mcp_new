@@ -167,11 +167,49 @@ mv build/final.tmp.mp4 final.mp4
 
 ### 0.3 Encoder choice
 
-- **`-preset medium -crf 22`** — single-pass default. On 1080×1920, ~0.55× realtime (~90 s for 50 s output). Visually indistinguishable from `slow crf 20` after social-network re-encode (TikTok/Reels/Shorts re-transcode anyway).
-- **`-preset slow -crf 20`** — ONLY for archival masters or when explicitly requested. Costs 3–5× wall-clock for 5–10% bitrate at perceptual parity. Do not use as default.
-- `-pix_fmt yuv420p` — required for QuickTime + all social uploads.
-- `-c:a aac -b:a 128k -ar 44100 -ac 2` — locked. Do not change.
-- `-t TOTAL_DUR` — mandatory hard cap so `apad` / `amix duration=longest` do not extend final to music length (185 s of bg-music would otherwise leak through).
+#### Hardware codec fallback (use this order every run)
+
+Hardware encoders are 2–5× faster than `libx264` on the same machine. Detect once at the start of assembly and set `$VCODEC_ARGS`:
+
+```bash
+# Detect best available H.264 encoder (run once, reuse $VCODEC_ARGS in every -c:v slot)
+FF=/usr/local/bin/ffmpeg-full/ffmpeg
+
+if $FF -encoders 2>/dev/null | grep -q h264_videotoolbox; then
+  # Apple Silicon / Intel Mac — ~3–5× faster than libx264, no quality loss after social re-encode
+  VCODEC_ARGS="-c:v h264_videotoolbox -b:v 5M -maxrate 7M -bufsize 10M"
+elif $FF -encoders 2>/dev/null | grep -q h264_nvenc; then
+  # NVIDIA GPU
+  VCODEC_ARGS="-c:v h264_nvenc -preset p4 -cq 22 -b:v 0"
+elif $FF -encoders 2>/dev/null | grep -q h264_amf; then
+  # AMD GPU
+  VCODEC_ARGS="-c:v h264_amf -quality balanced -qp_i 22 -qp_p 24"
+elif $FF -encoders 2>/dev/null | grep -q h264_qsv; then
+  # Intel Quick Sync
+  VCODEC_ARGS="-c:v h264_qsv -preset medium -global_quality 22"
+else
+  # CPU fallback
+  VCODEC_ARGS="-c:v libx264 -preset medium -crf 22"
+fi
+```
+
+Then in every encode command replace `-c:v libx264 -preset medium -crf 22` with `$VCODEC_ARGS`.
+
+**Notes:**
+- `h264_videotoolbox` does not support `-crf` — use `-b:v 5M` target bitrate instead. At 1080×1920 this is equivalent quality to `crf 22` and well within TikTok/Reels/Shorts ingest limits.
+- Always append `-pix_fmt yuv420p` — required regardless of encoder (QuickTime + social uploads).
+- If a hardware encode fails mid-run (rare: thermal throttle, driver crash), fall through to `libx264` and log the error. Do not retry the hardware encoder in the same session.
+- `ffmpeg-full` binary is still required for any encode that burns subtitles (`ass=` filter). Hardware encode is compatible with `ass=` — it is a video filter, not a codec constraint.
+
+#### Software fallback params (when `$VCODEC_ARGS` resolves to libx264)
+
+- **`-preset medium -crf 22`** — single-pass default. On 1080×1920, ~90 s for 50 s output.
+- **`-preset slow -crf 20`** — ONLY for archival masters or when explicitly requested. 3–5× wall-clock for marginal quality gain after social re-encode. Do not use as default.
+
+#### Locked audio params (do not change)
+
+- `-c:a aac -b:a 128k -ar 44100 -ac 2` — locked.
+- `-t TOTAL_DUR` — mandatory hard cap so `apad` / `amix duration=longest` do not extend final to music length.
 
 ### 0.4 Audio shaping — match what the ASS expects
 
