@@ -212,6 +212,24 @@ Example error (EP1 tribbles): manager described "no visible eyes" from memory �
 - **Game config style override:** if the game config specifies a cartoon or stylized art style (e.g. Pokémon GO cartoon 3D), IGNORE IT. Add `"style_override"` field to storyboard.json and state explicitly. The wildlife-photography style overrides ALL game config styles for this format.
 - NB2 image_prompt must include: `ultra-realistic, hidden camera documentary footage, telephoto lens, shallow depth of field, naturalistic lighting, grainy texture, 4K photorealistic`
 
+#### Ultra-realistic prompting (mandatory technique — learned from EP1 Seelie retry)
+
+The most common failure mode: the creature looks like a CGI asset pasted into a background — a clean glowing sphere or cartoon character floating in a realistic environment. This is wrong. The creature must feel physically present in nature, as if it were a real bioluminescent/biological organism photographed by a hidden camera.
+
+**Prompt structure — lead with camera/technical specs FIRST:**
+```
+RAW wildlife photography, Canon 5D Mark IV, [focal length], ISO 3200, heavy film grain and digital noise, natural light only — [creature anatomy + behavior] — [environment] — atmospheric haze, chromatic aberration at edges, no studio lighting, no post-processing
+```
+
+**Key elements that force photorealism:**
+1. **Film grain and noise** — always include: `"heavy film grain, digital noise, ISO 3200 grain texture"`. This is the single most effective realism signal.
+2. **Imperfect lighting** — `"natural ambient light only, no studio lighting, uneven exposure, underexposed background"`. Perfect lighting = CGI.
+3. **Organic creature texture** — the creature should NOT be a smooth clean sphere. Describe it as a biological organism: `"slightly irregular translucent surface like a real jellyfish, internal structures faintly visible through body walls, soft glow with organic texture"`.
+4. **Camera imperfections** — `"handheld camera shake, partial occlusion by foreground grass/branches, lens flare, chromatic aberration"`.
+5. **Strong negative prompt** — every scene must include: `"no CGI, no game art, no cartoon, no studio lighting, no anime, no clean render, no smooth perfect sphere, no video game character"`.
+
+**Creature scale rule:** the creature should be SMALL relative to the environment. In wide and medium shots it occupies 5–15% of frame height. A creature that dominates the frame reads as a rendered asset, not a wild animal. Let the environment be primary.
+
 #### Creature ref workflow (mandatory — do this before generating any scene)
 
 1. **Read the original game art ref** (`games/{GAME_TAG}/assets/`) or search for authoritative creature descriptions (wiki, in-game codex). Do NOT rely on memory or training data — the creature may look nothing like you expect.
@@ -222,6 +240,8 @@ Example error (EP1 tribbles): manager described "no visible eyes" from memory �
    - **Face/close-up/CTA shots:** `image_urls: [scene with best horn/face profile]` (a profile or ridge shot showing correct features)
 
 **Prompt detail rule:** every image_prompt must describe the creature's key distinguishing features explicitly (horn shape, armor texture, fur color). Never write "a Sumpter Beast" without also describing what it looks like — NB2 will invent its own interpretation. Include: exact horn description ("two short curved horns growing outward from sides of skull, curving slightly upward at tips like a yak"), armor type ("rough stone-textured armor plates"), fur ("thick coarse dark grey-brown bristly fur mane"). If the prompt is vague, the creature will be wrong.
+
+**Creature vertical placement rule (mandatory — subtitle safe zone):** the creature must be positioned in the **central vertical zone of the frame (roughly 20%–75% from the top)**. Never place the creature in the bottom quarter of the frame — that area is covered by subtitles (ASS burn-in). In wide shots where the creature is small, keep it at mid-frame height, not hovering near the ground. In the image_prompt, use explicit placement language: `"creature at mid-frame, center of image, not near bottom edge"`. This applies to ALL clips including the CTA.
 
 **Scene visual contrast rule (mandatory):** adjacent clips must differ in at least TWO of the following — or the edit will look like a jump cut:
   - Camera distance (wide / medium / extreme close-up)
@@ -394,6 +414,10 @@ output/YYYY-MM-DD/{GAME_TAG}/wild-documentary/
 ## Anti-patterns
 
 - ❌ Game-art style NB2 images (cartoon proportions, smooth skin, bright colors) — requires photorealism
+- ❌ Creature looks like a CGI sphere pasted into a background — use film grain (ISO 3200), organic texture description, "no clean render, no smooth perfect sphere" in negative prompt; lead prompt with RAW/Canon/ISO specs
+- ❌ Perfect studio lighting — always "natural ambient light only, no studio lighting, uneven exposure"
+- ❌ Creature too large / dominant in wide shots — should occupy 5–15% of frame height in establishing shots; let environment be primary
+- ❌ Creature placed in the bottom quarter of the frame — subtitles burn into that zone; always specify "creature at mid-frame, center of image, not near bottom edge" in image_prompt
 - ❌ Not overriding game config style — for stylized games (Pokémon GO etc.) MUST add `style_override` to storyboard
 - ❌ Vague creature description in image_prompt — write every feature explicitly (horn shape, armor texture, fur color, body proportions). "A Sumpter Beast" without description = NB2 invents a random animal
 - ❌ Skipping creature ref research — always read the original game asset or wiki before writing prompts. Never rely on training data for creature appearance
