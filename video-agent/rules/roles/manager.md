@@ -231,7 +231,9 @@ Exit≠0 → STOP.
 **Output:** `scenes/scene-K/scene-K.mp4` per clip.
 
 ### PHASE 5 — Assembly (Editor)
-Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude/agents/editor.md`). Sub-agent loads `rules/roles/editor.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute), `OPENER_PATH` / `CTA_PATH` if applicable, `LANGUAGE`, `CHANNEL_BUG_URL` (if set), **+ two booleans from the front-matter (see below)**. All scene MP4s and audio tracks are already on disk in `OUTPUT_DIR/scenes/`. Template: `prompts/editor.txt`.
+Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude/agents/editor.md`). Sub-agent loads `rules/roles/editor.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute), `OPENER_PATH` / `CTA_PATH` if applicable, `LANGUAGE`, `CHANNEL_BUG_URL` (see rule below), **+ two booleans from the front-matter (see below)**. All scene MP4s and audio tracks are already on disk in `OUTPUT_DIR/scenes/`. Template: `prompts/editor.txt`.
+
+**`CHANNEL_BUG_URL` rule:** передавать только если `GAME_TAG == star-trek-timelines` **И** `FORMAT == fun-news`. Во всех остальных случаях передавать пустую строку (`CHANNEL_BUG_URL=""`). URL берётся из `games/star-trek-timelines/star-trek-timelines.md` → `## GLN Channel Branding`.
 
 **Subtitles are universal — the orchestrator only passes on/off.**
 
