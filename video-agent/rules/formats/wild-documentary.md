@@ -223,10 +223,10 @@ RAW wildlife photography, Canon 5D Mark IV, [focal length], ISO 3200, heavy film
 
 **Key elements that force photorealism:**
 1. **Film grain and noise** — always include: `"heavy film grain, digital noise, ISO 3200 grain texture"`. This is the single most effective realism signal.
-2. **Imperfect lighting** — `"natural ambient light only, no studio lighting, uneven exposure, underexposed background"`. Perfect lighting = CGI.
-3. **Organic creature texture** — the creature should NOT be a smooth clean sphere. Describe it as a biological organism: `"slightly irregular translucent surface like a real jellyfish, internal structures faintly visible through body walls, soft glow with organic texture"`.
+2. **Imperfect lighting** — `"natural ambient light only, no studio lighting, uneven exposure, underexposed background"`. Perfect lighting = CGI. The creature's glow should cast realistic light on nearby surfaces (grass, stone, leaves).
+3. **Environmental integration** — the creature must feel embedded in the scene, not pasted on top. Its glow should interact with the surroundings: `"bioluminescent glow casting soft light on surrounding grass/stone, atmospheric haze catching the light"`. A spirit or orb can still be smooth and glowing — the failure mode is when it looks like a flat cartoon asset with no environmental interaction.
 4. **Camera imperfections** — `"handheld camera shake, partial occlusion by foreground grass/branches, lens flare, chromatic aberration"`.
-5. **Strong negative prompt** — every scene must include: `"no CGI, no game art, no cartoon, no studio lighting, no anime, no clean render, no smooth perfect sphere, no video game character"`.
+5. **Strong negative prompt** — every scene must include: `"no cartoon shading, no cel shading, no flat colors, no anime outline, no game UI, no studio lighting, no video game render"`. Do NOT add "no smooth sphere" — the creature can legitimately be a smooth glowing orb/spirit.
 
 **Creature scale rule:** the creature should be SMALL relative to the environment. In wide and medium shots it occupies 5–15% of frame height. A creature that dominates the frame reads as a rendered asset, not a wild animal. Let the environment be primary.
 
@@ -414,7 +414,7 @@ output/YYYY-MM-DD/{GAME_TAG}/wild-documentary/
 ## Anti-patterns
 
 - ❌ Game-art style NB2 images (cartoon proportions, smooth skin, bright colors) — requires photorealism
-- ❌ Creature looks like a CGI sphere pasted into a background — use film grain (ISO 3200), organic texture description, "no clean render, no smooth perfect sphere" in negative prompt; lead prompt with RAW/Canon/ISO specs
+- ❌ Creature looks like a cartoon/game asset pasted into a background — use film grain (ISO 3200), describe glow casting light on surroundings, "no cartoon shading, no cel shading, no flat colors" in negative prompt; lead prompt with RAW/Canon/ISO specs. A smooth glowing orb or spirit is fine — it just must interact with the environment realistically (cast light, catch in haze, be partially occluded by foreground)
 - ❌ Perfect studio lighting — always "natural ambient light only, no studio lighting, uneven exposure"
 - ❌ Creature too large / dominant in wide shots — should occupy 5–15% of frame height in establishing shots; let environment be primary
 - ❌ Creature placed in the bottom quarter of the frame — subtitles burn into that zone; always specify "creature at mid-frame, center of image, not near bottom edge" in image_prompt
