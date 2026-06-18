@@ -1,0 +1,56 @@
+{
+  "series_id": "fake-ad-genshin-impact",
+  "game_tag": "genshin-impact",
+  "title": "Genshin Impact Fake Ad",
+  "created_at": "2026-06-18",
+  "last_episode": 1,
+  "advertised_products": [
+    {
+      "episode": 1,
+      "product_name": "Resin Energy",
+      "product_slug": "resin-energy",
+      "tagline": "Doesn't restore resin. Helps you outlive the wait.",
+      "game_mechanic_referenced": "original-resin",
+      "date": "2026-06-18"
+    }
+  ],
+  "anti_repetition": {
+    "recent_lines": ["Doesn't restore resin. Helps you outlive the wait."],
+    "recent_themes": ["resin-economy"],
+    "recent_tones": ["zen-deadpan"],
+    "recent_hooks": [
+      "Lumine exhausted at resin cap, Resin Energy drink appears, runs through domain effortlessly, sits meditating — enlightenment achieved, walks away from game, Paimon holds sign: she's fine"
+    ],
+    "recent_twist_types": ["enlightenment-walk-away"],
+    "recent_problem_types": ["resin-anxiety"],
+    "recent_characters": ["Lumine"],
+    "recent_environments": [
+      "Mondstadt city plaza cobblestone medieval fantasy windmill golden afternoon light",
+      "Mondstadt hillside meadow green rolling hills wildflowers pastoral serenity"
+    ],
+    "banned_combos": []
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-06-18",
+      "product_name": "Resin Energy",
+      "product_slug": "resin-energy",
+      "character": "Lumine",
+      "theme": "resin-economy",
+      "twist_type": "enlightenment-walk-away",
+      "problem_type": "resin-anxiety",
+      "environments": [
+        "Mondstadt city plaza cobblestone medieval fantasy windmill golden afternoon light",
+        "Mondstadt hillside meadow green rolling hills wildflowers pastoral serenity"
+      ],
+      "tone": "zen-deadpan",
+      "hook": "Lumine exhausted at resin cap, Resin Energy drink appears, runs through domain effortlessly, sits meditating — enlightenment achieved, walks away from game, Paimon holds sign: she's fine",
+      "final_url": "",
+      "duration_sec": 25.0,
+      "cost_usd": 2.75,
+      "notes": "Pilot episode. Twist: Lumine achieves enlightenment and walks away from the game."
+    }
+  ],
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4"
+}

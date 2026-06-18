@@ -49,6 +49,19 @@
       "Vulcan Science Academy as central institution of Vulcan logic culture",
       "Riker's signature move of climbing over chair backs"
     ],
+    "recent_satire_angles": [],
+    "recent_reporters": ["Spock", "Seven of Nine"],
+    "recent_hooks": [
+      {"text": "Vulcan Logic Conference cancelled — attendees logically concluded it was illogical", "type": "institutional-self-contradiction"},
+      {"text": "Commander Riker celebrates 40 years of climbing over chairs instead of walking around them", "type": "anniversary-absurdism"}
+    ],
+    "recent_reporter_angles": [
+      {"reporter": "Spock",       "angle_type": "vulcan-logic-satire"},
+      {"reporter": "Seven of Nine","angle_type": "clinical-absurdism"}
+    ],
+    "anchor_joke_types": ["omnipotent-boredom"],
+    "recent_locations": [],
+    "banned_combos": [],
     "cooldown_episodes": 5
   },
   "episode_summaries": [

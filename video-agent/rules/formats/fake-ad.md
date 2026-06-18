@@ -371,3 +371,110 @@ output/YYYY-MM-DD/{GAME_TAG}/fake-ad/
 - ❌ `-shortest` in FFmpeg. Always `apad`.
 - ❌ `voice_id` hash in ElevenLabs. Use `voice` name string.
 - ❌ Subtitle burn-in on any scene. No captions — this is a TV commercial. (Front-matter has `subtitles: true` for the announcer VO — if the channel wants captions; for none, set `subtitles: false`. By default the ad announcer is subtitled.)
+
+---
+
+## Story Bible
+
+Create on first run: `games/{GAME_TAG}/fake-ad_story_bible.json`
+
+```json
+{
+  "series_id": "fake-ad-{GAME_TAG}",
+  "game_tag": "{GAME_TAG}",
+  "title": "{Game} Fake Ad",
+  "created_at": "{TODAY}",
+  "last_episode": 0,
+  "advertised_products": [],
+  "anti_repetition": {
+    "recent_lines": [],
+    "recent_themes": [],
+    "recent_tones": [],
+    "recent_hooks": [],
+    "recent_twist_types": [],
+    "recent_problem_types": [],
+    "recent_characters": [],
+    "recent_environments": [],
+    "banned_combos": []
+  },
+  "episode_summaries": [],
+  "cta_url": ""
+}
+```
+
+**`advertised_products`** — **PERMANENT, NEVER TRIM.** Every product ever advertised stays in this list forever. This is the primary anti-repetition guarantee of the fake-ad format: the same product is never re-advertised. Each entry:
+```json
+{
+  "episode": 1,
+  "product_name": "Resin Energy",
+  "product_slug": "resin-energy",
+  "tagline": "Doesn't restore resin. Helps you outlive the wait.",
+  "game_mechanic_referenced": "original-resin",
+  "date": "YYYY-MM-DD"
+}
+```
+
+**`anti_repetition`** fields (all FIFO):
+
+- `recent_lines` — FIFO 8 — exact spoken lines: product tagline + up to 2 key voiceover lines per episode. Example: `"Doesn't restore resin. Helps you outlive the wait."` Prevents repeating the same phrasing construction across episodes.
+- `recent_themes` — FIFO 5 — broad episode theme slug: `resin-economy`, `obby-skill-check`, `stamina-grind`, `gacha-luck`
+- `recent_tones` — FIFO 5 — announcer tone style: `zen-deadpan`, `earnest-absurd`, `desperation-sell`
+- `recent_hooks` — FIFO 5 — **full narrative arc as plain text** (the most important field after `advertised_products`): comma-separated key beats of the episode — character + problem → product → peak → twist → finale. Example: `"Lumine exhausted at resin cap, Resin Energy drink appears, runs through domain, sits meditating — enlightenment achieved, walks away from game, Paimon holds sign"`
+- `recent_twist_types` — FIFO 5 — semantic slug for how the product fails: `enlightenment-walk-away`, `run-past-exit`, `server-crash-at-victory`, `inventory-full-on-rare-drop`
+- `recent_problem_types` — FIFO 5 — setup obstacle category: `resin-anxiety`, `obby-fail-loop`, `stamina-drain`, `farming-burnout`
+- `recent_characters` — FIFO 10 — character starring in the ad (cooldown 10 episodes)
+- `recent_environments` — FIFO 6 — scene 0–2 locations (cooldown 6 episodes)
+- `banned_combos` — permanent dynamic blocklist — e.g. `{"character": "Lumine", "theme": "resin-economy"}` if a combo is exhausted
+
+**`episode_summaries`** — FIFO 5:
+```json
+{
+  "episode": 1,
+  "date": "YYYY-MM-DD",
+  "product_name": "Resin Energy",
+  "product_slug": "resin-energy",
+  "character": "Lumine",
+  "theme": "resin-economy",
+  "twist_type": "enlightenment-walk-away",
+  "problem_type": "resin-anxiety",
+  "environments": ["Mondstadt city plaza cobblestone", "Mondstadt hillside meadow"],
+  "tone": "zen-deadpan",
+  "hook": "Lumine exhausted at resin cap, Resin Energy drink appears, runs through domain, sits meditating — enlightenment achieved, walks away from game, Paimon holds sign",
+  "final_url": "...",
+  "duration_sec": 25.0,
+  "cost_usd": 2.75
+}
+```
+
+**Story Bible update (Manager, after editor confirms `final.mp4`):**
+
+1. Add entry to `advertised_products` (product_name, slug, tagline, mechanic, date) — **DO NOT TRIM — this list is permanent.**
+2. `theme` → append to `recent_themes`; FIFO 5.
+3. `tone` → append to `recent_tones`; FIFO 5.
+4. `hook` (narrative arc text) → append to `recent_hooks`; FIFO 5.
+5. `twist_type` → append to `recent_twist_types`; FIFO 5.
+6. `problem_type` → append to `recent_problem_types`; FIFO 5.
+7. `character` → append to `recent_characters`; FIFO 10.
+8. Scene 0–2 environments → append each to `recent_environments`; FIFO 6.
+9. Tagline + up to 2 key voiceover lines → append each to `recent_lines`; FIFO 8.
+10. Append `episode_summary`; FIFO 5.
+11. Increment `last_episode`.
+
+---
+
+## Anti-repetition check
+
+Before Phase 1 (scenarist), manager validates proposed product and creative choices:
+
+- [ ] `product_slug` of the proposed product is **absent** from `advertised_products[].product_slug` — **permanent check, no FIFO window. This is the core rule of the fake-ad format.**
+- [ ] `theme` does not match any of the last 5 in `recent_themes`.
+- [ ] Proposed narrative arc (`hook`) does not echo the beats in any entry in `recent_hooks`.
+- [ ] `twist_type` does not match any of the last 5 in `recent_twist_types`.
+- [ ] `problem_type` does not match any of the last 5 in `recent_problem_types`.
+- [ ] `character` is not in `recent_characters` (last 10 episodes).
+- [ ] None of the proposed scene 0–2 environments appear in `recent_environments` (last 6 episodes).
+- [ ] `tone` does not match either of the last 2 in `recent_tones`.
+- [ ] Proposed `{character, theme}` combo is not in `banned_combos`.
+- [ ] None of the proposed tagline or key voiceover lines appear in `recent_lines` (last 8).
+
+If a collision is found — scenarist proposes a different product concept or creative angle before writing `storyboard.json`.

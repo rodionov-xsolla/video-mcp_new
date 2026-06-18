@@ -324,11 +324,20 @@ Create on first run: `games/{GAME_TAG}/fun-news_story_bible.json`
     "anchor": "",
     "reporters": {}
   },
-  "reporter_pool": [],
+  "reporter_pool": [
+    {"character_name": "", "display_name": "", "voice": "", "stability": 0.55, "tone_signature": "...", "supabase_avatar_url": "", "last_seen_episode": null}
+  ],
   "style_tone": "ironic|satirical|absurd|dry-deadpan",
   "topic_rotation": {
     "recent_topic_tags": [],
     "recent_canon_facts": [],
+    "recent_satire_angles": [],
+    "recent_reporters": [],
+    "recent_hooks": [],
+    "recent_reporter_angles": [],
+    "anchor_joke_types": [],
+    "recent_locations": [],
+    "banned_combos": [],
     "cooldown_episodes": 5
   },
   "episode_summaries": [],
@@ -336,6 +345,11 @@ Create on first run: `games/{GAME_TAG}/fun-news_story_bible.json`
   "cta_url": ""
 }
 ```
+
+**Field formats for `topic_rotation` objects:**
+- `recent_hooks` entries: `{"text": "headline string", "type": "semantic-slug"}` — hook type describes the JOKE FRAME, not topic. Generic types: `regulatory-bureaucratic`, `mock-academic-study`, `economic-crash-satire`, `institutional-self-contradiction`, `anniversary-absurdism`, `civic-protest-absurdism`, `government-agency-reaction`, `bureaucratic-monster-absurdism`, `institutional-rebranding-satire`. Game-specific types defined in each bible.
+- `recent_reporter_angles` entries: `{"reporter": "Display Name", "angle_type": "slug"}` — type describes HOW the reporter delivers the joke, not what about. Defined per-game based on character personality.
+- `anchor_joke_types` entries: plain strings, FIFO 5. Defined per-game. Describes which anchor running-bit was used this episode.
 
 **FIFO 5** on `episode_summaries` — keep last 5, drop older. Append per episode (after editor confirms `final.mp4`):
 
@@ -353,7 +367,21 @@ Create on first run: `games/{GAME_TAG}/fun-news_story_bible.json`
 }
 ```
 
-**Anti-repetition:** before Phase 1, manager checks `recent_topic_tags` and `recent_canon_facts`; the scenarist's research.json must not collide.
+**Anti-repetition:** before Phase 1, manager checks `recent_topic_tags`, `recent_canon_facts`, `recent_satire_angles`, `recent_reporters`, `recent_hooks`, `recent_reporter_angles`, `anchor_joke_types`, `recent_locations`, and `banned_combos`; the scenarist's research.json must not collide.
+
+**Story Bible update (Manager, after editor confirms `final.mp4`):**
+
+Extract from `research.json` and `storyboard.json`, then update `topic_rotation`:
+
+1. `news_items[].satire_angle` → append each to `recent_satire_angles`; trim to last **10** items (FIFO, 2 per episode × 5 episodes).
+2. `episode_summary.reporters` → append each to `recent_reporters`; trim to last **6** items (FIFO, 2 per episode × 3 episodes).
+3. `news_items[].headline` + `news_items[].hook_type` → append each as `{"text": headline, "type": hook_type}` to `recent_hooks`; trim to last **10** items (FIFO).
+4. `news_items[].topic_tags` → extend `recent_topic_tags`; trim to last 5 episodes' worth.
+5. Resolved canon facts used this episode → append each to `recent_canon_facts`; trim to last **5** items (FIFO).
+6. `news_items[].location` → append each to `recent_locations`; trim to last **6** items (FIFO, 2 per episode × 3 episodes).
+7. For each reporter selected: set `reporter_pool[].last_seen_episode = current episode number`.
+8. `news_items[].reporter` + `news_items[].reporter_angle_type` → append each as `{"reporter": name, "angle_type": type}` to `recent_reporter_angles`; trim to last **6** items (FIFO, 2 per episode × 3 episodes).
+9. Anchor bit used this episode → append to `anchor_joke_types`; trim to last **5** items (FIFO).
 
 **No loop management** (this is not serial — each episode is standalone).
 
@@ -365,8 +393,14 @@ Before Phase 3, manager validates:
 
 - [ ] None of `news_items[].canon_fact_index` resolves to a fact in `recent_canon_facts`.
 - [ ] None of `topic_tags` overlap with `recent_topic_tags` (last 5 episodes).
-- [ ] `satire_angle` distribution differs from the previous episode (don't run two `absurd`-only episodes back-to-back).
-- [ ] Reporter rotation: at least one reporter different from the previous episode (avoid Spock-Seven both episodes back-to-back when Worf is in the pool).
+- [ ] `satire_angle`: neither news item's angle appears 3+ times consecutively in the tail of `recent_satire_angles`.
+- [ ] Reporter rotation: at least 1 reporter differs from those in the last episode (`recent_reporters[-2:]`). Prefer reporters with the lowest `last_seen_episode`.
+- [ ] Hooks (text): no headline shares a dominant keyword with any `recent_hooks[].text`.
+- [ ] Hooks (type): `news_items[].hook_type` does not repeat the same type 2+ times consecutively in `recent_hooks[].type` tail.
+- [ ] Reporter angles: no `{reporter, angle_type}` pair in this episode matches the same pair in `recent_reporter_angles` — same reporter may return, but must use a different angle_type.
+- [ ] Anchor bit: `anchor_joke_types` proposed this episode not identical to the last entry in `anchor_joke_types`.
+- [ ] Locations: neither `news_items[].location` matches any entry in `recent_locations` (last 3 episodes).
+- [ ] Banned combos: no `{reporter, topic_tag}` or `{satire_angle, topic_tag}` pair matches an entry in `banned_combos`.
 
 If a collision is found — scenarist regenerates research.json with cooldown applied.
 

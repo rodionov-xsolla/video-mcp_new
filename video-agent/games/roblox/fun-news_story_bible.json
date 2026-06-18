@@ -27,7 +27,8 @@
       "voice_id": "Inspirational_girl",
       "stability": 0.55,
       "tone_signature": "earnest field reporter, slightly worried tone, takes Robloxia events very seriously",
-      "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/characters/sarah-news/avatar.png"
+      "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/characters/sarah-news/avatar.png",
+      "last_seen_episode": 2
     },
     {
       "character_name": "chad-news",
@@ -35,7 +36,8 @@
       "voice_id": "Determined_Man",
       "stability": 0.55,
       "tone_signature": "deadpan analyst-correspondent, dry delivery, treats absurd statistics as serious data journalism",
-      "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/characters/chad-news/avatar.png"
+      "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/roblox/characters/chad-news/avatar.png",
+      "last_seen_episode": 2
     }
   ],
   "style_tone": "satirical|dry-deadpan|absurd",
@@ -66,6 +68,23 @@
       "adopt-me-pet-economy-shadow-dragon-candy-corn-currency",
       "obby-respawn-death-mechanic"
     ],
+    "recent_satire_angles": ["absurd", "dry-deadpan"],
+    "recent_reporters": ["Sarah", "Chad", "Sarah", "Chad"],
+    "recent_hooks": [
+      {"text": "Bacon Hair Liberation Front Demands Reparations from Robux Holders", "type": "civic-protest-absurdism"},
+      {"text": "Sociologist: 73% of Bacon Hairs Still Mewing on Default Jawline — A Structural Problem", "type": "mock-academic-study"},
+      {"text": "Robloxian Safety Commission Declares Stage 100 an Unregulated Hazard Zone — Respawn Trauma Up 4000%", "type": "regulatory-bureaucratic"},
+      {"text": "Adopt Me Shadow Dragon Values Crash 40 Candy Corn Overnight — Full Pet Economy Collapse, Pizza Wage Workers Cooked", "type": "economic-crash-satire"}
+    ],
+    "recent_reporter_angles": [
+      {"reporter": "Sarah", "angle_type": "earnest-field-correspondent"},
+      {"reporter": "Chad",  "angle_type": "deadpan-analyst"},
+      {"reporter": "Sarah", "angle_type": "earnest-field-correspondent"},
+      {"reporter": "Chad",  "angle_type": "deadpan-analyst"}
+    ],
+    "anchor_joke_types": ["breaking-news-absurdism", "breaking-news-absurdism"],
+    "recent_locations": [],
+    "banned_combos": [],
     "cooldown_episodes": 5
   },
   "episode_summaries": [

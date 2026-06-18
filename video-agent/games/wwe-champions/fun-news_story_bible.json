@@ -71,6 +71,19 @@
       "Undertaker's Tombstone Piledriver finisher + Funeral Parlor era opponent burial visual",
       "John Cena 'You can't see me' catchphrase / invisibility meme since 2004"
     ],
+    "recent_satire_angles": [],
+    "recent_reporters": ["The Undertaker", "John Cena"],
+    "recent_hooks": [
+      {"text": "OSHA cites Undertaker for 847 counts of unlicensed embalming via Tombstone Piledriver; Funeral Directors Association claims $2.4M lost revenue", "type": "regulatory-bureaucratic"},
+      {"text": "TSA approves $40M millimeter-wave scanner array after 47 'undetected Cena' airport incidents; Cena-class visibility gap classified", "type": "government-agency-reaction"}
+    ],
+    "recent_reporter_angles": [
+      {"reporter": "The Undertaker", "angle_type": "funereal-deadpan"},
+      {"reporter": "John Cena",      "angle_type": "patriotic-earnest-absurdism"}
+    ],
+    "anchor_joke_types": ["kayfabe-serious"],
+    "recent_locations": [],
+    "banned_combos": [],
     "cooldown_episodes": 5
   },
   "episode_summaries": [
