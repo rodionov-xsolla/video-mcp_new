@@ -276,12 +276,24 @@ Example: `"RESIN ENERGY.\nDOESN'T RESTORE RESIN. HELPS YOU OUTLIVE THE WAIT."`
 
 ### Storyboarder
 
-- 5 NB2 images (one per scene).
+- 5 NB2 images (one per scene) **+ 1 standalone product logo image** (see below).
 - Scenes 0–3: character + environment. Scene 4 (packshot): product ONLY, no character.
 - Apply `visual_identity.style_tags` verbatim to EVERY image_prompt.
 - Scene 4 NB2: hero-product angle, centered, sparkles/glow. `negative_prompt` must include `"character, player, hands, text, labels"`.
 - Do NOT bake any text into NB2 (no slogan, no product name on the can, no UI). Editor handles all text.
 - General rules — `rules/roles/storyboarder.md`
+
+#### Product logo — mandatory separate asset
+
+Generate a **standalone logo PNG** for the advertised product at the same time as scene images (Phase 3). Do NOT skip this step.
+
+- **Prompt:** product name in stylized letters on a dark/branded background, small brand icon below the text. NO character, NO props (no PADD, no hands), NO scene environment. Clean graphic treatment — centered, readable at small size.
+- **negative_prompt:** `"character, person, face, hands, props, device, PADD, background scene, complex environment"`
+- **Save to:** `scenes/refs/product-logo.png`
+- **Upload to Supabase:** `episodes/{GAME_TAG}/{RUN_ID}/refs/product-logo.png`
+- **Write back to storyboard.json:** `"product_logo_url": "<supabase_url>"`
+
+**Why:** the product name/logo appears in BOTH scene 1 (on a prop/surface) and the packshot overlay. Cropping it from a scene image loses quality and always captures unwanted elements (PADD border, hands, background). A dedicated logo PNG can be reused cleanly as a video overlay by the Editor without quality loss.
 
 ### Animator
 
@@ -325,6 +337,7 @@ output/YYYY-MM-DD/{GAME_TAG}/fake-ad/
 ├── storyboard.json
 ├── scenes/
 │   ├── refs/
+│   │   ├── product-logo.png         (MANDATORY: standalone logo — reused in scene 1 prop + packshot overlay)
 │   │   └── product-ref.png          (optional: reference for the product if complex design)
 │   ├── scene-0/
 │   │   ├── scene-0.png              (NB2: character in problem setup)
@@ -364,6 +377,7 @@ output/YYYY-MM-DD/{GAME_TAG}/fake-ad/
 - ❌ Forgetting the TWIST — the product MUST fail at the worst possible moment. A straight commercial is not this format.
 - ❌ Character in the packshot (scene 4). Packshot = product only. Character presence kills the commercial ending.
 - ❌ Baking slogan text into NB2 — Kling warps it. Editor handles all text overlays.
+- ❌ Cropping the logo from a scene image (e.g. from the PADD in scene 1) — always captures borders/hands/background, degrades quality. Generate `product-logo.png` as a separate NB2 asset in Phase 3.
 - ❌ `generate_audio: true` — wastes ~$0.21/clip. TTS+music bed handle all audio.
 - ❌ Music gating (going silent during VO). Music is continuous in this format — the mismatch between upbeat music and the twist is intentional.
 - ❌ Long VO lines (>15 words per scene). Commercial rhythm = punchy, 6–12 words.
