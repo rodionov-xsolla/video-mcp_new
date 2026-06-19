@@ -1,7 +1,7 @@
 {
   "format": "in-game-pov",
   "game_tag": "star-trek-timelines",
-  "last_updated": "2026-06-16",
+  "last_updated": "2026-06-20",
   "used_situations": [
     {
       "situation": "Battle of Wolf 359 — Borg cube attack, your Starfleet vessel is crippled",
@@ -38,10 +38,19 @@
       "published": true,
       "status": "completed",
       "comment": "youtube: https://www.youtube.com/watch?v=xmCseaRhnCU (scheduled 2026-06-19). Survival arc: 12%→8%→18%→35%→52%→72%. 5 POV scenes: airlock→corridor→jefferies tube→engineering→transporter room."
+    },
+    {
+      "situation": "Romulan Warbird Ambush in the Neutral Zone — your Starfleet vessel is surrounded by three decloaking Warbirds",
+      "date": "2026-06-20",
+      "outcome": "survive",
+      "threat_type": "Romulan",
+      "published": true,
+      "status": "completed",
+      "comment": "youtube: https://www.youtube.com/watch?v=uZuSleljafo (scheduled 2026-06-22T20:59:00Z). Supabase: https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/star-trek-timelines/2026-06-19-in-game-pov/final.mp4. Survival arc: 8%→4%→22%→47%→71%. 5 POV scenes: bridge→corridor→auxiliary control→engineering→bridge clearing. Title card has TTS and Tactic Sans overlay."
     }
   ],
   "anti_repetition": {
-    "threat_types_used": ["Borg", "Borg", "Borg", "Dominion"],
-    "note": "Borg used 3 times, then Dominion. Next situation: avoid Borg and Dominion. Good candidates: Klingon Bird-of-Prey ambush, Romulan Warbird attack, Breen energy dampener, Species 8472 in fluidic space, Cardassian raid on DS9, Hirogen hunting party, Temporal anomaly (Krenim weapon), Holodeck malfunction trapping crew."
+    "threat_types_used": ["Borg", "Borg", "Borg", "Dominion", "Romulan"],
+    "note": "Borg used 3 times, then Dominion, then Romulan. Next situation: avoid Borg, Dominion, and Romulan. Good candidates: Klingon Bird-of-Prey ambush, Breen energy dampener, Species 8472 in fluidic space, Cardassian raid on DS9, Hirogen hunting party, Temporal anomaly (Krenim weapon), Holodeck malfunction trapping crew."
   }
 }

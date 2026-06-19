@@ -94,6 +94,17 @@ FONTS = {
         os.path.expanduser("~/Library/Fonts/BebasNeue-Regular.ttf"),
         "/System/Library/Fonts/Supplemental/Impact.ttf",
     ],
+    "TACTIC_DISPLAY": [
+        os.path.expanduser("~/Library/Fonts/TacticSans-Blk.otf"),
+        os.path.expanduser("~/Library/Fonts/TacticSans-Bld.otf"),
+        os.path.expanduser("~/Library/Fonts/TacticSansExd-Blk.otf"),
+        os.path.expanduser("~/Library/Fonts/TacticSansExtExd-Blk.otf"),
+    ],
+    "TACTIC_LABEL": [
+        os.path.expanduser("~/Library/Fonts/TacticSans-Bld.otf"),
+        os.path.expanduser("~/Library/Fonts/TacticSans-Med.otf"),
+        os.path.expanduser("~/Library/Fonts/TacticSansExd-Bld.otf"),
+    ],
 }
 
 # Color name -> ffmpeg-compatible (ffmpeg understands names, but we fix the set)
