@@ -11,7 +11,7 @@
 | `rules/main/` | Основные правила pipeline: budgets, fallback, скилл создания формата. Универсальные для ВСЕХ форматов. |
 | `rules/formats/` | Правила форматов видео. Каждый формат — отдельный самодостаточный файл. |
 | `games/{tag}/` | Конфиги игр. Каждая игра — отдельная папка. |
-| `tools/` | API-документация внешних сервисов (fal.ai, FFmpeg, Sjinn). |
+| `tools/` | Скрипты пайплайна (gate-скрипты, FFmpeg-хелперы) и API-документация внешних сервисов. Справочник — `SCRIPTS.md`. |
 | `music/` | Фоновая музыка (tracks.json). |
 | `queue/` | Система очередей задач (worker, scripts, Supabase интеграция). |
 | `output/` | Сгенерированные видео (вложенная структура). |
@@ -108,7 +108,7 @@ video-agent/
 ├── CLAUDE.md                    # Entry point агента
 ├── STRUCTURE.md                 # Этот файл
 ├── providers.json               # Активные API-провайдеры
-├── run.sh                       # Запуск генерации
+├── pipeline.sh                  # Запуск генерации (sub-agent orchestrator)
 │
 ├── rules/
 │   ├── main/
@@ -161,9 +161,13 @@ video-agent/
 │       └── top-list_special.md
 │
 ├── tools/
+│   ├── SCRIPTS.md              # Справочник всех скриптов пайплайна (назначение, аргументы, подводные камни)
+│   ├── add_subtitles.py        # ASS субтитры через Whisper (вызывается editor-агентом)
+│   ├── overlays.py             # drawtext фильтры для FFmpeg (вызывается editor-агентом)
+│   ├── gen-character-cards.sh  # Батч-генерация character sheets (NB2)
+│   ├── upload-voice-refs.sh    # Загрузка ElevenLabs voice refs в Supabase
 │   ├── fal-ai.md               # fal.ai API reference
-│   ├── ffmpeg-api.md           # FFmpeg API reference
-│   └── sjinn.md                # Sjinn TTS (legacy)
+│   └── ffmpeg-api.md           # FFmpeg Cloud API reference
 │
 ├── music/
 │   └── tracks.json
