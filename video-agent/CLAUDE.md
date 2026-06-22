@@ -16,18 +16,11 @@ What you personally do:
 ## Startup order
 
 1. **`git pull origin main`** — first thing. Team repo, rules change. On conflict — stop and ask the user; do not auto-merge.
-2. **Read `rules/roles/manager.md`** — format detection table, Supabase upload details, YouTube routing, phase contracts, Debug mode rules, API table. The FIXED EXECUTION SEQUENCE with gate commands is in the root `CLAUDE.md` (already in your context).
-3. **Read `rules/main/budgets.md` and `rules/main/fallback.md`** — limits and error handling.
-4. **Phase 0 — prep:**
-   - Detect format from the user request (format detection table is in `manager.md`).
-   - Create `OUTPUT_DIR` (`output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/`).
-   - Run `build_context.py` — assembles format rules, game config, special overrides, story state:
-     ```bash
-     python tools/build_context.py "$GAME_TAG" "$FORMAT" "$OUTPUT_DIR"
-     ```
-     On exit≠0 → STOP. On success → `$OUTPUT_DIR/merged-context.md` ready.
-   - Gather `EXISTING_REFS_JSON` from Supabase (game assets query).
-5. **Delegate phases via the `Agent` tool** per the fixed sequence in `manager.md`:
+2. **Read `rules/roles/manager.md`** — format detection table, Supabase upload details, YouTube routing, phase contracts, Debug mode rules, API table.
+3. **Detect format** from the user request → read `rules/formats/{format}.md` (only the "Manager" section / overall structure; per-role briefs are loaded by each sub-agent itself).
+4. **Read `rules/main/budgets.md` and `rules/main/fallback.md`** — limits and error handling.
+5. **Phase 0 — prep:** create `OUTPUT_DIR` (`output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/`), gather `EXISTING_REFS_JSON` from Supabase (if the format uses persisted assets), path to story bible for serial-drama / reddit-story.
+6. **Delegate phases via the `Agent` tool** in this order:
 
    | Phase | subagent_type | Model | Purpose |
    |---|---|---|---|
@@ -37,14 +30,14 @@ What you personally do:
    | 4. Animation | `animator` | sonnet | Kling I2V/Avatar v2 → MP4 per scene |
    | 5. Assembly | `editor` | sonnet | ffmpeg concat → `final.mp4`, subtitles, music, CTA, upload to Supabase |
 
-6. **For every sub-agent, pass in `prompt`** (it does not see your context):
+7. **For every sub-agent, pass in `prompt`** (it does not see your context):
    - `GAME_TAG`, `FORMAT`, `IDEA`, `OUTPUT_DIR`, `LANGUAGE` (default `en`)
-   - Scenarist: also `MERGED_CONTEXT_PATH` (path to `$OUTPUT_DIR/merged-context.md`)
+   - For serial-drama / reddit-story: path to story bible
    - Editor: also `SUBTITLES` and `OVERLAYS` booleans (read from format front-matter)
    - For formats with prebuilt assets: `EXISTING_REFS_JSON`, `OPENER_PATH`, `CTA_PATH`
    - Prompt templates in `prompts/*.txt` — always use as the base.
-7. **After every phase — run the gate script** (see fixed sequence in `manager.md`). If red → STOP, show error to user.
-8. **After Editor** — git add/commit/push; for serial-drama / reddit-story update the story bible (you do this, not the sub-agent); print the cost report.
+8. **After every phase — programmatic validation** (filesize/ffprobe/jq — no visual Read on PNG/MP4). If invalid → STOP, show error to user. Inline checks already live in `pipeline.sh`.
+9. **After Editor** — git add/commit/push; for serial-drama / reddit-story update the story bible (you do this, not the sub-agent); print the cost report.
 
 ## Universal principles
 
