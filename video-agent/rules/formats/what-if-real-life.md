@@ -243,7 +243,24 @@ Other scene types have no overlays (subtitles only).
 
 - Per-scene burn-in pipeline:
   - `title-card`: a GRAPHIC OVERLAY (`title` type in `scenes[].overlays[]`), rendered by `tools/overlays.py` (see `## Overlays`), NOT a subtitle. 4 lines: "What if..." / character name / "Becomes a" / role. No audio → anullsrc. MANDATORY.
-  - `dialogue-offscreen`: scale → amix(Avatar audio, customer.mp3). Both lines (character + off-screen customer) go into `voice-final.wav` and are subtitled in ONE universal style — there is no separate Customer style anymore. Burn — the shared `build/subs.ass` (editor.md §6).
+  - `dialogue-offscreen`: scale → amix(Avatar audio, customer.mp3) **in the final video**. Both lines (character + off-screen customer) go into `voice-final.wav` and are subtitled in ONE universal style — there is no separate Customer style anymore. Burn — the shared `build/subs.ass` (editor.md §6).
+
+    ⚠️ **voice-final.wav construction for dialogue-offscreen scenes — SEQUENTIAL, NOT amix:**
+    
+    The final video uses amix (customer plays during Avatar's silence window — that's correct). But `voice-final.wav` (fed to Whisper for subtitle timing) **must be built sequentially** — if you amix both audio streams into voice-final.wav, Whisper receives two voices simultaneously and will miss or misalign the customer lines entirely.
+    
+    Correct recipe per dialogue-offscreen scene (example: scene K, customer_dur = X seconds):
+    ```
+    # 1. Speed up customer
+    ffmpeg -y -i scenes/scene-K/customer.mp3 -filter:a "atempo=1.18" build/vf_sceneK_cust.wav
+    # 2. Extract Spock TTS from Avatar — trim the silent head (customer_dur + 0.6s), speed up
+    ffmpeg -y -i scenes/scene-K/scene-K.mp4 -vn -ss {X+0.6} -filter:a "atempo=1.18" build/vf_sceneK_spock.wav
+    # 3. Concat sequentially → customer speech then Spock speech
+    ffmpeg -y -i build/vf_sceneK_cust.wav -i build/vf_sceneK_spock.wav \
+      -filter_complex "[0:a][1:a]concat=n=2:v=0:a=1[out]" -map "[out]" build/vf_sceneK.wav
+    ```
+    
+    Result: Whisper hears customer line first → then Spock line → transcribes both → correct subtitle events for both speakers.
   - `dialogue-on-screen`: assemble shot-reverse-shot cuts → burn ASS.
   - `monologue` / `inner-thought`: silent I2V → overlay TTS (scene-K.mp3) via amix → burn ASS with Default style timed from 0:00:00.00.
   - `physical-gag`: I2V with Kling SFX baked → keep audio → no subtitles.
@@ -306,6 +323,7 @@ output/YYYY-MM-DD/{GAME_TAG}/what-if-real-life/
 - ❌ Two vignettes with the same gag mechanic (two "absurd customer order" gags, two "boss screams at toddlers" gags)
 - ❌ Calling Avatar v2 with non-padded audio when the gag needs customer-first rhythm
 - ❌ Forgetting to mix off-screen / narrator VO into the final audio (RMS check catches it)
+- ❌ Building `voice-final.wav` for dialogue-offscreen scenes via amix — customer and Spock get mixed simultaneously, Whisper misses customer lines entirely. Always use sequential concat: customer.mp3 → trimmed Spock TTS (see Editor brief above)
 - ❌ Masking the CJK artifact with a subtitle box/drawbox — the mask is removed; fix it with the hardened negative_prompt
 - ❌ Touching the subtitle MarginV — the position is fixed by the universal style (editor.md §6)
 - ❌ Music from `Dark/` or `Drama/` — mood mismatch
