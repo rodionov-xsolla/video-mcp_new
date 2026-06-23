@@ -256,3 +256,81 @@ output/YYYY-MM-DD/{GAME_TAG}/dual-style/
 - ❌ Trying to align cartoon and realistic by height — let chibi stay smaller
 - ❌ `character_speech ≠ null` (Kling I2V does not generate voice)
 - ❌ `-shortest` in ffmpeg
+
+---
+
+## Story Bible
+
+Create on first run: `games/{GAME_TAG}/dual-style_story_bible.json`
+
+```json
+{
+  "series_id": "dual-style-{GAME_TAG}",
+  "game_tag": "{GAME_TAG}",
+  "title": "{Game} Dual Style",
+  "created_at": "{TODAY}",
+  "last_episode": 0,
+  "character_pool": [
+    {
+      "character_name": "slug",
+      "display_name": "Name",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": null
+    }
+  ],
+  "character_rotation": {
+    "recent_characters": [],
+    "recent_actors": [],
+    "recent_environments": [],
+    "recent_action_types": [],
+    "cooldown_episodes": 10
+  },
+  "episode_summaries": [],
+  "cta_url": ""
+}
+```
+
+**`character_pool`** — mirrors the characters defined in `games/{GAME_TAG}/{GAME_TAG}.md` with dual-style blocks. Populate on first run; add new characters as they are added to the game config. `last_seen_episode: null` means the character has never been featured.
+
+**`episode_summary`** structure (FIFO 5):
+
+```json
+{
+  "episode": 1,
+  "date": "YYYY-MM-DD",
+  "characters": ["Venti", "Hu Tao"],
+  "environments": ["Mondstadt cliff", "Wuwang Hill graveyard"],
+  "actors": ["(none)", "(none)"],
+  "action_types": ["wide-introduction-pose", "dynamic-element-release"],
+  "final_url": "...",
+  "duration_sec": 20.0,
+  "cost_usd": 2.00
+}
+```
+
+**`action_types`** slugs — describe the VISUAL HOOK TYPE, not just the beat name. Examples: `wide-introduction-pose`, `weapon-draw-stance`, `element-burst-release`, `idle-confident-stance`, `sitting-meditate`, `walking-approach`, `dynamic-jump-landing`.
+
+**Story Bible update (Manager, after editor confirms `final.mp4`):**
+
+1. Characters used → append each to `recent_characters`; trim to last **10 episodes' worth** (FIFO).
+2. Actors used (if any named actor) → append to `recent_actors`; trim to last **10** items (FIFO).
+3. Environments used → append each to `recent_environments`; trim to last **6 episodes' worth** (FIFO).
+4. Action types used → append each to `recent_action_types`; trim to last **6** items (FIFO).
+5. For each character featured: set `character_pool[].last_seen_episode = current episode number`.
+6. Append `episode_summary`; FIFO keep last **5**.
+7. Increment `last_episode`.
+
+---
+
+## Anti-repetition check
+
+Before Phase 1 (scenarist), manager validates proposed character/environment selection:
+
+- [ ] None of the selected characters appear in `recent_characters` (last 10 episodes).
+- [ ] None of the selected environments appear in `recent_environments` (last 6 episodes).
+- [ ] None of the selected actors appear in `recent_actors` (last 10 items).
+- [ ] Proposed `action_types` do not repeat the same type 2+ times consecutively in `recent_action_types` tail.
+- [ ] Prefer characters with the lowest (or null) `last_seen_episode` when choosing from the pool.
+
+If a collision is found — scenarist picks different characters / environments before writing storyboard.json.

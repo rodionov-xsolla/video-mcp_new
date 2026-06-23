@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Gate: post-Editor validation — final.mp4 integrity + subtitle drift check.
 Usage: python tools/check_final.py --output-dir <path>

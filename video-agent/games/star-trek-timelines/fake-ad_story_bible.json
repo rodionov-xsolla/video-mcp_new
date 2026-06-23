@@ -1,0 +1,46 @@
+{
+  "series_id": "fake-ad-star-trek-timelines",
+  "game_tag": "star-trek-timelines",
+  "title": "Star Trek Timelines Fake Ad",
+  "created_at": "2026-06-18",
+  "last_episode": 1,
+  "advertised_products": [
+    "Vulcan Brow Design Salon"
+  ],
+  "anti_repetition": {
+    "recent_lines": [],
+    "recent_themes": [
+      "eyebrow styling"
+    ],
+    "recent_tones": [],
+    "recent_hooks": [
+      "extreme close-up eyebrow reveal"
+    ],
+    "recent_twist_types": [
+      "product works but misread as emotional response"
+    ],
+    "recent_problem_types": [],
+    "recent_characters": [
+      "Spock"
+    ],
+    "recent_environments": [
+      "Vulcan Logic Council",
+      "Enterprise corridor",
+      "Vulcan salon"
+    ],
+    "banned_combos": []
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "product": "Vulcan Brow Design Salon",
+      "theme": "eyebrow styling",
+      "twist": "emotional scanner detects Level 9 response to perfectly styled Vulcan brows",
+      "slogan": "Brows up — and you are on top",
+      "youtube_url": "https://www.youtube.com/watch?v=m1viXkXs_jI",
+      "scheduled_for": "2026-06-20T20:59:00Z",
+      "date": "2026-06-20"
+    }
+  ],
+  "cta_url": ""
+}

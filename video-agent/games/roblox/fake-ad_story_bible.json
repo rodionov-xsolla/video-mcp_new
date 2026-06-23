@@ -1,0 +1,55 @@
+{
+  "series_id": "fake-ad-roblox",
+  "game_tag": "roblox",
+  "title": "Roblox Fake Ad",
+  "created_at": "2026-06-18",
+  "last_episode": 1,
+  "advertised_products": [
+    {
+      "episode": 1,
+      "product_name": "Obby Energy",
+      "product_slug": "obby-energy",
+      "tagline": "Doesn't guarantee skill. Just confidence.",
+      "game_mechanic_referenced": "obby-obstacle-course",
+      "date": "2026-06-18"
+    }
+  ],
+  "anti_repetition": {
+    "recent_themes": ["obby-skill-check"],
+    "recent_tones": ["earnest-absurd"],
+    "recent_hooks": [
+      "Noob falling off obby for 47th time, Obby Energy drink appears, perfect jumps through every platform, runs straight past the exit — L detected face, wide eyes, mouth open"
+    ],
+    "recent_twist_types": ["run-past-exit"],
+    "recent_problem_types": ["obby-fail-loop"],
+    "recent_characters": ["Noob"],
+    "recent_environments": [
+      "colorful obby start platform neon edges glowing acid lava blocky Roblox style",
+      "colorful obby mid-section floating platforms lava below neon electric edges"
+    ],
+    "banned_combos": []
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-06-18",
+      "product_name": "Obby Energy",
+      "product_slug": "obby-energy",
+      "character": "Noob",
+      "theme": "obby-skill-check",
+      "twist_type": "run-past-exit",
+      "problem_type": "obby-fail-loop",
+      "environments": [
+        "colorful obby start platform neon edges glowing acid lava blocky Roblox style",
+        "colorful obby mid-section floating platforms lava below neon electric edges"
+      ],
+      "tone": "earnest-absurd",
+      "hook": "Noob falling off obby for 47th time, Obby Energy drink appears, perfect jumps through every platform, runs straight past the exit — L detected face, wide eyes, mouth open",
+      "final_url": "",
+      "duration_sec": 25.0,
+      "cost_usd": 2.75,
+      "notes": "Pilot episode. Twist: Noob gains perfect jumping ability but runs straight past the exit."
+    }
+  ],
+  "cta_url": ""
+}

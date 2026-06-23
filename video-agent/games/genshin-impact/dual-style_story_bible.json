@@ -1,0 +1,62 @@
+{
+  "series_id": "dual-style-genshin-impact",
+  "game_tag": "genshin-impact",
+  "title": "Genshin Impact Dual Style",
+  "created_at": "2026-06-09",
+  "last_episode": 1,
+  "character_pool": [
+    {"character_name": "venti",        "display_name": "Venti",          "has_actor_counterpart": false, "actor_name": null,                  "last_seen_episode": 1},
+    {"character_name": "hu-tao",       "display_name": "Hu Tao",         "has_actor_counterpart": false, "actor_name": null,                  "last_seen_episode": 1},
+    {"character_name": "zhongli",      "display_name": "Zhongli",        "has_actor_counterpart": false, "actor_name": null,                  "last_seen_episode": 1},
+    {"character_name": "diluc",        "display_name": "Diluc",          "has_actor_counterpart": false, "actor_name": null,                  "last_seen_episode": 1},
+    {"character_name": "raiden-shogun","display_name": "Raiden Shogun",  "has_actor_counterpart": true,  "actor_name": "Gal Gadot",           "last_seen_episode": null},
+    {"character_name": "tartaglia",    "display_name": "Tartaglia",      "has_actor_counterpart": true,  "actor_name": "Tom Holland",         "last_seen_episode": null},
+    {"character_name": "furina",       "display_name": "Furina",         "has_actor_counterpart": true,  "actor_name": "Florence Pugh",       "last_seen_episode": null},
+    {"character_name": "arlecchino",   "display_name": "Arlecchino",     "has_actor_counterpart": true,  "actor_name": "Eva Green",           "last_seen_episode": null},
+    {"character_name": "wriothesley",  "display_name": "Wriothesley",    "has_actor_counterpart": true,  "actor_name": "Henry Cavill",        "last_seen_episode": null},
+    {"character_name": "yae-miko",     "display_name": "Yae Miko",       "has_actor_counterpart": true,  "actor_name": "Margot Robbie",       "last_seen_episode": null},
+    {"character_name": "neuvillette",  "display_name": "Neuvillette",    "has_actor_counterpart": true,  "actor_name": "Timothée Chalamet",   "last_seen_episode": null},
+    {"character_name": "navia",        "display_name": "Navia",          "has_actor_counterpart": true,  "actor_name": "Sydney Sweeney",      "last_seen_episode": null},
+    {"character_name": "shenhe",       "display_name": "Shenhe",         "has_actor_counterpart": true,  "actor_name": "Emily Blunt",         "last_seen_episode": null},
+    {"character_name": "fischl",       "display_name": "Fischl",         "has_actor_counterpart": true,  "actor_name": "Anya Taylor-Joy",     "last_seen_episode": null},
+    {"character_name": "keqing",       "display_name": "Keqing",         "has_actor_counterpart": true,  "actor_name": "Zendaya",             "last_seen_episode": null},
+    {"character_name": "eula",         "display_name": "Eula",           "has_actor_counterpart": true,  "actor_name": "Scarlett Johansson",  "last_seen_episode": null}
+  ],
+  "character_rotation": {
+    "recent_characters": ["Venti", "Hu Tao", "Zhongli", "Diluc"],
+    "recent_actors": [],
+    "recent_environments": [
+      "Mondstadt windswept cliff edge",
+      "Wuwang Hill misty graveyard at dusk",
+      "Liyue Harbor stone dock at golden hour",
+      "Dawn Winery stone courtyard at night"
+    ],
+    "recent_action_types": [
+      "wide-introduction-pose",
+      "character-skill-pose",
+      "character-skill-pose",
+      "dynamic-element-release"
+    ],
+    "cooldown_episodes": 10
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-06-09",
+      "characters": ["Venti", "Hu Tao", "Zhongli", "Diluc"],
+      "environments": [
+        "Mondstadt windswept cliff edge",
+        "Wuwang Hill misty graveyard at dusk",
+        "Liyue Harbor stone dock at golden hour",
+        "Dawn Winery stone courtyard at night"
+      ],
+      "actors": ["(none)", "(none)", "(none)", "(none)"],
+      "action_types": ["wide-introduction-pose", "character-skill-pose", "character-skill-pose", "dynamic-element-release"],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-09/dual-style_final.mp4",
+      "duration_sec": 20.0,
+      "cost_usd": 2.00,
+      "notes": "Pilot episode. 4 characters: 4 generic (no actor counterparts). All Liyue/Mondstadt region environments."
+    }
+  ],
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4"
+}

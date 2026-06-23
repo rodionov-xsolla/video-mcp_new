@@ -32,6 +32,24 @@
       "Zhongli invented Mora but is canonically always broke/penniless",
       "Venti/Barbatos is the Anemo Archon who values freedom above all and frequently drinks wine"
     ],
+    "recent_satire_angles": ["dry-deadpan", "absurd"],
+    "recent_reporters": ["Hu Tao", "Fischl"],
+    "recent_hooks": [
+      {"text": "Liyue Commerce Bureau Opens Formal Inquiry: Mora's Inventor Found Penniless 14 Consecutive Weeks", "type": "mora-poverty-gag"},
+      {"text": "Mondstadt's Anemo Archon Sells 'Bottled Freedom' at Cathedral — Sold Out by Noon, Proceeds to Wine", "type": "archon-divine-triviality"}
+    ],
+    "recent_reporter_angles": [
+      {"reporter": "Hu Tao", "angle_type": "funeral-corporate-satire"},
+      {"reporter": "Fischl", "angle_type": "dramatic-theatrical-proclamation"}
+    ],
+    "anchor_joke_types": ["mora-poverty-gag"],
+    "recent_locations": [],
+    "banned_combos": [],
+    "serial_drama_exclusion_topics": [
+      "childe", "lumine", "fatui-agent",
+      "northland-bank", "golden-house",
+      "port-liyue-escape", "fatui-watcher", "liyue-harbor-rain"
+    ],
     "cooldown_episodes": 5
   },
   "episode_summaries": [

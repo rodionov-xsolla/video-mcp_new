@@ -30,7 +30,8 @@
       "tone_signature": "conspiratorial, knows more than he says, whisper-to-normal cadence, pauses for effect",
       "topics": ["politics", "king's-landing", "intrigue", "small-council"],
       "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/characters/varys/avatar.png",
-      "supabase_on_location_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/locations/varys-on-location-kings-landing.png"
+      "supabase_on_location_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/locations/varys-on-location-kings-landing.png",
+      "last_seen_episode": 1
     },
     {
       "stage": 1,
@@ -41,7 +42,8 @@
       "tone_signature": "flat deadpan monotone, zero emotional range, absurd content delivered with maximum sincerity",
       "topics": ["night's-watch", "the-wall", "north", "wildlings"],
       "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/characters/jon-snow/avatar.png",
-      "supabase_on_location_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/locations/jon-snow-on-location-the-wall.png"
+      "supabase_on_location_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/locations/jon-snow-on-location-the-wall.png",
+      "last_seen_episode": 1
     }
   ],
   "style_tone": "ironic|satirical|absurd|dry-deadpan",
@@ -51,6 +53,19 @@
       "Dragons in Westeros regularly cause fire damage — Drogon, Rhaegal etc.",
       "'Winter is Coming' — House Stark words repeated for decades before winter arrives"
     ],
+    "recent_satire_angles": ["absurd", "satirical"],
+    "recent_reporters": ["Varys", "Jon Snow"],
+    "recent_hooks": [
+      {"text": "Animal Control Opens Investigation Into Unsanctioned Dragon Flyovers — Drogon Melts Investigators' Clipboards", "type": "bureaucratic-monster-absurdism"},
+      {"text": "Night's Watch Retires 'Winter is Coming' After Phrase Loses Urgency — New Advisory: 'Dress Appropriately'", "type": "institutional-rebranding-satire"}
+    ],
+    "recent_reporter_angles": [
+      {"reporter": "Varys",    "angle_type": "conspiratorial-whisper"},
+      {"reporter": "Jon Snow", "angle_type": "flat-deadpan-monotone"}
+    ],
+    "anchor_joke_types": ["political-cynicism"],
+    "recent_locations": [],
+    "banned_combos": [],
     "cooldown_episodes": 5
   },
   "episode_summaries": [

@@ -261,6 +261,30 @@ Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, so
 ### Navia (realistic counterpart — Sydney Sweeney)
 `photorealistic Sydney Sweeney, American actress with expressive blue eyes natural curly blonde hair warm radiant smile and charismatic presence, wearing white and gold Victorian ball gown with rose motifs and layered ruffles, long curly blonde hair with rose ornaments, natural skin textures fair complexion, warm confident smile, tall elegant build`
 
+### Shenhe (game-style)
+`anime cel-shaded female adeptus Shenhe, pale icy blue and white qipao-style outfit with cryo rope chains wrapped around body and trailing behind, long white hair in elaborate updo with blue ornamental pins and loose strands, clean bold anime outlines, vibrant flat saturated colors, cold austere expression with faint distant gaze, cryo polearm with frost shimmer, tall slender powerful build, faint cryo ice crystal aura radiating around her`
+
+### Shenhe (realistic counterpart — Emily Blunt)
+`photorealistic Emily Blunt, British actress with expressive blue-grey eyes strong elegant features refined cheekbones and commanding graceful presence, wearing pale icy blue and white qipao-style outfit with rope chains as accessories, white hair in elaborate updo with blue ornamental pins, natural skin textures fair complexion, cold austere expression with distant authority, tall slender powerful build`
+
+### Fischl (game-style)
+`anime cel-shaded female Fischl von Luftschloss Narfidort, black and gold gothic aristocrat outfit with dramatic dark cape and ruffled details, long golden blonde hair with dark streaks and ornate black crow headpiece, clean bold anime outlines, vibrant flat saturated colors, theatrical haughty expression with dramatic flair, electro bow glowing with violet sparks, raven Oz perched on arm, slender elegant build, purple electro aura`
+
+### Fischl (realistic counterpart — Anya Taylor-Joy)
+`photorealistic Anya Taylor-Joy, British-American actress with striking large expressive blue-green eyes sharp high cheekbones distinctive elfin features and theatrical presence, wearing black and gold gothic aristocrat outfit with dramatic dark cape and ruffled details, long golden blonde hair with dark streaks and ornate black crow headpiece, natural skin textures fair complexion, theatrical haughty expression with dramatic intensity, slender elegant build`
+
+### Keqing (game-style)
+`anime cel-shaded female Yuheng of the Liyue Qixing Keqing, purple and white noble Chinese hanfu outfit with electro lightning motifs and ornate golden accessories, long purple hair in twin ox-horn buns with lightning ornaments, clean bold anime outlines, vibrant flat saturated colors, sharp confident expression with determined gaze, electro polearm crackling with violet lightning sparks, slender elegant build, soft purple electro aura`
+
+### Keqing (realistic counterpart — Zendaya)
+`photorealistic Zendaya, American actress with expressive dark eyes tall slender elegant frame natural commanding charisma and radiant presence, wearing purple and white noble Chinese hanfu outfit with golden accessories and electro lightning motifs, long purple styled hair in twin bun style with lightning ornaments, natural skin textures warm complexion, sharp confident expression with determined directness, tall slender elegant build`
+
+### Eula (game-style)
+`anime cel-shaded female Spindrift Knight Eula Lawrence, blue and white aristocrat military coat with cryo claymore carried over shoulder, short silver-white hair with blue ice crystal ornaments, clean bold anime outlines, vibrant flat saturated colors, cold disdainful expression with proud aristocratic bearing, cryo claymore blade shimmering with ice shards, tall athletic powerful build, faint cryo snowflake aura drifting around her`
+
+### Eula (realistic counterpart — Scarlett Johansson)
+`photorealistic Scarlett Johansson, American actress with strong jawline expressive blue-grey eyes athletic powerful build natural blonde hair and commanding screen presence, wearing blue and white aristocrat military coat with silver accents, short silver-white styled hair with blue ice ornaments, natural skin textures fair complexion, cold disdainful expression with proud bearing, tall athletic powerful build`
+
 ---
 
 ## Tone of Voice

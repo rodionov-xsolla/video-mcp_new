@@ -1,0 +1,20 @@
+{
+  "series_id": "fake-ad-got-conquest",
+  "game_tag": "got-conquest",
+  "title": "Game of Thrones Fake Ad",
+  "created_at": "2026-06-18",
+  "last_episode": 0,
+  "advertised_products": [],
+  "anti_repetition": {
+    "recent_themes": [],
+    "recent_tones": [],
+    "recent_hooks": [],
+    "recent_twist_types": [],
+    "recent_problem_types": [],
+    "recent_characters": [],
+    "recent_environments": [],
+    "banned_combos": []
+  },
+  "episode_summaries": [],
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/got-conquest/branding/cta.mp4"
+}
