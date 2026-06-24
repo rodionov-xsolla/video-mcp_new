@@ -106,6 +106,15 @@ If the user request contains the phrase **"Debug mode"** (or RU «Отладоч
 
 - **Animator confirm before any Kling clip > $0.30 in Debug mode.** Avatar v2 / I2V with audio at 5–10s is $0.28–$1.40 per attempt. In Debug mode, before launching a batch of ≥ 2 such clips, list the planned clips with per-clip cost and wait for OK.
 
+- **Voice approval before Sound (MANDATORY in Debug mode).** Before launching the Sound sub-agent, show the full voice mapping table and wait for explicit OK:
+
+  | Scene | Character | Role | Voice | Notes |
+  |---|---|---|---|---|
+  | 0 | … | anchor | VoiceName | new / locked-from-EP1 / … |
+  | 2 | … | reporter_1 | VoiceName | … |
+
+  For every voice, check ALL story bibles for this game (`serial-drama`, `fun-news`, `streettalk`, etc.) and flag any voice that is **already assigned to a different character** in any other format. Example: `George` is Spock in serial-drama — using it for Worf in fun-news creates a cross-format conflict. Surface these conflicts explicitly: `"⚠ George — already Spock in serial-drama. Use for Worf?"`. Do not start TTS until the user confirms the full mapping.
+
 Without this phrase — work autonomously.
 
 ---
