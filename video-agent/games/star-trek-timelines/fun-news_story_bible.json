@@ -3,7 +3,7 @@
   "game_tag": "star-trek-timelines",
   "title": "Star Trek Lore Newsflash",
   "created_at": "2026-05-26",
-  "last_episode": 1,
+  "last_episode": 2,
   "anchor": {
     "character_name": "q-anchor",
     "display_name": "Q",
@@ -27,6 +27,12 @@
         "stability": 0.55,
         "tone": "clinical-absurdism",
         "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/_unsorted/seven-on-location-riker-chair.png"
+      },
+      "commander-worf": {
+        "voice": "George",
+        "stability": 0.55,
+        "tone": "klingon-indignation",
+        "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/worf/sheet.png"
       }
     }
   },
@@ -38,33 +44,72 @@
   "style_tone": "ironic-satirical mix, Q-anchored omnipotent broadcast aesthetic, dry humor anchored by absurd canon facts",
   "topic_rotation": {
     "recent_topic_tags": [
-      "vulcan",
-      "logic",
-      "riker",
-      "starfleet-medical",
+      "klingon",
+      "bureaucracy",
+      "borg",
+      "assimilation",
+      "high-council",
       "tng",
-      "tos"
+      "form-qah7",
+      "unsolicited-feedback"
     ],
     "recent_canon_facts": [
-      "Vulcan Science Academy as central institution of Vulcan logic culture",
-      "Riker's signature move of climbing over chair backs"
+      "Klingon High Council issued Form QaH-7 requiring warriors to rate each kill's gloriousness in triplicate",
+      "Borg Collective rebranded resistance as 'unsolicited feedback' with voluntary opt-out"
     ],
-    "recent_satire_angles": [],
-    "recent_reporters": ["Spock", "Seven of Nine"],
+    "recent_satire_angles": ["bureaucratic-monster-absurdism", "government-agency-reaction"],
+    "recent_reporters": ["Worf", "Seven of Nine"],
     "recent_hooks": [
       {"text": "Vulcan Logic Conference cancelled — attendees logically concluded it was illogical", "type": "institutional-self-contradiction"},
-      {"text": "Commander Riker celebrates 40 years of climbing over chairs instead of walking around them", "type": "anniversary-absurdism"}
+      {"text": "Commander Riker celebrates 40 years of climbing over chairs instead of walking around them", "type": "anniversary-absurdism"},
+      {"text": "Q falls butt-first onto news desk — desk destroyed, broadcast continues", "type": "physical-comedy-hook"}
     ],
     "recent_reporter_angles": [
-      {"reporter": "Spock",       "angle_type": "vulcan-logic-satire"},
+      {"reporter": "Worf",         "angle_type": "bureaucratic-indignation"},
       {"reporter": "Seven of Nine","angle_type": "clinical-absurdism"}
     ],
-    "anchor_joke_types": ["omnipotent-boredom"],
-    "recent_locations": [],
+    "anchor_joke_types": ["omnipotent-boredom", "sarcastic-handoff", "civilizations-are-disappointing"],
+    "recent_locations": ["great-hall-qonos", "borg-cube-corridor"],
     "banned_combos": [],
     "cooldown_episodes": 5
   },
   "episode_summaries": [
+    {
+      "episode": 2,
+      "date": "2026-06-19",
+      "anchor": "Q",
+      "reporters": ["Worf", "Seven of Nine"],
+      "structure": "6 scenes — hook (Q falls on desk) → anchor intro → reporter 1 → anchor reaction → reporter 2 → anchor outro",
+      "hook_type": "physical-comedy-i2v",
+      "news_items": [
+        {
+          "index": 1,
+          "headline": "High Council Form QaH-7: warriors must rate each kill's gloriousness in triplicate",
+          "reporter": "Worf",
+          "satire_angle": "bureaucratic-monster-absurdism"
+        },
+        {
+          "index": 2,
+          "headline": "Borg Collective rebrands resistance as 'unsolicited feedback', 2.3 stars avg satisfaction",
+          "reporter": "Seven of Nine",
+          "satire_angle": "government-agency-reaction"
+        }
+      ],
+      "topic_tags": ["klingon", "bureaucracy", "borg", "assimilation", "form-qah7", "tng"],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/videos/star-trek-timelines/2026-06-19/fun-news_ep2_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=3RGmBwlIAD4",
+      "youtube_scheduled": "2026-06-26T20:59:00Z",
+      "duration_sec": 56.1,
+      "cost_breakdown": {
+        "scene0_i2v": 0.42,
+        "images_nb2": 0.24,
+        "tts_5_scenes": 0.30,
+        "avatar_v2_scenes_1_3": 1.34,
+        "avatar_v2_scenes_4_5": 1.24,
+        "total_usd": 3.54
+      },
+      "notes": "EP2 — Q falling I2V hook, Freesound CC0 crash SFX + jingle, Pillow subtitle rendering (libass not in FFmpeg build). Scene-0 audio: yelp (ElevenLabs George) + crash (Freesound #343164) + jingle (Freesound #709973). Within $4.50 cap."
+    },
     {
       "episode": 1,
       "date": "2026-05-26",
