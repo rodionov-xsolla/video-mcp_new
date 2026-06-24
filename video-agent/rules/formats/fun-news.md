@@ -43,15 +43,21 @@ Keywords: "fun news", "fictional news", "fake news", "lore news", "иронич�
 
 ## Visual Identity & Branding (MANDATORY)
 
-### Hook (scene 0) — per-episode I2V, always required from EP2+
+### Hook (scene 0) — reusable branding asset, always prepended
 
-Every fun-news episode must open with a **custom I2V hook clip** (scene 0). This replaces the pre-built static opener. Rules:
-- **Physical comedy beat** involving the anchor character — something goes wrong, unexpected, funny. Sets the chaotic tone before the news segment starts. Examples: anchor falls onto desk, chair collapses, teleports into wrong set.
-- **Title card burn-in** — show name (e.g. "Star Trek Lore Newsflash") appears on screen after the action beat, before cut to anchor dialogue. This is the brand touchpoint.
-- **SFX audio track** (not bg-music) — three-element sequence: yelp/reaction → impact SFX → jingle sting. Mix timed so jingle occupies the last ~3s of the clip (when title card appears). See SFX assembly below.
-- **No subtitles, no channel bug** on scene 0.
-- **Duration: ~4–6s** — short enough to be a hook, long enough for the action + title card.
-- **`opener: null` in storyboard.json** — scene 0 IS the opener; no pre-built opener.mp4 is used.
+Every fun-news episode opens with the **pre-built hook clip** stored in the story bible (`hook_url`). This is a one-time I2V clip with baked-in SFX audio — reused every episode, $0 cost per episode.
+
+**Default behaviour (Manager):** read `hook_url` from story bible, download, prepend as scene 0. No regeneration, no SFX work.
+
+**`opener: null` in storyboard.json** — hook IS the opener; no pre-built opener.mp4 is used.
+
+**No subtitles, no channel bug** on scene 0.
+
+#### When to regenerate the hook (explicit user request only)
+Only regenerate if the user explicitly asks for a new hook. Process:
+- **Kling I2V** — physical comedy beat with anchor (falls, teleports, chair collapses, etc.). Wide/action shot. Title card burn-in after action beat shows show name. ~4–6s.
+- **SFX audio** — three-element mix: yelp/reaction (ElevenLabs) → impact SFX (Freesound CC0) → jingle sting (Freesound CC0). Jingle occupies last ~3s (when title card appears). Mix with FFmpeg `filter_complex` + `loudnorm`.
+- After approval: upload new clip to `star-trek-timelines/branding/hook.mp4` (upsert), update `hook_url` in story bible, git push.
 
 ### Opener music = CTA music (same theme, only at those two points)
 
