@@ -204,9 +204,9 @@ With 1 reporter: scenes 1, 2, 3, 4, 5 = anchor → R1 → anchor reaction (recap
 | Scene | Words | Raw TTS @ ~2.5 wps | Sped @ 1.3× | Cost (Avatar v2) |
 |---|---|---|---|---|
 | 1 Anchor intro | 15–20 | ~6–8s | ~5–6s | ~$0.40 |
-| 2 Reporter 1 | 20–28 | ~8–11s | ~6–8s | ~$0.50 |
+| 2 Reporter 1 | **max 18** | ~5–7s | ~5–7s | ~$0.35 |
 | 3 Anchor reaction | 5–10 | ~3–5s | ~2.5–4s | ~$0.25 |
-| 4 Reporter 2 | 20–28 | ~8–11s | ~6–8s | ~$0.50 |
+| 4 Reporter 2 | **max 18** | ~5–7s | ~5–7s | ~$0.35 |
 | 5 Anchor outro | 15–20 | ~6–10s | ~5–8s | ~$0.45 |
 | **Total** | **~95** | **~35–45s** | **~27–35s** | **~$2.10** |
 
@@ -222,7 +222,13 @@ For each dialogue scene:
    - `image_url` = avatar ref from Supabase (9:16, not square). Anchor uses the studio avatar; reporters use the per-episode **on-location** edit from Phase 2.
    - `audio_url` = TTS mp3 **from Supabase** (not fal.ai temp URL).
    - Note: Avatar v2 currently accepts only `image_url` + `audio_url` per fal docs — no `motion_prompt` or `negative_prompt` are sent (the ones in `storyboard.json` are documentation hints for future Lipsync model upgrades).
-3. **Avatar v2 output duration ≈ input audio duration**, with a small trailing-silence buffer (often 0.05–1.8s where video continues with mouth-closed pose). This trailing buffer matters for assembly — Editor must `apad` per-scene audio to the **video** duration, not the **audio** duration, or lipsync drifts (see Phase 5 + Anti-patterns).
+3. **Avatar v2 output duration ≈ input audio duration + 0.05–1.8s trailing tail.** In this tail the character silently nods, blinks, or moves lips without sound — visibly awkward and bloats runtime. **Animator must trim each clip to `tts_dur + 0.2s` immediately after download:**
+   ```bash
+   TTS_DUR=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 scene-N.mp3)
+   TRIM=$(python3 -c "print(round(float('$TTS_DUR') + 0.2, 3))")
+   ffmpeg -y -i scene-N-raw.mp4 -t $TRIM -c copy scene-N.mp4
+   ```
+   0.2s grace prevents cutting the last syllable. After trimming, Editor applies `apad=whole_dur=<trimmed_video_dur>` to align audio in the concat graph (see Phase 5).
 4. **No speedup.** Avatar v2 raw output goes straight into the Editor's canonical pipeline at natural TTS speed. Applying atempo=1.3 makes characters sound unnatural and creates AV sync drift when combined with Avatar v2's trailing-silence tail.
 
 ### Phase 5: Assembly (FFmpeg)
@@ -258,7 +264,7 @@ Output:
   build/final.tmp.mp4   → mv final.mp4 after ffprobe-validate
 ```
 
-**Critical:** the per-scene `apad=whole_dur=<raw_video_dur>` is **mandatory**. Avatar v2 returns video that is 0.05–1.8s longer than the input audio (trailing silence with mouth-closed pose). Without `apad`, the concat audio runs ahead of concat video, accumulating a multi-second lip-sync drift by scene 5. See Anti-patterns.
+**Critical:** Animator trims each Avatar v2 clip to `tts_dur + 0.2s` before handing off to Editor (see Phase 4 step 3). Editor then applies `apad=whole_dur=<trimmed_video_dur>` per scene to align audio in the concat graph. Without the trim, the character silently nods or moves lips with no sound — visually broken and bloats runtime. Without `apad`, audio drifts ahead of video by scene 5.
 
 **ASS subtitles** — one ASS per scene via `tools/add_subtitles.py --emit-ass-only --emphasis "<kicker phrases>"`, burned into the corresponding `[vk]` branch BEFORE concat. Per-scene burn-in (rather than one ASS over concat) keeps timings local and trivially correct.
 
@@ -535,7 +541,7 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 ### Scenarist
 - **5 dialogue scenes** (opener/CTA are pre-built — not in storyboard). Structure: anchor intro → reporter 1 → anchor reaction → reporter 2 → anchor outro.
 - Fictional headlines derived from canon lore (no real patch notes).
-- Word budget: anchor intro 15–20, reporter 20–28, anchor reaction 5–10, reporter 20–28, anchor outro 15–20.
+- Word budget: anchor intro 15–20, **reporter max 18 (hard cap)**, anchor reaction 5–10, **reporter max 18 (hard cap)**, anchor outro 15–20.
 - **Hook-first intro** — do NOT tease item contents in scene 1 (spoiler). Tease the brand/show, not the news.
 - Anchor reaction (scene 3) is sarcastic/dismissive — NOT a recap of item 1.
 - Mandatory by-name handoffs. Reporter handoff is single-word: `"{Anchor name}?"`
@@ -587,7 +593,8 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 ### Editor
 - Canonical single-pass `filter_complex` (see `rules/roles/editor.md` §0). One ffmpeg call, no intermediate re-encodes.
 - Inputs: 5 scene mp4s + opener + cta + bg-music.
-- **Per-scene `apad=whole_dur=<sped_video_dur>` on audio** — non-negotiable. Without it, audio leads video by 3+ seconds by scene 5.
+- **Animator trims each Avatar v2 clip to `tts_dur + 0.2s`** before handoff (silent nod/lip-move tail kills retention). Editor receives already-trimmed clips.
+- **Per-scene `apad=whole_dur=<trimmed_video_dur>` on audio** — non-negotiable. Without it, audio leads video by 3+ seconds by scene 5.
 - Per-scene ASS burn-in inside each `[vk]` branch BEFORE concat.
 - `adelay=2000|2000` on concat dialogue audio (matches 2s opener silence).
 - Fade-out on scene-5 video (last 1s before CTA) + afade-out on music.
@@ -644,9 +651,11 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 - ❌ Same `satire_angle` on adjacent reporter scenes.
 - ❌ Avatar v2 cost estimate based on "N × 5s clip" — **WRONG**. Avatar v2 is billed per **second of input audio**. A 17s mp3 input costs $0.95, not $0.28. Compute from word-budget table.
 - ❌ Pre-encoding `-fast.mp4` per scene — no speedup is applied; Avatar v2 raw output is used as-is.
-- ❌ Audio concat **without** per-scene `apad=whole_dur=<sped_video_dur>` — Avatar v2's trailing silence in video makes the audio run shorter than video per scene; concat without padding stacks the drift across all 5 scenes (up to 4s by the outro).
+- ❌ **Skipping Avatar v2 tail trim** — character silently nods/moves lips for 1-2s with no audio. Bloats runtime, looks broken, hurts retention. Animator must trim to `tts_dur + 0.2s` before handoff.
+- ❌ Audio concat **without** per-scene `apad=whole_dur=<trimmed_video_dur>` — even after trim there's still a tiny delta; without `apad` the drift stacks across all 5 scenes (up to 4s by the outro).
 - ❌ Bash off-by-one in scene-id arrays during download — prefer `declare -a IDS; IDS[N]=...` indexing or named structs over `IDS=("" "a" "b")` + `IDS[$((N-1))]`.
 - ❌ `-shortest` in FFmpeg (use `apad` and `-t TOTAL_DUR`).
+- ❌ Reporter dialogue over 18 words — every comma, period, and dash adds 0.3–0.8s of TTS dead air; deliberate character voices (Klingon, Vulcan) amplify this. Keep reporter lines punchy: 1–2 short sentences + kicker word. HARD CAP: 18 words per reporter scene.
 - ❌ `energetic-simulacao` track for fun-news — confirmed too gloomy/dark for satirical ironic news tone (Genshin EP1 pilot). Pick a track with a clearly upbeat comedic feel; `energetic-simulacao` is in `tracks.json` `not_for: ["fun-news"]`.
 - ❌ No location ambient SFX on reporter scenes — every on-location reporter scene must have a `scene_ambient` block describing the background noise of the location (market crowd, wind, city bustle, nature, etc.) at volume 0.08–0.12. Silence on location feels unnatural. See Scenarist brief below.
 - ❌ TTS `speed` parameter > 1.0 — always generate TTS at `speed=1.0` (or omit the field). There is no Editor-side speedup to "absorb" a fast TTS. If a reporter's line sounds too long, shorten the text.
