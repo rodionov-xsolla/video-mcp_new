@@ -123,7 +123,10 @@ def main():
         )
 
         # ── Check 1: image_url HTTP 200 ────────────────────────────────────
-        if image_url:
+        # CTA clips use source_url (pre-rendered video) — no scene PNG required
+        if clip_type == "cta" or clip.get("source_url"):
+            pass
+        elif image_url:
             if not http_head_ok(image_url):
                 errors.append(f"scene-{idx}: scene_image URL returns non-200 — {truncate(image_url, 80)}")
         else:
