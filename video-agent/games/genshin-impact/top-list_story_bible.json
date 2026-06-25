@@ -1,0 +1,108 @@
+{
+  "series_id": "top-list-genshin-impact",
+  "game_tag": "genshin-impact",
+  "title": "Genshin Impact Top Lists",
+  "created_at": "2026-06-19",
+  "last_episode": 2,
+  "anti_repetition": {
+    "cooldown_episodes": 6,
+    "recent_themes": [
+      "GENSHIN WOMEN",
+      "GENSHIN MEN"
+    ],
+    "recent_categories": [
+      "female-characters",
+      "male-characters"
+    ],
+    "recent_winners": [
+      "Furina",
+      "Zhongli"
+    ],
+    "recent_entries": [
+      "Ganyu",
+      "Hu Tao",
+      "Yae Miko",
+      "Raiden Shogun",
+      "Furina",
+      "Kazuha",
+      "Xiao",
+      "Tartaglia",
+      "Neuvillette",
+      "Zhongli"
+    ]
+  },
+  "reserved_topics": [],
+  "lists": [
+    {
+      "episode": 1,
+      "date": "2026-06-02",
+      "theme": "GENSHIN WOMEN",
+      "category": "female-characters",
+      "ranking_basis": "recognizability + visual variety + iconic status",
+      "entries": [
+        {
+          "rank": 5,
+          "name": "Ganyu"
+        },
+        {
+          "rank": 4,
+          "name": "Hu Tao"
+        },
+        {
+          "rank": 3,
+          "name": "Yae Miko"
+        },
+        {
+          "rank": 2,
+          "name": "Raiden Shogun"
+        },
+        {
+          "rank": 1,
+          "name": "Furina"
+        }
+      ],
+      "winner": "Furina",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/genshin-impact/2026-06-02-top-list/final.mp4",
+      "youtube_url": "",
+      "duration_sec": 35.3,
+      "status": "completed",
+      "notes": "Backfilled from output/2026-06-02/genshin-impact/top-list/storyboard.json after adding top-list story bible support."
+    },
+    {
+      "episode": 2,
+      "date": "2026-06-19",
+      "theme": "GENSHIN MEN",
+      "category": "male-characters",
+      "ranking_basis": "lore impact + recognizability + visual variety, not current patch meta",
+      "entries": [
+        {
+          "rank": 5,
+          "name": "Kazuha"
+        },
+        {
+          "rank": 4,
+          "name": "Xiao"
+        },
+        {
+          "rank": 3,
+          "name": "Tartaglia"
+        },
+        {
+          "rank": 2,
+          "name": "Neuvillette"
+        },
+        {
+          "rank": 1,
+          "name": "Zhongli"
+        }
+      ],
+      "winner": "Zhongli",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/videos/genshin-impact/2026-06-19/top-list_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=MZhLG0_fQ8o",
+      "duration_sec": 40.3,
+      "status": "scheduled_private",
+      "notes": "Assembled in debug mode with rank-only overlays, spoken names in TTS, and Supabase CTA pack-shot appended after scene 6.",
+      "youtube_publish_at": "2026-06-24T20:59:00Z"
+    }
+  ]
+}
