@@ -199,7 +199,7 @@ If these blocks are missing — Manager must flag and stop until they are added.
   - Save to: `OUTPUT_DIR/scenes/scene-K/scene-K-sfx.wav`; convert to mp3 via ffmpeg if needed
   - One SFX file per scene; write `sfx_url` (local path) back into storyboard.json
   - Cost: **$0.01 per generation** (4 scenes = $0.04)
-- Music mood: **`energetic` or `fun`** (not `heroic`/`ethereal`) — pick from `music/tracks.json`
+- Music: **обязательно генерировать через MiniMax Music v2.6** (`fal-ai/minimax-music/v2.6`, $0.03/трек). Треки из `music/tracks.json` запрещены — правообладатель подаёт страйки, видео попадают в теневой бан. Параметры: `is_instrumental: true`, mood energetic/upbeat, BPM 120–150. Длительность: не менее длительности финального видео (≥25s). Сохранить как `OUTPUT_DIR/bg-music.mp3`.
 - Subtitles do not apply
 - General rules — `rules/roles/sound.md`
 
