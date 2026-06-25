@@ -734,6 +734,7 @@ RESULT_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}"
 | `fal-ai/kling-video/v3/pro/motion-control` | `fal-ai/kling-video` |
 | `fal-ai/elevenlabs/tts/eleven-v3` | `fal-ai/elevenlabs` |
 | `fal-ai/veo3` | `fal-ai/veo3` |
+| `fal-ai/minimax-music/v2.6` | `fal-ai/minimax-music` |
 | `fal-ai/gpt-image-1/text-to-image` | `fal-ai/gpt-image-1` |
 | `fal-ai/heygen/avatar4/image-to-video` | `fal-ai/heygen` |
 
@@ -936,6 +937,73 @@ Nano Banana 2 (avatar ref) → ElevenLabs TTS (speech.wav, через fal.ai) �
 ```
 
 > **Используй как fallback**, если HeyGen Avatar IV не работает. Дешевле ($0.056/сек vs $0.10/сек), но требует отдельный TTS.
+
+---
+
+## 8. MiniMax Music v2.6 — AI-generated background music
+
+**Endpoint:** `https://queue.fal.run/fal-ai/minimax-music/v2.6`
+**Polling base:** `fal-ai/minimax-music`
+**Стоимость:** $0.03 за трек
+
+> Генерирует инструментальную музыку по текстовому описанию. Используется для форматов, где треки из библиотеки запрещены (авторские права → страйки). `is_instrumental: true` — обязательно для фоновой музыки без вокала.
+
+### Запрос
+
+```bash
+cat > /tmp/music-body.json << 'EOF'
+{
+  "style": "energetic upbeat anime action music, driving beat 140bpm, orchestral synth blend, heroic bold melody, suitable for vertical short video, cinematic hype",
+  "is_instrumental": true,
+  "duration": 30
+}
+EOF
+
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/minimax-music/v2.6" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d @/tmp/music-body.json)
+
+REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
+```
+
+### Параметры
+
+| Параметр | Тип | Обязательный | Описание |
+|----------|-----|-------------|----------|
+| `style` | string | Да | Описание стиля (до 2000 символов) |
+| `is_instrumental` | boolean | Нет | `true` = без вокала. **Всегда `true` для фоновой музыки** |
+| `duration` | integer | Нет | Длительность в секундах (рекомендуется 30–60) |
+
+### Polling
+
+```bash
+while true; do
+  STATUS=$(curl -s "https://queue.fal.run/fal-ai/minimax-music/requests/$REQUEST_ID/status" \
+    -H "Authorization: Key $FAL_KEY" | jq -r '.status')
+  case "$STATUS" in
+    "COMPLETED") break ;;
+    "FAILED") echo "FAILED"; exit 1 ;;
+    *) sleep 15 ;;
+  esac
+done
+
+RESULT=$(curl -s "https://queue.fal.run/fal-ai/minimax-music/requests/$REQUEST_ID" \
+  -H "Authorization: Key $FAL_KEY")
+AUDIO_URL=$(echo "$RESULT" | jq -r '.audio.url // .audio_file.url')
+curl -s -o bg-music.mp3 "$AUDIO_URL"
+```
+
+### Ответ
+
+```json
+{
+  "audio": {
+    "url": "https://fal.media/files/abc123/music.mp3",
+    "content_type": "audio/mpeg"
+  }
+}
+```
 
 ---
 
