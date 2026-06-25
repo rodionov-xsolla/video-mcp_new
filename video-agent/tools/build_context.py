@@ -18,7 +18,7 @@ import sys
 import json
 import pathlib
 
-STORY_BIBLE_FORMATS = {"serial-drama", "reddit-story", "fun-news", "streettalk", "special-report", "in-game-pov"}
+STORY_BIBLE_FORMATS = {"serial-drama", "reddit-story", "fun-news", "streettalk", "special-report"}
 
 
 def render_serial_drama_state(bible: dict) -> str:
@@ -97,46 +97,6 @@ def render_reddit_story_state(bible: dict) -> str:
             lines.append(f"**Recently used tones:** {', '.join(recent_tones[-4:])}")
         if banned:
             lines.append(f"**Banned combos:** {', '.join(str(b) for b in banned[-3:])}")
-
-    return "\n".join(lines)
-
-
-def render_in_game_pov_state(bible: dict) -> str:
-    lines = []
-    situations = bible.get("used_situations", [])
-    lines.append(f"**In-game POV situations produced:** {len(situations)}")
-
-    if situations:
-        lines.append("\n**Used situations (do not repeat core premise/threat):**")
-        for item in situations:
-            situation = item.get("situation", "")
-            date = item.get("date", "?")
-            outcome = item.get("outcome", "")
-            threat_type = item.get("threat_type", "")
-            status = item.get("status", "")
-            published = item.get("published")
-            comment = item.get("comment", "")
-            line = f"  - {date}: {situation}"
-            if outcome:
-                line += f" | outcome={outcome}"
-            if threat_type:
-                line += f" | threat_type={threat_type}"
-            if status:
-                line += f" | status={status}"
-            if published is not None:
-                line += f" | published={published}"
-            if comment:
-                line += f" | comment={comment}"
-            lines.append(line)
-
-    anti = bible.get("anti_repetition", {})
-    if isinstance(anti, dict):
-        threat_types = anti.get("threat_types_used", [])
-        note = anti.get("note", "")
-        if threat_types:
-            lines.append(f"\n**Threat types used (avoid recent):** {', '.join(str(t) for t in threat_types)}")
-        if note:
-            lines.append(f"**Anti-repetition note:** {note}")
 
     return "\n".join(lines)
 
@@ -241,8 +201,6 @@ def main():
             state_text = render_serial_drama_state(story_bible_data)
         elif format_slug == "reddit-story":
             state_text = render_reddit_story_state(story_bible_data)
-        elif format_slug == "in-game-pov":
-            state_text = render_in_game_pov_state(story_bible_data)
         else:
             state_text = render_generic_state(story_bible_data)
         sections.append(f"## Story State\n\n{state_text}")
