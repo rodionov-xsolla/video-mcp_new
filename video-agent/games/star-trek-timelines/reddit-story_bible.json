@@ -1,6 +1,6 @@
 {
   "game_tag": "star-trek-timelines",
-  "total_stories": 2,
+  "total_stories": 3,
   "stories": [
     {
       "id": 1,
@@ -23,21 +23,56 @@
       "output_dir": "output/2026-06-08/star-trek-timelines/reddit-story/",
       "youtube_url": "https://www.youtube.com/watch?v=KHAj4ChPkHs",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-08/reddit-story_final.mp4"
+    },
+    {
+      "id": 3,
+      "date": "2026-06-30",
+      "tone": "soft drama",
+      "theme": "lonely-player-finds-friendship-through-fleet-chat",
+      "headline": "I downloaded a free game from a bio link and found a way through loneliness.",
+      "offerwall_angle": null,
+      "moral_engine": "mocked and misjudged as using a helpful player for free carries",
+      "game_situation": "lonely new player joins a Star Trek Timelines fleet",
+      "false_verdict": "the narrator only talks to TemporalMedic to get carried",
+      "pressure_source": "fleet chat accusing the narrator of farming sympathy and free help",
+      "resolution_type": "positive",
+      "output_dir": "output/2026-06-26/star-trek-timelines/reddit-story-dramatic/",
+      "youtube_url": "https://www.youtube.com/watch?v=9KzlGfoDVb8",
+      "yt_publish_at": "2026-06-30T20:59:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-26/reddit-story_dramatic_final.mp4"
     }
   ],
   "anti_repetition": {
     "recent_themes": [
       "gauntlet-comeback-behold-seven-of-nine",
-      "real-life-friendship-fleet-surgeon"
+      "real-life-friendship-fleet-surgeon",
+      "lonely-player-finds-friendship-through-fleet-chat"
     ],
     "recent_tones": [
       "dramatic",
-      "warm"
+      "warm",
+      "soft drama"
     ],
     "recent_hooks": [
       "three years playing, hit a wall with Gauntlet, offerwall tasks, Behold pull",
-      "LogicOverFear username, best fleet tactician, surgeon reveal, COVID lockdowns, pasta dinner"
+      "LogicOverFear username, best fleet tactician, surgeon reveal, COVID lockdowns, pasta dinner",
+      "bio link download, lonely group-chat avoider, accused of using TemporalMedic for free carries, chat logs reveal he helped everyone"
     ],
-    "banned_combos": []
+    "banned_combos": [],
+    "recent_moral_engines": [
+      "misjudged friendship as manipulation"
+    ],
+    "recent_game_situations": [
+      "lonely new player joins a Star Trek Timelines fleet"
+    ],
+    "recent_false_verdicts": [
+      "the narrator only talks to TemporalMedic to get carried"
+    ],
+    "recent_pressure_sources": [
+      "fleet chat accusations"
+    ],
+    "recent_resolution_types": [
+      "positive"
+    ]
   }
 }

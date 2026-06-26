@@ -1,6 +1,6 @@
 # Editor — FFmpeg assembly craft
 
-You are the editor. Manager passes you: all `scene-K.mp4`, audio (TTS / Avatar audio / bg music), subtitles (if pre-made), format (split-screen / vertical), **opener and CTA from Supabase** (`.mp4` videos). You assemble `final.mp4` (1080×1920).
+You are the editor. Manager passes you: all `scene-K.mp4`, audio (embedded I2V/Avatar audio, optional external TTS/VO, bg music), subtitles (if pre-made), format (split-screen / vertical), **opener and CTA from Supabase** (`.mp4` videos). You assemble `final.mp4` (1080×1920).
 
 **Core principles:**
 1. **One ffmpeg pipeline, not layered.** Each intermediate re-encode = quality loss and DTS issues.
@@ -26,7 +26,7 @@ Variable `$FFMPEG` defaults to `/usr/local/bin/ffmpeg-full/ffmpeg` (when drawtex
 
 From Manager:
 - `scenes/scene-K/scene-K.mp4` (K = 1..N) — animated clips (from Animator)
-- `scenes/scene-K/scene-K.mp3` (opt.) — TTS audio (from Sound; for serial-drama I2V overlay; Avatar clips have embedded audio)
+- `scenes/scene-K/scene-K.mp3` (opt.) — external TTS/VO audio from Sound (Avatar/TTS-overlay formats, narrator/off-screen VO). Serial-drama I2V dialogue normally has embedded audio in `scene-K.mp4`.
 - `bg-music.mp3` (opt.) — background music (from Sound)
 - `storyboard.json` — for subtitle generation (line text, timings)
 - `opener.mp4` (opt.) — opener video from Supabase (tag `opener` + `video`)
@@ -308,11 +308,11 @@ f"[{i}:v]trim=end={tts_dur},setpts=PTS-STARTPTS,scale=...,fps=30,setsar=1[sv{i}]
 f"[{i}:a]atrim=end={tts_dur},asetpts=PTS-STARTPTS,aformat=sample_rates=44100:channel_layouts=stereo[sa{i}]"
 ```
 
-**I2V clips: NEVER trim.** Their declared duration is intentional. Only Avatar (dialogue) clips are trimmed.
+**I2V clips: NEVER trim.** Their declared duration is intentional. Only Avatar-based dialogue clips are trimmed.
 
-### 1.0b Joint v+a concat for formats with embedded Avatar audio
+### 1.0b Joint v+a concat for formats with embedded dialogue audio
 
-When Avatar clips carry embedded lipsync audio (serial-drama, character-story), **never split video and audio into two separate concat chains** — they will drift under any A/V processing. Instead use a single `concat=n=N:v=1:a=1` with interleaved pairs:
+When clips carry embedded dialogue audio (serial-drama I2V `generate_audio:true`, Avatar-based formats), **never split video and audio into two separate concat chains** — they will drift under any A/V processing. Instead use a single `concat=n=N:v=1:a=1` with interleaved pairs:
 
 ```python
 # Interleaved: [sv0][sa0][sv1][sa1]...[svN-1][saN-1]
@@ -320,7 +320,8 @@ pairs = "".join(f"[sv{i}][sa{i}]" for i in range(n))
 f"{pairs}concat=n={n}:v=1:a=1[vconcat][aconcat]"
 ```
 
-- I2V clips: pair `[sv_i]` (scaled video) with `[sa_i]` generated from `anullsrc` (they have no audio).
+- I2V clips with audio: pair `[sv_i]` (scaled video, never trimmed) with `[sa_i]` (normalized audio from embedded stream).
+- I2V clips without audio: pair `[sv_i]` with `[sa_i]` generated from `anullsrc`.
 - Avatar clips: pair `[sv_i]` (scaled+trimmed) with `[sa_i]` (trimmed audio from embedded stream).
 - CTA: pair scaled video with `anullsrc,atrim=duration={CTA_DUR}`.
 
@@ -429,7 +430,7 @@ No manual drawtext here. For serial-drama there is none at all (cold open on the
 
 ## 3d. Speed up the video (LEGACY — DO NOT USE for serial-drama)
 
-> ⚠️ **OVERRIDE — for `serial-drama`: SKIP this section.** `formats/serial-drama.md` explicitly says `Do NOT speed up Avatar` and clip durations in the storyboard are the final timings (5s = 5s, not 5/1.15s). 1.15x bump on the whole episode also accelerates I2V action that the scenarist already paced at 5s. The block below applies only to formats that explicitly request the 1.15x bump in their playbook (e.g. `gameplay-ai-avatar` has its own 1.3x rule for Avatar audio, see section 11 of `animator.md`).
+> ⚠️ **OVERRIDE — for `serial-drama`: SKIP this section.** Serial-drama is I2V-only and clip durations in the storyboard are the final timings (5s = 5s, not 5/1.15s). 1.15x bump on the whole episode accelerates I2V action/dialogue that the scenarist already paced. The block below applies only to formats that explicitly request the 1.15x bump in their playbook (e.g. `gameplay-ai-avatar` has its own 1.3x rule for Avatar audio, see section 11 of `animator.md`).
 
 **After concat, BEFORE music overlay** (legacy formats only) — speed up the whole video by ~1.15x. This makes the video more dynamic without noticeable voice distortion.
 
@@ -648,7 +649,7 @@ video chain before `-map [v…]`.
 **SUB-2 — Loudnorm 2-pass on the final audio** (-14 LUFS / -1 dBTP / 11 LU). Two passes (measure →
 apply), otherwise social platforms drop the volume unevenly across scenes.
 
-**SUB-4 — subtitle events must not bleed into non-dialogue (I2V) clips.** For formats with interleaved Avatar + I2V clips (serial-drama, news, gameplay-ai-avatar, etc.), each Dialogue event in `subs.ass` must satisfy `End ≤ cumulative_start_of_scene + tts_duration_sec`. Whisper frequently assigns wildly wrong End-timestamps for short TTS clips (<2.5s) — e.g. a 1.96s clip gets `End=12.20s`, spanning the entire next I2V scene. After `add_subtitles.py` runs, inspect every event: if `End` exceeds `scene_start + tts_dur`, cap it. Compute cumulative starts from the assembled timeline (Avatar clips trimmed to TTS duration, I2V at full Kling duration).
+**SUB-4 — subtitle events must not bleed outside dialogue scene windows.** After `add_subtitles.py` runs, build the cumulative timeline from the actual scene MP4 durations and classify clips from `storyboard.json`. Every ASS `Dialogue` event must fit inside one dialogue clip window. If an event overlaps action/silent I2V, CTA, or the next dialogue scene, clamp it to the dialogue window it overlaps most. If Whisper merged words across a boundary (`THE GIRL DIPLOMACY`, `HOW CIVILIZATIONS FALL FIRST`), split the text manually at the scene boundary. This applies to serial-drama I2V dialogue as well as Avatar-based formats.
 
 **SUB-3 — never cut inside a word.** If you trim a scene tail for music / `-t TOTAL_DUR`, snap to a word
 boundary. The boundaries come from `build/subs.ass` events (already whisper-aligned); no separate
@@ -676,9 +677,8 @@ The `adelay` lead silence shifts the first word to `${PRE_MS}` — whisper sees 
 ```bash
 # For EACH scene K in index order, build its speech slot EXACTLY as long as the scene:
 #   - silent I2V / action / physical-gag -> anullsrc for the clip length (silence placeholder)
-#   - Avatar/dialogue -> EXTRACT audio from scene-K.mp4 ITSELF (Avatar's embedded lipsync track),
-#       NOT from the source scene-K.mp3. Avatar may shift/trim timing at render — take what is
-#       actually in the video, otherwise the subtitle drifts against the lips.
+#   - I2V dialogue / Avatar dialogue -> EXTRACT audio from scene-K.mp4 ITSELF.
+#       Do not use source scene-K.mp3 for timing; the video MP4 is the audio the viewer hears.
 #   - + off-screen VO (customer.mp3 etc.) — same amix as in §0
 #   - apply the same per-scene atempo/apad as in §0 (slot length == video clip length)
 # then concat in index order, no bg-music:
@@ -898,22 +898,23 @@ Or use bash explicitly: `#!/bin/bash`.
 Before starting concat, walk through this checklist. Each missed item = re-assembly of the whole final.mp4.
 
 - [ ] **Recap:** if EP2+ — last 1-2 clips of the previous episode are at the start of the concat list
-- [ ] **Recap audio:** Avatar/dialogue clips from the recap kept original audio (not replaced with anullsrc)
+- [ ] **Recap audio:** dialogue clips from the recap kept original audio (not replaced with anullsrc)
 - [ ] **Recap subtitles:** if recap contains dialogue — subtitles overlaid via add_subtitles.py
 - [ ] **Episode number:** overlay ONLY on the first clip (if there's a recap — on the recap, NOT on scene-1). Verify no duplicate
-- [ ] **Avatar audio during normalization:** Avatar clips (dialogue) normalized with `-c:a aac` (preserving original audio), NOT via `anullsrc`. `anullsrc` ONLY for I2V clips without audio
+- [ ] **Dialogue audio during normalization:** serial-drama I2V dialogue / Avatar dialogue normalized with `-c:a aac` (preserving original audio), NOT via `anullsrc`. `anullsrc` ONLY for clips without audio
 - [ ] **TTS overlay:** I2V clips with off-screen voiceover got TTS through aecho BEFORE subtitles
-- [ ] **Subtitles:** all dialogue clips (Avatar + TTS overlay) have subtitles
+- [ ] **Subtitles:** all dialogue clips (serial-drama I2V dialogue, Avatar dialogue, and TTS overlay) have subtitles
 - [ ] **Audio padding:** after add_subtitles.py — apad each clip to video duration
 - [ ] **Fade-to-black:** on the last story clip (before CTA)
 - [ ] **CTA:** last in the concat list
-- [ ] **Music:** overlaid AFTER speed boost, volume per format
+- [ ] **Music:** overlaid after concat and any format-specific speed step, volume per format
 
 ### Normalization by clip type
 
 | Clip type | Video | Audio |
 |---|---|---|
 | I2V (action, silent) | scale + 30fps + libx264 | `-f lavfi -i anullsrc` → map 1:a |
+| I2V dialogue / I2V with generated audio | scale + 30fps + libx264; never trim | **Preserve original:** normalize embedded audio to target sample rate/channels |
 | I2V + TTS overlay | first normalize as I2V, then amix with TTS via aecho | |
 | Avatar (dialogue, with audio) | scale + 30fps + libx264 | **Preserve original:** `-ar 44100 -ac 2 -c:a aac` (NOT anullsrc) |
 | Recap (from previous episode) | scale + 30fps + libx264 | Check ffprobe: has audio → keep; none → anullsrc |

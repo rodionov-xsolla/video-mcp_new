@@ -27,3 +27,11 @@ git mv video-agent/legacy/rules/main/storyboard.md video-agent/rules/main/storyb
 ```
 
 После успешной приживаемости новой структуры эту папку можно удалить.
+
+## Архивы 2026-06-22
+
+- `tools-gates-2026-06-15/` — слой gate-скриптов (build_context, validate_storyboard, check_runtime, preflight_assets, check_final). Откат после того, как валидация переехала инлайн в `pipeline.sh`.
+- `tools-migrations-2026-05/` — одноразовые миграции Supabase storage / DB-маппинга (`migrate-storage.py`, `phase4/`, `cleanup-category-a.py`).
+- `tools-misc/` — `sjinn.md` (несвязанный конспект).
+- `launchers-2026-04/` — `run.sh` и `run-v2.sh` (канонический запуск теперь только `pipeline.sh`).
+- `junk-2026-06-22/` — untracked мусор из корня (TikTok-референсы, скриншот, `temp/` с kekele/regen-6 ассетами).

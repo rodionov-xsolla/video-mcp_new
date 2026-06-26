@@ -8,7 +8,7 @@ Model: **NB2** (`fal-ai/nano-banana-2/edit`). Aspect: `"9:16"` (608×1080). Befo
 
 ### How NB2 works
 
-NB2 is an edit model with chain reference support via `image_urls` (array, up to 2 refs). Main strength: takes multiple refs and composes them into a new scene per the prompt.
+NB2 is an edit model with chain reference support via `image_urls`. Main strength: takes multiple refs and composes them into a new scene per the prompt. Check the current endpoint limit before a batch; do not assume an old ref-count limit.
 
 - **Natural sentences beat tag lists.** `"warrior standing on a cliff, cape billowing"` beats `"warrior, cliff, cape, wind, epic"`.
 - **Order matters:** earlier details have stronger influence → character and pose at the start, decor at the end.
@@ -72,6 +72,8 @@ Keep the facial features of the person in the uploaded reference image exactly c
 ```
 
 Without this line NB2 "freely interprets" the ref — face drifts between scenes.
+
+**Proportion lock:** if the locked character cards are semi-realistic 3D, keep their exact head/body/eye proportions. Do not enlarge eyes, round faces, or soften anatomy into Disney/Pixar/toy proportions.
 
 **Example:**
 ```
@@ -277,16 +279,18 @@ Burn-tested EP2 scene-3 (2026-06-08): `"arms slightly angled"` on Lumine produce
 
 ### 6. Character mouth
 
-- **Lipsync scenes** (Kling Avatar v2) — slight smile / mouth slightly open, teeth visible: `"mouth slightly open with teeth visible"`. Critical for lipsync quality.
+- **Avatar-based lipsync scenes** (non-serial-drama formats only) — slight smile / mouth slightly open, teeth visible: `"mouth slightly open with teeth visible"`. Critical for lipsync quality.
+- **Serial-drama dialogue scenes** are I2V start frames, not Avatar frames. Build them as cinematic/storytelling frames with the relevant character refs + location ref attached.
 - **Non-lipsync scenes** (I2V action) — mouth in a STATIC expression matching the scene mood: tight lips (anger), open mouth (surprise), neutral closed (sadness). Mouth must NOT animate — Animator adds a negative_prompt to suppress mouth motion. Exception: if `action_description` explicitly indicates a scream, yawn or other mouth action.
 
 ### 6.1 Avatar clips — close-up forbidden
 
-Kling Avatar at close-up of the face produces an uncanny valley: cheap, frightening expression. **For all Avatar/dialogue clips, the minimum shot is medium close-up** (head + shoulders + upper chest). Close-up and extreme close-up are forbidden.
+Kling Avatar at close-up of the face produces an uncanny valley: cheap, frightening expression. **For Avatar-based clips, the minimum shot is medium close-up** (head + shoulders + upper chest). Close-up and extreme close-up are forbidden. Serial-drama dialogue is I2V and should prefer medium two-shots, over-shoulders, and medium group reactions.
 
 | clip_type | Allowed shots |
 |---|---|
-| Avatar / dialogue | medium close-up, medium shot, medium wide |
+| Avatar-based dialogue | medium close-up, medium shot, medium wide |
+| Serial-drama I2V dialogue | medium two-shot, over-shoulder, medium group shot, close-medium reaction |
 | I2V action | any (including close-up) |
 
 #### 6.1.1 Avatar scene PNG — zero-text rule (MANDATORY)
@@ -458,14 +462,18 @@ Save as `games/{GAME_TAG}/assets/refs/{slug}-sheet.png`.
 
 #### 8a.1 New character = new character ref (ALWAYS)
 
-Every new character in any format requires its own character sheet (16:9) + avatar ref (9:16 for Kling Avatar). Never reuse one character's ref for another — style, face, and proportions will drift.
+Every new character in any format requires its own character sheet/reference. Avatar refs are required only for Avatar-based formats. Serial-drama requires locked character sheets/refs and location refs; do not generate Avatar refs for serial-drama.
+
+**Serial-drama identity rule:** if a character is visible, speaking, reacting, holding a prop, entering, or being referenced as a specific person in the scene, that character's locked ref must be in `image_urls`. Do not render from text-only identity. If the scene prompt mentions Alex but `alex/sheet.png` is missing, stop and return to Manager. This burned ROOM 1701 scene 5/6: missing refs created random stand-ins and broke voice ownership.
+
+**Prompt wording:** scene image prompts may include the character name for bookkeeping, but the visual description must immediately follow it: `Alex — slim young man in black cap, navy hoodie...`. A bare name is not enough for NB2/Kling.
 
 **Sheet is mandatory even for "ad-hoc" characters in single-clip formats** (motion-dance one-offs). It's tempting to skip the sheet and render the character straight into the scene — DON'T. The next run that wants the same character will only have your wide-shot scene render to chain off, and NB2 will copy its composition (wide shot → wide-shot output, regardless of text prompt). One $0.04 sheet now saves $1+ of mis-framed Kling Motion Control / Avatar calls later. Treat the sheet as the deliverable, the scene render as a downstream artifact.
 
 Order:
 1. **First — check the series story bible** (`games/{GAME_TAG}/{format}_story_bible.json` → `supabase_assets.char_refs`). If a canonical character sheet exists there (e.g. `noob-sheet`, `preppy-girl-sheet`, `shadow-sheet`), **use its Supabase URL as the `image_urls` chain reference for any new per-episode character ref or scene PNG**. The prompt should describe a single full-body front view extracted from the reference sheet. **Never regenerate the character from text alone when a canon sheet exists** — text-only generation drifts (e.g. Roblox-noob arms can render as green instead of yellow, accessories like Bella's sunglasses get dropped). One $0.04 wasted ref is cheap; downstream scene PNGs and Kling clips that drift cost much more.
 2. Then — check the general asset bank (`game_assets`) for any other refs (props, locations) → use the URL
-3. If neither has it — generate character sheet (NB2 text-to-image) + avatar ref (NB2 edit with sheet as ref)
+3. If neither has it — generate character sheet/reference. Generate an avatar ref only if the active format uses Kling Avatar.
 3. **MANDATORY: upload to Supabase** immediately after generation:
    ```bash
    # Character sheet (canonical)
@@ -474,7 +482,7 @@ Order:
    # Character variant (young / mature / borg / prophet / cadet / child / adult / ...)
    bash queue/upload-asset.sh --kind character --game {GAME_TAG} --slug {slug} \
      --variant {variant} ./variant.png --tags "{format}"
-   # Avatar ref (Kling Avatar v2)
+   # Avatar ref (Kling Avatar v2) — only when the active format uses Avatar
    bash queue/upload-asset.sh --kind avatar --game {GAME_TAG} --slug {slug} \
      ./avatar.png --tags "{format},avatar"
    # Location bg-ref (slug WITHOUT bg- prefix)
@@ -488,7 +496,7 @@ Order:
 
    > Per-episode scene PNG / TTS — **другой kind**: `--kind episode-scene` / `episode-tts` с `--episode {YYYY-MM-DD}-{format}`. Эти файлы пишутся в bucket `episodes/`, в `game_assets` НЕ регистрируются (одноразовый эпизодный мусор).
 
-Applies to ALL formats: news (anchor + co-anchor), serial-drama (multiple characters), gameplay-ai-avatar (avatar), character-story (hero).
+Applies to ALL formats: news (anchor + co-anchor), serial-drama (multiple characters with sheets/refs), gameplay-ai-avatar (avatar), character-story (hero).
 
 ---
 
@@ -535,6 +543,8 @@ Each frame is generated through NB2/edit with `image_urls: [bg-ref, char-sheet-1
 - Consistent background between frames in the same location
 - Correct proportions (background already sets scale)
 - Ability to swap only the characters without regenerating the background
+
+**Room/layout lock:** for a locked sitcom room such as ROOM 1701, the bg/location ref defines the core layout and recurring set pieces. Preserve the main sofa/table/window/rug/shelf geometry and avoid unexplained major layout changes. Episode-specific props are fine when the story asks for them. If characters are good but the room layout is wrong, reuse the same character refs and regenerate with stricter room-lock wording; do not accept the scene.
 
 **When you need a NEW bg ref:** if the current bg does not give the desired perspective (characters end up the same size as the architecture), generate a new bg from a different angle/distance. Do not try to fix proportions through the character prompt — the problem is always the background.
 
@@ -656,7 +666,7 @@ Wrong anchor → wrong character generated.
 | Scene type | Format |
 |---|---|
 | I2V action | 608×1080 |
-| Avatar/dialogue | 608×1080 |
+| Avatar-based dialogue / I2V dialogue | 608×1080 |
 | Background asset | 608×1080 |
 
 ---
@@ -787,6 +797,9 @@ A wide establishing bg ref (view of the whole plaza) with a character sheet give
 3. Character sheet **must always** be passed in `image_urls` — sheet is mandatory for consistency
 4. `image_urls: [close-bg-ref, character-sheet]`
 
+For serial-drama multi-character scenes, pass **all** visible character sheets plus the location ref:
+`image_urls: [room-ref, alex-sheet, michael-sheet, emily-sheet]`. The scene prompt must describe each visible character's physical traits from the story bible, not only their names.
+
 ### 14.7 Test character ref against safety filter
 
 Before a series of generations with a specific character ref — do **one test generation** ($0.08). If the ref is blocked by NB2's safety filter, switch to a character sheet BEFORE the series starts. Do not waste $0.40+ figuring out the ref is blocked.
@@ -874,7 +887,7 @@ Working pattern:
 2. Hands: **describe only if there is an active action** ("right palm slamming against wall panel", "left hand gripping PADD") — needed for Kling to understand trajectory. If no active action — only one body-pose gesture, do NOT describe the second hand.
 3. Start = closed pose (head down), End = opening (head up, gesture, environment changed)
 
-**Avatar/dialogue clips:** only one image (start). End frame not needed.
+**Avatar-based dialogue and I2V dialogue clips:** only one image (start). End frame not needed.
 
 ---
 
@@ -924,7 +937,7 @@ Only after ALL images pass — hand off to Manager.
 - [ ] All location bg refs created (for serial-drama)
 - [ ] All scene PNGs created, programmatic validation passed (filesize > 1KB, dimensions correct)
 - [ ] For I2V clips: start frame only (`scene-K.png`), programmatic validation passed — end frames are NEVER generated (see §14.8 / §16)
-- [ ] Max 2 refs in image_urls per generation
+- [ ] `image_urls` includes every visible/speaking character ref plus the needed location ref. If the current endpoint rejects that many refs, split the scene or reduce visible characters; never silently omit a speaking character ref
 - [ ] No extra characters, style consistent
 - [ ] All files downloaded locally and uploaded to Supabase
 - [ ] Paths to all files saved for handoff to Animator

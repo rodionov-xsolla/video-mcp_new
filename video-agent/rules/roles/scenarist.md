@@ -84,18 +84,18 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
 
 | Content | Duration | When |
 |---|---|---|
-| Line ≤15 words | **5s** | Default for ALL dialogue clips |
+| Line ≤15 words | **5s** | Default for ALL dialogue clips unless the format uses I2V multi-shot dialogue |
 | Action / reaction | **5s** | Default for ALL I2V clips |
 | Long undividable monologue (16–25 words) | **10s** | Only if splitting would lose the meaning |
 | Complex physical sequence | **10s** | Extremely rare |
 
 **Hard rules:**
-1. Dialogue (Avatar) clips > 5s = ALMOST ALWAYS A MISTAKE. A static head for 10s = death of dynamics. Split into 2×5s with different angles.
+1. Dialogue clips > 5s require a format-specific reason. For serial-drama, dialogue can be 6–12s only when it is I2V `multi_prompt` with multiple 3s shots; a static talking head for 10s is a mistake.
 2. More 5s clips > fewer 10s clips. Dynamics beats cost.
 3. A 10s clip requires justification in `duration_reason`. Can't explain — make it 5s.
 4. If the dialogue doesn't fit in 5s — cut text, don't stretch the clip.
 
-> ⚠️ **`duration_sec` for a dialogue clip is a cap, not the rendered length.** Kling Avatar renders a clip exactly as long as the TTS line (~0.4s/word EN). A 4-word line → ~2s clip, not 5s. So an episode's REAL runtime ≈ `Σ(action clip durations) + Σ(TTS line lengths) + CTA`, not `Σ(duration_sec)`. When the format brief sets a target runtime (e.g. 40–45s), reach it by adding/lengthening **action/I2V clips** (they honor their duration) or by writing longer lines — never assume five "5s" dialogue clips equal 25s (they're ~10s). EP7 first cut came out 24s for exactly this reason.
+> ⚠️ Format override: serial-drama dialogue is I2V `multi_prompt + voice_ids`, not Avatar. In serial-drama, `duration_sec` is the real clip duration. In Avatar-based formats, dialogue runtime follows TTS duration; read the format playbook before planning runtime.
 
 ---
 
@@ -124,7 +124,7 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
 
 **For I2V clips — micro motion only.** Don't describe walking, hits, running — Kling I2V does not animate that. Movement = montage transition between clips, not animation inside one clip.
 
-**For Avatar/dialogue clips — do NOT introduce a second character into the frame** unless they are the explicit 2-shot partner. Storyboarder renders literally everything `action_description` mentions: a "background reaction" beat like "Spock tilts his head toward Chekov" puts Spock in the frame and breaks the intended solo shot (EP7 — Chekov's solo line rendered with Spock standing in front of him). If the speaker is alone in the shot, `action_description` mentions ONLY the speaker. Reaction of others = a separate clip.
+**For dialogue clips — obey the format's animation mode.** Serial-drama dialogue is I2V and may stage two-shots / over-shoulders / group reactions if the start frame supports them. Avatar-based formats should not introduce background characters into a solo Avatar frame unless the format says so.
 
 ---
 
@@ -141,7 +141,7 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
   "character_state": "what the character does AT THE START of the clip",
   "facial_expression": "concrete expression: scared wide eyes, cocky smirk, tearful gaze (NOT 'sad'/'happy')",
   "character_speech": "line" or null,
-  "tts": "text for ElevenLabs TTS (for Avatar clips)",
+  "tts": "text for external TTS (Avatar-based formats only; null for serial-drama I2V dialogue)",
   "subtitle_emphasis": ["word or phrase to emphasize"],
   "environment_state": "what is happening in the environment",
   "action_description": "what happens in the scene — description for Storyboarder and Animator"
@@ -149,8 +149,21 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
 ```
 
 ### `character_speech` / `tts`
-- **Kling Avatar v2** (lipsync ElevenLabs TTS): `character_speech` = null; `tts` = text for ElevenLabs
-- **Kling I2V** (no voice): both null
+- **Serial-drama dialogue (I2V):** `character_speech` contains the spoken lines; `tts` is null; include `generate_audio: true`, `shot_type: "customize"`, `voice_ids`, and `multi_prompt` with `<<<voice_1>>>` / `<<<voice_2>>>`.
+- **Avatar-based formats:** `character_speech` = null; `tts` = text for external TTS.
+- **Silent I2V action:** both null.
+
+Serial-drama `multi_prompt` rules:
+- At most 2 speakers / `voice_ids` per Kling request. The series can have 3+ reusable voices; `<<<voice_1>>>` and `<<<voice_2>>>` are local to the current request and must be remapped from the selected `voice_ids` array. Split true 3-speaker exchanges into separate clips.
+- Target dialogue clip length: 6–10s. Shot duration is variable: 2–3s default, 4s only when a phrase/acting beat needs it.
+- Timing formula before generation: `shot_seconds = word_count / pace + pause_padding + acting_padding`, rounded up to whole seconds. Default pace is 2.4 words/sec; use faster pace for tension/Michael mission-rant only when intentional.
+- Each shot prompt ≤512 characters.
+- Each shot restates the style anchor and the visible characters by physical description, not just by name.
+- **No bare character names in Kling-facing shot prompts.** The model does not know "Alex", "Michael", or "Emily"; it only sees the start frame and text. Use the story bible `character_description` / `visual_prompt` every time.
+- **The speaker must be physically identified immediately before the voice tag.** Pattern: `[physical descriptor + frame position + action]. <<<voice_1>>> "line"`. Do not write `Alex says <<<voice_1>>>`.
+- `voice_ids[N-1]`, `<<<voice_N>>>`, `character_speech.speaker`, and the physical descriptor in that shot must all refer to the same character.
+- If a beat needs a third speaker or a character who is not already visible in the start frame, split into another I2V dialogue clip. Do not drop the beat and do not rely on a name to introduce the character mid-clip.
+- `duration_sec` equals the sum of `multi_prompt[].duration`.
 
 ### `subtitle_emphasis` — NO LONGER USED
 
@@ -189,7 +202,7 @@ Formats with `overlays: false` need no array.
 
 ### `clip_type`
 - `action` — I2V clip (no dialogue, micro motion)
-- `dialogue` — Avatar clip (with TTS audio and lipsync)
+- `dialogue` — format-specific dialogue clip. For serial-drama this is I2V `multi_prompt + voice_ids`; for Avatar-based formats this may be a lipsync Avatar clip.
 
 ---
 
@@ -214,7 +227,7 @@ Formats with `overlays: false` need no array.
 - Each clip has `hero` with the active character's name
 - 2 characters in frame are allowed for dynamics
 
-> ⚠️ **`style_tags` describes STYLE only** — art direction, lighting, palette, medium (e.g. `semi-realistic Pixar 3D`, `anime cel-shading`, `cinematic Federation lighting`). **Never put diegetic UI elements** here: `LCARS interface`, `HUD`, `text overlay`, `panel borders`, `news ticker`, `lower-third` — NB2 treats them literally and draws UI over the character's face. If a scene needs UI, put it in that scene's `environment_state`, not in the global `style_tags`. Same rule applies when authoring `prompt_prefix` in `games/{tag}/{tag}.md`.
+> ⚠️ **`style_tags` describes STYLE only** — art direction, lighting, palette, medium (e.g. `semi-realistic stylized 3D`, `anime cel-shading`, `cinematic Federation lighting`). **Never put diegetic UI elements** here: `LCARS interface`, `HUD`, `text overlay`, `panel borders`, `news ticker`, `lower-third` — NB2 treats them literally and draws UI over the character's face. If a scene needs UI, put it in that scene's `environment_state`, not in the global `style_tags`. Same rule applies when authoring `prompt_prefix` in `games/{tag}/{tag}.md`.
 
 ### Describing interaction in action_description
 
@@ -229,14 +242,14 @@ Storyboarder will decide how to render this in `image_prompt`.
 
 ---
 
-## 7. Consecutive Avatar clips — different composition
+## 7. Consecutive dialogue clips — different composition
 
-If two dialogue (Avatar) clips run back-to-back — they cannot both be the same angle. Specify the desired option in `action_description`:
+If two dialogue clips run back-to-back — they cannot both be the same angle. Specify the desired option in `action_description`:
 
 1. **Profile:** "Kirk, profile facing left" / "Worf, slightly side-on"
 2. **Different shot:** "close-up Kirk" / "medium shot Worf"
 3. **Different background:** "Kirk at console" / "Worf at the entrance"
-4. **Cutaway:** I2V action clip between them (reaction without dialogue)
+4. **Cutaway:** action clip between them (reaction without dialogue)
 
 ---
 
@@ -246,8 +259,8 @@ If two dialogue (Avatar) clips run back-to-back — they cannot both be the same
 - ❌ 3+ characters in one scene — split into 2 clips
 - ❌ Walking/running/hits in `action_description` for an I2V clip — impossible to animate
 - ❌ One looped action across the whole clip — minimum 2 beats
-- ❌ Adjacent Avatar clips with the same angle — change composition
-- ❌ Mentioning a second character in a solo Avatar clip's `action_description` (even as a "background reaction") — Storyboarder renders them into the frame (EP7 Chekov+Spock). Solo line = only the speaker described
+- ❌ Adjacent dialogue clips with the same angle — change composition
+- ❌ Avatar fields in serial-drama (`clip_type: "avatar"`, `tts` as primary dialogue, Avatar endpoint) — serial-drama dialogue is I2V
 - ❌ Dialogue clip > 5s without justification in `duration_reason`
 - ❌ Title/brainrot text overlays in storyboard — only dialogue subs + TBC + CTA
 
@@ -262,11 +275,13 @@ If two dialogue (Avatar) clips run back-to-back — they cannot both be the same
 - [ ] Each `action_description` contains at least 2 distinct beats
 - [ ] Default 3 clips (~15–30s); 4+ only if each is necessary
 - [ ] Duration 5s by default; for 10s `duration_reason` is filled
-- [ ] `character_speech` / `tts` filled where needed
+- [ ] `character_speech` / `tts` filled according to format mode; serial-drama dialogue uses `character_speech` + `multi_prompt`, not `tts`
+- [ ] Serial-drama `multi_prompt`: every `<<<voice_N>>>` is preceded by the correct physical character descriptor; no bare names as the only identifier
+- [ ] Every requested/key beat is present. If Kling limits force a split, insert an extra clip instead of removing the story beat
 - [ ] `facial_expression` — concrete expression (not "sad"/"happy")
 - [ ] I2V clips: `action_description` does not contain walking/running/hits
 - [ ] Multi-char: max 2 in frame; third = "distant figure in background"
-- [ ] Consecutive Avatar clips: different composition specified in `action_description`
+- [ ] Consecutive dialogue clips: different composition specified in `action_description`
 - [ ] No title/brainrot overlays in storyboard
 - [ ] Budget not exceeded (N images × $0.04 + animation per format rates)
 

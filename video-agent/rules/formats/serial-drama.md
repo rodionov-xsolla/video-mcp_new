@@ -20,17 +20,18 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 ## Concept
 
 - **Genre:** endless micro-dramas with brainrot aesthetic, cliffhangers, plot loops
-- **Style:** Pixar/Disney 3D — stylized 3D characters, plastic textures, expressive faces, soft ambient lighting, cinematic depth of field
+- **Style:** stylized semi-realistic 3D characters with expressive faces and practical lighting. Do **not** prompt Disney/Pixar/DreamWorks, toy-like plastic style, or oversized cartoon eyes unless a specific game bible explicitly requires it. Preserve the exact proportions and style of locked character cards.
 - **Duration:** 25–40s (3–5 clips × 5–10s)
 - **Budget:** up to $10 per episode. Stop if spend > $9.00.
 - **Frame format:** 9:16 (608×1080) for all scenes. Square forbidden.
 
 ### Clip mix (balances)
 
-- **ACTION/DIALOGUE ~ 50/50.** All-dialogue episode = monotonous and expensive; all-action = no plot.
-- **I2V (Kling v3 Standard)** — action/reaction clips (silent); fallback v2.6 Pro only on v3 artifacts
-- **Avatar (Kling Avatar v2)** — dialogue clips with lipsync (TTS from MiniMax)
-- **TTS overlay with aecho** — only for "behind glass/door" scenes (character is visible through a barrier, face not visible)
+- **ACTION/DIALOGUE ~ 50/50.** All-dialogue episode = monotonous; all-action = no plot.
+- **I2V only.** Every serial-drama clip, including dialogue, is Kling v3 Standard I2V. Fallback v2.6 Pro only on v3 artifacts.
+- **Dialogue I2V uses Kling voice support:** `generate_audio: true`, `voice_ids`, `shot_type: "customize"`, and `multi_prompt` with `<<<voice_1>>>` / `<<<voice_2>>>`.
+- **Kling Avatar v2 is forbidden for serial-drama.** Do not create Avatar refs, do not call `fal-ai/kling-video/ai-avatar/*`, and do not render dialogue as a separate lipsync avatar clip.
+- **Identity is physical, not nominal.** Kling/NB2 do not know character names. Every scene prompt and every `multi_prompt` shot must identify visible/speaking characters by their locked physical descriptors and attached refs.
 
 ---
 
@@ -39,11 +40,12 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 | Component | 5s clip | 10s clip |
 |---|---|---|
 | Image (NB2) | $0.08 | $0.08 |
-| Kling v3 Standard I2V (generate_audio=false, $0.084/s) | $0.42 | $0.84 |
-| MiniMax TTS (line 5–15s) | ~$0.002 | ~$0.003 |
-| Kling Avatar v2 (dialogue) | ~$0.28 | ~$0.56 |
-| **I2V action clip** | **~$0.50** | **~$0.92** |
-| **Avatar dialogue clip** | **~$0.32** | **~$0.63** |
+| Kling v3 Standard I2V, no audio ($0.084/s) | $0.42 | $0.84 |
+| Kling v3 Standard I2V with generated dialogue/audio ($0.126/s) | $0.63 | $1.26 |
+| MiniMax / local TTS | not used for serial-drama dialogue |
+| Kling Avatar v2 | forbidden |
+| **I2V action clip** | **~$0.50–0.63** | **~$0.92–1.26** |
+| **I2V dialogue clip** | **~$0.63** | **~$1.26** |
 
 | Variant | Clips | Cost |
 |---|---|---|
@@ -52,6 +54,8 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 | Exception (undividable monologue) | 4×5s + 1×10s | ~$2.80–3.80 |
 
 ⚠️ **Dynamics > savings.** 2×5s almost always beats 1×10s. Angle change / counterpart reaction matters more than $0.04 saved.
+
+When reporting actual spend, calculate from rendered seconds, model rates, regenerations, and any burn tests; do not reuse the rough estimate after generation.
 
 ---
 
@@ -77,7 +81,7 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 - ❌ Theatrical speeches, long monologues
 - ❌ Slow buildup without conflict in the first 5 seconds
 - ❌ All clips dialogue (monotonous, expensive, boring)
-- ❌ Two consecutive Avatar clips of different characters on the SAME background, frontal (copy-paste)
+- ❌ Static talking heads. Dialogue should be staged as two-shots, over-shoulders, reaction beats, or multi-shot I2V, not Avatar bust shots.
 
 ### Brainrot vocabulary
 
@@ -90,15 +94,19 @@ Appropriate in dialogue: `rizz`, `sigma`, `cooked`, `negative aura`, `bro`, `no 
 - 10s dialogue clip = **almost always a mistake** (a static head for 10 seconds = death of dynamics). Split into 2×5s with different angles.
 - 10s clip requires `duration_reason` in storyboard.json.
 
-#### ⚠️ Avatar renders to TTS length, NOT `duration_sec` — runtime planning
+#### Dialogue runtime planning
 
-Kling Avatar produces a video **exactly as long as the audio fed to it**. A 1.7s line → a 1.7s clip, regardless of `duration_sec: 5`. So five "5s" dialogue clips (25s on paper) render as ~10s of actual footage (EP7 first cut came out 24s instead of the 37s the numbers implied).
+Serial-drama dialogue is I2V, so `duration_sec` is the actual rendered clip length. Plan runtime from the storyboard durations:
 
-**Plan target runtime from real clip lengths, not nominal `duration_sec`:**
-- **Dialogue/Avatar clip ≈ its spoken line length** — budget ~0.4s/word EN (~2–3s per short line), NOT 5s.
-- **Action/I2V clip = its declared `duration` honestly** (6s = 6s; multi_prompt 9s = 9s).
-- To hit a target runtime (e.g. 40–45s), **carry the runtime in action/I2V clips** (6–9s each) and/or write longer dialogue lines — never inflate by freezing the last Avatar frame (see Anti-patterns).
-- Rough formula: `runtime ≈ Σ(action durations) + Σ(TTS line lengths) + CTA`. Compute this before generation; if short, add an action clip, don't stretch a still.
+- Dialogue I2V target length is **6–10s**. Go longer only with explicit `duration_reason` and budget check.
+- `multi_prompt` shot duration is not fixed. Default 2–3s per shot; 4s only when the phrase or acting beat genuinely needs it.
+- Estimate spoken timing before generation: `speech_seconds = word_count / words_per_second`. ROOM 1701 default pace is ~2.4 words/sec; relaxed/sarcastic can be slower, tension/Michael mission-rant beats can be faster. Avoid accidental taratorка caused by too many words in a short shot.
+- Add acting/pause padding when needed: +0.2s for a simple line, +0.4–0.7s for pause/comma/reaction, +0.8–1.2s for prop handoff or physical beat.
+- One Kling dialogue request can use at most 2 `voice_ids`. The series/story bible may have 3+ reusable character voices, but each request remaps only the voices used in that clip to local `<<<voice_1>>>` / `<<<voice_2>>>` tags. If a scene needs 3 speaking characters in the same moment, split the scene into multiple clips.
+- Prompt text per shot must stay ≤512 characters.
+- The physical descriptor immediately before each `<<<voice_N>>>` must match `voice_ids[N-1]`.
+- Any spoken line in a dialogue I2V clip must have `generate_audio: true`, `voice_ids`, and a matching `<<<voice_N>>>` tag. A dialogue clip rendered without voice is a failed request, not an acceptable silent beat.
+- Never pad a clip with a frozen frame; the I2V duration is the duration.
 
 ---
 
@@ -113,7 +121,7 @@ File `games/{GAME_TAG}/serial-drama_story_bible.json` stores the universe state 
   "series_id": "roblox-noob-revenge",
   "game_tag": "Roblox",
   "title": "The Noob Who Was a Secret Millionaire",
-  "style_tags": "Roblox-inspired Pixar-style 3D...",
+  "style_tags": "locked series stylized 3D look...",
   "created_at": "2026-03-27",
   "last_episode": 0,
 
@@ -217,7 +225,7 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 
 - Episode structure: HOOK → CLIMAX (2–3 clips) → CLIFFHANGER
 - **5s default**, 10s dialogue = almost always a mistake (split into 2×5s)
-- **Avatar dialogue clips: bust shot only** — head fills 55–75% of frame, no feet, no full body. Do NOT describe pacing, standing figures, or full-body action in `action_description` for Avatar clips. Full-body framing produces face artifacts (EP6 Kirk scenes 3/5).
+- **Dialogue clips are I2V `multi_prompt`, not Avatar.** Stage them as medium two-shots, over-shoulders, group reactions, and insert beats. Avoid static frontal bust shots.
 - Balance ACTION/DIALOGUE ~ 50/50; at least 2 different characters speak per episode
 - Read the story bible: characters, voices (`voice` field), active loops, anti-repetition
 - **`retention_strategy` mandatory** in storyboard — why the cliffhanger pulls the next episode
@@ -243,47 +251,42 @@ Convention examples (series "Don't Save Me", Genshin Impact):
 
 ### Storyboarder
 
-- Pixar/Disney 3D style (`style_tags` from story bible)
+- Stylized 3D style (`style_tags` from story bible), but do not introduce Disney/Pixar/DreamWorks terms unless they already exist in the locked series bible.
 - All frames 9:16 (608×1080) — square forbidden
 - **bg-reference per location** mandatory — without it the background drifts between clips (see `storyboarder.md` section 2)
-- Character refs: characters from story bible, mouth with teeth for lipsync clips
+- **Location lock:** the location ref is the source of truth. Do not add extra furniture, walls, props, or alternate room layouts that are not in the locked room/background card. If the generated scene has correct character positions but a wrong room, regenerate from the same character setup with stricter room-lock text.
+- Character refs: characters from story bible. Attach relevant character refs and the location/background ref to every scene image prompt.
+- **Ref completeness gate:** every visible/speaking character in the scene must have their locked ref in `image_urls`. If a character is mentioned but their ref is missing, regenerate the scene PNG before Animator.
 - I2V clips: **start frame only** (`scene-K.png`). End frames are NEVER generated — see `storyboarder.md` §14.8/§16. `end_image_url` is FORBIDDEN with `multi_prompt` (Kling returns 422).
 - Each clip = its own scene PNG (not the ref directly)
-- **No photoreal source refs in this stylized format.** Before using a character ref, check its tags — an asset tagged `photoreal` / `comedy-sketch` / `live-action` is FORBIDDEN here. A photoreal reference image biases the whole render toward realism; a text "NOT photorealistic, strictly Pixar 3D" does NOT override a photoreal *source image* (proven by EP6 scene 8, which used `spock/variants/canonical.png` — a photoreal sheet — and drifted realistic). Use the Pixar/3D-styled sheet, or generate one.
+- **No photoreal source refs in this stylized format.** Before using a character ref, check its tags — an asset tagged `photoreal` / `comedy-sketch` / `live-action` is FORBIDDEN here. A photoreal reference image biases the whole render toward realism; a text negative such as "not photorealistic" does NOT override a photoreal *source image* (proven by EP6 scene 8, which used `spock/variants/canonical.png` — a photoreal sheet — and drifted realistic). Use a locked stylized 3D sheet, or generate one.
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
 
 - I2V clips via Kling v3 Standard — micro motion only. Fallback to v2.6 Pro only on v3 artifacts.
-  - **`generate_audio: false`** for I2V clips that have DIALOGUE overlaid (TTS/narrator — the voice track replaces Kling audio anyway).
-  - **`generate_audio: true`** for atmospheric I2V action clips with NO voice: rain, night streets, ambient rooms, battle ambience. Costs $0.126/s instead of $0.084/s but adds rain/wind/footstep sound that significantly raises drama. Default for silent action clips in serial-drama is `true`. Override to `false` only if the scene is purely visual with no natural ambient layer.
-- Avatar clips via Kling Avatar v2 Standard (with TTS audio_url)
+  - **Dialogue I2V:** `generate_audio: true`, `shot_type: "customize"`, `voice_ids`, `multi_prompt`. No external TTS, no Avatar.
+  - **Action I2V:** `generate_audio: true` when room tone/ambient helps; `false` only for purely visual shots.
 - Motion prompt = technical (positions, camera, physical actions), without names/moods
 - One I2V model for the whole episode — do not mix Kling I2V versions within one episode
 - Start frame only for I2V; Kling animates from the start frame via `motion_prompt`
-- **Style-hold for this Pixar-styled format (not universal — lives here, not in `animator.md`):**
+- **Style-hold for this stylized 3D format (not universal — lives here, not in `animator.md`):**
   - **Anti-photoreal negative in EVERY I2V clip**, not selectively: `photorealistic, film grain, realistic skin, live action, photograph`. EP6 scene 2 omitted it and the close-up drifted realistic; scenes 7/8 that had it held better.
-  - **Carry the style anchor into EVERY shot of a `multi_prompt`**, not just shot 1 — each shot's prompt restates the style ("Pixar 3D animated …"). Late shots without an anchor drift to the model's realistic prior.
+  - **Carry the style anchor into EVERY shot of a `multi_prompt`**, not just shot 1 — each shot's prompt restates the locked series style (for ROOM 1701: "semi-realistic stylized 3D characters, practical bedroom lighting, not photoreal"). Late shots without an anchor drift to the model's realistic prior.
+  - **Carry physical descriptors into EVERY shot of a `multi_prompt`**, especially immediately before each voice tag. Do not rely on names: the model will assign lines to the wrong visible person.
   - **Do not end a `multi_prompt` on a tight close-up of a face that is not present in the start frame.** This was the real "problem is always in the third shot": both EP6 multi-prompts ended on an invented face close-up; by the last shot Kling has left the start frame and re-renders that face with its own (realistic) prior. Keep the final shot within the framing the start frame supports, or split the close-up into its own clip.
   - **Второй персонаж входит в середине `multi_prompt`-клипа** → через Kling `elements` + `@Element1` в нужном шоте (`animator.md §5a`, burn-tested 2026-06-01). Работает, **если персонаж занимает заметную площадь кадра** (особенно крупный план лица — чинит дрейф финального шота). Для узнаваемости в мелком/перекрытом плане (лицо за стеклом и т.п.) element читается обобщённо → делай отдельный клип со своим start-frame.
-- **Do NOT speed up Avatar** in serial-drama (1.3x — only for gameplay-ai-avatar)
-- Avatar = bust shot (head fills upper 55–75% of frame, no feet / full body) — full-body framing produces face artifacts (EP6 Kirk scenes 3/5)
+- **Do NOT use Avatar** in serial-drama. If a storyboard contains `clip_type: "avatar"` or an Avatar endpoint, return it to Scenarist before generation.
 - General rules — `rules/roles/animator.md`
 
 ### Sound
 
-- TTS via fal.ai MiniMax — `voice_setting.voice_id` from story bible, `emotion` per mood, field is `prompt` not `text`. For Genshin Impact serial-drama: Chatterbox TTS (`fal-ai/chatterbox/text-to-speech`) — see `sound.md §1`.
-- One character = one voice across the whole series (locked in story bible)
-- **Chatterbox `exaggeration` is mandatory per scene mood — never use default 0.25 for drama.** Sound agent must differentiate by emotional register:
-  - Desperate / raw urgency: `exaggeration 0.80–0.85`
-  - Defiant anger: `exaggeration 0.65–0.72`
-  - Cold threat / menace: `exaggeration 0.28–0.35`, `cfg 0.65–0.72`
-  - Pained whisper / apology: `exaggeration 0.15–0.20`, `cfg 0.70–0.75`
-  - Cliffhanger reveal: `exaggeration 0.55–0.65`
-  - Default neutral if no emotion context: `exaggeration 0.45`
+- **No per-scene TTS for serial-drama dialogue.** Dialogue voices come from Kling I2V `voice_ids` in Animator. Sound only generates external audio for explicit narrator/off-screen VO tracks.
+- For serial-drama dialogue I2V, one character = one reusable voice across the series. Use the supplied voice refs / existing Kling voice IDs from the story bible. If Kling requires `fal-ai/kling-video/create-voice`, call it once from the supplied Supabase voice ref, store the returned reusable ID in the story bible, and reuse it for the series. This does not disable required TTS/VO generation for narrator/off-screen tracks or other formats.
+- **Music is generated, not silently selected locally:** for serial-drama, generate `bg-music.mp3` through `fal-ai/minimax-music/v2.6` unless the user explicitly asks for a local library track. For sitcom tone: instrumental low-density comedy underscore, no vocals/lyrics, no dramatic swell.
 - **Narrator VO (optional):** off-screen series intro voice over I2V action clips. Store as `narrator_vo` top-level field in storyboard.json: `{text, voice, tts_url, duration_sec, overlay_clips, volume}`. Sound generates the MP3; Editor overlays it via amix starting at t=0. Generate with `faster-whisper` for timing (offset=0 per clip, then +cumulative_start for ASS timecodes).
 - **Subtitles:** ASS via `ffmpeg-full` (`/usr/local/bin/ffmpeg-full/ffmpeg`) — libass is required; stock Homebrew ffmpeg silently errors on `ass=` filter. Use sentence-level Whisper timing — NOT word-by-word. Dialogue style: Bold=1, Outline=6, Fontsize=70, white, MarginV=520. Narrator style: Bold=1, Outline=4, italic, warm color `#EDE0C8`, Fontsize=65, MarginV=540.
-- **Subtitle timing cap (mandatory):** After `add_subtitles.py` generates `build/subs.ass`, verify every Dialogue event: `End ≤ cumulative_start_of_scene + tts_duration_sec`. Whisper produces wildly wrong End-timestamps on short Avatar clips (<2.5s) — events can span entire I2V scenes. Cap formula: build the cumulative timeline first (Avatar trimmed to TTS, I2V at full Kling duration), then check each event window `[T_start, T_start + tts_dur]` and truncate any End that overshoots. Burned in EP3 serial-drama — subtitle "DOING THIS" ran from 1.20s to 12.20s, covering all of scene-2 I2V.
+- **Subtitle timing cap (mandatory):** After `add_subtitles.py` generates `build/subs.ass`, clamp every Dialogue event to the dialogue clip window it overlaps most. Events must never bleed into action/I2V-without-speech clips, CTA, or the next dialogue scene. If Whisper merges words across a scene boundary, split the subtitle text manually at the boundary.
 - ONLY dialogue subs + narrator + TBC. No title cards, brainrot tags, character names.
 - Background music: drama/cinematic, `volume=0.15`; duck to `0.08–0.10` under narrator VO.
 - General rules — `rules/roles/sound.md`
@@ -292,9 +295,9 @@ Convention examples (series "Don't Save Me", Genshin Impact):
 
 - **One ffmpeg pipeline for the entire final assembly** (concat + overlays + music + fade + CTA). NOT layered.
 - I2V clips: fps normalization 24 → 30 mandatory before concat. **NEVER trim I2V clips** — their declared duration is intentional and exact.
-- Avatar clips: trim **both video AND audio** to TTS_dur before concat. Use `trim=end=TTS_DUR,setpts=PTS-STARTPTS` (video) + `atrim=end=TTS_DUR,asetpts=PTS-STARTPTS` (audio). No apad needed — audio is embedded, not a separate track.
-- **A/V sync — joint concat mandatory:** when Avatar clips have embedded audio, use a single `concat=n=N:v=1:a=1` with interleaved `[sv_i][sa_i]` pairs (`[sv0][sa0][sv1][sa1]...`). Never split video and audio into two separate concat chains — they will drift. CTA (no audio) gets `anullsrc` paired with its video.
-- **I2V `generate_audio:true` audio must be preserved.** I2V clips with `generate_audio: true` contain Kling-generated action sounds (costs $0.042/s extra). Extract `[k:a]`, normalize to stereo, include in `concat=a=1`. Never use `concat=a=0` when I2V audio streams exist.
+- I2V clips: **never trim**; their declared duration is intentional. Preserve each clip's embedded audio stream when `generate_audio:true`.
+- **A/V sync — joint concat mandatory:** use a single `concat=n=N:v=1:a=1` with interleaved `[sv_i][sa_i]` pairs. CTA (no audio) gets `anullsrc` paired with its video.
+- **I2V `generate_audio:true` audio must be preserved.** Dialogue voices are inside the I2V MP4. Never replace final audio with `voice-final.wav`; that file is for Whisper timing only.
 - **`voice-final.wav` is NOT an audio source for the final encode.** It is a whisper-alignment artifact (TTS only, 16kHz mono). Final audio = scene `[k:a]` streams + `bg-music.m4a`. Passing `voice-final.wav` to the encode discards all I2V atmospheric sounds. Burned in EP3 — cost 3 re-renders.
 - **amix for overlay tracks:** narrator VO + bg-music overlay on top of joint concat via `amix=inputs=3:duration=first:normalize=0`. `normalize=0` is mandatory (prevents volume division by N). `duration=first` anchors output length to the scene audio, avoiding music bleed-through.
 - Off-screen narrator VO: overlay as separate amix input starting at t=0; music ducked during VO. See storyboard.json `narrator_vo` field.
@@ -369,8 +372,8 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - [ ] Cross-asset pre-flight passed (all URLs 200, distinct audio per clip, filename=index, scene_image_url↔hero) — `validation.md`
 - [ ] Each character from ONE locked ref; no photoreal-tagged refs; every `image_prompt` has full style prefix
 - [ ] Each I2V has anti-photoreal negative; each multi_prompt shot has a style anchor; no multi_prompt ends on an invented face close-up
-- [ ] TTS via fal.ai MiniMax (`voice_setting.voice_id`, field `prompt` not `text`)
-- [ ] Subtitles PIL PNG; dialogue + TBC only
+- [ ] Dialogue clips use I2V `multi_prompt + voice_ids`; no Avatar endpoint and no `clip_type: "avatar"`
+- [ ] Subtitles ASS events are clamped to dialogue scene windows; no bleed into action scenes or silence
 - [ ] fps normalized to 30 before concat
 - [ ] One ffmpeg pipeline, not layered
 - [ ] CTA included in concat-list (not a separate re-encode)
@@ -382,10 +385,11 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 
 ## Anti-patterns
 
-- ❌ `generate_audio: true` in Kling for dialogue/Avatar clips (voice is bad). Exception: I2V **action** clips may use `generate_audio: true` to get atmospheric ambient sound (candle flicker, room tone, etc.) — this works correctly and costs $0.126/s instead of $0.084/s.
+- ❌ Kling Avatar v2 for serial-drama.
+- ❌ External TTS as the primary serial-drama dialogue source. Dialogue voice comes from Kling I2V `voice_ids`.
 - ❌ Kokoro TTS, Kling Lipsync, ElevenLabs
 - ❌ `voice_id` hash instead of `voice` name
-- ❌ 1:1 square for Avatar (only 9:16)
+- ❌ 1:1 square scenes (all serial-drama frames are 9:16)
 - ❌ character ref directly as scene image (each clip = its own PNG)
 - ❌ Generating `scene-K-end.png` for I2V — end frames forbidden (storyboarder.md §14.8); `end_image_url` + `multi_prompt` = Kling 422
 - ❌ `-shortest` in FFmpeg
@@ -393,12 +397,12 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - ❌ Repeating hooks/cliffhangers from the last 8 episodes
 - ❌ Redoing clips that already work (each extra generation = $0.42+)
 - ❌ Layered assembly (breaks music and timing)
-- ❌ Padding Avatar/dialogue clips to `duration_sec` with `tpad=stop_mode=clone` / freeze-last-frame (dead frozen face after every line — EP7). Avatar runs its natural TTS length; runtime comes from action clips
+- ❌ Padding dialogue clips with `tpad=stop_mode=clone` / freeze-last-frame. Runtime comes from I2V durations.
 - ❌ Title cards, brainrot tags, character name overlays
 - ❌ Long 10s dialogue clips for $0.04 savings (kills dynamics)
 - ❌ Re-rendering one line into a parallel `-new`/`-v2` audio file (drops locked voice → same character, two voices — EP6 Admiral)
 - ❌ Referencing one character from two different ref asset paths across clips (face differs between adjacent clips)
-- ❌ Photoreal-tagged source ref in this Pixar format (text "NOT photorealistic" does not override a photoreal source image)
+- ❌ Photoreal-tagged source ref in this stylized format (text "NOT photorealistic" does not override a photoreal source image)
 - ❌ `image_prompt` without the full `style_tags` prefix (off-style clip)
 - ❌ I2V clip without an anti-photoreal negative; `multi_prompt` shot without a style anchor
 - ❌ Ending a `multi_prompt` on a tight invented face close-up not present in the start frame (drifts realistic)
