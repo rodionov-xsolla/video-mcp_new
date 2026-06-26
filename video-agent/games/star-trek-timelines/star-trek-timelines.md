@@ -138,6 +138,15 @@ Star Trek Timelines style, semi-realistic sci-fi character portrait, cinematic F
 
 ## Character Prompt Blocks
 
+### Alex (ROOM 1701 sitcom)
+`Star Trek Timelines 3D animated character, Pixar-DreamWorks quality 3D render, slim young man late teens early 20s, messy tousled chestnut-brown hair peeking out from a black baseball cap with gold Starfleet delta badge on front, large warm brown expressive eyes, navy blue Star Trek Timelines hoodie with gold Starfleet command delta logo on chest, black cargo pants, blue-and-white sneakers, holding a smartphone in one hand, slightly shy nervous expression`
+
+### Michael (ROOM 1701 sitcom)
+`Star Trek Timelines 3D animated character, Pixar-DreamWorks quality 3D render, stocky enthusiastic young man, wild voluminous curly bright orange-ginger hair, round thick black-framed glasses, large expressive eyes, yellow-gold Star Trek Timelines hoodie with black Starfleet command delta logo on chest, black jogger pants, grey foam NCC-1701 slippers, black over-ear headphones hanging around neck, small clip-on ID badge on hoodie, wide excited grin`
+
+### Emily (ROOM 1701 sitcom)
+`Star Trek Timelines 3D animated character, Pixar-DreamWorks quality 3D render, confident young woman, short wavy dark-brown hair with vivid purple ombre tips and highlights, warm brown expressive eyes, black off-shoulder loose-fit top with gold Starfleet command delta logo, purple cargo jogger pants, black Converse high-top sneakers, thin choker necklace with small Starfleet delta pendant, holding a black Star Trek mug with gold Starfleet delta, slight knowing smirk`
+
 ### Captain Kirk (TOS, command gold)
 `semi-realistic male Starfleet captain, athletic build, light brown hair swept to the side, confident charming smirk showing teeth, gold yellow command tunic with black collar and Starfleet delta badge on left chest, black trousers, standing heroic pose with phaser in hand, dramatic bridge lighting, deep space visible through viewport behind`
 
