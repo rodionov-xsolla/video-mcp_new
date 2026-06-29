@@ -5,7 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 11,
+  "last_episode": 12,
   "planned_arc": {
     "note": "Season 1 arc EP9–EP16. Core emotional engine: Kirk saves the monster that tried to kill Chekov — and every time he does 'the right thing', his crew gets more afraid. Mirror Kirk envies Kirk's loyal crew. Admiral pressures Kirk to eject the double or face Enterprise quarantine. Scenarist follows the beats and key_lines below as RAILS: keep cliffhanger spoken lines verbatim, adapt each episode into 3–5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion, protagonist always faces camera, cliffhanger line = Avatar TTS). Fold completed episodes into characters[], active_loops, episode_summaries as usual. Do NOT invent complex conspiracies or test protocols — the drama is simple: Kirk's mercy costs him his crew's trust.",
     "new_characters": [
@@ -33,10 +33,22 @@
           "A black pod launches from the damaged allied ship and races toward Enterprise."
         ],
         "key_lines": [
-          { "speaker": "Admiral", "line": "Captain, that ship must not survive." },
-          { "speaker": "Kirk", "line": "Then you should have told me why." },
-          { "speaker": "Scotty", "line": "We'll lose the phasers!" },
-          { "speaker": "Kirk", "line": "Better the weapons than my conscience." }
+          {
+            "speaker": "Admiral",
+            "line": "Captain, that ship must not survive."
+          },
+          {
+            "speaker": "Kirk",
+            "line": "Then you should have told me why."
+          },
+          {
+            "speaker": "Scotty",
+            "line": "We'll lose the phasers!"
+          },
+          {
+            "speaker": "Kirk",
+            "line": "Better the weapons than my conscience."
+          }
         ],
         "cliffhanger": {
           "scene": "The pod slams into the Enterprise airlock. Scanner reads a biosignature.",
@@ -58,10 +70,22 @@
           "Mirror Kirk steps out of the pod."
         ],
         "key_lines": [
-          { "speaker": "Admiral", "line": "Do not open it. That is a direct order." },
-          { "speaker": "Kirk", "line": "You already lied to me once." },
-          { "speaker": "Chekov", "line": "I saw that pod before the airlock." },
-          { "speaker": "Mirror Kirk", "line": "Hello, Jim. You're late again." }
+          {
+            "speaker": "Admiral",
+            "line": "Do not open it. That is a direct order."
+          },
+          {
+            "speaker": "Kirk",
+            "line": "You already lied to me once."
+          },
+          {
+            "speaker": "Chekov",
+            "line": "I saw that pod before the airlock."
+          },
+          {
+            "speaker": "Mirror Kirk",
+            "line": "Hello, Jim. You're late again."
+          }
         ],
         "cliffhanger": {
           "scene": "Mirror Kirk looks at Chekov and smiles.",
@@ -82,10 +106,22 @@
           "Explosive decompression drags Chekov toward the gap. Mirror Kirk is also pulled out through the gap he opened."
         ],
         "key_lines": [
-          { "speaker": "Worf", "line": "Take one step and I'll break your neck." },
-          { "speaker": "Mirror Kirk", "line": "You're slower than my Worf." },
-          { "speaker": "Kirk", "line": "Why Chekov?" },
-          { "speaker": "Mirror Kirk", "line": "Because you'll always save the boy." }
+          {
+            "speaker": "Worf",
+            "line": "Take one step and I'll break your neck."
+          },
+          {
+            "speaker": "Mirror Kirk",
+            "line": "You're slower than my Worf."
+          },
+          {
+            "speaker": "Kirk",
+            "line": "Why Chekov?"
+          },
+          {
+            "speaker": "Mirror Kirk",
+            "line": "Because you'll always save the boy."
+          }
         ],
         "cliffhanger": {
           "scene": "Chekov hanging on the airlock frame, stars behind him. Mirror Kirk ejected into space.",
@@ -107,10 +143,22 @@
           "Scotty almost locks on — but Mirror Kirk disappears into the debris field of the allied ship."
         ],
         "key_lines": [
-          { "speaker": "Chekov", "line": "He wanted to kill me." },
-          { "speaker": "Kirk", "line": "I know. That's why we won't become like him." },
-          { "speaker": "Scotty", "line": "The signal's breaking up!" },
-          { "speaker": "Admiral", "line": "Leave him there, Captain." }
+          {
+            "speaker": "Chekov",
+            "line": "He wanted to kill me."
+          },
+          {
+            "speaker": "Kirk",
+            "line": "I know. That's why we won't become like him."
+          },
+          {
+            "speaker": "Scotty",
+            "line": "The signal's breaking up!"
+          },
+          {
+            "speaker": "Admiral",
+            "line": "Leave him there, Captain."
+          }
         ],
         "cliffhanger": {
           "scene": "Through static and interference, Mirror Kirk's voice cuts in from somewhere in the debris.",
@@ -138,10 +186,22 @@
           "Chekov climbs into an emergency shuttle — he's too afraid to stay aboard a ship with two Kirks."
         ],
         "key_lines": [
-          { "speaker": "Chekov", "line": "If he comes back, I'll be at the airlock again." },
-          { "speaker": "Kirk", "line": "I won't let a man die." },
-          { "speaker": "Chekov", "line": "He's not a man to me." },
-          { "speaker": "Worf", "line": "Fear makes fast mistakes." }
+          {
+            "speaker": "Chekov",
+            "line": "If he comes back, I'll be at the airlock again."
+          },
+          {
+            "speaker": "Kirk",
+            "line": "I won't let a man die."
+          },
+          {
+            "speaker": "Chekov",
+            "line": "He's not a man to me."
+          },
+          {
+            "speaker": "Worf",
+            "line": "Fear makes fast mistakes."
+          }
         ],
         "cliffhanger": {
           "scene": "Chekov's shuttle breaks free of the dock and flies into the debris field.",
@@ -169,10 +229,22 @@
           "Chekov's shuttle lands in the dock — and right behind it, Mirror Kirk's emergency capsule."
         ],
         "key_lines": [
-          { "speaker": "Scotty", "line": "I've got Chekov... and something else." },
-          { "speaker": "Kirk", "line": "Pull them both." },
-          { "speaker": "Chekov", "line": "No. No, no, no." },
-          { "speaker": "Spock", "line": "The second capsule contains Kirk." }
+          {
+            "speaker": "Scotty",
+            "line": "I've got Chekov... and something else."
+          },
+          {
+            "speaker": "Kirk",
+            "line": "Pull them both."
+          },
+          {
+            "speaker": "Chekov",
+            "line": "No. No, no, no."
+          },
+          {
+            "speaker": "Spock",
+            "line": "The second capsule contains Kirk."
+          }
         ],
         "cliffhanger": {
           "scene": "The capsule opens. Mirror Kirk drops to the floor and smiles at Chekov.",
@@ -189,7 +261,7 @@
       {
         "episode": 12,
         "title": "The Monster in Sickbay",
-        "status": "unshipped",
+        "status": "shipped",
         "link": "Mirror Kirk's capsule opened. He's back on Enterprise.",
         "emotion": "Chekov's hatred + Mirror Kirk's envy",
         "beats": [
@@ -200,10 +272,22 @@
           "Mirror Kirk realizes: this Kirk is powerful not through fear but through loyalty."
         ],
         "key_lines": [
-          { "speaker": "Chekov", "line": "Why is he still breathing?" },
-          { "speaker": "Kirk", "line": "Because we don't kill people who are down." },
-          { "speaker": "Mirror Kirk", "line": "They actually listen to you without fear?" },
-          { "speaker": "Worf", "line": "We follow the captain. Not the face." }
+          {
+            "speaker": "Chekov",
+            "line": "Why is he still breathing?"
+          },
+          {
+            "speaker": "Kirk",
+            "line": "Because we don't kill people who are down."
+          },
+          {
+            "speaker": "Mirror Kirk",
+            "line": "They actually listen to you without fear?"
+          },
+          {
+            "speaker": "Worf",
+            "line": "We follow the captain. Not the face."
+          }
         ],
         "cliffhanger": {
           "scene": "Admiral cuts partial power to Enterprise, demanding the double be handed over.",
@@ -231,10 +315,22 @@
           "The real Kirk bursts onto the bridge."
         ],
         "key_lines": [
-          { "speaker": "Mirror Kirk", "line": "The crew needs an order. I'll make it simple." },
-          { "speaker": "Scotty", "line": "Captain?..." },
-          { "speaker": "Kirk", "line": "Scotty, step away from the panel." },
-          { "speaker": "Mirror Kirk", "line": "You see, Jim? They almost believed me." }
+          {
+            "speaker": "Mirror Kirk",
+            "line": "The crew needs an order. I'll make it simple."
+          },
+          {
+            "speaker": "Scotty",
+            "line": "Captain?..."
+          },
+          {
+            "speaker": "Kirk",
+            "line": "Scotty, step away from the panel."
+          },
+          {
+            "speaker": "Mirror Kirk",
+            "line": "You see, Jim? They almost believed me."
+          }
         ],
         "cliffhanger": {
           "scene": "Mirror Kirk's hand hovers over the fire button.",
@@ -262,10 +358,22 @@
           "The panel explodes — the discharge hits the airlock sector."
         ],
         "key_lines": [
-          { "speaker": "Kirk", "line": "We don't execute people without a trial." },
-          { "speaker": "Mirror Kirk", "line": "While you wait for a trial, they kill." },
-          { "speaker": "Worf", "line": "Then I'll stop both of you." },
-          { "speaker": "Scotty", "line": "Panel's burning! The blast went to the airlock!" }
+          {
+            "speaker": "Kirk",
+            "line": "We don't execute people without a trial."
+          },
+          {
+            "speaker": "Mirror Kirk",
+            "line": "While you wait for a trial, they kill."
+          },
+          {
+            "speaker": "Worf",
+            "line": "Then I'll stop both of you."
+          },
+          {
+            "speaker": "Scotty",
+            "line": "Panel's burning! The blast went to the airlock!"
+          }
         ],
         "cliffhanger": {
           "scene": "Chekov is on the other side of the emergency compartment glass. Air is venting.",
@@ -293,10 +401,22 @@
           "Mirror Kirk steps inside the airlock in Kirk's place."
         ],
         "key_lines": [
-          { "speaker": "Kirk", "line": "How do you know that code?" },
-          { "speaker": "Mirror Kirk", "line": "Because once, I made the other choice." },
-          { "speaker": "Chekov", "line": "I don't want to be your price." },
-          { "speaker": "Mirror Kirk", "line": "Not today." }
+          {
+            "speaker": "Kirk",
+            "line": "How do you know that code?"
+          },
+          {
+            "speaker": "Mirror Kirk",
+            "line": "Because once, I made the other choice."
+          },
+          {
+            "speaker": "Chekov",
+            "line": "I don't want to be your price."
+          },
+          {
+            "speaker": "Mirror Kirk",
+            "line": "Not today."
+          }
         ],
         "cliffhanger": {
           "scene": "Mirror Kirk closes the inner airlock door in front of the real Kirk.",
@@ -324,10 +444,22 @@
           "The airlock flashes white. Mirror Kirk is gone."
         ],
         "key_lines": [
-          { "speaker": "Kirk", "line": "I'll pull you both out!" },
-          { "speaker": "Mirror Kirk", "line": "You'd try. That's why I'm faster." },
-          { "speaker": "Chekov", "line": "Why are you saving me?" },
-          { "speaker": "Mirror Kirk", "line": "Because he was right. I hate that." }
+          {
+            "speaker": "Kirk",
+            "line": "I'll pull you both out!"
+          },
+          {
+            "speaker": "Mirror Kirk",
+            "line": "You'd try. That's why I'm faster."
+          },
+          {
+            "speaker": "Chekov",
+            "line": "Why are you saving me?"
+          },
+          {
+            "speaker": "Mirror Kirk",
+            "line": "Because he was right. I hate that."
+          }
         ],
         "cliffhanger": {
           "scene": "SEASON CLIFF: On screen, the Admiral stares at the empty airlock.",
@@ -350,14 +482,14 @@
       "character_description": "semi-realistic Pixar 3D Captain James T. Kirk, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
       "voice": "Daniel",
       "elevenlabs_voice": "Daniel",
-      "status": "EP10: Enterprise under quarantine. Kirk refused to promise Chekov that Mirror Kirk would stay away — chose mercy in silence. Chekov saw the answer and fled aboard an emergency shuttle into the debris field.",
+      "status": "EP12: Kept Mirror Kirk alive in sickbay despite Chekov's hatred. Kirk's mercy now has a new cost: Mirror Kirk has seen that the crew follows Kirk out of loyalty, not fear.",
       "aura_points": 1100,
       "relationships": {
         "Worf": "uneasy alliance — Worf told the truth at great personal cost",
-        "Chekov": "Chekov's trust is fracturing — Kirk's mercy toward Mirror Kirk is scaring him",
+        "Chekov": "Chekov's trust is badly damaged — Kirk kept the man who tried to kill him alive",
         "Scotty": "loyalty confirmed EP6, role in conspiracy unresolved",
         "Fleet Admiral": "confirmed enemy — direct confrontation; now threatening quarantine",
-        "Mirror Kirk": "Kirk will try to save him. Cannot abandon even an enemy."
+        "Mirror Kirk": "Kirk refuses to kill him while he is down, which makes Mirror Kirk envy his command"
       }
     },
     {
@@ -366,10 +498,10 @@
       "character_description": "semi-realistic Pixar 3D Commander Worf, imposing Klingon-Human, prominent forehead ridges, dark skin, fierce disciplined expression, TNG Starfleet command red uniform with lieutenant commander pips, broad shoulders, intense dark eyes",
       "voice": "George",
       "elevenlabs_voice": "George",
-      "status": "EP10: Followed Chekov from the bridge into the corridor but could not stop him. Watched Chekov board the emergency shuttle. Reported it to Kirk: 'Fear makes fast mistakes.'",
+      "status": "EP12: Guarded Mirror Kirk in sickbay and defined loyalty clearly: 'We follow the captain. Not the face.'",
       "aura_points": 600,
       "relationships": {
-        "Kirk": "follows the captain, not the face — loyalty absolute but with growing unease"
+        "Kirk": "follows Kirk as captain, not merely the face — loyalty publicly reaffirmed in front of Mirror Kirk"
       }
     },
     {
@@ -378,10 +510,10 @@
       "character_description": "semi-realistic Pixar 3D Ensign Pavel Chekov, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
       "voice": "Charlie",
       "elevenlabs_voice": "Charlie",
-      "status": "EP11: Rescued by Scotty's tractor beam from the debris field — but Mirror Kirk's capsule was dragged in alongside. Returned to Enterprise against his will. Last words on landing: 'No. No, no, no.' Cornered again.",
+      "status": "EP12: Saw Mirror Kirk restrained in sickbay and demanded to know why he was still alive. Chekov's fear has hardened into hatred.",
       "aura_points": 200,
       "relationships": {
-        "Kirk": "trusted captain completely — that trust is cracking now that Kirk wants to retrieve Mirror Kirk"
+        "Kirk": "trust is fractured — Kirk's mercy toward Mirror Kirk feels like betrayal"
       }
     },
     {
@@ -402,7 +534,7 @@
       "character_description": "semi-realistic Pixar 3D Chief Engineer Montgomery Scott, stocky build, round friendly face now tense and alarmed, swept-back dark hair with grey temples and short sideburns, wide desperate eyes, TOS red engineering tunic with black collar and Starfleet delta badge, hands raised in protest",
       "voice": "George",
       "elevenlabs_voice": "George",
-      "status": "EP11: Locked tractor beam on Chekov's shuttle and pulled it home — but the second signal in the debris rode in alongside it. Scotty accidentally brought Mirror Kirk back aboard. Did not realize until the capsule opened.",
+      "status": "EP12: At engineering controls during the Admiral's remote power cut. Detected the critical failure and delivered the cliffhanger: 'The brig just lost power.'",
       "aura_points": 450,
       "relationships": {
         "Kirk": "loyal engineer — will execute Kirk's orders even the ones that scare him"
@@ -415,10 +547,10 @@
       "voice": "Daniel",
       "elevenlabs_voice": "Daniel",
       "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery.",
-      "status": "EP11: Back aboard Enterprise. Scotty's tractor beam pulled his emergency capsule in alongside Chekov's shuttle. Stepped out and said 'Miss me, boy?' directly to Chekov. Location: transporter room.",
+      "status": "EP12: Restrained on a sickbay biobed. Realized Kirk's real power is loyalty, not fear. Now wants more than survival — he wants to steal what Kirk has.",
       "aura_points": 0,
       "relationships": {
-        "Kirk": "mirror double — envies Kirk's loyal crew; knows Kirk will try to save him",
+        "Kirk": "mirror double — now envies Kirk's loyal crew and wants to prove he can command them faster",
         "Chekov": "designated target — Chekov fears and hates him"
       },
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/mirror-kirk/sheet.png"
@@ -429,7 +561,7 @@
       "character_description": "semi-realistic Pixar 3D Starfleet Fleet Admiral, older distinguished male, silver-grey hair combed straight back, sharp strong cheekbones, four gold admiral pips on collar, dark navy Starfleet admiral uniform with gold trim, cold calculating expression, slight controlled cold smile",
       "voice": "Liam",
       "elevenlabs_voice": "Liam",
-      "status": "EP6: Direct confrontation. Now threatening quarantine of Enterprise if Kirk doesn't abandon Mirror Kirk.",
+      "status": "EP12: Escalated quarantine pressure by cutting partial power to Enterprise, causing the brig to lose power.",
       "aura_points": 0,
       "relationships": {
         "Kirk": "confirmed enemy — pressuring Kirk to abandon his principles"
@@ -437,11 +569,11 @@
     }
   ],
   "active_loops": [
-    "major: Mirror Kirk back aboard Enterprise — now in the transporter room, face-to-face with Chekov",
-    "major: Chekov cornered again — came home to find his nightmare waiting for him",
-    "major: Scotty accidentally caused Mirror Kirk's return — guilt unknown to crew yet",
-    "major: Kirk's mercy cost Chekov his escape — crew fracture deepens",
-    "major: Enterprise still under quarantine — Admiral's stranglehold; weapons offline",
+    "major: Mirror Kirk restrained in sickbay but newly envious of Kirk's loyal crew",
+    "major: Brig lost power — Mirror Kirk can escape in EP13",
+    "major: Chekov's hatred of Mirror Kirk now clashes directly with Kirk's mercy",
+    "major: Admiral escalating quarantine pressure through remote power cuts",
+    "major: Kirk's mercy keeps fracturing crew trust even as Worf reaffirms loyalty",
     "eternal: Kirk always fights for his crew against the system"
   ],
   "closed_loops": [
@@ -453,13 +585,14 @@
     "minor: Who is in the pod? — RESOLVED EP7: Mirror Kirk, a mirror-universe double of James T. Kirk"
   ],
   "world_state": {
-    "location": "Enterprise Airlock Bay + Bridge",
+    "location": "Enterprise Sickbay + Engineering Control Alcove + Brig",
     "important_items": [
-      "Mirror Kirk — missing in debris field, last heard via static comm EP9; now Chekov's shuttle is in the same zone",
+      "Mirror Kirk — restrained in sickbay after EP12, but the brig has just lost power",
       "Enterprise phaser array — DESTROYED (weapons offline)",
-      "Chekov — alone in emergency shuttle inside the debris field; his shuttle's last known heading",
+      "Chekov — back aboard Enterprise, terrified and angry that Mirror Kirk is still alive",
       "Enterprise — under quarantine by Fleet Admiral order",
-      "Fleet Admiral — quarantine enforced; Kirk cannot pursue Chekov without violating quarantine"
+      "Fleet Admiral — enforcing quarantine by remote power cuts",
+      "Brig power — offline as of EP12 cliffhanger"
     ],
     "key_events": [
       "EP1: Worf executed airlock procedure on Chekov on Fleet Admiral's orders",
@@ -503,7 +636,15 @@
       "EP10: Kirk: 'I won't let a man die.' — the answer Chekov feared.",
       "EP10: Worf followed Chekov from the bridge saying 'Fear makes fast mistakes.' Could not stop him.",
       "EP10: Chekov boarded an emergency shuttle and broke free of the dock into the debris field.",
-      "EP10: Cliffhanger — Chekov: 'Better space than that airlock again.' Shuttle enters debris field."
+      "EP10: Cliffhanger — Chekov: 'Better space than that airlock again.' Shuttle enters debris field.",
+      "EP11: Scotty caught Chekov's shuttle with the tractor beam, but a second signal rode in beside it.",
+      "EP11: Kirk ordered 'Pull them both.' — Chekov returned to Enterprise with Mirror Kirk's emergency capsule.",
+      "EP11: Mirror Kirk stepped out of the capsule and smiled at Chekov: 'Miss me, boy?'",
+      "EP12: Mirror Kirk was strapped to a sickbay biobed while Chekov stood at the door, furious that he was still alive.",
+      "EP12: Kirk told Chekov, 'Because we don't kill people who are down.'",
+      "EP12: Mirror Kirk watched the crew obey Kirk without threats and realized Kirk commands through loyalty, not fear.",
+      "EP12: Worf told Mirror Kirk, 'We follow the captain. Not the face.'",
+      "EP12: The Admiral cut partial power to Enterprise. Scotty reported: 'The brig just lost power.'"
     ]
   },
   "anti_repetition": {
@@ -520,7 +661,12 @@
       "I've got Chekov... and something else.",
       "Pull them both.",
       "No. No, no, no.",
-      "Miss me, boy?"
+      "Miss me, boy?",
+      "Why is he still breathing?",
+      "Because we don't kill people who are down.",
+      "They actually listen to you without fear?",
+      "We follow the captain. Not the face.",
+      "The brig just lost power."
     ],
     "recent_hooks": [
       "authority-edict-coldopen",
@@ -528,12 +674,16 @@
       "shuttle-escape-into-debris",
       "tractor-beam-double-signal",
       "dual-transporter-beam-reveal",
-      "capsule-hatch-opening-reveal"
+      "capsule-hatch-opening-reveal",
+      "sickbay-restraint-doorway",
+      "loyalty-without-fear-reveal",
+      "remote-power-cut-brig"
     ],
     "recent_cliffhangers": [
       "disembodied-voice-through-static",
       "shuttle-escape-into-debris",
-      "mirror-double-resurface-transporter"
+      "mirror-double-resurface-transporter",
+      "remote-power-cut-brig-escape-risk"
     ]
   },
   "episode_summaries": [
@@ -630,6 +780,16 @@
       "youtube_url": "https://www.youtube.com/watch?v=tpfUdqQcEDw",
       "yt_publish_at": "2026-06-21T20:59:00Z",
       "duration_sec": 39
+    },
+    {
+      "episode": 12,
+      "language": "en",
+      "summary": "Mirror Kirk is strapped to a sickbay biobed while Chekov stands at the door, furious that the man who tried to kill him is still breathing. Kirk refuses to execute a helpless prisoner. Mirror Kirk watches Worf and the crew obey Kirk without threats and realizes this Kirk's power comes from loyalty, not fear. Worf makes the line clear: they follow the captain, not the face. Then the Admiral escalates quarantine pressure by cutting partial ship power.",
+      "cliffhanger": "Scotty looks up from the failing engineering panel and says: 'The brig just lost power.' Mirror Kirk now has a way out.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/videos/star-trek-timelines/2026-06-24/serial-drama_final_banner.mp4",
+      "duration_sec": 38,
+      "youtube_url": "https://www.youtube.com/watch?v=pzbTE8gxTsQ",
+      "yt_publish_at": "2026-06-25T20:59:00Z"
     }
   ]
 }

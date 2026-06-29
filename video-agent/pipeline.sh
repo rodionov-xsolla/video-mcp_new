@@ -213,7 +213,7 @@ if [ "$EXPECTED_CLIPS" = "0" ] || [ -z "$EXPECTED_CLIPS" ]; then
   fail_task "storyboard.json has no clips/scenes array"
   exit 2
 fi
-DIALOGUE_CLIPS=$(jq '[(.clips // .scenes // [])[] | select(.clip_type == "dialogue" or (.tts // null) != null and (.tts | type) == "string")] | length' "$OUTPUT_DIR/storyboard.json" 2>/dev/null || echo 0)
+DIALOGUE_CLIPS=$(jq '[(.clips // .scenes // [])[] | select(.clip_type == "dialogue" or ((.tts // null) != null and (.tts | type) == "string") or (.tts_segment // null) != null)] | length' "$OUTPUT_DIR/storyboard.json" 2>/dev/null || echo 0)
 log "    storyboard.json: $EXPECTED_CLIPS clips ($DIALOGUE_CLIPS dialogue)"
 
 # === Phase 2: Sound sub-agent (Haiku) — TTS BEFORE Animator (Avatar needs audio_url) ===
@@ -227,7 +227,7 @@ if [ "$DIALOGUE_CLIPS" -gt 0 ]; then
 
   # Validate that each dialogue clip has scene-K.mp3
   SOUND_MISSING=0
-  for K in $(jq -r '[(.clips // .scenes // []) | to_entries[] | select(.value.clip_type == "dialogue" or ((.value.tts // null) | type) == "string") | (.key + 1)] | .[]' "$OUTPUT_DIR/storyboard.json" 2>/dev/null); do
+  for K in $(jq -r '[(.clips // .scenes // []) | to_entries[] | select(.value.clip_type == "dialogue" or ((.value.tts // null) | type) == "string" or (.value.tts_segment // null) != null) | (.key + 1)] | .[]' "$OUTPUT_DIR/storyboard.json" 2>/dev/null); do
     MP3="$OUTPUT_DIR/scenes/scene-$K/scene-$K.mp3"
     if [ ! -s "$MP3" ] || [ "$(stat -f%z "$MP3" 2>/dev/null || echo 0)" -lt 5000 ]; then
       log "    [warn] missing/undersized TTS: $MP3"
