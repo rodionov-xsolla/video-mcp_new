@@ -285,6 +285,30 @@ Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, so
 ### Eula (realistic counterpart — Scarlett Johansson)
 `photorealistic Scarlett Johansson, American actress with strong jawline expressive blue-grey eyes athletic powerful build natural blonde hair and commanding screen presence, wearing blue and white aristocrat military coat with silver accents, short silver-white styled hair with blue ice ornaments, natural skin textures fair complexion, cold disdainful expression with proud bearing, tall athletic powerful build`
 
+### Ayaka (game-style)
+`anime cel-shaded female Kamisato Ayaka, pale blue and white elegant kimono with snowflake cryo motifs and flowing wide sleeves, long blue-black hair in elaborate updo with white ornamental pins and delicate blue ribbons, clean bold anime outlines, vibrant flat saturated colors, serene graceful expression with a gentle confident smile, cryo sword with frost shimmer, slender elegant noble build, soft cryo snowflake aura drifting around her`
+
+### Ayaka (realistic counterpart — Selena Gomez)
+`photorealistic Selena Gomez, American actress and singer with expressive dark brown eyes warm olive complexion full lips and natural charismatic presence, wearing pale blue and white elegant kimono with snowflake motifs and flowing wide sleeves, long dark hair styled in an elaborate updo with white ornamental pins and blue ribbons, natural skin textures, serene graceful expression with warm confident smile, slender elegant build`
+
+### Nilou (game-style)
+`anime cel-shaded female Nilou, teal and white flowing dancer costume with hydro water motifs, lotus flower ornaments and layered veil skirt, long vivid red hair with decorative hairpins and flowing ribbons, clean bold anime outlines, vibrant flat saturated colors, joyful graceful dancing expression, hydro sword with shimmering water droplets, petite elegant dancer build, shimmering blue-green hydro water aura`
+
+### Nilou (realistic counterpart — Dua Lipa)
+`photorealistic Dua Lipa, British-Albanian pop star with striking dark brown eyes strong cheekbones full lips natural charisma and powerful performer presence, wearing teal and white flowing dancer costume with lotus ornaments and layered veil skirt, long red styled hair with decorative hairpins and ribbons, natural skin textures olive complexion, joyful confident dancer expression, petite elegant build`
+
+### Yelan (game-style)
+`anime cel-shaded female special operative Yelan, blue and dark navy bodysuit with hydro water motifs and intricate gold trim, flowing dark blue hair, clean bold anime outlines, vibrant flat saturated colors, elegant mysterious half-smile, hydro bow with water droplet string glow, tall athletic build, shimmering teal hydro aura`
+
+### Yelan (realistic counterpart — Ana de Armas)
+`photorealistic Ana de Armas, Cuban-Spanish actress with expressive dark eyes defined cheekbones full lips magnetic mysterious presence and sleek athletic build, wearing blue and dark navy bodysuit with hydro motifs and gold trim, flowing dark blue styled hair, natural skin textures warm complexion, elegant mysterious half-smile, tall athletic build`
+
+### Cyno (game-style)
+`anime cel-shaded male General Mahamatra Cyno, white and gold Egyptian-style armor with Anubis jackal headdress and hieroglyph motifs, dark hair under the ornate jackal mask, clean bold anime outlines, vibrant flat saturated colors, intense stoic expression, electro polearm crackling with violet sparks, lean agile powerful build, sharp violet electro aura`
+
+### Cyno (realistic counterpart — Rami Malek)
+`photorealistic Rami Malek, Egyptian-American actor with intense dark eyes distinctive angular features strong jawline and compelling magnetic presence, wearing white and gold Egyptian-style armor with Anubis jackal headdress and hieroglyph motifs, natural skin textures medium complexion, intense stoic expression with quiet authority, lean powerful build`
+
 ---
 
 ## Tone of Voice

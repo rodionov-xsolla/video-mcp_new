@@ -35,17 +35,14 @@ Run parameters:
 
 ## Concept
 
-- **Gameplay:** pre-made clips from `games/{GAME_TAG}/gameplay/`, random shuffle, not tied to text
-- **Background:** static image from Supabase `game_assets` where `tags @> ['reddit-story-bg']` for this `game_tag`
-- **TTS:** MiniMax via fal.ai `fal-ai/minimax/speech-2.8-hd`
-- **Narrator voice:** `Determined_Man`
-- **Emotion:** `neutral`
-- **Speed:** `0.90`
+- **Gameplay:** pre-made clips from `games/{GAME_TAG}/gameplay/`, random shuffle, **not tied to text** — pure background visual
+- **Background:** static image from Supabase `game_assets` where `tags @> ['reddit-story-bg']` for this `game_tag`. Editor downloads it to `build/bg.png`. If not found — STOP and ask Manager to upload one.
+- **TTS:** MiniMax via fal.ai (`fal-ai/minimax/speech-2.8-hd`), narrator voice `Determined_Man`, emotion `neutral`, speed 0.90
 - **Subtitles:** word-highlight via Whisper ASS, mandatory
-- **Duration:** up to 60s, around 150–170 words
+- **Duration:** up to 60s (~150–170 words)
 - **CTA:** overlay only, never voiced
-- **No AI video generation:** only TTS + FFmpeg assembly
-- **Budget:** $2 max, typical $0.30–0.50
+- **No AI video generation** — only TTS + ffmpeg assembly
+- **Budget:** $2 max (typical $0.30–0.50)
 
 ---
 
@@ -514,151 +511,41 @@ Only random gameplay clips are used.
 ---
 
 ### Sound
-
-- Use MiniMax via fal.ai: `fal-ai/minimax/speech-2.8-hd`.
-- ElevenLabs is not used.
+- **MiniMax via fal.ai** (`fal-ai/minimax/speech-2.8-hd`) — ElevenLabs is no longer used
 - Kokoro is not used.
-- Narrator voice: `Determined_Man`.
-- Emotion: `neutral`.
-- Speed: `0.90`.
-- Input text = `headline + "\n\n" + narrative_text`.
-- Generate one file: `tts-output.mp3`.
-- Do not generate an SRT file.
-- Editor generates timings via Whisper during assembly.
-- Music optional.
-- Music volume: `0.05`.
-- Narration must be clear.
-- General rules: `rules/roles/sound.md`.
-
----
+- Narrator voice: `Determined_Man`, emotion `neutral`, speed `0.90`
+- Input text = `headline + "\n\n" + narrative_text` as a single prompt → `tts-output.mp3`
+- **Do not generate an SRT file** — Editor generates timings via Whisper in assembly
+- Music optional, `volume=0.05` (quieter than usual — narration must be clear)
+- General rules — `rules/roles/sound.md`
 
 ### Editor
 
-Canonical layout. Do not deviate.
+**Layout (canonical — do not deviate):**
+- **Background:** query Supabase `game_assets` where `game_tag = {GAME_TAG}` AND `tags @> ['reddit-story-bg']` → download to `build/bg.png` → scaled to 1080×1920. If not found — STOP, ask Manager to upload a background asset with tag `reddit-story-bg` for this game.
+- **Gameplay panel:** 960×1280 (3:4), overlaid at x=60, y=320 → 60px side borders, 320px top/bottom borders of background visible
+- **Subtitles:** generated via Whisper on `tts-output.mp3` → `build/subs.ass`, then burned in the single-pass encode (step 2). MarginV=520 puts them inside the gameplay panel — correct.
 
-#### Layout 1080×1920
-
-- **Background:** query Supabase `game_assets` where `game_tag = {GAME_TAG}` and `tags @> ['reddit-story-bg']`.
-- Download background to `build/bg.png`.
-- Scale background to 1080×1920.
-- If not found, STOP and ask Manager to upload a background asset with tag `reddit-story-bg`.
-- **Gameplay panel:** 960×1280, overlaid at `x=60`, `y=320`.
-- This leaves 60px side borders and 320px top/bottom borders.
-- **Subtitles:** generated via Whisper on `tts-output.mp3`.
-- Subtitles are saved as `build/subs.ass`.
-- Burn subtitles into the gameplay panel.
-- `MarginV=520` puts subtitles inside the gameplay panel.
-
-#### Assembly
-
-Three-step assembly:
-
-```text
-1. Normalize gameplay.
-2. Single-pass encode with background, gameplay, subtitles, TTS and music.
-3. Concat CTA.
+**Three-step assembly (steps 2+3+4 merged into one ffmpeg-full pass):**
+```
+1. Normalize gameplay  → scale each clip to 960×1280, crop-to-fill (NEVER pad — pad adds black bars)
+                          ffmpeg: scale=960:1280:force_original_aspect_ratio=increase,crop=960:1280
+                          Optional: -ss OFFSET to start gameplay from a specific timestamp.
+                          Also run Whisper on tts-output.mp3 → build/subs.ass before step 2.
+2. Single-pass encode  → /usr/local/bin/ffmpeg-full/ffmpeg:
+                          [bg 1080×1920][gameplay 960×1280]overlay=x=60:y=320,ass='subs.ass',fps=30
+                          + amix TTS(apad) + bg-music(vol=0.05), -t TTS_DUR → build/main-final.mp4
+                          MUST use ffmpeg-full (libass). Combines composite + subtitle burn + audio in one pass.
+3. Concat CTA          → ffmpeg-full concat main-final.mp4 + cta-norm.mp4 → final.mp4
 ```
 
-#### Step 1 — Normalize gameplay
+**NEVER normalize gameplay to 1080×810** — that is landscape (4:3) applied to portrait (3:4) clips, produces massive black bars baked into gp_norm files.
 
-Normalize each gameplay clip to 960×1280.
+**CTA:** query `game_assets` where `tags @> ['cta','video']` for this `game_tag`. Accept any `asset_type` (`promo_art` or `generated_ref`) — skip records tagged `legacy`.
+If no CTA exists, fallback: `fade-to-black → SUBSCRIBE FOR MORE drawtext, 2s`.
 
-Use crop-to-fill.  
-Never use pad.
-
-Correct FFmpeg filter:
-
-```text
-scale=960:1280:force_original_aspect_ratio=increase,crop=960:1280
-```
-
-Optional:
-
-```text
--ss OFFSET
-```
-
-to start gameplay from a specific timestamp.
-
-Run Whisper on `tts-output.mp3` before step 2:
-
-```text
-build/subs.ass
-```
-
-#### Step 2 — Single-pass encode
-
-Use:
-
-```text
-/usr/local/bin/ffmpeg-full/ffmpeg
-```
-
-Must use `ffmpeg-full` because libass is required.
-
-Composite:
-
-```text
-[bg 1080×1920][gameplay 960×1280]overlay=x=60:y=320,ass='subs.ass',fps=30
-```
-
-Audio:
-
-```text
-TTS(apad) + bg-music(volume=0.05)
-```
-
-Use:
-
-```text
--t TTS_DUR
-```
-
-Never use:
-
-```text
--shortest
-```
-
-Output:
-
-```text
-build/main-final.mp4
-```
-
-#### Step 3 — Concat CTA
-
-Query `game_assets` where:
-
-```text
-tags @> ['cta','video']
-```
-
-for this `game_tag`.
-
-Accept any `asset_type`:
-
-- `promo_art`
-- `generated_ref`
-
-Skip records tagged:
-
-```text
-legacy
-```
-
-Normalize CTA if needed.  
-Concat:
-
-```text
-main-final.mp4 + cta-norm.mp4 → final.mp4
-```
-
-If no CTA exists, fallback:
-
-```text
-fade-to-black → SUBSCRIBE FOR MORE drawtext, 2s
-```
+- TTS overlay via `apad` (**NEVER `-shortest`**)
+- General rules — `rules/roles/editor.md`
 
 ---
 
@@ -755,20 +642,21 @@ games/{GAME_TAG}/reddit-story_bible.json
 - ❌ Revenge fantasy.
 - ❌ Death, gore, grim cruelty.
 - ❌ Bullying without resolution.
-- ❌ Corporate tone.
-- ❌ Voiced CTA.
+- ❌ Corporate tone ("we recommend", "download").
+- ❌ Voiced CTA / service name in the text.
 - ❌ Offerwall integration of any kind.
+- ❌ Starting with the purchase/offerwall — first a gripping story.
 
 ### Technical anti-patterns
 
-- ❌ ElevenLabs or Kokoro.
+- ❌ ElevenLabs or Kokoro — only MiniMax via `fal-ai/minimax/speech-2.8-hd`.
 - ❌ AI-video generation.
-- ❌ Hardcoding a game-specific background URL.
-- ❌ Normalizing gameplay to 1080×810.
+- ❌ Hardcoding a game-specific background URL — always query Supabase by tag `reddit-story-bg`.
+- ❌ Normalizing gameplay to 1080×810 (landscape) — clips are portrait 3:4, panel is 960×1280.
 - ❌ Padding gameplay with black bars.
-- ❌ Tying gameplay to text.
-- ❌ Using `-shortest`.
-- ❌ Repeating hooks from the last 10.
+- ❌ Tying gameplay to text — must be random.
+- ❌ Using `-shortest` — use `apad + -t`.
+- ❌ Repeating themes/hooks from the last 10 (bible).
 - ❌ Sentences longer than 15 words.
 
 ---

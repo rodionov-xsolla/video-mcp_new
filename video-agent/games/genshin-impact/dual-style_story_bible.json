@@ -3,39 +3,63 @@
   "game_tag": "genshin-impact",
   "title": "Genshin Impact Dual Style",
   "created_at": "2026-06-09",
-  "last_episode": 1,
+  "last_episode": 4,
   "character_pool": [
     {"character_name": "venti",        "display_name": "Venti",          "has_actor_counterpart": false, "actor_name": null,                  "last_seen_episode": 1},
     {"character_name": "hu-tao",       "display_name": "Hu Tao",         "has_actor_counterpart": false, "actor_name": null,                  "last_seen_episode": 1},
     {"character_name": "zhongli",      "display_name": "Zhongli",        "has_actor_counterpart": false, "actor_name": null,                  "last_seen_episode": 1},
     {"character_name": "diluc",        "display_name": "Diluc",          "has_actor_counterpart": false, "actor_name": null,                  "last_seen_episode": 1},
-    {"character_name": "raiden-shogun","display_name": "Raiden Shogun",  "has_actor_counterpart": true,  "actor_name": "Gal Gadot",           "last_seen_episode": null},
-    {"character_name": "tartaglia",    "display_name": "Tartaglia",      "has_actor_counterpart": true,  "actor_name": "Tom Holland",         "last_seen_episode": null},
-    {"character_name": "furina",       "display_name": "Furina",         "has_actor_counterpart": true,  "actor_name": "Florence Pugh",       "last_seen_episode": null},
-    {"character_name": "arlecchino",   "display_name": "Arlecchino",     "has_actor_counterpart": true,  "actor_name": "Eva Green",           "last_seen_episode": null},
-    {"character_name": "wriothesley",  "display_name": "Wriothesley",    "has_actor_counterpart": true,  "actor_name": "Henry Cavill",        "last_seen_episode": null},
-    {"character_name": "yae-miko",     "display_name": "Yae Miko",       "has_actor_counterpart": true,  "actor_name": "Margot Robbie",       "last_seen_episode": null},
-    {"character_name": "neuvillette",  "display_name": "Neuvillette",    "has_actor_counterpart": true,  "actor_name": "Timothée Chalamet",   "last_seen_episode": null},
-    {"character_name": "navia",        "display_name": "Navia",          "has_actor_counterpart": true,  "actor_name": "Sydney Sweeney",      "last_seen_episode": null},
-    {"character_name": "shenhe",       "display_name": "Shenhe",         "has_actor_counterpart": true,  "actor_name": "Emily Blunt",         "last_seen_episode": null},
-    {"character_name": "fischl",       "display_name": "Fischl",         "has_actor_counterpart": true,  "actor_name": "Anya Taylor-Joy",     "last_seen_episode": null},
-    {"character_name": "keqing",       "display_name": "Keqing",         "has_actor_counterpart": true,  "actor_name": "Zendaya",             "last_seen_episode": null},
-    {"character_name": "eula",         "display_name": "Eula",           "has_actor_counterpart": true,  "actor_name": "Scarlett Johansson",  "last_seen_episode": null}
+    {"character_name": "raiden-shogun","display_name": "Raiden Shogun",  "has_actor_counterpart": true,  "actor_name": "Gal Gadot",           "last_seen_episode": 2},
+    {"character_name": "tartaglia",    "display_name": "Tartaglia",      "has_actor_counterpart": true,  "actor_name": "Tom Holland",         "last_seen_episode": 2},
+    {"character_name": "furina",       "display_name": "Furina",         "has_actor_counterpart": true,  "actor_name": "Florence Pugh",       "last_seen_episode": 2},
+    {"character_name": "arlecchino",   "display_name": "Arlecchino",     "has_actor_counterpart": true,  "actor_name": "Eva Green",           "last_seen_episode": 2},
+    {"character_name": "wriothesley",  "display_name": "Wriothesley",    "has_actor_counterpart": true,  "actor_name": "Henry Cavill",        "last_seen_episode": 3},
+    {"character_name": "yae-miko",     "display_name": "Yae Miko",       "has_actor_counterpart": true,  "actor_name": "Margot Robbie",       "last_seen_episode": 3},
+    {"character_name": "neuvillette",  "display_name": "Neuvillette",    "has_actor_counterpart": true,  "actor_name": "Timothée Chalamet",   "last_seen_episode": 3},
+    {"character_name": "navia",        "display_name": "Navia",          "has_actor_counterpart": true,  "actor_name": "Sydney Sweeney",      "last_seen_episode": 3},
+    {"character_name": "keqing",       "display_name": "Keqing",         "has_actor_counterpart": true,  "actor_name": "Zendaya",             "last_seen_episode": 4},
+    {"character_name": "fischl",       "display_name": "Fischl",         "has_actor_counterpart": true,  "actor_name": "Anya Taylor-Joy",     "last_seen_episode": 4},
+    {"character_name": "shenhe",       "display_name": "Shenhe",         "has_actor_counterpart": true,  "actor_name": "Emily Blunt",         "last_seen_episode": 4},
+    {"character_name": "eula",         "display_name": "Eula",           "has_actor_counterpart": true,  "actor_name": "Scarlett Johansson",  "last_seen_episode": 4},
+    {"character_name": "ayaka",        "display_name": "Ayaka",          "has_actor_counterpart": true,  "actor_name": "Selena Gomez",        "last_seen_episode": null},
+    {"character_name": "nilou",        "display_name": "Nilou",          "has_actor_counterpart": true,  "actor_name": "Dua Lipa",            "last_seen_episode": null},
+    {"character_name": "yelan",        "display_name": "Yelan",          "has_actor_counterpart": true,  "actor_name": "Ana de Armas",        "last_seen_episode": null},
+    {"character_name": "cyno",         "display_name": "Cyno",           "has_actor_counterpart": true,  "actor_name": "Rami Malek",          "last_seen_episode": null}
   ],
   "character_rotation": {
-    "recent_characters": ["Venti", "Hu Tao", "Zhongli", "Diluc"],
-    "recent_actors": [],
+    "recent_characters": [
+      "Venti", "Hu Tao", "Zhongli", "Diluc",
+      "Raiden Shogun", "Tartaglia", "Furina", "Arlecchino",
+      "Wriothesley", "Yae Miko", "Neuvillette", "Navia",
+      "Keqing", "Fischl", "Shenhe", "Eula"
+    ],
+    "recent_actors": [
+      "Florence Pugh", "Eva Green",
+      "Henry Cavill", "Margot Robbie", "Timothée Chalamet", "Sydney Sweeney",
+      "Zendaya", "Anya Taylor-Joy", "Emily Blunt", "Scarlett Johansson"
+    ],
     "recent_environments": [
       "Mondstadt windswept cliff edge",
       "Wuwang Hill misty graveyard at dusk",
       "Liyue Harbor stone dock at golden hour",
-      "Dawn Winery stone courtyard at night"
+      "Dawn Winery stone courtyard at night",
+      "Inazuma throne room",
+      "Liyue harbor arena at dusk",
+      "Fontaine open theater stage plain wooden floor",
+      "Fatui underground stone chamber",
+      "Cryo prison Snezhnaya plain neutral floor",
+      "Narukami shrine Inazuma plain neutral floor",
+      "plain neutral grey floor simple spotlight",
+      "plain warm ivory floor simple spotlight",
+      "plain soft violet-tinted seamless studio floor",
+      "plain dark charcoal seamless studio floor with gold undertone",
+      "plain icy blue seamless studio floor",
+      "plain silver-blue seamless studio floor"
     ],
     "recent_action_types": [
-      "wide-introduction-pose",
-      "character-skill-pose",
-      "character-skill-pose",
-      "dynamic-element-release"
+      "walking-approach", "walking-approach",
+      "walking-approach", "walking-approach",
+      "walking-approach", "walking-approach"
     ],
     "cooldown_episodes": 10
   },
@@ -53,9 +77,59 @@
       "actors": ["(none)", "(none)", "(none)", "(none)"],
       "action_types": ["wide-introduction-pose", "character-skill-pose", "character-skill-pose", "dynamic-element-release"],
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-09/dual-style_final.mp4",
-      "duration_sec": 20.0,
-      "cost_usd": 2.00,
-      "notes": "Pilot episode. 4 characters: 4 generic (no actor counterparts). All Liyue/Mondstadt region environments."
+      "duration_sec": 25.21,
+      "cost_usd": 2.32
+    },
+    {
+      "episode": 2,
+      "date": "2026-06-09",
+      "characters": ["Raiden Shogun", "Tartaglia", "Furina", "Arlecchino"],
+      "environments": [
+        "Inazuma throne room",
+        "Liyue harbor arena at dusk",
+        "Fontaine open theater stage plain wooden floor",
+        "Fatui underground stone chamber"
+      ],
+      "actors": ["Gal Gadot", "Tom Holland", "Florence Pugh", "Eva Green"],
+      "action_types": ["walking-approach", "walking-approach", "walking-approach", "walking-approach"],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-09/dual-style-ep2_final.mp4",
+      "duration_sec": 25.21,
+      "cost_usd": 2.68,
+      "notes": "Actor-as-realistic debut. Walk-toward-camera format established after face-distortion iterations."
+    },
+    {
+      "episode": 3,
+      "date": "2026-06-10",
+      "characters": ["Wriothesley", "Yae Miko", "Neuvillette", "Navia"],
+      "environments": [
+        "Cryo prison Snezhnaya plain neutral floor",
+        "Narukami shrine Inazuma plain neutral floor",
+        "plain neutral grey floor simple spotlight",
+        "plain warm ivory floor simple spotlight"
+      ],
+      "actors": ["Henry Cavill", "Margot Robbie", "Timothée Chalamet", "Sydney Sweeney"],
+      "action_types": ["walking-approach", "walking-approach", "walking-approach", "walking-approach"],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/genshin-impact/2026-06-10-dual-style-ep3/final.mp4",
+      "duration_sec": 25.21,
+      "cost_usd": 3.20,
+      "notes": "NO HEAD/FACE MOVEMENT rule added. Simple backgrounds used after Neuvillette/Chalamet face distortion."
+    },
+    {
+      "episode": 4,
+      "date": "2026-06-15",
+      "characters": ["Keqing", "Fischl", "Shenhe", "Eula"],
+      "environments": [
+        "plain soft violet-tinted seamless studio floor",
+        "plain dark charcoal seamless studio floor with gold undertone",
+        "plain icy blue seamless studio floor",
+        "plain silver-blue seamless studio floor"
+      ],
+      "actors": ["Zendaya", "Anya Taylor-Joy", "Emily Blunt", "Scarlett Johansson"],
+      "action_types": ["walking-approach", "walking-approach", "walking-approach", "walking-approach"],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/genshin-impact/2026-06-15-dual-style-ep4/final.mp4",
+      "duration_sec": 25.21,
+      "cost_usd": 2.80,
+      "notes": "EP4 format: simple studio backgrounds, strict NO HEAD/FACE MOVEMENT. Keqing/Zendaya SFX scene-1 reduced to 0.06 (was too loud)."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4"
