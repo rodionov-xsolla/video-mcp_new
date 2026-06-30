@@ -39,6 +39,8 @@ Not for: news / patch recaps (use `news`), character lore (use `character-story`
 
 4. **Music is continuous and upbeat.** Unlike other formats (where music only plays at opener/CTA), fake-ad music runs through the ENTIRE video including the twist and packshot. Volume `0.25` (louder than default — commercial-style presence).
 
+5. **Dialogue/sketch exception.** If the user brief requires a character-driven sketch, proposal, interview, confession, or other dialogue setup, the format may use character dialogue instead of a single announcer. This is still `fake-ad` only if it preserves the core commercial structure: a sincere setup, an unexpected ad turn/twist, and a final packshot or channel CTA. In this exception, keep dialogue short enough for 5s clips, use the user's live story beats over the default table below, and make the ad line feel like a deliberate commercial interruption.
+
 ### Models
 
 - **Image:** Nano Banana 2 (5 scenes including packshot product hero shot)

@@ -14,6 +14,7 @@
 # ENV переменные:
 #   PIPELINE_EDITOR_MODEL — модель для Editor (default: claude-sonnet-4-6)
 #   PIPELINE_LOG          — путь к лог-файлу (default: $OUTPUT_DIR/pipeline.log)
+#   PIPELINE_ORCHESTRATOR — codex (default) | claude
 #
 # Легаси (run.sh, монолитный worker.sh) не трогается. Pipeline опт-ин.
 
@@ -94,11 +95,20 @@ log() {
 #   Storyboarder — Opus 4.7 (chain-ref strategy, expensive errors on NB2)
 #   Animator   — Opus 4.7 (Kling errors are $0.28-1.40, judgment matters)
 #   Editor     — Sonnet 4.6 (procedural FFmpeg по чек-листу)
-SCENARIST_MODEL="${PIPELINE_SCENARIST_MODEL:-claude-sonnet-4-6}"
-SOUND_MODEL="${PIPELINE_SOUND_MODEL:-claude-haiku-4-5-20251001}"
-STORYBOARDER_MODEL="${PIPELINE_STORYBOARDER_MODEL:-claude-opus-4-7}"
-ANIMATOR_MODEL="${PIPELINE_ANIMATOR_MODEL:-claude-opus-4-7}"
-EDITOR_MODEL="${PIPELINE_EDITOR_MODEL:-claude-sonnet-4-6}"
+PIPELINE_ORCHESTRATOR="${PIPELINE_ORCHESTRATOR:-codex}"
+if [ "$PIPELINE_ORCHESTRATOR" = "claude" ]; then
+  SCENARIST_MODEL="${PIPELINE_SCENARIST_MODEL:-claude-sonnet-4-6}"
+  SOUND_MODEL="${PIPELINE_SOUND_MODEL:-claude-haiku-4-5-20251001}"
+  STORYBOARDER_MODEL="${PIPELINE_STORYBOARDER_MODEL:-claude-opus-4-7}"
+  ANIMATOR_MODEL="${PIPELINE_ANIMATOR_MODEL:-claude-opus-4-7}"
+  EDITOR_MODEL="${PIPELINE_EDITOR_MODEL:-claude-sonnet-4-6}"
+else
+  SCENARIST_MODEL="${PIPELINE_SCENARIST_MODEL:-}"
+  SOUND_MODEL="${PIPELINE_SOUND_MODEL:-}"
+  STORYBOARDER_MODEL="${PIPELINE_STORYBOARDER_MODEL:-}"
+  ANIMATOR_MODEL="${PIPELINE_ANIMATOR_MODEL:-}"
+  EDITOR_MODEL="${PIPELINE_EDITOR_MODEL:-}"
+fi
 
 fail_task() {
   local REASON="$1"
@@ -110,7 +120,7 @@ fail_task() {
 
 run_subagent() {
   # run_subagent <phase_name> <prompt_file> <model> <log_file> <env_var_assignments...>
-  # Interpolates ${VARS} from current env into prompt_file via envsubst, runs claude -p with model.
+  # Interpolates ${VARS} from current env into prompt_file, runs the configured orchestrator.
   local PHASE_NAME="$1"
   local PROMPT_FILE="$2"
   local MODEL="$3"
@@ -123,26 +133,74 @@ run_subagent() {
   fi
 
   local PROMPT
-  PROMPT=$(GAME_TAG="$GAME_TAG" FORMAT="$FORMAT" IDEA="$IDEA" \
-           OUTPUT_DIR="$OUTPUT_DIR" TASK_ID="$TASK_ID" \
-           LANGUAGE="${LANGUAGE:-en}" \
-           OPENER_PATH="${OPENER_PATH:-}" CTA_PATH="${CTA_PATH:-}" \
-           EXISTING_REFS_JSON="${EXISTING_REFS_JSON:-}" \
-           SUPABASE_ASSETS_FILE="${SUPABASE_ASSETS_FILE:-}" \
-           envsubst < "$PROMPT_FILE")
+  if command -v envsubst >/dev/null 2>&1; then
+    PROMPT=$(GAME_TAG="$GAME_TAG" FORMAT="$FORMAT" IDEA="$IDEA" \
+             OUTPUT_DIR="$OUTPUT_DIR" TASK_ID="$TASK_ID" \
+             LANGUAGE="${LANGUAGE:-en}" \
+             OPENER_PATH="${OPENER_PATH:-}" CTA_PATH="${CTA_PATH:-}" \
+             MERGED_CONTEXT_PATH="${MERGED_CONTEXT_PATH:-}" \
+             EXISTING_REFS_JSON="${EXISTING_REFS_JSON:-}" \
+             SUPABASE_ASSETS_FILE="${SUPABASE_ASSETS_FILE:-}" \
+             envsubst < "$PROMPT_FILE")
+  else
+    PROMPT=$(GAME_TAG="$GAME_TAG" FORMAT="$FORMAT" IDEA="$IDEA" \
+             OUTPUT_DIR="$OUTPUT_DIR" TASK_ID="$TASK_ID" \
+             LANGUAGE="${LANGUAGE:-en}" \
+             OPENER_PATH="${OPENER_PATH:-}" CTA_PATH="${CTA_PATH:-}" \
+             MERGED_CONTEXT_PATH="${MERGED_CONTEXT_PATH:-}" \
+             EXISTING_REFS_JSON="${EXISTING_REFS_JSON:-}" \
+             SUPABASE_ASSETS_FILE="${SUPABASE_ASSETS_FILE:-}" \
+             python3 - "$PROMPT_FILE" <<'PY'
+import os
+import re
+import sys
+
+text = open(sys.argv[1], encoding="utf-8").read()
+pattern = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)(?::-(.*?))?\}")
+
+def repl(match):
+    value = os.environ.get(match.group(1))
+    if value:
+        return value
+    return match.group(2) or ""
+
+sys.stdout.write(pattern.sub(repl, text))
+PY
+)
+  fi
 
   local START_T END_T
   START_T=$(date +%s)
-  log "    [$PHASE_NAME] launching (model: $MODEL)..."
-  if env -u CLAUDECODE stdbuf -oL claude -p "$PROMPT" \
-     --model "$MODEL" \
-     --allowedTools '*' --permission-mode bypassPermissions --verbose \
-     < /dev/null >> "$CLAUDE_LOG" 2>&1; then
+  log "    [$PHASE_NAME] launching (${PIPELINE_ORCHESTRATOR}, model: ${MODEL:-default})..."
+  local EXIT_CODE
+  if [ "$PIPELINE_ORCHESTRATOR" = "codex" ]; then
+    local CODEX_CMD=(codex exec -C "$SCRIPT_DIR" --dangerously-bypass-approvals-and-sandbox)
+    if [ -n "$MODEL" ]; then
+      CODEX_CMD+=("--model" "$MODEL")
+    fi
+    "${CODEX_CMD[@]}" "$PROMPT" < /dev/null >> "$CLAUDE_LOG" 2>&1
+    EXIT_CODE=$?
+  else
+    if command -v stdbuf >/dev/null 2>&1; then
+      env -u CLAUDECODE stdbuf -oL claude -p "$PROMPT" \
+         --model "$MODEL" \
+         --permission-mode bypassPermissions --verbose \
+         < /dev/null >> "$CLAUDE_LOG" 2>&1
+      EXIT_CODE=$?
+    else
+      env -u CLAUDECODE claude -p "$PROMPT" \
+         --model "$MODEL" \
+         --permission-mode bypassPermissions --verbose \
+         < /dev/null >> "$CLAUDE_LOG" 2>&1
+      EXIT_CODE=$?
+    fi
+  fi
+
+  if [ "$EXIT_CODE" -eq 0 ]; then
     END_T=$(date +%s)
     log "    [$PHASE_NAME] completed in $((END_T - START_T))s"
     return 0
   else
-    local EXIT_CODE=$?
     END_T=$(date +%s)
     log "!!! [$PHASE_NAME] FAILED (exit $EXIT_CODE) after $((END_T - START_T))s — log: $CLAUDE_LOG"
     return "$EXIT_CODE"
@@ -156,6 +214,7 @@ log "Idea:         $IDEA"
 log "Format:       $FORMAT"
 log "Output:       $OUTPUT_DIR"
 log "Task ID:      ${TASK_ID:-<none>}"
+log "Orchestrator: $PIPELINE_ORCHESTRATOR"
 log "Scenarist:    $SCENARIST_MODEL"
 log "Sound:        $SOUND_MODEL"
 log "Storyboarder: $STORYBOARDER_MODEL"
@@ -173,6 +232,21 @@ if git -C "$SCRIPT_DIR" pull --rebase --autostash origin main >> "$LOG_FILE" 2>&
 else
   log "    [warn] git pull failed or no upstream; continuing"
 fi
+
+MERGED_CONTEXT_PATH="$OUTPUT_DIR/merged-context.md"
+log "    build_context.py (optional legacy gate)..."
+BUILD_CONTEXT_SCRIPT="$SCRIPT_DIR/tools/build_context.py"
+if [ -f "$BUILD_CONTEXT_SCRIPT" ]; then
+  if python3 "$BUILD_CONTEXT_SCRIPT" "$GAME_TAG" "$FORMAT" "$OUTPUT_DIR" >> "$LOG_FILE" 2>&1; then
+    log "    build_context: OK → $MERGED_CONTEXT_PATH"
+  else
+    fail_task "build_context.py failed"
+    exit 1
+  fi
+else
+  log "    build_context: skipped (script not present in current tool layout)"
+fi
+export MERGED_CONTEXT_PATH
 
 # Supabase asset bank query — список существующих refs/avatars/openers/CTAs/prompts
 SUPABASE_ASSETS_FILE="$OUTPUT_DIR/_supabase-assets.json"
