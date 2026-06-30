@@ -1,0 +1,163 @@
+{
+  "series_id": "genshin-character-story-en",
+  "game_tag": "genshin-impact",
+  "language": "en",
+  "title": "Genshin Impact — Character Story",
+  "format": "character-story",
+  "created_at": "2026-06-29",
+  "last_episode": 9,
+
+  "tts_engine": "chatterbox",
+  "tts_note": "Genshin ALWAYS uses Chatterbox via fal-ai/chatterbox/text-to-speech. Voice refs at assets/genshin-impact/characters/{slug}/voice-1.mp3. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
+  "voice_ref_base": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/{slug}/voice-1.mp3",
+
+  "format_overrides": {
+    "note": "Format-level additions applied from EP9 (2026-06-29) onwards. Scenarist must implement these in storyboard.json.",
+    "hook_requirement": "Clip 1 MUST visualize the most tragic or emotionally intense trial of the character — not a neutral opener. Visual should be scroll-stopping (dramatic contrast of light/dark, child alone, devastating loss). TTS fragment sets the stakes immediately.",
+    "promo_clip": {
+      "active": true,
+      "position": 2,
+      "beats": ["promo"],
+      "tts_template_en": "Grab free Primogems from the link in bio. Now — here's my story.",
+      "tts_template_ru": "Забери бесплатные примагемы по ссылке в био. А вот моя история.",
+      "clip_type": "action",
+      "duration_sec": 5,
+      "visual_note": "Character faces camera in neutral/warm environment (Wangsheng gates, shrine entrance, etc). Slight knowing smile or direct gaze — as if speaking to the viewer. NOT dramatic — brief and natural, then cuts to story.",
+      "chatterbox_params": {
+        "exaggeration": 0.45,
+        "cfg": 0.50,
+        "temperature": 0.7
+      }
+    },
+    "structure": "HOOK (clip 1) → PROMO (clip 2) → ORIGIN (clips 3-4) → TURNING POINT (clips 5-6) → REVELATION (clip 7) → CTA"
+  },
+
+  "character_rotation": {
+    "done_female": ["Amber", "Kokomi", "Lisa", "Xiangling", "Dehya", "Navia", "Hu Tao"],
+    "done_male": ["Xiao", "Zhongli"],
+    "all_done": ["Amber", "Xiao", "Kokomi", "Lisa", "Xiangling", "Dehya", "Navia", "Zhongli", "Hu Tao"],
+    "cooldown_episodes": 20,
+    "selection_note": "Pick characters with strong lore arcs and tragic backstories. Prioritize 5-star characters with high popularity. Alternate male/female for variety. Avoid repeating characters used in dual-style within 4 episodes."
+  },
+
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-06-01",
+      "character": "Amber",
+      "character_slug": "amber",
+      "gender": "female",
+      "idea": "Amber — Outrider of the Knights of Favonius | Character Story",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/amber/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-01/character-story_final.mp4",
+      "tts_engine": "chatterbox",
+      "notes": "First episode. No promo clip. Standard HOOK → ORIGIN → TURNING POINT → REVELATION structure."
+    },
+    {
+      "episode": 2,
+      "date": "2026-06-02",
+      "character": "Xiao",
+      "character_slug": "xiao",
+      "gender": "male",
+      "idea": "Xiao — Last Yaksha | Character Story",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/xiao/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-02/character-story_final.mp4",
+      "tts_engine": "chatterbox",
+      "notes": "No promo clip."
+    },
+    {
+      "episode": 3,
+      "date": "2026-06-02",
+      "character": "Kokomi",
+      "character_slug": "kokomi",
+      "gender": "female",
+      "idea": "Kokomi — Divine Priestess | Character Story",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/kokomi/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-02/character-story-kokomi_final.mp4",
+      "tts_engine": "chatterbox",
+      "notes": "No promo clip. Same day as Xiao."
+    },
+    {
+      "episode": 4,
+      "date": "2026-06-08",
+      "character": "Lisa",
+      "character_slug": "lisa",
+      "gender": "female",
+      "idea": "Lisa's Story — Mondstadt's Witchy Librarian | Genshin Impact",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lisa/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-08/character-story_final.mp4",
+      "tts_engine": "chatterbox",
+      "youtube_url": "https://www.youtube.com/watch?v=3WcoG3CQCyM",
+      "notes": "No promo clip."
+    },
+    {
+      "episode": 5,
+      "date": "2026-06-08",
+      "character": "Xiangling",
+      "character_slug": "xiangling",
+      "gender": "female",
+      "idea": "Xiangling's Story — Liyue's Fearless Chef | Genshin Impact",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/xiangling/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-08/character-story-xiangling_final.mp4",
+      "tts_engine": "chatterbox",
+      "notes": "No promo clip. Same day as Lisa."
+    },
+    {
+      "episode": 6,
+      "date": "2026-06-08",
+      "character": "Dehya",
+      "character_slug": "dehya",
+      "gender": "female",
+      "idea": "Dehya's Story — Blazing Beiyou Captain | Genshin Impact",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/dehya/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/videos/genshin-impact/2026-06-08/character-story-dehya_final.mp4",
+      "tts_engine": "chatterbox",
+      "notes": "No promo clip."
+    },
+    {
+      "episode": 7,
+      "date": "2026-06-15",
+      "character": "Navia",
+      "character_slug": "navia",
+      "gender": "female",
+      "idea": "Navia's Story in 30 Seconds | Genshin Impact",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/navia/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-15/character-story-navia_final.mp4",
+      "tts_engine": "chatterbox",
+      "chatterbox_params": { "exaggeration": 0.55, "cfg": 0.45, "temperature": 0.7 },
+      "notes": "No promo clip. Chunk-based TTS used (3 chunks of ≤35 words)."
+    },
+    {
+      "episode": 9,
+      "date": "2026-06-29",
+      "character": "Hu Tao",
+      "character_slug": "hu-tao",
+      "gender": "female",
+      "idea": "Hu Tao — 77th Director of Wangsheng Funeral Parlor | Genshin Impact",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/hu-tao/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-29/character-story-hu-tao_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=5Iorp7s3ir0",
+      "youtube_scheduled": "2026-07-02T20:59:00Z",
+      "tts_engine": "chatterbox",
+      "chatterbox_params": { "exaggeration": 0.60, "cfg": 0.45, "temperature": 0.70 },
+      "age_variants": ["child (~7)", "teen (~12)", "adult"],
+      "clips": 7,
+      "cost_usd": 3.94,
+      "notes": "First episode with format_overrides active: tragic hook at clip 1 (child in graveyard), promo clip at position 2 (free primogems CTA in Hu Tao's voice). 3 age-variant character refs generated. ffmpeg-full libass for subtitle burn."
+    },
+    {
+      "episode": 8,
+      "date": "2026-06-25",
+      "character": "Zhongli",
+      "character_slug": "zhongli",
+      "gender": "male",
+      "idea": "Zhongli's Story — The Geo Archon Who Gave Up Everything",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/zhongli/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-25/character-story_final.mp4",
+      "tts_engine": "chatterbox",
+      "notes": "No promo clip."
+    }
+  ],
+
+  "next_planned": null
+}

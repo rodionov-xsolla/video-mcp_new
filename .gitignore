@@ -18,6 +18,10 @@ video-agent/.env.*
 video-agent/output/
 output/
 
+# Conductor workspace state
+.conductor/
+.context/
+
 # macOS
 .DS_Store
 
