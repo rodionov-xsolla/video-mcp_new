@@ -20,7 +20,7 @@ Keywords: "character story", "история персонажа", "лор", "lor
 ## Concept
 
 - **Genre:** lore monologue, first-person visual storytelling
-- **Style:** realistic 3D CGI — always, regardless of the game's own art style. Cinematic, photorealistic textures, game cutscene quality.
+- **Style:** taken from `games/{GAME_TAG}/{GAME_TAG}.md` — unless the story bible (`*_story_bible.json`) defines a `format_overrides.image_style` override, which takes precedence.
 - **Duration:** 30–40s (6–8 clips × 5s)
 - **Budget:** up to $6.00 per video. Stop if spend > $5.40.
 - **Frame format:** 9:16 (608×1080) for all scenes
@@ -156,7 +156,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
 
 ### Storyboarder
 
-- **Style: realistic 3D CGI** — always, for every game. Do NOT mirror the game's own art style (illustrated, painted, cel-shaded, etc.). Image prompts must include: `realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI, game cutscene quality`.
+- Style: from `games/{GAME_TAG}/{GAME_TAG}.md`. If the story bible defines `format_overrides.image_style`, use that instead — it overrides the game config for all clips.
 - All frames 9:16 (608×1080)
 - Character ref: create an anchor ref (neutral pose, dark background) from game config
 - **No bg-reference generation.** Environment is baked into the scene prompt via `image_prompt`. Do NOT generate separate bg PNGs for character-story — use text description of the location in the prompt only.
@@ -288,13 +288,11 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 
 ## Visual style consistency — HARD RULE
 
-**The canonical style for character-story is realistic 3D — regardless of the game's own art style.** Even if the game uses illustrated, painted, or cel-shaded graphics, all character-story clips must look like high-quality realistic 3D CGI characters (think cinematic game cutscene quality). This is the established visual language of this format across all episodes.
+**All clips in an episode must share the same visual style.** The target style is determined by the story bible's `format_overrides.image_style` (if present) or the game config — and must be applied identically to every clip, including clips with child characters or scenes that trigger NB2 safety filters.
 
-**Image prompt style keywords to always include:** `realistic 3D render`, `cinematic lighting`, `photorealistic textures`, `high detail 3D CGI`, `game cutscene quality`. Do NOT use: `illustrated`, `painted`, `cel-shaded`, `anime`, `cartoon`, `stylized`.
+**If NB2 rejects a prompt:** rewrite the `image_prompt` and `negative_prompt` using neutral language (avoid: occupation, refugee, soldier, war, violence, terrified, attack, battle, enemy). Do NOT change the image style, do NOT drop the character ref from `image_urls`. The character ref anchors the visual style — removing it causes NB2 to lose the style anchor and produce inconsistent output.
 
-**If NB2 rejects a prompt:** rewrite the `image_prompt` and `negative_prompt` using neutral language (avoid: occupation, refugee, soldier, war, violence, terrified, attack, battle, enemy). Do NOT change the image style, do NOT drop the character ref from `image_urls`. The character ref (`image_urls`) anchors the 3D style — removing it causes NB2 to lose the visual anchor and may produce inconsistent output.
-
-**Style drift = episode failure.** An episode where some clips are realistic 3D and others are in a different art style (illustrated, painted, photographic) must be marked `status: "error"` and rejected at the Phase 6 review gate. The entire storyboard generation phase must be rerun with corrected prompts.
+**Style drift = episode failure.** An episode where clips differ in art style must be marked `status: "error"` and rejected at the Phase 6 review gate. Rerun storyboarder with corrected prompts.
 
 ---
 

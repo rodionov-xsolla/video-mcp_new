@@ -11,6 +11,7 @@
 
   "format_overrides": {
     "note": "Applied from EP1 onward. Star Trek Timelines character-story = canonical Trek character narrates their own origin/lore in first person. I2V visualizes the key moments. Do NOT show the character speaking on camera — TTS is off-screen narration while Kling shows action.",
+    "image_style": "realistic 3D CGI — cinematic lighting, photorealistic textures, high detail 3D render, game cutscene quality. Do NOT use the game's illustrated/painted art style. All clips must match this style, including child-character scenes. Required prompt keywords: 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI, game cutscene quality'.",
     "hook_requirement": "Clip 1 MUST visualize the most dramatic or emotionally charged moment of the character's arc — not a neutral opener. Visual should be scroll-stopping: crisis, loss, decisive choice. TTS line sets the stakes immediately.",
     "era_tags": {
       "note": "Do NOT write era-specific strings (TNG, TOS, DS9) in NB2/Kling prompts — the model re-assigns uniform colors. Always specify the uniform color explicitly.",
