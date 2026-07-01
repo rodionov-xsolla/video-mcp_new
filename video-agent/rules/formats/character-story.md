@@ -286,6 +286,16 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 
 ---
 
+## Visual style consistency — HARD RULE
+
+**All scenes in the episode must be in the same visual style as the game.** Style is defined once in `games/{GAME_TAG}/{GAME_TAG}.md` and must be applied identically to every clip, including clips with child characters, difficult historical events, or scenes that trigger NB2 safety filters.
+
+**If NB2 rejects a prompt:** rewrite the `image_prompt` and `negative_prompt` using neutral language (avoid: occupation, refugee, soldier, war, violence, terrified, attack, battle, enemy). Do NOT change the image style, do NOT switch to photorealism, do NOT drop the character ref from `image_urls`. The character ref (`image_urls`) is what anchors the game's 3D/illustrated/painted style — removing it causes NB2 to default to photorealism and breaks visual consistency across the episode.
+
+**Style drift = episode failure.** An episode where some clips are in the game's 3D style and others are photorealistic must be marked `status: "error"` and rejected at the Phase 6 review gate. The entire storyboard generation phase must be rerun with corrected prompts.
+
+---
+
 ## Anti-patterns
 
 - ❌ `generate_audio: true` in Kling I2V (voice is bad, use TTS overlay)

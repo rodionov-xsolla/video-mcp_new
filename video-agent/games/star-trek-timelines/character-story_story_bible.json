@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Character Story",
   "created_at": "2026-05-30",
-  "last_episode": 7,
+  "last_episode": 15,
   "tts_engine": "elevenlabs",
   "tts_note": "ElevenLabs eleven-v3 via fal-ai/elevenlabs/tts/eleven-v3. Each canonical character gets a dedicated voice chosen by gender and emotional register. No Chatterbox — STT always uses ElevenLabs. See characters[] for voice assignments. Long monologue (>80 words) → mandatory chunking into ≤35-word segments.",
 
@@ -25,9 +25,11 @@
   },
 
   "character_rotation": {
-    "done_female": ["Uhura", "Carol Marcus", "B'Elanna Torres"],
-    "done_male": ["McCoy", "Archer", "Lorca"],
-    "all_done": ["McCoy", "Uhura", "Carol Marcus", "Archer", "Lorca", "B'Elanna Torres", "Q (unknown EP7)"],
+    "done_female": ["Uhura", "Carol Marcus", "B'Elanna Torres", "Seven of Nine", "Jadzia Dax", "Janeway", "Michael Burnham", "T'Pol"],
+    "done_male": ["McCoy", "Archer", "Lorca", "Q", "Sisko", "Picard", "Data"],
+    "all_done": ["McCoy", "Uhura", "Carol Marcus", "Archer", "Lorca", "B'Elanna Torres", "Q", "Seven of Nine", "Sisko", "Jadzia Dax", "Janeway", "Picard", "Data", "Michael Burnham", "T'Pol"],
+    "error": ["Kira Nerys"],
+    "error_note": "Characters listed in 'error' had a production attempt but the final video was rejected. Do NOT pick them again until manually reviewed and removed from this list.",
     "cooldown_episodes": 20,
     "selection_note": "Cover all Trek eras — TOS → TNG → DS9 → VOY → ENT → DIS. Prioritize characters with strong lore arcs and tragic backstories. Alternate male/female for variety. Include complex antagonists (Lorca, Khan, Dukat) but balance with heroes. Avoid repeating characters used in dual-style / redcon within 4 episodes. 5-star characters preferred for engagement."
   },
@@ -267,6 +269,20 @@
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-09/character-story-belanna_final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=w67HFhXuCKU",
       "notes": "Half-Klingon engineer torn between two cultures. Rejected by both Starfleet Academy and her Klingon heritage. Found identity through engineering genius and crew of Voyager."
+    },
+    {
+      "episode": 16,
+      "date": "2026-07-01",
+      "character": "Kira Nerys",
+      "character_slug": "kira",
+      "gender": "female",
+      "era": "DS9",
+      "status": "error",
+      "error_reason": "Visual style inconsistency: scenes 1 and 3 rendered in 3D game style (correct), scenes 2/4/5/6/7 rendered in illustrated/painted style (different). Root cause: child-character safety filter blocked initial NB2 prompts, causing re-generation without image_urls style anchor — resulting in photorealistic output for those clips. Fix: always keep image_urls (character ref) even on safety-filter retries; rewrite prompt language only.",
+      "output_dir": "output/2026-07-01/star-trek-timelines/character-story-kira",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-01/character-story-kira_final.mp4",
+      "youtube_url": null,
+      "notes": "Do not publish. Redo from Phase 3 (storyboarder) with consistent style anchoring across all clips."
     },
     {
       "episode": 7,
