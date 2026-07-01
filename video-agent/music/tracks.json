@@ -210,6 +210,45 @@
       "bpm": 125,
       "use_for": ["dance-battle", "object-character", "standard"],
       "description": "Classic feel-good house (Music Sounds Better With You), party and dance energy"
+    },
+    {
+      "name": "dual-style-cyber-fantasy",
+      "file": "AI-generated/dual-style-cyber-fantasy.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/dual-style-cyber-fantasy.mp3",
+      "duration_sec": 185,
+      "mood": "energetic",
+      "bpm": 145,
+      "use_for": ["dual-style"],
+      "start_offset_sec": 139,
+      "description": "Japanese cyberpunk fantasy instrumental, driving taiko drums with synth lead melody, 145 BPM. Use from 2:19 for rhythmic part.",
+      "generated_by": "MiniMax Music v2.6",
+      "prompt": "japanese cyberpunk fantasy instrumental, driving taiko drums with synth lead melody, futuristic anime aesthetic, 145 BPM, energetic rhythmic momentum, no vocals"
+    },
+    {
+      "name": "dual-style-dark-taiko",
+      "file": "AI-generated/dual-style-dark-taiko.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/dual-style-dark-taiko.mp3",
+      "duration_sec": 158,
+      "mood": "energetic",
+      "bpm": 145,
+      "use_for": ["dual-style"],
+      "start_offset_sec": 26,
+      "description": "Japanese taiko percussion driven instrumental, aggressive synth bass, cyberpunk anime battle energy, 145 BPM. Use from 0:26 for rhythmic part.",
+      "generated_by": "MiniMax Music v2.6",
+      "prompt": "japanese taiko percussion driven instrumental, aggressive synth bass, cyberpunk anime battle energy, pounding rhythmic momentum, 145 BPM, no vocals, dark electronic fantasy"
+    },
+    {
+      "name": "dual-style-samurai-synth",
+      "file": "AI-generated/dual-style-samurai-synth.mp3",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/music/dual-style-samurai-synth.mp3",
+      "duration_sec": 233,
+      "mood": "energetic",
+      "bpm": 148,
+      "use_for": ["dual-style"],
+      "start_offset_sec": 44,
+      "description": "Driving taiko drums with dark synth lead, cyberpunk samurai energy, heavy bass pulse, 148 BPM. Use from 0:44 for rhythmic part.",
+      "generated_by": "MiniMax Music v2.6",
+      "prompt": "driving taiko drums with dark synth lead, intense rhythmic anime action, cyberpunk samurai energy, heavy bass pulse, 148 BPM, no vocals, futuristic japanese electronic"
     }
   ]
 }
