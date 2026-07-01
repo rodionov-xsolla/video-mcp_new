@@ -28,7 +28,10 @@
     "Any spoken line inside a ROOM 1701 dialogue I2V clip must have generate_audio:true, voice_ids, and <<<voice_N>>>; do not accidentally make a dialogue beat silent.",
     "If a required story beat does not fit the 2-voice or 512-character limits, split/add a clip instead of dropping the beat.",
     "Generate background music with MiniMax Music unless the user explicitly asks for a local library track.",
-    "After ASS subtitle generation, clamp every subtitle event to its dialogue scene window; no subtitles may hang over silent/action scenes."
+    "After ASS subtitle generation, clamp every subtitle event to its dialogue scene window; no subtitles may hang over silent/action scenes.",
+    "Title card overlay PNG is at games/star-trek-timelines/overlay-series.png. Use this file in every episode — do NOT generate a Pillow text strip.",
+    "bg-refs for new locations must be TIGHT MEDIUM SHOTS — not wide establishing shots. Wide refs cause characters to appear tiny and child-proportioned. EP2 burned this twice before fixing.",
+    "Max 6 scenes per episode to stay under $7 budget. 8 scenes (EP2) cost $8.42 — too much."
   ],
   "characters": [
     {

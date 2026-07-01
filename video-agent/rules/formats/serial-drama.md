@@ -5,7 +5,7 @@ overlays: false
 
 # Format "Serial Drama" — serial micro-dramas
 
-Serial micro-dramas with brainrot aesthetic and an endless plot. Each episode = 25–40 seconds, 3–5 clips, cliffhanger at the end.
+Serial micro-dramas with brainrot aesthetic and an endless plot. Each episode = 40–45 seconds, **max 6 clips**, cliffhanger at the end.
 
 This file is the **playbook**: when to use, concept, budget, series state (story bible), role briefs. Craft rules — in `rules/roles/*.md`.
 
@@ -21,8 +21,8 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 
 - **Genre:** endless micro-dramas with brainrot aesthetic, cliffhangers, plot loops
 - **Style:** stylized semi-realistic 3D characters with expressive faces and practical lighting. Do **not** prompt Disney/Pixar/DreamWorks, toy-like plastic style, or oversized cartoon eyes unless a specific game bible explicitly requires it. Preserve the exact proportions and style of locked character cards.
-- **Duration:** 25–40s (3–5 clips × 5–10s)
-- **Budget:** up to $10 per episode. Stop if spend > $9.00.
+- **Duration:** 40–45s (**max 6 clips** × 5–10s). Hard cap — Scenarist must not exceed 6 scenes. EP2 had 8 scenes = $8.42, target is ≤$6 per episode.
+- **Budget:** up to $7 per episode. Stop if spend > $6.50. Each dialogue I2V clip costs ~$0.63–1.26 — 6 clips max keeps you under budget.
 - **Frame format:** 9:16 (608×1080) for all scenes. Square forbidden.
 
 ### Clip mix (balances)
@@ -254,6 +254,7 @@ Convention examples (series "Don't Save Me", Genshin Impact):
 - Stylized 3D style (`style_tags` from story bible), but do not introduce Disney/Pixar/DreamWorks terms unless they already exist in the locked series bible.
 - All frames 9:16 (608×1080) — square forbidden
 - **bg-reference per location** mandatory — without it the background drifts between clips (see `storyboarder.md` section 2)
+- **bg-ref must be a TIGHT MEDIUM SHOT** — not a wide establishing shot. Wide bg-refs make characters appear tiny and proportionally wrong. The bg-ref should show the environment at the same depth/distance as the characters will occupy in the scene. EP2: initial wide coffee-spot refs caused child-proportioned characters; regenerating as tight medium shots fixed it.
 - **Location lock:** the location ref is the source of truth. Do not add extra furniture, walls, props, or alternate room layouts that are not in the locked room/background card. If the generated scene has correct character positions but a wrong room, regenerate from the same character setup with stricter room-lock text.
 - Character refs: characters from story bible. Attach relevant character refs and the location/background ref to every scene image prompt.
 - **Ref completeness gate:** every visible/speaking character in the scene must have their locked ref in `image_urls`. If a character is mentioned but their ref is missing, regenerate the scene PNG before Animator.
@@ -286,6 +287,7 @@ Convention examples (series "Don't Save Me", Genshin Impact):
 - **Music is generated, not silently selected locally:** for serial-drama, generate `bg-music.mp3` through `fal-ai/minimax-music/v2.6` unless the user explicitly asks for a local library track. For sitcom tone: instrumental low-density comedy underscore, no vocals/lyrics, no dramatic swell.
 - **Narrator VO (optional):** off-screen series intro voice over I2V action clips. Store as `narrator_vo` top-level field in storyboard.json: `{text, voice, tts_url, duration_sec, overlay_clips, volume}`. Sound generates the MP3; Editor overlays it via amix starting at t=0. Generate with `faster-whisper` for timing (offset=0 per clip, then +cumulative_start for ASS timecodes).
 - **Subtitles:** ASS via `ffmpeg-full` (`/usr/local/bin/ffmpeg-full/ffmpeg`) — libass is required; stock Homebrew ffmpeg silently errors on `ass=` filter. Use sentence-level Whisper timing — NOT word-by-word. Dialogue style: Bold=1, Outline=6, Fontsize=70, white, MarginV=520. Narrator style: Bold=1, Outline=4, italic, warm color `#EDE0C8`, Fontsize=65, MarginV=540.
+- **Whisper source = individual scene MP4s, NOT voice-final.wav and NOT storyboard JSON text.** Extract 16kHz mono WAV from each dialogue scene MP4 (`ffmpeg -vn -ar 16000 -ac 1`), run Whisper on each separately, then offset timecodes by cumulative scene start. Running Whisper on voice-final.wav or storyboard text produces subtitles with speaker names and JSON metadata instead of dialogue. Burned in EP2.
 - **Subtitle timing cap (mandatory):** After `add_subtitles.py` generates `build/subs.ass`, clamp every Dialogue event to the dialogue clip window it overlaps most. Events must never bleed into action/I2V-without-speech clips, CTA, or the next dialogue scene. If Whisper merges words across a scene boundary, split the subtitle text manually at the boundary.
 - ONLY dialogue subs + narrator + TBC. No title cards, brainrot tags, character names.
 - Background music: drama/cinematic, `volume=0.15`; duck to `0.08–0.10` under narrator VO.
@@ -306,19 +308,14 @@ Convention examples (series "Don't Save Me", Genshin Impact):
 - **CTA included in concat list** as the last clip (not a separate re-encode)
 - TBC overlay 2s before the end (before fade)
 - Fade out 1.0s on MAIN_DUR (before CTA); CTA goes after fade in silence
-- **Episode title strip — mandatory for every episode.** Pillow PNG overlay (NOT drawtext — `.ttf` on macOS works but `.ttc` produces squares). Apply via ffmpeg `-loop 1` on the PNG with `[1:v]trim=duration=TOTAL,fade=in:d=0.3,fade=out:st=4.5:d=0.5[strip]; [0:v][strip]overlay=x=0:y=40`. Duration: visible **5 seconds** total (fade-in 0.3s at t=0, fade-out 0.5s starting at t=4.5s). Strip spec:
-  - Canvas: 1080×110 px, semi-transparent dark background (black, alpha ~200)
-  - Line 1 (top): series name, 32px Arial Bold, gold `#f5d060`, centered
-  - Line 2 (bottom): `EP. N — EPISODE TITLE`, 54px Arial Bold, white, centered
-  - y=8 for line 1, y=48 for line 2
-  - Generate with Pillow, save as `build/title-strip.png`, apply in final ffmpeg pass
+- **Episode title card — use the series overlay PNG, not a Pillow-generated strip.** Each series has a locked `overlay-series.png` in `games/{GAME_TAG}/`. Load it as an ffmpeg input, scale to fit 1080px wide (`scale=1080:-1`), overlay centered on the frame (`x=(main_w-overlay_w)/2:y=(main_h-overlay_h)/2`) during the title-card window defined in `storyboard.json episode_metadata.title_card_position`. Visible 5 seconds with fade-in 0.5s + fade-out 0.5s (starting at t=4.5s relative to overlay start). For ROOM 1701: `games/star-trek-timelines/overlay-series.png`.
 - General rules — `rules/roles/editor.md`
 
 ---
 
 ## CTA (Call to Action)
 
-The CTA video is taken from Supabase `game_assets` (tag `cta` + `video`). Manager downloads it in Phase 0 and hands it to Editor.
+The CTA video is taken from Supabase `game_assets` (tag `cta` + `video`). Manager downloads it in Phase 0 and hands it to Editor. For star-trek-timelines: `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4` (5s, no embedded audio — inject anullsrc).
 
 ### Assembly
 
