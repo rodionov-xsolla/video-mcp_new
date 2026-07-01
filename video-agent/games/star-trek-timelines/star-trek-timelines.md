@@ -177,6 +177,15 @@ Star Trek Timelines style, semi-realistic sci-fi character portrait, cinematic F
 ### Gul Dukat (Cardassian)
 `semi-realistic male Cardassian, gray scaly textured skin, prominent spoon-shaped cranial ridge on forehead, raised neck ridges, slicked-back dark hair, Cardassian military uniform in gray-brown with armored shoulders, charming manipulative smile, tall lean build, Cardassian warship bridge background with dark metallic tones`
 
+### Jadzia Dax (DS9, science blue)
+`semi-realistic female Trill Starfleet science officer, light tan skin, distinctive dark brown Trill spots along hairline and neck, long dark hair loosely styled, blue and black DS9-era Starfleet uniform with combadge on left chest, lieutenant commander rank pips on collar, intelligent warm expression, serene confident posture, full-body standing figure, Deep Space Nine background`
+
+### Michael Burnham (Discovery, command red)
+`semi-realistic female Starfleet captain, dark brown skin, short natural hair, determined focused expression, dark red and black DSC uniform with Starfleet delta combadge, strong athletic build, hands clasped with commanding presence, full-body figure, Discovery-era bridge background with holographic blue displays`
+
+### Uhura (TOS, operations red)
+`semi-realistic female Starfleet communications officer, smooth dark skin, elegant facial structure, straight black hair styled back, warm professional expression, red operations mini-dress TOS uniform with Starfleet delta badge on left chest, small Vulcan hearing earpiece in left ear, full-body standing figure, Enterprise bridge communications panel background`
+
 ---
 
 ## Игровой сленг (для сценариев)
