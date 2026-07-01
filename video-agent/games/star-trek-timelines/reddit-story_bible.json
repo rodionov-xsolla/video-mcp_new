@@ -1,6 +1,6 @@
 {
   "game_tag": "star-trek-timelines",
-  "total_stories": 3,
+  "total_stories": 4,
   "stories": [
     {
       "id": 1,
@@ -34,45 +34,67 @@
       "moral_engine": "mocked and misjudged as using a helpful player for free carries",
       "game_situation": "lonely new player joins a Star Trek Timelines fleet",
       "false_verdict": "the narrator only talks to TemporalMedic to get carried",
-      "pressure_source": "fleet chat accusing the narrator of farming sympathy and free help",
+      "pressure_source": "fleet chat accusations",
       "resolution_type": "positive",
       "output_dir": "output/2026-06-26/star-trek-timelines/reddit-story-dramatic/",
       "youtube_url": "https://www.youtube.com/watch?v=9KzlGfoDVb8",
       "yt_publish_at": "2026-06-30T20:59:00Z",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-26/reddit-story_dramatic_final.mp4"
+    },
+    {
+      "id": 4,
+      "date": "2026-07-01",
+      "tone": "funny-justice",
+      "theme": "lore-nerd-proves-fake-fans-wrong",
+      "moral_engine": "dismissed-as-fake-fan-proven-right-by-knowledge",
+      "game_situation": "Trek Discord lore debate",
+      "false_verdict": "narrator is a fake Trek fan who plays gacha trash",
+      "pressure_source": "Discord group piling on publicly",
+      "resolution_type": "neutral-positive",
+      "headline": "They called me a fake Trek fan for playing a gacha game. That game proved them wrong.",
+      "offerwall_angle": "downloaded game from bio link (native — first story beat)",
+      "output_dir": "output/2026-07-01/star-trek-timelines/reddit-story/",
+      "youtube_url": "https://www.youtube.com/watch?v=o_0lqlxes44",
+      "yt_publish_at": "2026-07-04T20:59:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/videos/star-trek-timelines/2026-07-01/reddit-story_final.mp4"
     }
   ],
   "anti_repetition": {
     "recent_themes": [
-      "gauntlet-comeback-behold-seven-of-nine",
       "real-life-friendship-fleet-surgeon",
-      "lonely-player-finds-friendship-through-fleet-chat"
+      "lonely-player-finds-friendship-through-fleet-chat",
+      "lore-nerd-proves-fake-fans-wrong"
     ],
     "recent_tones": [
-      "dramatic",
       "warm",
-      "soft drama"
+      "soft drama",
+      "funny-justice"
     ],
-    "recent_hooks": [
-      "three years playing, hit a wall with Gauntlet, offerwall tasks, Behold pull",
-      "LogicOverFear username, best fleet tactician, surgeon reveal, COVID lockdowns, pasta dinner",
-      "bio link download, lonely group-chat avoider, accused of using TemporalMedic for free carries, chat logs reveal he helped everyone"
-    ],
-    "banned_combos": [],
     "recent_moral_engines": [
-      "misjudged friendship as manipulation"
+      "misjudged friendship as manipulation",
+      "dismissed-as-fake-fan-proven-right-by-knowledge"
     ],
     "recent_game_situations": [
-      "lonely new player joins a Star Trek Timelines fleet"
+      "lonely new player joins a Star Trek Timelines fleet",
+      "Trek Discord lore debate"
     ],
     "recent_false_verdicts": [
-      "the narrator only talks to TemporalMedic to get carried"
+      "the narrator only talks to TemporalMedic to get carried",
+      "narrator is a fake Trek fan who plays gacha trash"
     ],
     "recent_pressure_sources": [
-      "fleet chat accusations"
+      "fleet chat accusations",
+      "Discord group piling on publicly"
     ],
     "recent_resolution_types": [
-      "positive"
-    ]
+      "positive",
+      "neutral-positive"
+    ],
+    "recent_hooks": [
+      "LogicOverFear username, best fleet tactician, surgeon reveal, COVID lockdowns, pasta dinner",
+      "bio link download, lonely group-chat avoider, accused of using TemporalMedic for free carries, chat logs reveal he helped everyone",
+      "bio link download, mocked in Discord for playing STT, Treaty of Algeron lore fact silences crowd"
+    ],
+    "banned_combos": []
   }
 }
