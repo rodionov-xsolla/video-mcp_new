@@ -49,8 +49,18 @@
       "comment": "youtube: https://www.youtube.com/watch?v=uZuSleljafo (scheduled 2026-06-22T20:59:00Z). Supabase: https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/star-trek-timelines/2026-06-19-in-game-pov/final.mp4. Survival arc: 8%→4%→22%→47%→71%. 5 POV scenes: bridge→corridor→auxiliary control→engineering→bridge clearing. Title card has TTS and Tactic Sans overlay."
     }
   ],
+    {
+      "situation": "Hirogen hunting party on the surface of a hostile M-class planet — you are the prey",
+      "date": "2026-06-29",
+      "outcome": "survive",
+      "threat_type": "Hirogen",
+      "published": true,
+      "status": "completed",
+      "comment": "youtube: https://www.youtube.com/watch?v=QtaLwneSSug (scheduled 2026-07-02T20:59:00Z). Supabase: https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-29/in-game-pov_final.mp4. Survival arc: 8%→6%→4%→18%→42%→71%. Planet surface POV: jungle→ravine→ruins→cave(download hook)→thermal field→crashed shuttle. Banner ST2 overlay on scenes 1 and 4. Download hook woven into cave scene (Timelines relay beacon). Video manually edited by user before upload."
+    }
+  ],
   "anti_repetition": {
-    "threat_types_used": ["Borg", "Borg", "Borg", "Dominion", "Romulan"],
-    "note": "Borg used 3 times, then Dominion, then Romulan. Next situation: avoid Borg, Dominion, and Romulan. Good candidates: Klingon Bird-of-Prey ambush, Breen energy dampener, Species 8472 in fluidic space, Cardassian raid on DS9, Hirogen hunting party, Temporal anomaly (Krenim weapon), Holodeck malfunction trapping crew."
+    "threat_types_used": ["Borg", "Borg", "Borg", "Dominion", "Romulan", "Hirogen"],
+    "note": "Borg used 3 times, Dominion, Romulan, Hirogen. Next situation: avoid all of these. Good candidates: Klingon Bird-of-Prey ambush, Breen energy dampener, Species 8472 in fluidic space, Cardassian raid on DS9, Temporal anomaly (Krenim weapon), Holodeck malfunction trapping crew."
   }
 }

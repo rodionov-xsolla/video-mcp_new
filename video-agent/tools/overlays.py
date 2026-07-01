@@ -33,6 +33,19 @@ overlays[] schema (in each clip/scene of storyboard.json):
     "line_gap": 160                   // optional y step between \\n lines (default = size*1.25)
   }
 
+  IMAGE overlay type (static PNG from URL, displayed over the clip):
+  {
+    "type": "image",
+    "url": "https://...banner.png",   // downloaded to workdir at encode time
+    "width": 400,                     // px, -1 = keep aspect relative to height
+    "height": -1,                     // px, -1 = keep aspect relative to width
+    "position": "top-left|top-right|center|bottom-center|{x},{y}",
+    "enable": [0.0, 5.0],             // optional time window; omit = full clip
+    "opacity": 1.0                    // optional (1.0 = fully opaque)
+  }
+  Image overlays are rendered via ffmpeg movie+overlay filter (no extra -i needed).
+  They are applied AFTER all drawtext overlays in the scene.
+
 Usage:
   # fragment for one scene (editor calls it in a loop K=1..N):
   python3 overlays.py storyboard.json --scene-index 3 --workdir build \\
@@ -50,6 +63,7 @@ import argparse
 import json
 import os
 import sys
+import urllib.request
 
 
 # ---------------------------------------------------------------------------
@@ -230,17 +244,98 @@ def build_overlay_drawtexts(ov: dict, scene_idx, oi: int, workdir: str) -> list[
     return filters
 
 
+def _download_img(url: str, workdir: str, scene_idx, oi: int) -> str:
+    """Download an image URL to workdir and return the local path (cached)."""
+    os.makedirs(workdir, exist_ok=True)
+    ext = (url.rsplit(".", 1)[-1].split("?")[0] if "." in url else "png")[:4]
+    local = os.path.join(workdir, f"img-s{scene_idx}-{oi}.{ext}")
+    if not os.path.isfile(local):
+        urllib.request.urlretrieve(url, local)
+    return local
+
+
+def _img_pos_to_xy(pos) -> tuple[str, str]:
+    """Position spec -> (x_expr, y_expr) for ffmpeg overlay filter (uses W/H, not text_w/h)."""
+    if pos == "center":
+        return "(W-w)/2", "(H-h)/2"
+    if pos == "top-left":
+        return "40", "40"
+    if pos == "top-right":
+        return "W-w-40", "40"
+    if pos == "bottom-center":
+        return "(W-w)/2", "H-h-200"
+    if isinstance(pos, str) and "," in pos:
+        x, y = pos.split(",", 1)
+        return x.strip(), y.strip()
+    if isinstance(pos, dict):
+        return str(pos.get("x", "40")), str(pos.get("y", "40"))
+    return "40", "40"
+
+
+def build_image_overlay_frags(ov: dict, scene_idx, oi: int, workdir: str,
+                               in_label: str, out_label: str) -> tuple[str, str]:
+    """One image overlay -> (source_frag, overlay_frag) pair joined with ';' by caller.
+    source_frag: 'movie=...,scale,loop,format=rgba[imgLBL]'
+    overlay_frag: '{in_label}[imgLBL]overlay=x:y[out_label]'
+    Returns ("", "") on missing url (skipped silently).
+    """
+    url = ov.get("url", "").strip()
+    if not url:
+        return "", ""
+    local = _download_img(url, workdir, scene_idx, oi)
+    w = int(ov.get("width", -1))
+    h = int(ov.get("height", -1))
+    # keep aspect if one dim is -1; ffmpeg scale allows -1
+    scale_str = f"scale={w}:{h}"
+    lbl = f"v{scene_idx}im{oi}"
+    escaped = local.replace("'", "\\'")
+    src = (f"movie='{escaped}',{scale_str},"
+           f"loop=loop=-1:size=1:start=0,format=rgba[{lbl}]")
+    x, y = _img_pos_to_xy(ov.get("position", "top-left"))
+    en = _enable_expr(ov.get("enable"))
+    opts = f"x={x}:y={y}"
+    if en:
+        opts += f":enable='{en}'"
+    ovl = f"{in_label}[{lbl}]overlay={opts}{out_label}"
+    return src, ovl
+
+
 def scene_fragment(scene: dict, scene_idx, workdir: str,
                    in_label: str, out_label: str) -> str:
-    """All overlays of a scene -> one filter fragment '[in]drawtext,...[out]'.
-    Empty if there are no overlays."""
+    """All overlays of a scene -> one filter fragment string (parts joined by ';').
+    Handles drawtext (title/hud_counter/etc.) and image types.
+    Empty string if there are no overlays."""
     overlays = scene.get("overlays") or []
-    all_dt = []
-    for oi, ov in enumerate(overlays):
-        all_dt.extend(build_overlay_drawtexts(ov, scene_idx, oi, workdir))
-    if not all_dt:
+    text_ovls = [ov for ov in overlays if ov.get("type") != "image"]
+    img_ovls  = [ov for ov in overlays if ov.get("type") == "image"]
+
+    if not text_ovls and not img_ovls:
         return ""
-    return f"{in_label}" + ",".join(all_dt) + f"{out_label}"
+
+    parts: list[str] = []
+    cur = in_label  # current 'input' label as we chain filters
+
+    # -- Drawtext chain (text overlays) --
+    if text_ovls:
+        all_dt = []
+        for oi, ov in enumerate(text_ovls):
+            all_dt.extend(build_overlay_drawtexts(ov, scene_idx, oi, workdir))
+        if all_dt:
+            dt_out = f"[v{scene_idx}dt]" if img_ovls else out_label
+            parts.append(f"{cur}" + ",".join(all_dt) + f"{dt_out}")
+            cur = dt_out
+
+    # -- Image overlays (movie + overlay filter) --
+    for ii, ov in enumerate(img_ovls):
+        next_lbl = out_label if ii == len(img_ovls) - 1 else f"[v{scene_idx}io{ii}]"
+        oi_abs = len(text_ovls) + ii
+        src, ovl = build_image_overlay_frags(ov, scene_idx, oi_abs, workdir, cur, next_lbl)
+        if src and ovl:
+            parts.append(src)
+            parts.append(ovl)
+            cur = next_lbl
+
+    return ";".join(parts) if parts else ""
 
 
 def scene_idx(s: dict):
@@ -290,15 +385,21 @@ def main():
 
     if args.check:
         used = set()
+        img_urls = []
         for s in scenes:
             for ov in (s.get("overlays") or []):
-                used.add(ov.get("font", "IMPACT"))
+                if ov.get("type") == "image":
+                    img_urls.append(ov.get("url", ""))
+                else:
+                    used.add(ov.get("font", "IMPACT"))
         missing = [k for k in used if resolve_font(k) is None]
         for k in sorted(used):
             print(f"  font {k}: {resolve_font(k) or 'MISSING'}", file=sys.stderr)
         if missing:
             print(f"ERROR: fonts not found: {missing}", file=sys.stderr)
             sys.exit(1)
+        for url in img_urls:
+            print(f"  image overlay url: {url}", file=sys.stderr)
         print("  [check] all fonts found", file=sys.stderr)
         return
 

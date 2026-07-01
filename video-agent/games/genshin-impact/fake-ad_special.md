@@ -4,6 +4,8 @@
 
 **Lumine (Traveler)** is the default protagonist for Genshin fake ads unless the brief specifies otherwise. She's the perfect straight-man — earnest, determined, and deeply afflicted by resin anxiety.
 
+If the user brief specifies canonical characters, product, setting, or a sketch/dialogue premise, that live brief overrides this Lumine/Resin Energy default completely. Keep only the Genshin visual style, Supabase asset reuse, and packshot/CTA discipline from this file. Do not force Lumine, Paimon, resin anxiety, Resin Energy, or the resin notification into briefs about other characters or products.
+
 Character prompt block (copy verbatim for scenes 0–3):
 ```
 female Traveler Lumine: white and gold traveler outfit with star constellation motifs and flowing white sash, long blonde hair with signature silver star-shaped hair clip, sharp determined expression, one-handed sword at her side, graceful athletic build, anime cel-shaded style
