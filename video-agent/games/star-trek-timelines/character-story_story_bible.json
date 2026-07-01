@@ -278,7 +278,7 @@
       "gender": "female",
       "era": "DS9",
       "status": "error",
-      "error_reason": "Visual style inconsistency: scenes 1 and 3 rendered in 3D game style (correct), scenes 2/4/5/6/7 rendered in illustrated/painted style (different). Root cause: child-character safety filter blocked initial NB2 prompts, causing re-generation without image_urls style anchor — resulting in photorealistic output for those clips. Fix: always keep image_urls (character ref) even on safety-filter retries; rewrite prompt language only.",
+      "error_reason": "Visual style inconsistency: scenes 1 and 3 correct (realistic 3D CGI), scenes 2/4/5/6/7 rendered in the game's illustrated/painted style (wrong). character-story format requires realistic 3D across ALL clips. Root cause: storyboarder used game art style from star-trek-timelines.md instead of the format's canonical realistic 3D style. Fix: image prompts must always include 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI' keywords — do not inherit game art style for this format.",
       "output_dir": "output/2026-07-01/star-trek-timelines/character-story-kira",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-01/character-story-kira_final.mp4",
       "youtube_url": null,
