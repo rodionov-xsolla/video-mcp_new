@@ -253,14 +253,46 @@ Convention examples (series "Don't Save Me", Genshin Impact):
 
 - Stylized 3D style (`style_tags` from story bible), but do not introduce Disney/Pixar/DreamWorks terms unless they already exist in the locked series bible.
 - All frames 9:16 (608×1080) — square forbidden
-- **bg-reference per location** mandatory — without it the background drifts between clips (see `storyboarder.md` section 2)
-- **bg-ref must be a TIGHT MEDIUM SHOT** — not a wide establishing shot. Wide bg-refs make characters appear tiny and proportionally wrong. The bg-ref should show the environment at the same depth/distance as the characters will occupy in the scene. EP2: initial wide coffee-spot refs caused child-proportioned characters; regenerating as tight medium shots fixed it.
-- **Location lock:** the location ref is the source of truth. Do not add extra furniture, walls, props, or alternate room layouts that are not in the locked room/background card. If the generated scene has correct character positions but a wrong room, regenerate from the same character setup with stricter room-lock text.
-- Character refs: characters from story bible. Attach relevant character refs and the location/background ref to every scene image prompt.
-- **Ref completeness gate:** every visible/speaking character in the scene must have their locked ref in `image_urls`. If a character is mentioned but their ref is missing, regenerate the scene PNG before Animator.
-- I2V clips: **start frame only** (`scene-K.png`). End frames are NEVER generated — see `storyboarder.md` §14.8/§16. `end_image_url` is FORBIDDEN with `multi_prompt` (Kling returns 422).
+
+#### image_prompt template (EP1 gold standard — follow this structure for every scene)
+
+```
+{GAME} 3D animated scene, Pixar-DreamWorks quality CGI,
+[PRIMARY CHAR — full physical description + SPECIFIC POSE/ACTION in this scene],
+[SECONDARY CHAR — full physical description, shown shoulders-up only, facing direction, action],
+[TERTIARY CHAR if present — shown shoulders-up only, STRONGLY out of focus blurred background [position], action],
+[ENVIRONMENT — tight, specific relevant details matching the bg-ref],
+[SHOT TYPE — close medium two-shot / medium three-shot / etc.],
+vertical 9:16 frame, no text overlays, keep facial features exactly matching the uploaded reference images
+```
+
+**Critical rules for this template:**
+- **Primary char** = the speaker or hero of this beat. Full description + what they are physically DOING (pose, gesture, expression). Not just appearance — specific action: `"leaning in toward Michael with urgent whisper expression, shoulders raised, chin tucked"` not `"nervous energy"`.
+- **Secondary chars** = always `"shown shoulders-up only [left/right of frame]"`. Never describe their full body unless they are equally prominent. Describe their specific action too.
+- **Background/blurred chars** = add `"STRONGLY out of focus blurred background [far left/right]"` in CAPS so NB2 treats it as instruction, not description. Include their char sheet in `image_urls` anyway — the sheet anchors their face even when blurred.
+- **Color specificity** = use emphatic exact names for distinctive costume items: `"bright YELLOW-GOLD hoodie"` not `"yellow hoodie"`. Ambiguous color = wrong render.
+- **Environment** = describe tightly — what is immediately around the characters, not the whole room. Match the bg-ref depth: if the bg-ref shows a tight medium shot of the coffee bar, describe `"coffee bar edge and espresso machine visible close in background"`, not `"coffee shop interior"`.
+
+#### image_urls order and rules
+
+```json
+"image_urls": [
+  "<location-bg-ref>",       // ALWAYS first — environment anchor
+  "<primary-char-sheet>",    // speaking/hero character
+  "<secondary-char-sheet>",  // second visible character
+  "<tertiary-char-sheet>"    // third visible character (if any, max 4 total)
+]
+```
+
+- **ALL visible/speaking character sheets are mandatory** — even for chars who are blurred background. Their sheet anchors the face even at low prominence. Missing a sheet = face drifts or character looks generic.
+- **NEVER include a cross-episode scene image as a ref.** A previous episode's room photo (e.g. `room1701-ep1-last-scene.png`) will bleed its location (bedroom furniture, colors) into the new scene. EP2 attempt 2 used the EP1 last scene as anchor → bedroom elements appeared in the coffee shop. Only use character sheets + location bg-ref.
+- **Each scene is independent** — no ref chaining between scenes. Each NB2 call gets a fresh set of refs: location ref + relevant char sheets for that scene. Do not pass a previous scene's output as input to the next.
+- **bg-ref must be a TIGHT MEDIUM SHOT** — not a wide establishing shot. Wide bg-refs make characters appear tiny and child-proportioned. EP2: wide coffee-spot refs caused this; regenerating as tight medium shots fixed it. If a new location has no saved bg-ref, generate it as a tight medium shot first.
+- **No photoreal source refs.** An asset tagged `photoreal` / `live-action` biases the render toward realism; `"not photorealistic"` in the text prompt does NOT override a photoreal source image.
+
+#### General storyboarder rules
+- I2V clips: **start frame only** (`scene-K.png`). End frames are NEVER generated. `end_image_url` is FORBIDDEN with `multi_prompt` (Kling returns 422).
 - Each clip = its own scene PNG (not the ref directly)
-- **No photoreal source refs in this stylized format.** Before using a character ref, check its tags — an asset tagged `photoreal` / `comedy-sketch` / `live-action` is FORBIDDEN here. A photoreal reference image biases the whole render toward realism; a text negative such as "not photorealistic" does NOT override a photoreal *source image* (proven by EP6 scene 8, which used `spock/variants/canonical.png` — a photoreal sheet — and drifted realistic). Use a locked stylized 3D sheet, or generate one.
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
@@ -273,8 +305,8 @@ Convention examples (series "Don't Save Me", Genshin Impact):
 - Start frame only for I2V; Kling animates from the start frame via `motion_prompt`
 - **Style-hold for this stylized 3D format (not universal — lives here, not in `animator.md`):**
   - **Anti-photoreal negative in EVERY I2V clip**, not selectively: `photorealistic, film grain, realistic skin, live action, photograph`. EP6 scene 2 omitted it and the close-up drifted realistic; scenes 7/8 that had it held better.
-  - **Carry the style anchor into EVERY shot of a `multi_prompt`**, not just shot 1 — each shot's prompt restates the locked series style (for ROOM 1701: "semi-realistic stylized 3D characters, practical bedroom lighting, not photoreal"). Late shots without an anchor drift to the model's realistic prior.
-  - **Carry physical descriptors into EVERY shot of a `multi_prompt`**, especially immediately before each voice tag. Do not rely on names: the model will assign lines to the wrong visible person.
+  - **Carry the style anchor into EVERY shot of a `multi_prompt`**, not just shot 1 — each shot's prompt opens with the locked series style + current location lighting. The anchor is LOCATION-SPECIFIC, not a boilerplate: `"Semi-realistic stylized 3D, not photoreal, warm Edison bulb interior light"` for coffee shop interior; `"Semi-realistic stylized 3D, not photoreal, soft warm morning light, coffee shop exterior"` for exterior; `"Semi-realistic stylized 3D, not photoreal, warm lamp light, bedroom"` for Room 1701. Late shots without an anchor drift to the model's realistic prior.
+  - **Carry physical descriptors into EVERY shot of a `multi_prompt`**, especially immediately before each `<<<voice_N>>>` tag. Do not rely on names: the model will assign lines to the wrong visible person. Full physical description = at least hair color/style, glasses if any, hoodie/top color, and one distinctive item (headphones, badge, necklace).
   - **Do not end a `multi_prompt` on a tight close-up of a face that is not present in the start frame.** This was the real "problem is always in the third shot": both EP6 multi-prompts ended on an invented face close-up; by the last shot Kling has left the start frame and re-renders that face with its own (realistic) prior. Keep the final shot within the framing the start frame supports, or split the close-up into its own clip.
   - **Второй персонаж входит в середине `multi_prompt`-клипа** → через Kling `elements` + `@Element1` в нужном шоте (`animator.md §5a`, burn-tested 2026-06-01). Работает, **если персонаж занимает заметную площадь кадра** (особенно крупный план лица — чинит дрейф финального шота). Для узнаваемости в мелком/перекрытом плане (лицо за стеклом и т.п.) element читается обобщённо → делай отдельный клип со своим start-frame.
 - **Do NOT use Avatar** in serial-drama. If a storyboard contains `clip_type: "avatar"` or an Avatar endpoint, return it to Scenarist before generation.
