@@ -5,10 +5,9 @@
   "language": "en",
   "title": "Star Trek Timelines — Character Story",
   "created_at": "2026-05-30",
-  "last_episode": 15,
+  "last_episode": 17,
   "tts_engine": "elevenlabs",
   "tts_note": "ElevenLabs eleven-v3 via fal-ai/elevenlabs/tts/eleven-v3. Each canonical character gets a dedicated voice chosen by gender and emotional register. No Chatterbox — STT always uses ElevenLabs. See characters[] for voice assignments. Long monologue (>80 words) → mandatory chunking into ≤35-word segments.",
-
   "format_overrides": {
     "note": "Applied from EP1 onward. Star Trek Timelines character-story = canonical Trek character narrates their own origin/lore in first person. I2V visualizes the key moments. Do NOT show the character speaking on camera — TTS is off-screen narration while Kling shows action.",
     "image_style": "realistic 3D CGI — cinematic lighting, photorealistic textures, high detail 3D render, game cutscene quality. Do NOT use the game's illustrated/painted art style. All clips must match this style, including child-character scenes. Required prompt keywords: 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI, game cutscene quality'.",
@@ -24,17 +23,50 @@
     },
     "structure": "HOOK (clip 1) → ORIGIN (clips 2–3) → TURNING POINT (clips 4–5) → REVELATION / COST (clip 6) → CTA"
   },
-
   "character_rotation": {
-    "done_female": ["Uhura", "Carol Marcus", "B'Elanna Torres", "Seven of Nine", "Jadzia Dax", "Janeway", "Michael Burnham", "T'Pol"],
-    "done_male": ["McCoy", "Archer", "Lorca", "Q", "Sisko", "Picard", "Data"],
-    "all_done": ["McCoy", "Uhura", "Carol Marcus", "Archer", "Lorca", "B'Elanna Torres", "Q", "Seven of Nine", "Sisko", "Jadzia Dax", "Janeway", "Picard", "Data", "Michael Burnham", "T'Pol"],
-    "error": ["Kira Nerys"],
+    "done_female": [
+      "Uhura",
+      "Carol Marcus",
+      "B'Elanna Torres",
+      "Seven of Nine",
+      "Jadzia Dax",
+      "Janeway",
+      "Michael Burnham",
+      "T'Pol",
+      "Kira Nerys"
+    ],
+    "done_male": [
+      "McCoy",
+      "Archer",
+      "Lorca",
+      "Q",
+      "Sisko",
+      "Picard",
+      "Data"
+    ],
+    "all_done": [
+      "McCoy",
+      "Uhura",
+      "Carol Marcus",
+      "Archer",
+      "Lorca",
+      "B'Elanna Torres",
+      "Q",
+      "Seven of Nine",
+      "Sisko",
+      "Jadzia Dax",
+      "Janeway",
+      "Picard",
+      "Data",
+      "Michael Burnham",
+      "T'Pol",
+      "Kira Nerys"
+    ],
+    "error": [],
     "error_note": "Characters listed in 'error' had a production attempt but the final video was rejected. Do NOT pick them again until manually reviewed and removed from this list.",
     "cooldown_episodes": 20,
     "selection_note": "Cover all Trek eras — TOS → TNG → DS9 → VOY → ENT → DIS. Prioritize characters with strong lore arcs and tragic backstories. Alternate male/female for variety. Include complex antagonists (Lorca, Khan, Dukat) but balance with heroes. Avoid repeating characters used in dual-style / redcon within 4 episodes. 5-star characters preferred for engagement."
   },
-
   "canonical_characters": {
     "note": "Prompt blocks and Supabase refs for canonical Trek characters. Reference sheet goes to storyboarder as chain_ref. No voice_ref_url — use ElevenLabs voice name directly.",
     "picard": {
@@ -191,7 +223,6 @@
       "ref_url": null
     }
   },
-
   "episode_summaries": [
     {
       "episode": 1,
@@ -297,6 +328,20 @@
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-25/character-story_final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=8W7trSRYnNI",
       "notes": "Title suggests omnipotence as burden, not triumph. Likely Q's origin or the moment he gained his powers — victory that became a curse. Covers Q Continuum, exile, trial of humanity, existential weight of knowing everything."
+    },
+    {
+      "episode": 17,
+      "date": "2026-07-02",
+      "character": "Kira Nerys",
+      "character_slug": "kira",
+      "gender": "female",
+      "era": "DS9",
+      "idea": "Kira Nerys — Character Story | Star Trek Timelines",
+      "elevenlabs_voice": "Charlotte",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-02/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=Jt2yNjsZKDQ",
+      "yt_publish_at": "2026-07-05T20:59:00Z",
+      "notes": "Full redo from scratch (EP16 rejected for style inconsistency). Bilingual CTA opener (RU+EN). 3 age variants: child (~10-12), teen (~15-18), mature Major. Hook: young Kira beside dying mother in Singha refugee camp. Style fix: realistic 3D CGI enforced at 3 levels in storyboard. User manually edited final video (0703.mp4, 29.87s)."
     }
   ]
 }
