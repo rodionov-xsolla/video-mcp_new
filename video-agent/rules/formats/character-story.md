@@ -20,7 +20,7 @@ Keywords: "character story", "история персонажа", "лор", "lor
 ## Concept
 
 - **Genre:** lore monologue, first-person visual storytelling
-- **Style:** taken from `games/{GAME_TAG}/{GAME_TAG}.md` — unless the story bible (`*_story_bible.json`) defines a `format_overrides.image_style` override, which takes precedence.
+- **Style:** resolved from the style chain — the story bible's top-level `style_tags` (if present) takes precedence, else the game config `prompt_prefix` in `games/{GAME_TAG}/{GAME_TAG}.md`.
 - **Duration:** 30–40s (6–8 clips × 5s)
 - **Budget:** up to $6.00 per video. Stop if spend > $5.40.
 - **Frame format:** 9:16 (608×1080) for all scenes
@@ -156,7 +156,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
 
 ### Storyboarder
 
-- Style: from `games/{GAME_TAG}/{GAME_TAG}.md`. If the story bible defines `format_overrides.image_style`, use that instead — it overrides the game config for all clips.
+- Style: resolved from the style chain — the story bible's top-level `style_tags` (if present) overrides the game config for all clips, else use `prompt_prefix` from `games/{GAME_TAG}/{GAME_TAG}.md`. Apply the resolved style verbatim to every clip.
 - All frames 9:16 (608×1080)
 - Character ref: create an anchor ref (neutral pose, dark background) from game config
 - **No bg-reference generation.** Environment is baked into the scene prompt via `image_prompt`. Do NOT generate separate bg PNGs for character-story — use text description of the location in the prompt only.
@@ -288,7 +288,7 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 
 ## Visual style consistency — HARD RULE
 
-**All clips in an episode must share the same visual style.** The target style is determined by the story bible's `format_overrides.image_style` (if present) or the game config — and must be applied identically to every clip, including clips with child characters or scenes that trigger NB2 safety filters.
+**All clips in an episode must share the same visual style.** The target style is determined by the story bible's top-level `style_tags` (if present) or the game config `prompt_prefix` — and must be applied identically to every clip, including clips with child characters or scenes that trigger NB2 safety filters.
 
 **If NB2 rejects a prompt:** rewrite the `image_prompt` and `negative_prompt` using neutral language (avoid: occupation, refugee, soldier, war, violence, terrified, attack, battle, enemy). Do NOT change the image style, do NOT drop the character ref from `image_urls`. The character ref anchors the visual style — removing it causes NB2 to lose the style anchor and produce inconsistent output.
 

@@ -20,7 +20,7 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 ## Concept
 
 - **Genre:** endless micro-dramas with brainrot aesthetic, cliffhangers, plot loops
-- **Style:** stylized semi-realistic 3D characters with expressive faces and practical lighting. Do **not** prompt Disney/Pixar/DreamWorks, toy-like plastic style, or oversized cartoon eyes unless a specific game bible explicitly requires it. Preserve the exact proportions and style of locked character cards.
+- **Style:** read from the resolved style chain — story bible top-level `style_tags` (the series' canonical look), else game config `prompt_prefix`. This file does not hardcode a render medium; the scenarist resolves the chain into `visual_identity.style_tags` and the storyboarder applies it verbatim to every `image_prompt`. Preserve the exact proportions of locked character cards (cards carry appearance only — style comes solely from `style_tags`).
 - **Duration:** 40–45s (**max 6 clips** × 5–10s). Hard cap — Scenarist must not exceed 6 scenes. EP2 had 8 scenes = $8.42, target is ≤$6 per episode.
 - **Budget:** up to $7 per episode. Stop if spend > $6.50. Each dialogue I2V clip costs ~$0.63–1.26 — 6 clips max keeps you under budget.
 - **Frame format:** 9:16 (608×1080) for all scenes. Square forbidden.
@@ -121,7 +121,7 @@ File `games/{GAME_TAG}/serial-drama_story_bible.json` stores the universe state 
   "series_id": "roblox-noob-revenge",
   "game_tag": "Roblox",
   "title": "The Noob Who Was a Secret Millionaire",
-  "style_tags": "locked series stylized 3D look...",
+  "style_tags": "the series' canonical look, resolved once and applied verbatim to every image_prompt...",
   "created_at": "2026-03-27",
   "last_episode": 0,
 
@@ -251,13 +251,13 @@ Convention examples (series "Don't Save Me", Genshin Impact):
 
 ### Storyboarder
 
-- Stylized 3D style (`style_tags` from story bible), but do not introduce Disney/Pixar/DreamWorks terms unless they already exist in the locked series bible.
+- Style comes from the resolved style chain (story bible top-level `style_tags` → game config `prompt_prefix`) and is applied verbatim to every `image_prompt`. Do not introduce any render-medium terms that are not already in the locked `style_tags` string.
 - All frames 9:16 (608×1080) — square forbidden
 
 #### image_prompt template (EP1 gold standard — follow this structure for every scene)
 
 ```
-{GAME} 3D animated scene, Pixar-DreamWorks quality CGI,
+[STYLE PREFIX — the exact resolved `style_tags` string from the story bible, copied verbatim],
 [PRIMARY CHAR — full physical description + SPECIFIC POSE/ACTION in this scene],
 [SECONDARY CHAR — full physical description, shown shoulders-up only, facing direction, action],
 [TERTIARY CHAR if present — shown shoulders-up only, STRONGLY out of focus blurred background [position], action],
@@ -288,7 +288,7 @@ vertical 9:16 frame, no text overlays, keep facial features exactly matching the
 - **NEVER include a cross-episode scene image as a ref.** A previous episode's room photo (e.g. `room1701-ep1-last-scene.png`) will bleed its location (bedroom furniture, colors) into the new scene. EP2 attempt 2 used the EP1 last scene as anchor → bedroom elements appeared in the coffee shop. Only use character sheets + location bg-ref.
 - **Each scene is independent** — no ref chaining between scenes. Each NB2 call gets a fresh set of refs: location ref + relevant char sheets for that scene. Do not pass a previous scene's output as input to the next.
 - **bg-ref must be a TIGHT MEDIUM SHOT** — not a wide establishing shot. Wide bg-refs make characters appear tiny and child-proportioned. EP2: wide coffee-spot refs caused this; regenerating as tight medium shots fixed it. If a new location has no saved bg-ref, generate it as a tight medium shot first.
-- **No photoreal source refs.** An asset tagged `photoreal` / `live-action` biases the render toward realism; `"not photorealistic"` in the text prompt does NOT override a photoreal source image.
+- **No style-conflicting source refs.** An asset whose visual style differs from the resolved `style_tags` biases the render toward that other style; a text negative does NOT override a style-conflicting source image (e.g. a `photoreal` / `live-action` asset pulls toward realism regardless of `"not photorealistic"` in the prompt).
 
 #### General storyboarder rules
 - I2V clips: **start frame only** (`scene-K.png`). End frames are NEVER generated. `end_image_url` is FORBIDDEN with `multi_prompt` (Kling returns 422).
@@ -303,9 +303,9 @@ vertical 9:16 frame, no text overlays, keep facial features exactly matching the
 - Motion prompt = technical (positions, camera, physical actions), without names/moods
 - One I2V model for the whole episode — do not mix Kling I2V versions within one episode
 - Start frame only for I2V; Kling animates from the start frame via `motion_prompt`
-- **Style-hold for this stylized 3D format (not universal — lives here, not in `animator.md`):**
-  - **Anti-photoreal negative in EVERY I2V clip**, not selectively: `photorealistic, film grain, realistic skin, live action, photograph`. EP6 scene 2 omitted it and the close-up drifted realistic; scenes 7/8 that had it held better.
-  - **Carry the style anchor into EVERY shot of a `multi_prompt`**, not just shot 1 — each shot's prompt opens with the locked series style + current location lighting. The anchor is LOCATION-SPECIFIC, not a boilerplate: `"Semi-realistic stylized 3D, not photoreal, warm Edison bulb interior light"` for coffee shop interior; `"Semi-realistic stylized 3D, not photoreal, soft warm morning light, coffee shop exterior"` for exterior; `"Semi-realistic stylized 3D, not photoreal, warm lamp light, bedroom"` for Room 1701. Late shots without an anchor drift to the model's realistic prior.
+- **Style-hold for this format (not universal — lives here, not in `animator.md`):**
+  - **Anti-drift negative in EVERY I2V clip**, not selectively. DERIVE the negative from the resolved `style_tags`: it must push away from whatever the locked style is NOT (e.g. if `style_tags` is a stylized/animated look, the negative pushes away from photoreal — `photorealistic, film grain, realistic skin, live action, photograph`). Do not hardcode a fixed medium here; build the negative from the style the bible actually declares. EP6 scene 2 omitted it and the close-up drifted; scenes 7/8 that had it held better.
+  - **Carry the style anchor into EVERY shot of a `multi_prompt`**, not just shot 1 — each shot's prompt opens with the resolved `style_tags` + current location lighting. The anchor is LOCATION-SPECIFIC, not a boilerplate: prepend the exact `style_tags` string, then the per-location lighting (e.g. `"..., warm Edison bulb interior light"` for a coffee shop interior; `"..., soft warm morning light, exterior"` for exterior; `"..., warm lamp light, bedroom"` for an interior bedroom). The style string itself is never hardcoded here — it is copied from `style_tags`. Late shots without an anchor drift to the model's prior.
   - **Carry physical descriptors into EVERY shot of a `multi_prompt`**, especially immediately before each `<<<voice_N>>>` tag. Do not rely on names: the model will assign lines to the wrong visible person. Full physical description = at least hair color/style, glasses if any, hoodie/top color, and one distinctive item (headphones, badge, necklace).
   - **Do not end a `multi_prompt` on a tight close-up of a face that is not present in the start frame.** This was the real "problem is always in the third shot": both EP6 multi-prompts ended on an invented face close-up; by the last shot Kling has left the start frame and re-renders that face with its own (realistic) prior. Keep the final shot within the framing the start frame supports, or split the close-up into its own clip.
   - **Второй персонаж входит в середине `multi_prompt`-клипа** → через Kling `elements` + `@Element1` в нужном шоте (`animator.md §5a`, burn-tested 2026-06-01). Работает, **если персонаж занимает заметную площадь кадра** (особенно крупный план лица — чинит дрейф финального шота). Для узнаваемости в мелком/перекрытом плане (лицо за стеклом и т.п.) element читается обобщённо → делай отдельный клип со своим start-frame.
@@ -400,7 +400,7 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - [ ] I2V: start frame only (`scene-K.png`), no end frames generated
 - [ ] Cross-asset pre-flight passed (all URLs 200, distinct audio per clip, filename=index, scene_image_url↔hero) — `validation.md`
 - [ ] Each character from ONE locked ref; no photoreal-tagged refs; every `image_prompt` has full style prefix
-- [ ] Each I2V has anti-photoreal negative; each multi_prompt shot has a style anchor; no multi_prompt ends on an invented face close-up
+- [ ] Each I2V has an anti-drift negative derived from the resolved `style_tags`; each multi_prompt shot has a style anchor copied from `style_tags`; no multi_prompt ends on an invented face close-up
 - [ ] Dialogue clips use I2V `multi_prompt + voice_ids`; no Avatar endpoint and no `clip_type: "avatar"`
 - [ ] Subtitles ASS events are clamped to dialogue scene windows; no bleed into action scenes or silence
 - [ ] fps normalized to 30 before concat
@@ -431,8 +431,8 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - ❌ Long 10s dialogue clips for $0.04 savings (kills dynamics)
 - ❌ Re-rendering one line into a parallel `-new`/`-v2` audio file (drops locked voice → same character, two voices — EP6 Admiral)
 - ❌ Referencing one character from two different ref asset paths across clips (face differs between adjacent clips)
-- ❌ Photoreal-tagged source ref in this stylized format (text "NOT photorealistic" does not override a photoreal source image)
+- ❌ Source ref whose visual style conflicts with the resolved `style_tags` (a mismatched-style source image is not overridden by text negatives — e.g. a photoreal ref will not be un-realistified by "NOT photorealistic")
 - ❌ `image_prompt` without the full `style_tags` prefix (off-style clip)
-- ❌ I2V clip without an anti-photoreal negative; `multi_prompt` shot without a style anchor
+- ❌ I2V clip without an anti-drift negative derived from `style_tags`; `multi_prompt` shot without a style anchor copied from `style_tags`
 - ❌ Ending a `multi_prompt` on a tight invented face close-up not present in the start frame (drifts realistic)
 - ❌ Launching Kling before the cross-asset pre-flight gate passes (dead ref / duplicate audio / wrong PNG — see `validation.md`)

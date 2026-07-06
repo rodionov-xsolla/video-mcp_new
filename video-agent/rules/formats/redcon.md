@@ -5,6 +5,8 @@ overlays: false
 
 # Format "Redcon" — alternate-universe character story with lore divergence
 
+> TODO(style-refactor): style must come from the resolved chain (story bible top-level `style_tags` → game config `prompt_prefix`); character cards are style-free. This file not yet audited for hardcoded house-style.
+
 A serious, cinematic "What If?" for game characters: one divergence point in canon, one alternative fate, told in first-person by the alternate-self. Think Marvel's What If? or DC Elseworlds — not comedy, but genuine tragedy, horror, or triumph that *could have been*. The character narrates their own alternate history as TTS overlay over I2V visualizations.
 
 This file is the **playbook**: when to use, concept, budget, role briefs. Craft rules — in `rules/roles/*.md`.

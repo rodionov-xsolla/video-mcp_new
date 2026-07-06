@@ -181,8 +181,8 @@ For each of the 5 dialogue scenes generate a fresh NB2 edit using base avatar as
 NB2 /edit with:
   image_urls: [character_base_avatar_url]
   prompt: "{character} on-location at {location_name},
-           semi-realistic photographic {game}-style cinematic quality,
-           NOT cartoon, NOT illustration, NOT animation,
+           <resolved style_tags for this game/format — applied verbatim>,
+           <anti-drift negatives derived from that style — e.g. the opposite render medium>,
            9:16 vertical, three-quarter medium close-up,
            reporter holds GLN-branded microphone in foreground for reporter scenes,
            or mic visible in foreground from off-screen for interviewee scenes,
@@ -672,7 +672,7 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 - ❌ All 3 interviewees with same tone — flattens the comedic rhythm.
 - ❌ Reporter outro that recaps interviewees — outro should be ironic sign-off only.
 - ❌ Bare character ref as scene image — must be on-location NB2 edit.
-- ❌ Pixar 3D / cartoon style references — Avatar v2 mirrors input style. Use photoreal + "NOT cartoon" prompt.
+- ❌ Character refs whose style conflicts with the resolved `style_tags` — Avatar v2 mirrors the input ref's style. Prefer refs matching the target style, and derive the anti-drift negative from `style_tags`.
 - ❌ Avatar v2 cost estimate as flat "N × 5s" — billed per second of input audio.
 - ❌ Channel bug at large opacity (>80%) — TV brand bugs are subtle, 70% max.
 - ❌ Channel bug NOT applied when `channel_bug_url` is set — silent regression. Editor must check.

@@ -488,15 +488,15 @@ Serial-drama dialogue body:
   "generate_audio": true,
   "multi_prompt": [
     {
-      "prompt": "Stylized semi-realistic 3D sitcom shot. Slim young man in black cap and navy hoodie raises phone, nervous. <<<voice_1>>> \"I'm going to text her.\" Stocky young man with curly orange hair, black round glasses, yellow hoodie turns from desk, serious. <<<voice_2>>> \"Captain, unidentified girl in the personal life sector.\"",
+      "prompt": "[STYLE_TAGS] shot. [CHARACTER_A appearance] raises phone, nervous. <<<voice_1>>> \"<line A>\" [CHARACTER_B appearance] turns from desk, serious. <<<voice_2>>> \"<line B>\"",
       "duration": "3"
     },
     {
-      "prompt": "Stylized semi-realistic 3D sitcom over-shoulder shot. Slim young man in black cap and navy hoodie exhales. <<<voice_1>>> \"Her name is Anna.\" Stocky orange-haired roommate with black round glasses raises one finger. <<<voice_2>>> \"Don't simplify the threat.\"",
+      "prompt": "[STYLE_TAGS] over-shoulder shot. [CHARACTER_A appearance] exhales. <<<voice_1>>> \"<line A>\" [CHARACTER_B appearance] raises one finger. <<<voice_2>>> \"<line B>\"",
       "duration": "3"
     }
   ],
-  "negative_prompt": "photorealistic, live action, realistic skin, Disney, Pixar, DreamWorks, toy-like plastic, blur, distort, morphing faces"
+  "negative_prompt": "[NEGATIVE_PROMPT — anti-drift terms derived from the resolved style_tags, e.g. the OPPOSITE render medium; plus blur, distort, morphing faces]"
 }
 ```
 

@@ -173,8 +173,7 @@ The format spec calls for reporters to appear **on location relevant to their ne
 NB2 /edit with:
   image_urls: [reporter_base_avatar_url]
   prompt: "{character} on-location field reporter at {news_item.location},
-           semi-realistic photographic Star Trek movie cinematic quality,
-           NOT cartoon, NOT illustration, NOT animation, NOT graphic style,
+           {game house-style from the resolved style chain — game config prompt_prefix / story bible style_tags, verbatim},
            9:16 vertical, ... mouth slightly open mid-speech for lipsync,
            professional broadcasting key light on face,
            no on-screen text overlay, no captions"
@@ -188,7 +187,7 @@ Upload each scene's on-location png to Supabase as `refs/{character}-on-location
 3. Upload both to Supabase via `queue/upload-asset.sh` with tags `fun-news,avatar`
 4. In future episodes this reporter is already in Supabase
 
-**Style consistency:** Avatar v2 closely tracks the reference image. If you use a stylized/cartoonish base ref (e.g. one tagged `redcon` or `comedy-sketch`), the rendered video will look stylized too. **Prefer photoreal-tagged refs** for reporters when the game style is semi-realistic. If you must use a stylized base, the NB2 on-location edit prompt above explicitly counters with "NOT cartoon, NOT illustration".
+**Style consistency:** Avatar v2 closely tracks the reference image — the rendered video inherits the style of the base ref. **Prefer refs whose visual style matches the game's resolved style chain** (story bible `style_tags` → game config `prompt_prefix`); a ref generated in a different style (e.g. one tagged `redcon` or `comedy-sketch`) will drag the video off-style. If you must use a mismatched base, the NB2 on-location edit prompt above explicitly counters toward the target style with negatives derived from it.
 
 ### Phase 3: Script → `storyboard.json`
 
@@ -578,7 +577,7 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 ### Storyboarder
 - Anchor avatar — pulled from Supabase, do NOT regenerate.
 - Reporter base avatars — pulled from Supabase by `character_name` tag; generate sheet+ref only for brand-new reporters joining the pool.
-- **Per-episode on-location backgrounds (MANDATORY)** — NB2 edit using reporter base ref as `image_urls[0]`, with the news item's `location` in the prompt. The background must visually reflect the **specific news topic**: if the story is about dragons, include dragons/fire/scorched stone in the background; if about The Wall, show ice and blizzard. Use the full location description from `research.json news_items[].location` (not just the region name). Avoid the wording "Pixar 3D" if it pulls the model toward animated style — instead use "semi-realistic photographic cinematic quality, NOT cartoon, NOT illustration".
+- **Per-episode on-location backgrounds (MANDATORY)** — NB2 edit using reporter base ref as `image_urls[0]`, with the news item's `location` in the prompt. The background must visually reflect the **specific news topic**: if the story is about dragons, include dragons/fire/scorched stone in the background; if about The Wall, show ice and blizzard. Use the full location description from `research.json news_items[].location` (not just the region name). Apply the game's house-style from the resolved style chain (game config `prompt_prefix` / story bible `style_tags`) verbatim, and derive any style negatives from it so the on-location edit stays on-brand rather than drifting to Avatar v2's prior.
 - **Reporters always hold a broadcast handheld microphone (MANDATORY)** — every on-location reporter image must include `"holding a broadcast handheld microphone in one hand"` in the NB2 prompt. No exceptions. This is the visual identity of the format.
 - 9:16 (1080×1920) all images, frontal/three-quarter, teeth visible for lipsync.
 - Upload per-episode on-location images to Supabase as `refs/{character}-on-location-{topic}.png`.
@@ -652,7 +651,7 @@ output/YYYY-MM-DD/{GAME_TAG}/fun-news/
 - ❌ Changing the anchor between episodes (anchor is locked per game).
 - ❌ Generating opener / CTA per episode — they are one-time-per-game assets pulled from Supabase.
 - ❌ Bare character refs as reporter `image_url` — reporters must be **on-location** matching their news item. A reporter speaking about a closed conference shouldn't be standing on a starship bridge.
-- ❌ Pixar 3D / cartoon-style references for reporters when the game is semi-realistic — Avatar v2 mirrors the input style. Use photoreal-tagged refs and a "NOT cartoon, NOT illustration" prompt for on-location edits.
+- ❌ Reporter refs whose style conflicts with the game's resolved style chain — Avatar v2 mirrors the input style. Use refs matching the game's house-style (`style_tags` / `prompt_prefix`) and derive on-location-edit style negatives from that target.
 - ❌ Anchor intro that teases item contents — kills the surprise. Hook the brand, not the news.
 - ❌ Anchor reaction scene that recaps the previous item — make it a dry put-down (`"Astonishing, as expected — {Next reporter}, you're up."`).
 - ❌ Daniel voice with `style: 0.8` / `stability: 0.2` — theatrical, slow. Use `stability: 0.55` + no `style`. Validated on pilot.

@@ -5,6 +5,8 @@ overlays: false
 
 # Format "Motion Dance" — character dances to music via motion transfer from reference video
 
+> TODO(style-refactor): style must come from the resolved chain (story bible top-level `style_tags` → game config `prompt_prefix`); character cards are style-free. This file not yet audited for hardcoded house-style.
+
 A single character (game skin, OC, meme) dances to music. Movements come from a real dance video via Kling Motion Control. Key feature — analyzing the reference video before image generation so the character's shot and pose match the reference.
 
 This file is the **playbook**: when to use, concept, budget, role briefs.
