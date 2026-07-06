@@ -20,8 +20,7 @@
       "published": true,
       "status": "completed",
       "comment": "Logged retroactively — run predates story bible creation"
-    }
-  ],
+    },
     {
       "situation": "Shouki no Kami (Scaramouche as mechanical god) attacks Sumeru Akademiya — Akademiya student POV trapped in collapsing lecture hall, staircase, archive, undercroft, and research vault",
       "date": "2026-06-17",
@@ -34,7 +33,11 @@
     }
   ],
   "anti_repetition": {
-    "threat_types_used": ["Fatui", "Geo Colossus / Osial", "Scaramouche / Shouki no Kami"],
+    "threat_types_used": [
+      "Fatui",
+      "Geo Colossus / Osial",
+      "Scaramouche / Shouki no Kami"
+    ],
     "note": "Mondstadt (Fatui streets), Liyue Harbor (Osial flood), Sumeru Akademiya (Shouki no Kami) used. Next: Inazuma (Vision Hunt / Shogunate), Fontaine (Primordial Sea), Natlan (Abyss siege). Avoid water flood, sea god, mechanical god, and city-center premises. Vary civilian anchor: next could be sailor, temple guard, courtroom clerk."
   }
 }

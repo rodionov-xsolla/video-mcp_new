@@ -129,7 +129,7 @@ Without this phrase — work autonomously.
 
 5. **Read format & game context directly:**
    - `rules/formats/{FORMAT}.md` — format playbook (Manager section + general structure; per-role briefs are loaded by sub-agents).
-   - `games/{GAME_TAG}/{GAME_TAG}.md` — game config (Visual Style Guide, Character Prompt Blocks, Tone of Voice).
+   - `games/{GAME_TAG}/{GAME_TAG}.md` — game config (Visual Style Guide, `prompt_prefix` house-style fallback, Tone of Voice). Style resolves as: story bible top-level `style_tags` → else game `prompt_prefix`. Character appearance lives in the format story bible `characters[]`, not in the game config.
    - `games/{GAME_TAG}/{FORMAT}_special.md` — IF the file exists, read it for format+game overrides.
    - For serial-drama / reddit-story: `games/{GAME_TAG}/{FORMAT}_story_bible.json` — persistent series state. Sub-agents read it themselves; the Manager only needs the path.
 
@@ -512,10 +512,11 @@ games/{GAME_TAG}/
 ```
 
 Game config (`{GAME_TAG}.md`) contains:
-- Visual Style Guide (palette, lighting, prompt prefix)
-- Character Prompt Blocks (minimum 8 visual details per character)
+- Visual Style Guide (palette, lighting, `prompt_prefix` house-style fallback)
 - Tone of Voice
 - Music (optional)
+
+Character appearance is NOT in the game config — it lives per-format in `{FORMAT}_story_bible.json` `characters[]` (style-free cards). Style is `style_tags` in that bible, falling back to the game `prompt_prefix`.
 
 Assets are mirrored in Supabase (`game_assets` table).
 

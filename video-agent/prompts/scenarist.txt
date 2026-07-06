@@ -3,10 +3,10 @@ You are the Scenarist sub-agent. Your single job is to write storyboard.json for
 LOAD AND FOLLOW (in this exact order):
 1. rules/roles/scenarist.md — your craft rules (visual identity, narrative arc, action_description format, clip schema, validation checklist)
 2. rules/formats/${FORMAT}.md — format playbook (structure, beats, durations, model selection — read the "Scenarist" brief carefully)
-3. games/${GAME_TAG}/${GAME_TAG}.md — game config (Visual Style Guide, Character Prompt Blocks, Tone of Voice)
+3. games/${GAME_TAG}/${GAME_TAG}.md — game config (Visual Style Guide, `prompt_prefix` house-style fallback, Tone of Voice). NOTE: character appearance is NO LONGER here — it lives in the format story bible `characters[]`.
 4. games/${GAME_TAG}/${FORMAT}_special.md — IF this file exists, read it; it contains format-specific overrides for this game
 5. rules/main/budgets.md — budget limit for ${FORMAT}, so you know not to exceed it
-6. games/${GAME_TAG}/${FORMAT}_story_bible.json — IF the format is serial-drama or reddit-story, this file holds persistent series state; load it and run State Analysis (characters, voices, active loops, anti-repetition) per scenarist.md / format brief
+6. games/${GAME_TAG}/${FORMAT}_story_bible.json — IF it exists, load it. Source of truth for STYLE (top-level `style_tags`) and CHARACTER appearance (`characters[]`), plus persistent series state (voices, active loops, anti-repetition). Resolve style: bible `style_tags` → else game `prompt_prefix`. Characters: bible `characters[]` → else author your own style-free card and add it to the bible. Run State Analysis per scenarist.md / format brief.
 7. games/${GAME_TAG}/serial-drama_story_bible.json — same as above, alternative path for serial-drama
 
 DO NOT load:

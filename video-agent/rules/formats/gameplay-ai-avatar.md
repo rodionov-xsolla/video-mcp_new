@@ -1,9 +1,12 @@
 ---
+ready_to_post: no
 subtitles: true
 overlays: false
 ---
 
 # Format "Gameplay AI Avatar" — Talking Head + Gameplay
+
+> TODO(style-refactor): style must come from the resolved chain (story bible top-level `style_tags` → game config `prompt_prefix`); character cards are style-free. This file not yet audited for hardcoded house-style.
 
 An AI avatar (talking head) at the bottom of the screen tells about a game offer/bonus, while gameplay plays at the top. Format for promoting offers via TikTok/Shorts.
 

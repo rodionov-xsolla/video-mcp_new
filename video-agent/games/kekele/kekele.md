@@ -1,5 +1,16 @@
 # Kakele Online
 
+## Posting status
+
+- **ready_to_post:** no   <!-- yes only when the game is tested and cleared for posting -->
+
+**Formats (linked to this game):**
+
+- (none configured yet)
+
+
+> TODO(style-refactor): character appearance must move to per-format story bibles `characters[]` (style-free); style → top-level `style_tags` in the bible, fallback = `prompt_prefix`. This game config not yet migrated (see star-trek-timelines / genshin-impact for the pattern).
+
 ## Метаданные
 
 - **Жанр:** 2D MMORPG, Pixel Art, Fantasy

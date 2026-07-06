@@ -1,11 +1,12 @@
 ---
+ready_to_post: yes
 subtitles: true
 overlays: false
 ---
 
 # Format "Serial Drama" — serial micro-dramas
 
-Serial micro-dramas with brainrot aesthetic and an endless plot. Each episode = 25–40 seconds, 3–5 clips, cliffhanger at the end.
+Serial micro-dramas with brainrot aesthetic and an endless plot. Each episode = 40–45 seconds, **max 6 clips**, cliffhanger at the end.
 
 This file is the **playbook**: when to use, concept, budget, series state (story bible), role briefs. Craft rules — in `rules/roles/*.md`.
 
@@ -20,9 +21,9 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 ## Concept
 
 - **Genre:** endless micro-dramas with brainrot aesthetic, cliffhangers, plot loops
-- **Style:** stylized semi-realistic 3D characters with expressive faces and practical lighting. Do **not** prompt Disney/Pixar/DreamWorks, toy-like plastic style, or oversized cartoon eyes unless a specific game bible explicitly requires it. Preserve the exact proportions and style of locked character cards.
-- **Duration:** 25–40s (3–5 clips × 5–10s)
-- **Budget:** up to $10 per episode. Stop if spend > $9.00.
+- **Style:** read from the resolved style chain — story bible top-level `style_tags` (the series' canonical look), else game config `prompt_prefix`. This file does not hardcode a render medium; the scenarist resolves the chain into `visual_identity.style_tags` and the storyboarder applies it verbatim to every `image_prompt`. Preserve the exact proportions of locked character cards (cards carry appearance only — style comes solely from `style_tags`).
+- **Duration:** 40–45s (**max 6 clips** × 5–10s). Hard cap — Scenarist must not exceed 6 scenes. EP2 had 8 scenes = $8.42, target is ≤$6 per episode.
+- **Budget:** up to $7 per episode. Stop if spend > $6.50. Each dialogue I2V clip costs ~$0.63–1.26 — 6 clips max keeps you under budget.
 - **Frame format:** 9:16 (608×1080) for all scenes. Square forbidden.
 
 ### Clip mix (balances)
@@ -121,7 +122,7 @@ File `games/{GAME_TAG}/serial-drama_story_bible.json` stores the universe state 
   "series_id": "roblox-noob-revenge",
   "game_tag": "Roblox",
   "title": "The Noob Who Was a Secret Millionaire",
-  "style_tags": "locked series stylized 3D look...",
+  "style_tags": "the series' canonical look, resolved once and applied verbatim to every image_prompt...",
   "created_at": "2026-03-27",
   "last_episode": 0,
 
@@ -251,15 +252,48 @@ Convention examples (series "Don't Save Me", Genshin Impact):
 
 ### Storyboarder
 
-- Stylized 3D style (`style_tags` from story bible), but do not introduce Disney/Pixar/DreamWorks terms unless they already exist in the locked series bible.
+- Style comes from the resolved style chain (story bible top-level `style_tags` → game config `prompt_prefix`) and is applied verbatim to every `image_prompt`. Do not introduce any render-medium terms that are not already in the locked `style_tags` string.
 - All frames 9:16 (608×1080) — square forbidden
-- **bg-reference per location** mandatory — without it the background drifts between clips (see `storyboarder.md` section 2)
-- **Location lock:** the location ref is the source of truth. Do not add extra furniture, walls, props, or alternate room layouts that are not in the locked room/background card. If the generated scene has correct character positions but a wrong room, regenerate from the same character setup with stricter room-lock text.
-- Character refs: characters from story bible. Attach relevant character refs and the location/background ref to every scene image prompt.
-- **Ref completeness gate:** every visible/speaking character in the scene must have their locked ref in `image_urls`. If a character is mentioned but their ref is missing, regenerate the scene PNG before Animator.
-- I2V clips: **start frame only** (`scene-K.png`). End frames are NEVER generated — see `storyboarder.md` §14.8/§16. `end_image_url` is FORBIDDEN with `multi_prompt` (Kling returns 422).
+
+#### image_prompt template (EP1 gold standard — follow this structure for every scene)
+
+```
+[STYLE PREFIX — the exact resolved `style_tags` string from the story bible, copied verbatim],
+[PRIMARY CHAR — full physical description + SPECIFIC POSE/ACTION in this scene],
+[SECONDARY CHAR — full physical description, shown shoulders-up only, facing direction, action],
+[TERTIARY CHAR if present — shown shoulders-up only, STRONGLY out of focus blurred background [position], action],
+[ENVIRONMENT — tight, specific relevant details matching the bg-ref],
+[SHOT TYPE — close medium two-shot / medium three-shot / etc.],
+vertical 9:16 frame, no text overlays, keep facial features exactly matching the uploaded reference images
+```
+
+**Critical rules for this template:**
+- **Primary char** = the speaker or hero of this beat. Full description + what they are physically DOING (pose, gesture, expression). Not just appearance — specific action: `"leaning in toward Michael with urgent whisper expression, shoulders raised, chin tucked"` not `"nervous energy"`.
+- **Secondary chars** = always `"shown shoulders-up only [left/right of frame]"`. Never describe their full body unless they are equally prominent. Describe their specific action too.
+- **Background/blurred chars** = add `"STRONGLY out of focus blurred background [far left/right]"` in CAPS so NB2 treats it as instruction, not description. Include their char sheet in `image_urls` anyway — the sheet anchors their face even when blurred.
+- **Color specificity** = use emphatic exact names for distinctive costume items: `"bright YELLOW-GOLD hoodie"` not `"yellow hoodie"`. Ambiguous color = wrong render.
+- **Environment** = describe tightly — what is immediately around the characters, not the whole room. Match the bg-ref depth: if the bg-ref shows a tight medium shot of the coffee bar, describe `"coffee bar edge and espresso machine visible close in background"`, not `"coffee shop interior"`.
+
+#### image_urls order and rules
+
+```json
+"image_urls": [
+  "<location-bg-ref>",       // ALWAYS first — environment anchor
+  "<primary-char-sheet>",    // speaking/hero character
+  "<secondary-char-sheet>",  // second visible character
+  "<tertiary-char-sheet>"    // third visible character (if any, max 4 total)
+]
+```
+
+- **ALL visible/speaking character sheets are mandatory** — even for chars who are blurred background. Their sheet anchors the face even at low prominence. Missing a sheet = face drifts or character looks generic.
+- **NEVER include a cross-episode scene image as a ref.** A previous episode's room photo (e.g. `room1701-ep1-last-scene.png`) will bleed its location (bedroom furniture, colors) into the new scene. EP2 attempt 2 used the EP1 last scene as anchor → bedroom elements appeared in the coffee shop. Only use character sheets + location bg-ref.
+- **Each scene is independent** — no ref chaining between scenes. Each NB2 call gets a fresh set of refs: location ref + relevant char sheets for that scene. Do not pass a previous scene's output as input to the next.
+- **bg-ref must be a TIGHT MEDIUM SHOT** — not a wide establishing shot. Wide bg-refs make characters appear tiny and child-proportioned. EP2: wide coffee-spot refs caused this; regenerating as tight medium shots fixed it. If a new location has no saved bg-ref, generate it as a tight medium shot first.
+- **No style-conflicting source refs.** An asset whose visual style differs from the resolved `style_tags` biases the render toward that other style; a text negative does NOT override a style-conflicting source image (e.g. a `photoreal` / `live-action` asset pulls toward realism regardless of `"not photorealistic"` in the prompt).
+
+#### General storyboarder rules
+- I2V clips: **start frame only** (`scene-K.png`). End frames are NEVER generated. `end_image_url` is FORBIDDEN with `multi_prompt` (Kling returns 422).
 - Each clip = its own scene PNG (not the ref directly)
-- **No photoreal source refs in this stylized format.** Before using a character ref, check its tags — an asset tagged `photoreal` / `comedy-sketch` / `live-action` is FORBIDDEN here. A photoreal reference image biases the whole render toward realism; a text negative such as "not photorealistic" does NOT override a photoreal *source image* (proven by EP6 scene 8, which used `spock/variants/canonical.png` — a photoreal sheet — and drifted realistic). Use a locked stylized 3D sheet, or generate one.
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
@@ -270,10 +304,10 @@ Convention examples (series "Don't Save Me", Genshin Impact):
 - Motion prompt = technical (positions, camera, physical actions), without names/moods
 - One I2V model for the whole episode — do not mix Kling I2V versions within one episode
 - Start frame only for I2V; Kling animates from the start frame via `motion_prompt`
-- **Style-hold for this stylized 3D format (not universal — lives here, not in `animator.md`):**
-  - **Anti-photoreal negative in EVERY I2V clip**, not selectively: `photorealistic, film grain, realistic skin, live action, photograph`. EP6 scene 2 omitted it and the close-up drifted realistic; scenes 7/8 that had it held better.
-  - **Carry the style anchor into EVERY shot of a `multi_prompt`**, not just shot 1 — each shot's prompt restates the locked series style (for ROOM 1701: "semi-realistic stylized 3D characters, practical bedroom lighting, not photoreal"). Late shots without an anchor drift to the model's realistic prior.
-  - **Carry physical descriptors into EVERY shot of a `multi_prompt`**, especially immediately before each voice tag. Do not rely on names: the model will assign lines to the wrong visible person.
+- **Style-hold for this format (not universal — lives here, not in `animator.md`):**
+  - **Anti-drift negative in EVERY I2V clip**, not selectively. DERIVE the negative from the resolved `style_tags`: it must push away from whatever the locked style is NOT (e.g. if `style_tags` is a stylized/animated look, the negative pushes away from photoreal — `photorealistic, film grain, realistic skin, live action, photograph`). Do not hardcode a fixed medium here; build the negative from the style the bible actually declares. EP6 scene 2 omitted it and the close-up drifted; scenes 7/8 that had it held better.
+  - **Carry the style anchor into EVERY shot of a `multi_prompt`**, not just shot 1 — each shot's prompt opens with the resolved `style_tags` + current location lighting. The anchor is LOCATION-SPECIFIC, not a boilerplate: prepend the exact `style_tags` string, then the per-location lighting (e.g. `"..., warm Edison bulb interior light"` for a coffee shop interior; `"..., soft warm morning light, exterior"` for exterior; `"..., warm lamp light, bedroom"` for an interior bedroom). The style string itself is never hardcoded here — it is copied from `style_tags`. Late shots without an anchor drift to the model's prior.
+  - **Carry physical descriptors into EVERY shot of a `multi_prompt`**, especially immediately before each `<<<voice_N>>>` tag. Do not rely on names: the model will assign lines to the wrong visible person. Full physical description = at least hair color/style, glasses if any, hoodie/top color, and one distinctive item (headphones, badge, necklace).
   - **Do not end a `multi_prompt` on a tight close-up of a face that is not present in the start frame.** This was the real "problem is always in the third shot": both EP6 multi-prompts ended on an invented face close-up; by the last shot Kling has left the start frame and re-renders that face with its own (realistic) prior. Keep the final shot within the framing the start frame supports, or split the close-up into its own clip.
   - **Второй персонаж входит в середине `multi_prompt`-клипа** → через Kling `elements` + `@Element1` в нужном шоте (`animator.md §5a`, burn-tested 2026-06-01). Работает, **если персонаж занимает заметную площадь кадра** (особенно крупный план лица — чинит дрейф финального шота). Для узнаваемости в мелком/перекрытом плане (лицо за стеклом и т.п.) element читается обобщённо → делай отдельный клип со своим start-frame.
 - **Do NOT use Avatar** in serial-drama. If a storyboard contains `clip_type: "avatar"` or an Avatar endpoint, return it to Scenarist before generation.
@@ -286,6 +320,7 @@ Convention examples (series "Don't Save Me", Genshin Impact):
 - **Music is generated, not silently selected locally:** for serial-drama, generate `bg-music.mp3` through `fal-ai/minimax-music/v2.6` unless the user explicitly asks for a local library track. For sitcom tone: instrumental low-density comedy underscore, no vocals/lyrics, no dramatic swell.
 - **Narrator VO (optional):** off-screen series intro voice over I2V action clips. Store as `narrator_vo` top-level field in storyboard.json: `{text, voice, tts_url, duration_sec, overlay_clips, volume}`. Sound generates the MP3; Editor overlays it via amix starting at t=0. Generate with `faster-whisper` for timing (offset=0 per clip, then +cumulative_start for ASS timecodes).
 - **Subtitles:** ASS via `ffmpeg-full` (`/usr/local/bin/ffmpeg-full/ffmpeg`) — libass is required; stock Homebrew ffmpeg silently errors on `ass=` filter. Use sentence-level Whisper timing — NOT word-by-word. Dialogue style: Bold=1, Outline=6, Fontsize=70, white, MarginV=520. Narrator style: Bold=1, Outline=4, italic, warm color `#EDE0C8`, Fontsize=65, MarginV=540.
+- **Whisper source = individual scene MP4s, NOT voice-final.wav and NOT storyboard JSON text.** Extract 16kHz mono WAV from each dialogue scene MP4 (`ffmpeg -vn -ar 16000 -ac 1`), run Whisper on each separately, then offset timecodes by cumulative scene start. Running Whisper on voice-final.wav or storyboard text produces subtitles with speaker names and JSON metadata instead of dialogue. Burned in EP2.
 - **Subtitle timing cap (mandatory):** After `add_subtitles.py` generates `build/subs.ass`, clamp every Dialogue event to the dialogue clip window it overlaps most. Events must never bleed into action/I2V-without-speech clips, CTA, or the next dialogue scene. If Whisper merges words across a scene boundary, split the subtitle text manually at the boundary.
 - ONLY dialogue subs + narrator + TBC. No title cards, brainrot tags, character names.
 - Background music: drama/cinematic, `volume=0.15`; duck to `0.08–0.10` under narrator VO.
@@ -306,19 +341,14 @@ Convention examples (series "Don't Save Me", Genshin Impact):
 - **CTA included in concat list** as the last clip (not a separate re-encode)
 - TBC overlay 2s before the end (before fade)
 - Fade out 1.0s on MAIN_DUR (before CTA); CTA goes after fade in silence
-- **Episode title strip — mandatory for every episode.** Pillow PNG overlay (NOT drawtext — `.ttf` on macOS works but `.ttc` produces squares). Apply via ffmpeg `-loop 1` on the PNG with `[1:v]trim=duration=TOTAL,fade=in:d=0.3,fade=out:st=4.5:d=0.5[strip]; [0:v][strip]overlay=x=0:y=40`. Duration: visible **5 seconds** total (fade-in 0.3s at t=0, fade-out 0.5s starting at t=4.5s). Strip spec:
-  - Canvas: 1080×110 px, semi-transparent dark background (black, alpha ~200)
-  - Line 1 (top): series name, 32px Arial Bold, gold `#f5d060`, centered
-  - Line 2 (bottom): `EP. N — EPISODE TITLE`, 54px Arial Bold, white, centered
-  - y=8 for line 1, y=48 for line 2
-  - Generate with Pillow, save as `build/title-strip.png`, apply in final ffmpeg pass
+- **Episode title card — use the series overlay PNG, not a Pillow-generated strip.** Each series has a locked `overlay-series.png` in `games/{GAME_TAG}/`. Load it as an ffmpeg input, scale to fit 1080px wide (`scale=1080:-1`), overlay centered on the frame (`x=(main_w-overlay_w)/2:y=(main_h-overlay_h)/2`) during the title-card window defined in `storyboard.json episode_metadata.title_card_position`. Visible 5 seconds with fade-in 0.5s + fade-out 0.5s (starting at t=4.5s relative to overlay start). For ROOM 1701: `games/star-trek-timelines/overlay-series.png`.
 - General rules — `rules/roles/editor.md`
 
 ---
 
 ## CTA (Call to Action)
 
-The CTA video is taken from Supabase `game_assets` (tag `cta` + `video`). Manager downloads it in Phase 0 and hands it to Editor.
+The CTA video is taken from Supabase `game_assets` (tag `cta` + `video`). Manager downloads it in Phase 0 and hands it to Editor. For star-trek-timelines: `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4` (5s, no embedded audio — inject anullsrc).
 
 ### Assembly
 
@@ -371,7 +401,7 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - [ ] I2V: start frame only (`scene-K.png`), no end frames generated
 - [ ] Cross-asset pre-flight passed (all URLs 200, distinct audio per clip, filename=index, scene_image_url↔hero) — `validation.md`
 - [ ] Each character from ONE locked ref; no photoreal-tagged refs; every `image_prompt` has full style prefix
-- [ ] Each I2V has anti-photoreal negative; each multi_prompt shot has a style anchor; no multi_prompt ends on an invented face close-up
+- [ ] Each I2V has an anti-drift negative derived from the resolved `style_tags`; each multi_prompt shot has a style anchor copied from `style_tags`; no multi_prompt ends on an invented face close-up
 - [ ] Dialogue clips use I2V `multi_prompt + voice_ids`; no Avatar endpoint and no `clip_type: "avatar"`
 - [ ] Subtitles ASS events are clamped to dialogue scene windows; no bleed into action scenes or silence
 - [ ] fps normalized to 30 before concat
@@ -402,8 +432,8 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - ❌ Long 10s dialogue clips for $0.04 savings (kills dynamics)
 - ❌ Re-rendering one line into a parallel `-new`/`-v2` audio file (drops locked voice → same character, two voices — EP6 Admiral)
 - ❌ Referencing one character from two different ref asset paths across clips (face differs between adjacent clips)
-- ❌ Photoreal-tagged source ref in this stylized format (text "NOT photorealistic" does not override a photoreal source image)
+- ❌ Source ref whose visual style conflicts with the resolved `style_tags` (a mismatched-style source image is not overridden by text negatives — e.g. a photoreal ref will not be un-realistified by "NOT photorealistic")
 - ❌ `image_prompt` without the full `style_tags` prefix (off-style clip)
-- ❌ I2V clip without an anti-photoreal negative; `multi_prompt` shot without a style anchor
+- ❌ I2V clip without an anti-drift negative derived from `style_tags`; `multi_prompt` shot without a style anchor copied from `style_tags`
 - ❌ Ending a `multi_prompt` on a tight invented face close-up not present in the start frame (drifts realistic)
 - ❌ Launching Kling before the cross-asset pre-flight gate passes (dead ref / duplicate audio / wrong PNG — see `validation.md`)

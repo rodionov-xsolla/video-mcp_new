@@ -73,17 +73,16 @@ Keep the facial features of the person in the uploaded reference image exactly c
 
 Without this line NB2 "freely interprets" the ref — face drifts between scenes.
 
-**Proportion lock:** if the locked character cards are semi-realistic 3D, keep their exact head/body/eye proportions. Do not enlarge eyes, round faces, or soften anatomy into Disney/Pixar/toy proportions.
+**Proportion lock:** keep the exact head/body/eye proportions implied by the resolved `style_tags` and the locked character cards. Do not drift into a different proportion system between scenes (enlarged eyes, rounded faces, softened anatomy) unless the locked style calls for it.
 
-**Example:**
+**Example** (`[...]` = fill from the resolved `style_tags`, the character card, and the scene — never a hardcoded style):
 ```
-MLBB Mobile Legends style, anime aesthetic, vibrant saturated colors, dramatic hero lighting,
-male warrior assassin Lancelot, silver armor with intricate blue engravings, flowing royal blue cape, gleaming silver rapier, spiky silver-blue hair,
-standing on a cliff edge overlooking the battlefield, cape billowing in wind, challenging smirk, mouth slightly open with teeth visible,
-ancient battlefield arena at twilight, crumbling stone pillars, purple-orange sky,
-dramatic side-lighting with hero spotlight, purple-blue ambient glow,
-deep blue and gold color scheme,
-cinematic low angle shot, vertical composition, 9:16 aspect ratio, mobile-first framing
+[STYLE_TAGS resolved for this video],
+[CHARACTER_DESCRIPTION from the bible card — appearance only],
+[CHARACTER_STATE: pose, expression, action for this scene],
+[ENVIRONMENT_DESCRIPTION], [ENVIRONMENT_STATE],
+[LIGHTING], [COLOR_PALETTE],
+[CAMERA_STYLE], vertical composition, 9:16 aspect ratio, mobile-first framing
 ```
 
 **Consistency between scenes of one character:** `style_tags`, `character_description` (appearance), `environment_description` (base), `lighting`, `color_palette` are **IDENTICAL**. Only `character_state`, `environment_state`, `camera_style` change.
@@ -103,9 +102,9 @@ In `visual_identity`, each character is its own block. Block is copied unchanged
 ```json
 {
   "visual_identity": {
-    "style": "semi-realistic sci-fi, cinematic, LCARS aesthetic",
-    "lighting": "dramatic three-point, amber key, cool blue fill",
-    "color_palette": "deep black, LCARS orange, federation blue",
+    "style": "<resolved style_tags — verbatim, do not paraphrase or hardcode>",
+    "lighting": "<from game config / bible>",
+    "color_palette": "<from game config / bible>",
     "characters": {
       "Worf": {
         "species": "Klingon",
@@ -766,7 +765,7 @@ Without explicit scale anchors NB2 will pick the size that fills the canvas most
 
 5. **Pose can amplify scale, but cannot replace anchoring.** Crouching, kneeling, sitting reduce a character's vertical footprint and help when the subject should read small — but a standing figure can still read small if anchored to a tall bg object explicitly (`"head reaches the lower rim of the airlock door"`). Conversely, a giant must be anchored to small bg objects (`"foot the length of a parked car"`), or NB2 will draw an average-sized person.
 
-6. **Anti-Pixar / anti-toy clauses for children specifically** — NB2 is biased to render children as Pixar-proportioned regardless of the rest of the prompt. Add `"realistic child anatomy, head-to-body ratio ~1:6 for a 6-year-old / ~1:7 for a 10-year-old, NOT Pixar style, NOT cartoon, NOT toy-like"`. This is on top of the scale anchors, not instead of them.
+6. **Child-proportion anchor** — NB2 is biased to render children with over-large heads / toy proportions regardless of the rest of the prompt. Anchor the anatomy geometrically: `"child anatomy, head-to-body ratio ~1:6 for a 6-year-old / ~1:7 for a 10-year-old"`. Keep the child rendered in the video's resolved `style_tags` — if that style is realistic, add `"realistic proportions, not toy-like"`; do NOT negate a specific art style by name (the target style varies per game). This is on top of the scale anchors, not instead of them.
 
 **Anti-patterns:**
 
