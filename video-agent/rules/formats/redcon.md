@@ -85,6 +85,50 @@ Same as `character-story`: character does NOT speak on camera (no lipsync). I2V 
 - **Irony and dark mirror.** The best What If stories show how the character's core traits lead them *into* the alternate fate — Spock's logic is what makes him vulnerable to the Borg.
 - **Three motion layers per clip** (mandatory) — same rules as `character-story`.
 
+### Player-POV variant (Star Trek Timelines, Genshin Impact)
+
+Use this variant when `character_name = "You"` / the player is the protagonist (not a specific canonical character).
+
+**Applies to:** `star-trek-timelines`, `genshin-impact`. Same rules for both games.
+
+#### Structure
+
+| Clip | Beat | Timing | Goal |
+|---|---|---|---|
+| **TEASER** | clip 1 | 0–5s | Dynamic visual of the alternate outcome. **TTS starts here.** Text overlay (via ASS): "WHAT IF THANKS TO YOU / [OUTCOME]". No character in frame — show the result: a battle won, a world saved, a city standing. |
+| **TITLE CARD** | clip 2 | 5–10s | Static atmospheric background. **TTS silent** (`tts_segment: null`). Title text: "WHAT IF: YOU / CRACKED / [THE EVENT]". Slow camera drift only. |
+| **HOOK** | clip 3 | 10–15s | Player-Commander on bridge/field — CTA embed: "Imagine, you downloaded [Game] from the link in bio… and changed everything." |
+| **CANON REMINDER** | clip 4 | 15–20s | The canonical crisis as it happened — the before. |
+| **DIVERGENCE** | clip 5 | 20–25s | The crew the player assembled. The exact moment they solved it. |
+| **TRANSFORMATION** | clip 6 | 25–30s | The turning point — shields reignite, armies rally, the threat collapses. |
+| **REVELATION** | clip 7 | 30–35s | Q / the Archon / the world reacts. Ironic final line. |
+| **CTA** | clip 8 | — | Standard CTA asset. |
+
+#### Voiceover rules (mandatory)
+
+- **Opens with:** `"Imagine, you downloaded [Game Name] from the link in bio… and [outcome in 1 clause]."` — this line goes on the TEASER clip (clip 1), not clip 3.
+- Second-person throughout ("you assembled", "you cracked", "you saved") — NOT first-person alternate-self.
+- CTA embed in clip 3 hook: the phrase "from the link in bio" must appear in clip 3 (or clip 1) — not later.
+- Clip 2 (title card): `tts_segment: null` — silence.
+- ~90–110 words total across clips 1, 3–7.
+
+#### Editor — PRE_MS for player-POV
+
+- `PRE_MS = 0` — TTS starts immediately at t=0 (teaser clip). No adelay.
+- Title card (clip 2, t=5–10s) is silent: the TTS segment for clip 2 is null, so no audio is generated for it; the TTS from clips 1 and 3+ are separate files concatenated around the silence.
+- `atempo = TTS_DUR / (MAIN_DUR)` — full duration, not MAIN_DUR minus 5.
+- MAIN_DUR = 5 + 5 + 5×5 + CTA_DUR (teaser + title + 5 story clips + CTA).
+
+#### Teaser clip — ASS title text
+
+Teaser clip (clip 1) gets its own ASS `Dialogue:` events (different font size from subtitles):
+- Two lines: `"WHAT IF THANKS TO YOU"` and `"[OUTCOME IN CAPS]"` (e.g. `"THE DOMINION WAR ENDED EARLY"`)
+- Font: Montserrat Black `\fs88`, white `\c&H00FFFFFF&`, centered `\an5`
+- y positions: 800 and 970 (lower than subtitle zone to avoid overlap with TTS subtitles)
+- Timing: `0:00:00.50–0:00:04.80`
+
+---
+
 ### Offer-driven redcon variant
 
 Use this variant when the user asks to tie the redcon to an offer such as free currency, pulls, link-in-bio rewards, or a playable character acquisition.
@@ -144,6 +188,7 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
 
 ### Scenarist
 
+- **If `character_name = "You"` (player-POV):** use the **Player-POV variant** structure — teaser clip (clip 1, TTS starts), title card (clip 2, `tts_segment: null`), story clips (3–7), CTA (clip 8). Voiceover opens with `"Imagine, you downloaded [Game] from the link in bio… and [outcome]."` and stays second-person throughout.
 - Write the alternate-self monologue (~90–120 words English, ~35–40s)
 - If the user asks for an offer/currency/pull/link-in-bio angle, use the **Offer-driven redcon variant** above:
   - clip 2 starts with the familiar doomed situation;
@@ -238,9 +283,8 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
 **Use `rules/roles/editor.md §0 — canonical single-pass `filter_complex` pipeline`** (the redcon worked example in §0.2 ships exactly this format).
 
 Format-specific parameters to compute and pass into §0:
-- `PRE_MS = 5000` — TTS starts after the 5 s title card via `adelay=5000|5000`
-- `atempo = TTS_DUR / 40` — TTS window is `MAIN_DUR − 5 s` (title card silence). If atempo > 1.4, you may exceed the conventional cap up to ~1.5 for this format (Borg-flat voice is naturally slow); ASS must be regenerated against the exact final atempo.
-- `MAIN_DUR = 5 + 6*5 + 10 = 45 s` (title + 6 story clips + 10 s coda) — adjust if scene count changes
+- **Standard redcon** (canonical character): `PRE_MS = 5000` — TTS starts after the 5 s title card via `adelay=5000|5000`. `atempo = TTS_DUR / (MAIN_DUR − 5)`. `MAIN_DUR = 5 + 6×5 + CTA_DUR`.
+- **Player-POV redcon** (`character_name = "You"`): `PRE_MS = 0` — TTS starts at t=0 (teaser clip 1). Title card (clip 2) has `tts_segment: null` — no TTS audio for that clip. Concatenate clip-1 TTS + silence(5s) + clips 3–7 TTS. `atempo = TTS_DUR / MAIN_DUR`. `MAIN_DUR = 5 + 5 + 5×5 + CTA_DUR`.
 - Fade-to-black: 1.0 s on the last story clip (scene-8) before CTA
 - Music: `volume=0.15`, `afade=t=out:st=(MAIN_DUR−1):d=1.0`
 
