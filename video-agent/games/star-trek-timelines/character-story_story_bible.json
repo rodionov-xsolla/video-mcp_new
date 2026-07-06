@@ -1,0 +1,347 @@
+{
+  "series_id": "star-trek-character-story-en",
+  "game_tag": "star-trek-timelines",
+  "format": "character-story",
+  "language": "en",
+  "title": "Star Trek Timelines — Character Story",
+  "created_at": "2026-05-30",
+  "last_episode": 17,
+  "tts_engine": "elevenlabs",
+  "tts_note": "ElevenLabs eleven-v3 via fal-ai/elevenlabs/tts/eleven-v3. Each canonical character gets a dedicated voice chosen by gender and emotional register. No Chatterbox — STT always uses ElevenLabs. See characters[] for voice assignments. Long monologue (>80 words) → mandatory chunking into ≤35-word segments.",
+  "format_overrides": {
+    "note": "Applied from EP1 onward. Star Trek Timelines character-story = canonical Trek character narrates their own origin/lore in first person. I2V visualizes the key moments. Do NOT show the character speaking on camera — TTS is off-screen narration while Kling shows action.",
+    "image_style": "realistic 3D CGI — cinematic lighting, photorealistic textures, high detail 3D render, game cutscene quality. Do NOT use the game's illustrated/painted art style. All clips must match this style, including child-character scenes. Required prompt keywords: 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI, game cutscene quality'.",
+    "hook_requirement": "Clip 1 MUST visualize the most dramatic or emotionally charged moment of the character's arc — not a neutral opener. Visual should be scroll-stopping: crisis, loss, decisive choice. TTS line sets the stakes immediately.",
+    "era_tags": {
+      "note": "Do NOT write era-specific strings (TNG, TOS, DS9) in NB2/Kling prompts — the model re-assigns uniform colors. Always specify the uniform color explicitly.",
+      "TOS": "gold-yellow / science-blue / red command uniform",
+      "TNG": "red-and-black (command) / gold-and-black (ops) / blue-and-black (science) uniform",
+      "DS9": "gray-shouldered command uniform, darker than TNG",
+      "VOY": "red-and-black (command) / gold-and-black (ops) — same cut as TNG",
+      "ENT": "blue-gray Starfleet jumpsuit with vertical blue/gold/red shoulder stripe",
+      "DIS": "black-and-metallic Discovery-era Starfleet uniform"
+    },
+    "structure": "HOOK (clip 1) → ORIGIN (clips 2–3) → TURNING POINT (clips 4–5) → REVELATION / COST (clip 6) → CTA"
+  },
+  "character_rotation": {
+    "done_female": [
+      "Uhura",
+      "Carol Marcus",
+      "B'Elanna Torres",
+      "Seven of Nine",
+      "Jadzia Dax",
+      "Janeway",
+      "Michael Burnham",
+      "T'Pol",
+      "Kira Nerys"
+    ],
+    "done_male": [
+      "McCoy",
+      "Archer",
+      "Lorca",
+      "Q",
+      "Sisko",
+      "Picard",
+      "Data"
+    ],
+    "all_done": [
+      "McCoy",
+      "Uhura",
+      "Carol Marcus",
+      "Archer",
+      "Lorca",
+      "B'Elanna Torres",
+      "Q",
+      "Seven of Nine",
+      "Sisko",
+      "Jadzia Dax",
+      "Janeway",
+      "Picard",
+      "Data",
+      "Michael Burnham",
+      "T'Pol",
+      "Kira Nerys"
+    ],
+    "error": [],
+    "error_note": "Characters listed in 'error' had a production attempt but the final video was rejected. Do NOT pick them again until manually reviewed and removed from this list.",
+    "cooldown_episodes": 20,
+    "selection_note": "Cover all Trek eras — TOS → TNG → DS9 → VOY → ENT → DIS. Prioritize characters with strong lore arcs and tragic backstories. Alternate male/female for variety. Include complex antagonists (Lorca, Khan, Dukat) but balance with heroes. Avoid repeating characters used in dual-style / redcon within 4 episodes. 5-star characters preferred for engagement."
+  },
+  "canonical_characters": {
+    "note": "Prompt blocks and Supabase refs for canonical Trek characters. Reference sheet goes to storyboarder as chain_ref. No voice_ref_url — use ElevenLabs voice name directly.",
+    "picard": {
+      "name": "Captain Picard",
+      "gender": "male",
+      "era": "TNG",
+      "elevenlabs_voice": "Brian",
+      "voice_note": "Measured, dignified, authoritative — fits Picard's philosophical command style",
+      "character_description": "bald male Starfleet captain, red and black TNG uniform with red shoulders black body, gold combadge, 4 rank pips, dignified expression",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/picard/sheet.png"
+    },
+    "uhura": {
+      "name": "Nyota Uhura",
+      "gender": "female",
+      "era": "TOS",
+      "elevenlabs_voice": "Aria",
+      "voice_note": "Warm, expressive, strong — fits Uhura's confidence and emotional depth",
+      "character_description": "Black female Starfleet communications officer, red short-sleeve command dress uniform with Starfleet delta badge, elegant upswept hair, warm expressive eyes, Enterprise bridge background",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/uhura/sheet.png"
+    },
+    "janeway": {
+      "name": "Captain Janeway",
+      "gender": "female",
+      "era": "VOY",
+      "elevenlabs_voice": "Sarah",
+      "voice_note": "Sharp, determined, slight gravitas — Janeway's no-nonsense command presence",
+      "character_description": "female Starfleet captain, reddish-brown hair in tight bun, red-and-black command uniform, decisive expression, Voyager bridge background",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/janeway/variants/captain.png"
+    },
+    "kirk": {
+      "name": "Captain Kirk",
+      "gender": "male",
+      "era": "TOS",
+      "elevenlabs_voice": "Daniel",
+      "voice_note": "Charismatic, bold, emotionally direct — Kirk's confident swagger",
+      "character_description": "male Starfleet captain, athletic build, light brown hair swept to the side, confident charming smirk, gold-yellow command tunic with Starfleet delta badge, black trousers, heroic pose, dramatic bridge lighting",
+      "ref_url": null
+    },
+    "spock": {
+      "name": "Mr. Spock",
+      "gender": "male",
+      "era": "TOS",
+      "elevenlabs_voice": "Brian",
+      "voice_note": "Flat, precise, no emotional coloring — Vulcan logic pattern",
+      "character_description": "male Vulcan Starfleet officer, pointed ears, sharply arched eyebrows, straight black bowl-cut hair, olive-tinted skin, calm emotionless expression, blue-and-black science tunic with Starfleet delta badge",
+      "ref_url": null
+    },
+    "mccoy": {
+      "name": "Dr. Leonard McCoy",
+      "gender": "male",
+      "era": "TOS",
+      "elevenlabs_voice": "Daniel",
+      "voice_note": "Warm Southern drawl, impassioned, occasionally grumpy — Bones' emotional core. Lower stability than Kirk's Daniel to differentiate",
+      "character_description": "male Starfleet doctor, medium build, hazel eyes, short dark hair with silver temples, blue-and-black science/medical tunic, Starfleet delta badge, slightly furrowed brow — perpetually worried expression, sickbay background with medical panels",
+      "ref_url": null
+    },
+    "worf": {
+      "name": "Commander Worf",
+      "gender": "male",
+      "era": "TNG/DS9",
+      "elevenlabs_voice": "George",
+      "voice_note": "Deep, gravelly, intense — Klingon honor in Starfleet uniform",
+      "character_description": "male Klingon Starfleet officer, prominent triangular cranial ridges on forehead, dark brown skin, long dark hair in warrior ponytail, groomed goatee, gold-and-black operations uniform, diagonal metal baldric sash, fierce honorable expression",
+      "ref_url": null
+    },
+    "data": {
+      "name": "Commander Data",
+      "gender": "male",
+      "era": "TNG",
+      "elevenlabs_voice": "Charlie",
+      "voice_note": "Flat, over-enunciated, precise — android speech pattern, no contractions",
+      "character_description": "android male Starfleet officer, pale yellowish skin, slicked black hair, yellow-gold eyes, gold-and-black operations uniform, emotionless face, slight head tilt of curiosity",
+      "ref_url": null
+    },
+    "seven": {
+      "name": "Seven of Nine",
+      "gender": "female",
+      "era": "VOY",
+      "elevenlabs_voice": "Aria",
+      "voice_note": "Cold, clinical, detached — former Borg learning humanity. High stability, flat affect",
+      "character_description": "blonde female, hair pulled back tightly, metallic starburst Borg implant above left eye, small metallic implant on left hand, silver-and-blue form-fitting catsuit, intense blue eyes, arms crossed, Voyager astrometrics lab background",
+      "ref_url": null
+    },
+    "lorca": {
+      "name": "Captain Gabriel Lorca",
+      "gender": "male",
+      "era": "DIS",
+      "elevenlabs_voice": "Liam",
+      "voice_note": "Dark, charismatic, with hidden menace — mirror-universe predator behind a Starfleet mask",
+      "character_description": "male Starfleet captain, lean angular face, short dark hair, cold calculating eyes, black-and-metallic Discovery-era command uniform, tense predatory posture, dim Discovery bridge background with dark tones",
+      "ref_url": null
+    },
+    "belanna": {
+      "name": "B'Elanna Torres",
+      "gender": "female",
+      "era": "VOY",
+      "elevenlabs_voice": "Matilda",
+      "voice_note": "Fierce, passionate, quick-tempered — half-Klingon warrior fighting her own nature",
+      "character_description": "half-Klingon female Starfleet engineer, subtle cranial ridges on forehead (less prominent than full Klingon), dark brown wavy hair, intense brown eyes, gold-and-black engineering uniform, strong jaw, defiant expression, engineering section background",
+      "ref_url": null
+    },
+    "carol_marcus": {
+      "name": "Dr. Carol Marcus",
+      "gender": "female",
+      "era": "TOS (movie era)",
+      "elevenlabs_voice": "Sarah",
+      "voice_note": "Intelligent, composed, with underlying grief — scientist's resolve",
+      "character_description": "blonde female scientist, pale blue civilian science uniform, Starfleet delta on breast pocket, clear blue eyes, hair pulled back, intelligent focused expression, science lab background with Genesis device",
+      "ref_url": null
+    },
+    "archer": {
+      "name": "Captain Jonathan Archer",
+      "gender": "male",
+      "era": "ENT",
+      "elevenlabs_voice": "George",
+      "voice_note": "Earnest, adventurous, slightly rougher than later Starfleet captains — the first great explorer",
+      "character_description": "male Starfleet captain, dark hair, brown eyes, blue-gray Enterprise-era Starfleet jumpsuit with vertical gold shoulder stripe, combadge, determined optimistic expression, early NX-01 bridge background",
+      "ref_url": null
+    },
+    "khan": {
+      "name": "Khan Noonien Singh",
+      "gender": "male",
+      "era": "TOS / movie",
+      "elevenlabs_voice": "Liam",
+      "voice_note": "Theatrical, imperious, seething with controlled rage — genetic superman's arrogance",
+      "character_description": "muscular male warrior, long flowing dark hair, broad bare chest through torn red uniform, gold necklace, weathered tanned skin, intense vengeful expression, clenched jaw, desolate planet background",
+      "ref_url": null
+    },
+    "q": {
+      "name": "Q",
+      "gender": "male",
+      "era": "omnipotent / all eras",
+      "elevenlabs_voice": "Daniel",
+      "voice_note": "Sardonic, theatrical, omniscient amusement — the trickster god who takes nothing seriously except his own entertainment",
+      "character_description": "middle-aged male in red-and-black TNG Starfleet captain uniform, smug knowing grin, theatrical raised hand, mischievous gleaming eyes, Enterprise bridge background with golden omnipotent glow distortion",
+      "ref_url": null
+    },
+    "borg_queen": {
+      "name": "Borg Queen",
+      "gender": "female",
+      "era": "TNG / VOY",
+      "elevenlabs_voice": "Aria",
+      "voice_note": "Silky-smooth, seductive, utterly cold — the Collective speaking through one voice. High stability, zero warmth",
+      "character_description": "female Borg Queen, pale grayish skin, bald head with dark biomechanical skull cap, exposed mechanical spine, black bodysuit with grey bio-tubing, dark hollow eyes, sinister knowing half-smile, Borg alcove background with green ambient glow",
+      "ref_url": null
+    },
+    "dukat": {
+      "name": "Gul Dukat",
+      "gender": "male",
+      "era": "DS9",
+      "elevenlabs_voice": "Liam",
+      "voice_note": "Charming, self-righteous, delusional — villain who genuinely believes he's the hero",
+      "character_description": "male Cardassian, gray scaly textured skin, prominent spoon-shaped cranial ridge on forehead, raised neck ridges, slicked-back dark hair, gray-brown Cardassian military uniform with armored shoulders, charming manipulative smile",
+      "ref_url": null
+    }
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-05-30",
+      "character": "McCoy",
+      "character_slug": "mccoy",
+      "gender": "male",
+      "era": "TOS",
+      "idea": "Leonard \"Bones\" McCoy — Character Story",
+      "elevenlabs_voice": "Daniel",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-30/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=cVMl0UdVhLM",
+      "notes": "First episode. No promo clip. Covered McCoy's Georgia origins, failed marriage, medical career driven by guilt over father's euthanasia, recruitment by Starfleet."
+    },
+    {
+      "episode": 2,
+      "date": "2026-06-03",
+      "character": "Uhura",
+      "character_slug": "uhura",
+      "gender": "female",
+      "era": "TOS",
+      "idea": "Nyota Uhura — Character Story | Star Trek Timelines",
+      "elevenlabs_voice": "Aria",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-23/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=lw61mydGYS4",
+      "notes": "Uhura's origin — Kenyan heritage, communications genius, breaking Starfleet's glass ceiling. Iconic mirror-universe scene, relationship with Spock."
+    },
+    {
+      "episode": 3,
+      "date": "2026-06-03",
+      "character": "Carol Marcus",
+      "character_slug": "carol-marcus",
+      "gender": "female",
+      "era": "TOS (movie era)",
+      "idea": "Dr. Carol Marcus — Character Story | Star Trek Timelines",
+      "elevenlabs_voice": "Sarah",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-26/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=PO3YCuIFruE",
+      "notes": "Genesis Project, secret son David, relationship with Kirk, tragic death of David in ST III. Mother's sacrifice arc."
+    },
+    {
+      "episode": 4,
+      "date": "2026-06-03",
+      "character": "Archer",
+      "character_slug": "archer",
+      "gender": "male",
+      "era": "ENT",
+      "idea": "Capt. Jonathan Archer — Character Story | Star Trek Timelines",
+      "elevenlabs_voice": "George",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-27/character-story-archer_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=Oh6vHJ9WFto",
+      "notes": "First captain of the NX-01, father's warp engine legacy, Temporal Cold War, founding of the Federation. Pioneer before the rules existed."
+    },
+    {
+      "episode": 5,
+      "date": "2026-06-09",
+      "character": "Gabriel Lorca",
+      "character_slug": "lorca",
+      "gender": "male",
+      "era": "DIS",
+      "idea": "Gabriel Lorca: The Mirror Captain",
+      "elevenlabs_voice": "Liam",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-09/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=xFud8dCCfxQ",
+      "notes": "Mirror-universe Lorca posing as prime-universe Starfleet captain. Manipulation, betrayal, Terran Empire ambition. Dark character with no redemption arc — the monster who wore a hero's face."
+    },
+    {
+      "episode": 6,
+      "date": "2026-06-09",
+      "character": "B'Elanna Torres",
+      "character_slug": "belanna-torres",
+      "gender": "female",
+      "era": "VOY",
+      "idea": "B'Elanna Torres: The Engineer's Fire | Star Trek Timelines",
+      "elevenlabs_voice": "Matilda",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-09/character-story-belanna_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=w67HFhXuCKU",
+      "notes": "Half-Klingon engineer torn between two cultures. Rejected by both Starfleet Academy and her Klingon heritage. Found identity through engineering genius and crew of Voyager."
+    },
+    {
+      "episode": 16,
+      "date": "2026-07-01",
+      "character": "Kira Nerys",
+      "character_slug": "kira",
+      "gender": "female",
+      "era": "DS9",
+      "status": "error",
+      "error_reason": "Visual style inconsistency: scenes 1 and 3 correct (realistic 3D CGI), scenes 2/4/5/6/7 rendered in the game's illustrated/painted style (wrong). character-story format requires realistic 3D across ALL clips. Root cause: storyboarder used game art style from star-trek-timelines.md instead of the format's canonical realistic 3D style. Fix: image prompts must always include 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI' keywords — do not inherit game art style for this format.",
+      "output_dir": "output/2026-07-01/star-trek-timelines/character-story-kira",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-01/character-story-kira_final.mp4",
+      "youtube_url": null,
+      "notes": "Do not publish. Redo from Phase 3 (storyboarder) with consistent style anchoring across all clips."
+    },
+    {
+      "episode": 7,
+      "date": "2026-06-25",
+      "character": "Q",
+      "character_slug": "q",
+      "gender": "male",
+      "era": "omnipotent / all eras",
+      "idea": "I Won. God Help Me.",
+      "elevenlabs_voice": "Daniel",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-25/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=8W7trSRYnNI",
+      "notes": "Title suggests omnipotence as burden, not triumph. Likely Q's origin or the moment he gained his powers — victory that became a curse. Covers Q Continuum, exile, trial of humanity, existential weight of knowing everything."
+    },
+    {
+      "episode": 17,
+      "date": "2026-07-02",
+      "character": "Kira Nerys",
+      "character_slug": "kira",
+      "gender": "female",
+      "era": "DS9",
+      "idea": "Kira Nerys — Character Story | Star Trek Timelines",
+      "elevenlabs_voice": "Charlotte",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-02/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=Jt2yNjsZKDQ",
+      "yt_publish_at": "2026-07-05T20:59:00Z",
+      "notes": "Full redo from scratch (EP16 rejected for style inconsistency). Bilingual CTA opener (RU+EN). 3 age variants: child (~10-12), teen (~15-18), mature Major. Hook: young Kira beside dying mother in Singha refugee camp. Style fix: realistic 3D CGI enforced at 3 levels in storyboard. User manually edited final video (0703.mp4, 29.87s)."
+    }
+  ]
+}

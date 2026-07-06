@@ -160,5 +160,21 @@
   ],
   "hook_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/hook.mp4",
   "opener_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/opener.mp4",
-  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4"
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4",
+  "channel_branding": {
+    "name": "Galactic Lol Network (GLN)",
+    "channel_bug_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/gln-bug.png",
+    "position": "top-left",
+    "offset_px": 40,
+    "size_px": 110,
+    "opacity_note": "alpha already embedded in PNG (~70% effective); apply colorchannelmixer=aa=0.7 if softer needed",
+    "behavior": "static, full main-content duration, no fade in/out",
+    "apply_rule": "Editor applies channel_bug_url ONLY on main content (between opener and CTA). NOT on CTA clip itself.",
+    "anti_patterns": [
+      "Bug on CTA clip — double branding",
+      "Bug size > 200x200px — becomes a watermark, not a TV bug",
+      "Bug at 100% opacity",
+      "Bug position or size changing between episodes"
+    ]
+  }
 }

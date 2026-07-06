@@ -34,19 +34,21 @@
 - Космические бои: яркие вспышки фазеров, торпед, щитов
 
 ### Композиция
-- Персонажи: полуреалистичные портреты, **semi-realistic Pixar 3D**, НЕ cartoon/мультяшные
+- Персонажи: **3D cinematic sci-fi**, НЕ cartoon/мультяшные
 - Фон: мостик корабля, космос, планеты, станции
 - UI вдохновлён LCARS (закруглённые прямоугольные панели Star Trek)
 - Вертикальная 9:16, mobile-first
 
 ### Стилистические ограничения
-- **НЕ cartoon, НЕ chibi, НЕ stylized** — только semi-realistic Pixar-quality 3D
+- **НЕ cartoon, НЕ chibi, НЕ stylized, НЕ toy-like** — только 3D cinematic sci-fi
 - Для молодых персонажей (Chekov) — явно указывать `"realistic adult proportions, full-height figure"` в промпте, иначе модель генерирует карикатурные/непропорциональные фигуры
 - Не использовать эра-специфичные слова (`"TNG"`, `"TOS"`) в промптах — модель переопределяет цвет формы. Писать цвет явно: `"gold-yellow uniform"`, `"red uniform"`
 
+> ⚠️ Это **базовый** стиль игры — fallback, если в `{format}_story_bible.json` не задан `format_overrides.image_style`. Storyboarder берёт стиль из story bible в первую очередь, и только при его отсутствии — отсюда.
+
 ### Prompt prefix
 ```
-Star Trek Timelines style, semi-realistic sci-fi character portrait, cinematic Federation lighting, deep space environment, Starfleet uniform details, clean cinematic frame, no UI overlay
+Star Trek Timelines style, cinematic sci-fi character portrait, cinematic Federation lighting, deep space environment, Starfleet uniform details, clean cinematic frame, no UI overlay
 ```
 
 > ⚠️ В prefix описываем **стиль** (свет, палитра, художественное направление), не диегетический UI. Слова `LCARS interface aesthetic`, `HUD`, `text overlay`, `panel borders` сюда не пихать — NB2 трактует их буквально и рисует UI поверх лица. LCARS-панели рисуем локально в `environment_state` тех сцен, где они нужны (title card, DS9 Ops).
@@ -138,44 +140,46 @@ Star Trek Timelines style, semi-realistic sci-fi character portrait, cinematic F
 
 ## Character Prompt Blocks
 
+> ⚠️ Блоки ниже содержат только физическое описание персонажа. Стиль рендера (3D, реализм, художественное направление) берётся из `format_overrides.image_style` story bible или из Prompt prefix выше — не из этих блоков.
+
 ### Alex (ROOM 1701 sitcom)
-`Star Trek Timelines 3D animated character, Pixar-DreamWorks quality 3D render, slim young man late teens early 20s, messy tousled chestnut-brown hair peeking out from a black baseball cap with gold Starfleet delta badge on front, large warm brown expressive eyes, navy blue Star Trek Timelines hoodie with gold Starfleet command delta logo on chest, black cargo pants, blue-and-white sneakers, holding a smartphone in one hand, slightly shy nervous expression`
+`slim young man late teens early 20s, messy tousled chestnut-brown hair peeking out from a black baseball cap with gold Starfleet delta badge on front, large warm brown expressive eyes, navy blue Star Trek Timelines hoodie with gold Starfleet command delta logo on chest, black cargo pants, blue-and-white sneakers, holding a smartphone in one hand, slightly shy nervous expression`
 
 ### Michael (ROOM 1701 sitcom)
-`Star Trek Timelines 3D animated character, Pixar-DreamWorks quality 3D render, stocky enthusiastic young man, wild voluminous curly bright orange-ginger hair, round thick black-framed glasses, large expressive eyes, yellow-gold Star Trek Timelines hoodie with black Starfleet command delta logo on chest, black jogger pants, grey foam NCC-1701 slippers, black over-ear headphones hanging around neck, small clip-on ID badge on hoodie, wide excited grin`
+`stocky enthusiastic young man, wild voluminous curly bright orange-ginger hair, round thick black-framed glasses, large expressive eyes, yellow-gold Star Trek Timelines hoodie with black Starfleet command delta logo on chest, black jogger pants, grey foam NCC-1701 slippers, black over-ear headphones hanging around neck, small clip-on ID badge on hoodie, wide excited grin`
 
 ### Emily (ROOM 1701 sitcom)
-`Star Trek Timelines 3D animated character, Pixar-DreamWorks quality 3D render, confident young woman, short wavy dark-brown hair with vivid purple ombre tips and highlights, warm brown expressive eyes, black off-shoulder loose-fit top with gold Starfleet command delta logo, purple cargo jogger pants, black Converse high-top sneakers, thin choker necklace with small Starfleet delta pendant, holding a black Star Trek mug with gold Starfleet delta, slight knowing smirk`
+`confident young woman, short wavy dark-brown hair with vivid purple ombre tips and highlights, warm brown expressive eyes, black off-shoulder loose-fit top with gold Starfleet command delta logo, purple cargo jogger pants, black Converse high-top sneakers, thin choker necklace with small Starfleet delta pendant, holding a black Star Trek mug with gold Starfleet delta, slight knowing smirk`
 
 ### Captain Kirk (TOS, command gold)
-`semi-realistic male Starfleet captain, athletic build, light brown hair swept to the side, confident charming smirk showing teeth, gold yellow command tunic with black collar and Starfleet delta badge on left chest, black trousers, standing heroic pose with phaser in hand, dramatic bridge lighting, deep space visible through viewport behind`
+`male Starfleet captain, athletic build, light brown hair swept to the side, confident charming smirk showing teeth, gold yellow command tunic with black collar and Starfleet delta badge on left chest, black trousers, standing heroic pose with phaser in hand, dramatic bridge lighting, deep space visible through viewport behind`
 
 ### Mr. Spock (TOS, science blue)
-`semi-realistic male Vulcan Starfleet officer, pointed ears, sharply arched thick eyebrows, straight black bowl-cut hair, olive-tinted skin, calm emotionless expression with one eyebrow slightly raised, blue science tunic with black collar and Starfleet delta badge, hands clasped behind back, starship bridge background with LCARS consoles`
+`male Vulcan Starfleet officer, pointed ears, sharply arched thick eyebrows, straight black bowl-cut hair, olive-tinted skin, calm emotionless expression with one eyebrow slightly raised, blue science tunic with black collar and Starfleet delta badge, hands clasped behind back, starship bridge background with LCARS consoles`
 
 ### Captain Picard (TNG, command red)
-`semi-realistic bald male Starfleet captain, distinguished refined appearance, serious authoritative expression, red and black TNG uniform with red shoulders and black body, Starfleet combadge on left chest, four rank pips on collar, one hand extended in commanding gesture, Enterprise-D bridge background, dramatic blue lighting`
+`bald male Starfleet captain, distinguished refined appearance, serious authoritative expression, red and black TNG uniform with red shoulders and black body, Starfleet combadge on left chest, four rank pips on collar, one hand extended in commanding gesture, Enterprise-D bridge background, dramatic blue lighting`
 
 ### Locutus of Borg (assimilated Picard)
-`semi-realistic Borg-assimilated male, pale gray cybernetic skin, bald head with black Borg skull cap and tubes, red laser eye-piece over left eye, mechanical tubes running from neck and jaw, black Borg body armor with green glowing circuitry, emotionless menacing stare, dark Borg cube interior background with green ambient light`
+`Borg-assimilated male, pale gray cybernetic skin, bald head with black Borg skull cap and tubes, red laser eye-piece over left eye, mechanical tubes running from neck and jaw, black Borg body armor with green glowing circuitry, emotionless menacing stare, dark Borg cube interior background with green ambient light`
 
 ### Borg Queen
-`semi-realistic female Borg Queen, pale grayish skin, bald head with dark biomechanical skull cap, exposed mechanical spine and neck vertebrae visible, black form-fitting bodysuit with grey biomechanical tubing, dark hollow eyes with sinister knowing half-smile, Borg alcove background with green glowing lights`
+`female Borg Queen, pale grayish skin, bald head with dark biomechanical skull cap, exposed mechanical spine and neck vertebrae visible, black form-fitting bodysuit with grey biomechanical tubing, dark hollow eyes with sinister knowing half-smile, Borg alcove background with green glowing lights`
 
 ### Khan (classic, Wrath of Khan era)
-`semi-realistic muscular male warrior, long flowing dark hair, broad bare chest visible through torn open red uniform, thick gold necklace, deeply tanned weathered skin, intense vengeful expression with clenched jaw, strong defined cheekbones, dramatic side lighting, desolate planet surface background`
+`muscular male warrior, long flowing dark hair, broad bare chest visible through torn open red uniform, thick gold necklace, deeply tanned weathered skin, intense vengeful expression with clenched jaw, strong defined cheekbones, dramatic side lighting, desolate planet surface background`
 
 ### Q (in Starfleet uniform)
-`semi-realistic middle-aged male in Starfleet captain uniform, red and black TNG uniform, smug knowing grin, slightly theatrical pose with one hand raised as if snapping fingers, mischievous gleaming eyes, slightly disheveled appearance suggesting casual disregard for protocol, Enterprise bridge background slightly distorted with golden omnipotent glow`
+`middle-aged male in Starfleet captain uniform, red and black TNG uniform, smug knowing grin, slightly theatrical pose with one hand raised as if snapping fingers, mischievous gleaming eyes, slightly disheveled appearance suggesting casual disregard for protocol, Enterprise bridge background slightly distorted with golden omnipotent glow`
 
 ### Seven of Nine (Voyager)
-`semi-realistic blonde female, hair pulled back tightly in a bun, metallic starburst-shaped Borg implant above left eye, small metallic implant on left hand, form-fitting silver and blue catsuit, athletic build, intense striking blue eyes, confident stance with arms crossed, Voyager astrometrics lab background with star charts`
+`blonde female, hair pulled back tightly in a bun, metallic starburst-shaped Borg implant above left eye, small metallic implant on left hand, form-fitting silver and blue catsuit, athletic build, intense striking blue eyes, confident stance with arms crossed, Voyager astrometrics lab background with star charts`
 
 ### Commander Worf (TNG)
-`semi-realistic male Klingon Starfleet officer, prominent triangular cranial ridges on forehead, dark brown skin, long dark hair in warrior ponytail, groomed goatee beard, gold and black TNG operations uniform, diagonal metal warrior baldric sash across chest, fierce honorable expression, strong muscular build, Enterprise corridor background`
+`male Klingon Starfleet officer, prominent triangular cranial ridges on forehead, dark brown skin, long dark hair in warrior ponytail, groomed goatee beard, gold and black TNG operations uniform, diagonal metal warrior baldric sash across chest, fierce honorable expression, strong muscular build, Enterprise corridor background`
 
 ### Gul Dukat (Cardassian)
-`semi-realistic male Cardassian, gray scaly textured skin, prominent spoon-shaped cranial ridge on forehead, raised neck ridges, slicked-back dark hair, Cardassian military uniform in gray-brown with armored shoulders, charming manipulative smile, tall lean build, Cardassian warship bridge background with dark metallic tones`
+`male Cardassian, gray scaly textured skin, prominent spoon-shaped cranial ridge on forehead, raised neck ridges, slicked-back dark hair, Cardassian military uniform in gray-brown with armored shoulders, charming manipulative smile, tall lean build, Cardassian warship bridge background with dark metallic tones`
 
 ---
 
@@ -252,22 +256,3 @@ Star Trek Timelines style, semi-realistic sci-fi character portrait, cinematic F
 - **Формат:** 720×1280, 30fps, ~5s — idle animation, star particles drifting
 - **Использование:** Editor скачивает, нормализует (scale+pad 1080×1920+30fps+AAC), конкатенирует в конец после всех сцен
 
----
-
-## GLN Channel Branding (надканальный бренд)
-
-Всё ST-Timelines контент идёт как сетка **Galactic Lol Network (GLN)** — фановый ТВ-канал по вселенной Star Trek. Brand-bug накладывается Editor'ом ПОВЕРХ финального видео (после concat, до субтитров), как это делают реальные ТВ-каналы (CNN/BBC/RT).
-
-- **`channel_bug_url`**: `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/gln-bug.png`
-- **Источник логотипа:** Gemini Generated (2026-05-29), вырезан до RGBA (background transparent), 512×512 PNG, ~42 KB
-- **Позиция в кадре:** top-left, отступ 40 px от верха и левого края
-- **Размер при overlay:** 110×110 px (downscale из 512×512 через `scale=110:110` в filter_complex)
-- **Прозрачность:** альфа уже зашита в PNG (~70% эффективная); если нужно сильнее погасить — `colorchannelmixer=aa=0.7` в overlay цепочке
-- **Поведение:** static, full-video duration (без fade in/out)
-- **Применимо к форматам:** ТОЛЬКО `fun-news`. Manager передаёт `CHANNEL_BUG_URL` editor'у исключительно когда `FORMAT == fun-news`. Для всех других форматов (streettalk, news, character-story, redcon, serial-drama, ...) `CHANNEL_BUG_URL` = пустая строка.
-- **Когда НЕ применять:** любой формат кроме `fun-news`, а также любая игра кроме Star Trek Timelines (Roblox, Genshin Impact и пр. не имеют `channel_bug_url`).
-
-**Анти-паттерны:**
-- ❌ Bug на CTA — CTA это отдельный branded ролик, bug на нём = двойной брендинг. Применять ТОЛЬКО на основном контенте (между opener и CTA, или на всём, если opener тоже свой — зависит от format-specific решения).
-- ❌ Bug меняет позицию / размер от ролика к ролику. Везде одинаково — top-left, 110×110, 40px отступ.
-- ❌ Bug на 100% непрозрачности или больше 200×200 px — это watermark, не TV bug. Сатира требует тонкости.
