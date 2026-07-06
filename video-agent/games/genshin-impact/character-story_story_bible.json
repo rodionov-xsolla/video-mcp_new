@@ -6,18 +6,18 @@
   "format": "character-story",
   "created_at": "2026-06-29",
   "last_episode": 9,
-
   "tts_engine": "chatterbox",
   "tts_note": "Genshin ALWAYS uses Chatterbox via fal-ai/chatterbox/text-to-speech. Voice refs at assets/genshin-impact/characters/{slug}/voice-1.mp3. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "voice_ref_base": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/{slug}/voice-1.mp3",
-
   "format_overrides": {
     "note": "Format-level additions applied from EP9 (2026-06-29) onwards. Scenarist must implement these in storyboard.json.",
     "hook_requirement": "Clip 1 MUST visualize the most tragic or emotionally intense trial of the character — not a neutral opener. Visual should be scroll-stopping (dramatic contrast of light/dark, child alone, devastating loss). TTS fragment sets the stakes immediately.",
     "promo_clip": {
       "active": true,
       "position": 2,
-      "beats": ["promo"],
+      "beats": [
+        "promo"
+      ],
       "tts_template_en": "Grab free Primogems from the link in bio. Now — here's my story.",
       "tts_template_ru": "Забери бесплатные примагемы по ссылке в био. А вот моя история.",
       "clip_type": "action",
@@ -31,15 +31,34 @@
     },
     "structure": "HOOK (clip 1) → PROMO (clip 2) → ORIGIN (clips 3-4) → TURNING POINT (clips 5-6) → REVELATION (clip 7) → CTA"
   },
-
   "character_rotation": {
-    "done_female": ["Amber", "Kokomi", "Lisa", "Xiangling", "Dehya", "Navia", "Hu Tao"],
-    "done_male": ["Xiao", "Zhongli"],
-    "all_done": ["Amber", "Xiao", "Kokomi", "Lisa", "Xiangling", "Dehya", "Navia", "Zhongli", "Hu Tao"],
+    "done_female": [
+      "Amber",
+      "Kokomi",
+      "Lisa",
+      "Xiangling",
+      "Dehya",
+      "Navia",
+      "Hu Tao"
+    ],
+    "done_male": [
+      "Xiao",
+      "Zhongli"
+    ],
+    "all_done": [
+      "Amber",
+      "Xiao",
+      "Kokomi",
+      "Lisa",
+      "Xiangling",
+      "Dehya",
+      "Navia",
+      "Zhongli",
+      "Hu Tao"
+    ],
     "cooldown_episodes": 20,
     "selection_note": "Pick characters with strong lore arcs and tragic backstories. Prioritize 5-star characters with high popularity. Alternate male/female for variety. Avoid repeating characters used in dual-style within 4 episodes."
   },
-
   "episode_summaries": [
     {
       "episode": 1,
@@ -124,7 +143,11 @@
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/navia/voice-1.mp3",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-15/character-story-navia_final.mp4",
       "tts_engine": "chatterbox",
-      "chatterbox_params": { "exaggeration": 0.55, "cfg": 0.45, "temperature": 0.7 },
+      "chatterbox_params": {
+        "exaggeration": 0.55,
+        "cfg": 0.45,
+        "temperature": 0.7
+      },
       "notes": "No promo clip. Chunk-based TTS used (3 chunks of ≤35 words)."
     },
     {
@@ -139,8 +162,16 @@
       "youtube_url": "https://www.youtube.com/watch?v=5Iorp7s3ir0",
       "youtube_scheduled": "2026-07-02T20:59:00Z",
       "tts_engine": "chatterbox",
-      "chatterbox_params": { "exaggeration": 0.60, "cfg": 0.45, "temperature": 0.70 },
-      "age_variants": ["child (~7)", "teen (~12)", "adult"],
+      "chatterbox_params": {
+        "exaggeration": 0.60,
+        "cfg": 0.45,
+        "temperature": 0.70
+      },
+      "age_variants": [
+        "child (~7)",
+        "teen (~12)",
+        "adult"
+      ],
       "clips": 7,
       "cost_usd": 3.94,
       "notes": "First episode with format_overrides active: tragic hook at clip 1 (child in graveyard), promo clip at position 2 (free primogems CTA in Hu Tao's voice). 3 age-variant character refs generated. ffmpeg-full libass for subtitle burn."
@@ -158,6 +189,159 @@
       "notes": "No promo clip."
     }
   ],
-
-  "next_planned": null
+  "next_planned": null,
+  "characters": {
+    "amber": {
+      "name": "Amber",
+      "character_description": "female archer Amber, red and white Outrider uniform with red beret and bunny ears accessory, brown hair in twin tails, energetic cheerful expression, bow and quiver, lightweight agile build"
+    },
+    "barbara": {
+      "name": "Barbara",
+      "character_description": "female healer Barbara, blue and white idol outfit with blue ribbons and water droplet accessories, blonde hair in twin tails, gentle kind expression, microphone prop, petite elegant build"
+    },
+    "bennett": {
+      "name": "Bennett",
+      "character_description": "male adventurer Bennett, orange and white outfit with goggles on head, brown messy hair, enthusiastic brave expression, one-handed sword, athletic youthful build"
+    },
+    "beidou": {
+      "name": "Beidou",
+      "character_description": "female captain Beidou, dark navy and gold pirate-style outfit, black hair in a high bun, confident fierce expression, large claymore sword, tall muscular build"
+    },
+    "dehya": {
+      "name": "Dehya",
+      "character_description": "female mercenary Dehya, red and gold warrior outfit with flame motifs and braided details, silver-white hair, fierce protective expression, pyro claymore, tall muscular dark-skinned build"
+    },
+    "diluc": {
+      "name": "Diluc",
+      "character_description": "male knight Diluc, dark red and black noble outfit, long dark red hair tied back, serious brooding expression, large claymore, tall imposing build"
+    },
+    "fischl": {
+      "name": "Fischl",
+      "character_description": "female archer Fischl, black and purple gothic noble outfit, blonde hair with eye patch, dramatic theatrical expression, bow, accompanied by raven Oz, petite aristocratic build"
+    },
+    "ganyu": {
+      "name": "Ganyu",
+      "character_description": "female secretary Ganyu, blue qipao outfit with flower ornaments and cryo ice accents, long blue hair with horns, shy gentle expression, bow, graceful slender build"
+    },
+    "hu-tao": {
+      "name": "Hu Tao",
+      "character_description": "female funeral director Hu Tao, dark red and black traditional Chinese outfit with talisman ornaments, brown hair in twin tails with flower pins, mischievous playful expression, polearm with ghost motifs, petite energetic build"
+    },
+    "jean": {
+      "name": "Jean",
+      "character_description": "female Acting Grand Master Jean, white and gold paladin armor with blue cape, blonde hair in a side ponytail, calm dignified expression, one-handed sword, tall graceful build"
+    },
+    "kaeya": {
+      "name": "Kaeya",
+      "character_description": "male cavalry captain Kaeya, dark blue and black military coat with fur collar and eyepatch, dark blue hair slicked back, charming cunning smile, one-handed sword, tall confident build"
+    },
+    "kazuha": {
+      "name": "Kazuha (Kaedehara Kazuha)",
+      "character_description": "male wanderer Kazuha, red and white samurai-style outfit with maple leaf motifs, white hair in a topknot with red ribbon, serene contemplative expression, katana, lean agile build"
+    },
+    "keqing": {
+      "name": "Keqing",
+      "character_description": "female Yuheng Keqing, purple and white elegant hanfu with thunder motifs, purple hair with star-shaped clips, sharp decisive expression, twin daggers, slender elegant build"
+    },
+    "klee": {
+      "name": "Klee",
+      "character_description": "female fire mage Klee, red and white knight uniform way too large for her, ginger hair in side pigtails, bright joyful childlike expression, bomb bag, tiny child build"
+    },
+    "kokomi": {
+      "name": "Kokomi (Sangonomiya Kokomi)",
+      "character_description": "female Divine Priestess Kokomi, white and pink flowing shrine outfit with coral accessories and jellyfish motifs, pink hair with flower ornament, serene graceful expression, catalyst, petite ethereal build"
+    },
+    "lisa": {
+      "name": "Lisa",
+      "character_description": "female librarian Lisa, purple and green elegant witch outfit with wide-brim hat, purple wavy hair, alluring relaxed expression, magical book, tall voluptuous build"
+    },
+    "lumine": {
+      "name": "Lumine (Traveller)",
+      "character_description": "female Traveler Lumine, white and gold traveler outfit with star constellation motifs and flowing white sash, long blonde hair with signature silver star-shaped hair clip, sharp determined expression with hint of wariness, one-handed sword at her side, graceful athletic build"
+    },
+    "mona": {
+      "name": "Mona",
+      "character_description": "female astrologer Mona, black and dark blue magical outfit with star motifs, black hair with star hairpins, proud mysterious expression, catalyst, petite elegant build"
+    },
+    "nahida": {
+      "name": "Nahida",
+      "character_description": "female Lesser Lord Kusanali Nahida, white and green flowing dress with dendro leaf motifs and flower crown, light green hair, wise gentle child expression, catalyst, very small petite build"
+    },
+    "neuvillette": {
+      "name": "Neuvillette",
+      "character_description": "male Chief Justice Neuvillette, white and blue elegant coat with dragon scale details and water motifs, long silver-blue hair, dignified austere expression, hydro catalyst, tall imposing build"
+    },
+    "noelle": {
+      "name": "Noelle",
+      "character_description": "female maid knight Noelle, grey and white maid armor with flower brooch, brown hair with ribbons, earnest determined expression, large claymore, athletic sturdy build"
+    },
+    "qiqi": {
+      "name": "Qiqi",
+      "character_description": "female zombie healer Qiqi, blue and white traditional outfit with talisman on forehead, silver-white hair, blank expressionless face with pale blue skin, cryo lotus props, tiny child build"
+    },
+    "raiden-shogun": {
+      "name": "Raiden Shogun",
+      "character_description": "female Electro Archon Raiden Shogun, purple and violet shogun armor with lightning motifs, long dark purple hair, imposing commanding presence, electro polearm, tall regal build"
+    },
+    "sucrose": {
+      "name": "Sucrose",
+      "character_description": "female alchemist Sucrose, green and brown lab coat outfit with oversized goggles, green hair in asymmetric style, shy nervous expression, catalyst, petite intellectual build"
+    },
+    "tartaglia": {
+      "name": "Tartaglia (Childe)",
+      "character_description": "male Fatui Harbinger Tartaglia, dark blue and red Fatui uniform with cryo bow, orange hair, bright aggressive grin, hydro bow, athletic energetic build"
+    },
+    "venti": {
+      "name": "Venti",
+      "character_description": "male Anemo Archon Venti, blue and teal bard outfit with wind motifs and laurel crown, short teal hair with braids, playful carefree expression, bow, slender androgynous build"
+    },
+    "wanderer": {
+      "name": "Wanderer (Scaramouche)",
+      "character_description": "male wanderer, dark navy and white hat outfit with star ornaments, dark blue hair under wide-brim hat, aloof arrogant expression, anemo catalyst, lean compact build"
+    },
+    "xiao": {
+      "name": "Xiao",
+      "character_description": "male Adeptus Xiao, green and black yaksha armor with golden accents and mask, dark hair, intense stoic expression, polearm, lean agile build"
+    },
+    "xiangling": {
+      "name": "Xiangling",
+      "character_description": "female chef Xiangling, red and white Chinese outfit with panda hat accessory, brown hair in high pigtails, enthusiastic cheerful expression, polearm, accompanied by panda Guoba, petite energetic build"
+    },
+    "yae-miko": {
+      "name": "Yae Miko",
+      "character_description": "female Guuji Yae Miko, pink and white shrine maiden outfit with fox ears, long pink hair, confident sly expression with fox tail, electro catalyst, tall elegant build"
+    },
+    "yanfei": {
+      "name": "Yanfei",
+      "character_description": "female legal advisor Yanfei, pink and red outfit with legal scroll props, pink hair with red ribbons, confident assertive expression, pyro catalyst, petite energetic build"
+    },
+    "yelan": {
+      "name": "Yelan",
+      "character_description": "female special operative Yelan, blue and black bodysuit with hydro motifs, dark blue hair, elegant mysterious expression, hydro bow, tall athletic build"
+    },
+    "zhongli": {
+      "name": "Zhongli",
+      "character_description": "male Geo Archon Zhongli, dark brown and gold traditional Chinese scholar outfit, dark brown hair with gold accents, composed sophisticated expression, geo polearm, tall dignified build"
+    },
+    "furina": {
+      "name": "Furina",
+      "character_description": "female Hydro Archon Furina, teal and white elegant performer outfit with theatrical flair and top hat, light blue hair with curls, dramatic theatrical expression, hydro catalyst, petite lively build"
+    },
+    "arlecchino": {
+      "name": "Arlecchino",
+      "character_description": "female Fatui Harbinger Arlecchino, black and white asymmetric outfit with red-cross markings, pale hair with dark streaks, cold calculating expression, pyro polearm, tall imposing build"
+    },
+    "navia": {
+      "name": "Navia",
+      "character_description": "female Spina di Rosula leader Navia, white and gold Victorian dress with rose motifs, blonde curly hair, warm confident smile, geo special shotgun, tall regal build"
+    },
+    "wriothesley": {
+      "name": "Wriothesley",
+      "character_description": "male Duke Wriothesley, grey and blue prison warden outfit with handcuffs accessory, white and grey hair, cold handsome expression, cryo gauntlets, tall muscular build"
+    },
+    "mavuika": {
+      "name": "Mavuika",
+      "character_description": "female Pyro Archon Mavuika, red and black Natlan warrior outfit with fire motifs, dark hair with flame ornaments, intense fierce expression, pyro claymore, athletic powerful build"
+    }
+  }
 }

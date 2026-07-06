@@ -1,5 +1,21 @@
 # Star Trek Timelines
 
+## Posting status
+
+- **ready_to_post:** yes   <!-- yes only when the game is tested and cleared for posting -->
+
+**Formats (linked to this game):**
+
+- character-story — ready_to_post: yes
+- fake-ad — ready_to_post: yes
+- fun-news — ready_to_post: yes
+- in-game-pov — ready_to_post: yes
+- reddit-story — ready_to_post: yes
+- room1701 — ready_to_post: yes
+- serial-drama — ready_to_post: yes
+- streettalk — ready_to_post: yes
+
+
 ## Метаданные
 
 - **Жанр:** Strategy RPG, Crew Collector (Gacha)
@@ -44,7 +60,7 @@
 - Для молодых персонажей (Chekov) — явно указывать `"realistic adult proportions, full-height figure"` в промпте, иначе модель генерирует карикатурные/непропорциональные фигуры
 - Не использовать эра-специфичные слова (`"TNG"`, `"TOS"`) в промптах — модель переопределяет цвет формы. Писать цвет явно: `"gold-yellow uniform"`, `"red uniform"`
 
-> ⚠️ Это **базовый** стиль игры — fallback, если в `{format}_story_bible.json` не задан `format_overrides.image_style`. Storyboarder берёт стиль из story bible в первую очередь, и только при его отсутствии — отсюда.
+> ⚠️ Это **базовый** стиль игры — fallback, если в `{format}_story_bible.json` не задан top-level `style_tags`. Scenarist берёт стиль из story bible в первую очередь, и только при его отсутствии — отсюда (в `visual_identity.style_tags`).
 
 ### Prompt prefix
 ```
@@ -90,36 +106,6 @@ Star Trek Timelines style, cinematic sci-fi character portrait, cinematic Federa
 
 ---
 
-## Герои для промптов
-
-### Федерация / Герои
-
-| Персонаж | Эпоха | Визуальные ключи |
-|----------|-------|------------------|
-| Captain Kirk | TOS | Атлетичный, каштановые волосы набок, золотая командная туника с дельтой Starfleet, чёрные брюки, самоуверенная поза |
-| Mr. Spock | TOS | Заострённые уши, дугообразные брови, чёрные волосы-каре, оливковая кожа, синяя научная туника, спокойное выражение, одна бровь поднята |
-| Captain Picard | TNG | Лысый, благородный, красно-чёрная форма TNG (красные плечи, чёрный корпус), комбейдж на груди, руки за спиной |
-| Commander Data | TNG | Бледно-жёлтая кожа, зализанные чёрные волосы, жёлто-золотые глаза, золото-чёрная форма, безэмоциональное лицо |
-| Commander Worf | TNG/DS9 | Клингонские гребни на лбу, тёмная кожа, длинные тёмные волосы в хвосте, козлиная бородка, золотая форма + металлический пояс-перевязь |
-| Captain Janeway | VOY | Рыжевато-каштановые волосы в пучке, красно-чёрная форма Voyager, решительное выражение |
-| Seven of Nine | VOY | Блондинка, волосы гладко зачёсаны, импл Борга над левым глазом (металлическая звёздочка), серебристо-голубой костюм, пронзительный взгляд |
-| Commander Riker | TNG | Высокий, широкоплечий, тёмные волосы, фирменная борода, красно-чёрная форма, усмешка |
-
-### Злодеи / Антагонисты
-
-| Персонаж | Фракция | Визуальные ключи |
-|----------|---------|------------------|
-| Khan | Augments | Мускулистый, длинные тёмные волосы, открытая грудь, надменное выражение, одежда воина |
-| Borg Queen | Borg | Серая кожа, лысая голова с кибер-шлемом, механический позвоночник/шея, чёрный костюм с био-трубками, зловещая полуулыбка |
-| Q | Neutral | Среднего возраста, надменная ухмылка, чаще в красно-чёрной форме капитана Starfleet, иногда в мантии судьи |
-| Locutus | Borg | Лицо Пикара, серая кожа Борга, красный лазерный окуляр, кибер-трубки от головы/шеи, чёрная броня Борга |
-| Gul Dukat | Cardassian | Серая чешуйчатая кожа, ложкообразный гребень на лбу, кардассианские шейные гребни, зализанные тёмные волосы, серо-коричневая военная форма |
-
-### Зеркальная Вселенная (Mirror Universe)
-Злые версии героев: тёмные милитаристские формы, эмблема Терранской Империи (меч через планету). Mirror Spock — с козлиной бородкой. Mirror Kirk — агрессивный, жестокий.
-
----
-
 ## Tone of Voice
 
 - Эпичный sci-fi с юмором (Q задаёт тон — сарказм + величие)
@@ -138,48 +124,9 @@ Star Trek Timelines style, cinematic sci-fi character portrait, cinematic Federa
 
 ---
 
-## Character Prompt Blocks
+## Character appearance
 
-> ⚠️ Блоки ниже содержат только физическое описание персонажа. Стиль рендера (3D, реализм, художественное направление) берётся из `format_overrides.image_style` story bible или из Prompt prefix выше — не из этих блоков.
-
-### Alex (ROOM 1701 sitcom)
-`slim young man late teens early 20s, messy tousled chestnut-brown hair peeking out from a black baseball cap with gold Starfleet delta badge on front, large warm brown expressive eyes, navy blue Star Trek Timelines hoodie with gold Starfleet command delta logo on chest, black cargo pants, blue-and-white sneakers, holding a smartphone in one hand, slightly shy nervous expression`
-
-### Michael (ROOM 1701 sitcom)
-`stocky enthusiastic young man, wild voluminous curly bright orange-ginger hair, round thick black-framed glasses, large expressive eyes, yellow-gold Star Trek Timelines hoodie with black Starfleet command delta logo on chest, black jogger pants, grey foam NCC-1701 slippers, black over-ear headphones hanging around neck, small clip-on ID badge on hoodie, wide excited grin`
-
-### Emily (ROOM 1701 sitcom)
-`confident young woman, short wavy dark-brown hair with vivid purple ombre tips and highlights, warm brown expressive eyes, black off-shoulder loose-fit top with gold Starfleet command delta logo, purple cargo jogger pants, black Converse high-top sneakers, thin choker necklace with small Starfleet delta pendant, holding a black Star Trek mug with gold Starfleet delta, slight knowing smirk`
-
-### Captain Kirk (TOS, command gold)
-`male Starfleet captain, athletic build, light brown hair swept to the side, confident charming smirk showing teeth, gold yellow command tunic with black collar and Starfleet delta badge on left chest, black trousers, standing heroic pose with phaser in hand, dramatic bridge lighting, deep space visible through viewport behind`
-
-### Mr. Spock (TOS, science blue)
-`male Vulcan Starfleet officer, pointed ears, sharply arched thick eyebrows, straight black bowl-cut hair, olive-tinted skin, calm emotionless expression with one eyebrow slightly raised, blue science tunic with black collar and Starfleet delta badge, hands clasped behind back, starship bridge background with LCARS consoles`
-
-### Captain Picard (TNG, command red)
-`bald male Starfleet captain, distinguished refined appearance, serious authoritative expression, red and black TNG uniform with red shoulders and black body, Starfleet combadge on left chest, four rank pips on collar, one hand extended in commanding gesture, Enterprise-D bridge background, dramatic blue lighting`
-
-### Locutus of Borg (assimilated Picard)
-`Borg-assimilated male, pale gray cybernetic skin, bald head with black Borg skull cap and tubes, red laser eye-piece over left eye, mechanical tubes running from neck and jaw, black Borg body armor with green glowing circuitry, emotionless menacing stare, dark Borg cube interior background with green ambient light`
-
-### Borg Queen
-`female Borg Queen, pale grayish skin, bald head with dark biomechanical skull cap, exposed mechanical spine and neck vertebrae visible, black form-fitting bodysuit with grey biomechanical tubing, dark hollow eyes with sinister knowing half-smile, Borg alcove background with green glowing lights`
-
-### Khan (classic, Wrath of Khan era)
-`muscular male warrior, long flowing dark hair, broad bare chest visible through torn open red uniform, thick gold necklace, deeply tanned weathered skin, intense vengeful expression with clenched jaw, strong defined cheekbones, dramatic side lighting, desolate planet surface background`
-
-### Q (in Starfleet uniform)
-`middle-aged male in Starfleet captain uniform, red and black TNG uniform, smug knowing grin, slightly theatrical pose with one hand raised as if snapping fingers, mischievous gleaming eyes, slightly disheveled appearance suggesting casual disregard for protocol, Enterprise bridge background slightly distorted with golden omnipotent glow`
-
-### Seven of Nine (Voyager)
-`blonde female, hair pulled back tightly in a bun, metallic starburst-shaped Borg implant above left eye, small metallic implant on left hand, form-fitting silver and blue catsuit, athletic build, intense striking blue eyes, confident stance with arms crossed, Voyager astrometrics lab background with star charts`
-
-### Commander Worf (TNG)
-`male Klingon Starfleet officer, prominent triangular cranial ridges on forehead, dark brown skin, long dark hair in warrior ponytail, groomed goatee beard, gold and black TNG operations uniform, diagonal metal warrior baldric sash across chest, fierce honorable expression, strong muscular build, Enterprise corridor background`
-
-### Gul Dukat (Cardassian)
-`male Cardassian, gray scaly textured skin, prominent spoon-shaped cranial ridge on forehead, raised neck ridges, slicked-back dark hair, Cardassian military uniform in gray-brown with armored shoulders, charming manipulative smile, tall lean build, Cardassian warship bridge background with dark metallic tones`
+Character appearance cards live in the per-format story bibles (`characters[]` / `characters{}`), NOT here — the same character may look different per format, and cards must stay style-free (appearance only; style comes from the resolved `style_tags`). Canonical Trek roster: `character-story_story_bible.json` → `characters`. ROOM 1701 cast (Alex, Michael, Emily, Anna): `room1701_story_bible.json` → `characters`. Recurring serial-drama cast: `serial-drama_story_bible.json` → `characters`. If a character has no card in the target format's bible, the scenarist writes a style-free card and adds it to that bible.
 
 ---
 

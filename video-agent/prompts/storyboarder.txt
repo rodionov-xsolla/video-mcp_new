@@ -13,7 +13,7 @@ LOAD AND FOLLOW (in this exact order):
 4. rules/main/validation.md — validation policy (programmatic only by default; visual validation opt-in per format)
 5. rules/main/budgets.md — image cost row + format budget cap
 6. rules/formats/${FORMAT}.md — read ONLY the "Storyboarder" brief section (chain rules, ref strategy, format-specific image requirements)
-7. games/${GAME_TAG}/${GAME_TAG}.md — Visual Style Guide, Character Prompt Blocks (used in image_prompt)
+7. games/${GAME_TAG}/${GAME_TAG}.md — Visual Style Guide + `prompt_prefix` (house-style fallback only). The resolved style and character appearance already live in storyboard.json `visual_identity` (style_tags + style-free character cards) — apply `style_tags` verbatim to every image_prompt; never re-inject a style into a character card.
 8. games/${GAME_TAG}/${FORMAT}_special.md — IF this file exists; format-specific overrides for this game
 
 DO NOT load:

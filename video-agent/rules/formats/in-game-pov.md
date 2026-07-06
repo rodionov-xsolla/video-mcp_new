@@ -1,4 +1,5 @@
 ---
+ready_to_post: yes
 subtitles: true
 overlays: true
 ---
@@ -38,7 +39,7 @@ Update `games/{GAME_TAG}/in-game-pov_story_bible.json` — add the new situation
 
 - **Genre:** first-person survival manual / immersive POV
 - **Perspective:** pure environmental POV. Second person ("ты"/"вы"). The protagonist is **never shown** — no face, no reflection, no over-the-shoulder, **no hands**. The camera IS their eyes. We look at the world, we walk through it, we breathe.
-- **Style:** identical to the game (taken from `games/{GAME_TAG}/{GAME_TAG}.md`).
+- **Style:** resolved from the style chain — story bible `style_tags` if present, else game config `prompt_prefix` (which for this format is the game's house style).
 - **Duration:** 35–45s (title card + 5–6 POV clips × 5s + CTA).
 - **Budget:** up to $7.00 per video. Stop if spend > $6.30.
 - **Frame format:** 9:16 (608×1080) for all scenes.
@@ -314,7 +315,7 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 
 ### Storyboarder
 
-- Style taken from `games/{GAME_TAG}/{GAME_TAG}.md` (identical to the game).
+- Style resolved from the style chain — story bible `style_tags` if present, else game config `prompt_prefix` (the game's house style for this format). Apply it verbatim.
 - All frames 9:16 (608×1080).
 - **Generate ONE PNG per clip** — title card + every POV clip. N clips → N PNGs.
   - `clip 0` (title card) → `scene-0.png` — wide **cinematic establishing shot**, NOT first-person POV. Atmospheric crisis from a dramatic angle. NB2 `negative_prompt` must include `text, captions, ui, hud, hands, person pov, first person view`.
@@ -354,8 +355,9 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 - No names, no moods, no hands, no weapon barrels, no protagonist body
 - Prompt ≤ 512 chars (count before submitting)
 
-**`negative_prompt` on every call:**
-`voices, speech, dialogue, vocals, singing, music, on-screen text, HUD numbers, percentage counter, captions, watermark, person facing camera, protagonist body, hands, arms, weapon, controls, cockpit controls, talking, photorealistic, film grain, realistic skin`
+**`negative_prompt` on every call** (functional core — always include):
+`voices, speech, dialogue, vocals, singing, music, on-screen text, HUD numbers, percentage counter, captions, watermark, person facing camera, protagonist body, hands, arms, weapon, controls, cockpit controls, talking`
+Then append style anti-drift terms **derived from the resolved `style_tags`** (the opposite render medium) so the POV stays on the game's house style — e.g. `photorealistic, film grain, realistic skin` when the game style is stylized/illustrated. Do not hardcode anti-realism terms when the game's own style is photoreal.
 
 **Banned phrases in prompts** (Kling reads as freeze): `then settles`, `then steady`, `then holds`, `camera holds steady`, `hold position`, `no morphing`. Use continuous verbs + endpoint cues.
 

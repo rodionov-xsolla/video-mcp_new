@@ -1,9 +1,12 @@
 ---
+ready_to_post: no
 subtitles: true
 overlays: true
 ---
 
 # Format "What If... Real Life" — game characters dropped into the mundane real world
+
+> TODO(style-refactor): style must come from the resolved chain (story bible top-level `style_tags` → game config `prompt_prefix`); character cards are style-free. This file not yet audited for hardcoded house-style.
 
 A recognizable game character is placed into a banal real-world situation or job — the contrast between who they ARE (their game persona, abilities, mannerisms, way of speaking) and who they have to BE in this context generates the comedy. Examples: Spock as a coffee barista, Kratos as a kindergarten teacher, a blocky Roblox guy trying to shop at a luxury boutique, Master Chief at a DMV counter, Geralt as a vet's receptionist.
 

@@ -15,8 +15,8 @@ You are the scenarist. Manager passes you: format (playbook), game config, story
 
 From Manager:
 - `format` — which playbook (`rules/formats/{format}.md`); read it for format-specific brief
-- `game_config` — `games/{GAME_TAG}/{GAME_TAG}.md` (Visual Style Guide, Character Prompt Blocks, Tone of Voice)
-- `story_bible` (optional) — for serial-drama, reddit-story
+- `game_config` — `games/{GAME_TAG}/{GAME_TAG}.md` (Visual Style Guide, `prompt_prefix` house-style fallback, Tone of Voice). Note: character appearance is NO LONGER stored here — it lives in the format's story bible `characters[]`.
+- `story_bible` — the format's `{FORMAT}_story_bible.json`. Source of truth for **style** (top-level `style_tags`) and **character appearance** (`characters[]`). Present for most formats; where absent, style falls back to game config `prompt_prefix` and you author character descriptions yourself.
 - `user_idea` — what the user asked for
 - `assets_available` — refs/avatars/gameplay from Supabase
 
@@ -35,16 +35,28 @@ One block, defines who the character is, where the action happens, what the styl
   "visual_identity": {
     "character_description": "concrete description — name, clothing, weapon, hair, build, facial expression. Minimum 8 visual details",
     "environment_description": "concrete location from the game (not abstract)",
-    "style_tags": "from game config prompt_prefix",
+    "style_tags": "resolved STYLE string — see precedence below",
     "color_palette": "from game config",
     "lighting": "from game config"
   }
 }
 ```
 
+**Style source — precedence (first found wins):**
+1. Live user instruction (overrides everything);
+2. Story bible top-level `style_tags` — the format's canonical look;
+3. Game config `prompt_prefix` / Visual Style Guide — the game's house-style fallback.
+
+Resolve this chain and write the result into `visual_identity.style_tags`. Storyboarder applies that string verbatim to every `image_prompt`; style words live ONLY here. Do not hardcode a specific style in this file — it varies per game and format.
+
+> `format_overrides` in a story bible is a **narrative** namespace (e.g. `hook_requirement`, `structure`, `era_tags`), NOT a style source. Style always comes from top-level `style_tags`.
+
+**Character appearance source — precedence:**
+1. Story bible `characters[]` — the format's style-free cards (source of truth);
+2. If the character has no card yet — write your own, minimum 8 vivid details (skin, scars, beard, dirt, clothing, expression) and add the card to the bible so it persists. Game config no longer holds character descriptions.
+
 **Rules:**
-- `character_description` is taken from game config "Character Prompt Blocks"; for serial-drama — from the story bible
-- If no block — write your own, minimum 8 vivid details: skin, scars, beard, dirt, sweat, tattoos, clothing, expression
+- Character descriptions are **style-free** — appearance only (anatomy, clothing, props). Never bake style words (`semi-realistic`, `Pixar`, `anime cel-shaded`, `3D render`) into a character card; style comes from `style_tags`.
 - No vague words ("beautiful", "cool", "epic", "amazing"). Concrete only
 - For multi-character videos — `characters: { name: description }` (see "Multi-character videos")
 
@@ -227,7 +239,7 @@ Formats with `overlays: false` need no array.
 - Each clip has `hero` with the active character's name
 - 2 characters in frame are allowed for dynamics
 
-> ⚠️ **`style_tags` describes STYLE only** — art direction, lighting, palette, medium (e.g. `semi-realistic stylized 3D`, `anime cel-shading`, `cinematic Federation lighting`). **Never put diegetic UI elements** here: `LCARS interface`, `HUD`, `text overlay`, `panel borders`, `news ticker`, `lower-third` — NB2 treats them literally and draws UI over the character's face. If a scene needs UI, put it in that scene's `environment_state`, not in the global `style_tags`. Same rule applies when authoring `prompt_prefix` in `games/{tag}/{tag}.md`.
+> ⚠️ **`style_tags` describes STYLE only** — the categories are: art direction / render medium, lighting, and colour palette. Take the actual value from the resolved style chain (bible `style_tags` → game `prompt_prefix`); never hardcode a specific style here. **Never put diegetic UI elements** here: `LCARS interface`, `HUD`, `text overlay`, `panel borders`, `news ticker`, `lower-third` — NB2 treats them literally and draws UI over the character's face. If a scene needs UI, put it in that scene's `environment_state`, not in the global `style_tags`. Same rule applies when authoring `prompt_prefix` in `games/{tag}/{tag}.md`.
 
 ### Describing interaction in action_description
 

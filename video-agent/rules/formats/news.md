@@ -1,9 +1,12 @@
 ---
+ready_to_post: no
 subtitles: true
 overlays: false
 ---
 
 # Format "Game News"
+
+> TODO(style-refactor): style must come from the resolved chain (story bible top-level `style_tags` → game config `prompt_prefix`); character cards are style-free. This file not yet audited for hardcoded house-style.
 
 > **Single video model — Kling Avatar v2 Standard.** No other video models. Opener and CTA — pre-built from Supabase. Characters — from Supabase `game_assets`.
 

@@ -10,7 +10,6 @@
   "tts_note": "ElevenLabs eleven-v3 via fal-ai/elevenlabs/tts/eleven-v3. Each canonical character gets a dedicated voice chosen by gender and emotional register. No Chatterbox — STT always uses ElevenLabs. See characters[] for voice assignments. Long monologue (>80 words) → mandatory chunking into ≤35-word segments.",
   "format_overrides": {
     "note": "Applied from EP1 onward. Star Trek Timelines character-story = canonical Trek character narrates their own origin/lore in first person. I2V visualizes the key moments. Do NOT show the character speaking on camera — TTS is off-screen narration while Kling shows action.",
-    "image_style": "realistic 3D CGI — cinematic lighting, photorealistic textures, high detail 3D render, game cutscene quality. Do NOT use the game's illustrated/painted art style. All clips must match this style, including child-character scenes. Required prompt keywords: 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI, game cutscene quality'.",
     "hook_requirement": "Clip 1 MUST visualize the most dramatic or emotionally charged moment of the character's arc — not a neutral opener. Visual should be scroll-stopping: crisis, loss, decisive choice. TTS line sets the stakes immediately.",
     "era_tags": {
       "note": "Do NOT write era-specific strings (TNG, TOS, DS9) in NB2/Kling prompts — the model re-assigns uniform colors. Always specify the uniform color explicitly.",
@@ -67,8 +66,129 @@
     "cooldown_episodes": 20,
     "selection_note": "Cover all Trek eras — TOS → TNG → DS9 → VOY → ENT → DIS. Prioritize characters with strong lore arcs and tragic backstories. Alternate male/female for variety. Include complex antagonists (Lorca, Khan, Dukat) but balance with heroes. Avoid repeating characters used in dual-style / redcon within 4 episodes. 5-star characters preferred for engagement."
   },
-  "canonical_characters": {
-    "note": "Prompt blocks and Supabase refs for canonical Trek characters. Reference sheet goes to storyboarder as chain_ref. No voice_ref_url — use ElevenLabs voice name directly.",
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-05-30",
+      "character": "McCoy",
+      "character_slug": "mccoy",
+      "gender": "male",
+      "era": "TOS",
+      "idea": "Leonard \"Bones\" McCoy — Character Story",
+      "elevenlabs_voice": "Daniel",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-30/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=cVMl0UdVhLM",
+      "notes": "First episode. No promo clip. Covered McCoy's Georgia origins, failed marriage, medical career driven by guilt over father's euthanasia, recruitment by Starfleet."
+    },
+    {
+      "episode": 2,
+      "date": "2026-06-03",
+      "character": "Uhura",
+      "character_slug": "uhura",
+      "gender": "female",
+      "era": "TOS",
+      "idea": "Nyota Uhura — Character Story | Star Trek Timelines",
+      "elevenlabs_voice": "Aria",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-23/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=lw61mydGYS4",
+      "notes": "Uhura's origin — Kenyan heritage, communications genius, breaking Starfleet's glass ceiling. Iconic mirror-universe scene, relationship with Spock."
+    },
+    {
+      "episode": 3,
+      "date": "2026-06-03",
+      "character": "Carol Marcus",
+      "character_slug": "carol-marcus",
+      "gender": "female",
+      "era": "TOS (movie era)",
+      "idea": "Dr. Carol Marcus — Character Story | Star Trek Timelines",
+      "elevenlabs_voice": "Sarah",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-26/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=PO3YCuIFruE",
+      "notes": "Genesis Project, secret son David, relationship with Kirk, tragic death of David in ST III. Mother's sacrifice arc."
+    },
+    {
+      "episode": 4,
+      "date": "2026-06-03",
+      "character": "Archer",
+      "character_slug": "archer",
+      "gender": "male",
+      "era": "ENT",
+      "idea": "Capt. Jonathan Archer — Character Story | Star Trek Timelines",
+      "elevenlabs_voice": "George",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-27/character-story-archer_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=Oh6vHJ9WFto",
+      "notes": "First captain of the NX-01, father's warp engine legacy, Temporal Cold War, founding of the Federation. Pioneer before the rules existed."
+    },
+    {
+      "episode": 5,
+      "date": "2026-06-09",
+      "character": "Gabriel Lorca",
+      "character_slug": "lorca",
+      "gender": "male",
+      "era": "DIS",
+      "idea": "Gabriel Lorca: The Mirror Captain",
+      "elevenlabs_voice": "Liam",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-09/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=xFud8dCCfxQ",
+      "notes": "Mirror-universe Lorca posing as prime-universe Starfleet captain. Manipulation, betrayal, Terran Empire ambition. Dark character with no redemption arc — the monster who wore a hero's face."
+    },
+    {
+      "episode": 6,
+      "date": "2026-06-09",
+      "character": "B'Elanna Torres",
+      "character_slug": "belanna-torres",
+      "gender": "female",
+      "era": "VOY",
+      "idea": "B'Elanna Torres: The Engineer's Fire | Star Trek Timelines",
+      "elevenlabs_voice": "Matilda",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-09/character-story-belanna_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=w67HFhXuCKU",
+      "notes": "Half-Klingon engineer torn between two cultures. Rejected by both Starfleet Academy and her Klingon heritage. Found identity through engineering genius and crew of Voyager."
+    },
+    {
+      "episode": 16,
+      "date": "2026-07-01",
+      "character": "Kira Nerys",
+      "character_slug": "kira",
+      "gender": "female",
+      "era": "DS9",
+      "status": "error",
+      "error_reason": "Visual style inconsistency: scenes 1 and 3 correct (realistic 3D CGI), scenes 2/4/5/6/7 rendered in the game's illustrated/painted style (wrong). character-story format requires realistic 3D across ALL clips. Root cause: storyboarder used game art style from star-trek-timelines.md instead of the format's canonical realistic 3D style. Fix: image prompts must always include 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI' keywords — do not inherit game art style for this format.",
+      "output_dir": "output/2026-07-01/star-trek-timelines/character-story-kira",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-01/character-story-kira_final.mp4",
+      "youtube_url": null,
+      "notes": "Do not publish. Redo from Phase 3 (storyboarder) with consistent style anchoring across all clips."
+    },
+    {
+      "episode": 7,
+      "date": "2026-06-25",
+      "character": "Q",
+      "character_slug": "q",
+      "gender": "male",
+      "era": "omnipotent / all eras",
+      "idea": "I Won. God Help Me.",
+      "elevenlabs_voice": "Daniel",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-25/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=8W7trSRYnNI",
+      "notes": "Title suggests omnipotence as burden, not triumph. Likely Q's origin or the moment he gained his powers — victory that became a curse. Covers Q Continuum, exile, trial of humanity, existential weight of knowing everything."
+    },
+    {
+      "episode": 17,
+      "date": "2026-07-02",
+      "character": "Kira Nerys",
+      "character_slug": "kira",
+      "gender": "female",
+      "era": "DS9",
+      "idea": "Kira Nerys — Character Story | Star Trek Timelines",
+      "elevenlabs_voice": "Charlotte",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-02/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=Jt2yNjsZKDQ",
+      "yt_publish_at": "2026-07-05T20:59:00Z",
+      "notes": "Full redo from scratch (EP16 rejected for style inconsistency). Bilingual CTA opener (RU+EN). 3 age variants: child (~10-12), teen (~15-18), mature Major. Hook: young Kira beside dying mother in Singha refugee camp. Style fix: realistic 3D CGI enforced at 3 levels in storyboard. User manually edited final video (0703.mp4, 29.87s)."
+    }
+  ],
+  "style_tags": "realistic 3D CGI — cinematic lighting, photorealistic textures, high detail 3D render, game cutscene quality. Do NOT use the game's illustrated/painted art style. All clips must match this style, including child-character scenes. Required prompt keywords: 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI, game cutscene quality'.",
+  "characters": {
     "picard": {
       "name": "Captain Picard",
       "gender": "male",
@@ -223,125 +343,5 @@
       "ref_url": null
     }
   },
-  "episode_summaries": [
-    {
-      "episode": 1,
-      "date": "2026-05-30",
-      "character": "McCoy",
-      "character_slug": "mccoy",
-      "gender": "male",
-      "era": "TOS",
-      "idea": "Leonard \"Bones\" McCoy — Character Story",
-      "elevenlabs_voice": "Daniel",
-      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-30/character-story_final.mp4",
-      "youtube_url": "https://www.youtube.com/watch?v=cVMl0UdVhLM",
-      "notes": "First episode. No promo clip. Covered McCoy's Georgia origins, failed marriage, medical career driven by guilt over father's euthanasia, recruitment by Starfleet."
-    },
-    {
-      "episode": 2,
-      "date": "2026-06-03",
-      "character": "Uhura",
-      "character_slug": "uhura",
-      "gender": "female",
-      "era": "TOS",
-      "idea": "Nyota Uhura — Character Story | Star Trek Timelines",
-      "elevenlabs_voice": "Aria",
-      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-23/character-story_final.mp4",
-      "youtube_url": "https://www.youtube.com/watch?v=lw61mydGYS4",
-      "notes": "Uhura's origin — Kenyan heritage, communications genius, breaking Starfleet's glass ceiling. Iconic mirror-universe scene, relationship with Spock."
-    },
-    {
-      "episode": 3,
-      "date": "2026-06-03",
-      "character": "Carol Marcus",
-      "character_slug": "carol-marcus",
-      "gender": "female",
-      "era": "TOS (movie era)",
-      "idea": "Dr. Carol Marcus — Character Story | Star Trek Timelines",
-      "elevenlabs_voice": "Sarah",
-      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-26/character-story_final.mp4",
-      "youtube_url": "https://www.youtube.com/watch?v=PO3YCuIFruE",
-      "notes": "Genesis Project, secret son David, relationship with Kirk, tragic death of David in ST III. Mother's sacrifice arc."
-    },
-    {
-      "episode": 4,
-      "date": "2026-06-03",
-      "character": "Archer",
-      "character_slug": "archer",
-      "gender": "male",
-      "era": "ENT",
-      "idea": "Capt. Jonathan Archer — Character Story | Star Trek Timelines",
-      "elevenlabs_voice": "George",
-      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-05-27/character-story-archer_final.mp4",
-      "youtube_url": "https://www.youtube.com/watch?v=Oh6vHJ9WFto",
-      "notes": "First captain of the NX-01, father's warp engine legacy, Temporal Cold War, founding of the Federation. Pioneer before the rules existed."
-    },
-    {
-      "episode": 5,
-      "date": "2026-06-09",
-      "character": "Gabriel Lorca",
-      "character_slug": "lorca",
-      "gender": "male",
-      "era": "DIS",
-      "idea": "Gabriel Lorca: The Mirror Captain",
-      "elevenlabs_voice": "Liam",
-      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-09/character-story_final.mp4",
-      "youtube_url": "https://www.youtube.com/watch?v=xFud8dCCfxQ",
-      "notes": "Mirror-universe Lorca posing as prime-universe Starfleet captain. Manipulation, betrayal, Terran Empire ambition. Dark character with no redemption arc — the monster who wore a hero's face."
-    },
-    {
-      "episode": 6,
-      "date": "2026-06-09",
-      "character": "B'Elanna Torres",
-      "character_slug": "belanna-torres",
-      "gender": "female",
-      "era": "VOY",
-      "idea": "B'Elanna Torres: The Engineer's Fire | Star Trek Timelines",
-      "elevenlabs_voice": "Matilda",
-      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-09/character-story-belanna_final.mp4",
-      "youtube_url": "https://www.youtube.com/watch?v=w67HFhXuCKU",
-      "notes": "Half-Klingon engineer torn between two cultures. Rejected by both Starfleet Academy and her Klingon heritage. Found identity through engineering genius and crew of Voyager."
-    },
-    {
-      "episode": 16,
-      "date": "2026-07-01",
-      "character": "Kira Nerys",
-      "character_slug": "kira",
-      "gender": "female",
-      "era": "DS9",
-      "status": "error",
-      "error_reason": "Visual style inconsistency: scenes 1 and 3 correct (realistic 3D CGI), scenes 2/4/5/6/7 rendered in the game's illustrated/painted style (wrong). character-story format requires realistic 3D across ALL clips. Root cause: storyboarder used game art style from star-trek-timelines.md instead of the format's canonical realistic 3D style. Fix: image prompts must always include 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI' keywords — do not inherit game art style for this format.",
-      "output_dir": "output/2026-07-01/star-trek-timelines/character-story-kira",
-      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-01/character-story-kira_final.mp4",
-      "youtube_url": null,
-      "notes": "Do not publish. Redo from Phase 3 (storyboarder) with consistent style anchoring across all clips."
-    },
-    {
-      "episode": 7,
-      "date": "2026-06-25",
-      "character": "Q",
-      "character_slug": "q",
-      "gender": "male",
-      "era": "omnipotent / all eras",
-      "idea": "I Won. God Help Me.",
-      "elevenlabs_voice": "Daniel",
-      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-25/character-story_final.mp4",
-      "youtube_url": "https://www.youtube.com/watch?v=8W7trSRYnNI",
-      "notes": "Title suggests omnipotence as burden, not triumph. Likely Q's origin or the moment he gained his powers — victory that became a curse. Covers Q Continuum, exile, trial of humanity, existential weight of knowing everything."
-    },
-    {
-      "episode": 17,
-      "date": "2026-07-02",
-      "character": "Kira Nerys",
-      "character_slug": "kira",
-      "gender": "female",
-      "era": "DS9",
-      "idea": "Kira Nerys — Character Story | Star Trek Timelines",
-      "elevenlabs_voice": "Charlotte",
-      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-02/character-story_final.mp4",
-      "youtube_url": "https://www.youtube.com/watch?v=Jt2yNjsZKDQ",
-      "yt_publish_at": "2026-07-05T20:59:00Z",
-      "notes": "Full redo from scratch (EP16 rejected for style inconsistency). Bilingual CTA opener (RU+EN). 3 age variants: child (~10-12), teen (~15-18), mature Major. Hook: young Kira beside dying mother in Singha refugee camp. Style fix: realistic 3D CGI enforced at 3 levels in storyboard. User manually edited final video (0703.mp4, 29.87s)."
-    }
-  ]
+  "characters_note": "Prompt blocks and Supabase refs for canonical Trek characters. Reference sheet goes to storyboarder as chain_ref. No voice_ref_url — use ElevenLabs voice name directly."
 }

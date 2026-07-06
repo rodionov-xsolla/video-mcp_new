@@ -1,6 +1,6 @@
 {
   "game_tag": "genshin-impact",
-  "total_stories": 1,
+  "total_stories": 2,
   "stories": [
     {
       "id": 1,
@@ -10,12 +10,31 @@
       "headline": "My sister and I didn't talk for two years. A video game fixed that.",
       "offerwall_angle": "none",
       "output_dir": "output/2026-06-16/genshin-impact/reddit-story"
+    },
+    {
+      "id": 2,
+      "date": "2026-07-01",
+      "tone": "rage-to-relief",
+      "theme": "f2p-triumph",
+      "moral_engine": "mockery for being F2P",
+      "false_verdict": "narrator is a forever F2P loser who will never pull a 5-star",
+      "pressure_source": "toxic co-op friend who repeats the taunt every session",
+      "resolution_type": "positive",
+      "headline": "My co-op friend said I'd never pull Hu Tao. He messaged me first.",
+      "offerwall_angle": "link-in-bio primogems (native — watching this channel)",
+      "output_dir": "output/2026-07-01/genshin-impact/reddit-story"
     }
   ],
   "anti_repetition": {
-    "recent_themes": ["sibling-reconnection"],
-    "recent_tones": ["touching"],
-    "recent_hooks": ["My sister and I used to be close. Then high school hit and we just drifted."],
+    "recent_themes": ["sibling-reconnection", "f2p-triumph"],
+    "recent_tones": ["touching", "rage-to-relief"],
+    "recent_moral_engines": ["f2p-mockery"],
+    "recent_false_verdicts": ["forever F2P loser who will never pull a 5-star"],
+    "recent_pressure_sources": ["toxic co-op friend"],
+    "recent_hooks": [
+      "My sister and I used to be close. Then high school hit and we just drifted.",
+      "He called me a forever F2P loser. Said Hu Tao would never be mine."
+    ],
     "banned_combos": []
   }
 }

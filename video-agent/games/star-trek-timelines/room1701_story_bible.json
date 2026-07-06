@@ -6,39 +6,43 @@
   "genre": "sitcom",
   "style_tags": "semi-realistic stylized 3D characters, modern nerdy shared bedroom interior, warm casual lighting, practical props (phones, laptops, game controllers, Star Trek posters), intimate close-ups and 3/4 face shots, cozy bedroom aesthetic with sci-fi geeky decor, natural soft lighting from screens and lamps, not Disney, not Pixar, not DreamWorks, not toy-like",
   "created_at": "2026-06-25",
-  "last_episode": 1,
-  "show_concept": "Two geeky roommates (Alex and Michael) live in Room 1701 and play Star Trek Timelines all the time. They treat every everyday problem like a Starfleet mission. Emily, their cool neighbor, is sharp, sarcastic, and unexpectedly good at handling people. The show is a fast sitcom about awkward dating comedy and Star Trek geek humor.",
+  "last_episode": 2,
+  "show_concept": "Two geeky roommates (Alex and Michael) live in Room 1701 and play Star Trek Timelines all the time. They treat every everyday problem like a Starfleet mission. Emily, their cool neighbor, is sharp, sarcastic, and unexpectedly good at handling people. Anna is the girl Alex is pursuing — warm, playful, and increasingly drawn to Michael's nerd sincerity. The show is a fast sitcom about awkward dating comedy and Star Trek geek humor.",
   "production_rules": [
-    "Do NOT rely on readable phone UI \u2014 phone can glow in hands but meaning comes from acting/dialogue",
+    "Do NOT rely on readable phone UI — phone can glow in hands but meaning comes from acting/dialogue",
     "Do NOT show complex game screens",
     "Use one visible Star Trek / 'Assemble Your Crew' style poster in the room",
-    "Preserve the exact proportions of the user character cards: semi-realistic 3D, not oversized cartoon eyes, not Disney/Pixar toy anatomy.",
+    "Preserve the exact proportions of the character cards and the resolved style_tags; do not drift into a different proportion system (oversized cartoon eyes, toy anatomy) between scenes.",
     "Room 1701 location ref defines the core layout and recurring set pieces. Preserve sofa/table/window/rug/shelf geometry; episode-specific props are okay when the story asks for them.",
     "Keep shots simple: close-ups, 3/4 faces, room, door, phone glow",
     "Dialogue must be short and punchy",
     "Game appears naturally, not as hard ad",
     "CTA always after cliffhanger at the end",
     "All ROOM 1701 clips are Kling I2V, including dialogue. Do not use Kling Avatar v2.",
-    "Dialogue scenes use Kling I2V multi_prompt + voice_ids + generate_audio:true. ROOM 1701 has 3 reusable character voices, but each Kling request uses at most 2 voice_ids and maps them locally to <<<voice_1>>> / <<<voice_2>>>; split 3-speaker exchanges.",
+    "Dialogue scenes use Kling I2V multi_prompt + voice_ids + generate_audio:true. ROOM 1701 has 4 reusable character voices (Alex, Michael, Emily, Anna), but each Kling request uses at most 2 voice_ids and maps them locally to <<<voice_1>>> / <<<voice_2>>>; split 3-speaker exchanges.",
     "ROOM 1701 dialogue I2V target length is 6-10s. Multi_prompt shots are variable: 2-3s default, 4s only when the phrase or acting beat needs it. Default pace is about 2.4 words/sec; faster pacing is allowed for tension or Michael mission-rant moments.",
-    "Attach character refs and Room 1701 location ref to every scene image generation.",
+    "Attach character refs and location ref to every scene image generation.",
     "Every visible or speaking character must be included in scene image_urls with their locked ref. Missing ref = stop before Animator.",
-    "Do not rely on character names in NB2/Kling prompts. Use physical descriptors from this bible in every scene prompt and immediately before each <<<voice_N>>> tag.",
+    "Do not rely on character names in NB2/Kling prompts. Use the character's `prompt_descriptor` field verbatim in every scene image_prompt and immediately before each <<<voice_N>>> tag in multi_prompt. These strings are battle-tested from EP1/EP2.",
     "For dialogue I2V, voice_ids order, <<<voice_N>>> tags, speaker names, and physical descriptors must all point to the same character.",
     "Any spoken line inside a ROOM 1701 dialogue I2V clip must have generate_audio:true, voice_ids, and <<<voice_N>>>; do not accidentally make a dialogue beat silent.",
     "If a required story beat does not fit the 2-voice or 512-character limits, split/add a clip instead of dropping the beat.",
     "Generate background music with MiniMax Music unless the user explicitly asks for a local library track.",
-    "After ASS subtitle generation, clamp every subtitle event to its dialogue scene window; no subtitles may hang over silent/action scenes."
+    "After ASS subtitle generation, clamp every subtitle event to its dialogue scene window; no subtitles may hang over silent/action scenes.",
+    "Title card overlay PNG is at games/star-trek-timelines/overlay-series.png. Use this file in every episode — do NOT generate a Pillow text strip.",
+    "bg-refs for new locations must be TIGHT MEDIUM SHOTS — not wide establishing shots. Wide refs cause characters to appear tiny and child-proportioned. EP2 burned this twice before fixing.",
+    "Max 6 scenes per episode to stay under $7 budget. 8 scenes (EP2) cost $8.42 — too much."
   ],
   "characters": [
     {
       "name": "Alex",
       "role": "protagonist",
-      "character_description": "semi-realistic stylized 3D young man, late 20s, slim build, slightly nervous energy, warm brown eyes, messy chestnut-brown hair visible under a black baseball cap with a Starfleet delta, dark navy Star Trek Timelines hoodie with logo, black cargo pants, blue-and-white sneakers, usually holding a phone with anxious grip, shy worried smile, practical warm bedroom lighting",
+      "character_description": "young man, late 20s, slim build, slightly nervous energy, warm brown eyes, messy chestnut-brown hair visible under a black baseball cap with a Starfleet delta, dark navy Star Trek Timelines hoodie with logo, black cargo pants, blue-and-white sneakers, usually holding a phone with anxious grip, shy worried smile, practical warm bedroom lighting",
       "visual_prompt": "Alex - slim young man in black baseball cap with Starfleet delta, messy chestnut-brown hair, large warm brown eyes, dark navy Star Trek Timelines hoodie, black cargo pants, blue-and-white sneakers, anxious grip on phone, shy worried expression",
+      "prompt_descriptor": "slim young man late 20s messy chestnut-brown hair under black baseball cap with gold Starfleet delta badge large warm brown expressive eyes dark navy Star Trek Timelines hoodie with gold Starfleet command delta logo black cargo pants blue-and-white sneakers",
       "voice": "Liam",
       "elevenlabs_voice": "Liam",
-      "voice_note": "Warm, slightly nervous, endearing \u2014 fits romantic nervous protagonist",
+      "voice_note": "Warm, slightly nervous, endearing — fits romantic nervous protagonist",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-alex.mp3",
       "voice_id_kling": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-alex.mp3",
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/alex/sheet.png"
@@ -46,11 +50,12 @@
     {
       "name": "Michael",
       "role": "co-protagonist",
-      "character_description": "semi-realistic stylized 3D young man, late 20s, stocky confident build, intense focused eyes, wild curly bright orange-ginger hair, round black-framed glasses, yellow-gold Star Trek hoodie with black delta insignia, black joggers, gray NCC-1701 slippers, black headphones around neck, badge, holds phone/tablet like a command console, very serious mission-briefing expression",
+      "character_description": "young man, late 20s, stocky confident build, intense focused eyes, wild curly bright orange-ginger hair, round black-framed glasses, yellow-gold Star Trek hoodie with black delta insignia, black joggers, gray NCC-1701 slippers, black headphones around neck, badge, holds phone/tablet like a command console, very serious mission-briefing expression",
       "visual_prompt": "Michael - stocky young man with wild curly orange-ginger hair, round black-framed glasses, yellow-gold Star Trek hoodie with black delta, black joggers, gray NCC-1701 slippers, black headphones around neck, badge, intense serious expression",
+      "prompt_descriptor": "stocky young man late 20s wild voluminous curly bright orange-ginger hair round thick black-framed glasses large expressive eyes bright YELLOW-GOLD Star Trek Timelines hoodie with black Starfleet command delta logo black headphones hanging around neck clip-on ID badge",
       "voice": "George",
       "elevenlabs_voice": "George",
-      "voice_note": "Deep, authoritative, dramatic \u2014 perfect for someone who treats everything like a starship mission",
+      "voice_note": "Deep, authoritative, dramatic — perfect for someone who treats everything like a starship mission",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-michael.mp3",
       "voice_id_kling": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-michael.mp3",
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/michael/sheet.png"
@@ -58,23 +63,26 @@
     {
       "name": "Emily",
       "role": "neighbor",
-      "character_description": "semi-realistic stylized 3D young woman, late 20s, confident relaxed posture, sharp intelligent eyes, dark wavy hair with vivid purple ombre tips, black off-shoulder top with gold Starfleet delta, purple cargo pants, black Converse sneakers, black choker with Starfleet delta charm, usually holding a black Star Trek coffee mug, slight sarcastic smirk, effortlessly cool",
+      "character_description": "young woman, late 20s, confident relaxed posture, sharp intelligent eyes, dark wavy hair with vivid purple ombre tips, black off-shoulder top with gold Starfleet delta, purple cargo pants, black Converse sneakers, black choker with Starfleet delta charm, usually holding a black Star Trek coffee mug, slight sarcastic smirk, effortlessly cool",
       "visual_prompt": "Emily - young woman with dark wavy hair and vivid purple ombre tips, sharp eyes, black off-shoulder top with gold Starfleet delta, purple cargo pants, black Converse, black choker with Starfleet delta charm, holding black Star Trek mug, dry sarcastic smirk",
+      "prompt_descriptor": "young woman late 20s dark wavy hair with vivid purple ombre tips sharp intelligent eyes black off-shoulder top with gold Starfleet delta logo purple cargo pants black Converse sneakers black choker with Starfleet delta charm holding black Star Trek coffee mug",
       "voice": "Aria",
       "elevenlabs_voice": "Aria",
-      "voice_note": "Smart, dry wit, effortlessly cool \u2014 perfect for sarcastic neighbor",
+      "voice_note": "Smart, dry wit, effortlessly cool — perfect for sarcastic neighbor",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-emily.mp3",
       "voice_id_kling": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-emily.mp3",
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/emily/sheet.png"
     },
     {
       "name": "Anna",
-      "role": "off-screen / mentioned",
-      "character_description": "semi-realistic stylized 3D young woman, the girl Alex likes — usually off-screen and represented by dialogue/text reactions unless an episode explicitly introduces her visually",
-      "visual_prompt": "Anna - off-screen romantic interest; do not show her unless the episode explicitly says she appears on camera",
+      "role": "recurring guest / love interest",
+      "character_description": "young woman, late 20s, warm confident posture, large warm brown eyes, medium-length wavy dark brown hair, friendly open smile, beige ribbed henley top, blue straight-leg jeans with rolled cuffs, beige sneakers, simple gold necklace, often holding a coffee cup, naturally charming and playful energy",
+      "visual_prompt": "Anna - young woman with medium wavy dark brown hair, large warm brown eyes, friendly smile, beige ribbed henley top, blue straight-leg jeans rolled at cuffs, beige sneakers, gold necklace, holding a coffee cup, warm natural lighting",
+      "prompt_descriptor": "young woman late 20s medium-length wavy dark brown hair large warm brown eyes friendly open smile beige ribbed henley top blue straight-leg jeans with rolled cuffs beige sneakers simple gold necklace holding a coffee cup",
       "voice": null,
       "elevenlabs_voice": null,
-      "voice_note": "Not a speaking character in EP1 \u2014 only appears as text message replies",
+      "voice_note": "Serial-drama uses Kling voice cloning only — voice_id_kling is the audio ref. Anna becomes a speaking character from EP2 onward.",
+      "voice_id_kling": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-anna.mp3",
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/anna/sheet.png"
     }
   ],
@@ -85,13 +93,32 @@
       "description": "Bright nerdy shared bedroom / apartment room, two blue sofas facing each other, central table with two chairs and laptops, large daylight window, Starfleet delta rug, shelves packed with Star Trek collectibles on the walls, game controllers, action figures, phone glow, laptop screens, one visible 'ASSEMBLE YOUR CREW' style poster",
       "visual_prompt": "Room 1701 - bright shared geek bedroom with two blue sofas facing each other, central table with laptops, large daylight window, Starfleet delta rug, wall shelves of Star Trek collectibles, posters, game controllers, phone glow, one Assemble Your Crew style poster",
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/locations/room-1701.png"
+    },
+    {
+      "name": "Coffee Spot",
+      "slug": "coffee-spot",
+      "description": "Modern cozy urban coffee place exterior and interior. Outdoor: pavement tables, warm string lights, big window with cafe logo, daytime. Interior: exposed brick, warm Edison bulbs, wooden tables, espresso machine on counter, casual urban vibe, soft natural light.",
+      "visual_prompt": "modern cozy urban coffee shop, outdoor seating area with pavement tables and warm string lights, large window with cafe signage, daytime warm light, casual urban street — OR — interior with exposed brick walls, warm Edison bulb lighting, wooden tables, espresso bar in background, soft natural light",
+      "ref_url": null
     }
   ],
   "active_loops": [
-    "Will Emily agree to come to coffee with Alex and Anna?",
-    "Will Michael keep treating Alex's dating life like a Starfleet mission?"
+    "Will Alex manage to keep Anna's attention now that Michael accidentally charmed her?",
+    "Will Michael realize he's accidentally becoming a romantic rival?",
+    "Will Emily ever actually join them?"
   ],
   "episode_summaries": [
+    {
+      "episode": 2,
+      "title": "The Link in Bio",
+      "language": "en",
+      "summary": "The coffee date finally happens without Emily. Alex brings Michael as backup. Anna arrives and immediately gets drawn to Michael's deadpan sincerity about Star Trek Timelines. Michael accidentally charms her by explaining game mechanics and the link in bio. Alex watches his own date become user acquisition. Cliffhanger: Anna asks Alex to bring Michael on their next date to teach her the game.",
+      "cliffhanger": "Anna asks Alex to bring Michael on their next date — to teach her the game. Alex turns to camera for the CTA.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-01/serial-drama-ep2_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=8EQp-7UKqo4",
+      "yt_publish_at": "2026-07-03T20:59:00Z",
+      "duration_sec": 59
+    },
     {
       "episode": 1,
       "title": "First Contact",
@@ -110,123 +137,36 @@
       {
         "episode": 1,
         "title": "First Contact",
-        "status": "scheduled",
-        "link": "Series pilot \u2014 establishing characters and the first disastrous text to Anna.",
-        "beats": [
-          "Alex stares at his phone, nervous. Wants to text Anna.",
-          "Michael looks up from his game, treats it as a Starfleet mission briefing.",
-          "Wide shot of Room 1701 \u2014 nerdy bedroom, 'ASSEMBLE YOUR CREW' poster visible.",
-          "Michael decides they need to 'assemble the crew' (soft game gag).",
-          "Alex dictates a normal message. Michael rewrites it as 'Ready to join my crew?'",
-          "Alex tries to grab the phone \u2014 they struggle \u2014 message accidentally sends.",
-          "Anna replies: 'Is this flirting, or are you actually from space?'",
-          "Emily enters with a mug, clocks the situation immediately.",
-          "Emily takes the phone, reads, types a recovery message.",
-          "Anna says yes to coffee \u2014 but asks them to bring the girl who wrote that.",
-          "Alex and Michael slowly turn to Emily."
-        ],
-        "key_lines": [
-          {
-            "speaker": "Michael",
-            "line": "Captain, unidentified girl in the personal life sector."
-          },
-          {
-            "speaker": "Alex",
-            "line": "Her name is Anna."
-          },
-          {
-            "speaker": "Michael",
-            "line": "Don't simplify the threat."
-          },
-          {
-            "speaker": "Michael",
-            "line": "That's how civilizations fall."
-          },
-          {
-            "speaker": "Michael",
-            "line": "First, we assemble the crew."
-          },
-          {
-            "speaker": "Alex",
-            "line": "For a text?"
-          },
-          {
-            "speaker": "Michael",
-            "line": "For survival."
-          },
-          {
-            "speaker": "Michael",
-            "line": "We need diplomacy, charm, and someone who doesn't sweat at the word coffee."
-          },
-          {
-            "speaker": "Alex",
-            "line": "We don't have the last one."
-          },
-          {
-            "speaker": "Michael",
-            "line": "Hello. Are you ready to join my crew?"
-          },
-          {
-            "speaker": "Alex",
-            "line": "You just buried me in space."
-          },
-          {
-            "speaker": "Michael",
-            "line": "Captain... it went to warp."
-          },
-          {
-            "speaker": "Michael",
-            "line": "Incoming transmission."
-          },
-          {
-            "speaker": "Michael",
-            "line": "She continued the dialogue. That's a win."
-          },
-          {
-            "speaker": "Emily",
-            "line": "Why are you guys talking about women like aliens again?"
-          },
-          {
-            "speaker": "Emily",
-            "line": "My condolences to the girl."
-          },
-          {
-            "speaker": "Emily",
-            "line": "Diplomacy. The thing you two don't have."
-          },
-          {
-            "speaker": "Emily",
-            "line": "I'm weird, but coffee with me is safer than it sounds."
-          },
-          {
-            "speaker": "Michael",
-            "line": "We need this officer."
-          },
-          {
-            "speaker": "Alex",
-            "line": "She said yes."
-          },
-          {
-            "speaker": "Michael",
-            "line": "First contact successful."
-          },
-          {
-            "speaker": "Alex",
-            "line": "She wrote: Bring the girl who wrote that."
-          },
-          {
-            "speaker": "Emily",
-            "line": "I never joined your crew."
-          }
-        ],
-        "cliffhanger": {
-          "speaker": "Emily",
-          "line": "I never joined your crew."
-        },
+        "status": "done",
+        "summary": "Series pilot — establishing characters and the first disastrous text to Anna.",
+        "cliffhanger": "Emily refuses to join their crew while Anna asks to bring 'the girl who wrote that'.",
         "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/videos/star-trek-timelines/2026-06-25/serial-drama_final.mp4",
-        "youtube_url": "https://www.youtube.com/watch?v=V1x0sm3Lg5U",
-        "yt_publish_at": "2026-06-28T20:59:00Z",
-        "duration_sec": 60
+        "youtube_url": "https://www.youtube.com/watch?v=V1x0sm3Lg5U"
+      },
+      {
+        "episode": 2,
+        "title": "The Link in Bio",
+        "status": "done",
+        "location": "coffee-spot",
+        "cast": [
+          "Alex",
+          "Michael",
+          "Anna"
+        ],
+        "summary": "The coffee date finally happens — but without Emily. Alex is stressed, Michael is emotionally unavailable (because of the game). Anna arrives and immediately gets drawn to Michael's deadpan game nerd energy. Michael accidentally charms her by explaining Star Trek Timelines mechanics and the link in bio. Alex watches his date become user acquisition.",
+        "beats": [
+          "COLD OPEN: Alex + Michael outside coffee spot. Alex: 'You're backup. Not competition.' Michael: 'I am emotionally unavailable.' Beat. Michael: 'Because of the game.' Alex: 'Less good.'",
+          "TITLE CARD: ROOM 1701",
+          "SCENE 1: Anna arrives. She notices Michael's Star Trek hoodie/pin. Alex: 'Sadly, professionally.'",
+          "SCENE 2: Alex gets coffee. Anna turns to Michael. Michael: 'I serve Star Trek Timelines.' Anna laughs. Michael: 'I respect clear calls to action.' Anna: 'That's the nerdiest thing anyone's said to me.' Michael: 'Thank you. I prepared nothing romantic.'",
+          "SCENE 3: Alex returns. Anna is smiling. Alex: 'That was my date.' Michael: 'Now it's user acquisition.' Alex: 'Please stop being accidentally attractive.' Michael: 'Impossible. I'm explaining mechanics.'",
+          "SCENE 4: Anna: 'I downloaded it yesterday. My crew is awful.' Michael: 'No. Your crew is innocent.' Anna: 'Can you help me fix it?' Michael: 'Finally. A healthy relationship.'",
+          "SCENE 5: Alex: 'So… are we still on a date?' Anna: 'Yes. But your friend is fascinating.' Alex: 'Because he said user acquisition?' Anna: 'Because he meant it.'",
+          "CLIFFHANGER/CTA: Anna: 'Next time, bring him too.' Alex: 'To our date?' Anna: 'To teach me the game. Unless you can.' Alex turns to camera: 'Download the game via the link in bio.' Michael silently raises his phone, proud."
+        ],
+        "cliffhanger": "Anna asks Alex to bring Michael on their next date — to teach her the game. Alex turns to camera for the CTA.",
+        "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-01/serial-drama-ep2_final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=8EQp-7UKqo4"
       }
     ]
   }

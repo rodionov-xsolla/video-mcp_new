@@ -1,4 +1,5 @@
 ---
+ready_to_post: yes
 subtitles: true
 overlays: false
 ---
@@ -73,8 +74,8 @@ facing slightly [RIGHT/LEFT] toward the subject area,
 holding broadcast handheld mic with '[SHOW NAME]' printed on the mic flag,
 mouth slightly open mid-speech for lipsync,
 [SUBJECT: specific visual description of evidence] prominently filling the [other] 65% of frame,
-game-authentic environment, semi-realistic photographic quality,
-NOT cartoon, NOT centered portrait, 9:16 vertical broadcast field reporter composition,
+game-authentic environment, game-authentic look per the resolved style chain (game config prompt_prefix / story bible style_tags),
+NOT centered portrait, 9:16 vertical broadcast field reporter composition,
 professional key light on reporter's face, no text overlay, no captions
 ```
 
@@ -164,8 +165,8 @@ NB2 /edit:
            mouth slightly open mid-speech for lipsync,
            [evidence from research.json: specific visual description] fills the other 65% of frame,
            [location description from research.json],
-           semi-realistic photographic quality, game-authentic,
-           NOT cartoon, NOT centered portrait,
+           game-authentic look per the resolved style chain (game config prompt_prefix / story bible style_tags),
+           NOT centered portrait,
            9:16 vertical broadcast field reporter composition,
            professional key light on face, no text overlay"
 ```

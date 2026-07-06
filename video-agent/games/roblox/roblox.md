@@ -1,5 +1,20 @@
 # Roblox
 
+## Posting status
+
+- **ready_to_post:** no   <!-- yes only when the game is tested and cleared for posting -->
+
+**Formats (linked to this game):**
+
+- fake-ad — ready_to_post: no
+- fun-news — ready_to_post: no
+- serial-drama — ready_to_post: no
+- special-report — ready_to_post: no
+- streettalk — ready_to_post: no
+
+
+> TODO(style-refactor): character appearance must move to per-format story bibles `characters[]` (style-free); style → top-level `style_tags` in the bible, fallback = `prompt_prefix`. This game config not yet migrated (see star-trek-timelines / genshin-impact for the pattern).
+
 ## Метаданные
 
 - **Жанр:** Sandbox / Social Platform
