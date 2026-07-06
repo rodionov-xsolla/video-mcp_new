@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Character Story",
   "created_at": "2026-05-30",
-  "last_episode": 17,
+  "last_episode": 18,
   "tts_engine": "elevenlabs",
   "tts_note": "ElevenLabs eleven-v3 via fal-ai/elevenlabs/tts/eleven-v3. Each canonical character gets a dedicated voice chosen by gender and emotional register. No Chatterbox — STT always uses ElevenLabs. See characters[] for voice assignments. Long monologue (>80 words) → mandatory chunking into ≤35-word segments.",
   "format_overrides": {
@@ -41,7 +41,11 @@
       "Q",
       "Sisko",
       "Picard",
-      "Data"
+      "Data",
+      "Kirk",
+      "Spock",
+      "Worf",
+      "Khan"
     ],
     "all_done": [
       "McCoy",
@@ -59,7 +63,11 @@
       "Data",
       "Michael Burnham",
       "T'Pol",
-      "Kira Nerys"
+      "Kira Nerys",
+      "Kirk",
+      "Spock",
+      "Worf",
+      "Khan"
     ],
     "error": [],
     "error_note": "Characters listed in 'error' had a production attempt but the final video was rejected. Do NOT pick them again until manually reviewed and removed from this list.",
@@ -185,6 +193,20 @@
       "youtube_url": "https://www.youtube.com/watch?v=Jt2yNjsZKDQ",
       "yt_publish_at": "2026-07-05T20:59:00Z",
       "notes": "Full redo from scratch (EP16 rejected for style inconsistency). Bilingual CTA opener (RU+EN). 3 age variants: child (~10-12), teen (~15-18), mature Major. Hook: young Kira beside dying mother in Singha refugee camp. Style fix: realistic 3D CGI enforced at 3 levels in storyboard. User manually edited final video (0703.mp4, 29.87s)."
+    },
+    {
+      "episode": 18,
+      "date": "2026-07-06",
+      "character": "Khan Noonien Singh",
+      "character_slug": "khan",
+      "gender": "male",
+      "era": "TOS / movie",
+      "idea": "Khan Noonien Singh — Character Story | Star Trek Timelines",
+      "elevenlabs_voice": "Liam",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-06/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=lnbcc_Mt-gQ",
+      "yt_publish_at": "2026-07-07T20:59:00Z",
+      "notes": "Villain arc — Eugenics Wars warlord to exiled avenger. 3 age variants: young (~30-35, Eugenics Wars), exile (~35-40, Ceti Alpha V), mature (~45-50, Reliant/Genesis). Hook: mature Khan at Mutara Nebula. Monologue ~116 words, atempo 1.31×. Music: dark-loosescrew-slowed. Budget: ~$3.28."
     }
   ],
   "style_tags": "realistic 3D CGI — cinematic lighting, photorealistic textures, high detail 3D render, game cutscene quality. Do NOT use the game's illustrated/painted art style. All clips must match this style, including child-character scenes. Required prompt keywords: 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI, game cutscene quality'.",
@@ -313,7 +335,12 @@
       "elevenlabs_voice": "Liam",
       "voice_note": "Theatrical, imperious, seething with controlled rage — genetic superman's arrogance",
       "character_description": "muscular male warrior, long flowing dark hair, broad bare chest through torn red uniform, gold necklace, weathered tanned skin, intense vengeful expression, clenched jaw, desolate planet background",
-      "ref_url": null
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/khan/variants/mature.png",
+      "variants": {
+        "young": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/khan/variants/young.png",
+        "exile": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/khan/variants/exile.png",
+        "mature": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/khan/variants/mature.png"
+      }
     },
     "q": {
       "name": "Q",
