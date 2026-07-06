@@ -5,7 +5,7 @@
   "title": "Genshin Impact — Character Story",
   "format": "character-story",
   "created_at": "2026-06-29",
-  "last_episode": 9,
+  "last_episode": 10,
   "tts_engine": "chatterbox",
   "tts_note": "Genshin ALWAYS uses Chatterbox via fal-ai/chatterbox/text-to-speech. Voice refs at assets/genshin-impact/characters/{slug}/voice-1.mp3. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "voice_ref_base": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/{slug}/voice-1.mp3",
@@ -25,7 +25,7 @@
       "visual_note": "Character faces camera in neutral/warm environment (Wangsheng gates, shrine entrance, etc). Slight knowing smile or direct gaze — as if speaking to the viewer. NOT dramatic — brief and natural, then cuts to story.",
       "chatterbox_params": {
         "exaggeration": 0.45,
-        "cfg": 0.50,
+        "cfg": 0.5,
         "temperature": 0.7
       }
     },
@@ -43,7 +43,8 @@
     ],
     "done_male": [
       "Xiao",
-      "Zhongli"
+      "Zhongli",
+      "wanderer"
     ],
     "all_done": [
       "Amber",
@@ -54,7 +55,8 @@
       "Dehya",
       "Navia",
       "Zhongli",
-      "Hu Tao"
+      "Hu Tao",
+      "Wanderer"
     ],
     "cooldown_episodes": 20,
     "selection_note": "Pick characters with strong lore arcs and tragic backstories. Prioritize 5-star characters with high popularity. Alternate male/female for variety. Avoid repeating characters used in dual-style within 4 episodes."
@@ -163,9 +165,9 @@
       "youtube_scheduled": "2026-07-02T20:59:00Z",
       "tts_engine": "chatterbox",
       "chatterbox_params": {
-        "exaggeration": 0.60,
+        "exaggeration": 0.6,
         "cfg": 0.45,
-        "temperature": 0.70
+        "temperature": 0.7
       },
       "age_variants": [
         "child (~7)",
@@ -187,6 +189,36 @@
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-25/character-story_final.mp4",
       "tts_engine": "chatterbox",
       "notes": "No promo clip."
+    },
+    {
+      "episode": 10,
+      "date": "2026-07-06",
+      "character": "Wanderer",
+      "character_slug": "wanderer",
+      "gender": "male",
+      "idea": "Wanderer (Scaramouche) — The Abandoned Puppet | Character Story EP10 | Genshin Impact",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/wanderer/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/videos/genshin-impact/2026-07-06/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=KGU2vRbQt-Y",
+      "youtube_scheduled": "2026-07-08T20:59:00Z",
+      "tts_engine": "chatterbox",
+      "chatterbox_params": {
+        "exaggeration": 0.6,
+        "cfg": 0.45,
+        "temperature": 0.7
+      },
+      "promo_chatterbox_params": {
+        "exaggeration": 0.45,
+        "cfg": 0.5,
+        "temperature": 0.7
+      },
+      "age_variants": [
+        "wanderer-current",
+        "scaramouche-harbinger"
+      ],
+      "clips": 7,
+      "cost_usd": 3.94,
+      "notes": "Two costume variants: wanderer-current (navy/white hat) for clips 1,2,6,7 and scaramouche-harbinger (teal-purple Fatui coat, no hat) for clips 3,4,5. format_overrides active: tragic hook clip 1 + promo clip 2. TTS 43s → atempo=1.23x. Chain ref reset at clip 3 (variant switch)."
     }
   ],
   "next_planned": null,
