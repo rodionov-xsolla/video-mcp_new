@@ -1,5 +1,21 @@
 # Star Trek Timelines
 
+## Posting status
+
+- **ready_to_post:** yes   <!-- yes only when the game is tested and cleared for posting -->
+
+**Formats (linked to this game):**
+
+- character-story — ready_to_post: yes
+- fake-ad — ready_to_post: yes
+- fun-news — ready_to_post: yes
+- in-game-pov — ready_to_post: yes
+- reddit-story — ready_to_post: yes
+- room1701 — ready_to_post: yes
+- serial-drama — ready_to_post: yes
+- streettalk — ready_to_post: yes
+
+
 ## Метаданные
 
 - **Жанр:** Strategy RPG, Crew Collector (Gacha)

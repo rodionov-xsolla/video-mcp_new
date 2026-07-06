@@ -1,4 +1,5 @@
 ---
+ready_to_post: yes
 subtitles: true
 overlays: true
 ---
