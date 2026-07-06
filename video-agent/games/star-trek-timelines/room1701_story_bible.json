@@ -12,7 +12,7 @@
     "Do NOT rely on readable phone UI — phone can glow in hands but meaning comes from acting/dialogue",
     "Do NOT show complex game screens",
     "Use one visible Star Trek / 'Assemble Your Crew' style poster in the room",
-    "Preserve the exact proportions of the user character cards: semi-realistic 3D, not oversized cartoon eyes, not Disney/Pixar toy anatomy.",
+    "Preserve the exact proportions of the character cards and the resolved style_tags; do not drift into a different proportion system (oversized cartoon eyes, toy anatomy) between scenes.",
     "Room 1701 location ref defines the core layout and recurring set pieces. Preserve sofa/table/window/rug/shelf geometry; episode-specific props are okay when the story asks for them.",
     "Keep shots simple: close-ups, 3/4 faces, room, door, phone glow",
     "Dialogue must be short and punchy",
@@ -37,7 +37,7 @@
     {
       "name": "Alex",
       "role": "protagonist",
-      "character_description": "semi-realistic stylized 3D young man, late 20s, slim build, slightly nervous energy, warm brown eyes, messy chestnut-brown hair visible under a black baseball cap with a Starfleet delta, dark navy Star Trek Timelines hoodie with logo, black cargo pants, blue-and-white sneakers, usually holding a phone with anxious grip, shy worried smile, practical warm bedroom lighting",
+      "character_description": "young man, late 20s, slim build, slightly nervous energy, warm brown eyes, messy chestnut-brown hair visible under a black baseball cap with a Starfleet delta, dark navy Star Trek Timelines hoodie with logo, black cargo pants, blue-and-white sneakers, usually holding a phone with anxious grip, shy worried smile, practical warm bedroom lighting",
       "visual_prompt": "Alex - slim young man in black baseball cap with Starfleet delta, messy chestnut-brown hair, large warm brown eyes, dark navy Star Trek Timelines hoodie, black cargo pants, blue-and-white sneakers, anxious grip on phone, shy worried expression",
       "prompt_descriptor": "slim young man late 20s messy chestnut-brown hair under black baseball cap with gold Starfleet delta badge large warm brown expressive eyes dark navy Star Trek Timelines hoodie with gold Starfleet command delta logo black cargo pants blue-and-white sneakers",
       "voice": "Liam",
@@ -50,7 +50,7 @@
     {
       "name": "Michael",
       "role": "co-protagonist",
-      "character_description": "semi-realistic stylized 3D young man, late 20s, stocky confident build, intense focused eyes, wild curly bright orange-ginger hair, round black-framed glasses, yellow-gold Star Trek hoodie with black delta insignia, black joggers, gray NCC-1701 slippers, black headphones around neck, badge, holds phone/tablet like a command console, very serious mission-briefing expression",
+      "character_description": "young man, late 20s, stocky confident build, intense focused eyes, wild curly bright orange-ginger hair, round black-framed glasses, yellow-gold Star Trek hoodie with black delta insignia, black joggers, gray NCC-1701 slippers, black headphones around neck, badge, holds phone/tablet like a command console, very serious mission-briefing expression",
       "visual_prompt": "Michael - stocky young man with wild curly orange-ginger hair, round black-framed glasses, yellow-gold Star Trek hoodie with black delta, black joggers, gray NCC-1701 slippers, black headphones around neck, badge, intense serious expression",
       "prompt_descriptor": "stocky young man late 20s wild voluminous curly bright orange-ginger hair round thick black-framed glasses large expressive eyes bright YELLOW-GOLD Star Trek Timelines hoodie with black Starfleet command delta logo black headphones hanging around neck clip-on ID badge",
       "voice": "George",
@@ -63,7 +63,7 @@
     {
       "name": "Emily",
       "role": "neighbor",
-      "character_description": "semi-realistic stylized 3D young woman, late 20s, confident relaxed posture, sharp intelligent eyes, dark wavy hair with vivid purple ombre tips, black off-shoulder top with gold Starfleet delta, purple cargo pants, black Converse sneakers, black choker with Starfleet delta charm, usually holding a black Star Trek coffee mug, slight sarcastic smirk, effortlessly cool",
+      "character_description": "young woman, late 20s, confident relaxed posture, sharp intelligent eyes, dark wavy hair with vivid purple ombre tips, black off-shoulder top with gold Starfleet delta, purple cargo pants, black Converse sneakers, black choker with Starfleet delta charm, usually holding a black Star Trek coffee mug, slight sarcastic smirk, effortlessly cool",
       "visual_prompt": "Emily - young woman with dark wavy hair and vivid purple ombre tips, sharp eyes, black off-shoulder top with gold Starfleet delta, purple cargo pants, black Converse, black choker with Starfleet delta charm, holding black Star Trek mug, dry sarcastic smirk",
       "prompt_descriptor": "young woman late 20s dark wavy hair with vivid purple ombre tips sharp intelligent eyes black off-shoulder top with gold Starfleet delta logo purple cargo pants black Converse sneakers black choker with Starfleet delta charm holding black Star Trek coffee mug",
       "voice": "Aria",
@@ -76,7 +76,7 @@
     {
       "name": "Anna",
       "role": "recurring guest / love interest",
-      "character_description": "semi-realistic stylized 3D young woman, late 20s, warm confident posture, large warm brown eyes, medium-length wavy dark brown hair, friendly open smile, beige ribbed henley top, blue straight-leg jeans with rolled cuffs, beige sneakers, simple gold necklace, often holding a coffee cup, naturally charming and playful energy",
+      "character_description": "young woman, late 20s, warm confident posture, large warm brown eyes, medium-length wavy dark brown hair, friendly open smile, beige ribbed henley top, blue straight-leg jeans with rolled cuffs, beige sneakers, simple gold necklace, often holding a coffee cup, naturally charming and playful energy",
       "visual_prompt": "Anna - young woman with medium wavy dark brown hair, large warm brown eyes, friendly smile, beige ribbed henley top, blue straight-leg jeans rolled at cuffs, beige sneakers, gold necklace, holding a coffee cup, warm natural lighting",
       "prompt_descriptor": "young woman late 20s medium-length wavy dark brown hair large warm brown eyes friendly open smile beige ribbed henley top blue straight-leg jeans with rolled cuffs beige sneakers simple gold necklace holding a coffee cup",
       "voice": null,
@@ -148,7 +148,11 @@
         "title": "The Link in Bio",
         "status": "done",
         "location": "coffee-spot",
-        "cast": ["Alex", "Michael", "Anna"],
+        "cast": [
+          "Alex",
+          "Michael",
+          "Anna"
+        ],
         "summary": "The coffee date finally happens — but without Emily. Alex is stressed, Michael is emotionally unavailable (because of the game). Anna arrives and immediately gets drawn to Michael's deadpan game nerd energy. Michael accidentally charms her by explaining Star Trek Timelines mechanics and the link in bio. Alex watches his date become user acquisition.",
         "beats": [
           "COLD OPEN: Alex + Michael outside coffee spot. Alex: 'You're backup. Not competition.' Michael: 'I am emotionally unavailable.' Beat. Michael: 'Because of the game.' Alex: 'Less good.'",
