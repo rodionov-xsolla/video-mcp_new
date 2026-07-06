@@ -459,7 +459,7 @@ episodes/{GAME_TAG}/{YYYY-MM-DD}-{format}/
 
 videos/{GAME_TAG}/{YYYY-MM-DD}/{format}_final.mp4   final video
 
-music/{Mood}/{track}.mp3                    Drama/, Fun/, Tense/, Dark/, Neutral/
+music/                                     DEPRECATED local library (bg-music is now generated per-video by Sound via MiniMax; see sound.md §6)
 ```
 
 **NOT in storage:** story bibles (JSON) — local only in `games/`.

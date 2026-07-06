@@ -156,7 +156,7 @@ Ask or infer from tone:
 |---|-------|---------|
 | 1 | Mood category | Badass / Dark / Emotional sad / Energetic / Fun / Heroic |
 | 2 | BPM range | e.g. 110–140 |
-| 3 | Specific tracks | Names from `music/tracks.json` (optional) |
+| 3 | Music mood/style | keywords for the MiniMax `style` prompt (optional) |
 
 ---
 

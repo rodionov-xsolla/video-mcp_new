@@ -260,7 +260,7 @@ Example: `"RESIN ENERGY.\nDOESN'T RESTORE RESIN. HELPS YOU OUTLIVE THE WAIT."`
 - **Volume:** `0.25` (louder than default — commercial-style presence)
 - **Duration:** continuous through all 5 scenes, including packshot
 - **No fade during twist** — music does NOT dip on scene 3. The upbeat music playing over the failure amplifies the absurdity.
-- Select from `music/tracks.json` mood `"upbeat-commercial"` or `"energetic-pop"`. If neither exists, use `"fun-news"` mood track.
+- Generate via MiniMax with an `"upbeat-commercial"` / `"energetic-pop"` `style` prompt (instrumental, see `rules/roles/sound.md` §6).
 
 ---
 

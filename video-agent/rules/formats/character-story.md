@@ -200,7 +200,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
   - One universal style (editor.md §6): `add_subtitles.py build/voice-final.wav build/subs.ass --storyboard storyboard.json --lang en --main-dur {MAIN_DUR}`. No `--chunk`/`--fontsize`/`--marginv`/`--no-scale`/`--emphasis`.
 - **Speed control:** if TTS duration > timeline (7×5 = 35s for 6-clip; 8×5 = 40s for 8-clip), Editor applies `atempo` (cap 1.4×). Subtitles are computed from the already sped-up speech (`voice-final.wav`) — no recompute. If mismatch > 40% — return to Scenarist to shorten text.
 - **Music:** by mood from storyboard (`music.mood`)
-  - Pick a track from `music/tracks.json` by mood
+  - Generate the track with MiniMax by mood (see sound.md §6)
   - `volume` from storyboard (default 0.15)
 - General rules — `rules/roles/sound.md`
 
