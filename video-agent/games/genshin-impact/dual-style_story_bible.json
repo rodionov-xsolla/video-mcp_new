@@ -5,38 +5,177 @@
   "created_at": "2026-06-09",
   "last_episode": 4,
   "character_pool": [
-    {"character_name": "venti",        "display_name": "Venti",          "has_actor_counterpart": false, "actor_name": null,                  "last_seen_episode": 1},
-    {"character_name": "hu-tao",       "display_name": "Hu Tao",         "has_actor_counterpart": false, "actor_name": null,                  "last_seen_episode": 1},
-    {"character_name": "zhongli",      "display_name": "Zhongli",        "has_actor_counterpart": false, "actor_name": null,                  "last_seen_episode": 1},
-    {"character_name": "diluc",        "display_name": "Diluc",          "has_actor_counterpart": false, "actor_name": null,                  "last_seen_episode": 1},
-    {"character_name": "raiden-shogun","display_name": "Raiden Shogun",  "has_actor_counterpart": true,  "actor_name": "Gal Gadot",           "last_seen_episode": 2},
-    {"character_name": "tartaglia",    "display_name": "Tartaglia",      "has_actor_counterpart": true,  "actor_name": "Tom Holland",         "last_seen_episode": 2},
-    {"character_name": "furina",       "display_name": "Furina",         "has_actor_counterpart": true,  "actor_name": "Florence Pugh",       "last_seen_episode": 2},
-    {"character_name": "arlecchino",   "display_name": "Arlecchino",     "has_actor_counterpart": true,  "actor_name": "Eva Green",           "last_seen_episode": 2},
-    {"character_name": "wriothesley",  "display_name": "Wriothesley",    "has_actor_counterpart": true,  "actor_name": "Henry Cavill",        "last_seen_episode": 3},
-    {"character_name": "yae-miko",     "display_name": "Yae Miko",       "has_actor_counterpart": true,  "actor_name": "Margot Robbie",       "last_seen_episode": 3},
-    {"character_name": "neuvillette",  "display_name": "Neuvillette",    "has_actor_counterpart": true,  "actor_name": "Timothée Chalamet",   "last_seen_episode": 3},
-    {"character_name": "navia",        "display_name": "Navia",          "has_actor_counterpart": true,  "actor_name": "Sydney Sweeney",      "last_seen_episode": 3},
-    {"character_name": "keqing",       "display_name": "Keqing",         "has_actor_counterpart": true,  "actor_name": "Zendaya",             "last_seen_episode": 4},
-    {"character_name": "fischl",       "display_name": "Fischl",         "has_actor_counterpart": true,  "actor_name": "Anya Taylor-Joy",     "last_seen_episode": 4},
-    {"character_name": "shenhe",       "display_name": "Shenhe",         "has_actor_counterpart": true,  "actor_name": "Emily Blunt",         "last_seen_episode": 4},
-    {"character_name": "eula",         "display_name": "Eula",           "has_actor_counterpart": true,  "actor_name": "Scarlett Johansson",  "last_seen_episode": 4},
-    {"character_name": "ayaka",        "display_name": "Ayaka",          "has_actor_counterpart": true,  "actor_name": "Selena Gomez",        "last_seen_episode": null},
-    {"character_name": "nilou",        "display_name": "Nilou",          "has_actor_counterpart": true,  "actor_name": "Dua Lipa",            "last_seen_episode": null},
-    {"character_name": "yelan",        "display_name": "Yelan",          "has_actor_counterpart": true,  "actor_name": "Ana de Armas",        "last_seen_episode": null},
-    {"character_name": "cyno",         "display_name": "Cyno",           "has_actor_counterpart": true,  "actor_name": "Rami Malek",          "last_seen_episode": null}
+    {
+      "character_name": "venti",
+      "display_name": "Venti",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "hu-tao",
+      "display_name": "Hu Tao",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "zhongli",
+      "display_name": "Zhongli",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "diluc",
+      "display_name": "Diluc",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "raiden-shogun",
+      "display_name": "Raiden Shogun",
+      "has_actor_counterpart": true,
+      "actor_name": "Gal Gadot",
+      "last_seen_episode": 2
+    },
+    {
+      "character_name": "tartaglia",
+      "display_name": "Tartaglia",
+      "has_actor_counterpart": true,
+      "actor_name": "Tom Holland",
+      "last_seen_episode": 2
+    },
+    {
+      "character_name": "furina",
+      "display_name": "Furina",
+      "has_actor_counterpart": true,
+      "actor_name": "Florence Pugh",
+      "last_seen_episode": 2
+    },
+    {
+      "character_name": "arlecchino",
+      "display_name": "Arlecchino",
+      "has_actor_counterpart": true,
+      "actor_name": "Eva Green",
+      "last_seen_episode": 2
+    },
+    {
+      "character_name": "wriothesley",
+      "display_name": "Wriothesley",
+      "has_actor_counterpart": true,
+      "actor_name": "Henry Cavill",
+      "last_seen_episode": 3
+    },
+    {
+      "character_name": "yae-miko",
+      "display_name": "Yae Miko",
+      "has_actor_counterpart": true,
+      "actor_name": "Margot Robbie",
+      "last_seen_episode": 3
+    },
+    {
+      "character_name": "neuvillette",
+      "display_name": "Neuvillette",
+      "has_actor_counterpart": true,
+      "actor_name": "Timothée Chalamet",
+      "last_seen_episode": 3
+    },
+    {
+      "character_name": "navia",
+      "display_name": "Navia",
+      "has_actor_counterpart": true,
+      "actor_name": "Sydney Sweeney",
+      "last_seen_episode": 3
+    },
+    {
+      "character_name": "keqing",
+      "display_name": "Keqing",
+      "has_actor_counterpart": true,
+      "actor_name": "Zendaya",
+      "last_seen_episode": 4
+    },
+    {
+      "character_name": "fischl",
+      "display_name": "Fischl",
+      "has_actor_counterpart": true,
+      "actor_name": "Anya Taylor-Joy",
+      "last_seen_episode": 4
+    },
+    {
+      "character_name": "shenhe",
+      "display_name": "Shenhe",
+      "has_actor_counterpart": true,
+      "actor_name": "Emily Blunt",
+      "last_seen_episode": 4
+    },
+    {
+      "character_name": "eula",
+      "display_name": "Eula",
+      "has_actor_counterpart": true,
+      "actor_name": "Scarlett Johansson",
+      "last_seen_episode": 4
+    },
+    {
+      "character_name": "ayaka",
+      "display_name": "Ayaka",
+      "has_actor_counterpart": true,
+      "actor_name": "Selena Gomez",
+      "last_seen_episode": null
+    },
+    {
+      "character_name": "nilou",
+      "display_name": "Nilou",
+      "has_actor_counterpart": true,
+      "actor_name": "Dua Lipa",
+      "last_seen_episode": null
+    },
+    {
+      "character_name": "yelan",
+      "display_name": "Yelan",
+      "has_actor_counterpart": true,
+      "actor_name": "Ana de Armas",
+      "last_seen_episode": null
+    },
+    {
+      "character_name": "cyno",
+      "display_name": "Cyno",
+      "has_actor_counterpart": true,
+      "actor_name": "Rami Malek",
+      "last_seen_episode": null
+    }
   ],
   "character_rotation": {
     "recent_characters": [
-      "Venti", "Hu Tao", "Zhongli", "Diluc",
-      "Raiden Shogun", "Tartaglia", "Furina", "Arlecchino",
-      "Wriothesley", "Yae Miko", "Neuvillette", "Navia",
-      "Keqing", "Fischl", "Shenhe", "Eula"
+      "Venti",
+      "Hu Tao",
+      "Zhongli",
+      "Diluc",
+      "Raiden Shogun",
+      "Tartaglia",
+      "Furina",
+      "Arlecchino",
+      "Wriothesley",
+      "Yae Miko",
+      "Neuvillette",
+      "Navia",
+      "Keqing",
+      "Fischl",
+      "Shenhe",
+      "Eula"
     ],
     "recent_actors": [
-      "Florence Pugh", "Eva Green",
-      "Henry Cavill", "Margot Robbie", "Timothée Chalamet", "Sydney Sweeney",
-      "Zendaya", "Anya Taylor-Joy", "Emily Blunt", "Scarlett Johansson"
+      "Florence Pugh",
+      "Eva Green",
+      "Henry Cavill",
+      "Margot Robbie",
+      "Timothée Chalamet",
+      "Sydney Sweeney",
+      "Zendaya",
+      "Anya Taylor-Joy",
+      "Emily Blunt",
+      "Scarlett Johansson"
     ],
     "recent_environments": [
       "Mondstadt windswept cliff edge",
@@ -57,9 +196,12 @@
       "plain silver-blue seamless studio floor"
     ],
     "recent_action_types": [
-      "walking-approach", "walking-approach",
-      "walking-approach", "walking-approach",
-      "walking-approach", "walking-approach"
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach"
     ],
     "cooldown_episodes": 10
   },
@@ -67,15 +209,30 @@
     {
       "episode": 1,
       "date": "2026-06-09",
-      "characters": ["Venti", "Hu Tao", "Zhongli", "Diluc"],
+      "characters": [
+        "Venti",
+        "Hu Tao",
+        "Zhongli",
+        "Diluc"
+      ],
       "environments": [
         "Mondstadt windswept cliff edge",
         "Wuwang Hill misty graveyard at dusk",
         "Liyue Harbor stone dock at golden hour",
         "Dawn Winery stone courtyard at night"
       ],
-      "actors": ["(none)", "(none)", "(none)", "(none)"],
-      "action_types": ["wide-introduction-pose", "character-skill-pose", "character-skill-pose", "dynamic-element-release"],
+      "actors": [
+        "(none)",
+        "(none)",
+        "(none)",
+        "(none)"
+      ],
+      "action_types": [
+        "wide-introduction-pose",
+        "character-skill-pose",
+        "character-skill-pose",
+        "dynamic-element-release"
+      ],
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-09/dual-style_final.mp4",
       "duration_sec": 25.21,
       "cost_usd": 2.32
@@ -83,15 +240,30 @@
     {
       "episode": 2,
       "date": "2026-06-09",
-      "characters": ["Raiden Shogun", "Tartaglia", "Furina", "Arlecchino"],
+      "characters": [
+        "Raiden Shogun",
+        "Tartaglia",
+        "Furina",
+        "Arlecchino"
+      ],
       "environments": [
         "Inazuma throne room",
         "Liyue harbor arena at dusk",
         "Fontaine open theater stage plain wooden floor",
         "Fatui underground stone chamber"
       ],
-      "actors": ["Gal Gadot", "Tom Holland", "Florence Pugh", "Eva Green"],
-      "action_types": ["walking-approach", "walking-approach", "walking-approach", "walking-approach"],
+      "actors": [
+        "Gal Gadot",
+        "Tom Holland",
+        "Florence Pugh",
+        "Eva Green"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-09/dual-style-ep2_final.mp4",
       "duration_sec": 25.21,
       "cost_usd": 2.68,
@@ -100,15 +272,30 @@
     {
       "episode": 3,
       "date": "2026-06-10",
-      "characters": ["Wriothesley", "Yae Miko", "Neuvillette", "Navia"],
+      "characters": [
+        "Wriothesley",
+        "Yae Miko",
+        "Neuvillette",
+        "Navia"
+      ],
       "environments": [
         "Cryo prison Snezhnaya plain neutral floor",
         "Narukami shrine Inazuma plain neutral floor",
         "plain neutral grey floor simple spotlight",
         "plain warm ivory floor simple spotlight"
       ],
-      "actors": ["Henry Cavill", "Margot Robbie", "Timothée Chalamet", "Sydney Sweeney"],
-      "action_types": ["walking-approach", "walking-approach", "walking-approach", "walking-approach"],
+      "actors": [
+        "Henry Cavill",
+        "Margot Robbie",
+        "Timothée Chalamet",
+        "Sydney Sweeney"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/genshin-impact/2026-06-10-dual-style-ep3/final.mp4",
       "duration_sec": 25.21,
       "cost_usd": 3.20,
@@ -117,20 +304,158 @@
     {
       "episode": 4,
       "date": "2026-06-15",
-      "characters": ["Keqing", "Fischl", "Shenhe", "Eula"],
+      "characters": [
+        "Keqing",
+        "Fischl",
+        "Shenhe",
+        "Eula"
+      ],
       "environments": [
         "plain soft violet-tinted seamless studio floor",
         "plain dark charcoal seamless studio floor with gold undertone",
         "plain icy blue seamless studio floor",
         "plain silver-blue seamless studio floor"
       ],
-      "actors": ["Zendaya", "Anya Taylor-Joy", "Emily Blunt", "Scarlett Johansson"],
-      "action_types": ["walking-approach", "walking-approach", "walking-approach", "walking-approach"],
+      "actors": [
+        "Zendaya",
+        "Anya Taylor-Joy",
+        "Emily Blunt",
+        "Scarlett Johansson"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/genshin-impact/2026-06-15-dual-style-ep4/final.mp4",
       "duration_sec": 25.21,
       "cost_usd": 2.80,
       "notes": "EP4 format: simple studio backgrounds, strict NO HEAD/FACE MOVEMENT. Keqing/Zendaya SFX scene-1 reduced to 0.06 (was too loud)."
     }
   ],
-  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4"
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4",
+  "style_tags": "Dual-style split-frame format: LEFT side is the Genshin game render — anime cel-shaded, clean bold anime outlines, vibrant flat saturated colors, with the character's elemental particle aura (pyro flames, hydro water glow, electro sparks, cryo frost, geo amber shimmer). RIGHT side is the photorealistic twin — natural skin textures, realistic complexion, cinematic lighting, no cel-shading — wearing the identical costume and hair; for cast characters the right side is portrayed by the assigned real-world actor (see each character's actor_counterpart). Both sides share the exact same costume, hair, props and colors described in characters[]; only the render medium differs.",
+  "characters": [
+    {
+      "slug": "venti",
+      "name": "Venti",
+      "actor_counterpart": null,
+      "character_description": "young androgynous male bard Venti, teal and blue bard outfit with wind motifs and laurel wreath crown, short teal hair with two small braids, playful carefree expression, bow, slender lean androgynous build"
+    },
+    {
+      "slug": "hu-tao",
+      "name": "Hu Tao",
+      "actor_counterpart": null,
+      "character_description": "young East Asian woman, funeral director Hu Tao, dark red and black traditional Chinese outfit with golden talisman ornaments, brown hair in twin tails with red flower pins, warm tan complexion, mischievous grinning expression, ornate polearm with ghost flame motifs, petite energetic build"
+    },
+    {
+      "slug": "zhongli",
+      "name": "Zhongli",
+      "actor_counterpart": null,
+      "character_description": "tall East Asian man, Geo Archon Zhongli, dark brown and gold traditional Chinese scholar coat with ornate geo motifs, dark brown hair with gold ornamental accents, olive complexion, composed dignified sophisticated expression, ornate geo polearm, tall imposing dignified build"
+    },
+    {
+      "slug": "diluc",
+      "name": "Diluc",
+      "actor_counterpart": null,
+      "character_description": "tall European man, knight Diluc, dark red and black noble overcoat with silver buttons and dark cape, long dark red hair tied back with ribbon, pale complexion, serious brooding expression, large greatsword claymore, tall imposing muscular build"
+    },
+    {
+      "slug": "raiden-shogun",
+      "name": "Raiden Shogun",
+      "actor_counterpart": "Gal Gadot",
+      "character_description": "female Electro Archon Raiden Shogun, purple and violet shogun armor with intricate lightning bolt motifs and ornate shoulder guards, long dark purple hair flowing down, olive complexion, cold commanding regal expression, electro polearm, tall imposing regal build"
+    },
+    {
+      "slug": "tartaglia",
+      "name": "Tartaglia",
+      "actor_counterpart": "Tom Holland",
+      "character_description": "young male Fatui Harbinger Tartaglia, dark blue and crimson red Fatui uniform with silver insignia and high collar, bright orange styled hair, fair complexion, wide aggressive confident grin, hydro bow, athletic lean energetic build"
+    },
+    {
+      "slug": "furina",
+      "name": "Furina",
+      "actor_counterpart": "Florence Pugh",
+      "character_description": "female Hydro Archon Furina, teal and white elegant performer tailcoat with theatrical flair and top hat, light blue curled hair, fair complexion, dramatic theatrical wide-eyed expression, hydro catalyst, petite lively build"
+    },
+    {
+      "slug": "arlecchino",
+      "name": "Arlecchino",
+      "actor_counterpart": "Eva Green",
+      "character_description": "female Fatui Harbinger Arlecchino, black and white sharply asymmetric tailcoat with red cross markings on collar, pale white hair with dark streaks, pale complexion, cold calculating half-smile, pyro polearm with flame tip, tall imposing build"
+    },
+    {
+      "slug": "wriothesley",
+      "name": "Wriothesley",
+      "actor_counterpart": "Henry Cavill",
+      "character_description": "male Duke Wriothesley, grey and blue prison warden coat with dark accents and handcuff chain accessory, white and grey styled hair, fair complexion, cold handsome confident expression with slight smirk, cryo gauntlets, tall muscular powerful build"
+    },
+    {
+      "slug": "yae-miko",
+      "name": "Yae Miko",
+      "actor_counterpart": "Margot Robbie",
+      "character_description": "female Guuji Yae Miko, pink and white kitsune shrine maiden outfit with decorative fox ears and flowing wide sleeves, long pink hair with ornamental pins, fair complexion, confident sly playful expression with subtle smirk, electro catalyst, fox tail visible, tall elegant build"
+    },
+    {
+      "slug": "neuvillette",
+      "name": "Neuvillette",
+      "actor_counterpart": "Timothée Chalamet",
+      "character_description": "male Chief Justice Neuvillette, white and blue elegant long coat with intricate dragon scale patterns and hydro water motifs, long silver-blue hair flowing down, fair complexion, dignified austere expression with quiet authority, hydro catalyst, tall imposing slender regal build"
+    },
+    {
+      "slug": "navia",
+      "name": "Navia",
+      "actor_counterpart": "Sydney Sweeney",
+      "character_description": "female Spina di Rosula leader Navia, white and gold Victorian ball gown with intricate rose motifs and layered ruffles, long curly blonde hair with rose ornaments, fair complexion, warm radiant confident smile, ornate geo shotgun with golden filigree details, tall elegant regal build"
+    },
+    {
+      "slug": "shenhe",
+      "name": "Shenhe",
+      "actor_counterpart": "Emily Blunt",
+      "character_description": "female adeptus Shenhe, pale icy blue and white qipao-style outfit with cryo rope chains wrapped around body and trailing behind, long white hair in elaborate updo with blue ornamental pins and loose strands, fair complexion, cold austere expression with faint distant gaze, cryo polearm, tall slender powerful build"
+    },
+    {
+      "slug": "fischl",
+      "name": "Fischl",
+      "actor_counterpart": "Anya Taylor-Joy",
+      "character_description": "female Fischl von Luftschloss Narfidort, black and gold gothic aristocrat outfit with dramatic dark cape and ruffled details, long golden blonde hair with dark streaks and ornate black crow headpiece, fair complexion, theatrical haughty expression with dramatic intensity, electro bow, raven Oz perched on arm, slender elegant build"
+    },
+    {
+      "slug": "keqing",
+      "name": "Keqing",
+      "actor_counterpart": "Zendaya",
+      "character_description": "female Yuheng of the Liyue Qixing Keqing, purple and white noble Chinese hanfu outfit with electro lightning motifs and ornate golden accessories, long purple hair in twin ox-horn buns with lightning ornaments, warm complexion, sharp confident expression with determined directness, electro polearm, tall slender elegant build"
+    },
+    {
+      "slug": "eula",
+      "name": "Eula",
+      "actor_counterpart": "Scarlett Johansson",
+      "character_description": "female Spindrift Knight Eula Lawrence, blue and white aristocrat military coat with silver accents and cryo claymore carried over shoulder, short silver-white hair with blue ice crystal ornaments, fair complexion, cold disdainful expression with proud aristocratic bearing, cryo claymore, tall athletic powerful build"
+    },
+    {
+      "slug": "ayaka",
+      "name": "Ayaka",
+      "actor_counterpart": "Selena Gomez",
+      "character_description": "female Kamisato Ayaka, pale blue and white elegant kimono with snowflake cryo motifs and flowing wide sleeves, long blue-black hair in elaborate updo with white ornamental pins and delicate blue ribbons, serene graceful expression with a gentle confident smile, cryo sword, slender elegant noble build"
+    },
+    {
+      "slug": "nilou",
+      "name": "Nilou",
+      "actor_counterpart": "Dua Lipa",
+      "character_description": "female dancer Nilou, teal and white flowing dancer costume with hydro water motifs, lotus flower ornaments and layered veil skirt, long vivid red hair with decorative hairpins and flowing ribbons, olive complexion, joyful graceful dancing expression, hydro sword, petite elegant dancer build"
+    },
+    {
+      "slug": "yelan",
+      "name": "Yelan",
+      "actor_counterpart": "Ana de Armas",
+      "character_description": "female special operative Yelan, blue and dark navy bodysuit with hydro water motifs and intricate gold trim, flowing dark blue hair, warm complexion, elegant mysterious half-smile, hydro bow, tall athletic build"
+    },
+    {
+      "slug": "cyno",
+      "name": "Cyno",
+      "actor_counterpart": "Rami Malek",
+      "character_description": "male General Mahamatra Cyno, white and gold Egyptian-style armor with Anubis jackal headdress and hieroglyph motifs, dark hair under the ornate jackal mask, medium complexion, intense stoic expression with quiet authority, electro polearm, lean agile powerful build"
+    }
+  ]
 }
