@@ -93,39 +93,42 @@ Use this variant when `character_name = "You"` / the player is the protagonist (
 
 #### Structure
 
-| Clip | Beat | Timing | Goal |
+| Clip | Beat | Duration | Goal |
 |---|---|---|---|
-| **TEASER** | clip 1 | 0–5s | Dynamic visual of the alternate outcome. **TTS starts here.** Text overlay (via ASS): "WHAT IF THANKS TO YOU / [OUTCOME]". No character in frame — show the result: a battle won, a world saved, a city standing. |
-| **TITLE CARD** | clip 2 | 5–10s | Static atmospheric background. **TTS silent** (`tts_segment: null`). Title text: "WHAT IF: YOU / CRACKED / [THE EVENT]". Slow camera drift only. |
-| **HOOK** | clip 3 | 10–15s | Player-Commander on bridge/field — CTA embed: "Imagine, you downloaded [Game] from the link in bio… and changed everything." |
-| **CANON REMINDER** | clip 4 | 15–20s | The canonical crisis as it happened — the before. |
-| **DIVERGENCE** | clip 5 | 20–25s | The crew the player assembled. The exact moment they solved it. |
-| **TRANSFORMATION** | clip 6 | 25–30s | The turning point — shields reignite, armies rally, the threat collapses. |
-| **REVELATION** | clip 7 | 30–35s | Q / the Archon / the world reacts. Ironic final line. |
-| **CTA** | clip 8 | — | Standard CTA asset. |
+| **HOOK** | clip 1 | 5s | Active shot mid-crisis — something is already going wrong. TTS starts immediately. Voiceover opens with the offer hook (see below), plunging into the action. **No ASS overlay except Whisper subtitles.** |
+| **TITLE CARD** | clip 2 | 3s max | Static atmospheric background. **TTS silent** (`tts_segment: null`). Title text rendered via ASS: "WHAT IF THANKS TO YOU / [OUTCOME IN CAPS]". Slow drift only. |
+| **CANON REMINDER** | clip 3 | 5s | The canonical crisis — what happens without the player. The before. |
+| **CHARACTER/CREW** | clip 4 | 5s | The character the player pulled / the crew assembled — their key ability revealed. |
+| **DIVERGENCE** | clip 5 | 5s | The exact moment the outcome changes. The pivotal action. |
+| **CONSEQUENCE** | clip 6 | 5s | The turning point takes hold — the threat collapses, the ritual fails, the fleet survives. |
+| **REVELATION** | clip 7 | 5s | The world reacts. Ironic or triumphant final line. |
+| **CTA** | clip 8 | — | Standard CTA asset (game-specific). |
 
 #### Voiceover rules (mandatory)
 
-- **Opens with:** `"Imagine, you downloaded [Game Name] from the link in bio… and [outcome in 1 clause]."` — this line goes on the TEASER clip (clip 1), not clip 3.
-- Second-person throughout ("you assembled", "you cracked", "you saved") — NOT first-person alternate-self.
-- CTA embed in clip 3 hook: the phrase "from the link in bio" must appear in clip 3 (or clip 1) — not later.
+- **Clip 1 opens with the offer hook — naturally woven into the action:**
+  - Genshin: `"Imagine, you grabbed free Primogems from the link in bio, pulled [Character], and [outcome in 1 clause]."`
+  - Star Trek: `"Imagine, you downloaded Star Trek Timelines from the link in bio, assembled [crew/character], and [outcome in 1 clause]."`
+  - The offer is the causal explanation — "[Character] is here because you pulled them." This must be clear.
+- **The offer phrase appears ONCE — in clip 1 only.** Do NOT repeat "link in bio", "free Primogems", or "download" anywhere else in the script.
+- **Clip 3 (canon reminder) must NOT repeat clip 1.** Clip 1 = the diverged outcome as a hook. Clip 3 = the canonical before, told in past/conditional ("In canon…", "Without you…").
+- Second-person throughout ("you pulled", "you assembled", "you stopped") — NOT first-person alternate-self.
+- ~75–95 words total across clips 1, 3–7.
 - Clip 2 (title card): `tts_segment: null` — silence.
-- ~90–110 words total across clips 1, 3–7.
 
 #### Editor — PRE_MS for player-POV
 
-- `PRE_MS = 0` — TTS starts immediately at t=0 (teaser clip). No adelay.
-- Title card (clip 2, t=5–10s) is silent: the TTS segment for clip 2 is null, so no audio is generated for it; the TTS from clips 1 and 3+ are separate files concatenated around the silence.
-- `atempo = TTS_DUR / (MAIN_DUR)` — full duration, not MAIN_DUR minus 5.
-- MAIN_DUR = 5 + 5 + 5×5 + CTA_DUR (teaser + title + 5 story clips + CTA).
+- `PRE_MS = 0` — TTS starts immediately at t=0 (clip 1 hook). No adelay.
+- Title card (clip 2) is silent: TTS from clip 1 + silence(3s) + clips 3–7 TTS concatenated.
+- Title card duration is **3 seconds** (not 5s). Trim or generate accordingly.
+- `atempo = TTS_DUR / MAIN_DUR`. `MAIN_DUR = 5 + 3 + 5×5 + CTA_DUR`.
 
-#### Teaser clip — ASS title text
+#### Title card text (clip 2)
 
-Teaser clip (clip 1) gets its own ASS `Dialogue:` events (different font size from subtitles):
-- Two lines: `"WHAT IF THANKS TO YOU"` and `"[OUTCOME IN CAPS]"` (e.g. `"THE DOMINION WAR ENDED EARLY"`)
+Rendered via ASS `Dialogue:` events — same mechanism as subtitles, not drawtext or baked PNG:
+- Line 1: `"WHAT IF THANKS TO YOU"`, Line 2: `"[OUTCOME IN CAPS]"` (e.g. `"SCARAMOUCHE NEVER ASCENDED"`)
 - Font: Montserrat Black `\fs88`, white `\c&H00FFFFFF&`, centered `\an5`
-- y positions: 800 and 970 (lower than subtitle zone to avoid overlap with TTS subtitles)
-- Timing: `0:00:00.50–0:00:04.80`
+- Timing: `0:00:00.30–0:00:02.70` (fits within 3s clip)
 
 ---
 
@@ -188,7 +191,7 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
 
 ### Scenarist
 
-- **If `character_name = "You"` (player-POV):** use the **Player-POV variant** structure — teaser clip (clip 1, TTS starts), title card (clip 2, `tts_segment: null`), story clips (3–7), CTA (clip 8). Voiceover opens with `"Imagine, you downloaded [Game] from the link in bio… and [outcome]."` and stays second-person throughout.
+- **If `character_name = "You"` (player-POV):** use the **Player-POV variant** structure — hook clip (clip 1, TTS starts, no ASS overlay except subtitles), title card (clip 2, 3s, `tts_segment: null`), story clips (3–7), CTA (clip 8). Voiceover clip 1 opens with the offer hook naturally: Genshin = `"Imagine, you grabbed free Primogems from the link in bio, pulled [Character], and [outcome]."` / Star Trek = `"Imagine, you downloaded Star Trek Timelines from the link in bio, assembled [crew], and [outcome]."` Offer phrase appears ONCE (clip 1 only). Clip 3 = canon reminder ("In canon…") — must NOT repeat clip 1. Second-person throughout.
 - Write the alternate-self monologue (~90–120 words English, ~35–40s)
 - If the user asks for an offer/currency/pull/link-in-bio angle, use the **Offer-driven redcon variant** above:
   - clip 2 starts with the familiar doomed situation;
@@ -284,7 +287,7 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
 
 Format-specific parameters to compute and pass into §0:
 - **Standard redcon** (canonical character): `PRE_MS = 5000` — TTS starts after the 5 s title card via `adelay=5000|5000`. `atempo = TTS_DUR / (MAIN_DUR − 5)`. `MAIN_DUR = 5 + 6×5 + CTA_DUR`.
-- **Player-POV redcon** (`character_name = "You"`): `PRE_MS = 0` — TTS starts at t=0 (teaser clip 1). Title card (clip 2) has `tts_segment: null` — no TTS audio for that clip. Concatenate clip-1 TTS + silence(5s) + clips 3–7 TTS. `atempo = TTS_DUR / MAIN_DUR`. `MAIN_DUR = 5 + 5 + 5×5 + CTA_DUR`.
+- **Player-POV redcon** (`character_name = "You"`): `PRE_MS = 0` — TTS starts at t=0 (hook clip 1). Title card (clip 2) is **3 seconds** and has `tts_segment: null` — no TTS audio for that clip. Concatenate clip-1 TTS + silence(3s) + clips 3–7 TTS. `atempo = TTS_DUR / MAIN_DUR`. `MAIN_DUR = 5 + 3 + 5×5 + CTA_DUR`.
 - Fade-to-black: 1.0 s on the last story clip (scene-8) before CTA
 - Music: `volume=0.15`, `afade=t=out:st=(MAIN_DUR−1):d=1.0`
 

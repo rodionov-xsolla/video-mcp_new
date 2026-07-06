@@ -5,23 +5,22 @@
   "language": "en",
   "title": "Genshin Impact — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 0,
+  "last_episode": 1,
   "tts_engine": "chatterbox",
   "tts_note": "Genshin ALWAYS uses Chatterbox via fal-ai/chatterbox/text-to-speech. Voice ref: assets/genshin-impact/characters/traveller/voice-1.mp3 (the Traveler's voice). Second-person monologue throughout. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "format_overrides": {
     "note": "Player-POV variant. Character = the Traveler (player). Each episode: one canonical Teyvat crisis, one cross-nation team assembled via gacha pulls, one divergence outcome made possible by a character the Traveler pulled.",
-    "structure": "TEASER (clip 1, TTS starts) → TITLE CARD (clip 2, silent) → HOOK+CTA (clip 3) → CANON REMINDER (clip 4) → CREW ASSEMBLED (clip 5) → DIVERGENCE (clip 6) → REVELATION (clip 7) → CTA asset",
+    "structure": "HOOK (clip 1, TTS starts, active mid-crisis) → TITLE CARD (clip 2, 3s silent) → CANON REMINDER (clip 3) → CHARACTER PULLED (clip 4) → DIVERGENCE (clip 5) → CONSEQUENCE (clip 6) → REVELATION (clip 7) → CTA asset",
     "voiceover_hook": {
-      "template_en": "Imagine, you grabbed free Primogems from the link in bio… and [outcome in one clause].",
-      "placement": "clip 1 (teaser), first TTS line",
-      "note": "Must appear in clip 1. The phrase 'free Primogems from the link in bio' is the Genshin CTA hook — mandatory for attribution."
+      "template_en": "Imagine, you grabbed free Primogems from the link in bio, pulled [Character], and [outcome in one clause].",
+      "placement": "clip 1 (hook), first TTS line — appears ONCE only, never repeated",
+      "note": "Offer phrase is the causal setup: Primogems → pull [Character] → [Character] enables divergence. No second CTA mention anywhere in the script."
     },
     "cta_clip": {
       "type": "asset",
       "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4",
       "url_note": "If cta.mp4 doesn't exist for genshin-impact, stop and notify manager — do NOT use star-trek-timelines CTA.",
-      "spoken_cta_en": "Grab free Primogems — link in bio.",
-      "spoken_cta_note": "Short spoken CTA embedded in clip 3 (hook). Does NOT replace the cta.mp4 asset at the end."
+      "spoken_cta_note": "No spoken CTA in script — the cta.mp4 asset handles CTA at the end."
     }
   },
   "player_character": {
@@ -33,12 +32,23 @@
     "note": "Voice ref must be loaded for Chatterbox. Use Traveller.mp3 from game root if voice-1.mp3 missing."
   },
   "crisis_rotation": {
-    "done": [],
-    "do_not_repeat": [],
+    "done": [
+      {
+        "crisis": "Scaramouche installs Electro Gnosis — transforms into Shouki no Kami (Chapter III Act V)",
+        "episode": 1,
+        "date": "2026-07-06",
+        "pulled_character": "Nahida",
+        "note": "Nahida senses Akasha tampering early, alerts Traveler before transformation completes. Gnosis recovered, Scaramouche stopped before ascending."
+      }
+    ],
+    "do_not_repeat": [
+      "Teppei/Baizhu Delusion (refs created 2026-06-30, never released — skip, used as format example in redcon.md)",
+      "Osial/Zhongli Liyue (ref zhongli-seal created, never released — available for future if needed)",
+      "Scaramouche Gnosis / Shouki no Kami"
+    ],
     "candidates_for_future": [
       "Osial unleashed — Liyue Harbor threatened (Archon Quest Chapter I Act III)",
       "Raiden Shogun's Vision Hunt Decree — Inazuma civil war (Chapter II)",
-      "Scaramouche/Balladeer gains the Gnosis — Sumeru (Chapter III)",
       "Fontaine sinking prophecy — The Hydro Archon's trial (Chapter IV)",
       "Dvalin corruption — Stormterror attacks Mondstadt (Prologue Act II)",
       "Signora's death and Fatui retaliation (Chapter II Act III)",
@@ -47,5 +57,18 @@
   },
   "style_tags": "Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, soft outline anime aesthetic, magical elemental effects, Teyvat world environment, clean detailed character illustration",
   "color_palette": "sky blue #87ceeb, fantasy gold #f5d060, emerald green #50c878, primogem violet #a855f7, electro purple #7c3aed, pyro orange #f97316",
-  "episode_summaries": []
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-07-06",
+      "crisis": "Scaramouche installs Electro Gnosis — transforms into Shouki no Kami (Chapter III Act V)",
+      "pulled_character": "Nahida",
+      "crew": ["Nahida", "Cyno", "Alhaitham"],
+      "tts_voice": "Traveller (Chatterbox)",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/genshin-impact/2026-07-06-redcon/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=Kr8q96xPdVo",
+      "youtube_scheduled": "2026-07-07T20:59:00Z",
+      "notes": "First episode. Player-POV variant. Hook structure (no teaser ASS overlay). Nahida pulls via free Primogems → senses Akasha tampering 3 min early → Gnosis never fuses."
+    }
+  ]
 }
