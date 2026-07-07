@@ -403,6 +403,7 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - [ ] Cross-asset pre-flight passed (all URLs 200, distinct audio per clip, filename=index, scene_image_url↔hero) — `validation.md`
 - [ ] Each character from ONE locked ref; no photoreal-tagged refs; every `image_prompt` has full style prefix
 - [ ] Each I2V has an anti-drift negative derived from the resolved `style_tags`; each multi_prompt shot has a style anchor copied from `style_tags`; no multi_prompt ends on an invented face close-up
+- [ ] For every `<<<voice_N>>>` tag in every multi_prompt shot: the physical descriptor IMMEDIATELY preceding it belongs to `voice_ids[N-1]`'s character — check who actually SPEAKS the line, not just who is mentioned last in the sentence. Burned EP4 (genshin, 2026-07-07): a shot described character A then tagged `<<<voice_1>>>` for character B's line, sitting right after A's descriptor — Kling rendered both characters off-model/identity-confused.
 - [ ] Dialogue clips use I2V `multi_prompt + voice_ids`; no Avatar endpoint and no `clip_type: "avatar"`
 - [ ] Subtitles ASS events are clamped to dialogue scene windows; no bleed into action scenes or silence
 - [ ] fps normalized to 30 before concat
