@@ -1,6 +1,6 @@
 {
   "game_tag": "star-trek-timelines",
-  "total_stories": 4,
+  "total_stories": 5,
   "stories": [
     {
       "id": 1,
@@ -57,43 +57,66 @@
       "youtube_url": "https://www.youtube.com/watch?v=o_0lqlxes44",
       "yt_publish_at": "2026-07-04T20:59:00Z",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/videos/star-trek-timelines/2026-07-01/reddit-story_final.mp4"
+    },
+    {
+      "id": 5,
+      "date": "2026-07-07",
+      "tone": "touching",
+      "theme": "marriage-reconnection-through-shared-trek-nostalgia",
+      "moral_engine": "emotional withdrawal mistaken for indifference",
+      "game_situation": "husband plays Star Trek Timelines nightly while marriage grows silent after second child",
+      "false_verdict": "narrator was using the game to avoid his wife and didn't care about the relationship",
+      "pressure_source": "months of mutual silence and growing distance between spouses",
+      "narrator_flaw": "knew deep down he was escaping but kept rationalizing it as decompression",
+      "resolution_type": "positive",
+      "headline": "I played Star Trek Timelines every night. My wife thought I was avoiding her. She was right.",
+      "offerwall_angle": "downloaded game from Starfleet bio link (native — early story beat)",
+      "output_dir": "output/2026-07-06/star-trek-timelines/reddit-story/",
+      "youtube_url": "https://www.youtube.com/watch?v=8TYKrz7Ju-s",
+      "yt_publish_at": "2026-07-09T20:59:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/videos/star-trek-timelines/2026-07-06/reddit-story_final.mp4"
     }
   ],
   "anti_repetition": {
     "recent_themes": [
-      "real-life-friendship-fleet-surgeon",
       "lonely-player-finds-friendship-through-fleet-chat",
-      "lore-nerd-proves-fake-fans-wrong"
+      "lore-nerd-proves-fake-fans-wrong",
+      "marriage-reconnection-through-shared-trek-nostalgia"
     ],
     "recent_tones": [
-      "warm",
       "soft drama",
-      "funny-justice"
+      "funny-justice",
+      "touching"
     ],
     "recent_moral_engines": [
       "misjudged friendship as manipulation",
-      "dismissed-as-fake-fan-proven-right-by-knowledge"
+      "dismissed-as-fake-fan-proven-right-by-knowledge",
+      "emotional withdrawal mistaken for indifference"
     ],
     "recent_game_situations": [
       "lonely new player joins a Star Trek Timelines fleet",
-      "Trek Discord lore debate"
+      "Trek Discord lore debate",
+      "husband plays nightly while marriage grows silent after second child"
     ],
     "recent_false_verdicts": [
       "the narrator only talks to TemporalMedic to get carried",
-      "narrator is a fake Trek fan who plays gacha trash"
+      "narrator is a fake Trek fan who plays gacha trash",
+      "narrator was using the game to avoid his wife"
     ],
     "recent_pressure_sources": [
       "fleet chat accusations",
-      "Discord group piling on publicly"
+      "Discord group piling on publicly",
+      "months of mutual silence between spouses"
     ],
     "recent_resolution_types": [
+      "neutral-positive",
       "positive",
-      "neutral-positive"
+      "positive"
     ],
     "recent_hooks": [
-      "LogicOverFear username, best fleet tactician, surgeon reveal, COVID lockdowns, pasta dinner",
       "bio link download, lonely group-chat avoider, accused of using TemporalMedic for free carries, chat logs reveal he helped everyone",
-      "bio link download, mocked in Discord for playing STT, Treaty of Algeron lore fact silences crowd"
+      "bio link download, mocked in Discord for playing STT, Treaty of Algeron lore fact silences crowd",
+      "bio link download, nightly escape, wife sits down and asks about Spock, late father's TOS connection, Thursday ritual"
     ],
     "banned_combos": []
   }
