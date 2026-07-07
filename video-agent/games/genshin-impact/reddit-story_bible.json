@@ -1,6 +1,6 @@
 {
   "game_tag": "genshin-impact",
-  "total_stories": 2,
+  "total_stories": 3,
   "stories": [
     {
       "id": 1,
@@ -22,18 +22,36 @@
       "resolution_type": "positive",
       "headline": "My co-op friend said I'd never pull Hu Tao. He messaged me first.",
       "offerwall_angle": "link-in-bio primogems (native — watching this channel)",
-      "output_dir": "output/2026-07-01/genshin-impact/reddit-story"
+      "output_dir": "output/2026-07-01/genshin-impact/reddit-story",
+      "youtube_url": "https://www.youtube.com/watch?v=o_0lqlxes44"
+    },
+    {
+      "id": 3,
+      "date": "2026-07-07",
+      "tone": "soft-drama",
+      "theme": "parent-judgment-to-connection",
+      "moral_engine": "judgment for hobby",
+      "false_verdict": "narrator is an immature adult wasting time on a kids' game",
+      "pressure_source": "dad's repeated dismissal in front of family",
+      "resolution_type": "positive",
+      "headline": "My dad called Genshin embarrassing. Three months later he asked me to teach him.",
+      "offerwall_angle": "free Primogems from GenshinSnap bio link — casual lunch break click",
+      "output_dir": "output/2026-07-07/genshin-impact/reddit-story",
+      "youtube_url": "https://www.youtube.com/watch?v=wQkCJ_frsLc",
+      "yt_publish_at": "2026-07-11T20:59:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-07/reddit-story_final.mp4"
     }
   ],
   "anti_repetition": {
-    "recent_themes": ["sibling-reconnection", "f2p-triumph"],
-    "recent_tones": ["touching", "rage-to-relief"],
-    "recent_moral_engines": ["f2p-mockery"],
-    "recent_false_verdicts": ["forever F2P loser who will never pull a 5-star"],
-    "recent_pressure_sources": ["toxic co-op friend"],
+    "recent_themes": ["sibling-reconnection", "f2p-triumph", "parent-judgment-to-connection"],
+    "recent_tones": ["touching", "rage-to-relief", "soft-drama"],
+    "recent_moral_engines": ["f2p-mockery", "judgment for hobby"],
+    "recent_false_verdicts": ["forever F2P loser who will never pull a 5-star", "immature adult wasting time on a kids' game"],
+    "recent_pressure_sources": ["toxic co-op friend", "dad's repeated dismissal in front of family"],
     "recent_hooks": [
       "My sister and I used to be close. Then high school hit and we just drifted.",
-      "He called me a forever F2P loser. Said Hu Tao would never be mine."
+      "He called me a forever F2P loser. Said Hu Tao would never be mine.",
+      "He said it once. Flat. That anime kids stuff. No argument. Just walked away."
     ],
     "banned_combos": []
   }
