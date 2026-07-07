@@ -156,7 +156,8 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
   "tts": "text for external TTS (Avatar-based formats only; null for serial-drama I2V dialogue)",
   "subtitle_emphasis": ["word or phrase to emphasize"],
   "environment_state": "what is happening in the environment",
-  "action_description": "what happens in the scene — description for Storyboarder and Animator"
+  "action_description": "what happens in the scene — description for Storyboarder and Animator",
+  "continues_from_scene": "N or null — set when this clip is a direct spatial continuation of clip N (same location, same continuous moment, characters mid-repositioning from where clip N left off). See serial-drama.md 'blocking continuity' exception — Storyboarder chains clip N's PNG as an extra ref to prevent characters visually teleporting between clips."
 }
 ```
 
