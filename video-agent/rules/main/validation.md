@@ -91,6 +91,12 @@ For dialogue clips, the face ref must match `clip.hero`. (EP6: the Admiral clip 
 
 **Print the mapping table** (`clip# → image_url → audio_url → expected text → hero`) and confirm all four checks pass before launching Kling. This is the single highest-ROI gate in the pipeline — it catches 4 of the 5 most expensive EP6 bugs with zero vision tokens.
 
+## Time-gated PNG overlays — prove the composite, don't sample variance
+
+`overlay=...:enable='between(t,START,END)'` on a plain `-i overlay.png` input is a silent no-op: a single still image has a PTS that never advances, so `between(t,...)` never evaluates true and the overlay never appears — ffmpeg exits 0, no warning. Feed the PNG a real timeline first: `-loop 1 -t <total_duration> -i overlay.png`.
+
+Frame-variance/stddev sampling on the output is NOT sufficient proof the overlay rendered — ordinary scene content already produces high variance, so a broken (missing) overlay and a working one can both pass a variance threshold. To actually verify: extract a frame from inside the overlay window and one from outside it (or from a version rendered without the overlay filter), and diff them (pixel mean/stddev delta, or eyeball via Read — this specific check is worth the vision tokens, unlike routine PNG/MP4 validation). Burned in ROOM 1701 EP3 (2026-07-07, `serial-drama.md`): Editor reported the title card as burned in based on variance sampling; it was actually absent from the delivered final.mp4, caught only on user review.
+
 ## Asset selection: by path, not by visual inspection
 
 Where the right asset depends on game/format (CTA, openers, character refs, bg refs) — **resolve by `GAME_TAG`-scoped path or by Supabase URL recorded in the story bible / game config.** Never pick from a generic location and then visually verify the branding — the path is the validation.
