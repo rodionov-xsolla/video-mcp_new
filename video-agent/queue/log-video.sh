@@ -9,6 +9,11 @@
 # Usage:
 #   log-video.sh --game GAME --title "..." --format FORMAT --video-url URL [--youtube-url URL]
 #
+# Если передан --youtube-url, обязателен ОДИН из:
+#   --yt-publish-at <ISO8601>   — реальный SCHEDULED_FOR из вывода youtube-upload.sh
+#   --immediate                 — ролик реально ушёл public сразу (без отложки)
+# Без одного из них раньше тихо падало в now() и портило yt_published — теперь это ошибка.
+#
 # Требует в .env: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
 
 set -euo pipefail
@@ -25,7 +30,7 @@ for VAR in SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY; do
   fi
 done
 
-GAME=""; TITLE=""; FORMAT=""; VIDEO_URL=""; YOUTUBE_URL=""; YT_PUBLISH_AT=""
+GAME=""; TITLE=""; FORMAT=""; VIDEO_URL=""; YOUTUBE_URL=""; YT_PUBLISH_AT=""; IMMEDIATE=false
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -35,18 +40,23 @@ while [ $# -gt 0 ]; do
     --video-url)     VIDEO_URL="$2"; shift 2 ;;
     --youtube-url)   YOUTUBE_URL="$2"; shift 2 ;;
     --yt-publish-at) YT_PUBLISH_AT="$2"; shift 2 ;;
-    -h|--help) sed -n '1,17p' "$0"; exit 0 ;;
+    --immediate)     IMMEDIATE=true; shift ;;
+    -h|--help) sed -n '1,20p' "$0"; exit 0 ;;
     *) echo "ERROR: unknown arg $1" >&2; exit 1 ;;
   esac
 done
 
-# Use actual YouTube publishAt if provided; fall back to now() only for immediate publishes
+# yt_published must reflect the real YouTube publishAt — no silent now() fallback.
 YT_TS=""
 if [ -n "$YOUTUBE_URL" ]; then
   if [ -n "$YT_PUBLISH_AT" ]; then
     YT_TS="$YT_PUBLISH_AT"
-  else
+  elif [ "$IMMEDIATE" = true ]; then
     YT_TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  else
+    echo "ERROR: --youtube-url given but neither --yt-publish-at nor --immediate set." >&2
+    echo "       Pass the real SCHEDULED_FOR from youtube-upload.sh output, or --immediate if it went public now." >&2
+    exit 1
   fi
 fi
 

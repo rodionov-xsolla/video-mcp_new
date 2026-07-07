@@ -311,11 +311,11 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
      --format "$format_slug" \
      --video-url "$SUPABASE_VIDEO_URL" \
      --youtube-url "$YOUTUBE_URL" \        # omit if YT upload was skipped
-     --yt-publish-at "$YT_PUBLISH_AT"      # actual YouTube publishAt date from upload output
+     --yt-publish-at "$YT_PUBLISH_AT"      # actual YouTube publishAt date from upload output; use --immediate instead if it went public now
    ```
    - `--video-url` is the Supabase public URL from step 1 (stable per game/date/format → the upsert key, mapped to `output_video_url`).
    - `--title` lands in `input_idea` (the table's NOT NULL title field). `--format` and `--youtube-url` in their own columns.
-   - `--yt-publish-at` is the actual scheduled date captured from `youtube-upload.sh` output (`SCHEDULED_FOR=...`). This is what gets stored in `yt_published` — NOT the current timestamp. If omitted, falls back to `now()` (immediate publish case).
+   - `--yt-publish-at` is the actual scheduled date captured from `youtube-upload.sh` output (`SCHEDULED_FOR=...`). This is what gets stored in `yt_published` — NOT the current timestamp. **If `--youtube-url` is set, one of `--yt-publish-at` or `--immediate` is now required — the script errors instead of silently defaulting to `now()`** (burned EP: Klingon Targ logged as published 07.07 while actually scheduled for 10.07, because `--yt-publish-at` was dropped).
    - Requires `UNIQUE(output_video_url)` + `format`/`youtube_url` columns — see `queue/setup.sql` (run the ALTERs once in the SQL editor).
 
    **Publication timestamp fields** (`yt_published`, `tt_published`, `inst_published`): each stores the UTC datetime when the video was published to that platform, `NULL` = not yet published. The manager only ever sets `yt_published` (via `log-video.sh`). **TikTok and Instagram publishing is a separate process — the manager does NOT trigger it and does NOT mention it to the user after generation.** Those platforms are handled by a dedicated mobile-mcp posting agent launched independently via its own command — runbook: `rules/roles/publisher.md` (triggered by «Опубликовать в тик-ток» / «Опубликовать в инстаграм»; uses `queue/fetch-for-publish.sh` to stage the video on the phone, then `queue/log-publish.sh` to mark it published).
