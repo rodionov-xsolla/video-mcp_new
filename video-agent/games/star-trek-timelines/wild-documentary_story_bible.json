@@ -1,0 +1,30 @@
+{
+  "format": "wild-documentary",
+  "game_tag": "star-trek-timelines",
+  "narrator": {
+    "provider": "minimax",
+    "voice_id": "Deep_Voice_Man",
+    "register": "elderly naturalist, hushed awe-filled VO, David Attenborough register",
+    "language": "en"
+  },
+  "branding": {
+    "overlay_local": "games/star-trek-timelines/Wildlife_overlay.png",
+    "overlay_supabase": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/wild-documentary-overlay.png",
+    "label": "STAR TREK TIMELINES / WILDLIFE"
+  },
+  "covered_creatures": [
+    "Klingon Targ"
+  ],
+  "episodes": [
+    {
+      "ep": 1,
+      "creature": "Klingon Targ",
+      "biome": "Volcanic lowlands of Qo'noS",
+      "date": "2026-07-07",
+      "supabase_url": null,
+      "yt_url": null,
+      "yt_publish_at": "2026-07-10T20:59:00Z",
+      "cta_sign": "Download the game / Link in bio"
+    }
+  ]
+}
