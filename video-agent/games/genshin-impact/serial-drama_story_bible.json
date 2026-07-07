@@ -7,7 +7,7 @@
   "created_at": "2026-06-04",
   "last_episode": 3,
   "planned_arc": {
-    "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion only, all combat/running/chases = CUT between clips not animation, protagonist always faces camera, cliffhanger spoken line = Avatar TTS). Childe is the reluctant protector — his every action should read as either threat or sacrifice until the last episode. No on-screen text. After shipping an episode, fold its loops/status into characters[], active_loops, episode_summaries. Do NOT re-invent episodes while this arc has unshipped entries.",
+    "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-6 clips under serial-drama constraints (max 2 chars per frame; see production_rules for the EP4+ Kling I2V voice_ids pipeline — Avatar is retired, macro movement/combat IS allowed in I2V for this series, cliffhanger spoken line is Kling I2V dialogue not Avatar TTS). Childe is the reluctant protector — his every action should read as either threat or sacrifice until the last episode. No on-screen text. After shipping an episode, fold its loops/status into characters[], active_loops, episode_summaries. Do NOT re-invent episodes while this arc has unshipped entries.",
     "episodes": [
       {
         "episode": 1,
@@ -433,7 +433,7 @@
       "name": "Childe",
       "role": "protagonist",
       "character_description": "male Fatui Harbinger Tartaglia, dark blue and red Fatui uniform with hydro-red accents, short bright orange hair, sharp confident grin softening into something genuine, hydro blades manifested at his sides, athletic lean build",
-      "voice": "chatterbox",
+      "voice": null,
       "voice_ref": "games/genshin-impact/Childe.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/voice-ref.mp3",
       "status": "EP3: Staged a fake fight against Lumine to fool the Fatui watcher — without warning her. Whispered 'Trust me' mid-fight. When the rooftop watcher took a shot aimed at Lumine, stepped into the bullet. Now on one knee, shoulder bleeding. His sacrifice exposed: he protects her even at cost to himself.",
@@ -442,13 +442,17 @@
         "Lumine": "sacrificed himself for her — she now knows he's been protecting her; question is whether she forgives the deception",
         "Agent": "staged loyalty performance succeeded — watcher fired at Lumine not Childe, meaning Childe appeared to be the threat; but now Childe is down",
         "Fatui": "loyal until the moment he isn't"
-      }
+      },
+      "prompt_descriptor": "male Fatui Harbinger Tartaglia, short bright orange hair, dark blue and red Fatui uniform with hydro-red accents, hydro blades manifested at his sides, sharp confident grin, athletic lean build",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/sheet.png",
+      "voice_id_kling": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/voice-ref.mp3",
+      "voice_note": "EP1-3 used Chatterbox TTS (chatterbox) + Kling Avatar v2 lipsync — retired 2026-07-07. EP4+ uses Kling native voice cloning via voice_id_kling (same reference MP3, reused). confident, sharp, sacrificial-hero warmth under bravado — fits a Fatui Harbinger hiding protectiveness behind jokes."
     },
     {
       "name": "Lumine",
       "role": "protagonist",
       "character_description": "female Traveler Lumine, white and gold traveler outfit with star constellation motifs and flowing white sash, long blonde hair with signature silver star-shaped hair clip, sharp determined expression with a hint of wariness, one-handed sword at her side, graceful athletic build",
-      "voice": "chatterbox",
+      "voice": null,
       "voice_ref": "games/genshin-impact/Traveller.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/voice-ref.mp3",
       "status": "EP3: Fought back in what she believed was a real attack — genuinely furious. Realized mid-sequence it was staged only when Childe took the bullet aimed at her. Now watching him bleed. Anger and confusion colliding with something she doesn't want to name.",
@@ -456,13 +460,17 @@
       "relationships": {
         "Childe": "he took a bullet for her after deceiving her — the deception and the sacrifice are both true at once; she doesn't know what to do with that",
         "Agent": "active threat — directly targeted"
-      }
+      },
+      "prompt_descriptor": "female Traveler Lumine, long blonde hair with silver star-shaped hair clip, white and gold traveler outfit with star constellation motifs and flowing white sash, one-handed sword at her side, graceful athletic build",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/sheet.png",
+      "voice_id_kling": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/voice-ref.mp3",
+      "voice_note": "EP1-3 used Chatterbox TTS (chatterbox) + Kling Avatar v2 lipsync — retired 2026-07-07. EP4+ uses Kling native voice cloning via voice_id_kling (same reference MP3, reused). sharp, determined, guarded — softens only when genuinely shaken."
     },
     {
       "name": "Agent",
       "role": "antagonist",
       "character_description": "male Fatui Agent, dark charcoal and black Fatui operative coat with deep crimson Fatui insignia, silver Fatui half-mask obscuring the upper face, cold calculating expression, hands clasped behind his back, average compact build radiating controlled menace",
-      "voice": "chatterbox",
+      "voice": null,
       "voice_ref": "games/genshin-impact/Fatui_dottore.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fatui-agent/voice-ref.mp3",
       "status": "EP2: Watcher (proxy/subordinate) observed the confrontation from the rooftop. Whether the Agent received a report is unknown. Childe's performance may or may not have been convincing.",
@@ -470,7 +478,11 @@
       "relationships": {
         "Childe": "superior issuing an ultimatum — waiting for Childe's answer",
         "Lumine": "active target — now confirmed present in Liyue"
-      }
+      },
+      "prompt_descriptor": "male Fatui Agent, silver Fatui half-mask obscuring the upper face, dark charcoal and black Fatui operative coat with deep crimson Fatui insignia, hands clasped behind his back, compact build radiating controlled menace",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fatui-agent/sheet.png",
+      "voice_id_kling": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fatui-agent/voice-ref.mp3",
+      "voice_note": "EP1-3 used Chatterbox TTS (chatterbox) + Kling Avatar v2 lipsync — retired 2026-07-07. EP4+ uses Kling native voice cloning via voice_id_kling (same reference MP3, reused). cold, measured, controlled menace — a Fatui operative who never raises his voice."
     }
   ],
   "active_loops": [
@@ -625,5 +637,19 @@
       "youtube_url": "https://www.youtube.com/watch?v=WNM4sqbEzwM",
       "scheduled_at": "2026-06-20T20:59:00Z"
     }
+  ],
+  "production_rules": [
+    "SWITCHED 2026-07-07 (from Room 1701 precedent): all 'Don't Save Me' clips are Kling I2V, including dialogue. Do not use Kling Avatar v2 and do not call fal-ai/kling-video/ai-avatar/*. EP1-3 used Kling Avatar v2 + Chatterbox TTS (see episode_summaries notes) — that mechanism is now retired for this series; EP4+ use Kling native voice cloning instead.",
+    "Dialogue scenes use Kling I2V multi_prompt + voice_ids + generate_audio:true. Reusable voices: Childe, Lumine, Agent (voice_id_kling per character below). Each Kling request uses at most 2 voice_ids and maps them locally to <<<voice_1>>>/<<<voice_2>>>; split 3-speaker exchanges (e.g. Agent+Childe+Lumine together) into multiple clips.",
+    "USER OVERRIDE — macro movement IS ALLOWED for this series, unlike the default serial-drama micro-motion-only rule. 'Don't Save Me' is a combat/thriller drama (blade strikes, gunfire, running, chases) — action_description and multi_prompt shots MAY describe literal combat/running/hits directly. Still respect Kling's own physical plausibility limits (no more coherent than a 3-5s continuous shot can sell) and still cut between clips for anything a single continuous I2V motion can't carry believably.",
+    "Dialogue I2V target length 6-10s, matching Room 1701 convention, but pacing follows this series' dramatic tension (slower/heavier than sitcom timing) rather than a fixed words/sec default — read each scene's emotional weight.",
+    "Attach character refs (character-sheet + location ref) to every scene image generation. Every visible or speaking character must be included in scene image_urls with their locked ref. Missing ref = stop before Animator.",
+    "Do not rely on character names in NB2/Kling prompts. Use the character's `prompt_descriptor` field verbatim in every scene image_prompt and immediately before each <<<voice_N>>> tag in multi_prompt — battle-tested pattern from Room 1701 EP1-3.",
+    "For dialogue I2V, voice_ids order, <<<voice_N>>> tags, speaker names, and physical descriptors must all point to the same character.",
+    "Any spoken line inside a dialogue I2V clip must have generate_audio:true, voice_ids, and <<<voice_N>>>; do not accidentally make a dialogue beat silent.",
+    "If a required story beat does not fit the 2-voice or 512-character shot limits, split/add a clip instead of dropping the beat.",
+    "Generate background music with MiniMax Music (dramatic/tense mood, not comedic) unless the user explicitly asks for a local library track.",
+    "NO on-screen text / title cards for this series (locked in planned_arc note) — do not add a Room-1701-style overlay-series.png; this series has none and should not get one.",
+    "Max 6 scenes per episode per the format's $7-10 budget cap, same as every other serial-drama series."
   ]
 }
