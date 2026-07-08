@@ -57,6 +57,24 @@
   },
   "style_tags": "Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, soft outline anime aesthetic, magical elemental effects, Teyvat world environment, clean detailed character illustration",
   "color_palette": "sky blue #87ceeb, fantasy gold #f5d060, emerald green #50c878, primogem violet #a855f7, electro purple #7c3aed, pyro orange #f97316",
+  "character_variant_episodes": {
+    "note": "One-off classic-character redcon episodes (canonical character + alternate-self, first-person monologue) — NOT part of the Player-POV crisis_rotation numbering above. Kept separate so future runs don't confuse these with the numbered Traveler-POV series or its do_not_repeat list.",
+    "done": [
+      {
+        "date": "2026-07-08",
+        "character_name": "Childe (Tartaglia)",
+        "alternate_designation": "The Eleventh, Unchained",
+        "divergence_point": "Inazuma Ch. II Act III, Narukami Shrine duel — instead of voluntarily standing down after winning the fight he wanted, he pushes past the Foul Legacy limit he always respects in canon; the shrine collapses.",
+        "named_casualty": "Kujou Sara, crushed in the shrine collapse",
+        "downstream_consequence": "Fontaine's Golden House convicts him of manslaughter instead of leniency; he tears away from the Fatui/Tsaritsa entirely rather than accept judgment.",
+        "tts_voice": "Chatterbox clone of Childe's own voice ref (games/genshin-impact/Childe.mp3), degraded stability/style (0.05/0.9) for the corrupted alternate register",
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-08/redcon_final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=XeeWPHBzk_A",
+        "yt_publish_at": "2026-07-14T20:59:00Z",
+        "notes": "User pitch was 'Childe joins the villains', which doesn't work as a clean divergence since he's already a Fatui Harbinger — pivoted to a real canon inflection point (Narukami duel) with an actual named-character death instead. Used the genshin-only CTA banner (branding/banner-genshin.png, 'GAIN FREE PRIMOGEMS / LINK IN BIO') as a fade-in/fade-out image overlay on clip 3 only — top-anchored, y=80, width~1010 — applying the exact placement/scope + eof_action=pass freeze-fix already learned from the star-trek-timelines Worf episode, so it worked clean on the first assembly pass this time. Animator was also briefed hard on dynamic camera work (push/pull/orbit + action + atmosphere, multi_prompt on clips 4-5) per repeated user feedback that prior redcon episodes read as static."
+      }
+    ]
+  },
   "episode_summaries": [
     {
       "episode": 1,
