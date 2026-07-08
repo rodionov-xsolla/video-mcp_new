@@ -199,7 +199,7 @@ Kling **does not understand** character names, motivations, emotions. Understand
 - ❌ Moods: "tension fills the room", "dramatic moment" → does not convert
 - ❌ Motivations: "realizing the truth", "betrayed by his captain" → abstract
 - ❌ Literature: "the weight of command presses on his shoulders" → zero visual
-- ❌ Passive freeze phrases: "remains still", "holds position", "stays motionless", "does not move", "freezes in place" — мёртвый кадр, Kling воспроизводит как статику. Каждый элемент кадра должен что-то делать каждую секунду.
+- ❌ Passive freeze phrases: "remains still", "holds position", "stays motionless", "does not move", "freezes in place" — this reads as a dead frame; Kling renders it as static. Every element in frame should be doing something every second.
 
 For serial-drama dialogue, this applies to `multi_prompt` shots too: names may appear only in your internal mapping table, not as the model-facing identifier. The model-facing prompt must identify people by visible traits and position: clothing, hair, build, accessories, frame side, current action.
 
@@ -339,23 +339,25 @@ Camera slow push-in. ++Figure in foreground++ turns head slowly left, jaw tighte
 
 Not more than one `++` per prompt.
 
-### Avatar v2 API не поддерживает negative_prompt
+### Avatar v2 API does not support negative_prompt
 
-Endpoint `fal-ai/kling-video/ai-avatar/v2/standard` (и `/pro`) принимает только
-3 параметра: `image_url`, `audio_url`, `prompt`. Любой `negative_prompt` в body
-fal.ai тихо игнорирует (verified против схемы fal.ai, 2026-05). Раньше мы клали
-длинный anti-text negative_prompt в каждый Avatar-вызов — он не делал ничего.
+Endpoint `fal-ai/kling-video/ai-avatar/v2/standard` (and `/pro`) accepts only
+3 parameters: `image_url`, `audio_url`, `prompt`. Any `negative_prompt` in the
+body is silently ignored by fal.ai (verified against the fal.ai schema, 2026-05).
+We used to put a long anti-text negative_prompt in every Avatar call — it did
+nothing.
 
-**Защита от text-артефактов = upstream, в Storyboarder §6.1.1** (zero-text rule
-для Avatar PNG). На стороне Animator контроля нет — если в исходном PNG есть
-меню/вывески/логотипы/брендинг, Kling Avatar превратит их в иероглифы при
-движении, независимо от длины клипа (артефакты видели на 7s клипах).
+**Protection against text artifacts happens upstream, in Storyboarder §6.1.1**
+(zero-text rule for Avatar PNGs). Animator has no control on its side — if the
+source PNG has menus/signs/logos/branding, Kling Avatar will turn them into
+garbled glyphs during motion, regardless of clip length (artifacts seen even
+on 7s clips).
 
-Если Animator получает PNG с явным текстом в кадре для Avatar-сцены — return
-to Storyboarder, не запускать Avatar.
+If Animator receives a PNG with visible text in frame for an Avatar scene —
+return it to Storyboarder, do not run Avatar.
 
-В motion_prompt держать руки выше пояса (на столе/на груди/у лица). Зона
-ниже пояса — область, где Kling «дорисовывает» галлюцинированный текст.
+In `motion_prompt`, keep hands above the waist (on the table/chest/near the
+face). The area below the waist is where Kling "hallucinates" garbled text.
 
 ---
 
@@ -500,30 +502,30 @@ Serial-drama dialogue body:
 }
 ```
 
-### Elements — ввести нового персонажа/объект в конкретный шот
+### Elements — introduce a new character/object into a specific shot
 
-> ✅ **Burn-tested 2026-06-01 (v3 Standard, $0.50).** `elements` + `multi_prompt` работают вместе. Полная схема и выводы — `tools/fal-ai.md §2c`.
-> ⚠️ **`elements` требуют `multi_prompt: true`.** Передача `elements` без `multi_prompt` вызывает 500 на стороне Kling при fetch результата (submit проходит, ошибка откладывается). Никогда не используй elements с одиночным prompt.
+> ✅ **Burn-tested 2026-06-01 (v3 Standard, $0.50).** `elements` + `multi_prompt` work together. Full schema and findings — `tools/fal-ai.md §2c`.
+> ⚠️ **`elements` requires `multi_prompt: true`.** Passing `elements` without `multi_prompt` causes a 500 on Kling's side at result-fetch time (submit succeeds, the error is deferred). Never use elements with a single prompt.
 
-`multi_prompt` тянет всё из одного `start_image_url` → новые сущности в кадре сами не появляются. Чтобы в шоте N вошёл персонаж/объект, которого нет на стартовом кадре:
+`multi_prompt` pulls everything from one `start_image_url` → new entities do not appear in frame on their own. To bring a character/object into shot N that isn't in the start frame:
 
-1. Storyboarder генерит его референсы (фронталь + ≥1 ракурс), грузит в Supabase (`storyboarder.md §15.2`).
-2. Кладёшь в `elements[0]` (полная схема — `tools/fal-ai.md §2c`):
+1. Storyboarder generates its references (frontal + ≥1 angle), uploads to Supabase (`storyboarder.md §15.2`).
+2. Put them into `elements[0]` (full schema — `tools/fal-ai.md §2c`):
    ```json
    "elements": [{"frontal_image_url": "…/worf-front.png", "reference_image_urls": ["…/worf-side.png", "…/worf-3q.png"]}]
    ```
-3. В промптах шотов до N — **не упоминаешь** элемент; в промпте шота N — `@Element1 enters the frame`.
+3. In shot prompts before N — **do not mention** the element; in shot N's prompt — `@Element1 enters the frame`.
 
-- `reference_image_urls` **обязателен (≥1)**. Если чистый ракурс один — допустим дубликат фронтали, но идентичность слабее.
-- `elements` — на уровне запроса, не шота. `@ElementN` зовётся из `prompt` любого шота.
-- Video-элемент — только 1 на запрос (`video_url` + опц. `voice_id`).
-- Все URL — постоянные Supabase, НЕ fal.media.
-- Style-anchor и анти-фотореал negative по-прежнему в КАЖДОМ шоте — element не отменяет правил дрейфа (`serial-drama.md`).
+- `reference_image_urls` **is required (≥1)**. If only one clean angle exists, a duplicate of the frontal is acceptable, but identity fidelity is weaker.
+- `elements` is request-level, not shot-level. `@ElementN` is called from `prompt` in any shot.
+- Video-element — only 1 per request (`video_url` + optional `voice_id`).
+- All URLs must be permanent Supabase, NOT fal.media.
+- Style-anchor and anti-photoreal negative still go in EVERY shot — an element does not override the drift rules (`serial-drama.md`).
 
-**Где element реально помогает (из теста):**
-- ✅ **Крупный план лица в финальном шоте** — заякоривание элементом чинит EP6-дрейф «третий шот плывёт в реализм». Используй element для on-model клоуз-апа лица, которого нет на стартовом кадре.
-- ⚠️ **Мелкая/перекрытая область** (лицо за стеклом, в толпе, под цветным светом) — идентичность element НЕ гарантируется, читается обобщённо. Для узнаваемости давай элементу заметную площадь кадра. Если важна именно узнаваемость в мелком плане — отдельный клип со своим start-frame надёжнее.
-- ✅ **Проверяй `video.url` в результате** — валидация elements отложенная, ошибка приходит в `detail` при fetch (см. §2c), а не на submit.
+**Where an element actually helps (from testing):**
+- ✅ **Close-up on the face in the final shot** — anchoring with an element fixes the EP6 drift where "the third shot drifts into realism." Use an element for an on-model face close-up that isn't in the start frame.
+- ⚠️ **Small/occluded area** (face behind glass, in a crowd, under colored light) — element identity is NOT guaranteed and reads as generic. For recognizability, give the element a noticeable share of the frame. If recognizability specifically matters in a small/occluded shot, a separate clip with its own start-frame is more reliable.
+- ✅ **Check `video.url` in the result** — elements validation is deferred, the error arrives in `detail` at fetch time (see §2c), not at submit.
 
 ### Multi-call chaining (sequences > 15s)
 
@@ -543,8 +545,8 @@ This preserves narrative continuity AND keeps each call within the 15s cap. Tota
 | ≤ 15s sequence of multiple distinct actions from one anchor (montage, combo) | **multi_prompt** (cheaper, smoother shot transitions) |
 | > 15s sequence | **multi_prompt × N calls + bridge** (above) |
 | Different locations / different start anchors per shot | **Separate I2V calls** (multi_prompt is single-anchor only) |
-| New character/object enters mid-sequence, заметной площадью кадра (same location, one anchor) | **multi_prompt + `elements`** (см. выше, burn-tested) |
-| New character must be RECOGNISABLE в мелком/перекрытом плане (за стеклом, в толпе) | **Separate I2V** со своим start-frame — element там читается обобщённо |
+| New character/object enters mid-sequence with a noticeable share of the frame (same location, one anchor) | **multi_prompt + `elements`** (see above, burn-tested) |
+| New character must be RECOGNISABLE in a small/occluded shot (behind glass, in a crowd) | **Separate I2V** with its own start-frame — an element reads as generic there |
 | One simple action, 5–10s | **Regular I2V** (single `prompt`) |
 
 ### Seamless-loop clips — `loop_hint` (⚠️ UNVERIFIED, burn-test pending)
@@ -594,25 +596,27 @@ Body (minimum):
 - `audio_url` — TTS .mp3, **Supabase public URL** (not fal.ai temp from ElevenLabs)
 - `prompt` — motion_prompt (see section 7)
 
-**НЕ добавлять `negative_prompt`** — параметр API'ем игнорируется (см. §4).
-Защита от text-артефактов делается upstream в Storyboarder §6.1.1.
+**Do NOT add `negative_prompt`** — the API silently ignores this parameter
+(see §4). Protection against text artifacts happens upstream in Storyboarder
+§6.1.1.
 
-### Длина Avatar-клипа — hard limit 25s
+### Avatar clip length — hard limit 25s
 
-Endpoint позволяет до 60s, fal.ai dev guide рекомендует 5–30s. По нашему опыту
-артефакты temporal drift (псевдо-субтитры, иероглифы в нижней трети кадра)
-начинаются стабильно от ~30s. Берём запас.
+The endpoint allows up to 60s; the fal.ai dev guide recommends 5–30s. In our
+experience, temporal-drift artifacts (pseudo-subtitles, garbled glyphs in the
+bottom third of the frame) start reliably appearing from ~30s onward. We keep
+a safety margin.
 
-**Правило:** `TTS_dur` для Avatar-сцены ≤ 25s.
+**Rule:** `TTS_dur` for an Avatar scene ≤ 25s.
 
-Если TTS_dur > 25s:
-- НЕ запускать Avatar. Stop.
-- Вернуть сцену Scenarist'у с инструкцией «сократить реплику до ≤25s TTS»
-  (≈55–60 слов EN на нормальной скорости, ≈50 RU).
-- Дробление одной реплики на несколько Avatar-клипов с тем же `image_url`
-  не делаем — слишком много возни на склейке lipsync.
+If TTS_dur > 25s:
+- Do NOT run Avatar. Stop.
+- Return the scene to Scenarist with the instruction "shorten the line to
+  ≤25s TTS" (≈55–60 words EN at normal pace, ≈50 RU).
+- Do not split one line across multiple Avatar clips sharing the same
+  `image_url` — too much hassle stitching lipsync together.
 
-Sanity-check перед каждым Avatar-вызовом:
+Sanity-check before every Avatar call:
 
 ```bash
 TTS_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 scene-K.mp3)

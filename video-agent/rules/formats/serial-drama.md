@@ -101,7 +101,7 @@ Serial-drama dialogue is I2V, so `duration_sec` is the actual rendered clip leng
 
 - Dialogue I2V target length is **6–10s**. Go longer only with explicit `duration_reason` and budget check.
 - `multi_prompt` shot duration is not fixed. Default 2–3s per shot; 4s only when the phrase or acting beat genuinely needs it.
-- Estimate spoken timing before generation: `speech_seconds = word_count / words_per_second`. ROOM 1701 default pace is ~2.4 words/sec; relaxed/sarcastic can be slower, tension/Michael mission-rant beats can be faster. Avoid accidental taratorка caused by too many words in a short shot.
+- Estimate spoken timing before generation: `speech_seconds = word_count / words_per_second`. Default pace is ~2.4 words/sec; relaxed/sarcastic lines can be slower, tension/mission-rant beats can be faster. Avoid accidentally cramming too many words into a short shot.
 - Add acting/pause padding when needed: +0.2s for a simple line, +0.4–0.7s for pause/comma/reaction, +0.8–1.2s for prop handoff or physical beat.
 - One Kling dialogue request can use at most 2 `voice_ids`. The series/story bible may have 3+ reusable character voices, but each request remaps only the voices used in that clip to local `<<<voice_1>>>` / `<<<voice_2>>>` tags. If a scene needs 3 speaking characters in the same moment, split the scene into multiple clips.
 - Prompt text per shot must stay ≤512 characters.
@@ -310,7 +310,7 @@ vertical 9:16 frame, no text overlays, keep facial features exactly matching the
   - **Carry the style anchor into EVERY shot of a `multi_prompt`**, not just shot 1 — each shot's prompt opens with the resolved `style_tags` + current location lighting. The anchor is LOCATION-SPECIFIC, not a boilerplate: prepend the exact `style_tags` string, then the per-location lighting (e.g. `"..., warm Edison bulb interior light"` for a coffee shop interior; `"..., soft warm morning light, exterior"` for exterior; `"..., warm lamp light, bedroom"` for an interior bedroom). The style string itself is never hardcoded here — it is copied from `style_tags`. Late shots without an anchor drift to the model's prior.
   - **Carry physical descriptors into EVERY shot of a `multi_prompt`**, especially immediately before each `<<<voice_N>>>` tag. Do not rely on names: the model will assign lines to the wrong visible person. Full physical description = at least hair color/style, glasses if any, hoodie/top color, and one distinctive item (headphones, badge, necklace).
   - **Do not end a `multi_prompt` on a tight close-up of a face that is not present in the start frame.** This was the real "problem is always in the third shot": both EP6 multi-prompts ended on an invented face close-up; by the last shot Kling has left the start frame and re-renders that face with its own (realistic) prior. Keep the final shot within the framing the start frame supports, or split the close-up into its own clip.
-  - **Второй персонаж входит в середине `multi_prompt`-клипа** → через Kling `elements` + `@Element1` в нужном шоте (`animator.md §5a`, burn-tested 2026-06-01). Работает, **если персонаж занимает заметную площадь кадра** (особенно крупный план лица — чинит дрейф финального шота). Для узнаваемости в мелком/перекрытом плане (лицо за стеклом и т.п.) element читается обобщённо → делай отдельный клип со своим start-frame.
+  - **A second character enters mid-`multi_prompt` clip** → via Kling `elements` + `@Element1` in the relevant shot (`animator.md §5a`, burn-tested 2026-06-01). Works well **when the character occupies a noticeable share of the frame** (especially a face close-up — this fixes final-shot drift). For recognizability in a small/occluded shot (face behind glass, etc.) an element reads as generic → use a separate clip with its own start-frame instead.
 - **Do NOT use Avatar** in serial-drama. If a storyboard contains `clip_type: "avatar"` or an Avatar endpoint, return it to Scenarist before generation.
 - General rules — `rules/roles/animator.md`
 
@@ -342,7 +342,7 @@ vertical 9:16 frame, no text overlays, keep facial features exactly matching the
 - **CTA included in concat list** as the last clip (not a separate re-encode)
 - TBC overlay 2s before the end (before fade)
 - Fade out 1.0s on MAIN_DUR (before CTA); CTA goes after fade in silence
-- **Episode title card — use the series overlay PNG, not a Pillow-generated strip.** Each series has a locked `overlay-series.png` in `games/{GAME_TAG}/`. Load it as an ffmpeg input, scale to fit 1080px wide (`scale=1080:-1`), overlay centered on the frame (`x=(main_w-overlay_w)/2:y=(main_h-overlay_h)/2`) during the title-card window defined in `storyboard.json episode_metadata.title_card_position`. Visible 5 seconds with fade-in 0.5s + fade-out 0.5s (starting at t=4.5s relative to overlay start). For ROOM 1701: `games/star-trek-timelines/overlay-series.png`.
+- **Episode title card — use the series overlay PNG, not a Pillow-generated strip.** Each series has a locked `overlay-series.png` in `games/{GAME_TAG}/`. Load it as an ffmpeg input, scale to fit 1080px wide (`scale=1080:-1`), overlay centered on the frame (`x=(main_w-overlay_w)/2:y=(main_h-overlay_h)/2`) during the title-card window defined in `storyboard.json episode_metadata.title_card_position`. Visible 5 seconds with fade-in 0.5s + fade-out 0.5s (starting at t=4.5s relative to overlay start).
 - **PNG overlay input MUST be given a real timeline — `-loop 1 -t <total_duration>` — or `enable='between(t,...)'` silently never fires.** A plain `-i overlay-series.png` produces a single-frame stream whose PTS never advances past ~0, so the `overlay` filter's `enable=between(t,START,END)` gate never evaluates true — ffmpeg exits 0, no error, and the title card is simply absent from every frame. This is a silent no-op, not a crash. Burned in ROOM 1701 EP3 (2026-07-07): the first Editor pass reported the title card as burned in (based on frame-variance sampling, which false-positived on the underlying scene content), but the overlay was missing from the delivered final.mp4 — caught only when the user manually reviewed the video. **Verification must extract actual frames inside the overlay window and pixel-diff them against a frame outside the window** (or against a version rendered without the overlay filter) — variance/stddev sampling on a single frame is not sufficient proof, since normal scene content can also produce high variance.
 - General rules — `rules/roles/editor.md`
 
@@ -350,7 +350,7 @@ vertical 9:16 frame, no text overlays, keep facial features exactly matching the
 
 ## CTA (Call to Action)
 
-The CTA video is taken from Supabase `game_assets` (tag `cta` + `video`). Manager downloads it in Phase 0 and hands it to Editor. For star-trek-timelines: `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4` (5s, no embedded audio — inject anullsrc).
+The CTA video is taken from Supabase `game_assets` (tag `cta` + `video`), resolved by `GAME_TAG` — see `editor.md §5.1` for the lookup order. Manager downloads it in Phase 0 and hands it to Editor. If the CTA has no embedded audio, inject `anullsrc`.
 
 ### Assembly
 

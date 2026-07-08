@@ -68,7 +68,6 @@ On generation failure — descend the cascade:
 
 ```
 Kling I2V ──FAIL──→ retry once ──FAIL──→ Ken Burns (FFmpeg zoompan)
-Veo3 T2V  ──FAIL──→ retry once ──FAIL──→ Kling I2V (no speech) ──FAIL──→ Ken Burns
 Ken Burns  ──FAIL──→ retry once ──FAIL──→ status 'failed', record error
 ```
 
@@ -148,7 +147,6 @@ For any error that leads to `status='failed'`:
 |----------|---------|
 | Image generation (Nano Banana 2) | 120 seconds |
 | Video generation (Kling 2.6 Pro I2V) | 10 minutes |
-| Video generation (Veo3 T2V) | 10 minutes |
 | File download (curl) | 120 seconds |
 | FFmpeg operation | 5 minutes |
 | **Whole pipeline (worker.sh)** | **40 minutes** |

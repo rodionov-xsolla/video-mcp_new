@@ -294,8 +294,8 @@ Format-specific parameters to compute and pass into §0:
 
 ASS generation: `tools/add_subtitles.py` against `tts-output.mp3` PRE-shaped (atempo applied, then 5 s adelay prepended), so the ASS timeline matches what §0 feeds the `ass=` filter.
 
-**Title card text (MANDATORY) — через ASS, не через drawtext, overlay или baked PNG text.**
-`title_lines` из `storyboard.json` (clip 1) рендерятся как отдельные `Dialogue:` события в том же `subs.ass` — ровно тот же механизм что и субтитры, просто крупнее и с позиционированием через `\pos`. Добавить 4 события с таймингами `0:00:00.50–0:00:04.80` (чуть позже старта, исчезают до конца title card).
+**Title card text (MANDATORY) — via ASS, not drawtext, overlay, or baked PNG text.**
+`title_lines` from `storyboard.json` (clip 1) render as separate `Dialogue:` events in the same `subs.ass` — the exact same mechanism as subtitles, just larger and positioned via `\pos`. Add 4 events timed `0:00:00.50–0:00:04.80` (starting slightly after the clip start, disappearing before the title card ends).
 
 Title typography is locked:
 - Font: **Montserrat Black** (`\fnMontserrat Black\b1`). If libass cannot resolve the family name, pass `fontsdir=/Users/admin/Library/Fonts` to the `ass`/`subtitles` filter or copy `Montserrat-Black.ttf` into `build/fonts/`.
@@ -313,10 +313,10 @@ Dialogue: 0,0:00:00.50,0:00:04.80,Default,,0,0,0,,{\an5\pos(540,1028)\fnMontserr
 Dialogue: 0,0:00:00.50,0:00:04.80,Default,,0,0,0,,{\an5\pos(540,1182)\fnMontserrat Black\b1\fs104\bord5\shad0\c&H0000D7FF&}THE BORG
 ```
 
-- y-позиции рассчитаны для PlayResY=1920; суммарный блок центрирован чуть выше середины кадра.
-- Если `title_lines` уже содержат классический character-redcon шаблон (`WHAT IF:` / `{CHARACTER}` / `BECAME` / `{ALTERNATE FATE}`), применять тот же Montserrat Black / uniform-size / equal-spacing стандарт; не возвращаться к старым `fs65/fs165/fs100` размерам.
+- The y-positions are calculated for PlayResY=1920; the whole block is centered slightly above the middle of the frame.
+- If `title_lines` already follow the classic character-redcon template (`WHAT IF:` / `{CHARACTER}` / `BECAME` / `{ALTERNATE FATE}`), apply the same Montserrat Black / uniform-size / equal-spacing standard; do not revert to the old `fs65/fs165/fs100` sizes.
 
-Эти события добавляются **в начало** `[Events]` секции (до первого subtitle-события) чтобы Layer=0 совпадал и порядок был предсказуем.
+These events are added **at the start** of the `[Events]` section (before the first subtitle event) so `Layer=0` matches and the order is predictable.
 
 General rules — `rules/roles/editor.md`
 

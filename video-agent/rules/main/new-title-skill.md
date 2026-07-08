@@ -185,13 +185,11 @@ Ask the user **in one block**:
 | 1 | What should the CTA show? | Game logo + "FOLLOW FOR MORE" |
 | 2 | Duration | 3s |
 | 3 | Call to action text | "LINK IN BIO" / "FOLLOW" / "SUBSCRIBE" |
-| 4 | Animation style | Dynamic (Veo3) or static overlay (Kling I2V) |
+| 4 | Animation style | Static overlay with subtle motion (Kling I2V) |
 
-**Model decision:**
-- Veo3 T2V — if the CTA needs motion and sound baked in (`generate_audio: true`)
-- Kling I2V — if a styled still frame + subtle motion is sufficient
+**Model:** Kling I2V — styled still frame + subtle motion.
 
-Generate one clip. Cost: ~$3.20 (Veo3 8s) or ~$0.63 (Kling I2V 5s with audio).
+Generate one clip. Cost: ~$0.63 (Kling I2V 5s with audio).
 
 After generation:
 1. Validate with ffprobe: resolution `1080x1920`, duration > 1s
@@ -324,7 +322,7 @@ Show the user:
 |-------|---------|----------------|
 | Composition | vertical 9:16 (1080×1920) | split-screen games |
 | CTA duration | 3s | user specifies otherwise |
-| CTA model | Kling I2V | if motion + sound required → Veo3 |
+| CTA model | Kling I2V | — |
 | Opener | TODO (not blocking) | user wants it now |
 | Language | EN (main) | user specifies RU or mix |
 | Music BPM | 110–140 | per game mood |

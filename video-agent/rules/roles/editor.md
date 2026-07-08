@@ -8,7 +8,7 @@ You are the editor. Manager passes you: all `scene-K.mp4`, audio (embedded I2V/A
 3. **Never `-shortest` with TTS overlay** — clips video to audio length. Use `apad`.
 4. **CTA is a file, do not rebuild it** if it's already valid.
 5. **NEVER pad a dialogue/Avatar clip to a longer target with `tpad=stop_mode=clone` or any freeze-last-frame trick.**
-6. **Audio normalization before concat — MANDATORY.** Sources arrive with different sample rates: Chatterbox TTS = 24kHz mono, Kling I2V audio = 44.1kHz, anullsrc default = 48kHz stereo. Never let ffmpeg resolve this silently — it produces clipping spikes ("писк") and mean RMS of -27dB with 0dB peaks. Always add `aresample=48000,aformat=channel_layouts=stereo` to EVERY audio input before it enters `concat` or `amix`. Standard: `[k:a]aresample=48000,aformat=channel_layouts=stereo[ak]`. Verify with `ffprobe -show_streams -select_streams a` on every input: all must show `sample_rate=48000 channels=2` before concat.
+6. **Audio normalization before concat — MANDATORY.** Sources arrive with different sample rates: Chatterbox TTS = 24kHz mono, Kling I2V audio = 44.1kHz, anullsrc default = 48kHz stereo. Never let ffmpeg resolve this silently — it produces clipping spikes ("squeal") and mean RMS of -27dB with 0dB peaks. Always add `aresample=48000,aformat=channel_layouts=stereo` to EVERY audio input before it enters `concat` or `amix`. Standard: `[k:a]aresample=48000,aformat=channel_layouts=stereo[ak]`. Verify with `ffprobe -show_streams -select_streams a` on every input: all must show `sample_rate=48000 channels=2` before concat.
 7. **ASS subtitle validation before final encode.** After generating `subs-master.ass`, read the `[Events]` section and check: (a) no Dialogue event is a fragment of 1–2 words while a longer duration implies the rest of the phrase was orphaned; (b) font size matches format spec (what-if-real-life: 58px, not 84px); (c) no two events overlap within the same Style. Fix before running the encode — fixing after costs a full re-encode.
 9. **I2V `generate_audio:true` audio is paid-for content — never discard it.** When any I2V clip has `generate_audio: true` in storyboard.json, its audio costs $0.042/s extra and must survive into the final mix. Use `concat=n=N:v=1:a=1` (never `a=0`) so Kling-generated atmospheric sound passes through. **`voice-final.wav` is a whisper-alignment artifact — it contains TTS only (16kHz mono) and is NEVER the final audio source.** The final audio always comes from scene MP4 streams (`[k:a]`) mixed with `bg-music`. Using `voice-final.wav` as output audio silently discards all I2V sounds and Kling Avatar lipsync quality. Burned in serial-drama EP3 — cost 3 re-renders.
 10. **Re-render audio checklist (subtitle/overlay fix, not a full regeneration).** When re-encoding final.mp4 to fix subtitles or overlays: (a) take `[k:a]` from every scene MP4 directly; (b) normalize to stereo 44100 Hz with `aformat`; (c) concat scene audio + `anullsrc` for any CTA/no-audio segment; (d) `amix` with `bg-music.m4a` at the declared volume. Never pass `voice-final.wav` as `-i` to the encode.
@@ -284,20 +284,20 @@ I2V (Kling) is 24fps, Avatar (Kling Avatar) is 30fps → normalize EVERYTHING to
 **CRITICAL — concat.txt requires ABSOLUTE paths.** The `-f concat` demuxer resolves `file` entries relative to the concat.txt location, not the ffmpeg cwd. If you write `file 'norm-1.mp4'` and run ffmpeg from a different directory, it silently fails (exit 137, OOM kill, or "No such file"). Always write absolute paths:
 
 ```bash
-# Правильно — абсолютные пути:
+# Correct — absolute paths:
 cat > "$B/concat.txt" << EOF
 file '$B/norm-1.mp4'
 file '$B/norm-2.mp4'
 EOF
 
-# Неправильно — relative paths вызывают exit 137:
+# Wrong — relative paths cause exit 137:
 cat > build/concat.txt << 'EOF'
 file 'norm-1.mp4'
 file 'norm-2.mp4'
 EOF
 ```
 
-**CRITICAL — filter_complex stream indices.** Когда передаёшь N входных файлов в ffmpeg, каждый `-i` получает свой индекс [0], [1], [2]... Если все клипы нормализованы и конкатенированы в один `concat-base.mp4`, то в финальном проходе overlay-оверлеи — ТОЛЬКО ОДИН видеовход `[0:v]`. Не смешивай: отдельные клипы как входы → filter_complex с concat; уже склеенный base → только overlays + subtitles.
+**CRITICAL — filter_complex stream indices.** When you pass N input files to ffmpeg, each `-i` gets its own index [0], [1], [2]... If all clips are already normalized and concatenated into one `concat-base.mp4`, then in the final overlay pass there is ONLY ONE video input `[0:v]`. Don't mix the two: separate clips as inputs → filter_complex with concat; an already-concatenated base → overlays + subtitles only.
 
 ### 1.0a Avatar silence trim — BEFORE concat
 

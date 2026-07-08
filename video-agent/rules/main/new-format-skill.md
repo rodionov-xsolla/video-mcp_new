@@ -57,14 +57,7 @@ Ask:
 
 Ask: WHO generates the voice?
 
-#### B1: Veo3 T2V (voice baked in)
-- motion_prompt includes `and says: "[text]"`
-- `generate_audio: true` always
-- Need NB2 images? (title card only or full scenes)
-
-**Result:** Image: NB2 (opt.) → Video: Veo3 T2V → Audio: embedded
-
-#### B2: ElevenLabs TTS + Kling Avatar v2 (lipsync)
+#### B1: ElevenLabs TTS + Kling Avatar v2 (lipsync)
 Ask:
 - Speed up Avatar after generation? (1.3x for energetic / 1.0x for drama)
 - Two-step approval? (TTS → show user → then Avatar)
@@ -72,7 +65,7 @@ Ask:
 
 **Result:** Image: NB2 (avatar ref) → TTS: ElevenLabs → Video: Kling Avatar v2
 
-#### B3: ElevenLabs TTS overlay on silent video
+#### B2: ElevenLabs TTS overlay on silent video
 Ask:
 - TTS volume? (default 1.0)
 - SFX volume from Kling? (default 0.4)
@@ -80,7 +73,7 @@ Ask:
 
 **Result:** Image: NB2 → Video: Kling I2V (SFX) → TTS: ElevenLabs overlay
 
-#### B4: MIXED (I2V action + Avatar dialogue in one video)
+#### B3: MIXED (I2V action + Avatar dialogue in one video)
 Ask:
 - What `clip_type`s exist? (action / dialogue / reaction / etc.)
 - Which clip_type → which model?
@@ -192,7 +185,6 @@ Based on collected data, compute typical and maximum cost.
 | Kling v3 Standard I2V (with audio) | $0.63 | $1.26 |
 | Kling Avatar v2 | $0.28 | $0.56 |
 | ElevenLabs TTS (line) | ~$0.05–0.10 | ~$0.07–0.15 |
-| Veo3 T2V 8s (with audio) | — | $3.20 |
 
 ### Formula
 
@@ -236,7 +228,7 @@ Keywords: "{keyword1}", "{keyword2}", ...
 ### Models
 
 - **Image:** {NB2 / skip}
-- **Video:** {Kling I2V / Kling Avatar v2 / Veo3 T2V / pre-existing clips}
+- **Video:** {Kling I2V / Kling Avatar v2 / pre-existing clips}
 - **Audio:** {generate_audio / ElevenLabs TTS / overlay / none}
 
 ---

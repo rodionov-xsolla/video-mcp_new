@@ -294,38 +294,39 @@ Kling Avatar at close-up of the face produces an uncanny valley: cheap, frighten
 
 #### 6.1.1 Avatar scene PNG — zero-text rule (MANDATORY)
 
-Kling Avatar v2 при анимации обрабатывает любой текст в исходном кадре как
-семантический контент и деградирует его в иероглифы/garbled Latin при движении.
-Артефакты появляются даже на 7-секундных клипах (см. comedy-sketch Spock barista,
-scene-3, 7.15s → CJK артефакт в последние 1.3s). Параметр `negative_prompt` у
-Avatar v2 API не работает — единственная защита это чистый исходный PNG.
+When animating, Kling Avatar v2 treats any text in the source frame as
+semantic content and degrades it into garbled glyphs/garbled Latin during
+motion. Artifacts appear even on 7-second clips (see comedy-sketch Spock
+barista, scene-3, 7.15s → CJK artifact in the last 1.3s). The `negative_prompt`
+parameter does not work on the Avatar v2 API — the only protection is a clean
+source PNG.
 
-**Для каждой сцены с `clip_type: avatar` в `image_prompt` запрещены:**
-- меню-доски, ценники, вывески, объявления
-- корешки книг, обложки журналов, газеты
-- плакаты, баннеры, флаги с надписями
-- чашки/банки/упаковка с брендингом и текстом
-- бейджи, нашивки, ярлыки на одежде
-- экраны мониторов/телефонов с UI-элементами и текстом
-- надписи мелом, маркером, граффити с буквами
-- цифры/числа на табло, циферблаты с цифрами
+**Forbidden in `image_prompt` for every scene with `clip_type: avatar`:**
+- menu boards, price tags, signs, notices
+- book spines, magazine covers, newspapers
+- posters, banners, flags with lettering
+- cups/jars/packaging with branding and text
+- badges, patches, labels on clothing
+- monitor/phone screens with UI elements and text
+- chalk/marker writing, graffiti with letters
+- digits/numbers on displays, dials with numbers
 
-**Если локация требует текстовых элементов — replace с no-text эквивалентом:**
+**If the location requires text elements — replace with a no-text equivalent:**
 
-| Локация требует | image_prompt пишет |
+| Location requires | image_prompt writes |
 |---|---|
-| кафе / бар | `blank dark chalkboard, no writing`, `unbranded white ceramic cups`, `plain wooden shelves` |
-| ньюсрум | `solid blue backdrop, no chyrons, no lower thirds, no ticker` |
-| офис | `closed laptop, blank notebook pages, unmarked folders` |
-| магазин | `solid-color packaging, plain shelves, no price tags` |
-| улица | `building facades without signs, no street signs, no advertisements` |
+| cafe / bar | `blank dark chalkboard, no writing`, `unbranded white ceramic cups`, `plain wooden shelves` |
+| newsroom | `solid blue backdrop, no chyrons, no lower thirds, no ticker` |
+| office | `closed laptop, blank notebook pages, unmarked folders` |
+| shop | `solid-color packaging, plain shelves, no price tags` |
+| street | `building facades without signs, no street signs, no advertisements` |
 
-**В `image_prompt` для NB2 добавлять positive-фразы (не negations — NB2 их
-игнорирует):** `clean text-free background`, `surfaces without writing`,
+**In the `image_prompt` for NB2, add positive phrases (not negations — NB2
+ignores those):** `clean text-free background`, `surfaces without writing`,
 `unbranded objects`, `blank signage`, `no visible letters or characters in frame`.
 
-Этот блок отменяет §7.2 («Text in frame — double quotes») для любых
-Avatar-сцен: в кадр под Avatar текст не добавляется никогда, даже в кавычках.
+This block overrides §7.2 ("Text in frame — double quotes") for any Avatar
+scene: no text is ever added to frame for Avatar, even in quotes.
 
 ---
 
@@ -361,7 +362,7 @@ For wide/establishing shots: anchor scale to architecture (`"she is the height o
 ### 7. image_prompt anti-patterns
 
 - ❌ `high quality, masterpiece, 4K, ultra HD` — junk tags, no effect on NB2
-- ❌ `no watermark, no text` (negations) — NB2 их игнорирует. Для Avatar-сцен, где текст недопустим, описывать поверхности positively: `blank chalkboard`, `plain wall`, `unbranded ceramic cup`. См. §6.1.1.
+- ❌ `no watermark, no text` (negations) — NB2 ignores these. For Avatar scenes, where text is not allowed, describe surfaces positively instead: `blank chalkboard`, `plain wall`, `unbranded ceramic cup`. See §6.1.1.
 - ❌ `beautiful, amazing, epic, cool` — abstract, no visual meaning
 - ❌ Duplicating `style_tags` inside `character_state`
 - ❌ Abstract secondary characters: `"armored man"` → NB2 makes a robot. Describe: `"weathered leather vest, scarred bearded face, sun-darkened skin"`
@@ -416,8 +417,8 @@ NB2 associates photo terms with concrete visual patterns. Use when standard `dra
 
 ### 7.2 Text in frame — double quotes
 
-> **Не применяется к Avatar-сценам.** Технику с двойными кавычками используем
-> только для I2V/static-кадров. Для `clip_type: avatar` — §6.1.1 (zero-text rule).
+> **Does not apply to Avatar scenes.** The double-quote technique is used only
+> for I2V/static frames. For `clip_type: avatar` — see §6.1.1 (zero-text rule).
 
 When you need text in the image (sign, screen, label):
 
@@ -491,9 +492,9 @@ Order:
    bash queue/upload-asset.sh --kind branding --game {GAME_TAG} --name opener-{format} \
      ./opener.mp4 --tags "{format},opener"
    ```
-   **Без Supabase upload генерация неполная.** Следующий агент не найдёт ассет и перегенерит = деньги в трубу.
+   **Generation is incomplete without the Supabase upload.** The next agent won't find the asset and will regenerate it = money down the drain.
 
-   > Per-episode scene PNG / TTS — **другой kind**: `--kind episode-scene` / `episode-tts` с `--episode {YYYY-MM-DD}-{format}`. Эти файлы пишутся в bucket `episodes/`, в `game_assets` НЕ регистрируются (одноразовый эпизодный мусор).
+   > Per-episode scene PNG / TTS use a **different kind**: `--kind episode-scene` / `episode-tts` with `--episode {YYYY-MM-DD}-{format}`. These files are written to the `episodes/` bucket and are NOT registered in `game_assets` (disposable per-episode output).
 
 Applies to ALL formats: news (anchor + co-anchor), serial-drama (multiple characters with sheets/refs), gameplay-ai-avatar (avatar), character-story (hero).
 
@@ -815,23 +816,23 @@ Before a series of generations with a specific character ref — do **one test g
 
 ---
 
-### 15.2 Element-референсы для I2V `elements` (по запросу Animator)
+### 15.2 Element references for I2V `elements` (on Animator's request)
 
-> ✅ **Burn-tested 2026-06-01** — генерируй только если Scenarist/Animator явно просит element для `multi_prompt`-клипа (новый персонаж/объект входит в середине клипа). См. `animator.md §5a`, `tools/fal-ai.md §2c`.
+> ✅ **Burn-tested 2026-06-01** — generate only when Scenarist/Animator explicitly requests an element for a `multi_prompt` clip (a new character/object enters mid-clip). See `animator.md §5a`, `tools/fal-ai.md §2c`.
 
-Это **отдельный тип ассета**, не scene-PNG и не char-ref. Когда в `multi_prompt`-клипе должен появиться персонаж/объект, которого нет на стартовом кадре, Kling `elements` хочет **набор «character sheet»**, а не один кадр:
+This is a **separate asset type**, not a scene PNG and not a char-ref. When a character/object that isn't in the start frame needs to appear in a `multi_prompt` clip, Kling `elements` wants a **"character sheet" set**, not a single frame:
 
-- `frontal_image_url` — 1 фронтальный вид;
-- `reference_image_urls` — **обязателен, ≥1 кадр** с других ракурсов (профиль, 3/4) на нейтральном фоне. Если у персонажа в Supabase чистый ракурс только один — **сгенерируй второй ракурс** (NB2 от существующего рефа, $0.08), не полагайся на дубликат: дубликат проходит валидацию, но узнаваемость хуже.
+- `frontal_image_url` — 1 frontal view;
+- `reference_image_urls` — **required, ≥1 frame** from other angles (profile, 3/4) on a neutral background. If the character has only one clean angle in Supabase — **generate a second angle** (NB2 from the existing ref, $0.08); don't rely on a duplicate: a duplicate passes validation, but recognizability is worse.
 
-Это **референсы элемента, а не сцены**: нейтральный фон, чистая поза, без окружения/действия. Генерируй через NB2 (chain reference от char-ref для консистентности).
+These are **element references, not scene references**: neutral background, clean pose, no environment/action. Generate via NB2 (chain reference from the char-ref for consistency).
 
-Путь в Supabase — как у char-ref (без даты, шарится между эпизодами):
+Supabase path — same convention as char-ref (no date, shared across episodes):
 `${GAME_TAG}/refs/elements/${name}-front.png`, `…-side.png`, `…-3q.png`.
 
-Записывай URL-ы обратно в `storyboard.json` (поле клипа `elements`), чтобы Animator забрал их в запрос Kling.
+Write the URLs back into `storyboard.json` (clip's `elements` field) so Animator picks them up for the Kling request.
 
-⚠️ Не путать с §14.8/§16: element-референсы НЕ являются end-frame и под запрет end-frame не попадают.
+⚠️ Not to be confused with §14.8/§16: element references are NOT an end-frame and are not subject to the end-frame ban.
 
 ---
 

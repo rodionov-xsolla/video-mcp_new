@@ -506,7 +506,7 @@ during Phase 0.
 
 **SKIP.**
 
-No Kling, Veo3, Runway or AI-video generation.  
+No Kling, Runway or AI-video generation.  
 Only random gameplay clips are used.
 
 ---
