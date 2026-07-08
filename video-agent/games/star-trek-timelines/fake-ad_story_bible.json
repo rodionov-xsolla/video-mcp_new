@@ -3,27 +3,41 @@
   "game_tag": "star-trek-timelines",
   "title": "Star Trek Timelines Fake Ad",
   "created_at": "2026-06-18",
-  "last_episode": 1,
+  "last_episode": 2,
   "advertised_products": [
-    "Vulcan Brow Design Salon"
+    "Vulcan Brow Design Salon",
+    "Klingon Honor Baldric"
   ],
   "anti_repetition": {
-    "recent_lines": [],
+    "recent_lines": [
+      "Klingon Honor Baldric. Get your honorous respect.",
+      "And then... the ready-room threshold."
+    ],
     "recent_themes": [
+      "honor-accessory",
       "eyebrow styling"
     ],
-    "recent_tones": [],
+    "recent_tones": [
+      "earnest-swagger"
+    ],
     "recent_hooks": [
+      "unnamed officer overlooked in corridor, dons chainmail honor baldric, crew parts in awe, chain snags ready-room threshold in front of a superior, packshot slogan confirms the snag",
       "extreme close-up eyebrow reveal"
     ],
     "recent_twist_types": [
+      "ceremonial-prop-snags-at-decisive-moment",
       "product works but misread as emotional response"
     ],
-    "recent_problem_types": [],
+    "recent_problem_types": [
+      "overlooked-officer"
+    ],
     "recent_characters": [
+      "generic-officer (unnamed)",
       "Spock"
     ],
     "recent_environments": [
+      "Starfleet ship corridor junction",
+      "ready-room threshold",
       "Vulcan Logic Council",
       "Enterprise corridor",
       "Vulcan salon"
@@ -40,6 +54,17 @@
       "youtube_url": "https://www.youtube.com/watch?v=m1viXkXs_jI",
       "scheduled_for": "2026-06-20T20:59:00Z",
       "date": "2026-06-20"
+    },
+    {
+      "episode": 2,
+      "product": "Klingon Honor Baldric",
+      "character": "unnamed generic Starfleet officer",
+      "theme": "honor-accessory",
+      "twist": "ceremonial chain-tassel snags the raised ready-room threshold in front of a superior officer, undoing the commanding entrance",
+      "slogan": "KLINGON HONOR BALDRIC. GET YOUR HONOROUS RESPECT!",
+      "youtube_url": "https://www.youtube.com/watch?v=UmqlkN1WrDc",
+      "scheduled_for": "2026-07-12T20:59:00Z",
+      "date": "2026-07-08"
     }
   ],
   "cta_url": ""
