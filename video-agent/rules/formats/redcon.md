@@ -269,6 +269,7 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
 - **Start frame only.** No `tail_image_url`.
 - Title card clip: very slow camera drift (parallax or gentle push-in). Minimal motion — text must remain readable throughout 5s.
 - Story clips: **active, dynamic prompts only** — three concurrent layers (camera + primary action + atmosphere), continuous present-tense verbs, no freeze phrases ("remains still", "holds position", "stays motionless" are banned).
+- **Known failure mode (user-flagged, 2026-07-07 Worf episode):** redcon's monologue-over-static-shot pacing tends to read as static even when `motion_prompt` technically satisfies the three-layer rule — the talking-head/portrait framing common to this format leaves little room for perceptible camera or environment motion. Compensate by pushing camera movement harder than usual (push-in/pull-out/orbit, not just drift) and favoring wider or three-quarter framing over tight portraits so there's visible depth/parallax to move through. Re-check the assembled clip, not just the prompt text, against "does this look static" before calling a clip done.
 - Duration: 5s for standard clips, up to 7s for multi-prompt clips
 - General rules — `rules/roles/animator.md`
 

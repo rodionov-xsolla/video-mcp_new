@@ -62,6 +62,22 @@
   },
   "style_tags": "Star Trek Timelines style, semi-realistic Pixar-quality 3D, cinematic Federation lighting, deep space environment, Starfleet uniform details, clean cinematic frame, no cartoon, no chibi",
   "color_palette": "deep space black #0a0a12, LCARS orange #ff9900, Federation blue #3366cc, LCARS purple #9966cc, rarity gold #ffd700, warp blue #00ccff",
+  "character_variant_episodes": {
+    "note": "One-off classic-character redcon episodes (canonical character + alternate-self, first-person monologue) — NOT part of the Player-POV crisis_rotation numbering above. Kept separate so future runs don't confuse these with the numbered player-POV series or its do_not_repeat list.",
+    "done": [
+      {
+        "date": "2026-07-07",
+        "character_name": "Worf",
+        "alternate_designation": "Worf, Son of None — Warlord of the Empire",
+        "divergence_point": "2367, TNG 'Reunion' — after executing Duras, Worf refuses discommendation and seizes the Duras bloodline's ships/warriors instead of returning to Starfleet",
+        "tts_voice": "Daniel (ElevenLabs preset, mapped to MiniMax Deep_Voice_Man for generation) — flat/angry alternate-identity delivery, not the canonical Worf voice",
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-07/redcon_final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=pbiuyIT-GAE",
+        "yt_publish_at": "2026-07-11T20:59:00Z",
+        "notes": "User-requested one-off ('what if Worf became a villain'), not the player-POV crisis-rotation format. Included a user-requested CTA banner image overlay (fade in/out, top-anchored) on clip 3 only — required extending tools/overlays.py: (1) build_image_overlay_frags() needed fade_in/fade_out support for image overlays (previously text-only), which surfaced an eof_action=repeat default that stalls the whole filtergraph when combined with an infinite loop=-1 still-image source — fixed with eof_action=pass; (2) banner placement/scope went through 3 rounds of user feedback (all clips -> clips 2-3 top -> clip 3 only) — final: top-anchored, y=80, width~1010 (35px side margins), fade ~0.5s, clip 3 only. Also flagged in rules/formats/redcon.md: this format's monologue-over-static-shot pacing reads as static even with technically-compliant motion_prompt — push camera movement harder and prefer wider framing over tight portraits."
+      }
+    ]
+  },
   "episode_summaries": [
     {
       "episode": 0,
