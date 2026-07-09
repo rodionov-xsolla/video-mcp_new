@@ -473,6 +473,8 @@ $FFMPEG -y -i final-base.mp4 -i bg-music.mp3 \
 - NEVER `-shortest`
 - If Sound did not specify a track — **stop and ask Manager**. Music is mandatory
 
+**Mandatory pre-flight check (do this BEFORE the final encode, not after):** `[ -s "$OUTPUT_DIR/bg-music.mp3" ]` (or `build/bg-music.mp3`). If the file is absent or empty, this is a hard stop — do not encode `final.mp4` without music "to be safe" or "since Manager can add it later." Burned 2026-07-09: star-trek-timelines `what-if-real-life` shipped as a finished, human-reviewed `final.mp4` with no music track at all because Editor built and delivered the whole video without ever checking for `bg-music.mp3`. Checking after encoding is too late — the file already looks "done."
+
 ---
 
 ## 4a. reddit-story — canonical assembly (three steps, DO NOT skip or reorder)

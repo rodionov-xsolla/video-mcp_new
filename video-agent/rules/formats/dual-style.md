@@ -18,6 +18,15 @@ Keywords: "dual-style", "game vs reality", "meet your character IRL", cosplay co
 
 ---
 
+## Pop-up promo banner (user override — `overlays: false` by default, opt-in per episode)
+
+When the user asks for a promo/pop-up banner on a specific clip (e.g. "поп-ап баннер на клипе N сверху"), add ONE `overlays[]` entry of `type: "image"` to that scene only in storyboard.json — see `tools/overlays.py` schema. Sizing convention (validated on genshin-impact EP5, 2026-07-09):
+- **Large, not a small corner badge** — `width = canvas_width - 60` (1080 - 2×30, i.e. 30px side margin each side), `height: -1` (keep aspect ratio).
+- `position: "top-center"` — centers automatically at that width, giving the 30px side margins for free; default top margin is 80px (baked into `_img_pos_to_xy`). For a non-80px top margin, use explicit `"{x},{y}"` instead (x = side margin, so it still centers for the given width).
+- `enable: [t0, t1]` with `fade_in`/`fade_out` ≈0.5s so it reads as a pop-up, not a static overlay for the whole clip.
+
+---
+
 ## Concept
 
 - **Cartoon left + realistic right** (positioning fixed for the whole video)

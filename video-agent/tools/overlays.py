@@ -39,7 +39,7 @@ overlays[] schema (in each clip/scene of storyboard.json):
     "url": "https://...banner.png",   // downloaded to workdir at encode time
     "width": 400,                     // px, -1 = keep aspect relative to height
     "height": -1,                     // px, -1 = keep aspect relative to width
-    "position": "top-left|top-right|center|bottom-center|{x},{y}",
+    "position": "top-left|top-right|center|bottom-center|top-center|{x},{y}",
     "enable": [0.0, 5.0],             // optional time window; omit = full clip
     "opacity": 1.0,                   // optional (1.0 = fully opaque)
     "fade_in": 0.5,                   // optional seconds — alpha fade-in at window start
@@ -48,6 +48,14 @@ overlays[] schema (in each clip/scene of storyboard.json):
   Image overlays are rendered via ffmpeg movie+overlay filter (no extra -i needed).
   fade_in/fade_out use the alpha-channel `fade` filter on the movie source (requires
   format=rgba before fade so the alpha channel exists) — a real ramp, not a hard cut.
+
+  Pop-up banner sizing convention (e.g. dual-style promo banner, 2026-07-09): size the
+  banner LARGE relative to the frame, not a small corner badge — `width = canvas_width -
+  2*side_margin` (e.g. 1080 - 2*30 = 1020 for a 30px side margin on each side), `height:
+  -1` to keep aspect ratio, `position: "top-center"` (auto-centers at that width, so the
+  30px side margins fall out automatically from W-w). `top-center`'s y-offset defaults to
+  80px top margin. For a different top margin, use explicit `"{x},{y}"` instead of
+  `top-center` (x = side_margin so it still centers for a given width).
   Needs an explicit `enable` window (own timeline) so fade timing is anchored; if
   `enable` is omitted, fade_in anchors to clip start (t=0) and fade_out is ignored
   (no end boundary to ramp against).
@@ -272,7 +280,7 @@ def _img_pos_to_xy(pos) -> tuple[str, str]:
     if pos == "bottom-center":
         return "(W-w)/2", "H-h-200"
     if pos == "top-center":
-        return "(W-w)/2", "40"
+        return "(W-w)/2", "80"
     if isinstance(pos, str) and "," in pos:
         x, y = pos.split(",", 1)
         return x.strip(), y.strip()

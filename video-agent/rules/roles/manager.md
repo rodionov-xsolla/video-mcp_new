@@ -178,13 +178,15 @@ In debug mode — stop for approval.
 
 ### PHASE 2 — Audio (Sound)
 
-**Only if dialogue clips exist.** If the storyboard has no dialogue clips — skip this entire phase.
+**TTS generation is skipped if the storyboard has no dialogue clips — but the Sound phase itself always runs**, because `bg-music.mp3` generation (mandatory for ALL formats per `rules/roles/sound.md` §6) lives in this same phase. Never skip invoking `sound` entirely just because there's no dialogue.
 
 Delegate via `Agent(subagent_type="sound")` (model: haiku, defined in `.claude/agents/sound.md`). Sub-agent loads `rules/roles/sound.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` inside). Template: `prompts/sound.txt`.
 
 **Validation:** `pipeline.sh` checks inline that every dialogue clip has a scene-K.mp3 (size ≥ 5KB). If a TTS file is missing or undersized → STOP. Catching it here costs $0; finding it after Kling costs $2+.
 
-**Output:** `scenes/scene-K/scene-K.mp3` per dialogue clip, `tts_url` written back into storyboard.json.
+**Also validate `bg-music.mp3` exists** — `[ -s "$OUTPUT_DIR/bg-music.mp3" ]` (≥ 10KB) — after every run of this phase, even when there were no dialogue clips to TTS. If missing → STOP, do not proceed to Storyboarder/Animator/Editor. Burned 2026-07-09: star-trek-timelines `what-if-real-life` shipped with zero background music — Sound never generated the track and nothing downstream caught it until human review, because this file-existence check didn't exist yet.
+
+**Output:** `scenes/scene-K/scene-K.mp3` per dialogue clip, `bg-music.mp3`, `tts_url` written back into storyboard.json.
 
 ### PHASE 3 — Images (Storyboarder)
 Delegate via `Agent(subagent_type="storyboarder")` (model: sonnet, defined in `.claude/agents/storyboarder.md`). The sub-agent loads `rules/roles/storyboarder.md` itself. In the `prompt`, pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` already inside), `EXISTING_REFS_JSON` (existing character/bg refs from Supabase). Template: `prompts/storyboarder.txt`.
