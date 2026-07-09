@@ -6,7 +6,7 @@ overlays: false
 
 # Format "Dual-Style" — cartoon + realistic
 
-In one frame: cartoon/chibi game character next to its photorealistic human "twin". Style contrast is the main device.
+In one frame: cel-shaded anime-style game character (accurate in-game proportions by default, chibi only if explicitly requested) next to its photorealistic human "twin". Style contrast is the main device.
 
 This file is the **playbook**. Craft rules (NB2, Kling I2V, ffmpeg) — in `rules/roles/*.md`.
 
@@ -22,7 +22,7 @@ Keywords: "dual-style", "game vs reality", "meet your character IRL", cosplay co
 
 - **Cartoon left + realistic right** (positioning fixed for the whole video)
 - **3 clips × 5–10s** → 15–30s total
-- **Model:** Kling v3 Standard I2V, `generate_audio: true` (Kling's built-in audio — ambient SFX baked directly into the clip)
+- **Model:** Kling v3 Standard I2V, `generate_audio: true` (Kling's built-in audio — ambient SFX baked directly into the clip; can also add unwanted music on energetic prompts, see Animator brief below)
 - **Speech:** NO, `character_speech: null` everywhere
 - **Budget:** $5 max
 
@@ -79,8 +79,10 @@ Explicitly bind each style to its side using the phrase:
 - `side by side`, not one behind the other
 
 ### 4. Sizes in frame
-- Cartoon may be **smaller** (chibi = small), realistic larger
-- This enhances the contrast, do not try to align by height
+- **Default: accurate in-game body proportions on the cartoon side — NOT chibi.** Burned on genshin-impact EP5 (2026-07-09): default chibi/exaggerated-proportions template drifted far enough from the real character design that the user rejected the whole batch and forced a full Storyboarder re-run. Chibi/deformed proportions are opt-in only, on explicit user request — never the default.
+- Cartoon and realistic are the same height/build (matching the character's real in-game proportions); contrast comes from render style (cel-shaded vs photorealistic), not from shrinking one figure.
+- `character_description` (cartoon) and `image_prompt` must state explicitly: "accurate to in-game proportions, NOT chibi, NOT deformed, NOT exaggerated head-to-body ratio." Add `chibi, deformed proportions, exaggerated head size` to `negative_prompt`.
+- Anchor cartoon fidelity to the character's chain-ref `sheet.png` (face/costume/silhouette) rather than letting the prompt override what the reference image shows.
 
 ### 6. Actor-as-realistic counterpart (optional, 2026-06-09)
 
@@ -96,9 +98,11 @@ Instead of a generic photorealistic human, the realistic side can depict a **spe
 
 **Rules:**
 - Only use publicly known actors — no private individuals
+- **Prefer widely recognized, A-list/globally famous actors over lesser-known ones** — virality scales with name/face recognition; when choosing between two plausible look-alikes, pick the more famous one.
 - The actor's costume must identically match the game-style version (same colors, accessories, weapon)
 - Do NOT alter the actor's face (no heavy makeup or distortion in the prompt)
 - `style_tags`: add `live-action cast, [Actor Name] as [Character]`
+- **Actor names are for Scenarist/Storyboarder prompts only (image generation) — never pass a real person's name into Animator/Kling-facing text** (motion_prompt, elements prompt reference). Kling doesn't parse identity from names; describe the photorealistic figure only by role/position ("the photorealistic figure on the right") and let the image itself (start frame + `elements` face-lock) carry the likeness.
 
 ### 5. Single shared space — no panel divide (mandatory, 2026-06-09)
 
@@ -121,11 +125,11 @@ The environment description, lighting, and ground plane must be written as **one
   "format": "dual-style",
   "visual_identity": {
     "character_description": {
-      "cartoon": "cartoon chibi [class] with bold black outlines, bright flat saturated colors, exaggerated proportions, [8+ details]",
+      "cartoon": "cartoon [class] with bold black outlines, bright flat saturated colors, accurate in-game body proportions (NOT chibi, NOT deformed) unless chibi explicitly requested, [8+ details]",
       "realistic": "photorealistic [gender] [build], [same costume], real skin textures, [vivid details], [emotion]"
     },
     "environment_description": "[concrete location]",
-    "style_tags": "cartoon chibi with bold black outlines, photorealistic human counterpart, dual-style side by side",
+    "style_tags": "cartoon cel-shaded with bold black outlines, photorealistic human counterpart, dual-style side by side",
     "color_palette": "[one palette for both versions]",
     "lighting": "[unified lighting across all scenes]"
   },
@@ -155,7 +159,7 @@ The environment description, lighting, and ground plane must be written as **one
 
 ```markdown
 ### Hero Name (cartoon)
-`cartoon chibi [class] with bold black outlines, bright flat saturated colors, exaggerated proportions, [8+ details]`
+`cartoon [class] with bold black outlines, bright flat saturated colors, accurate in-game body proportions (NOT chibi, NOT deformed) unless chibi explicitly requested, [8+ details]`
 
 ### Hero Name (realistic counterpart)
 `photorealistic [gender] [build], [same costume as cartoon], real skin textures, [skin/scars/dirt], [emotion]`
@@ -180,14 +184,19 @@ If these blocks are missing — Manager must flag and stop until they are added.
 - If none — generate the cartoon version through NB2 as anchor
 - **Multi-character:** every new character starts the chain anew (do NOT pass the previous character's scene)
 - For one character: scene 1 = `[asset]`; scene 2+ = `[asset, scene-(K-1)]`
+- **Face-lock headshot (optional side-asset, only when Animator needs `elements` binding for macro motion — see Animator brief below):** after the scene PNG is accepted, generate ONE additional frontal headshot crop of the photorealistic figure via NB2 edit, using the already-rendered scene PNG as the image reference (not a fresh text-only generation) — the headshot must match the exact identity already locked in that scene, not a new likeness. Plain neutral background, head+shoulders, facing camera, neutral expression. Upload as a per-episode asset (`episode-scene` kind), not `game_assets`. Cost ≈$0.04–0.08.
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
-- **Kling v3 Standard I2V**, `generate_audio: true` (built-in ambient SFX), `aspect_ratio: "9:16"`
+- **Kling v3 Standard I2V**, `aspect_ratio: "9:16"`
 - `duration`: "5" or "10"; without `end_image_url`
 - `character_speech: null` → Kling does not receive speech text
 - One model for the whole video
-- **⚠️ NO HEAD/FACE MOVEMENT for the photorealistic figure — MANDATORY.** Any head turn, chin lift, eye shift, or facial expression change causes face distortion in Kling I2V. motion_prompt must explicitly state: "photorealistic figure on the right: NO head movement, NO neck rotation, NO chin lift, NO eye movement — face remains completely locked forward throughout entire clip." Only body, costume, hair, and elemental effects may move.
+- **`generate_audio: true` risk — unwanted music.** Kling's native audio can add background music/score on top of ambient SFX when the motion_prompt reads "cinematic"/energetic (see `rules/roles/animator.md` generate_audio note). If the episode has a separately-generated `bg-music.mp3` (the dual-style default via Sound), either add an explicit anti-music clause to every motion_prompt (`"ambient environmental sound only, no music, no score, no soundtrack"`) or have Editor strip the baked-in clip audio entirely at concat time and rely solely on `bg-music.mp3`.
+- **Face stability — two supported patterns, pick one per episode:**
+  1. **Micro-motion only (original, lowest risk):** NO HEAD/FACE MOVEMENT for the photorealistic figure — any head turn, chin lift, eye shift, or facial expression change causes face distortion in Kling I2V. motion_prompt: "photorealistic figure on the right: NO head movement, NO neck rotation, NO chin lift, NO eye movement — face remains completely locked forward throughout entire clip." Only body, costume, hair, and elemental effects may move. Camera can be any angle since the figure doesn't need to face it continuously.
+  2. **Macro-motion (e.g. walking) with `elements` face-lock (validated on genshin-impact EP5, 2026-07-09):** requires the Storyboarder-generated frontal headshot (see above) passed as `elements[0].frontal_image_url`, with the scene PNG as `reference_image_urls`. **`elements` is mandatory-paired with `multi_prompt: true`** — passing `elements` with a bare top-level `prompt` causes a deferred 500 at result-fetch (`rules/roles/animator.md` §4). Reference the bound face as `@Element1` in the shot prompt; still state the explicit face-lock clause (no head turn/no morphing) even with `elements` — the binding reduces drift, it does not by itself guarantee zero motion.
+  - **Camera direction for walking shots — camera must be IN FRONT of the figures (receding/dolly-back tracking, retreating at their walking pace), never behind.** The whole point of dual-style is comparing the two faces side by side; a behind-the-figures tracking shot shows only backs/backs-of-heads and defeats the format. Burned on EP5: first attempt used camera-behind per a literal reading of "camera follows them," had to be redone.
 - General rules — `rules/roles/animator.md`
 
 ### Sound
@@ -231,8 +240,10 @@ output/YYYY-MM-DD/{GAME_TAG}/dual-style/
 
 ## Validation
 
-- [ ] Cartoon markers in image_prompt (`bold black outlines`, `bright flat saturated colors`, `exaggerated proportions`)
+- [ ] Cartoon markers in image_prompt (`bold black outlines`, `bright flat saturated colors`, accurate in-game proportions — NOT chibi/exaggerated unless explicitly requested)
 - [ ] Realistic markers in image_prompt (`photorealistic`, `real skin textures`)
+- [ ] If macro-motion (walking) is used: camera is in front (dolly-back), not behind; `elements` + `multi_prompt: true` used for face-lock; no real actor name in motion_prompt
+- [ ] If `generate_audio: true` + separate `bg-music.mp3` exists: anti-music clause in motion_prompt, or Editor strips baked-in clip audio at concat
 - [ ] Costume/pose/details match between versions
 - [ ] Cartoon and realistic on fixed sides (for the whole video)
 - [ ] `character_speech: null` in all clips
@@ -254,7 +265,12 @@ output/YYYY-MM-DD/{GAME_TAG}/dual-style/
 - ❌ Missing style isolation — without "anime cel-shaded style on LEFT figure only, photorealistic on RIGHT figure only", the character sheet chain-ref bleeds anime style onto both sides. Always add explicit per-side style binding and negative_prompt entries.
 - ❌ Realistic without "live" details (skin, textures) — you get a 3D render, not a human
 - ❌ Chain reference between different characters — breaks appearance
-- ❌ Trying to align cartoon and realistic by height — let chibi stay smaller
+- ❌ Trying to align cartoon and realistic by height — they should match (see §4, default is NOT chibi)
+- ❌ Defaulting to chibi/exaggerated proportions without an explicit user request — drifts from the real character design; state "accurate to in-game proportions, NOT chibi" in every cartoon `character_description`/`image_prompt`
+- ❌ Camera positioned BEHIND the figures for a walking/macro-motion shot — hides both faces, defeats the format's core comparison device. Camera goes in front (dolly-back) for any shot where the figures move toward it.
+- ❌ Passing Kling `elements` with a bare top-level `prompt` (no `multi_prompt: true`) — causes a deferred 500 at result-fetch, not an immediate error
+- ❌ Real actor name in Animator/Kling-facing motion_prompt text — Kling doesn't parse identity from names; use `elements`/the image for likeness, describe the figure only by role/position in motion_prompt
+- ❌ `generate_audio: true` with an energetic/cinematic motion_prompt and no anti-music clause, when a separate `bg-music.mp3` already exists — Kling may bake in its own unwanted score on top
 - ❌ `character_speech ≠ null` (Kling I2V does not generate voice)
 - ❌ `-shortest` in ffmpeg
 

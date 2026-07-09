@@ -271,6 +271,8 @@ def _img_pos_to_xy(pos) -> tuple[str, str]:
         return "W-w-40", "40"
     if pos == "bottom-center":
         return "(W-w)/2", "H-h-200"
+    if pos == "top-center":
+        return "(W-w)/2", "40"
     if isinstance(pos, str) and "," in pos:
         x, y = pos.split(",", 1)
         return x.strip(), y.strip()
