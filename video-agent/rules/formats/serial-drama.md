@@ -119,6 +119,18 @@ Serial-drama dialogue is I2V, so `duration_sec` is the actual rendered clip leng
 
 ---
 
+## Diegetic product placement (in-scene banners/posters)
+
+When the user asks for a native promo element (e.g. "free primogems banner", "poster in the background") worked into 2-3 scenes:
+
+- **Never let the placement request override locked scene continuity/location.** State the banner/poster requirement as a PROP to fit into whatever location the locked beats/prior episode already put the characters in — do not describe it as belonging to a specific setting (e.g. "market banner", "street signage") if that setting isn't where the scene is actually happening. Burned in genshin-impact "Don't Save Me" EP5 (2026-07-10): the Manager's own brief to Scenarist said "market banner/flag... market stall signage", which combined with "pick whatever location fits" latitude, made Scenarist invent an entire market-street setting and move 4 scenes out of the locked teahouse continuity — an unforced, confusing location jump the viewer couldn't parse ("as in, they moved? how?"). The fix cost a full re-render of 4 scenes (~$3.20) that a correctly-scoped brief would have avoided.
+- **When the locked location doesn't naturally fit the banner's real-world placement** (e.g. a promo banner is naturally an outdoor market fixture, but the scene is indoors), have it glimpsed through a window/open door frame from inside the locked location, rather than moving the characters outside. This satisfies "native in-world prop" without touching location/continuity.
+- **Escalate legibility gradually across the 2-3 scenes**, not instantly large in scene 1 — e.g. small/distant in the first scene it appears, clearer in the second, largest/most legible in the third (the scene where the camera is naturally closest to it).
+- **Banner text must fit fully in frame — verify against both crop AND occlusion.** NB2 can crop long banner text at the frame edges (state explicit width/positioning: "short banner, NOT spanning pole-to-pole, fully contained with margin on both sides") AND can let a character's raised arm/head cross in front of it (state explicit blocking: character's arms/head must stay below the banner's vertical band). Two different failure modes, both need explicit prompt language — fixing one does not fix the other.
+- **Character costume lock reinforcement for dramatic close shots.** A close/dramatic framing instruction (e.g. "leaning in, urgent whisper") can make NB2 drift a locked character into an invented costume (armor/cape/accessories not in their card) even when the correct reference sheet is attached and the prompt text is otherwise correct — this is a generation-fidelity miss, not a prompt-writing bug. For any dramatic/intense close shot, add an explicit corrective clause naming what NOT to add (e.g. "standard uniform only — no armor, no cape, no pendant, no mask") in addition to the normal locked `prompt_descriptor`.
+
+---
+
 ## Story Bible — persistent series state
 
 File `games/{GAME_TAG}/serial-drama_story_bible.json` stores the universe state between episodes. **Mandatory** for serial-drama.
