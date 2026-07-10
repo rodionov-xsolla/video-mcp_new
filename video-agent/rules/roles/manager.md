@@ -135,12 +135,18 @@ Without this phrase — work autonomously.
 
 6. **Character sheets:** check `games/{GAME_TAG}/assets/refs/` for `{slug}-sheet.png` for needed characters. If missing — run `tools/gen-character-cards.sh {GAME_TAG}` for batch generation of concept art sheets (~$0.04 per character).
 
-7. **Query ALL assets from Supabase** (single query for the whole game):
+7. **Query assets from Supabase, filtered to the current format.** Character/avatar refs are NEVER shared across formats — different formats render the same game in different art styles (e.g. `fun-news`'s talking-head anchor render vs `redcon`'s cinematic 3D vs `what-if-real-life`'s photoreal). Reusing a ref tagged for a different format silently imports its style. Burned 2026-07-09: the redcon Q episode reused a `fun-news`-tagged Q avatar as the "canonical self" ref, producing a visible style mismatch against the freshly generated alternate self.
+
+   **Series-scoped formats (serial-drama and any format that runs multiple parallel shows in the same game via separate story bibles) need a finer key than `FORMAT` alone.** `serial-drama` currently runs at least two distinct shows in `star-trek-timelines` — "The Airlock" (`series_id: star-trek-airlock`, cinematic ship-set 3D) and "ROOM 1701" (`series_id: room-1701`, explicitly "not Pixar" bedroom-sitcom look) — same format engine, different `style_tags` in each show's story bible. Tagging a character ref with just `serial-drama` would let the two shows cross-contaminate each other's style. For these formats, tag and filter by **`series_id`** (from the show's `{format}_story_bible.json` → top-level `series_id`), in addition to the `FORMAT` tag:
+
    ```bash
    curl -s -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
      -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
-     "${SUPABASE_URL}/rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*"
+     "${SUPABASE_URL}/rest/v1/game_assets?game_tag=eq.{GAME_TAG}&tags=cs.{${FORMAT}}&select=*"
+   # Series-scoped formats: also require series_id in tags, e.g. tags=cs.{serial-drama,star-trek-airlock}
    ```
+
+   **Only rows whose `tags` contain the current `FORMAT` slug (and `series_id`, where applicable) are eligible for reuse.** A row for the same character tagged with a *different* format or series, or with no matching tag at all, is NOT a match — treat it as if the ref doesn't exist for this format/series and have Storyboarder generate a fresh one (tagged with `FORMAT` + `series_id` on upload, so it becomes reusable within this format/series going forward). Branding assets (`opener`, `cta`, `title-card`) are the one exception — query those the same way but they're already scoped per-format by tag/name convention, so a match is expected every time.
 
    **Distribute assets to roles:**
 
@@ -153,9 +159,9 @@ Without this phrase — work autonomously.
    | `prompt_block` | **Scenarist** | Use as `character_description` |
    | `asset_type = gameplay_clip` | **Editor** | Download for reddit-story / gameplay-ai-avatar |
 
-   **If an asset is missing:**
+   **If an asset is missing (i.e. no row tagged with the current `FORMAT`):**
    - **Opener / CTA:** STOP — notify the user. These assets must be uploaded in advance
-   - **Character refs / avatar refs:** generation in Phase 3 is allowed, but **mandatory upload** of the result to Supabase via `queue/upload-asset.sh` with the right tags
+   - **Character refs / avatar refs:** generation in Phase 3 is allowed, but **mandatory upload** of the result to Supabase via `queue/upload-asset.sh --tags "{FORMAT},..."`. The `FORMAT` tag is mandatory, not optional — it's what makes the ref eligible for reuse next time and what keeps it from being reused by a different format.
    - **Gameplay clips:** STOP for reddit-story / gameplay-ai-avatar
 
    **After generating ANY new character** Storyboarder must:
