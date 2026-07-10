@@ -64,9 +64,17 @@ When reporting actual spend, calculate from rendered seconds, model rates, regen
 
 | Phase | Timing | Goal | Clips |
 |---|---|---|---|
-| **HOOK** | 0–5s | Visual paradox + hook line. Stop the scroll | 1 clip (5s, ACTION/I2V) |
+| **HOOK** | 0–5s | Spoken hook line / gag / engaging moment. Stop the scroll | 1 clip (5s, DIALOGUE/I2V) |
+| **TITLE CARD** | after HOOK | Series overlay card | interstitial, not a scene |
 | **CLIMAX** | 5–30s | Dialogue, confrontation, rising tempo | 2–3 clips (5–10s each) |
 | **CLIFFHANGER** | last 5s | Cut at the peak. Shock, reveal, mid-sentence stop | 1 clip (5s, ACTION/I2V) |
+
+**Scene 1 (HOOK) is always a dialogue clip carrying a spoken line/gag/engaging moment — never a silent action beat.** A silent hook (pure action, no line) reads as a slow establishing shot, not a scroll-stopper. This is Scenarist's job: write scene 1 as `clip_type: "dialogue"` with a punchy opening line, same convention as EP1–3's cold opens ("You're backup. Not competition." etc.).
+
+**Title card placement — fixed convention, not an overlay-on-scene-2 default.** The order is always: **HOOK (scene 1) → TITLE CARD → rest of the episode (scene 2 onward)**. The title card must NEVER overlap a scene window that has active `character_speech` — it buries the dialogue and its subtitles (burned in ROOM 1701 EP4, 2026-07-10: title card window defaulted to `after_scene_1` starting exactly at scene 2's t=0, and scene 2 is dialogue from frame 1 — the "FREE DOWNLOAD / LINK IN BIO" card sat directly over Michael/Alex's faces and subtitle text for the first 5s of their conversation). Two valid placements, in order of preference:
+1. **Within scene 1's own runtime**, if scene 1's hook line finishes with room to spare before the clip ends (e.g. line lands in the first 2–3s, last 2s is a silent reaction beat) — overlay the title card over that trailing silent portion only.
+2. **As a short freeze-frame interstitial** immediately after scene 1's last frame (hold scene 1's final frame ~1.5–2s, title card fades in/out over the hold), inserted as its own beat before scene 2 starts. This adds to total runtime and is NOT counted against the 6-scene cap — it is not a scene, it is a title-card interstitial. Use this whenever scene 1's dialogue runs to the very end of the clip (no natural silent tail to overlay onto).
+Never default the title card window to the start of scene 2 (or any other dialogue scene) just because scene 1 "ran out of room" — check the actual scene 1 audio/dialogue timing before picking the window.
 
 ### What works (TikTok/Reels audience)
 
@@ -396,6 +404,8 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - [ ] `format: "serial-drama"`, `series_id`, `episode_number` = story_bible.last_episode + 1
 - [ ] `retention_strategy`, `active_loops`, `cliffhanger` filled
 - [ ] First clip — HOOK, last — CLIFFHANGER
+- [ ] Scene 1 (HOOK) is a dialogue clip with a spoken line/gag, not a silent action beat
+- [ ] Title card window sits after HOOK and before scene 2, and does NOT overlap any scene's `character_speech` window (own trailing silent portion of scene 1, or a freeze-frame interstitial — never defaulted onto scene 2's start)
 - [ ] ACTION/DIALOGUE ~ 50/50; at least 2 characters speak
 - [ ] Dialogue clips = 5s (10s only with `duration_reason`)
 - [ ] All images 608×1080 (9:16)
@@ -430,8 +440,9 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - ❌ Repeating hooks/cliffhangers from the last 8 episodes
 - ❌ Redoing clips that already work (each extra generation = $0.42+)
 - ❌ Layered assembly (breaks music and timing)
-- ❌ Padding dialogue clips with `tpad=stop_mode=clone` / freeze-last-frame. Runtime comes from I2V durations.
-- ❌ Title cards, brainrot tags, character name overlays
+- ❌ Padding dialogue clips with `tpad=stop_mode=clone` / freeze-last-frame to fake extra runtime inside a scene. Runtime comes from I2V durations. (This does NOT forbid the title-card freeze-frame interstitial between scene 1 and scene 2 — that's a distinct beat, not padding a clip's own duration.)
+- ❌ Title-card overlay window defaulted onto scene 2 (or any scene with `character_speech`) — always place it on scene 1's silent tail or as its own freeze-frame interstitial (see "Episode structure" above). Burned ROOM 1701 EP4 (2026-07-10).
+- ❌ Mid-episode title cards, brainrot tags, character name overlays (the episode-open title card is the one exception — see "Episode structure")
 - ❌ Long 10s dialogue clips for $0.04 savings (kills dynamics)
 - ❌ Re-rendering one line into a parallel `-new`/`-v2` audio file (drops locked voice → same character, two voices — EP6 Admiral)
 - ❌ Referencing one character from two different ref asset paths across clips (face differs between adjacent clips)
