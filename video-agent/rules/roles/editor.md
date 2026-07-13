@@ -502,12 +502,14 @@ curl -s -o build/bg.png "$BG_URL"
 
 ### Step 1 — normalize gameplay clips (CRITICAL: crop-to-fill, never pad)
 
-Inspect actual clip dimensions first (`ffprobe -show_entries stream=width,height`). Scale to 960×1280 via crop-to-fill regardless of source resolution. If the source clip is longer than TTS_DUR, optionally use `-ss OFFSET` to start from a specific timestamp.
+Inspect actual clip dimensions first (`ffprobe -show_entries stream=width,height`). Scale to 960×1280 via crop-to-fill regardless of source resolution. The source clip is longer than TTS_DUR, so `-ss OFFSET` is **mandatory**, not optional.
+
+**OFFSET must vary between runs and go meaningfully deep into the clip** — do not default to a small offset (e.g. ~30–40s) every time, that reuses the same visual window and looks identical across episodes. Check `reddit-story_bible.json` for `gameplay_offset_sec` used in the last 2–3 episodes for this `game_tag`, then pick a new offset at least 3–4 minutes away from those (both `ffprobe -show_entries format=duration` on the clip and `TTS_DUR` bound the max: `offset + TTS_DUR <= clip_duration`). Record the chosen offset back into the bible entry so the next run can avoid it.
 
 ```bash
 FFMPEG=/usr/local/bin/ffmpeg-full/ffmpeg
-# Example: start from 35s offset, take only TTS_DUR seconds
-ffmpeg -y -ss 35 -i games/${GAME_TAG}/gameplay/clip.mp4 -t "$TTS_DUR" \
+# OFFSET: pick per-run, 3-4 min away from recent episodes' offsets (see above)
+ffmpeg -y -ss "$OFFSET" -i games/${GAME_TAG}/gameplay/clip.mp4 -t "$TTS_DUR" \
   -vf "scale=960:1280:force_original_aspect_ratio=increase,crop=960:1280,setsar=1,fps=30" \
   -an -c:v libx264 -preset fast -crf 22 \
   build/gp_norm.mp4

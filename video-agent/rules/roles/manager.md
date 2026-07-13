@@ -250,6 +250,8 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
 
 **Validation:** `pipeline.sh` checks inline that `final.mp4` exists, is ≥ 100KB, and has a sane `ffprobe` duration. If anything is off → STOP (moov atom missing usually means the encode was killed mid-run; never background ffmpeg).
 
+**Do not hand the Editor manual math.** Pass only the parameters listed above (`GAME_TAG`, `FORMAT`, `OUTPUT_DIR`, `LANGUAGE`, booleans, paths) plus short context facts (which scenes changed, special conditions). Never compute and pass specific clip durations, `filter_complex` graphs, `TOTAL_DUR`/`MAIN_DUR` formulas, or input ordering yourself — the Editor derives all of that from `storyboard.json` and `rules/roles/editor.md` §0/§6. Handing it your own numbers means it follows your math instead of the real files, and a wrong manual calculation produces a badly-cut/sped-up result. Exception: font-patch commands (e.g. `sed` Helvetica→Montserrat) and `fontsdir` — those aren't in editor.md and are fine to pass along.
+
 ### PHASE 6 — Review gate + Upload and logging
 
 **MANDATORY — show user Supabase URL first (both debug and non-debug).** After Editor uploads `final.mp4` to Supabase, STOP and show the user the public URL. Wait for explicit OK before proceeding to YouTube upload, git push, and `log-video.sh`. "Non-debug: no questions" applies only to the YouTube upload channel/privacy — not to the user review gate. Lesson burned EP10 (2026-06-09): pushed git and logged before user watched → had to redo voices and rebuild 3 times.
@@ -268,6 +270,8 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
    - No `youtube_channel` field → no channel mapped yet. Do NOT guess. Skip the YT upload and tell the user which channel to map (Supabase URL stays the deliverable).
 
    **Metadata.** Title: `storyboard.json → title` (fallback: idea). Description: `storyboard.json → description` (fallback: empty). Tags: `GAME_TAG + format_slug + storyboard.json → youtube_tags`.
+
+   **YouTube title hard limit — 100 characters.** `storyboard.json → title`/`headline` (e.g. reddit-story's full headline) is often longer — it's written for narration/on-screen text, not the YouTube title field. The API rejects anything over 100 chars with a misleading `"invalid or empty video title"` / `reason: invalidTitle` error that gives no hint about length (burned 2026-07-13, genshin reddit-story: 117-char headline silently failed upload, `set -euo pipefail` in `youtube-upload.sh` exits with no error text since the failing `curl` is inside a bare `$(...)` assignment). **Always check `echo -n "$TITLE" | wc -c` before upload; if >100, write a shorter YouTube-only title** (keep the full headline as the in-video hook/narration, just shorten what goes to `youtube-upload.sh`).
 
    **Privacy is always `private`** — videos are uploaded privately so the user can review before publishing.
 
