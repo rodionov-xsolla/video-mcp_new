@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Character Story",
   "created_at": "2026-05-30",
-  "last_episode": 18,
+  "last_episode": 19,
   "tts_engine": "elevenlabs",
   "tts_note": "ElevenLabs eleven-v3 via fal-ai/elevenlabs/tts/eleven-v3. Each canonical character gets a dedicated voice chosen by gender and emotional register. No Chatterbox — STT always uses ElevenLabs. See characters[] for voice assignments. Long monologue (>80 words) → mandatory chunking into ≤35-word segments.",
   "format_overrides": {
@@ -32,7 +32,8 @@
       "Janeway",
       "Michael Burnham",
       "T'Pol",
-      "Kira Nerys"
+      "Kira Nerys",
+      "Borg Queen"
     ],
     "done_male": [
       "McCoy",
@@ -67,7 +68,8 @@
       "Kirk",
       "Spock",
       "Worf",
-      "Khan"
+      "Khan",
+      "Borg Queen"
     ],
     "error": [],
     "error_note": "Characters listed in 'error' had a production attempt but the final video was rejected. Do NOT pick them again until manually reviewed and removed from this list.",
@@ -207,6 +209,20 @@
       "youtube_url": "https://www.youtube.com/watch?v=lnbcc_Mt-gQ",
       "yt_publish_at": "2026-07-07T20:59:00Z",
       "notes": "Villain arc — Eugenics Wars warlord to exiled avenger. 3 age variants: young (~30-35, Eugenics Wars), exile (~35-40, Ceti Alpha V), mature (~45-50, Reliant/Genesis). Hook: mature Khan at Mutara Nebula. Monologue ~116 words, atempo 1.31×. Music: dark-loosescrew-slowed. Budget: ~$3.28."
+    },
+    {
+      "episode": 19,
+      "date": "2026-07-13",
+      "character": "Borg Queen",
+      "character_slug": "borg-queen",
+      "gender": "female",
+      "era": "TNG / VOY",
+      "idea": "Borg Queen — Character Story | Star Trek Timelines",
+      "elevenlabs_voice": "Aria",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-13/character-story_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=ojGbJ8WzZ4s",
+      "yt_publish_at": "2026-07-19T20:59:00Z",
+      "notes": "Villain arc — origin of the Collective to near-humanity flickering with Data and Seven. Single-age (Borg, no canonical age variants). Hook: Queen activating in alcove, First Contact offer. Monologue 94 words, atempo 1.354× (MiniMax Calm_Woman, not ElevenLabs — active provider override). Music: dark sci-fi tension MiniMax Music. Redo: scene 1 re-animated with user-preferred original PNG; scene 4 regenerated as close-up hands (distinct from scene 3 throne). Budget ~$4.08."
     }
   ],
   "style_tags": "realistic 3D CGI — cinematic lighting, photorealistic textures, high detail 3D render, game cutscene quality. Do NOT use the game's illustrated/painted art style. All clips must match this style, including child-character scenes. Required prompt keywords: 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI, game cutscene quality'.",
@@ -358,7 +374,7 @@
       "elevenlabs_voice": "Aria",
       "voice_note": "Silky-smooth, seductive, utterly cold — the Collective speaking through one voice. High stability, zero warmth",
       "character_description": "female Borg Queen, pale grayish skin, bald head with dark biomechanical skull cap, exposed mechanical spine, black bodysuit with grey bio-tubing, dark hollow eyes, sinister knowing half-smile, Borg alcove background with green ambient glow",
-      "ref_url": null
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/borg-queen/sheet.png"
     },
     "dukat": {
       "name": "Gul Dukat",
