@@ -61,6 +61,19 @@
     "note": "One-off classic-character redcon episodes (canonical character + alternate-self, first-person monologue) — NOT part of the Player-POV crisis_rotation numbering above. Kept separate so future runs don't confuse these with the numbered Traveler-POV series or its do_not_repeat list.",
     "done": [
       {
+        "date": "2026-07-13",
+        "character_name": "Raiden Shogun (Ei)",
+        "alternate_designation": "Ei, the Unmoved — Absolute Sovereign of Inazuma",
+        "divergence_point": "Inazuma Chapter II, Tenshukaku — the moment the Traveler's intervention (destroying the Euthymia sample / the conversation with Ei) convinces her in canon to rescind the Vision Hunt Decree. In this alternate timeline the intervention fails; she completes the Decree by force, hunting and sealing every Vision in Inazuma with no exceptions, including her own loyal followers.",
+        "named_casualty": "Kujou Sara — the Shogun's own devoted tengu general and shrine maiden, herself an Electro Vision-bearer, has her Vision hunted and sealed like any other on Ei's own no-exceptions decree, broken in the process.",
+        "downstream_consequence": "Inazuma becomes a nation frozen in absolute stasis — no Vision-bearers, no dissent, no change of any kind — an eternity of silence rather than the canon's reconciled 'eternity within change'.",
+        "tts_voice": "Chatterbox — no pre-existing Raiden Shogun/Ei voice ref found in games/genshin-impact/ at scenarist time; a raiden-shogun/voice-1.mp3 ref was sourced/created for the run. Cold, commanding, low-register reference, degraded stability/style (0.05/0.9) for the 'Unmoved' alternate register.",
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-13/redcon_final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=60h1w0mUe3o",
+        "yt_publish_at": "2026-07-18T20:59:00Z",
+        "notes": "Character-variant branch (not Traveler-POV crisis_rotation). Structure mirrors the Childe 'The Eleventh, Unchained' precedent: 1 title card + 6 story clips, ~35s story + CTA. Two character refs needed (canonical Ei, alternate 'Unmoved' Ei) plus a fresh Kujou Sara ref — none of the existing redcon-tagged Supabase refs (zhongli-seal, teppei, scaramouche, tartaglia-unchained) apply. IMPORTANT lesson: Scenarist's first monologue draft was 116 words for a fixed 6×5s=30s clip window — Chatterbox rendered it at 63.66s, forcing Editor into a 2.1x atempo stretch that sounded chipmunked. Had to send it back to Scenarist to trim to 66 words (~10-12/clip), re-render TTS, and re-assemble — final stretch factor 1.166x, in line with Childe's 1.17x. Target ~60-70 words total (not 100+) for future 6-clip character-variant monologues. Also: MiniMax Music API timed out generating fresh bg-music for this episode; Sound fell back to the existing music/Dark/dark-crystal-castles.mp3 track (deprecated fallback per sound.md §6, but tonally fine for this somber/tragic episode) — future runs should retry generation before falling back if time allows."
+      },
+      {
         "date": "2026-07-08",
         "character_name": "Childe (Tartaglia)",
         "alternate_designation": "The Eleventh, Unchained",
