@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 1,
+  "last_episode": 2,
   "tts_engine": "minimax",
   "tts_note": "MiniMax Speech 2.8-HD. Voice: Deep_Voice_Man (authoritative, measured). Second-person monologue throughout — NOT first-person alternate-self. Voiceover opens with the CTA hook on the teaser clip, then continues second-person through story clips.",
   "format_overrides": {
@@ -46,18 +46,25 @@
         "date": "2026-07-06",
         "crew_assembled": ["Data", "Scotty", "Julian Bashir", "Ro Laren"],
         "note": "Frequency modulation cracked before Allied fleet annihilated. Dominion War ended 6 months early."
+      },
+      {
+        "crisis": "Hobus supernova — destruction of Romulus (2387), SAVED",
+        "episode": 2,
+        "date": "2026-07-13",
+        "crew_assembled": ["Spock (Ambassador)", "Geordi La Forge", "T'Pol"],
+        "note": "Successful-outcome divergence (not a canon-averting rescue of a doomed loss, but a straight-up fix of the original tragedy): in canon Ambassador Spock's red matter ship arrived too late and Romulus was destroyed, which is why Spock ends up flung into the past in the 2009 film. In this timeline the cross-era crew (Geordi rebuilding the deployment rig faster than canon, T'Pol locking the containment math, Spock firing the red matter in time) deployed containment before the shockwave hit — Romulus survived. First bible episode to use the new 8-part player-POV structure (TEASER with TTS starting immediately → 3s silent TITLE CARD → HOOK+CTA → CANON REMINDER → CREW ASSEMBLED → DIVERGENCE → REVELATION → CTA asset)."
       }
     ],
     "do_not_repeat": [
       "Borg cube / Wolf 359",
-      "Breen weapon / Chin'toka"
+      "Breen weapon / Chin'toka",
+      "Hobus supernova / Romulus"
     ],
     "candidates_for_future": [
       "Xindi superweapon — Delphic Expanse (2153)",
       "V'Ger approaching Earth (2273)",
       "Changeling infiltration of Starfleet Command (2372)",
-      "Praxis explosion + Khitomer Accords (2293)",
-      "Hobus supernova — destruction of Romulus (2387)"
+      "Praxis explosion + Khitomer Accords (2293)"
     ]
   },
   "style_tags": "Star Trek Timelines style, semi-realistic Pixar-quality 3D, cinematic Federation lighting, deep space environment, Starfleet uniform details, clean cinematic frame, no cartoon, no chibi",
@@ -111,6 +118,25 @@
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/videos/star-trek-timelines/2026-07-06/redcon_final.mp4",
       "youtube_url": null,
       "notes": "First bible episode. Note: used old structure (no pre-title-card teaser clip) — new Player-POV structure applies from EP2 onwards."
+    },
+    {
+      "episode": 2,
+      "date": "2026-07-13",
+      "crisis": "Hobus supernova — destruction of Romulus (2387), SAVED",
+      "crew": ["Spock (Ambassador)", "Geordi La Forge", "T'Pol"],
+      "tts_voice": "Deep_Voice_Man",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-13/redcon_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=42mWhkvaTZE",
+      "yt_publish_at": "2026-07-16T20:59:00Z",
+      "duration_sec": 38.33,
+      "cost_breakdown": {
+        "scenarist_storyboarder": 3.77,
+        "sound": 0.11,
+        "animator": 2.77,
+        "editor": 0.0,
+        "total_usd": 6.65
+      },
+      "notes": "First episode to use the new 8-part player-POV structure end to end (TEASER with TTS starting immediately → 3s silent TITLE CARD → HOOK+CTA → CANON REMINDER → CREW ASSEMBLED → DIVERGENCE → REVELATION → CTA asset). New redcon-tagged character refs generated for Ambassador Spock, Geordi La Forge, T'Pol. Incident: Storyboarder's upload-asset.sh call for T'Pol used --upsert on the shared canonical path characters/tpol/sheet.png (tagged motion-dance in game_assets, no --variant given), overwriting that file's bytes with the redcon-style render — original unrecoverable, no local cache existed. motion-dance is not currently a linked format for star-trek-timelines, so no active run is affected, but the game_assets row was retagged with CORRUPTED-redcon-style-2026-07-13-needs-regen so motion-dance regenerates its own T'Pol ref before next use. Recommend adding a pre-flight tag check to upload-asset.sh (refuse/warn on upsert to a canonical character path if the existing row's tags don't include the current format) to prevent recurrence."
     }
   ]
 }
