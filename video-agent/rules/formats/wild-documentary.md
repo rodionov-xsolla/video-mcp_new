@@ -295,7 +295,7 @@ Motion prompts must have three concurrent motion layers:
   - `voice_id: "Deep_Voice_Man"`, `speed: 0.90`, `emotion: "neutral"`
   - Upload to Supabase as `tts-narration.mp3`
 - **Segmentation for Editor:** provide a `tts_segments.json` with per-clip word counts and estimated timestamps so Editor can align narration to clips. Rough formula: ~0.45s per word at speed 0.90.
-- **No background music** (default). If the user explicitly requests it: ambient nature underscore from `music/Ambient/` at vol 0.05 maximum.
+- **No background music** (default). If the user explicitly requests it: ambient nature underscore generated via MiniMax (instrumental) at vol 0.05 maximum.
 - General rules — `rules/roles/sound.md`
 
 ### Editor

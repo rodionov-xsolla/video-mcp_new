@@ -161,7 +161,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - All frames 9:16 (608×1080)
 - Character ref: create an anchor ref (neutral pose, dark background) from game config
 - **No bg-reference generation.** Environment is baked into the scene prompt via `image_prompt`. Do NOT generate separate bg PNGs for character-story — use text description of the location in the prompt only.
-- Chain: `scene-1` refs = `[character-ref]`; `scene-N` (N≥2) refs = `[character-ref, scene-(N-1).png]`. No bg ref (фон через текст в `image_prompt`), но prev-scene chain — обязателен для continuity между кадрами (verified on Picard EP1: storyboarder использовал chain для clips 3/5/6/7 → continuity улучшилась). См. storyboarder.md §10.
+- Chain: `scene-1` refs = `[character-ref]`; `scene-N` (N≥2) refs = `[character-ref, scene-(N-1).png]`. No bg ref (background comes through text in `image_prompt`), but the prev-scene chain is mandatory for continuity between frames (verified on Picard EP1: Storyboarder used the chain for clips 3/5/6/7 → continuity improved). See storyboarder.md §10.
 - If 2 characters in frame — both via refs, max 2 refs per image
 - `image_prompt` describes the visual action from `action_description`, NOT the monologue text
 - **One PNG per clip — start frame only.** Do NOT generate `scene-K-end.png`. End frames waste $0.08/clip and are FORBIDDEN with `multi_prompt`. See storyboarder.md §14.8.
@@ -183,7 +183,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - Micro vs. macro motion: avoid full-body locomotion (walking across the frame, running, combat hits) because identity drift is visible. BUT motion within the frame (head, hands, torso, breath, sustained gestures, props in motion, environment) MUST be alive.
 - Duration: 5s for all clips
 - Polling: base URL `fal-ai/kling-video`, every 15s, max 10 min
-- Do NOT use: Kling Avatar, Veo3, generate_audio: true
+- Do NOT use: Kling Avatar, generate_audio: true
 - General rules — `rules/roles/animator.md`
 
 ### Sound
@@ -200,7 +200,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
   - One universal style (editor.md §6): `add_subtitles.py build/voice-final.wav build/subs.ass --storyboard storyboard.json --lang en --main-dur {MAIN_DUR}`. No `--chunk`/`--fontsize`/`--marginv`/`--no-scale`/`--emphasis`.
 - **Speed control:** if TTS duration > timeline (7×5 = 35s for 6-clip; 8×5 = 40s for 8-clip), Editor applies `atempo` (cap 1.4×). Subtitles are computed from the already sped-up speech (`voice-final.wav`) — no recompute. If mismatch > 40% — return to Scenarist to shorten text.
 - **Music:** by mood from storyboard (`music.mood`)
-  - Pick a track from `music/tracks.json` by mood
+  - Generate the track with MiniMax by mood (see sound.md §6)
   - `volume` from storyboard (default 0.15)
 - General rules — `rules/roles/sound.md`
 
@@ -300,7 +300,7 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 ## Anti-patterns
 
 - ❌ `generate_audio: true` in Kling I2V (voice is bad, use TTS overlay)
-- ❌ Kling Avatar / Veo3 (format does not use lipsync)
+- ❌ Kling Avatar (format does not use lipsync)
 - ❌ `character_speech ≠ null` (voice only via TTS overlay)
 - ❌ `voice_id` hash instead of `voice` name in ElevenLabs
 - ❌ TTS by fragments (generate the whole monologue in one request)

@@ -212,7 +212,7 @@ If output of one stage (TTS, images) is needed as input for the next expensive s
 ### PHASE 5 — Assembly (Editor)
 Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude/agents/editor.md`). Sub-agent loads `rules/roles/editor.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute), `OPENER_PATH` / `CTA_PATH` if applicable, `LANGUAGE`, `CHANNEL_BUG_URL` (see rule below), **+ two booleans from the front-matter (see below)**. All scene MP4s and audio tracks are already on disk in `OUTPUT_DIR/scenes/`. Template: `prompts/editor.txt`.
 
-**`CHANNEL_BUG_URL` rule:** передавать только если `GAME_TAG == star-trek-timelines` **И** `FORMAT == fun-news`. Во всех остальных случаях передавать пустую строку (`CHANNEL_BUG_URL=""`). URL берётся из `games/star-trek-timelines/star-trek-timelines.md` → `## GLN Channel Branding`.
+**`CHANNEL_BUG_URL` rule:** GLN ("Galactic Lol Network") is a Star Trek-specific brand — pass a URL only if `GAME_TAG == star-trek-timelines` **and** `FORMAT == fun-news`. In every other case pass an empty string (`CHANNEL_BUG_URL=""`). The URL is read from `games/star-trek-timelines/fun-news_story_bible.json` → `channel_branding.channel_bug_url`.
 
 **Subtitles are universal — the orchestrator only passes on/off.**
 
@@ -311,11 +311,11 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
      --format "$format_slug" \
      --video-url "$SUPABASE_VIDEO_URL" \
      --youtube-url "$YOUTUBE_URL" \        # omit if YT upload was skipped
-     --yt-publish-at "$YT_PUBLISH_AT"      # actual YouTube publishAt date from upload output
+     --yt-publish-at "$YT_PUBLISH_AT"      # actual YouTube publishAt date from upload output; use --immediate instead if it went public now
    ```
    - `--video-url` is the Supabase public URL from step 1 (stable per game/date/format → the upsert key, mapped to `output_video_url`).
    - `--title` lands in `input_idea` (the table's NOT NULL title field). `--format` and `--youtube-url` in their own columns.
-   - `--yt-publish-at` is the actual scheduled date captured from `youtube-upload.sh` output (`SCHEDULED_FOR=...`). This is what gets stored in `yt_published` — NOT the current timestamp. If omitted, falls back to `now()` (immediate publish case).
+   - `--yt-publish-at` is the actual scheduled date captured from `youtube-upload.sh` output (`SCHEDULED_FOR=...`). This is what gets stored in `yt_published` — NOT the current timestamp. **If `--youtube-url` is set, one of `--yt-publish-at` or `--immediate` is now required — the script errors instead of silently defaulting to `now()`** (burned EP: Klingon Targ logged as published 07.07 while actually scheduled for 10.07, because `--yt-publish-at` was dropped).
    - Requires `UNIQUE(output_video_url)` + `format`/`youtube_url` columns — see `queue/setup.sql` (run the ALTERs once in the SQL editor).
 
    **Publication timestamp fields** (`yt_published`, `tt_published`, `inst_published`): each stores the UTC datetime when the video was published to that platform, `NULL` = not yet published. The manager only ever sets `yt_published` (via `log-video.sh`). **TikTok and Instagram publishing is a separate process — the manager does NOT trigger it and does NOT mention it to the user after generation.** Those platforms are handled by a dedicated mobile-mcp posting agent launched independently via its own command — runbook: `rules/roles/publisher.md` (triggered by «Опубликовать в тик-ток» / «Опубликовать в инстаграм»; uses `queue/fetch-for-publish.sh` to stage the video on the phone, then `queue/log-publish.sh` to mark it published).
@@ -423,7 +423,6 @@ Before calling ANY external API (fal.ai, ElevenLabs, Kling, HeyGen, Supabase) **
 | GPT Image 2 medium (image) | `fal-ai/gpt-image-2` (verify via Context7) | ~$0.04 |
 | Kling v3 Standard I2V (primary) | `fal-ai/kling-video/v3/standard/image-to-video` | $0.084/s ($0.42/5s no audio; always `generate_audio: false`) |
 | Kling 2.6 Pro I2V (fallback) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.07/s ($0.35/5s no audio; always `generate_audio: false`) |
-| ~~Veo3 T2V~~ | ~~`fal-ai/veo3`~~ | ~~$0.20–$0.40/s~~ — **DO NOT USE** (expensive, no voice control) |
 | MiniMax TTS (via fal.ai) | `fal-ai/minimax/speech-2.8-hd` | ~$0.10/1k chars. `voice_setting.voice_id`, `emotion`. Field is `prompt` not `text`. |
 | Kling Lipsync | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/s |
 | HeyGen Avatar IV | `fal-ai/heygen/avatar4/image-to-video` | $0.10/s |
@@ -459,7 +458,7 @@ episodes/{GAME_TAG}/{YYYY-MM-DD}-{format}/
 
 videos/{GAME_TAG}/{YYYY-MM-DD}/{format}_final.mp4   final video
 
-music/{Mood}/{track}.mp3                    Drama/, Fun/, Tense/, Dark/, Neutral/
+music/                                     DEPRECATED local library (bg-music is now generated per-video by Sound via MiniMax; see sound.md §6)
 ```
 
 **NOT in storage:** story bibles (JSON) — local only in `games/`.

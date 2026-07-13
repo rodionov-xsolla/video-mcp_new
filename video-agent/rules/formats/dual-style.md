@@ -22,7 +22,7 @@ Keywords: "dual-style", "game vs reality", "meet your character IRL", cosplay co
 
 - **Cartoon left + realistic right** (positioning fixed for the whole video)
 - **3 clips × 5–10s** → 15–30s total
-- **Model:** Kling v3 Standard I2V, `generate_audio: true` (встроенный аудио Kling — ambient SFX прямо в клипе)
+- **Model:** Kling v3 Standard I2V, `generate_audio: true` (Kling's built-in audio — ambient SFX baked directly into the clip)
 - **Speech:** NO, `character_speech: null` everywhere
 - **Budget:** $5 max
 
@@ -183,7 +183,7 @@ If these blocks are missing — Manager must flag and stop until they are added.
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
-- **Kling v3 Standard I2V**, `generate_audio: true` (встроенный ambient SFX), `aspect_ratio: "9:16"`
+- **Kling v3 Standard I2V**, `generate_audio: true` (built-in ambient SFX), `aspect_ratio: "9:16"`
 - `duration`: "5" or "10"; without `end_image_url`
 - `character_speech: null` → Kling does not receive speech text
 - One model for the whole video
@@ -200,7 +200,7 @@ If these blocks are missing — Manager must flag and stop until they are added.
   - Save to: `OUTPUT_DIR/scenes/scene-K/scene-K-sfx.wav`; convert to mp3 via ffmpeg if needed
   - One SFX file per scene; write `sfx_url` (local path) back into storyboard.json
   - Cost: **$0.01 per generation** (4 scenes = $0.04)
-- Music: **обязательно генерировать через MiniMax Music v2.6** (`fal-ai/minimax-music/v2.6`, $0.03/трек). Треки из `music/tracks.json` запрещены — правообладатель подаёт страйки, видео попадают в теневой бан. Параметры: `is_instrumental: true`, mood energetic/upbeat, BPM 120–150. Длительность: не менее длительности финального видео (≥25s). Сохранить как `OUTPUT_DIR/bg-music.mp3`.
+- Music: **must be generated via MiniMax Music v2.6** (`fal-ai/minimax-music/v2.6`, $0.03/track). Tracks from `music/tracks.json` are forbidden — the rights holder files strikes and videos get shadow-banned. Parameters: `is_instrumental: true`, mood energetic/upbeat, BPM 120–150. Duration: at least as long as the final video (≥25s). Save as `OUTPUT_DIR/bg-music.mp3`.
 - Subtitles do not apply
 - General rules — `rules/roles/sound.md`
 

@@ -5,9 +5,9 @@
   "title": "Don't Save Me",
   "style_tags": "Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, soft outline anime aesthetic, magical elemental effects, Teyvat world environment, clean detailed character illustration, Liyue Harbor setting, cinematic 9:16 vertical composition",
   "created_at": "2026-06-04",
-  "last_episode": 3,
+  "last_episode": 4,
   "planned_arc": {
-    "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion only, all combat/running/chases = CUT between clips not animation, protagonist always faces camera, cliffhanger spoken line = Avatar TTS). Childe is the reluctant protector — his every action should read as either threat or sacrifice until the last episode. No on-screen text. After shipping an episode, fold its loops/status into characters[], active_loops, episode_summaries. Do NOT re-invent episodes while this arc has unshipped entries.",
+    "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-6 clips under serial-drama constraints (max 2 chars per frame; see production_rules for the EP4+ Kling I2V voice_ids pipeline — Avatar is retired, macro movement/combat IS allowed in I2V for this series, cliffhanger spoken line is Kling I2V dialogue not Avatar TTS). Childe is the reluctant protector — his every action should read as either threat or sacrifice until the last episode. No on-screen text. After shipping an episode, fold its loops/status into characters[], active_loops, episode_summaries. Do NOT re-invent episodes while this arc has unshipped entries.",
     "episodes": [
       {
         "episode": 1,
@@ -171,7 +171,10 @@
           "whether the Agent reports Childe's defection to Snezhnaya",
           "what Lumine decides to do now that she knows",
           "how far Fatui will escalate"
-        ]
+        ],
+        "status": "done",
+        "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-07/serial-drama_final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=vhiHqh4uPxU"
       },
       {
         "episode": 5,
@@ -432,61 +435,74 @@
     {
       "name": "Childe",
       "role": "protagonist",
-      "character_description": "male Fatui Harbinger Tartaglia, dark blue and red Fatui uniform with hydro-red accents, short bright orange hair, sharp confident grin softening into something genuine, hydro blades manifested at his sides, athletic lean build",
-      "voice": "chatterbox",
+      "character_description": "male Fatui Harbinger Tartaglia, dark blue and red Fatui uniform with hydro-red accents, short bright orange hair, sharp teal-blue eyes, sharp confident grin softening into something genuine, hydro blades manifested at his sides, athletic lean build",
+      "voice": null,
       "voice_ref": "games/genshin-impact/Childe.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/voice-ref.mp3",
-      "status": "EP3: Staged a fake fight against Lumine to fool the Fatui watcher — without warning her. Whispered 'Trust me' mid-fight. When the rooftop watcher took a shot aimed at Lumine, stepped into the bullet. Now on one knee, shoulder bleeding. His sacrifice exposed: he protects her even at cost to himself.",
-      "aura_points": 95,
+      "status": "EP4: Bandaged by Lumine in the empty teahouse. Deflected with jokes, then admitted the order was always about her. She pulled away in silence right as the Agent walked in and saw the bandage — read as proof Childe protected her.",
+      "aura_points": 98,
       "relationships": {
-        "Lumine": "sacrificed himself for her — she now knows he's been protecting her; question is whether she forgives the deception",
-        "Agent": "staged loyalty performance succeeded — watcher fired at Lumine not Childe, meaning Childe appeared to be the threat; but now Childe is down",
+        "Lumine": "confessed the order was about her; she pulled away in silence, unresolved whether she forgives him",
+        "Agent": "the Agent now has visible proof (the wound) that Childe protected Lumine instead of completing the mission",
         "Fatui": "loyal until the moment he isn't"
-      }
+      },
+      "prompt_descriptor": "male Fatui Harbinger Tartaglia, short bright orange hair, sharp teal-blue eyes, dark blue and red Fatui uniform with hydro-red accents, hydro blades manifested at his sides, sharp confident grin, athletic lean build",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/sheet.png",
+      "voice_id_kling": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/voice-ref.mp3",
+      "voice_note": "EP1-3 used Chatterbox TTS (chatterbox) + Kling Avatar v2 lipsync — retired 2026-07-07. EP4+ uses Kling native voice cloning via voice_id_kling (same reference MP3, reused). confident, sharp, sacrificial-hero warmth under bravado — fits a Fatui Harbinger hiding protectiveness behind jokes."
     },
     {
       "name": "Lumine",
       "role": "protagonist",
       "character_description": "female Traveler Lumine, white and gold traveler outfit with star constellation motifs and flowing white sash, long blonde hair with signature silver star-shaped hair clip, sharp determined expression with a hint of wariness, one-handed sword at her side, graceful athletic build",
-      "voice": "chatterbox",
+      "voice": null,
       "voice_ref": "games/genshin-impact/Traveller.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/voice-ref.mp3",
-      "status": "EP3: Fought back in what she believed was a real attack — genuinely furious. Realized mid-sequence it was staged only when Childe took the bullet aimed at her. Now watching him bleed. Anger and confusion colliding with something she doesn't want to name.",
-      "aura_points": 70,
+      "status": "EP4: Bandaged Childe's wound, pressed him until he admitted the order was always about her. Pulled her hands away in silence — the Agent walked in seconds later.",
+      "aura_points": 72,
       "relationships": {
-        "Childe": "he took a bullet for her after deceiving her — the deception and the sacrifice are both true at once; she doesn't know what to do with that",
+        "Childe": "he confessed the order was about her; she pulled away in silence, unresolved",
         "Agent": "active threat — directly targeted"
-      }
+      },
+      "prompt_descriptor": "female Traveler Lumine, long blonde hair with silver star-shaped hair clip, white and gold traveler outfit with star constellation motifs and flowing white sash, one-handed sword at her side, graceful athletic build",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/sheet.png",
+      "voice_id_kling": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/voice-ref.mp3",
+      "voice_note": "EP1-3 used Chatterbox TTS (chatterbox) + Kling Avatar v2 lipsync — retired 2026-07-07. EP4+ uses Kling native voice cloning via voice_id_kling (same reference MP3, reused). sharp, determined, guarded — softens only when genuinely shaken."
     },
     {
       "name": "Agent",
       "role": "antagonist",
       "character_description": "male Fatui Agent, dark charcoal and black Fatui operative coat with deep crimson Fatui insignia, silver Fatui half-mask obscuring the upper face, cold calculating expression, hands clasped behind his back, average compact build radiating controlled menace",
-      "voice": "chatterbox",
+      "voice": null,
       "voice_ref": "games/genshin-impact/Fatui_dottore.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fatui-agent/voice-ref.mp3",
-      "status": "EP2: Watcher (proxy/subordinate) observed the confrontation from the rooftop. Whether the Agent received a report is unknown. Childe's performance may or may not have been convincing.",
+      "status": "EP4: Walked in on Childe's bandaged shoulder — visible proof of protection. Says 'You protected her' — implication of defection now confirmed to his face, not just suspected.",
       "aura_points": 0,
       "relationships": {
-        "Childe": "superior issuing an ultimatum — waiting for Childe's answer",
+        "Childe": "has now personally witnessed proof of Childe's defection (the wound); next move unknown",
         "Lumine": "active target — now confirmed present in Liyue"
-      }
+      },
+      "prompt_descriptor": "male Fatui Agent, silver Fatui half-mask obscuring the upper face, dark charcoal and black Fatui operative coat with deep crimson Fatui insignia, hands clasped behind his back, compact build radiating controlled menace",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fatui-agent/sheet.png",
+      "voice_id_kling": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fatui-agent/voice-ref.mp3",
+      "voice_note": "EP1-3 used Chatterbox TTS (chatterbox) + Kling Avatar v2 lipsync — retired 2026-07-07. EP4+ uses Kling native voice cloning via voice_id_kling (same reference MP3, reused). cold, measured, controlled menace — a Fatui operative who never raises his voice."
     }
   ],
   "active_loops": [
-    "major: how badly Childe is hurt — shoulder wound, can he still fight",
-    "major: whether Lumine forgives the deception — fake fight was not explained in advance",
-    "major: if the rooftop watcher reported back to the Agent — and what they reported",
-    "eternal: Childe's loyalty — his sacrifice just showed Lumine where his choice really lies",
-    "eternal: Lumine does not trust Childe unconditionally — Golden House + blade + fake fight = three deceits, one bullet"
+    "major: whether the Agent reports Childe's defection to Snezhnaya now that he's seen the wound",
+    "major: whether Lumine forgives Childe for the deception now that she knows the order was about her",
+    "major: how Childe talks his way out of being caught red-handed protecting her",
+    "eternal: Childe's loyalty — now visibly compromised in front of his own superior",
+    "eternal: Lumine does not trust Childe unconditionally — Golden House + blade + fake fight + confession = four deceits, one bullet, one truth"
   ],
   "closed_loops": [
     "minor: will Childe acknowledge Lumine in public — YES, violently and apologetically",
     "EP2: whether Childe's blade-draw fooled the Fatui watcher — YES, staged; watcher stayed in position until EP3 shot",
-    "EP2: whether Childe will choose Lumine over orders — answered implicitly: stepped into bullet"
+    "EP2: whether Childe will choose Lumine over orders — answered implicitly: stepped into bullet",
+    "EP4: whether Childe would admit the order was about Lumine — YES, forced out by her"
   ],
   "world_state": {
-    "location": "Narrow street, Liyue Harbor — day (EP3)",
+    "location": "Empty Liyue teahouse after closing, night — EP4",
     "important_items": [
       "Burned Fatui order — ash on Northland Bank desk; Lumine witnessed it being read and destroyed",
       "Lumine's presence in Liyue — now known to the Agent",
@@ -513,7 +529,12 @@
       "EP3: Childe whispered 'Trust me' mid-fight; Lumine: 'After the Golden House?' Childe: 'Especially after it.'",
       "EP3: Fatui watcher on rooftop aimed at Lumine",
       "EP3: Childe saw the rifle and stepped into the shot — took the bullet in the shoulder",
-      "EP3: Cliffhanger — Childe on one knee, shoulder bleeding; Lumine: 'They were aiming at me?'"
+      "EP3: Cliffhanger — Childe on one knee, shoulder bleeding; Lumine: 'They were aiming at me?'",
+      "EP4: Lumine bandaged Childe's shoulder in the closed teahouse",
+      "EP4: Childe admitted the order was always about Lumine",
+      "EP4: Lumine pulled her hands away in silence",
+      "EP4: The Fatui Agent entered through the door and saw the bandage",
+      "EP4: Cliffhanger — Agent: 'You protected her.'"
     ]
   },
   "anti_repetition": {
@@ -566,7 +587,14 @@
       "You were supposed to be the enemy.",
       "I tried.",
       "Not hard enough.",
-      "Next time I'll come back without orders."
+      "Next time I'll come back without orders.",
+      "Barely a scratch, honestly.",
+      "Then it won't mind this.",
+      "I'm not your mission.",
+      "I know.",
+      "Then why do you keep lying?",
+      "Because the truth wouldn't stop you.",
+      "You protected her."
     ],
     "recent_hooks": [
       "burning-scroll-reveal",
@@ -578,7 +606,8 @@
       "scroll-read-expression-shift",
       "childe-steps-between-two-parties",
       "lumine-desperate-opening-call",
-      "blade-drawn-as-protection-performance"
+      "blade-drawn-as-protection-performance",
+      "silent-wound-tending-in-media-res"
     ],
     "recent_cliffhangers": [
       "agent-ultimatum-prove-loyalty",
@@ -590,7 +619,8 @@
       "agent-declares-port-sealed",
       "childe-kneeling-before-fatui",
       "season-cliff-next-time-without-orders",
-      "blade-at-lumine-whispered-apology-watcher"
+      "blade-at-lumine-whispered-apology-watcher",
+      "silent-inspection-single-cold-line"
     ]
   },
   "episode_summaries": [
@@ -624,6 +654,32 @@
       "notes": "8 clips: 3 I2V action (scenes 2, 4, 7 — multi-prompt dynamic, generate_audio:true) + 5 Avatar dialogue (scenes 1, 3, 5, 6, 8 — Chatterbox voice clone). Subtitles capped to Avatar clip windows. Title strip y=328.",
       "youtube_url": "https://www.youtube.com/watch?v=WNM4sqbEzwM",
       "scheduled_at": "2026-06-20T20:59:00Z"
+    },
+    {
+      "episode": 4,
+      "language": "en",
+      "summary": "Lumine bandages Childe's wound in the empty teahouse after closing. He deflects with jokes; she presses until he admits the order was always about her. She pulls away in silence — right as the Fatui Agent walks in and sees the bandage.",
+      "cliffhanger": "The Agent looks at Childe's bandaged shoulder — his eyes say everything. Agent: 'You protected her.'",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-07/serial-drama_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=vhiHqh4uPxU",
+      "yt_publish_at": "2026-07-10T20:59:00Z",
+      "duration_sec": 50,
+      "notes": "First episode on the Kling I2V voice_ids pipeline (retired Avatar+Chatterbox from EP1-3). 6 clips, macro movement allowed (user override). Added: diegetic in-scene promo poster (scenes 4-5), pop-up promo banner (top, 80px margin, fade in/out ~5.5s after clip 1), episode title strip (restored, matches EP1-3 convention). Scene 6 required a re-render: a multi_prompt voice-tag misattribution + missing eye-color in Childe's bible descriptor caused character identity drift/confusion — fixed and documented in production_rules."
     }
+  ],
+  "production_rules": [
+    "SWITCHED 2026-07-07 (from Room 1701 precedent): all 'Don't Save Me' clips are Kling I2V, including dialogue. Do not use Kling Avatar v2 and do not call fal-ai/kling-video/ai-avatar/*. EP1-3 used Kling Avatar v2 + Chatterbox TTS (see episode_summaries notes) — that mechanism is now retired for this series; EP4+ use Kling native voice cloning instead.",
+    "Dialogue scenes use Kling I2V multi_prompt + voice_ids + generate_audio:true. Reusable voices: Childe, Lumine, Agent (voice_id_kling per character below). Each Kling request uses at most 2 voice_ids and maps them locally to <<<voice_1>>>/<<<voice_2>>>; split 3-speaker exchanges (e.g. Agent+Childe+Lumine together) into multiple clips.",
+    "USER OVERRIDE — macro movement IS ALLOWED for this series, unlike the default serial-drama micro-motion-only rule. 'Don't Save Me' is a combat/thriller drama (blade strikes, gunfire, running, chases) — action_description and multi_prompt shots MAY describe literal combat/running/hits directly. Still respect Kling's own physical plausibility limits (no more coherent than a 3-5s continuous shot can sell) and still cut between clips for anything a single continuous I2V motion can't carry believably.",
+    "Dialogue I2V target length 6-10s, matching Room 1701 convention, but pacing follows this series' dramatic tension (slower/heavier than sitcom timing) rather than a fixed words/sec default — read each scene's emotional weight.",
+    "Attach character refs (character-sheet + location ref) to every scene image generation. Every visible or speaking character must be included in scene image_urls with their locked ref. Missing ref = stop before Animator.",
+    "Do not rely on character names in NB2/Kling prompts. Use the character's `prompt_descriptor` field verbatim in every scene image_prompt and immediately before each <<<voice_N>>> tag in multi_prompt — battle-tested pattern from Room 1701 EP1-3.",
+    "For dialogue I2V, voice_ids order, <<<voice_N>>> tags, speaker names, and physical descriptors must all point to the same character.",
+    "Any spoken line inside a dialogue I2V clip must have generate_audio:true, voice_ids, and <<<voice_N>>>; do not accidentally make a dialogue beat silent.",
+    "If a required story beat does not fit the 2-voice or 512-character shot limits, split/add a clip instead of dropping the beat.",
+    "Generate background music with MiniMax Music (dramatic/tense mood, not comedic) unless the user explicitly asks for a local library track.",
+    "NO on-screen text / title cards for this series (locked in planned_arc note) — do not add a Room-1701-style overlay-series.png; this series has none and should not get one.",
+    "Max 6 scenes per episode per the format's $7-10 budget cap, same as every other serial-drama series.",
+    "BURNED EP4 (2026-07-07): a multi_prompt shot placed <<<voice_1>>> immediately after the WRONG character's physical descriptor (voice_ids[0]=Agent but the tag followed Childe's descriptor) — Kling rendered both characters off-model/confused as a result (Agent lost his mask, Childe's face drifted). Before saving any multi_prompt, Scenarist must verify each <<<voice_N>>> tag sits immediately after the descriptor of the character at voice_ids[N-1], not just after whoever is mentioned last in the sentence. Also: character_description/prompt_descriptor must always include eye color — omitting it let NB2 invent a generic eye color and an unrequested hair accessory for Childe in EP4 scene 6."
   ]
 }

@@ -85,6 +85,53 @@ Same as `character-story`: character does NOT speak on camera (no lipsync). I2V 
 - **Irony and dark mirror.** The best What If stories show how the character's core traits lead them *into* the alternate fate — Spock's logic is what makes him vulnerable to the Borg.
 - **Three motion layers per clip** (mandatory) — same rules as `character-story`.
 
+### Player-POV variant (Star Trek Timelines, Genshin Impact)
+
+Use this variant when `character_name = "You"` / the player is the protagonist (not a specific canonical character).
+
+**Applies to:** `star-trek-timelines`, `genshin-impact`. Same rules for both games.
+
+#### Structure
+
+| Clip | Beat | Duration | Goal |
+|---|---|---|---|
+| **HOOK** | clip 1 | 5s | Active shot mid-crisis — something is already going wrong. TTS starts immediately. Voiceover opens with the offer hook (see below), plunging into the action. **No ASS overlay except Whisper subtitles.** |
+| **TITLE CARD** | clip 2 | 3s max | Static atmospheric background. **TTS silent** (`tts_segment: null`). Title text rendered via ASS: "WHAT IF THANKS TO YOU / [OUTCOME IN CAPS]". Slow drift only. |
+| **CANON REMINDER** | clip 3 | 5s | The canonical crisis — what happens without the player. The before. |
+| **CHARACTER/CREW** | clip 4 | 5s | The character the player pulled / the crew assembled — their key ability revealed. |
+| **DIVERGENCE** | clip 5 | 5s | The exact moment the outcome changes. The pivotal action. |
+| **CONSEQUENCE** | clip 6 | 5s | The turning point takes hold — the threat collapses, the ritual fails, the fleet survives. |
+| **REVELATION** | clip 7 | 5s | The world reacts. Ironic or triumphant final line. |
+| **CTA** | clip 8 | — | Standard CTA asset (game-specific). |
+
+#### Voiceover rules (mandatory)
+
+- **Clip 1 opens with the offer hook — naturally woven into the action:**
+  - Genshin: `"Imagine, you grabbed free Primogems from the link in bio, pulled [Character], and [outcome in 1 clause]."`
+  - Star Trek: `"Imagine, you downloaded Star Trek Timelines from the link in bio, assembled [crew/character], and [outcome in 1 clause]."`
+  - The offer is the causal explanation — "[Character] is here because you pulled them." This must be clear.
+- **The offer phrase appears ONCE — in clip 1 only.** Do NOT repeat "link in bio", "free Primogems", or "download" anywhere else in the script.
+- **Clip 3 (canon reminder) must NOT repeat clip 1.** Clip 1 = the diverged outcome as a hook. Clip 3 = the canonical before, told in past/conditional ("In canon…", "Without you…").
+- Second-person throughout ("you pulled", "you assembled", "you stopped") — NOT first-person alternate-self.
+- ~75–95 words total across clips 1, 3–7.
+- Clip 2 (title card): `tts_segment: null` — silence.
+
+#### Editor — PRE_MS for player-POV
+
+- `PRE_MS = 0` — TTS starts immediately at t=0 (clip 1 hook). No adelay.
+- Title card (clip 2) is silent: TTS from clip 1 + silence(3s) + clips 3–7 TTS concatenated.
+- Title card duration is **3 seconds** (not 5s). Trim or generate accordingly.
+- `atempo = TTS_DUR / MAIN_DUR`. `MAIN_DUR = 5 + 3 + 5×5 + CTA_DUR`.
+
+#### Title card text (clip 2)
+
+Rendered via ASS `Dialogue:` events — same mechanism as subtitles, not drawtext or baked PNG:
+- Line 1: `"WHAT IF THANKS TO YOU"`, Line 2: `"[OUTCOME IN CAPS]"` (e.g. `"SCARAMOUCHE NEVER ASCENDED"`)
+- Font: Montserrat Black `\fs88`, white `\c&H00FFFFFF&`, centered `\an5`
+- Timing: `0:00:00.30–0:00:02.70` (fits within 3s clip)
+
+---
+
 ### Offer-driven redcon variant
 
 Use this variant when the user asks to tie the redcon to an offer such as free currency, pulls, link-in-bio rewards, or a playable character acquisition.
@@ -144,6 +191,7 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
 
 ### Scenarist
 
+- **If `character_name = "You"` (player-POV):** use the **Player-POV variant** structure — hook clip (clip 1, TTS starts, no ASS overlay except subtitles), title card (clip 2, 3s, `tts_segment: null`), story clips (3–7), CTA (clip 8). Voiceover clip 1 opens with the offer hook naturally: Genshin = `"Imagine, you grabbed free Primogems from the link in bio, pulled [Character], and [outcome]."` / Star Trek = `"Imagine, you downloaded Star Trek Timelines from the link in bio, assembled [crew], and [outcome]."` Offer phrase appears ONCE (clip 1 only). Clip 3 = canon reminder ("In canon…") — must NOT repeat clip 1. Second-person throughout.
 - Write the alternate-self monologue (~90–120 words English, ~35–40s)
 - If the user asks for an offer/currency/pull/link-in-bio angle, use the **Offer-driven redcon variant** above:
   - clip 2 starts with the familiar doomed situation;
@@ -221,6 +269,7 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
 - **Start frame only.** No `tail_image_url`.
 - Title card clip: very slow camera drift (parallax or gentle push-in). Minimal motion — text must remain readable throughout 5s.
 - Story clips: **active, dynamic prompts only** — three concurrent layers (camera + primary action + atmosphere), continuous present-tense verbs, no freeze phrases ("remains still", "holds position", "stays motionless" are banned).
+- **Known failure mode (user-flagged, 2026-07-07 Worf episode):** redcon's monologue-over-static-shot pacing tends to read as static even when `motion_prompt` technically satisfies the three-layer rule — the talking-head/portrait framing common to this format leaves little room for perceptible camera or environment motion. Compensate by pushing camera movement harder than usual (push-in/pull-out/orbit, not just drift) and favoring wider or three-quarter framing over tight portraits so there's visible depth/parallax to move through. Re-check the assembled clip, not just the prompt text, against "does this look static" before calling a clip done.
 - Duration: 5s for standard clips, up to 7s for multi-prompt clips
 - General rules — `rules/roles/animator.md`
 
@@ -230,7 +279,7 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
 - **Voice engine:** `game_tag == "genshin-impact"` → **Chatterbox** with character's `voice-1.mp3` from Supabase (`assets/genshin-impact/characters/{slug}/voice-1.mp3`). All other games → MiniMax preset voice matching the alternate-self identity. See `rules/roles/sound.md §1`.
 - Generate `tts-output.mp3`, upload to Supabase as episode-tts asset
 - **Subtitles:** the one universal whisper style from `build/voice-final.wav` (the title-card lead silence is already inside via adelay) — `rules/roles/editor.md` §6. No `--offset`/`--text`.
-- Music: from `video-agent/music/Dark/` only — never Fun/
+- Music: generated via MiniMax with a dark `style` prompt (instrumental, see `rules/roles/sound.md` §6) — never upbeat/fun
 - General rules — `rules/roles/sound.md`
 
 ### Editor
@@ -238,16 +287,15 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
 **Use `rules/roles/editor.md §0 — canonical single-pass `filter_complex` pipeline`** (the redcon worked example in §0.2 ships exactly this format).
 
 Format-specific parameters to compute and pass into §0:
-- `PRE_MS = 5000` — TTS starts after the 5 s title card via `adelay=5000|5000`
-- `atempo = TTS_DUR / 40` — TTS window is `MAIN_DUR − 5 s` (title card silence). If atempo > 1.4, you may exceed the conventional cap up to ~1.5 for this format (Borg-flat voice is naturally slow); ASS must be regenerated against the exact final atempo.
-- `MAIN_DUR = 5 + 6*5 + 10 = 45 s` (title + 6 story clips + 10 s coda) — adjust if scene count changes
+- **Standard redcon** (canonical character): `PRE_MS = 5000` — TTS starts after the 5 s title card via `adelay=5000|5000`. `atempo = TTS_DUR / (MAIN_DUR − 5)`. `MAIN_DUR = 5 + 6×5 + CTA_DUR`.
+- **Player-POV redcon** (`character_name = "You"`): `PRE_MS = 0` — TTS starts at t=0 (hook clip 1). Title card (clip 2) is **3 seconds** and has `tts_segment: null` — no TTS audio for that clip. Concatenate clip-1 TTS + silence(3s) + clips 3–7 TTS. `atempo = TTS_DUR / MAIN_DUR`. `MAIN_DUR = 5 + 3 + 5×5 + CTA_DUR`.
 - Fade-to-black: 1.0 s on the last story clip (scene-8) before CTA
 - Music: `volume=0.15`, `afade=t=out:st=(MAIN_DUR−1):d=1.0`
 
 ASS generation: `tools/add_subtitles.py` against `tts-output.mp3` PRE-shaped (atempo applied, then 5 s adelay prepended), so the ASS timeline matches what §0 feeds the `ass=` filter.
 
-**Title card text (MANDATORY) — через ASS, не через drawtext, overlay или baked PNG text.**
-`title_lines` из `storyboard.json` (clip 1) рендерятся как отдельные `Dialogue:` события в том же `subs.ass` — ровно тот же механизм что и субтитры, просто крупнее и с позиционированием через `\pos`. Добавить 4 события с таймингами `0:00:00.50–0:00:04.80` (чуть позже старта, исчезают до конца title card).
+**Title card text (MANDATORY) — via ASS, not drawtext, overlay, or baked PNG text.**
+`title_lines` from `storyboard.json` (clip 1) render as separate `Dialogue:` events in the same `subs.ass` — the exact same mechanism as subtitles, just larger and positioned via `\pos`. Add 4 events timed `0:00:00.50–0:00:04.80` (starting slightly after the clip start, disappearing before the title card ends).
 
 Title typography is locked:
 - Font: **Montserrat Black** (`\fnMontserrat Black\b1`). If libass cannot resolve the family name, pass `fontsdir=/Users/admin/Library/Fonts` to the `ass`/`subtitles` filter or copy `Montserrat-Black.ttf` into `build/fonts/`.
@@ -265,10 +313,10 @@ Dialogue: 0,0:00:00.50,0:00:04.80,Default,,0,0,0,,{\an5\pos(540,1028)\fnMontserr
 Dialogue: 0,0:00:00.50,0:00:04.80,Default,,0,0,0,,{\an5\pos(540,1182)\fnMontserrat Black\b1\fs104\bord5\shad0\c&H0000D7FF&}THE BORG
 ```
 
-- y-позиции рассчитаны для PlayResY=1920; суммарный блок центрирован чуть выше середины кадра.
-- Если `title_lines` уже содержат классический character-redcon шаблон (`WHAT IF:` / `{CHARACTER}` / `BECAME` / `{ALTERNATE FATE}`), применять тот же Montserrat Black / uniform-size / equal-spacing стандарт; не возвращаться к старым `fs65/fs165/fs100` размерам.
+- The y-positions are calculated for PlayResY=1920; the whole block is centered slightly above the middle of the frame.
+- If `title_lines` already follow the classic character-redcon template (`WHAT IF:` / `{CHARACTER}` / `BECAME` / `{ALTERNATE FATE}`), apply the same Montserrat Black / uniform-size / equal-spacing standard; do not revert to the old `fs65/fs165/fs100` sizes.
 
-Эти события добавляются **в начало** `[Events]` секции (до первого subtitle-события) чтобы Layer=0 совпадал и порядок был предсказуем.
+These events are added **at the start** of the `[Events]` section (before the first subtitle event) so `Layer=0` matches and the order is predictable.
 
 General rules — `rules/roles/editor.md`
 

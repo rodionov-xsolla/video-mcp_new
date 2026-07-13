@@ -488,69 +488,6 @@ curl -s -o scene-1.mp4 "$VIDEO_URL"
 
 ---
 
-## 3. Veo 3 — Text-to-Video
-
-**Endpoint:** `https://queue.fal.run/fal-ai/veo3`
-**Метод:** POST (асинхронный — нужен polling)
-**Стоимость:** $1.60/клип без аудио (8s), $3.20/клип с аудио (8s)
-
-> **ОГРАНИЧЕНИЕ:** Максимум 2 клипа × 8 секунд = $3.20 без аудио. Потолок $10.
-
-### Отправка запроса
-
-```bash
-RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/veo3" \
-  -H "Authorization: Key $FAL_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prompt": "Cinematic trailer of a fantasy MOBA battle, epic hero poses, dramatic lighting, vertical 9:16 composition, high quality",
-    "aspect_ratio": "9:16",
-    "duration": "8s",
-    "resolution": "720p",
-    "generate_audio": false,
-    "safety_tolerance": "4"
-  }')
-
-REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
-```
-
-### Параметры
-
-| Параметр | Тип | Обязательный | Описание |
-|----------|-----|-------------|----------|
-| `prompt` | string | Да | Описание видео (макс 20000 символов) |
-| `aspect_ratio` | enum | Нет | `"9:16"` или `"16:9"`, по умолчанию "16:9" |
-| `duration` | enum | Нет | `"4s"`, `"6s"` или `"8s"`, по умолчанию "8s" |
-| `resolution` | enum | Нет | `"720p"` или `"1080p"`, по умолчанию "720p" |
-| `generate_audio` | boolean | Нет | По умолчанию true. `true` = голос + звук ($3.20/8s), `false` = только видео ($1.60/8s). Решение определяется файлом формата |
-| `negative_prompt` | string | Нет | Что исключить |
-| `seed` | integer | Нет | Для воспроизводимости |
-
-> **generate_audio:** `true` — когда в промпте есть речь (Veo3 генерит голос + липсинк из текста). `false` — чисто визуальный T2V без диалога (экономия 50%). Решение определяется файлом формата.
-
-### Polling и получение результата
-
-Аналогично Kling — базовый 2-сегментный путь `fal-ai/veo3`:
-```
-Status: https://queue.fal.run/fal-ai/veo3/requests/{REQUEST_ID}/status
-Result: https://queue.fal.run/fal-ai/veo3/requests/{REQUEST_ID}
-```
-
-### Ответ
-
-```json
-{
-  "video": {
-    "url": "https://fal.media/files/abc123/output.mp4",
-    "content_type": "video/mp4",
-    "file_name": "output.mp4",
-    "file_size": 9876543
-  }
-}
-```
-
----
-
 ## 4. MiniMax TTS — основной TTS для ВСЕХ форматов
 
 **Endpoint:** `https://queue.fal.run/fal-ai/minimax/speech-2.8-hd`
@@ -733,7 +670,6 @@ RESULT_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}"
 | `fal-ai/kling-video/v3/standard/motion-control` | `fal-ai/kling-video` |
 | `fal-ai/kling-video/v3/pro/motion-control` | `fal-ai/kling-video` |
 | `fal-ai/elevenlabs/tts/eleven-v3` | `fal-ai/elevenlabs` |
-| `fal-ai/veo3` | `fal-ai/veo3` |
 | `fal-ai/minimax-music/v2.6` | `fal-ai/minimax-music` |
 | `fal-ai/gpt-image-1/text-to-image` | `fal-ai/gpt-image-1` |
 | `fal-ai/heygen/avatar4/image-to-video` | `fal-ai/heygen` |
@@ -1010,7 +946,7 @@ curl -s -o bg-music.mp3 "$AUDIO_URL"
 ## Важные правила
 
 1. **fal.ai URL-ы ВРЕМЕННЫЕ.** Скачивай файлы сразу после генерации. Не рассчитывай на повторный доступ.
-2. **Перед дорогой генерацией (Kling I2V, Avatar, Veo3) — загрузи ВСЕ входные файлы в Supabase Storage.** Используй ТОЛЬКО постоянные Supabase URL как `start_image_url`, `end_image_url`, `audio_url`. Временные fal.ai URL протухают → генерация стоимостью $0.42–$3.20 пропадает.
+2. **Перед дорогой генерацией (Kling I2V, Avatar) — загрузи ВСЕ входные файлы в Supabase Storage.** Используй ТОЛЬКО постоянные Supabase URL как `start_image_url`, `end_image_url`, `audio_url`. Временные fal.ai URL протухают → генерация стоимостью $0.42–$1.40 пропадает.
 3. **Polling — по 2-сегментному base пути.** НЕ по полному submit endpoint. См. таблицу в "Общий паттерн polling".
 4. **Проверяй размер** скачанного файла (>1000 байт для изображений, >10000 для видео).
 5. **`generate_audio: false`** для всех I2V (anullsrc правило) — звук добавляется на этапе сборки.

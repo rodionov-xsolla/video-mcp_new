@@ -1,6 +1,6 @@
 {
   "game_tag": "star-trek-timelines",
-  "total_stories": 4,
+  "total_stories": 7,
   "stories": [
     {
       "id": 1,
@@ -57,44 +57,110 @@
       "youtube_url": "https://www.youtube.com/watch?v=o_0lqlxes44",
       "yt_publish_at": "2026-07-04T20:59:00Z",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/videos/star-trek-timelines/2026-07-01/reddit-story_final.mp4"
+    },
+    {
+      "id": 5,
+      "date": "2026-07-07",
+      "tone": "touching",
+      "theme": "marriage-reconnection-through-shared-trek-nostalgia",
+      "moral_engine": "emotional withdrawal mistaken for indifference",
+      "game_situation": "husband plays Star Trek Timelines nightly while marriage grows silent after second child",
+      "false_verdict": "narrator was using the game to avoid his wife and didn't care about the relationship",
+      "pressure_source": "months of mutual silence and growing distance between spouses",
+      "narrator_flaw": "knew deep down he was escaping but kept rationalizing it as decompression",
+      "resolution_type": "positive",
+      "headline": "I played Star Trek Timelines every night. My wife thought I was avoiding her. She was right.",
+      "offerwall_angle": "downloaded game from Starfleet bio link (native — early story beat)",
+      "output_dir": "output/2026-07-06/star-trek-timelines/reddit-story/",
+      "youtube_url": "https://www.youtube.com/watch?v=8TYKrz7Ju-s",
+      "yt_publish_at": "2026-07-09T20:59:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/videos/star-trek-timelines/2026-07-06/reddit-story_final.mp4"
+    },
+    {
+      "id": 6,
+      "date": "2026-07-08",
+      "tone": "touching",
+      "theme": "silent-grandfather-known-through-shared-game",
+      "false_verdict": null,
+      "narrative_engine": "genuine fan story, no injustice/accusation arc (user override on format default)",
+      "game_situation": "grandson downloads Star Trek Timelines to spend time near a quiet, closed-off retired-engineer grandfather",
+      "human_beat": "grandfather turns out sharp at optimizing crew builds; one real question about his real-world engineering past (Apollo-era antenna arrays, 1969) unlocks twenty minutes of answers",
+      "resolution_type": "positive",
+      "headline": "My grandfather barely speaks. A Star Trek game became the only language we both understood.",
+      "offerwall_angle": "downloaded game via bio link (native — early story beat)",
+      "output_dir": "output/2026-07-08/star-trek-timelines/reddit-story-grandfather/",
+      "youtube_url": "https://www.youtube.com/watch?v=BZQG8eynEbY",
+      "yt_publish_at": "2026-07-13T20:59:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-08/reddit-story-grandfather_final.mp4"
+    },
+    {
+      "id": 7,
+      "date": "2026-07-08",
+      "tone": "touching",
+      "theme": "offshore-father-nightly-ritual-with-son",
+      "false_verdict": null,
+      "narrative_engine": "genuine fan story, no injustice/accusation arc (user override on format default)",
+      "game_situation": "father on an 11-year offshore rotation downloads Star Trek Timelines during a slow night shift; his son downloads it too and they run the same crew together every night despite the distance",
+      "human_beat": "narrator's fear of failing his son again (dropped signal, missed calls) is quietly disproven — the son just keeps showing up; a rotation change lets the father surprise his son in person on Gauntlet night",
+      "resolution_type": "positive",
+      "headline": "I work offshore eleven months a year. My son and I run the same crew every night.",
+      "offerwall_angle": "downloaded game via bio link (native — early story beat)",
+      "output_dir": "output/2026-07-08/star-trek-timelines/reddit-story-deployment/",
+      "youtube_url": "https://www.youtube.com/watch?v=HcTUDFKWmsM",
+      "yt_publish_at": "2026-07-18T20:59:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-08/reddit-story_final.mp4"
     }
   ],
   "anti_repetition": {
     "recent_themes": [
-      "real-life-friendship-fleet-surgeon",
-      "lonely-player-finds-friendship-through-fleet-chat",
-      "lore-nerd-proves-fake-fans-wrong"
+      "lore-nerd-proves-fake-fans-wrong",
+      "marriage-reconnection-through-shared-trek-nostalgia",
+      "silent-grandfather-known-through-shared-game",
+      "offshore-father-nightly-ritual-with-son"
     ],
     "recent_tones": [
-      "warm",
-      "soft drama",
-      "funny-justice"
+      "funny-justice",
+      "touching",
+      "touching",
+      "touching"
     ],
     "recent_moral_engines": [
-      "misjudged friendship as manipulation",
-      "dismissed-as-fake-fan-proven-right-by-knowledge"
+      "dismissed-as-fake-fan-proven-right-by-knowledge",
+      "emotional withdrawal mistaken for indifference",
+      "n/a — genuine fan story, no accusation arc",
+      "n/a — genuine fan story, no accusation arc"
     ],
     "recent_game_situations": [
-      "lonely new player joins a Star Trek Timelines fleet",
-      "Trek Discord lore debate"
+      "Trek Discord lore debate",
+      "husband plays nightly while marriage grows silent after second child",
+      "grandson spends time with a silent retired-engineer grandfather via the game",
+      "offshore father and son share a nightly crew across an 11-year rotation"
     ],
     "recent_false_verdicts": [
-      "the narrator only talks to TemporalMedic to get carried",
-      "narrator is a fake Trek fan who plays gacha trash"
+      "narrator is a fake Trek fan who plays gacha trash",
+      "narrator was using the game to avoid his wife",
+      "null — no injustice arc",
+      "null — no injustice arc"
     ],
     "recent_pressure_sources": [
-      "fleet chat accusations",
-      "Discord group piling on publicly"
+      "Discord group piling on publicly",
+      "months of mutual silence between spouses",
+      "n/a — no pressure/accusation source, genuine story",
+      "n/a — no pressure/accusation source, genuine story"
     ],
     "recent_resolution_types": [
       "positive",
-      "neutral-positive"
+      "positive",
+      "positive",
+      "positive"
     ],
     "recent_hooks": [
-      "LogicOverFear username, best fleet tactician, surgeon reveal, COVID lockdowns, pasta dinner",
-      "bio link download, lonely group-chat avoider, accused of using TemporalMedic for free carries, chat logs reveal he helped everyone",
-      "bio link download, mocked in Discord for playing STT, Treaty of Algeron lore fact silences crowd"
+      "bio link download, mocked in Discord for playing STT, Treaty of Algeron lore fact silences crowd",
+      "bio link download, nightly escape, wife sits down and asks about Spock, late father's TOS connection, Thursday ritual",
+      "bio link download, quiet grandfather, deliberately-wrong crew build as excuse to sit near him, Apollo-era antenna-array reveal",
+      "bio link download, offshore rotation, son overhears a call and downloads the game too, nightly ritual, surprise in-person reunion on Gauntlet night"
     ],
+    "note": "stories 6 and 7 deliberately break the injustice/false-verdict engine per explicit user instruction — genuine fan/family stories instead. Both use tone 'touching' back-to-back with story 5 (3x in a row) — flag for the next reddit-story run to vary tone (e.g. funny-justice, soft-drama, dramatic) and consider reintroducing an injustice arc unless the user asks otherwise.",
     "banned_combos": []
   }
 }

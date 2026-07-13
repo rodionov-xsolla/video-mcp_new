@@ -323,12 +323,12 @@ echo "$URL"
 
 After TTS generation:
 1. Download `.mp3` locally (`curl -sSL -o tts-N.mp3 "$FAL_AUDIO_URL"`)
-2. **Upload via `queue/upload-asset.sh`** (НЕ raw curl):
+2. **Upload via `queue/upload-asset.sh`** (NOT raw curl):
    ```bash
    queue/upload-asset.sh --kind episode-tts --game {GAME_TAG} \
      --episode {YYYY-MM-DD}-{format_slug} --name clip-N.mp3 ./tts-N.mp3
    ```
-   Path → `episodes/{game}/{YYYY-MM-DD}-{format}/tts/clip-N.mp3`. **НЕ регистрируется** в `game_assets` (одноразовое).
+   Path → `episodes/{game}/{YYYY-MM-DD}-{format}/tts/clip-N.mp3`. **NOT registered** in `game_assets` (disposable, one-off).
 3. **Use the returned Supabase public URL** for Avatar's `audio_url`, not the fal.ai temp URL
 
 fal.ai TTS audio_url expires. Avatar polling takes 1–3 min — during that time the URL can become invalid. Supabase URL is permanent.
@@ -339,7 +339,7 @@ fal.ai TTS audio_url expires. Avatar polling takes 1–3 min — during that tim
 
 ### Music is mandatory for ALL formats
 
-There is no format without music. Generate or choose a track to fit the scene mood and pass it to Editor.
+There is no format without music. **Always GENERATE `bg-music.mp3` with MiniMax Music (`fal-ai/minimax-music/v2.6`).** Do NOT pull tracks from Supabase or the local `video-agent/music/` library — that path is deprecated (copyright strikes + off-mood picks). One freshly generated track per video, mood-matched to the format and the game, passed to Editor.
 
 | Format | Volume | Note |
 |---|---|---|
@@ -348,23 +348,25 @@ There is no format without music. Generate or choose a track to fit the scene mo
 | **reddit-story** | `0.05` | Even quieter — narration must be clear |
 | **news, others** | `0.10–0.15` | By mood |
 
-### Selection / generation
+### Generation — MiniMax Music (ALL formats)
 
-For serial-drama, generate `bg-music.mp3` with `fal-ai/minimax-music/v2.6` unless the user explicitly asks for a local library track. Do not silently pick from `video-agent/music/`.
+Full request/polling schema: `tools/fal-ai.md §8`. Essentials:
+- Endpoint: `POST https://queue.fal.run/fal-ai/minimax-music/v2.6`; polling base `fal-ai/minimax-music` (NOT the full path — see the base-path rule in fal-ai.md).
+- Body: `{ "style": "<mood prompt, ≤2000 chars>", "is_instrumental": true, "duration": <30–60> }`.
+- **`is_instrumental: true` ALWAYS** — background music has no vocals/lyrics.
+- `duration` ≈ the video length (30–60s); generating slightly longer and letting Editor trim is fine.
+- Download the result to `${OUTPUT_DIR}/bg-music.mp3` **immediately** (fal.ai URLs expire).
+- Cost ~$0.03/track (see `budgets.md`).
 
-MiniMax Music request rules:
-- Endpoint: `POST https://queue.fal.run/fal-ai/minimax-music/v2.6`
-- Poll/result URLs are returned in the submit response; use those exact URLs. The base path may be `fal-ai/minimax-music/requests/{id}`.
-- Use numeric `audio_setting.sample_rate` and `audio_setting.bitrate` values, e.g. `44100` and `256000`, not strings.
-- For sitcom serials, prompt for instrumental low-density comedy underscore, no vocals/lyrics, no dramatic swell.
+**Build the `style` prompt** from (a) the format's emotional register (§11 mood map) + (b) the game's atmosphere (game config `music.mood` / Tone of Voice). Always instrumental, no vocals, fits a 9:16 short. Example (sitcom serial): `"instrumental low-density comedy underscore, light and playful, no vocals, no lyrics, no dramatic swell, suitable for a vertical short video"`.
 
-For non-serial-drama formats, local `video-agent/music/{Mood}/` is still allowed if the format/user does not require generated music. If the folder is empty — ask Manager.
+On generation failure after one retry → `rules/main/fallback.md`; proceed without music only if the format allows it, and flag Manager.
 
 ### Mix parameters (passed to Editor)
 
 - **serial-drama:** `volume=0.15` (6.7× quieter than the voice)
 - **gameplay-ai-avatar:** `volume=0.10` (if used)
-- Mixing is done by Editor (see `editor.md` section 4). Sound only picks the track and sets the volume.
+- Mixing is done by Editor (see `editor.md` section 4). Sound only generates the track and sets the volume.
 
 ---
 
@@ -409,7 +411,7 @@ drift — you don't recompute anything.
 
 If `dur(tts) < dur(video_timeline)` — Editor extends the last clip with a freeze-frame; do **not** pad with leading silence at the start of the TTS.
 
-Если несоответствие > 40% — обратно к Scenarist, не маскировать atempo.
+If the mismatch is > 40% — send it back to Scenarist, don't mask it with atempo.
 
 ---
 
@@ -454,18 +456,18 @@ Hand off to Editor:
 
 ASS invariants (no event overlap, last event reaches clip end, MarginV direction, no full-width opaque box) are Editor's job, see `rules/roles/editor.md` §6. Sound writes no ASS.
 
-## 11. Music tone must match format mood
+## 11. Music mood must match the format
 
-Pick `bg-music.mp3` from the folder that matches the format's emotional register, not from the whole library. Quick mapping:
+The MiniMax `style` prompt must match the format's emotional register (this used to be a folder pick from `music/` — now it shapes the generation prompt in §6). Quick mapping:
 
-| Mood folder | Use for |
-|---|---|
-| `music/Fun/` | comedy-sketch, lighthearted reaction |
-| `music/Dark/` | serial-drama (tense beats), horror, news (somber) |
-| `music/Neutral/` (or Drama) | news, reddit-story (calm narration) |
-| `music/Tense/` | serial-drama (cliffhanger), action recap |
+| Mood | Use for | `style`-prompt keywords |
+|---|---|---|
+| fun / light | comedy-sketch, lighthearted reaction | upbeat, playful, comedic, bright, bouncy |
+| dark / tense | serial-drama (tense beats), horror, somber news | dark, tense, ominous, cinematic, low strings |
+| neutral / drama | news, reddit-story (calm narration) | calm, restrained, ambient underscore, neutral |
+| tense / action | serial-drama (cliffhanger), action recap | driving beat, suspenseful, rising tension |
 
-If the format is comedic and the picked track is melancholic/ambient — the whole video reads wrong. Re-pick before handing off.
+Always add `instrumental, no vocals, no lyrics` and `suitable for a vertical short video`. If the format is comedic but the generated track is melancholic/ambient — regenerate with corrected keywords before handing off.
 
 ---
 

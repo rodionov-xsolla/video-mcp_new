@@ -4,14 +4,10 @@
 
 | Format | Maximum | Stop if |
 |--------|---------|---------|
-| Standard | **$5.00** | Spend > $4.50 |
 | News | **$4.00** | Spend > $3.50 |
 | Serial Drama | **$10.00** | Spend > $9.00 |
-| Object Character (single) | **$1.50** | Spend > $1.30 |
-| Object Character (series×5) | **$7.50** | Spend > $7.00 |
 | Dual-style | **$5.00** | Spend > $4.50 |
 | Gameplay AI Avatar | **$5.00** | Spend > $4.50 |
-| Dance Battle | **$5.00** | Spend > $4.50 |
 | Reddit Story | **$2.00** | Spend > $1.80 |
 | Character Story | **$6.00** | Spend > $5.40 |
 | Motion Dance | **$3.00** | Spend > $2.70 |
@@ -21,7 +17,6 @@
 | Streettalk | **$7.00** | Spend > $6.30 (pilot allowance; EP2+ target ~$3.00) |
 | In-Game POV | **$7.00** | Spend > $6.30 |
 | Redcon | **$6.00** | Spend > $5.40 |
-| What If... Lore | **$6.00** | Spend > $5.40 |
 | Wild Documentary | **$5.00** | Spend > $4.50 |
 | Special Report | **$4.50** | Spend > $4.00 (pilot allowance; EP2+ target ~$2.85) |
 | Fake Ad | **$3.50** | Spend > $3.00 |
@@ -44,8 +39,6 @@ Tracking: after each generation, record the cost. Before the next one — check 
 | Kling 2.6 Pro I2V 5s (no audio, fallback) | fal-ai/kling-video/v2.6/pro/image-to-video | $0.35 |
 | Kling 2.6 Pro I2V 10s (with audio, fallback) | fal-ai/kling-video/v2.6/pro/image-to-video | $1.40 |
 | Kling 2.6 Pro I2V 10s (no audio, fallback) | fal-ai/kling-video/v2.6/pro/image-to-video | $0.70 |
-| Veo3 T2V 8s (with audio) | fal-ai/veo3 | $3.20 |
-| Veo3 T2V 8s (no audio) | fal-ai/veo3 | $1.60 |
 | MiniMax TTS | fal-ai/minimax/speech-2.8-hd | ~$0.10/1k chars (~$0.001–0.005/phrase). `voice_setting.voice_id`, `emotion` |
 | Chatterbox TTS (Genshin only) | fal-ai/resemble-ai/chatterbox | ~$0.05–0.08/phrase. Zero-shot voice clone from reference MP3. |
 | Kling Lipsync | fal-ai/kling-video/lipsync/audio-to-video | ~$0.10/s |

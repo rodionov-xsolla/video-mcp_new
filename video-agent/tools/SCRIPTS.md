@@ -205,10 +205,12 @@ Supabase → upload final.mp4
     --format FORMAT \
     --video-url "https://..." \
     [--youtube-url "https://..."] \
-    [--yt-publish-at "2026-06-20T20:59:00Z"]
+    [--yt-publish-at "2026-06-20T20:59:00Z" | --immediate]
 ```
 
 **Что делает:** UPSERT в `video_agent_runs` по `output_video_url` — создаёт или обновляет запись.
+
+Если передан `--youtube-url`, скрипт требует `--yt-publish-at` (реальный `SCHEDULED_FOR` из `youtube-upload.sh`) или `--immediate` (ролик реально ушёл public сразу) — без одного из них ошибка, а не тихий фоллбэк на `now()`.
 
 **Читает:** `.env` (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)  
 **Пишет:** Supabase таблица `video_agent_runs`

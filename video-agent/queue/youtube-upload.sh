@@ -164,9 +164,9 @@ FILE_SIZE=$(stat -f%z "$VIDEO_PATH" 2>/dev/null || stat -c%s "$VIDEO_PATH")
 # Build tags array
 TAGS_JSON="[]"
 if [ -n "$TAGS" ]; then
-  TAGS_JSON=$(python3 -c "
-import json, sys
-tags = [t.strip() for t in '${TAGS}'.split(',') if t.strip()]
+  TAGS_JSON=$(TAGS_RAW="$TAGS" python3 -c "
+import json, os
+tags = [t.strip() for t in os.environ['TAGS_RAW'].split(',') if t.strip()]
 print(json.dumps(tags))
 ")
 fi

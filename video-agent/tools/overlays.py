@@ -41,9 +41,16 @@ overlays[] schema (in each clip/scene of storyboard.json):
     "height": -1,                     // px, -1 = keep aspect relative to width
     "position": "top-left|top-right|center|bottom-center|{x},{y}",
     "enable": [0.0, 5.0],             // optional time window; omit = full clip
-    "opacity": 1.0                    // optional (1.0 = fully opaque)
+    "opacity": 1.0,                   // optional (1.0 = fully opaque)
+    "fade_in": 0.5,                   // optional seconds — alpha fade-in at window start
+    "fade_out": 0.5                   // optional seconds — alpha fade-out at window end
   }
   Image overlays are rendered via ffmpeg movie+overlay filter (no extra -i needed).
+  fade_in/fade_out use the alpha-channel `fade` filter on the movie source (requires
+  format=rgba before fade so the alpha channel exists) — a real ramp, not a hard cut.
+  Needs an explicit `enable` window (own timeline) so fade timing is anchored; if
+  `enable` is omitted, fade_in anchors to clip start (t=0) and fade_out is ignored
+  (no end boundary to ramp against).
   They are applied AFTER all drawtext overlays in the scene.
 
 Usage:
@@ -272,12 +279,48 @@ def _img_pos_to_xy(pos) -> tuple[str, str]:
     return "40", "40"
 
 
+def _image_fade_expr(fade_in: float, fade_out: float, enable) -> tuple[str, str]:
+    """Build 'fade=t=in:...,fade=t=out:...' fragments (alpha=1) for the movie source.
+    Anchored to the enable window: [t0, t1]. fade_in ramps up from t0, fade_out ramps
+    down into t1. Returns ("", "") if neither fade is requested."""
+    if not fade_in and not fade_out:
+        return "", ""
+    t0 = 0.0
+    t1 = None
+    if isinstance(enable, (list, tuple)) and len(enable) == 2 and enable[0] != "gte":
+        t0 = float(enable[0])
+        t1 = float(enable[1])
+    elif isinstance(enable, (list, tuple)) and len(enable) == 2 and enable[0] == "gte":
+        t0 = float(enable[1])
+    frags = []
+    if fade_in:
+        frags.append(f"fade=t=in:st={t0}:d={fade_in}:alpha=1")
+    if fade_out and t1 is not None:
+        st_out = max(t1 - fade_out, t0)
+        frags.append(f"fade=t=out:st={st_out}:d={fade_out}:alpha=1")
+    return ",".join(frags), ""
+
+
 def build_image_overlay_frags(ov: dict, scene_idx, oi: int, workdir: str,
                                in_label: str, out_label: str) -> tuple[str, str]:
     """One image overlay -> (source_frag, overlay_frag) pair joined with ';' by caller.
-    source_frag: 'movie=...,scale,loop,format=rgba[imgLBL]'
+    source_frag: 'movie=...,scale,loop,format=rgba[,fade=...][imgLBL]'
     overlay_frag: '{in_label}[imgLBL]overlay=x:y[out_label]'
     Returns ("", "") on missing url (skipped silently).
+
+    fade_in/fade_out (seconds) apply the alpha-channel `fade` filter on the movie
+    source AFTER format=rgba (fade needs an alpha plane to ramp) — a real ~0.4-0.6s
+    ramp, not a hard cut. Anchored to the `enable` window if present, else to clip
+    start for fade_in (fade_out is skipped without a window end to anchor to).
+
+    IMPORTANT: the movie source uses `loop=loop=-1` (infinite loop, no natural
+    EOF) so the still image survives for the whole scene regardless of its
+    declared `enable` window length. Because of this the downstream `overlay`
+    filter is given `eof_action=pass` (NOT the default `repeat`) — otherwise
+    overlay blocks on the longer (infinite) input's EOF and freezes the main
+    (finite) video branch on its last frame forever, which also stalls
+    everything downstream in the same filtergraph (concat, subsequent scenes).
+    Do not drop `eof_action=pass` when editing this function.
     """
     url = ov.get("url", "").strip()
     if not url:
@@ -289,11 +332,24 @@ def build_image_overlay_frags(ov: dict, scene_idx, oi: int, workdir: str,
     scale_str = f"scale={w}:{h}"
     lbl = f"v{scene_idx}im{oi}"
     escaped = local.replace("'", "\\'")
-    src = (f"movie='{escaped}',{scale_str},"
-           f"loop=loop=-1:size=1:start=0,format=rgba[{lbl}]")
+    fade_frag, _ = _image_fade_expr(ov.get("fade_in", 0), ov.get("fade_out", 0), ov.get("enable"))
+    chain = f"movie='{escaped}',{scale_str},loop=loop=-1:size=1:start=0,format=rgba"
+    if fade_frag:
+        chain += f",{fade_frag}"
+    src = f"{chain}[{lbl}]"
     x, y = _img_pos_to_xy(ov.get("position", "top-left"))
     en = _enable_expr(ov.get("enable"))
-    opts = f"x={x}:y={y}"
+    # eof_action=pass is MANDATORY here: the movie= source above is an
+    # infinite/looped still-image branch (loop=loop=-1). overlay's default
+    # eof_action=repeat blocks on the LONGER input reaching EOF, which for an
+    # infinite branch never happens -> it freezes the main (finite) video
+    # branch on its last frame indefinitely, stalling everything downstream
+    # in the same filtergraph (concat, subsequent scenes, etc). eof_action=pass
+    # makes overlay follow the main branch's own EOF/timing instead, so the
+    # scene ends exactly at its real duration regardless of the image branch's
+    # (looped, no natural EOF) length. See postmortem: star-trek-timelines
+    # redcon 2026-07-07, near-total freeze from clip 3 onward.
+    opts = f"x={x}:y={y}:eof_action=pass"
     if en:
         opts += f":enable='{en}'"
     ovl = f"{in_label}[{lbl}]overlay={opts}{out_label}"

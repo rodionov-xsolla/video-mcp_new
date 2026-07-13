@@ -1,0 +1,103 @@
+{
+  "series_id": "star-trek-timelines-redcon-en",
+  "game_tag": "star-trek-timelines",
+  "format": "redcon",
+  "language": "en",
+  "title": "Star Trek Timelines — Redcon (Player-POV What If?)",
+  "created_at": "2026-07-06",
+  "last_episode": 1,
+  "tts_engine": "minimax",
+  "tts_note": "MiniMax Speech 2.8-HD. Voice: Deep_Voice_Man (authoritative, measured). Second-person monologue throughout — NOT first-person alternate-self. Voiceover opens with the CTA hook on the teaser clip, then continues second-person through story clips.",
+  "format_overrides": {
+    "note": "Player-POV variant. Character = the player (Starfleet Timeline Commander). Each episode: one canonical crisis, one cross-era crew assembled in-game, one divergence outcome.",
+    "structure": "TEASER (clip 1, TTS starts) → TITLE CARD (clip 2, silent) → HOOK+CTA (clip 3) → CANON REMINDER (clip 4) → CREW ASSEMBLED (clip 5) → DIVERGENCE (clip 6) → REVELATION (clip 7) → CTA asset",
+    "voiceover_hook": {
+      "template_en": "Imagine, you downloaded Star Trek Timelines from the link in bio… and [outcome in one clause].",
+      "placement": "clip 1 (teaser), first TTS line",
+      "note": "Must appear in clip 1. The phrase 'from the link in bio' is mandatory for CTA attribution."
+    },
+    "cta_clip": {
+      "type": "asset",
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4",
+      "spoken_cta_en": "Download Star Trek Timelines free — link in bio.",
+      "spoken_cta_note": "Short spoken CTA embedded in clip 3 (hook). Does NOT replace the cta.mp4 asset at the end — both are used."
+    }
+  },
+  "player_character": {
+    "name": "Starfleet Timeline Commander",
+    "character_slug": "starfleet-timeline-commander",
+    "description": "Generic adult human player-captain. Black-and-red Starfleet command uniform, gold combadge, four rank pips. No celebrity likeness.",
+    "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/starfleet-timeline-commander/sheet.png",
+    "voice": "Deep_Voice_Man",
+    "note": "Same character ref every episode. Visual consistency is required — always chain from this sheet."
+  },
+  "crisis_rotation": {
+    "done": [
+      {
+        "crisis": "Battle of Wolf 359 — Borg cube (2367)",
+        "episode": 0,
+        "date": "2026-06-29",
+        "crew_assembled": ["Data", "Seven of Nine", "Worf"],
+        "note": "Pre-bible run. Pilot episode. Locutus signal isolation."
+      },
+      {
+        "crisis": "Breen energy-dampening weapon — Battle of Chin'toka (2375)",
+        "episode": 1,
+        "date": "2026-07-06",
+        "crew_assembled": ["Data", "Scotty", "Julian Bashir", "Ro Laren"],
+        "note": "Frequency modulation cracked before Allied fleet annihilated. Dominion War ended 6 months early."
+      }
+    ],
+    "do_not_repeat": [
+      "Borg cube / Wolf 359",
+      "Breen weapon / Chin'toka"
+    ],
+    "candidates_for_future": [
+      "Xindi superweapon — Delphic Expanse (2153)",
+      "V'Ger approaching Earth (2273)",
+      "Changeling infiltration of Starfleet Command (2372)",
+      "Praxis explosion + Khitomer Accords (2293)",
+      "Hobus supernova — destruction of Romulus (2387)"
+    ]
+  },
+  "style_tags": "Star Trek Timelines style, semi-realistic Pixar-quality 3D, cinematic Federation lighting, deep space environment, Starfleet uniform details, clean cinematic frame, no cartoon, no chibi",
+  "color_palette": "deep space black #0a0a12, LCARS orange #ff9900, Federation blue #3366cc, LCARS purple #9966cc, rarity gold #ffd700, warp blue #00ccff",
+  "character_variant_episodes": {
+    "note": "One-off classic-character redcon episodes (canonical character + alternate-self, first-person monologue) — NOT part of the Player-POV crisis_rotation numbering above. Kept separate so future runs don't confuse these with the numbered player-POV series or its do_not_repeat list.",
+    "done": [
+      {
+        "date": "2026-07-07",
+        "character_name": "Worf",
+        "alternate_designation": "Worf, Son of None — Warlord of the Empire",
+        "divergence_point": "2367, TNG 'Reunion' — after executing Duras, Worf refuses discommendation and seizes the Duras bloodline's ships/warriors instead of returning to Starfleet",
+        "tts_voice": "Daniel (ElevenLabs preset, mapped to MiniMax Deep_Voice_Man for generation) — flat/angry alternate-identity delivery, not the canonical Worf voice",
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-07/redcon_final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=pbiuyIT-GAE",
+        "yt_publish_at": "2026-07-11T20:59:00Z",
+        "notes": "User-requested one-off ('what if Worf became a villain'), not the player-POV crisis-rotation format. Included a user-requested CTA banner image overlay (fade in/out, top-anchored) on clip 3 only — required extending tools/overlays.py: (1) build_image_overlay_frags() needed fade_in/fade_out support for image overlays (previously text-only), which surfaced an eof_action=repeat default that stalls the whole filtergraph when combined with an infinite loop=-1 still-image source — fixed with eof_action=pass; (2) banner placement/scope went through 3 rounds of user feedback (all clips -> clips 2-3 top -> clip 3 only) — final: top-anchored, y=80, width~1010 (35px side margins), fade ~0.5s, clip 3 only. Also flagged in rules/formats/redcon.md: this format's monologue-over-static-shot pacing reads as static even with technically-compliant motion_prompt — push camera movement harder and prefer wider framing over tight portraits."
+      }
+    ]
+  },
+  "episode_summaries": [
+    {
+      "episode": 0,
+      "date": "2026-06-29",
+      "crisis": "Battle of Wolf 359 — Borg cube",
+      "crew": ["Data", "Seven of Nine", "Worf"],
+      "tts_voice": "Deep_Voice_Man",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/star-trek-timelines/2026-06-29-redcon/final.mp4",
+      "youtube_url": null,
+      "notes": "Pilot. Pre-bible. No pre-title-card teaser clip (old structure). Voiceover correctly used 'Imagine, you downloaded...' style."
+    },
+    {
+      "episode": 1,
+      "date": "2026-07-06",
+      "crisis": "Breen energy-dampening weapon — Battle of Chin'toka (2375)",
+      "crew": ["Data", "Scotty", "Julian Bashir", "Ro Laren"],
+      "tts_voice": "Deep_Voice_Man",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/videos/star-trek-timelines/2026-07-06/redcon_final.mp4",
+      "youtube_url": null,
+      "notes": "First bible episode. Note: used old structure (no pre-title-card teaser clip) — new Player-POV structure applies from EP2 onwards."
+    }
+  ]
+}

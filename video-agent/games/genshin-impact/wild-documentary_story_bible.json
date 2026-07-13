@@ -1,0 +1,30 @@
+{
+  "format": "wild-documentary",
+  "game_tag": "genshin-impact",
+  "narrator": {
+    "provider": "minimax",
+    "voice_id": "Deep_Voice_Man",
+    "register": "elderly naturalist, hushed awe-filled VO, David Attenborough register",
+    "language": "en"
+  },
+  "branding": {
+    "overlay_local": "games/genshin-impact/Wildlife_overlay.png",
+    "overlay_supabase": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/wild-documentary-overlay.png",
+    "label": "TEYVAT WILDLIFE"
+  },
+  "covered_creatures": [
+    "Cryo Slime"
+  ],
+  "episodes": [
+    {
+      "ep": 1,
+      "creature": "Cryo Slime",
+      "biome": "Dragonspine",
+      "date": "2026-07-07",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/episodes/genshin-impact/2026-07-07/wild-documentary_final.mp4",
+      "yt_url": "https://www.youtube.com/watch?v=FF9K_x7xC00",
+      "yt_publish_at": "2026-07-12T20:59:00Z",
+      "cta_sign": "Free primogems link in bio"
+    }
+  ]
+}

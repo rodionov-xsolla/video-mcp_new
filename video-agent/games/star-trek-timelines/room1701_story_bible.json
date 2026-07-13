@@ -6,7 +6,7 @@
   "genre": "sitcom",
   "style_tags": "semi-realistic stylized 3D characters, modern nerdy shared bedroom interior, warm casual lighting, practical props (phones, laptops, game controllers, Star Trek posters), intimate close-ups and 3/4 face shots, cozy bedroom aesthetic with sci-fi geeky decor, natural soft lighting from screens and lamps, not Disney, not Pixar, not DreamWorks, not toy-like",
   "created_at": "2026-06-25",
-  "last_episode": 2,
+  "last_episode": 3,
   "show_concept": "Two geeky roommates (Alex and Michael) live in Room 1701 and play Star Trek Timelines all the time. They treat every everyday problem like a Starfleet mission. Emily, their cool neighbor, is sharp, sarcastic, and unexpectedly good at handling people. Anna is the girl Alex is pursuing — warm, playful, and increasingly drawn to Michael's nerd sincerity. The show is a fast sitcom about awkward dating comedy and Star Trek geek humor.",
   "production_rules": [
     "Do NOT rely on readable phone UI — phone can glow in hands but meaning comes from acting/dialogue",
@@ -105,9 +105,22 @@
   "active_loops": [
     "Will Alex manage to keep Anna's attention now that Michael accidentally charmed her?",
     "Will Michael realize he's accidentally becoming a romantic rival?",
-    "Will Emily ever actually join them?"
+    "Will Emily ever actually join them?",
+    "Alex has to personally teach Anna the game tomorrow — can he pull it off without Michael?",
+    "Will Michael accept that Anna is texting Alex now, not him?"
   ],
   "episode_summaries": [
+    {
+      "episode": 3,
+      "title": "The Download",
+      "language": "en",
+      "summary": "Alex sulks after the coffee date while Michael celebrates it as a win because Anna downloaded the game. Emily needles Michael about Alex's jealousy, which he dismisses as 'inefficient' while bragging about the link-in-bio download. Anna starts texting Alex for help with the game — meant for Michael — and Michael lights up thinking she needs him, until Alex decides to answer as himself instead of routing it through Michael. Cliffhanger: Anna asks to meet tomorrow so Alex can personally teach her the game, leaving Michael stunned that he's been cut out.",
+      "cliffhanger": "Anna asks Alex to teach her the game in person tomorrow — Michael realizes he's been sidelined. Alex turns to camera for the CTA.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-07/serial-drama_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=SjyCnRRIWJk",
+      "yt_publish_at": "2026-07-08T20:59:00Z",
+      "duration_sec": 49
+    },
     {
       "episode": 2,
       "title": "The Link in Bio",
@@ -167,6 +180,29 @@
         "cliffhanger": "Anna asks Alex to bring Michael on their next date — to teach her the game. Alex turns to camera for the CTA.",
         "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-01/serial-drama-ep2_final.mp4",
         "youtube_url": "https://www.youtube.com/watch?v=8EQp-7UKqo4"
+      },
+      {
+        "episode": 3,
+        "title": "The Download",
+        "status": "done",
+        "location": "room-1701",
+        "cast": [
+          "Alex",
+          "Michael",
+          "Emily"
+        ],
+        "summary": "Alex is devastated the coffee date went to Michael while Michael celebrates it as a win because Anna downloaded the game. Emily needles Michael about Alex's jealousy; Michael calls jealousy 'inefficient' and reduces it back to download numbers. Anna starts texting Alex asking for Michael's help with the game — Michael assumes it's for him until Alex decides to answer as himself. Cliffhanger: Anna asks to meet tomorrow so Alex can personally teach her the game.",
+        "beats": [
+          "COLD OPEN: Alex + Michael. Alex: 'That was the worst date of my life.' Michael: 'Disagree. We got a download.'",
+          "CLIP 2 (action): Alex collapses onto the couch, phone loose in hand.",
+          "CLIP 3: Emily + Michael. Emily: 'Do you know Alex is jealous? Of you.' Michael: 'That's inefficient.' Michael pivots to the link-in-bio download count; Emily: 'You are emotionally sponsored.'",
+          "CLIP 4: Alex + Michael. Anna texts asking for Michael's help with her first mission. Michael: 'She needs me.' Alex: 'Wrong emotion, buddy.'",
+          "CLIP 5 (action): Alex hesitates, then types his own reply instead of forwarding it to Michael.",
+          "CLIFFHANGER/CTA: Anna replies 'Great. Tomorrow?' Michael: 'Captain… you're about to lose a tutorial.' Alex turns to camera: 'Download the game via the link in bio.'"
+        ],
+        "cliffhanger": "Anna asks Alex to teach her the game in person tomorrow — Michael realizes he's been sidelined. Alex turns to camera for the CTA.",
+        "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-07/serial-drama_final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=SjyCnRRIWJk"
       }
     ]
   }
