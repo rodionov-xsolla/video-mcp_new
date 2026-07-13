@@ -632,6 +632,7 @@ games/{GAME_TAG}/reddit-story_bible.json
 ### Narrative anti-patterns
 
 - ❌ Story about gameplay mechanics only.
+- ❌ Conflict/pressure/false-verdict built on in-game mechanics — fleet/guild politics, leaderboard rank, gauntlet standings, cheat/macro accusations, kicks, ranked system drama — **even when the mechanic genuinely exists in that game.** User feedback 2026-07-13 (STT gauntlet-leaderboard-macro pitch rejected hard: "никому не всрался этот флот... прекрати использовать эту ингейм срань"): existing-in-game is not the bar — interesting-to-a-human-viewer is. The injustice/pressure must come from real relationships (family judgment, misunderstanding, distance, a life circumstance), with the game described in plain language (a "crew", "his ships", "we play Fridays") never jargon (fleet, gauntlet, leaderboard, rank, cheat). Model examples: STT EP6 (silent grandfather), EP7 (offshore father) — human situation only, game is backdrop.
 - ❌ Cutting/skipping the concrete relationship **setup** (how long, since when, a specific ritual/detail) to fit a shorter runtime — reads generic/faceless. Duration budget flexes up to 68s TTS for this; a longer, specific story beats a short, generic one.
 - ❌ No moral injustice.
 - ❌ No false verdict.

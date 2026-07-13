@@ -1,14 +1,14 @@
 {
   "game_tag": "star-trek-timelines",
-  "total_stories": 7,
+  "total_stories": 8,
   "stories": [
     {
       "id": 1,
       "date": "2026-06-08",
       "tone": "dramatic",
       "theme": "gauntlet-comeback-behold-seven-of-nine",
-      "headline": "I almost quit Star Trek Timelines — then one Behold changed everything",
-      "offerwall_angle": "performed offerwall tasks — surveys, app trials, small jobs inside the game",
+      "headline": "I almost quit Star Trek Timelines \u2014 then one Behold changed everything",
+      "offerwall_angle": "performed offerwall tasks \u2014 surveys, app trials, small jobs inside the game",
       "output_dir": "output/2026-06-08/star-trek-timelines/reddit-story/",
       "youtube_url": "https://www.youtube.com/watch?v=3j8ylpVG9sI",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-08/reddit-story_final.mp4"
@@ -52,7 +52,7 @@
       "pressure_source": "Discord group piling on publicly",
       "resolution_type": "neutral-positive",
       "headline": "They called me a fake Trek fan for playing a gacha game. That game proved them wrong.",
-      "offerwall_angle": "downloaded game from bio link (native — first story beat)",
+      "offerwall_angle": "downloaded game from bio link (native \u2014 first story beat)",
       "output_dir": "output/2026-07-01/star-trek-timelines/reddit-story/",
       "youtube_url": "https://www.youtube.com/watch?v=o_0lqlxes44",
       "yt_publish_at": "2026-07-04T20:59:00Z",
@@ -70,7 +70,7 @@
       "narrator_flaw": "knew deep down he was escaping but kept rationalizing it as decompression",
       "resolution_type": "positive",
       "headline": "I played Star Trek Timelines every night. My wife thought I was avoiding her. She was right.",
-      "offerwall_angle": "downloaded game from Starfleet bio link (native — early story beat)",
+      "offerwall_angle": "downloaded game from Starfleet bio link (native \u2014 early story beat)",
       "output_dir": "output/2026-07-06/star-trek-timelines/reddit-story/",
       "youtube_url": "https://www.youtube.com/watch?v=8TYKrz7Ju-s",
       "yt_publish_at": "2026-07-09T20:59:00Z",
@@ -87,7 +87,7 @@
       "human_beat": "grandfather turns out sharp at optimizing crew builds; one real question about his real-world engineering past (Apollo-era antenna arrays, 1969) unlocks twenty minutes of answers",
       "resolution_type": "positive",
       "headline": "My grandfather barely speaks. A Star Trek game became the only language we both understood.",
-      "offerwall_angle": "downloaded game via bio link (native — early story beat)",
+      "offerwall_angle": "downloaded game via bio link (native \u2014 early story beat)",
       "output_dir": "output/2026-07-08/star-trek-timelines/reddit-story-grandfather/",
       "youtube_url": "https://www.youtube.com/watch?v=BZQG8eynEbY",
       "yt_publish_at": "2026-07-13T20:59:00Z",
@@ -101,52 +101,73 @@
       "false_verdict": null,
       "narrative_engine": "genuine fan story, no injustice/accusation arc (user override on format default)",
       "game_situation": "father on an 11-year offshore rotation downloads Star Trek Timelines during a slow night shift; his son downloads it too and they run the same crew together every night despite the distance",
-      "human_beat": "narrator's fear of failing his son again (dropped signal, missed calls) is quietly disproven — the son just keeps showing up; a rotation change lets the father surprise his son in person on Gauntlet night",
+      "human_beat": "narrator's fear of failing his son again (dropped signal, missed calls) is quietly disproven \u2014 the son just keeps showing up; a rotation change lets the father surprise his son in person on Gauntlet night",
       "resolution_type": "positive",
       "headline": "I work offshore eleven months a year. My son and I run the same crew every night.",
-      "offerwall_angle": "downloaded game via bio link (native — early story beat)",
+      "offerwall_angle": "downloaded game via bio link (native \u2014 early story beat)",
       "output_dir": "output/2026-07-08/star-trek-timelines/reddit-story-deployment/",
       "youtube_url": "https://www.youtube.com/watch?v=HcTUDFKWmsM",
       "yt_publish_at": "2026-07-18T20:59:00Z",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-08/reddit-story_final.mp4"
+    },
+    {
+      "id": 8,
+      "date": "2026-07-13",
+      "tone": "quietly-proud",
+      "theme": "sibling-connection-through-shared-interest",
+      "game_situation": "younger brother with autism/social anxiety explains his crew every Friday",
+      "false_verdict": null,
+      "narrative_engine": "genuine family story, no injustice/accusation arc",
+      "human_beat": "family pressures narrator to get the brother off the game, calling it isolating; reveal shows it was the one place he practiced connecting",
+      "resolution_type": "positive",
+      "headline": "My little brother barely talks. Ask him about his Star Trek crew and he won't stop.",
+      "youtube_title": "My little brother barely talks. Ask him about his Star Trek crew and he won't stop.",
+      "offerwall_angle": "downloaded game via bio link (native \u2014 early setup beat, no jargon)",
+      "gameplay_file": "Startrek_gameplay_3.mp4",
+      "gameplay_offset_sec": 0,
+      "gameplay_loop": true,
+      "output_dir": "output/2026-07-13/star-trek-timelines/reddit-story-brother",
+      "youtube_url": "https://www.youtube.com/watch?v=KWhB7KqbqTs",
+      "yt_publish_at": "2026-07-22T20:59:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-13/reddit-story-brother_final.mp4"
     }
   ],
   "anti_repetition": {
     "recent_themes": [
-      "lore-nerd-proves-fake-fans-wrong",
       "marriage-reconnection-through-shared-trek-nostalgia",
       "silent-grandfather-known-through-shared-game",
-      "offshore-father-nightly-ritual-with-son"
+      "offshore-father-nightly-ritual-with-son",
+      "sibling-connection-through-shared-interest"
     ],
     "recent_tones": [
-      "funny-justice",
       "touching",
       "touching",
-      "touching"
+      "touching",
+      "quietly-proud"
     ],
     "recent_moral_engines": [
-      "dismissed-as-fake-fan-proven-right-by-knowledge",
       "emotional withdrawal mistaken for indifference",
-      "n/a — genuine fan story, no accusation arc",
-      "n/a — genuine fan story, no accusation arc"
+      "n/a \u2014 genuine fan story, no accusation arc",
+      "n/a \u2014 genuine fan story, no accusation arc",
+      "n/a \u2014 genuine family story, no accusation arc"
     ],
     "recent_game_situations": [
-      "Trek Discord lore debate",
       "husband plays nightly while marriage grows silent after second child",
       "grandson spends time with a silent retired-engineer grandfather via the game",
-      "offshore father and son share a nightly crew across an 11-year rotation"
+      "offshore father and son share a nightly crew across an 11-year rotation",
+      "younger brother with autism explains his crew every Friday"
     ],
     "recent_false_verdicts": [
-      "narrator is a fake Trek fan who plays gacha trash",
       "narrator was using the game to avoid his wife",
-      "null — no injustice arc",
-      "null — no injustice arc"
+      "null \u2014 no injustice arc",
+      "null \u2014 no injustice arc",
+      "null \u2014 no injustice arc"
     ],
     "recent_pressure_sources": [
-      "Discord group piling on publicly",
       "months of mutual silence between spouses",
-      "n/a — no pressure/accusation source, genuine story",
-      "n/a — no pressure/accusation source, genuine story"
+      "n/a \u2014 no pressure/accusation source, genuine story",
+      "n/a \u2014 no pressure/accusation source, genuine story",
+      "family pressuring narrator to get brother off the game"
     ],
     "recent_resolution_types": [
       "positive",
@@ -155,12 +176,12 @@
       "positive"
     ],
     "recent_hooks": [
-      "bio link download, mocked in Discord for playing STT, Treaty of Algeron lore fact silences crowd",
       "bio link download, nightly escape, wife sits down and asks about Spock, late father's TOS connection, Thursday ritual",
       "bio link download, quiet grandfather, deliberately-wrong crew build as excuse to sit near him, Apollo-era antenna-array reveal",
-      "bio link download, offshore rotation, son overhears a call and downloads the game too, nightly ritual, surprise in-person reunion on Gauntlet night"
+      "bio link download, offshore rotation, son overhears a call and downloads the game too, nightly ritual, surprise in-person reunion on Gauntlet night",
+      "bio link download, brother with autism explains his crew every Friday, family pressure to stop, cousin unlocks unprompted connection at dinner"
     ],
-    "note": "stories 6 and 7 deliberately break the injustice/false-verdict engine per explicit user instruction — genuine fan/family stories instead. Both use tone 'touching' back-to-back with story 5 (3x in a row) — flag for the next reddit-story run to vary tone (e.g. funny-justice, soft-drama, dramatic) and consider reintroducing an injustice arc unless the user asks otherwise.",
+    "note": "story 8 (2026-07-13) breaks the 3x-touching streak with tone quietly-proud, still no injustice arc (genuine family story) \u2014 that is now 3 of the last 4 STT episodes without an accusation arc. HARD RULE added 2026-07-13: never build reddit-story conflict on in-game mechanics (fleet/gauntlet/leaderboard/cheat) even when the mechanic is real \u2014 user rejected this hard for STT. If reintroducing an injustice arc, source the false_verdict/pressure from real relationships only, never game mechanics.",
     "banned_combos": []
   }
 }
