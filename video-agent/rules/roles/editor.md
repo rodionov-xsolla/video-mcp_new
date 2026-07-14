@@ -996,9 +996,11 @@ artifacts (CJK hallucinations, garbled text near the frame bottom) are prevented
 the format playbook's negative_prompt (see what-if-real-life.md). No full-width `drawbox` and no
 opaque-box subtitles: the one style uses an outline only.
 
-## 14. Speedup is a mandatory step, not optional
+## 14. Speedup is a mandatory step, not optional (LEGACY FORMATS ONLY — see §3d override)
 
-The speedup pass (1.15× for serial-drama, 1.18× for comedy-sketch, format-dependent — see format playbook) is part of the standard pipeline order:
+> ⚠️ **`serial-drama` is excluded from this section — see §3d.** Its I2V clip durations are the scenarist's final, deliberate pacing (5s = 5s). Applying the §14 self-check below to serial-drama will flag a correct, unsped-up `final.mp4` as if the speedup step were missing — it is not missing, it does not apply. Burned 2026-07-14 (star-trek-airlock EP13): this section's blanket "1.15× for serial-drama" line directly contradicted §3d's explicit override and caused a rebuild to wrongly speed up an episode that had already been correctly assembled without speedup.
+
+The speedup pass (1.18× for comedy-sketch, format-dependent — see format playbook; NOT serial-drama) is part of the standard pipeline order for formats that request it:
 
 > normalize → subtitles → episode number → TBC → concat → **speedup** → music
 
