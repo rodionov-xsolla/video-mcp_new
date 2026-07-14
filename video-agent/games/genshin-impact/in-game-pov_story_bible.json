@@ -1,7 +1,7 @@
 {
   "format": "in-game-pov",
   "game_tag": "genshin-impact",
-  "last_updated": "2026-06-17",
+  "last_updated": "2026-07-14",
   "used_situations": [
     {
       "situation": "Fatui forces raid Mondstadt — you are a civilian caught in the city streets as Fatui soldiers move in",
@@ -30,14 +30,25 @@
       "status": "completed",
       "youtube_url": "https://www.youtube.com/watch?v=8W3U7yFM8Bg",
       "comment": "Scheduled private 2026-06-21T20:59:00Z on genshinsnap"
+    },
+    {
+      "situation": "Vision Hunt Decree lockdown — an ordinary Vision bearer carries Resistance orders across Narukami Island while the Tenryou Commission closes every exit",
+      "date": "2026-07-14",
+      "outcome": "survive",
+      "threat_type": "Vision Hunt Decree / Tenryou Commission",
+      "published": true,
+      "status": "completed",
+      "youtube_url": "https://www.youtube.com/watch?v=5cCy_zAOsYc",
+      "comment": "Approved and scheduled for 2026-07-22T20:59:00Z on genshinsnap"
     }
   ],
   "anti_repetition": {
     "threat_types_used": [
       "Fatui",
       "Geo Colossus / Osial",
-      "Scaramouche / Shouki no Kami"
+      "Scaramouche / Shouki no Kami",
+      "Vision Hunt Decree / Tenryou Commission"
     ],
-    "note": "Mondstadt (Fatui streets), Liyue Harbor (Osial flood), Sumeru Akademiya (Shouki no Kami) used. Next: Inazuma (Vision Hunt / Shogunate), Fontaine (Primordial Sea), Natlan (Abyss siege). Avoid water flood, sea god, mechanical god, and city-center premises. Vary civilian anchor: next could be sailor, temple guard, courtroom clerk."
+    "note": "Mondstadt (Fatui streets), Liyue Harbor (Osial flood), Sumeru Akademiya (Shouki no Kami), and Inazuma (Vision Hunt courier escape) used. Next: Natlan Abyss siege or a distinct Fontaine courtroom/fortress premise. Avoid water flood, sea god, mechanical god, city-center invasion, and authority-chase/courier premises."
   }
 }
