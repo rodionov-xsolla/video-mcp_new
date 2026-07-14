@@ -5,7 +5,7 @@
   "title": "Genshin Impact — Character Story",
   "format": "character-story",
   "created_at": "2026-06-29",
-  "last_episode": 11,
+  "last_episode": 12,
   "tts_engine": "chatterbox",
   "tts_note": "Genshin ALWAYS uses Chatterbox via fal-ai/chatterbox/text-to-speech. Voice refs at assets/genshin-impact/characters/{slug}/voice-1.mp3. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "voice_ref_base": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/{slug}/voice-1.mp3",
@@ -45,7 +45,8 @@
     "done_male": [
       "Xiao",
       "Zhongli",
-      "wanderer"
+      "wanderer",
+      "Tartaglia"
     ],
     "all_done": [
       "Amber",
@@ -58,7 +59,8 @@
       "Zhongli",
       "Hu Tao",
       "Wanderer",
-      "Raiden Shogun"
+      "Raiden Shogun",
+      "Tartaglia"
     ],
     "cooldown_episodes": 20,
     "selection_note": "Pick characters with strong lore arcs and tragic backstories. Prioritize 5-star characters with high popularity. Alternate male/female for variety. Avoid repeating characters used in dual-style within 4 episodes."
@@ -233,6 +235,18 @@
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-13/character-story_final.mp4",
       "tts_engine": "chatterbox",
       "notes": "HOOK (Cataclysm/Makoto death) → PROMO → ORIGIN (twin kagemusha) → TURNING POINT (Makoto leaves, Plane of Euthymia) → REVELATION (Plane fractures, grief confronted) → CTA. 7 clips + CTA. Used existing redcon character ref."
+    },
+    {
+      "episode": 12,
+      "date": "2026-07-13",
+      "character": "Tartaglia (Childe)",
+      "character_slug": "tartaglia",
+      "gender": "male",
+      "idea": "Tartaglia (Childe) — From innocent Snezhnayan boy to youngest Fatui Harbinger | Character Story",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-13/character-story-2_final.mp4",
+      "tts_engine": "chatterbox",
+      "notes": "3 age variants (child/young/mature). Extended clips 3-6 via setpts to match TTS duration. EP12."
     }
   ],
   "next_planned": null,
