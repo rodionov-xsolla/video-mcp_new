@@ -1,7 +1,7 @@
 {
   "format": "in-game-pov",
   "game_tag": "star-trek-timelines",
-  "last_updated": "2026-06-20",
+  "last_updated": "2026-07-14",
   "used_situations": [
     {
       "situation": "Battle of Wolf 359 — Borg cube attack, your Starfleet vessel is crippled",
@@ -56,6 +56,15 @@
       "published": true,
       "status": "completed",
       "comment": "youtube: https://www.youtube.com/watch?v=QtaLwneSSug (scheduled 2026-07-02T20:59:00Z). Supabase: https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-06-29/in-game-pov_final.mp4. Survival arc: 8%→6%→4%→18%→42%→71%. Planet surface POV: jungle→ravine→ruins→cave(download hook)→thermal field→crashed shuttle. Banner ST2 overlay on scenes 1 and 4. Download hook woven into cave scene (Timelines relay beacon). Video manually edited by user before upload."
+    },
+    {
+      "situation": "Breen Energy-Dampener Ambush at Chin'toka — your Starfleet vessel loses main power and is torn apart",
+      "date": "2026-07-14",
+      "outcome": "death",
+      "threat_type": "Breen",
+      "published": true,
+      "status": "completed",
+      "comment": "youtube: https://www.youtube.com/watch?v=FZy8b9IUqjY (scheduled 2026-07-21T20:59:00Z). Supabase: https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-14/in-game-pov_final.mp4. Survival arc: 9%→5%→2%→7%→0%. 5 POV scenes: bridge→emergency-lit corridor→engineering deck→Jefferies tube→escape pod bay. Kling v3 native environmental SFX, universal subtitles, and live survival HUD. Final generation cost: $4.323."
     }
   ],
   "anti_repetition": {
@@ -65,8 +74,9 @@
       "Borg",
       "Dominion",
       "Romulan",
-      "Hirogen"
+      "Hirogen",
+      "Breen"
     ],
-    "note": "Borg used 3 times, Dominion, Romulan, Hirogen. Next situation: avoid all of these. Good candidates: Klingon Bird-of-Prey ambush, Breen energy dampener, Species 8472 in fluidic space, Cardassian raid on DS9, Temporal anomaly (Krenim weapon), Holodeck malfunction trapping crew."
+    "note": "Borg used 3 times, plus Dominion, Romulan, Hirogen, and Breen. Never repeat a core premise; at minimum avoid the last three threat types (Romulan, Hirogen, Breen). Fresh candidates: Species 8472 in fluidic space, a Cardassian raid on DS9, a Krenim temporal-weapon strike, or a holodeck malfunction trapping the crew."
   }
 }
