@@ -468,12 +468,16 @@ $FFMPEG -y -i final-base.mp4 -i bg-music.mp3 \
   final-with-music.mp4
 ```
 
-- Music volume is set by Sound (serial-drama=0.15, gameplay=0.10, reddit-story=0.05)
+- Music volume is set by Sound (gameplay=0.10, reddit-story=0.05; serial-drama was 0.15 but see the audibility note below — verify with a real probe rather than trusting this number as-is)
 - `apad=whole_dur=$VIDEO_DUR` — pad with silence if music is shorter than the video
 - NEVER `-shortest`
 - If Sound did not specify a track — **stop and ask Manager**. Music is mandatory
 
 **Mandatory pre-flight check (do this BEFORE the final encode, not after):** `[ -s "$OUTPUT_DIR/bg-music.mp3" ]` (or `build/bg-music.mp3`). If the file is absent or empty, this is a hard stop — do not encode `final.mp4` without music "to be safe" or "since Manager can add it later." Burned 2026-07-09: star-trek-timelines `what-if-real-life` shipped as a finished, human-reviewed `final.mp4` with no music track at all because Editor built and delivered the whole video without ever checking for `bg-music.mp3`. Checking after encoding is too late — the file already looks "done."
+
+**"Music is in the filter graph" ≠ "music is audible" — always verify with a real probe, not by reading your own `filter_complex`.** Burned in EP13 star-trek-airlock (2026-07-14, serial-drama): the graph included `amix` with the music track at `volume=0.15` exactly as documented, but the user reported the final video had no audible music at all. Isolated testing showed `volume=0.15` (linear, not dB) attenuates the raw track by ~-16.5dB — combined with an already-quiet source track, the mixed result measured close to the noise floor in silent/no-dialogue scenes. Raising to `volume=0.45` fixed it, confirmed by measurement, not by re-reading the filter graph. **After every music mix, probe a genuinely silent/no-dialogue scene window and report the actual dB numbers** — do not report "music mixed at volume=X" as if that were proof of audibility.
+- **Probing gotcha: `-ss` placement changes what you measure.** `ffmpeg -i final.mp4 -ss T -t D -af volumedetect -f null -` (accurate seek — `-ss` AFTER `-i`) measures only the T→T+D window. `ffmpeg -ss T -i final.mp4 -t D ...` (fast/input-side seek) can behave inconsistently across ffmpeg builds/containers and has produced misleading whole-file-like stats during this same incident — if two probes of the same window disagree, try both seek placements before concluding the audio itself is the problem.
+- **Do not let the music fade end exactly at a hard cut (e.g. the CTA boundary).** An `afade=t=out:st=<content_end>:d=1.0` timed to land precisely where the next segment (CTA) starts leaves that entire following segment dead silent, which reads as "the music disappeared" even more than a low volume does. Time the fade to end within the final ~1–1.5s of the whole video, not at an internal segment boundary, unless the CTA segment has its own audio.
 
 ---
 
