@@ -5,9 +5,9 @@
   "language": "en",
   "title": "Star Trek Timelines — Character Story",
   "created_at": "2026-05-30",
-  "last_episode": 19,
+  "last_episode": 20,
   "tts_engine": "elevenlabs",
-  "tts_note": "ElevenLabs eleven-v3 via fal-ai/elevenlabs/tts/eleven-v3. Each canonical character gets a dedicated voice chosen by gender and emotional register. No Chatterbox — STT always uses ElevenLabs. See characters[] for voice assignments. Long monologue (>80 words) → mandatory chunking into ≤35-word segments.",
+  "tts_note": "Legacy default assignments use ElevenLabs voice names, but the active Sound provider may be MiniMax. A character's voice_engine_override and matching engine-specific voice field always win. Never pass an ElevenLabs-only name to MiniMax because the provider may fall back to the wrong gender. Long monologue (>80 words) → mandatory chunking into ≤35-word segments.",
   "format_overrides": {
     "note": "Applied from EP1 onward. Star Trek Timelines character-story = canonical Trek character narrates their own origin/lore in first person. I2V visualizes the key moments. Do NOT show the character speaking on camera — TTS is off-screen narration while Kling shows action.",
     "hook_requirement": "Clip 1 MUST visualize the most dramatic or emotionally charged moment of the character's arc — not a neutral opener. Visual should be scroll-stopping: crisis, loss, decisive choice. TTS line sets the stakes immediately.",
@@ -46,7 +46,8 @@
       "Kirk",
       "Spock",
       "Worf",
-      "Khan"
+      "Khan",
+      "Gul Dukat"
     ],
     "all_done": [
       "McCoy",
@@ -69,7 +70,8 @@
       "Spock",
       "Worf",
       "Khan",
-      "Borg Queen"
+      "Borg Queen",
+      "Gul Dukat"
     ],
     "error": [],
     "error_note": "Characters listed in 'error' had a production attempt but the final video was rejected. Do NOT pick them again until manually reviewed and removed from this list.",
@@ -223,6 +225,22 @@
       "youtube_url": "https://www.youtube.com/watch?v=ojGbJ8WzZ4s",
       "yt_publish_at": "2026-07-19T20:59:00Z",
       "notes": "Villain arc — origin of the Collective to near-humanity flickering with Data and Seven. Single-age (Borg, no canonical age variants). Hook: Queen activating in alcove, First Contact offer. Monologue 94 words, atempo 1.354× (MiniMax Calm_Woman, not ElevenLabs — active provider override). Music: dark sci-fi tension MiniMax Music. Redo: scene 1 re-animated with user-preferred original PNG; scene 4 regenerated as close-up hands (distinct from scene 3 throne). Budget ~$4.08."
+    },
+    {
+      "episode": 20,
+      "date": "2026-07-14",
+      "character": "Gul Dukat",
+      "character_slug": "dukat",
+      "gender": "male",
+      "era": "DS9",
+      "idea": "Gul Dukat — Character Story | Star Trek Timelines",
+      "tts_engine": "minimax",
+      "minimax_voice": "Deep_Voice_Man",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/videos/star-trek-timelines/2026-07-14/character-story_final.mp4",
+      "review_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/videos/star-trek-timelines/2026-07-14/character-story_final_male-v2.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=dX9d3w5qNek",
+      "yt_publish_at": "2026-07-20T20:59:00Z",
+      "notes": "Villain arc — Dukat frames the occupation of Bajor, Ziyal's death, and his Pah-wraith descent as proof that he was the wronged hero. Two persistent age variants: young and mature. Six 5-second Kling v3 clips, 95-word monologue, MiniMax Deep_Voice_Man atempo 1.392×. The first TTS attempt passed the ElevenLabs-only name Liam into MiniMax and fell back to a female voice; final review-approved version uses the explicit male MiniMax voice ID and a cache-safe male-v2 URL."
     }
   ],
   "style_tags": "realistic 3D CGI — cinematic lighting, photorealistic textures, high detail 3D render, game cutscene quality. Do NOT use the game's illustrated/painted art style. All clips must match this style, including child-character scenes. Required prompt keywords: 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI, game cutscene quality'.",
@@ -381,10 +399,16 @@
       "gender": "male",
       "era": "DS9",
       "elevenlabs_voice": "Liam",
-      "voice_note": "Charming, self-righteous, delusional — villain who genuinely believes he's the hero",
+      "voice_engine_override": "minimax",
+      "minimax_voice": "Deep_Voice_Man",
+      "voice_note": "Charming, self-righteous, delusional — villain who genuinely believes he's the hero. Active MiniMax override: always pass Deep_Voice_Man explicitly; Liam is ElevenLabs-only and must never be sent to MiniMax because the provider falls back to Wise_Woman.",
       "character_description": "male Cardassian, gray scaly textured skin, prominent spoon-shaped cranial ridge on forehead, raised neck ridges, slicked-back dark hair, gray-brown Cardassian military uniform with armored shoulders, charming manipulative smile",
-      "ref_url": null
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/dukat/variants/mature.png",
+      "variants": {
+        "young": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/dukat/variants/young.png",
+        "mature": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/dukat/variants/mature.png"
+      }
     }
   },
-  "characters_note": "Prompt blocks and Supabase refs for canonical Trek characters. Reference sheet goes to storyboarder as chain_ref. No voice_ref_url — use ElevenLabs voice name directly."
+  "characters_note": "Prompt blocks and Supabase refs for canonical Trek characters. Reference sheet goes to storyboarder as chain_ref. Use a character's voice_engine_override and engine-specific voice field when present; otherwise use the legacy ElevenLabs voice assignment."
 }
