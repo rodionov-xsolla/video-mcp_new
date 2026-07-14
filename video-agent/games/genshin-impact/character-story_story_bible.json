@@ -245,8 +245,12 @@
       "idea": "Tartaglia (Childe) — From innocent Snezhnayan boy to youngest Fatui Harbinger | Character Story",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/voice-1.mp3",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-13/character-story-2_final.mp4",
+      "final_sha256": "d40762b0ff59f0ed0ad55073d11665f391ec9cccdfe55cb1adc663d773f56852",
+      "duration_sec": 49.76,
+      "youtube_url": "https://www.youtube.com/watch?v=pSCT6c9Druc",
+      "yt_publish_at": "2026-07-21T20:59:00Z",
       "tts_engine": "chatterbox",
-      "notes": "3 age variants (child/young/mature). Extended clips 3-6 via setpts to match TTS duration. EP12."
+      "notes": "3 age variants (child/young/mature). Extended clips 3-6 via setpts to match TTS duration. EP12. Publication audit on 2026-07-14 confirmed the Supabase object is byte-identical to the latest local final.mp4 and the Genshin Snap upload is fully processed and scheduled."
     }
   ],
   "next_planned": null,
