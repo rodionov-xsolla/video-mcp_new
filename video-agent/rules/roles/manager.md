@@ -30,7 +30,7 @@ Burn-tested EP2 (2026-06-08): forward loop scene-3→4→5→6 overwrote Lumine 
 
 ## EXECUTION SEQUENCE
 
-Every run follows this sequence. Inline programmatic validation runs inside `pipeline.sh` after each phase (jq on `storyboard.json`, `stat`/`ffprobe` on artifacts). If a check fails → STOP and show the error.
+Every run follows this sequence. Inline programmatic validation runs directly in the manager after each phase (jq on `storyboard.json`, `stat`/`ffprobe` on artifacts). If a check fails → STOP and show the error.
 
 ```
 PHASE 0 — Initialization
@@ -181,7 +181,7 @@ Delegate via `Agent(subagent_type="scenarist")` (model: sonnet, defined in `.cla
 
 **Output:** `$OUTPUT_DIR/storyboard.json`.
 
-**Validation:** `pipeline.sh` checks inline that `storyboard.json` exists and has a non-empty clips/scenes array (`jq '(.clips // .scenes // []) | length'`). If absent → STOP.
+**Validation:** manager checks inline that `storyboard.json` exists and has a non-empty clips/scenes array (`jq '(.clips // .scenes // []) | length'`). If absent → STOP.
 
 In debug mode — stop for approval.
 
@@ -191,7 +191,7 @@ In debug mode — stop for approval.
 
 Delegate via `Agent(subagent_type="sound")` (model: haiku, defined in `.claude/agents/sound.md`). Sub-agent loads `rules/roles/sound.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` inside). Template: `prompts/sound.txt`.
 
-**Validation:** `pipeline.sh` checks inline that every dialogue clip has a scene-K.mp3 (size ≥ 5KB). If a TTS file is missing or undersized → STOP. Catching it here costs $0; finding it after Kling costs $2+.
+**Validation:** manager checks inline that every dialogue clip has a scene-K.mp3 (size ≥ 5KB). If a TTS file is missing or undersized → STOP. Catching it here costs $0; finding it after Kling costs $2+.
 
 **When the format requires music, validate `bg-music.mp3` exists** — `[ -s "$OUTPUT_DIR/bg-music.mp3" ]` (≥ 10KB). It is mandatory for serial-drama. If required music is missing, stop; never continue without it.
 
@@ -216,7 +216,7 @@ If output of one stage (TTS, images) is needed as input for the next expensive s
 3. Use ONLY the Supabase URL for the next stage
 4. NEVER use temporary fal.ai result URLs as input to expensive generation
 
-**Validation:** `pipeline.sh` checks inline that every scene has an MP4 ≥ 100KB. If any are missing or undersized → STOP and investigate before Editor.
+**Validation:** manager checks inline that every scene has an MP4 ≥ 100KB. If any are missing or undersized → STOP and investigate before Editor.
 
 **Output:** `scenes/scene-K/scene-K.mp4` per clip.
 
@@ -249,7 +249,7 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
 
 **Output:** `final.mp4` (1080×1920).
 
-**Validation:** `pipeline.sh` checks inline that `final.mp4` exists, is ≥ 100KB, and has a sane `ffprobe` duration. If anything is off → STOP (moov atom missing usually means the encode was killed mid-run; never background ffmpeg).
+**Validation:** manager checks inline that `final.mp4` exists, is ≥ 100KB, and has a sane `ffprobe` duration. If anything is off → STOP (moov atom missing usually means the encode was killed mid-run; never background ffmpeg).
 
 **Do not hand the Editor manual math.** Pass only the parameters listed above (`GAME_TAG`, `FORMAT`, `OUTPUT_DIR`, `LANGUAGE`, booleans, paths) plus short context facts (which scenes changed, special conditions). Never compute and pass specific clip durations, `filter_complex` graphs, `TOTAL_DUR`/`MAIN_DUR` formulas, or input ordering yourself — the Editor derives all of that from `storyboard.json` and `rules/roles/editor.md` §0/§6. Handing it your own numbers means it follows your math instead of the real files, and a wrong manual calculation produces a badly-cut/sped-up result. Exception: font-patch commands (e.g. `sed` Helvetica→Montserrat) and `fontsdir` — those aren't in editor.md and are fine to pass along.
 
@@ -391,7 +391,7 @@ Phase 5  → final.mp4                                [check: final.mp4 ≥ 100K
 Phase 6  → local final.mp4 shown → user OK → Supabase + scheduled YT + log + bible update
 Phase 7  → git push
 ```
-All inline checks live in `pipeline.sh`.
+All inline checks are run directly by the manager (jq/ffprobe/stat), not by a script.
 
 Output structure:
 ```
@@ -530,7 +530,6 @@ Assets are mirrored in Supabase (`game_assets` table).
 Automatic processing via Supabase. Table `video_tasks`: `pending → running → completed/failed`.
 
 Scripts:
-- `queue/worker.sh` — auto-worker, polls the queue every 30s
 - `queue/check-queue.sh` — check + atomic claim of a task
 - `queue/update-task.sh` — status update
 - `queue/add-task.sh` — add a task

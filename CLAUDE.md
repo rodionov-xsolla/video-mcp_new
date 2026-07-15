@@ -33,7 +33,7 @@ Sub-agents live in `.claude/agents/` with pinned models (sonnet/haiku). This is 
 
 ## EXECUTION SEQUENCE
 
-After each phase, run `pipeline.sh`'s inline programmatic validation (jq on `storyboard.json`, `stat`/`ffprobe` on artifacts). If invalid → STOP and show the error to the user.
+After each phase, run inline programmatic validation yourself (jq on `storyboard.json`, `stat`/`ffprobe` on artifacts). If invalid → STOP and show the error to the user.
 
 ### Phase 0 — Initialization
 

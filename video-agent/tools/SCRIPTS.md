@@ -16,35 +16,9 @@
 
 ## Оркестратор
 
----
+Оркестратор — интерактивный manager-агент (`../CLAUDE.md`), не скрипт: каждая фаза — отдельный вызов `Agent(subagent_type=...)`, инлайн-валидация (`jq`, `stat`, `ffprobe`) манагер делает сам после каждой фазы.
 
-### `pipeline.sh` 🟠
-
-**Роль:** Главная точка входа для генерации. Запускает 5 фаз последовательно, каждая — отдельный Claude-вызов с пинованной моделью. После каждой фазы — инлайн-валидация (`jq`, `stat`, `ffprobe`).
-
-**Запуск:**
-```bash
-./pipeline.sh <GAME_TAG> "idea" [FORMAT] [OUTPUT_DIR] [TASK_ID]
-```
-
-**Фазы и модели:**
-
-| Фаза | Субагент | Модель | Результат |
-|------|----------|--------|-----------|
-| 0 | — | bash | `git pull`, asset query → `_supabase-assets.json` |
-| 1 | scenarist | Sonnet 4.6 | `storyboard.json` |
-| 2 | sound | Haiku 4.5 | `scene-K/scene-K.mp3` |
-| 3 | storyboarder | Sonnet 4.6 | `scene-K/scene-K.png` |
-| 4 | animator | Sonnet 4.6 | `scene-K/scene-K.mp4` |
-| 5 | editor | Sonnet 4.6 | `final.mp4` + Supabase URL |
-
-**Читает:** `.env`, `prompts/*.txt`, game/format/rules файлы (делегирует субагентам)  
-**Пишет:** `{OUTPUT_DIR}/pipeline.log`, `claude-{phase}.log`, все артефакты фаз, статус в Supabase `video_tasks`
-
-**⚠ Подводные камни:**
-- Модели переопределяются через env: `PIPELINE_SCENARIST_MODEL`, `PIPELINE_EDITOR_MODEL` и т.д.
-- При падении любой фазы обновляет статус задачи в Supabase и останавливается — повтор с той же фазы невозможен без ручного вмешательства
-- `TASK_ID` опционален — без него статус в `video_tasks` не обновляется (при ручном запуске норм, при queue-запуске — обязателен)
+`pipeline.sh` и `queue/worker.sh` (bash-версия того же оркестратора, звавшая `codex exec`/`claude -p`) архивированы в `../legacy/launchers-2026-04/` — не рабочий путь, обе найденные попытки запуска падали на Scenarist. Не использовать.
 
 ---
 
@@ -294,7 +268,6 @@ assets/{GAME}/gameplay/{name}.mp4
 
 | Скрипт | Важность | Вызывается | Мутирует |
 |--------|----------|------------|----------|
-| `pipeline.sh` | 🟠 | вручную / worker | всё (оркестратор) |
 | `add_subtitles.py` | 🟠 | editor-агент | .ass файл |
 | `overlays.py` | 🟡 | editor-агент | temp .txt файлы |
 | `log-video.sh` | 🟢 | manager (после OK) | Supabase video_agent_runs |

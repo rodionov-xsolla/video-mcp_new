@@ -108,7 +108,6 @@ video-agent/
 ├── CLAUDE.md                    # Entry point агента
 ├── STRUCTURE.md                 # Этот файл
 ├── providers.json               # Активные API-провайдеры
-├── pipeline.sh                  # Запуск генерации (sub-agent orchestrator)
 │
 ├── rules/
 │   ├── main/
@@ -173,7 +172,6 @@ video-agent/
 │   └── tracks.json
 │
 └── queue/
-    ├── worker.sh
     ├── add-task.sh
     ├── check-queue.sh
     ├── update-task.sh

@@ -36,7 +36,7 @@ What you personally do:
    - Editor: also `SUBTITLES` and `OVERLAYS` booleans (read from format front-matter)
    - For formats with prebuilt assets: `EXISTING_REFS_JSON`, `OPENER_PATH`, `CTA_PATH`
    - Prompt templates in `prompts/*.txt` — always use as the base.
-8. **After every phase — programmatic validation** (filesize/ffprobe/jq — no visual Read on PNG/MP4). If invalid → STOP, show error to user. Inline checks already live in `pipeline.sh`.
+8. **After every phase — programmatic validation** (filesize/ffprobe/jq — no visual Read on PNG/MP4). If invalid → STOP, show error to user.
 9. **After Editor** — show the local `final.mp4` and wait for explicit user approval. Only after OK: upload to Supabase, schedule YouTube, log, update the exact story bible, then git commit/push.
 
 ## Universal principles
