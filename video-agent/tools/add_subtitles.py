@@ -162,6 +162,23 @@ def canonical_text_from_storyboard(sb_path: str) -> str:
     parts = []
     for s in arr:
         t = s.get("tts") or s.get("character_speech") or s.get("narration")
+        if not t:
+            continue
+        # character_speech can be a plain string ("line") or a list of
+        # {"speaker": ..., "line": ...} dicts (serial-drama multi-speaker I2V
+        # dialogue clips). str(list_of_dicts) would stringify the Python repr
+        # ("SPEAKER LUMINE LINE DON'T STOP...") straight into the subtitle
+        # track — extract just the spoken "line" text, in order, instead.
+        if isinstance(t, list):
+            lines = []
+            for item in t:
+                if isinstance(item, dict):
+                    line = str(item.get("line", "")).strip()
+                else:
+                    line = str(item).strip()
+                if line:
+                    lines.append(line)
+            t = " ".join(lines)
         if t and str(t).strip() and str(t).strip().lower() != "null":
             parts.append(str(t).strip())
     return " ".join(parts)

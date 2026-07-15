@@ -774,6 +774,8 @@ Speedup by format:
 
 ## 12. Validation after each clip
 
+**"Already valid, skip re-render" must check the file matches the CURRENT start frame, not just its own filesize/duration.** Burned in genshin-impact "Don't Save Me" EP6 (2026-07-14): a scene's PNG was corrected/regenerated (Storyboarder fixed its background) after that scene's MP4 had already been rendered once. On a later full-episode Animator pass, the existing MP4 passed the filesize/ffprobe checks below and was reused as "already valid" — but it was rendered from the OLD, now-superseded start frame, so the video didn't match the current (corrected, user-approved) image at all. Filesize and duration checks say nothing about which start frame a clip was actually rendered from. **Before skipping a re-render because a valid MP4 already exists, confirm the scene's `scene_image`/`scene_image_url` hasn't changed since that MP4 was produced** (compare timestamps, or just re-render whenever you're not certain — a wasted $0.42-1.26 re-render is far cheaper than shipping a clip that visually contradicts the approved storyboard).
+
 **Default: programmatic validation only. Visual check is opt-in per format (see `rules/main/validation.md`).**
 
 After each Kling generation:
