@@ -29,7 +29,7 @@
         "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/_unsorted/seven-on-location-riker-chair.png"
       },
       "commander-worf": {
-        "voice": "George",
+        "voice": "Determined_Man",
         "stability": 0.55,
         "tone": "klingon-indignation",
         "supabase_avatar_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/worf/sheet.png"

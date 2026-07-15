@@ -11,7 +11,7 @@ You are the editor. Manager passes you: all `scene-K.mp4`, audio (embedded I2V/A
 6. **Audio normalization before concat — MANDATORY.** Sources arrive with different sample rates: Chatterbox TTS = 24kHz mono, Kling I2V audio = 44.1kHz, anullsrc default = 48kHz stereo. Never let ffmpeg resolve this silently — it produces clipping spikes ("squeal") and mean RMS of -27dB with 0dB peaks. Always add `aresample=48000,aformat=channel_layouts=stereo` to EVERY audio input before it enters `concat` or `amix`. Standard: `[k:a]aresample=48000,aformat=channel_layouts=stereo[ak]`. Verify with `ffprobe -show_streams -select_streams a` on every input: all must show `sample_rate=48000 channels=2` before concat.
 7. **ASS subtitle validation before final encode.** After generating `subs-master.ass`, read the `[Events]` section and check: (a) no Dialogue event is a fragment of 1–2 words while a longer duration implies the rest of the phrase was orphaned; (b) font size matches format spec (what-if-real-life: 58px, not 84px); (c) no two events overlap within the same Style. Fix before running the encode — fixing after costs a full re-encode.
 9. **I2V `generate_audio:true` audio is paid-for content — never discard it.** When any I2V clip has `generate_audio: true` in storyboard.json, its audio costs $0.042/s extra and must survive into the final mix. Use `concat=n=N:v=1:a=1` (never `a=0`) so Kling-generated atmospheric sound passes through. **`voice-final.wav` is a whisper-alignment artifact — it contains TTS only (16kHz mono) and is NEVER the final audio source.** The final audio always comes from scene MP4 streams (`[k:a]`) mixed with `bg-music`. Using `voice-final.wav` as output audio silently discards all I2V sounds and Kling Avatar lipsync quality. Burned in serial-drama EP3 — cost 3 re-renders.
-10. **Re-render audio checklist (subtitle/overlay fix, not a full regeneration).** When re-encoding final.mp4 to fix subtitles or overlays: (a) take `[k:a]` from every scene MP4 directly; (b) normalize to stereo 44100 Hz with `aformat`; (c) concat scene audio + `anullsrc` for any CTA/no-audio segment; (d) `amix` with `bg-music.m4a` at the declared volume. Never pass `voice-final.wav` as `-i` to the encode.
+10. **Re-render audio checklist (subtitle/overlay fix, not a full regeneration).** When re-encoding final.mp4 to fix subtitles or overlays: (a) take `[k:a]` from every scene MP4 directly; (b) normalize to stereo 44100 Hz with `aformat`; (c) concat scene audio + `anullsrc` for any CTA/no-audio segment; (d) `amix` with `bg-music.mp3` at the declared volume. Never pass `voice-final.wav` as `-i` to the encode.
 8. **Final encode is always synchronous.** Never run the subtitle-burn + music-mix encode in background. It writes the moov atom only on clean exit — a killed or background process produces a file with `moov atom not found`. Use `timeout 180` if needed. Validate with `ffprobe -v error -show_entries format=duration` immediately after: if it errors, the file is incomplete. An Avatar clip plays at its natural TTS length (~2–3s) — that is correct, not a bug to "fix". Freezing the last frame to inflate runtime produces a dead, frozen face after every line and looks broken (burned on EP7). Runtime is set by CONTENT (number/length of action clips), never by stretching a still. `apad`/`tpad` are allowed ONLY to close an audio↔video gap within a single clip (≤ its own natural length), never to extend a clip past where it ends.
 
 FFmpeg:
@@ -51,7 +51,7 @@ After your last command, the `OUTPUT_DIR` root must contain ONLY:
 
 - ffmpeg concat helpers: `concat-list.txt`, `concat-final.txt`, `concat.mp4`
 - intermediate renders: `final-base.mp4`, `final-speed.mp4`, `final-compressed.mp4`, `video-concat.mp4`, `video-concat-cta.mp4`
-- normalized assets: `cta-normalized.mp4`, `cta-fallback.mp4`, opener-normalized, etc.
+- normalized assets: `cta-normalized.mp4`, opener-normalized, etc.
 - temp audio: `bg-music.mp3`, `tts-output.mp3`, `tts-fast.mp3`
 - normalization / subtitle staging dirs: `norm/`, `subs/`
 - ad-hoc scripts and logs: `gen_images.sh`, `submit_i2v_clean.sh`, `recover.sh`, `generate.sh`, `pipeline.log`, `recover.log`, `phase3_requests.txt`, `i2v_request_ids.txt`, `i2v_map.txt`, `scene_urls.env`
@@ -167,7 +167,7 @@ mv build/final.tmp.mp4 final.mp4
 
 ### 0.3 Encoder choice
 
-#### Hardware codec fallback (use this order every run)
+#### Encoder selection (lock once per run)
 
 Hardware encoders are 2–5× faster than `libx264` on the same machine. Detect once at the start of assembly and set `$VCODEC_ARGS`:
 
@@ -188,7 +188,7 @@ elif $FF -encoders 2>/dev/null | grep -q h264_qsv; then
   # Intel Quick Sync
   VCODEC_ARGS="-c:v h264_qsv -preset medium -global_quality 22"
 else
-  # CPU fallback
+  # CPU route when no hardware encoder is available
   VCODEC_ARGS="-c:v libx264 -preset medium -crf 22"
 fi
 ```
@@ -198,10 +198,10 @@ Then in every encode command replace `-c:v libx264 -preset medium -crf 22` with 
 **Notes:**
 - `h264_videotoolbox` does not support `-crf` — use `-b:v 5M` target bitrate instead. At 1080×1920 this is equivalent quality to `crf 22` and well within TikTok/Reels/Shorts ingest limits.
 - Always append `-pix_fmt yuv420p` — required regardless of encoder (QuickTime + social uploads).
-- If a hardware encode fails mid-run (rare: thermal throttle, driver crash), fall through to `libx264` and log the error. Do not retry the hardware encoder in the same session.
+- If the selected encoder fails mid-run, retry the same command once. A second failure stops the whole video; do not switch encoders.
 - `ffmpeg-full` binary is still required for any encode that burns subtitles (`ass=` filter). Hardware encode is compatible with `ass=` — it is a video filter, not a codec constraint.
 
-#### Software fallback params (when `$VCODEC_ARGS` resolves to libx264)
+#### Software-route params (when `$VCODEC_ARGS` resolves to libx264 at pre-flight)
 
 - **`-preset medium -crf 22`** — single-pass default. On 1080×1920, ~90 s for 50 s output.
 - **`-preset slow -crf 20`** — ONLY for archival masters or when explicitly requested. 3–5× wall-clock for marginal quality gain after social re-encode. Do not use as default.
@@ -260,7 +260,7 @@ WWE Champions fun-news pilot (2026-06-01) burned 1× re-render because the origi
 - **serial-drama "behind glass" TTS overlay** (§3) — per-scene aecho is a pre-mix on the I2V scene before §0. Treat output of §3 as the canonical input `[k:v]/[k:a]` for the main pipeline.
 - **Subtitle generation** (§6) — ONE universal ASS for the whole video, whisper-timed from `build/voice-final.wav`. `§0` picks it up as the last video filter `ass=build/subs.ass`. No per-format styles.
 - **Player-POV subtitle clamp (redcon + any format with a silent title card clip):** After `add_subtitles.py` generates `subs.ass`, post-process it in Python to remove/clamp Whisper subtitle events (layer-0, no `\pos`/`\fn` override) that fall inside the title card window. Window = `[clip_1_dur, clip_1_dur + title_card_dur]`. Events ending after window start → clamp end. Events starting inside window → move start to window end. Events fully inside → drop. Verify zero layer-0 subtitle conflicts before encoding. Title card text events (Montserrat Black, `\pos`) are NOT subtitles — do not touch them.
-- **Graphic overlays** (§6.5) — `tools/overlays.py` emits per-scene `drawtext` fragments spliced into the `[vk]` branch BEFORE concat. channel-bug — `overlay=` after `ass=`. No separate pass.
+- **Graphic overlays** (§6.5) — `tools/overlays.py` emits per-scene `drawtext` fragments spliced into the `[vk]` branch BEFORE concat. No generic channel-bug overlay exists.
 
 ### 0.6 When NOT to use the canonical pipeline
 
@@ -275,7 +275,7 @@ There is **no quality reason** to prefer multi-stage. Every multi-stage run = N 
 
 > ⚠️ **Prefer §0 single-pass pipeline.** This section describes the legacy multi-stage path. Use only when debugging an intermediate, or when §0 cannot express a required per-scene filter chain.
 
-**Path convention for every snippet below.** Run all commands with `OUTPUT_DIR` as cwd. Inputs come from `scenes/scene-K/...` (unchanged). **Every scratch file in the snippets — `concat-list.txt`, `concat-final.txt`, `final-base.mp4`, `final-speed.mp4`, `video-concat.mp4`, `cta-normalized.mp4`, `cta-fallback.mp4`, `bg-music.mp3`, `tts-output.mp3`, `tts-fast.mp3`, etc. — must be written to `build/`, not to the root.** So when a snippet says `final-base.mp4`, you write `build/final-base.mp4` and read it the same way on the next step. The ONLY file that lands in the root is the final deliverable, via `mv build/final-music.mp4 final.mp4` at the very end. Run `mkdir -p build` before your first ffmpeg call. See "Workspace layout (MANDATORY)" above.
+**Path convention for every snippet below.** Run all commands with `OUTPUT_DIR` as cwd. Inputs come from `scenes/scene-K/...` (unchanged). **Every scratch file in the snippets — `concat-list.txt`, `concat-final.txt`, `final-base.mp4`, `final-speed.mp4`, `video-concat.mp4`, `cta-normalized.mp4`, `bg-music.mp3`, `tts-output.mp3`, `tts-fast.mp3`, etc. — must be written to `build/`, not to the root.** So when a snippet says `final-base.mp4`, you write `build/final-base.mp4` and read it the same way on the next step. The ONLY file that lands in the root is the final deliverable, via `mv build/final-music.mp4 final.mp4` at the very end. Run `mkdir -p build` before your first ffmpeg call. See "Workspace layout (MANDATORY)" above.
 
 **CRITICAL:** before concat all clips MUST have identical fps and audio format.
 
@@ -450,7 +450,7 @@ $FFMPEG -y -i final-base.mp4 \
 3. Concat → `final-base.mp4`
 4. **Speed up (this section, legacy formats)** → `final-speed.mp4`
 5. Build `build/voice-final.wav` from the ALREADY sped-up speech (§6.1) and generate `build/subs.ass` (§6.2)
-6. Burn `ass=` (last video filter) + channel-bug overlay (§6.5)
+6. Burn `ass=` as the last video filter
 7. Music (section 4), mixed AFTER speedup (otherwise the pitch shifts)
 
 Subtitles are always generated from the FINAL (post-speed) speech and burned last — they cannot drift.
@@ -508,7 +508,7 @@ curl -s -o build/bg.png "$BG_URL"
 
 Inspect actual clip dimensions first (`ffprobe -show_entries stream=width,height`). Scale to 960×1280 via crop-to-fill regardless of source resolution. The source clip is longer than TTS_DUR, so `-ss OFFSET` is **mandatory**, not optional.
 
-**OFFSET must vary between runs and go meaningfully deep into the clip** — do not default to a small offset (e.g. ~30–40s) every time, that reuses the same visual window and looks identical across episodes. Check `reddit-story_bible.json` for `gameplay_offset_sec` used in the last 2–3 episodes for this `game_tag`, then pick a new offset at least 3–4 minutes away from those (both `ffprobe -show_entries format=duration` on the clip and `TTS_DUR` bound the max: `offset + TTS_DUR <= clip_duration`). Record the chosen offset back into the bible entry so the next run can avoid it.
+**OFFSET must vary between runs and go meaningfully deep into the clip** — do not default to a small offset (e.g. ~30–40s) every time. Check the exact format/series story bible for `gameplay_offset_sec` used in the last 2–3 approved episodes, then pick a new valid offset at least 3–4 minutes away. Report it to Manager as a pending state change; Manager records it only after the user approves the final video.
 
 ```bash
 FFMPEG=/usr/local/bin/ffmpeg-full/ffmpeg
@@ -571,42 +571,11 @@ Query `game_assets` where `game_tag = {GAME_TAG}` AND `tags @> ['cta','video']`.
 
 ---
 
-## 5. Video ending: fade-to-black + CTA (MANDATORY)
+## 5. Video ending: existing game CTA (MANDATORY)
 
-Every video ends with **fade-to-black → CTA text**. Two variants:
+Every video ends with the existing CTA resolved for its `GAME_TAG`. This game CTA is the only asset automatically shared across formats. Resolve it from the game's configured Supabase/local CTA path and validate only filename, size, codec, dimensions, and duration. If it is missing or invalid, stop the whole video; never create an end frame, synthetic CTA, text card, or copy one from another game.
 
-### 5.1 Custom CTA (priority)
-
-If a prepared CTA video exists — concat it at the very end after all scenes.
-
-**CTA lookup — priority order (MUST be scoped to `GAME_TAG`):**
-1. **Supabase Storage** — `assets/{GAME_TAG}/cta-*.mp4`. CTA URL is recorded in the game .md file (`games/{GAME_TAG}/{GAME_TAG}.md` → CTA section).
-2. **Most recent previous episode of the same `GAME_TAG`** — `output/.../{GAME_TAG}/.../cta-fallback.mp4` or similar.
-3. **`games/{GAME_TAG}/assets/cta/cta.mp4`** — local shared CTA of the game.
-4. **Programmatic fallback** (section 5.2) — generate "FOLLOW FOR MORE" on black.
-
-> ⚠️ **NEVER pick a CTA from a game-agnostic location** (e.g. `video-agent/cta-star-trek-timelines.mp4` at the repo root — this is star-trek-timelines branded, do NOT use for any other game). Resolve the CTA strictly from a `GAME_TAG`-scoped path — Supabase URL from the game .md file, the most recent prior episode's `output/.../{GAME_TAG}/...cta-fallback.mp4`, or `games/{GAME_TAG}/assets/cta/cta.mp4`. **The path is the validation** — never Read a frame to confirm branding.
-
-Different episodes may have different CTAs. Don't copy blindly — verify filename + size + duration via ffprobe. Brand correctness is guaranteed by the path, not by visual inspection.
-
-Download: `curl`, NOT `urllib`. After download — `ffprobe` validation (duration, codec, dimensions). CTA is normalized via the same `scale + pad + 30fps + AAC` step (section 1).
-
-### 5.2 Fallback CTA: fade-to-black + "FOLLOW FOR MORE"
-
-**If no custom CTA found** — generate CTA programmatically:
-- 2 seconds of black 1080×1920
-- White text centered: `"FOLLOW FOR MORE"`
-- Text fade-in from black (0.5s)
-
-```bash
-$FFMPEG_FULL -y \
-  -f lavfi -i color=c=black:s=1080x1920:d=2:r=30 \
-  -f lavfi -i anullsrc=r=44100:cl=stereo \
-  -vf "drawtext=fontfile='$IMPACT':text='FOLLOW FOR MORE':fontsize=72:fontcolor=white:x=(w-text_w)/2:y=(h-text_h)/2:alpha='if(lt(t,0.5),t/0.5,1)'" \
-  -c:v libx264 -preset slow -crf 20 -pix_fmt yuv420p \
-  -map 0:v -map 1:a -c:a aac -b:a 128k -shortest \
-  cta-fallback.mp4
-```
+Download with `curl`, then normalize it via the same `scale + pad + 30fps + AAC` step (section 1).
 
 ### 5.3 Fade-to-black before CTA
 
@@ -633,7 +602,7 @@ file 'cta-scaled.mp4'
 EOF
 ```
 
-CTA (custom or fallback) is added AFTER the last clip in the concat list.
+The resolved game CTA is added AFTER the last clip in the concat list.
 
 ---
 
@@ -651,9 +620,8 @@ flag — whisper simply finds no speech there in the final voice track.
 
 ### 6.0 Three hard rules
 
-**SUB-1 — `ass=build/subs.ass` is the LAST video filter.** After `concat` and after all overlay tokens
-from §6.5 (except channel-bug, which goes after the subtitle). Check: `ass=` is the last token of the
-video chain before `-map [v…]`.
+**SUB-1 — `ass=build/subs.ass` is the LAST video filter.** It comes after `concat` and all overlay tokens
+from §6.5. Check: `ass=` is the last token of the video chain before `-map [v…]`.
 
 **SUB-2 — Loudnorm 2-pass on the final audio** (-14 LUFS / -1 dBTP / 11 LU). Two passes (measure →
 apply), otherwise social platforms drop the volume unevenly across scenes.
@@ -738,24 +706,11 @@ frame). And only via `/usr/local/bin/ffmpeg-full/ffmpeg` (libass), see §11.
 2. **Subtitles never reach the CTA** — guaranteed by `--main-dur`.
 3. **No opaque box / full-width drawbox** — the style uses an outline (borderstyle=1), not a box.
 
-### 6.4 Programmatic self-eval after the burn
+### 6.4 Technical self-eval after the burn
 
 1. **Duration:** `ffprobe duration final.mp4 ≈ sum(scene_durations)[+ CTA] ± 200ms`.
 2. **Loudness:** `input_i` in [-15.0, -13.0].
-3. **Bottom-strip variance** (only if `SUBTITLES=true`): for each scene with non-empty `tts`, sample a
-   frame at `scene_mid + 0.5s`, compute stddev of the bottom 25% of the frame; > threshold => the
-   subtitle rendered. An empty strip => the burn failed (libass not picked up / broken fonts.conf).
-   Up to 3 retries, then fail to Manager.
-
-```bash
-$FFMPEG -y -ss "$SCENE_MID" -i final.mp4 -frames:v 1 -q:v 2 build/probe-$K.jpg
-python3 -c "
-from PIL import Image, ImageStat; import sys
-img = Image.open(sys.argv[1]).convert('L'); w,h = img.size
-v = ImageStat.Stat(img.crop((0,int(h*0.75),w,h))).stddev[0]
-print(f'scene {sys.argv[2]} variance={v:.1f}'); sys.exit(0 if v>15 else 1)
-" build/probe-$K.jpg "$K"
-```
+3. **Subtitle pipeline:** validate the ASS file structure/timestamps, confirm the selected FFmpeg binary exposes the `ass` filter, and require a successful encode. Do not sample frames, calculate pixel variance, or perform semantic/visual subtitle review.
 
 ### 6.5 Graphic overlays — `tools/overlays.py` (NOT subtitles)
 
@@ -774,18 +729,6 @@ done
 ```
 
 Before the expensive encode: `python3 tools/overlays.py storyboard.json --check` (font validation).
-
-**channel-bug** (if `CHANNEL_BUG_URL` is non-empty) — PNG 110×110, top-left 40,40, applied
-**after concat and after `ass=`** (last), not per-scene:
-```bash
-curl -sLo build/channel-bug.png "$CHANNEL_BUG_URL"
-# The PNG is the LAST '-i' -> its index = (number of all previous -i). E.g. if there were 11 inputs
-# before it (0..10), the PNG = input 11 -> label "[11:v]". Pass THAT index:
-BUG=$(python3 tools/overlays.py storyboard.json --channel-bug --bug-png build/channel-bug.png \
-        --bug-input-label "[11:v]" --input-label "[vsub]" --output-label "[vout]")
-# In ffmpeg: ... -i build/channel-bug.png (last),  $BUG appended to filter_complex,  -map "[vout]"
-# WARNING: --bug-input-label MUST be the real PNG input index, otherwise ffmpeg rejects the graph.
-```
 
 drawtext rules (macOS): only `ffmpeg-full` (libfreetype); the script already uses `textfile=` and
 `expansion=none` (escapes `:` and `%`), `fontfile=` resolved from the FONTS map with fallbacks.
@@ -938,7 +881,7 @@ Before starting concat, walk through this checklist. Each missed item = re-assem
 - [ ] Audio tracks present, AAC stereo
 - [ ] FFmpeg concat is deterministic — if input clips passed programmatic validation, the output is correct. Do NOT Read frames from `final.mp4` (`rules/main/validation.md`)
 - [ ] CTA in place (if applicable)
-- [ ] Subtitles readable, no overlap (if applicable)
+- [ ] Subtitle ASS timestamps are valid and non-overlapping; the libass encode completed successfully (if applicable)
 - [ ] Duration within format expectations (serial-drama 25–40s; gameplay-ai-avatar 30–40s)
 - [ ] **Workspace layout clean:** `ls OUTPUT_DIR` returns only `final.mp4`, `storyboard.json`, `scenes/`, optional `recap/` and `_archive/`. Anything else (concat lists, intermediate mp4s, temp audio, ad-hoc scripts, logs) is under `build/`. If `ls` shows stray files, move them into `build/` before handing off.
 
@@ -954,7 +897,7 @@ System `ffmpeg` 8.x ships WITHOUT libass on this machine. If you run `-vf "ass=.
 
 ```bash
 FFMPEG=/usr/local/bin/ffmpeg-full/ffmpeg
-[ -x "$FFMPEG" ] || FFMPEG=ffmpeg  # fallback
+[ -x "$FFMPEG" ] || { echo "ERROR: ffmpeg-full is required"; exit 1; }
 $FFMPEG -hide_banner -filters 2>&1 | grep -q '^ T.. ass ' || {
   echo "ERROR: ffmpeg lacks libass — ASS burn-in will silently fail"; exit 1; }
 ```
@@ -982,16 +925,6 @@ $FFMPEG -i final.mp4 -ss 1.5 -t 2.0 -af "volumedetect" -f null - 2>&1 | grep mea
 ```
 
 ---
-
-## 13a. Channel bug overlay (channel-wide brand)
-
-The channel bug (a persistent channel logo, TV-station style) is now drawn by `tools/overlays.py`,
-not by hand-written filter_complex. Manager parses `channel_bug_url` from `games/{GAME_TAG}/{GAME_TAG}.md`
-and passes `CHANNEL_BUG_URL`. If non-empty — see §6.5: download the PNG, get the fragment via
-`overlays.py --channel-bug`, apply it **after concat and after `ass=`** (overlay 110×110, top-left
-40,40, full duration). If `CHANNEL_BUG_URL` is empty — no step.
-
-Validation: sample a frame at t=1.0, stddev of the top-left 200×200 region > 25 ⇒ the brand is present.
 
 ## 13. Kling artifacts — fix with prompts, do NOT mask
 

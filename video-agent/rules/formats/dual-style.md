@@ -189,8 +189,8 @@ If these blocks are missing — Manager must flag and stop until they are added.
 - General rules — `rules/roles/scenarist.md`
 
 ### Storyboarder
-- Source ref: game asset (screenshot / character_card) from `game_assets` Supabase or `games/{GAME_TAG}/assets/refs/`
-- If none — generate the cartoon version through NB2 as anchor
+- Source ref: only an asset owned by this exact `dual-style` story bible/format (exact ownership tags required)
+- If none exists for this format, generate a fresh dual-style-bound cartoon anchor; do not borrow another format's ref without explicit user instruction
 - **Multi-character:** every new character starts the chain anew (do NOT pass the previous character's scene)
 - For one character: scene 1 = `[asset]`; scene 2+ = `[asset, scene-(K-1)]`
 - **Face-lock headshot (optional side-asset, only when Animator needs `elements` binding for macro motion — see Animator brief below):** after the scene PNG is accepted, generate ONE additional frontal headshot crop of the photorealistic figure via NB2 edit, using the already-rendered scene PNG as the image reference (not a fresh text-only generation) — the headshot must match the exact identity already locked in that scene, not a new likeness. Plain neutral background, head+shoulders, facing camera, neutral expression. Upload as a per-episode asset (`episode-scene` kind), not `game_assets`. Cost ≈$0.04–0.08.
@@ -234,7 +234,7 @@ If these blocks are missing — Manager must flag and stop until they are added.
 ## Output files
 
 ```
-output/YYYY-MM-DD/{GAME_TAG}/dual-style/
+${OUTPUT_DIR}/
 ├── storyboard.json
 ├── scenes/
 │   ├── refs/character-ref.png
@@ -287,7 +287,7 @@ output/YYYY-MM-DD/{GAME_TAG}/dual-style/
 
 ## Story Bible
 
-Create on first run: `games/{GAME_TAG}/dual-style_story_bible.json`
+Required path: `games/{GAME_TAG}/dual-style_story_bible.json`. If it is missing, Manager must stop and ask whether to create it; creation is allowed only after the user's explicit yes.
 
 ```json
 {
@@ -337,7 +337,7 @@ Create on first run: `games/{GAME_TAG}/dual-style_story_bible.json`
 
 **`action_types`** slugs — describe the VISUAL HOOK TYPE, not just the beat name. Examples: `wide-introduction-pose`, `weapon-draw-stance`, `element-burst-release`, `idle-confident-stance`, `sitting-meditate`, `walking-approach`, `dynamic-jump-landing`.
 
-**Story Bible update (Manager, after editor confirms `final.mp4`):**
+**Story Bible update (Manager, only after the user explicitly approves the local `final.mp4`):**
 
 1. Characters used → append each to `recent_characters`; trim to last **10 episodes' worth** (FIFO).
 2. Actors used (if any named actor) → append to `recent_actors`; trim to last **10** items (FIFO).

@@ -29,7 +29,7 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 ### Clip mix (balances)
 
 - **ACTION/DIALOGUE ~ 50/50.** All-dialogue episode = monotonous; all-action = no plot.
-- **I2V only.** Every serial-drama clip, including dialogue, is Kling v3 Standard I2V. Fallback v2.6 Pro only on v3 artifacts.
+- **I2V only.** Every serial-drama clip, including dialogue, is Kling v3 Standard I2V. Retry a technically failed request once with the same endpoint/settings; a second failure stops the video with an error. No v2.6, provider, or local fallback.
 - **Dialogue I2V uses Kling voice support:** `generate_audio: true`, `voice_ids`, `shot_type: "customize"`, and `multi_prompt` with `<<<voice_1>>>` / `<<<voice_2>>>`.
 - **Kling Avatar v2 is forbidden for serial-drama.** Do not create Avatar refs, do not call `fal-ai/kling-video/ai-avatar/*`, and do not render dialogue as a separate lipsync avatar clip.
 - **Identity is physical, not nominal.** Kling/NB2 do not know character names. Every scene prompt and every `multi_prompt` shot must identify visible/speaking characters by their locked physical descriptors and attached refs.
@@ -134,7 +134,7 @@ When the user asks for a native promo element (e.g. "free primogems banner", "po
 
 ## Story Bible — persistent series state
 
-File `games/{GAME_TAG}/serial-drama_story_bible.json` stores the universe state between episodes. **Mandatory** for serial-drama.
+The exact manager-resolved `STORY_BIBLE_PATH` stores the universe state between episodes. **Mandatory** for serial-drama. Never replace it with a hardcoded `games/{GAME_TAG}/serial-drama_story_bible.json`; this is especially important for Star Trek ROOM 1701, which must resolve to `games/star-trek-timelines/room1701_story_bible.json`.
 
 ### Structure
 
@@ -180,12 +180,14 @@ File `games/{GAME_TAG}/serial-drama_story_bible.json` stores the universe state 
 
 ### State Analysis (before generation)
 
-1. Load story bible from `games/{GAME_TAG}/serial-drama_story_bible.json`
+1. Load the story bible from the exact `STORY_BIBLE_PATH` passed by Manager. If it is absent, invalid, or ambiguous, STOP and ask the user whether to create/select one; never silently use the generic default.
 2. Analyze: who is in what status, which loops are active, what is the aura level
 3. Run Anti-Repetition Check (see below)
 4. Decide what happens in this episode (Loop Management)
 
-### State Transition (after generation, Manager updates)
+### State Transition (only after explicit final user approval, Manager updates)
+
+Do not mutate series state when generation or Editor finishes. Present the final video first; apply the following transition only after the user explicitly approves it.
 
 1. Update `characters[].status` and `aura_points`
 2. Update `relationships` if changed
@@ -249,7 +251,7 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 - **5s default**, 10s dialogue = almost always a mistake (split into 2×5s)
 - **Dialogue clips are I2V `multi_prompt`, not Avatar.** Stage them as medium two-shots, over-shoulders, group reactions, and insert beats. Avoid static frontal bust shots.
 - Balance ACTION/DIALOGUE ~ 50/50; at least 2 different characters speak per episode
-- Read the story bible: characters, voices (`voice` field), active loops, anti-repetition
+- Read the exact resolved series bible: characters, format-owned native voice refs/IDs (`voice_ref_url` / `voice_id_kling`), active loops, anti-repetition
 - **`retention_strategy` mandatory** in storyboard — why the cliffhanger pulls the next episode
 - Brainrot vocabulary in moderation, dialogue only
 - camera_angle differs for every adjacent clip
@@ -310,8 +312,8 @@ vertical 9:16 frame, no text overlays, keep facial features exactly matching the
 - **NEVER include a cross-episode scene image as a ref.** A previous episode's room photo (e.g. `room1701-ep1-last-scene.png`) will bleed its location (bedroom furniture, colors) into the new scene. EP2 attempt 2 used the EP1 last scene as anchor → bedroom elements appeared in the coffee shop. Only use character sheets + location bg-ref.
 - **Reusing the same location bg-ref across two DIFFERENT scenes in the same episode (not a `continues_from_scene` pair) risks Kling hallucinating an extra background person during I2V motion**, especially near a door/threshold/off-frame edge. Burned in EP13 star-trek-airlock (2026-07-14): scene 3 and scene 4 both chained off `bridge-tactical-ep13.png` with similar framing — across two separate render attempts, Kling invented a random extra character near the turbolift door during the I2V camera motion, not present in either scene's static start-frame prompt. This is distinct from the cross-episode bleed rule above (same episode, same format, still wrong): when two scenes in one episode are NOT declared continuations of each other (no `continues_from_scene` link) but would otherwise reuse the identical location bg-ref and near-identical camera framing, generate a genuinely fresh location bg-ref for one of them instead — a different angle/composition is not sufficient on its own to fix this once it's happened, a fresh underlying location asset is the reliable fix.
 - **Each scene is independent by default** — no ref chaining between scenes. Each NB2 call gets a fresh set of refs: location ref + relevant char sheets for that scene. Do not pass a previous scene's output as input to the next.
-- **EXCEPTION — blocking continuity for a continuous physical sequence within ONE episode.** When 2+ consecutive scenes are staged as one continuous physical moment in the same location (characters moving/repositioning across scenes — someone crosses the room, a third character enters and walks toward the others, etc.), generating each scene's start frame independently from text alone causes characters to visually "teleport" between clips — position, distance, and even who's still in frame can jump discontinuously. Burned in genshin-impact "Don't Save Me" EP4 (2026-07-07, scenes 4→5→6): a wound-tending exchange, a doorway confrontation, and a cliffhanger stand-off across 3 consecutive scenes in the same teahouse produced 3 unrelated spatial arrangements — caught only on user review. Room 1701's sitcom blocking (characters mostly seated, small movements) doesn't trigger this as visibly; any format/series with continuous cross-scene action will. **Fix:** Scenarist sets `"continues_from_scene": N` on a clip when it's staged as a direct spatial continuation of clip N (same location, same continuous moment, characters mid-repositioning) — omit/null when a scene is a clean new beat. Storyboarder reads this field: when set, it adds the immediately-preceding scene's PNG (same episode, one scene back only — never cross-episode, never more than one scene back) as an EXTRA chain-ref alongside the location bg-ref, and explicitly describes the new scene's blocking as a continuation of where that PNG left off (not the scene's declared end-of-motion pose — the animated clip may have moved further than the static PNG shows, so also cross-check against the actual last frame of the previous scene's rendered MP4 when available). This still respects the bg-ref-first / no-cross-episode-bleed rules — it only adds a positional anchor, not a new location source.
-  - **✅ Confirmed good practice (genshin-impact "Don't Save Me" EP6, 2026-07-14): when a `continues_from_scene` link needs a character to be reliably visible/positioned exactly as the previous clip left them (e.g. a character just introduced via `elements` in a silent reveal scene, who then needs to speak in the very next scene), extract the ACTUAL last frame of the previous scene's rendered MP4 (`ffmpeg -sseof -0.1 -i scene-N.mp4 -frames:v 1 last-frame.png`), upload it to Supabase, and use it directly as the next scene's `start_image_url` — rather than generating a fresh NB2 start frame for that next scene from text/refs alone.** This is more reliable than a freshly-generated PNG because it's pixel-identical continuity (same lighting, same exact pose/position, same element-introduced character) with zero regeneration risk, and it also means a character introduced via `elements` doesn't need `elements` again in the following scene — plain chain-ref off that extracted frame is enough. Use this whenever the next scene is a tight, immediate continuation (not just "same location, some time later").
+- **EXCEPTION — blocking continuity for a continuous physical sequence within ONE episode.** When 2+ consecutive scenes are staged as one continuous physical moment in the same location, independent start frames can make positions jump. Burned in genshin-impact "Don't Save Me" EP4 (2026-07-07, scenes 4→5→6), caught on user review. **Fix:** Scenarist sets `"continues_from_scene": N` on a direct spatial continuation. Storyboarder then adds only the immediately preceding scene's PNG from the same episode as an extra chain-ref and follows the previous scene's declared end-state/blocking metadata. Never inspect the rendered MP4 or extract its last frame automatically; generated media receives technical validation only. This remains a same-format, same-episode positional anchor, never a cross-episode or cross-format asset.
+  - For a tight `continues_from_scene` link, use the immediately preceding same-episode start PNG plus the declared end-state/blocking metadata. Do not extract or inspect frames from the rendered MP4 automatically; any visual continuity judgment is the user's during debug.
   - **⚠️ The extra chain-ref does NOT substitute for a fresh location bg-ref when the text describes REAL spatial repositioning (walking to a different wall, turning a corner, advancing down a corridor/dock).** Burned in genshin-impact "Don't Save Me" EP6 (2026-07-14): scenes 1→2 (running further down a dock) and scenes 3→4→5 (character steps to a side wall, then the other closes the distance) all reused the SAME location bg-ref file across the whole chain, with only the text and the continuation-PNG anchor describing the movement. Result: every cut looked like teleportation — running scene 2 showed the exact same framing as scene 1 (no sense of having covered distance), and the alcove scenes never actually showed a side wall despite the text repeatedly saying characters moved to one, because the underlying bg-ref photo was identical every time and NB2/Kling anchor heavily on the literal pixels of the location image, not just the text describing where people now stand in it. **Rule: if the blocking description says a character reaches a new vantage point (turns a corner, crosses to a different wall/landmark, advances a visible distance), generate a genuinely NEW location bg-ref for that vantage point** — a fresh NB2 generation (can be an `/edit` chained off the original bg-ref for style/architecture consistency, e.g. "same corridor, seen from further down / rotated to show the side wall") — not just a text instruction layered on the identical unchanged photo. Reserve the "text + continuation-PNG only" version of this exception for blocking that stays in essentially the same framing (a small step, a turn of the head, a hand reaching out) — anything that covers visible ground needs its own generated background.
   - **⚠️ Even a genuinely fresh bg-ref per vantage point can still fail — two independently-generated "same room, different angle" images rarely read as connected, and characters can flip left/right across the cut (crossing the 180-degree line), which looks like a place-swap, not dynamism.** This is what actually happened in the EP6 retry: a purpose-built "side wall" bg-ref for scenes 4-5 didn't visually connect to scene 3's door, and the characters' screen-left/right positions weren't held constant across the three scenes. **When a multi-beat exchange needs to happen in ONE location across several key_lines, prefer merging it into a SINGLE `multi_prompt` I2V clip (one start frame, several sequential shots) over splitting it into separate independently-generated scenes** — this sidesteps the whole problem, since there is no cut between independently-generated backgrounds, just continuous camera motion from one anchor. Kling's multi_prompt hard cap (≤15s, ≤6 shots per call) is usually enough for a 3-4 line exchange. Only fall back to separate scenes with fresh bg-refs when the exchange genuinely can't fit those caps, and if you do, fix each character's screen-left/right position for the ENTIRE sequence and never let it flip.
   - **⚠️ When a scene shows a character running/approaching TOWARD a destination visible in-frame, they must be oriented toward it (e.g. back-to-camera, angled toward the landmark) — not sprinting toward the camera with the destination as passive backdrop.** Burned in the same EP6 pursuit scene: the characters were composed running straight at the viewer while the door they were supposedly fleeing toward sat behind them, unrelated to their direction of motion — visually incoherent once cut against the arrival scene. Also: **that destination landmark's bg-ref must be generated as an `/edit` descendant of the SAME bg-ref asset used in the scene where they actually arrive there**, not independently re-generated as a "similar-looking" building — two separate NB2 calls describing "a Golden House entrance" will not produce the same door, and cutting between them reads as two different buildings.
@@ -325,7 +327,7 @@ vertical 9:16 frame, no text overlays, keep facial features exactly matching the
 
 ### Animator
 
-- I2V clips via Kling v3 Standard — micro motion only. Fallback to v2.6 Pro only on v3 artifacts.
+- I2V clips via Kling v3 Standard — micro motion only. Retry one technically failed request once with the same endpoint/settings, then STOP; never switch to v2.6 or another provider.
   - **Dialogue I2V:** `generate_audio: true`, `shot_type: "customize"`, `voice_ids`, `multi_prompt`. No external TTS, no Avatar.
   - **Action I2V:** `generate_audio: true` when room tone/ambient helps; `false` only for purely visual shots.
 - Motion prompt = technical (positions, camera, physical actions), without names/moods
@@ -343,14 +345,16 @@ vertical 9:16 frame, no text overlays, keep facial features exactly matching the
 ### Sound
 
 - **No per-scene TTS for serial-drama dialogue.** Dialogue voices come from Kling I2V `voice_ids` in Animator. Sound only generates external audio for explicit narrator/off-screen VO tracks.
-- For serial-drama dialogue I2V, one character = one reusable voice across the series. Use the supplied voice refs / existing Kling voice IDs from the story bible. If Kling requires `fal-ai/kling-video/create-voice`, call it once from the supplied Supabase voice ref, store the returned reusable ID in the story bible, and reuse it for the series. This does not disable required TTS/VO generation for narrator/off-screen tracks or other formats.
-- **Music is generated, not silently selected locally:** for serial-drama, generate `bg-music.mp3` through `fal-ai/minimax-music/v2.6` unless the user explicitly asks for a local library track. For sitcom tone: instrumental low-density comedy underscore, no vocals/lyrics, no dramatic swell.
+- For serial-drama dialogue I2V, one character = one reusable voice across the series. Use supplied voice refs / existing Kling voice IDs from the exact bible. If Kling requires `fal-ai/kling-video/create-voice`, call it once from the supplied format-owned ref and keep the returned ID in run-local state / `proposed_bible_updates`; Manager writes it to the exact bible only after explicit final user approval.
+- If a speaking character has no approved native voice ref/ID owned by the resolved series bible, STOP and report the missing requirement. Never substitute an ElevenLabs ID or borrow a voice from another format.
+- For explicit narrator/off-screen VO only: intentional native audio → approved sample owned by this resolved series bible through Chatterbox → otherwise MiniMax. Retry the same route once, then STOP; do not switch provider.
+- **Music is mandatory and generated:** Sound always generates `bg-music.mp3` through `fal-ai/minimax-music/v2.6`; never skip it or replace it with a local library track. For sitcom tone: instrumental low-density comedy underscore, no vocals/lyrics, no dramatic swell.
 - **Narrator VO (optional):** off-screen series intro voice over I2V action clips. Store as `narrator_vo` top-level field in storyboard.json: `{text, voice, tts_url, duration_sec, overlay_clips, volume}`. Sound generates the MP3; Editor overlays it via amix starting at t=0. Generate with `faster-whisper` for timing (offset=0 per clip, then +cumulative_start for ASS timecodes).
 - **Subtitles:** ASS via `ffmpeg-full` (`/usr/local/bin/ffmpeg-full/ffmpeg`) — libass is required; stock Homebrew ffmpeg silently errors on `ass=` filter. Use sentence-level Whisper timing — NOT word-by-word. Dialogue style: Bold=1, Outline=6, Fontsize=70, white, MarginV=520. Narrator style: Bold=1, Outline=4, italic, warm color `#EDE0C8`, Fontsize=65, MarginV=540.
 - **Whisper source = individual scene MP4s, NOT voice-final.wav and NOT storyboard JSON text.** Extract 16kHz mono WAV from each dialogue scene MP4 (`ffmpeg -vn -ar 16000 -ac 1`), run Whisper on each separately, then offset timecodes by cumulative scene start. Running Whisper on voice-final.wav or storyboard text produces subtitles with speaker names and JSON metadata instead of dialogue. Burned in EP2.
 - **Subtitle timing cap (mandatory):** After `add_subtitles.py` generates `build/subs.ass`, clamp every Dialogue event to the dialogue clip window it overlaps most. Events must never bleed into action/I2V-without-speech clips, CTA, or the next dialogue scene. If Whisper merges words across a scene boundary, split the subtitle text manually at the boundary.
 - ONLY dialogue subs + narrator + TBC. No title cards, brainrot tags, character names.
-- Background music: drama/cinematic, `volume=0.15`; duck to `0.08–0.10` under narrator VO.
+- Background music: drama/cinematic, `volume=0.45`; duck under narrator VO only as required by the mix.
 - General rules — `rules/roles/sound.md`
 
 ### Editor
@@ -360,7 +364,7 @@ vertical 9:16 frame, no text overlays, keep facial features exactly matching the
 - I2V clips: **never trim**; their declared duration is intentional. Preserve each clip's embedded audio stream when `generate_audio:true`.
 - **A/V sync — joint concat mandatory:** use a single `concat=n=N:v=1:a=1` with interleaved `[sv_i][sa_i]` pairs. CTA (no audio) gets `anullsrc` paired with its video.
 - **I2V `generate_audio:true` audio must be preserved.** Dialogue voices are inside the I2V MP4. Never replace final audio with `voice-final.wav`; that file is for Whisper timing only.
-- **`voice-final.wav` is NOT an audio source for the final encode.** It is a whisper-alignment artifact (TTS only, 16kHz mono). Final audio = scene `[k:a]` streams + `bg-music.m4a`. Passing `voice-final.wav` to the encode discards all I2V atmospheric sounds. Burned in EP3 — cost 3 re-renders.
+- **`voice-final.wav` is NOT an audio source for the final encode.** It is a whisper-alignment artifact (TTS only, 16kHz mono). Final audio = scene `[k:a]` streams + mandatory `bg-music.mp3`. Passing `voice-final.wav` to the encode discards all I2V atmospheric sounds. Burned in EP3 — cost 3 re-renders.
 - **amix for overlay tracks:** narrator VO + bg-music overlay on top of joint concat via `amix=inputs=3:duration=first:normalize=0`. `normalize=0` is mandatory (prevents volume division by N). `duration=first` anchors output length to the scene audio, avoiding music bleed-through.
 - Off-screen narrator VO: overlay as separate amix input starting at t=0; music ducked during VO. See storyboard.json `narrator_vo` field.
 - TTS overlay "behind glass" (rare): `aecho=0.8:0.9:10:0.3`, `adelay=500`
@@ -369,7 +373,7 @@ vertical 9:16 frame, no text overlays, keep facial features exactly matching the
 - TBC overlay 2s before the end (before fade)
 - Fade out 1.0s on MAIN_DUR (before CTA); CTA goes after fade in silence
 - **Episode title card — use the series overlay PNG, not a Pillow-generated strip.** Each series has a locked `overlay-series.png` in `games/{GAME_TAG}/`. Load it as an ffmpeg input, scale to fit 1080px wide (`scale=1080:-1`), overlay centered on the frame (`x=(main_w-overlay_w)/2:y=(main_h-overlay_h)/2`) during the title-card window defined in `storyboard.json episode_metadata.title_card_position`. Visible 5 seconds with fade-in 0.5s + fade-out 0.5s (starting at t=4.5s relative to overlay start).
-- **PNG overlay input MUST be given a real timeline — `-loop 1 -t <total_duration>` — or `enable='between(t,...)'` silently never fires.** A plain `-i overlay-series.png` produces a single-frame stream whose PTS never advances past ~0, so the `overlay` filter's `enable=between(t,START,END)` gate never evaluates true — ffmpeg exits 0, no error, and the title card is simply absent from every frame. This is a silent no-op, not a crash. Burned in ROOM 1701 EP3 (2026-07-07): the first Editor pass reported the title card as burned in (based on frame-variance sampling, which false-positived on the underlying scene content), but the overlay was missing from the delivered final.mp4 — caught only when the user manually reviewed the video. **Verification must extract actual frames inside the overlay window and pixel-diff them against a frame outside the window** (or against a version rendered without the overlay filter) — variance/stddev sampling on a single frame is not sufficient proof, since normal scene content can also produce high variance.
+- **PNG overlay input MUST be given a real timeline — `-loop 1 -t <total_duration>` — or `enable='between(t,...)'` silently never fires.** A plain `-i overlay-series.png` produces a single-frame stream whose PTS never advances past ~0, so the filter gate never evaluates true. Technical validation checks the input timeline, filtergraph, timestamps, encode success, and output decodability only. Do not extract/pixel-diff frames or run AI Vision; the user performs any visual review during debug.
 - General rules — `rules/roles/editor.md`
 
 ---
@@ -395,7 +399,7 @@ CTA is added to concat-list.txt **as the last clip** BEFORE final assembly. Timi
 ## Output files
 
 ```
-output/YYYY-MM-DD/{GAME_TAG}/serial-drama/
+${OUTPUT_DIR}/
 ├── storyboard.json
 ├── scenes/
 │   ├── refs/
@@ -411,9 +415,9 @@ output/YYYY-MM-DD/{GAME_TAG}/serial-drama/
 └── final.mp4
 ```
 
-Also: `games/{GAME_TAG}/serial-drama_story_bible.json` — persistent, updated after every episode.
+Also: exact `STORY_BIBLE_PATH` — persistent, updated only after explicit final user approval.
 
-After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabase.
+After explicit user approval, Manager uploads through its canonical run-scoped path.
 
 ---
 
@@ -440,7 +444,7 @@ After upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/serial-drama_final.mp4` in Supabas
 - [ ] CTA included in concat-list (not a separate re-encode)
 - [ ] TBC overlay 2s before the end; fade out 1.0s
 - [ ] Anti-repetition check passed
-- [ ] Story bible updated after generation
+- [ ] Story bible still unchanged before review; updated only after explicit final user approval
 
 ---
 

@@ -24,15 +24,14 @@ NB2 is an edit model with chain reference support via `image_urls`. Main strengt
 
 - `storyboard.json` — narrative fields: `beats`, `action_description`, `character_state`, `facial_expression`, `character_speech`, `tts`, `environment_state`, `clip_type`
 - `visual_identity` — `character_description`, `style_tags`, `lighting`, `color_palette`, `environment_description`
-- `existing_refs` — from Supabase `game_assets` (use instead of regenerating, if present)
-- `format` — determines whether location bg-refs and I2V end frames are needed
+- `existing_refs` — only Supabase `game_assets` owned by the exact current format/series; game CTA is the sole automatic cross-format exception
+- `format` — resolves the exact format/series asset ownership and image requirements
 
 ## Outputs
 
 - `scenes/refs/character-ref-{name}.png` (one per character, reused)
 - `scenes/refs/bg-{location}.png` (for serial-drama — one per location)
 - `scenes/scene-K/scene-K.png` (one per scene)
-- `scenes/scene-K/scene-K-end.png` (only for I2V clips)
 - updated `storyboard.json` with filled `image_prompt` for each scene
 
 ---
@@ -164,40 +163,13 @@ When converting to `image_prompt`, describe each character as **one continuous b
 one with ridges other without..." — attributes will mix
 ```
 
-#### Start/End frame pair — shared vs variable
+#### I2V start-frame lock
 
-For I2V clips: JSON explicitly declares what is shared, what changes.
-
-```json
-{
-  "frame_pair": {
-    "shared": {
-      "character": "Worf (from character lock)",
-      "background": "bg-bridge.png",
-      "camera": "medium close-up, eye level",
-      "lighting": "amber three-point"
-    },
-    "start": {
-      "expression": "neutral, mouth closed",
-      "gaze": "looking forward",
-      "hand": "arms at sides",
-      "env_detail": "panel indicator red"
-    },
-    "end": {
-      "expression": "alert, eyebrow raised",
-      "gaze": "looking slightly left",
-      "hand": "right hand at chest level",
-      "env_detail": "panel indicator green"
-    }
-  }
-}
-```
-
-**Rule:** everything in `shared` is verbatim identical in both prompts. Differences come only from `start` / `end`. If a field is missing in `end` — copy from `start`.
+For I2V clips, generate one complete start frame containing every character, prop, and interaction object needed by the motion prompt. Do not declare or generate an end frame.
 
 #### Edit operations — preserve / change
 
-For bg variants and end frames via the edit endpoint:
+For bg variants and location restyling via the edit endpoint:
 
 ```json
 {
@@ -580,7 +552,7 @@ Inside one location (a plaza) different zones and shots = different bg refs.
 
 **Edit endpoint: "preserve → change".** NB2 edit works better when first you describe what to keep, then what to change. Format: `"Keep: [what to keep]. Change: [what to change]. Do not alter: [guarantees]."` JSON template for edit operations — see section 2.1 "Edit operations".
 
-Applies to: bg variants, end frames, location restyling.
+Applies to bg variants and location restyling. End frames are not created.
 
 ---
 
@@ -588,10 +560,10 @@ Applies to: bg variants, end frames, location restyling.
 
 #### 10.0 Cross-episode anchor — mandatory ref for multi-episode series
 
-When generating EP2+ scenes with the same characters — use the end frame of the last scene from the previous episode as the primary anchor for proportions and style. This prevents proportion drift between episodes (head grows, height shifts, style drifts).
+When generating EP2+ scenes with the same characters, use an approved scene PNG from the same exact format/series as an optional proportions/style anchor. End frames do not exist.
 
 **Refs order for EP2+ scene:**
-1. `image_urls: [ep1-last-scene-end.png, bg-ref, char-sheet]` — EP1 end frame as primary anchor
+1. `image_urls: [approved-prior-scene.png, bg-ref, char-sheet]` — only from the same exact format/series
 2. In the prompt: `"Match proportions and style of the character in the first reference image exactly."`
 
 Without a cross-episode anchor every episode is generated "from scratch" off the char sheet → proportions drift.
@@ -601,7 +573,7 @@ Without a cross-episode anchor every episode is generated "from scratch" off the
 For a scene that continues in the same location as the previous one, the primary chain ref is **the previous approved scene PNG of THIS episode**, plus the location bg-ref — not the character sheet alone, and not an older episode's scene that merely happens to contain the location. The character sheet locks the face; the **environment (set design, the pod, walls, props, scale) is carried by the previous scene PNG**. Skip it and the environment redesigns itself every frame (EP7: the escape pod's size and the hatch changed shape scene to scene because generation chained off char sheets / a wrong-episode frame instead of the previous in-episode scene).
 
 - Continuation in same location → `image_urls: [previous-scene-of-this-episode, bg-ref-or-char-sheet]` (bg/prev frame ALWAYS first, §11).
-- Do NOT reach into an older episode's scene as a "scale reference" unless it's the same shot type AND actually depicts the thing you're anchoring (EP7: I pulled EP6 scene-8 for "pod scale", but scene-8 was a character at a wall LCARS panel — so LCARS panels bled into the new frame and the pod scale didn't transfer). Verify what the ref actually shows before using it.
+- Do NOT reach into another episode or format as a scale reference unless its exact ownership and intended content are recorded in the resolved story bible/storyboard metadata. Do not machine-inspect the image to decide.
 - One pivotal visual fact (how a reveal happens, the design of a hero prop) that spans several scenes: lock it in the FIRST scene that establishes it, then chain every dependent scene off that frame. Changing it later means regenerating every downstream scene by hand (EP7 hatch→steam change cascaded across scenes 6/7/8 and wasted an already-rendered clip).
 
 Standard pattern for one character in a scene:
@@ -622,13 +594,9 @@ For formats without bg ref (news, gameplay-ai-avatar):
 
 Fal.ai URLs are temporary → download locally immediately after generation; in the chain, use Supabase URLs, not expired fal.ai.
 
-#### 10.1 End frame as ref for character consistency
+#### 10.1 Previous approved scene as ref for character consistency
 
-For complex multi-character scenes, when you need to exactly match the previous frame (same characters, same pose), use a ref chain:
-- `image_urls: [end-frame-of-previous-clip, char-sheet-1, char-sheet-2]`
-- End frame as primary ref for style and pose, char sheets for facial consistency
-
-**Beware of watermarks:** the end frame may carry text/watermarks from the previous generation. If you see text on the ref — add `"NO text NO watermarks NO logos NO titles"` to the prompt. If text still bleeds through — drop the end frame from refs and use only bg + char-sheets.
+For complex multi-character scenes, use the immediately previous approved start/scene PNG from this run plus the exact-format character sheets when the endpoint's ref limit allows it. Never use an end frame or a scene from another format.
 
 ---
 
@@ -661,7 +629,7 @@ Wrong anchor → wrong character generated.
 
 - **Rule:** anchor = the less ethnically specific character (e.g. Kirk-ref), describe the second one in text.
 - **For Klingon in text:** explicitly write `"Klingon warrior, NOT Vulcan, dark brown skin, prominent ridged forehead"`.
-- **Same anchor** for start and end frames of one I2V clip.
+- **One start-frame anchor** per I2V clip; end frames are forbidden.
 
 ---
 
@@ -846,54 +814,9 @@ Write the URLs back into `storyboard.json` (clip's `elements` field) so Animator
 
 For each I2V clip generate ONE image: `scene-K.png` (start frame only). **`scene-K-end.png` is NEVER generated** — see §14.8.
 
-Cost: 1 × $0.08 per clip (GPT Image 2 edit).
+Cost: one start-image generation per clip on the format-selected image route.
 
-**Character consistency:** all objects and characters from the start frame MUST be present in the end frame. Kling interpolates between two frames — if an object is in one and missing in the other, Kling will dissolve it like a ghost.
-
-Exception: a character may disappear between start and end **only if** in `storyboard.json` for this clip there is explicit justification (e.g. `"action_description": "figure walks behind the door"`). In that case the end frame shows the character partially behind the frame edge / behind the door — not just removed from the scene.
-
-**Minimal change (CRITICAL):** start and end are nearly identical in composition, perspective, scale.
-
-Allowed to change: facial expression, indicator color, hand gesture, head turn, small details.
-
-**FORBIDDEN to change:** depth/perspective, frame scale, camera angle, distance to the object, character orientation/mirroring (if Kirk faces right in start — he faces right in end).
-
-**NB2 CANNOT change camera angle through the prompt.** Trying to describe low-angle / tilt / dolly in the prompt text → model distorts perspective (raises floor, stretches walls) instead of moving the camera. Camera moves are Kling's job through `motion_prompt`, NOT the difference between start and end frames. End frame MUST have the same angle as the start frame.
-
-✅ Correct: Kirk and Worf at the airlock door, indicator red → same characters at the door, indicator green, heads turned.
-
-❌ Wrong: Kirk and Worf at the start of the corridor (far shot) → at the door (close-up) — deformation.
-❌ Wrong: start eye-level → end low-angle — NB2 will distort geometry, not move the camera.
-❌ Wrong: two characters in start → empty room in end — Kling will dissolve the figures.
-
-### 16.1 Interaction object — MUST be on the start frame
-
-If the character interacts with an object (hits a panel, grabs a lever, picks up a PADD) — that object **MUST be on the start frame near the contact point**.
-
-Without this, the end frame draws the object in a new location → Kling interpolates → wall/panel "slides in" or morphs instead of the character's hand moving.
-
-| Action | Start frame | End frame |
-|---|---|---|
-| Hits panel | Character stands NEXT to the panel, hand within reach | Hand ON the panel, panel cracked |
-| Grabs lever | Lever visible near the hand | Hand on the lever |
-| Picks up PADD | PADD visible on belt/table | PADD in hand |
-| Pulls from pocket (reveal) | Object NOT yet visible — that's OK | Object in hand |
-
-### 16.2 End-frame prompting — director pose, not technical spec
-
-End-frame prompt = standard template `[STYLE][CHARACTER][STATE][EXPRESSION][ENV][CAMERA]`, 40–80 words. Do NOT use:
-
-- ❌ "Keep/Change" edit format → 3rd hand (model preserves old hands + draws new)
-- ❌ "Edit this image. Change only..." → pose does not change
-- ❌ Describing both hands separately without context → ballet/contortion
-- ❌ Re-prompting at 100+ words → worse, not better
-
-Working pattern:
-1. Director pose (3/4 turn, over the shoulder, leaning on wall) — NOT frontal
-2. Hands: **describe only if there is an active action** ("right palm slamming against wall panel", "left hand gripping PADD") — needed for Kling to understand trajectory. If no active action — only one body-pose gesture, do NOT describe the second hand.
-3. Start = closed pose (head down), End = opening (head up, gesture, environment changed)
-
-**Avatar-based dialogue and I2V dialogue clips:** only one image (start). End frame not needed.
+All characters, props, and interaction objects needed by the clip must already be visible in this start frame. Camera movement and micro-motion belong only in Animator's `motion_prompt`; Storyboarder does not create a destination frame.
 
 ---
 

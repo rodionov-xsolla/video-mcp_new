@@ -4,7 +4,7 @@ Central policy for validating generated binary assets (PNG/MP4/MP3). Applied by 
 
 ## Rule: programmatic-only. No Read on binaries.
 
-**Never use the Read tool on PNG/MP4/MP3.** Vision tokens are expensive, bloat the context, and don't pay off — broken output is caught at the next stage (Kling artifacts in MP4, weird Editor output in final.mp4) and at the human review of the final video.
+**Never use the Read tool, AI Vision, sampled-frame inspection, pixel-diff, or semantic media QA on generated PNG/MP4/MP3.** The only exceptions are source material explicitly declared by the format: a Wild Documentary research/source image when genuinely necessary, and Motion Dance source-video frames. These exceptions never apply to generated outputs or `final.mp4`.
 
 Validation is done via bash.
 
@@ -91,16 +91,16 @@ For dialogue clips, the face ref must match `clip.hero`. (EP6: the Admiral clip 
 
 **Print the mapping table** (`clip# → image_url → audio_url → expected text → hero`) and confirm all four checks pass before launching Kling. This is the single highest-ROI gate in the pipeline — it catches 4 of the 5 most expensive EP6 bugs with zero vision tokens.
 
-## Time-gated PNG overlays — prove the composite, don't sample variance
+## Time-gated PNG overlays — technical validation only
 
 `overlay=...:enable='between(t,START,END)'` on a plain `-i overlay.png` input is a silent no-op: a single still image has a PTS that never advances, so `between(t,...)` never evaluates true and the overlay never appears — ffmpeg exits 0, no warning. Feed the PNG a real timeline first: `-loop 1 -t <total_duration> -i overlay.png`.
 
-Frame-variance/stddev sampling on the output is NOT sufficient proof the overlay rendered — ordinary scene content already produces high variance, so a broken (missing) overlay and a working one can both pass a variance threshold. To actually verify: extract a frame from inside the overlay window and one from outside it (or from a version rendered without the overlay filter), and diff them (pixel mean/stddev delta, or eyeball via Read — this specific check is worth the vision tokens, unlike routine PNG/MP4 validation). Burned in ROOM 1701 EP3 (2026-07-07, `serial-drama.md`): Editor reported the title card as burned in based on variance sampling; it was actually absent from the delivered final.mp4, caught only on user review.
+Validate the PNG input timeline, `enable=between(...)` expression, filtergraph construction, encode exit status, output streams and duration. Do not extract or compare frames to prove visual presence; the user performs visual review.
 
 ## Asset selection: by path, not by visual inspection
 
-Where the right asset depends on game/format (CTA, openers, character refs, bg refs) — **resolve by `GAME_TAG`-scoped path or by Supabase URL recorded in the story bible / game config.** Never pick from a generic location and then visually verify the branding — the path is the validation.
+Where the right asset depends on game/format/series — resolve by exact ownership metadata or by the URL recorded in the exact resolved story bible. Images, appearance text, voice samples, openers and title assets require exact game + format + series ownership. The game CTA is the only automatic cross-format exception.
 
 Examples:
-- CTA → `games/{GAME_TAG}/assets/cta/cta.mp4` or previous-episode `output/.../{GAME_TAG}/.../cta-fallback.mp4`. Never `video-agent/cta-star-trek-timelines.mp4` (star-trek-timelines branded, wrong for any other game).
+- CTA → the existing CTA explicitly resolved for the current game. If missing or invalid, STOP; never synthesize or copy a fallback card.
 - Character refs → `games/{GAME_TAG}/{format}_story_bible.json → supabase_assets.char_refs`. Never re-derive from a wide-shot scene render.

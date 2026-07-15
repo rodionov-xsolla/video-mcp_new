@@ -6,8 +6,8 @@
   "title": "Genshin Impact — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
   "last_episode": 1,
-  "tts_engine": "chatterbox",
-  "tts_note": "Genshin ALWAYS uses Chatterbox via fal-ai/chatterbox/text-to-speech. Voice ref: assets/genshin-impact/characters/traveller/voice-1.mp3 (the Traveler's voice). Second-person monologue throughout. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
+  "tts_engine": "auto",
+  "tts_note": "Speech route for new episodes: intentional native audio → Chatterbox only with a redcon-owned approved sample recorded in this bible → otherwise MiniMax. Retry the same route once, then stop. Second-person monologue throughout. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "format_overrides": {
     "note": "Player-POV variant. Character = the Traveler (player). Each episode: one canonical Teyvat crisis, one cross-nation team assembled via gacha pulls, one divergence outcome made possible by a character the Traveler pulled.",
     "structure": "HOOK (clip 1, TTS starts, active mid-crisis) → TITLE CARD (clip 2, 3s silent) → CANON REMINDER (clip 3) → CHARACTER PULLED (clip 4) → DIVERGENCE (clip 5) → CONSEQUENCE (clip 6) → REVELATION (clip 7) → CTA asset",
@@ -28,8 +28,9 @@
     "character_slug": "traveller",
     "gender_note": "Default to Lumine (female, blonde twin) unless user specifies Aether. Both valid.",
     "description": "The Traveler — golden-haired wanderer from another world. Distinctive star-shaped hair accessory, traveler's outfit. Searching for their lost sibling across Teyvat.",
-    "voice_ref_path": "assets/genshin-impact/characters/traveller/voice-1.mp3",
-    "note": "Voice ref must be loaded for Chatterbox. Use Traveller.mp3 from game root if voice-1.mp3 missing."
+    "voice_route": "minimax",
+    "voice": "Deep_Voice_Man",
+    "note": "No redcon-owned approved sample is currently recorded here, so new player-POV episodes use MiniMax. Do not pull a sample from another format or use a local fallback."
   },
   "crisis_rotation": {
     "done": [
@@ -71,7 +72,7 @@
         "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-13/redcon_final.mp4",
         "youtube_url": "https://www.youtube.com/watch?v=7L_ZCAJBc0s",
         "yt_publish_at": "2026-07-18T20:59:00Z",
-        "notes": "Character-variant branch (not Traveler-POV crisis_rotation). Structure mirrors the Childe 'The Eleventh, Unchained' precedent: 1 title card + 6 story clips, ~35s story + CTA. Two character refs needed (canonical Ei, alternate 'Unmoved' Ei) plus a fresh Kujou Sara ref — none of the existing redcon-tagged Supabase refs (zhongli-seal, teppei, scaramouche, tartaglia-unchained) apply. IMPORTANT lesson: Scenarist's first monologue draft was 116 words for a fixed 6×5s=30s clip window — Chatterbox rendered it at 63.66s, forcing Editor into a 2.1x atempo stretch that sounded chipmunked. Had to send it back to Scenarist to trim to 66 words (~10-12/clip), re-render TTS, and re-assemble — final stretch factor 1.166x, in line with Childe's 1.17x. Target ~60-70 words total (not 100+) for future 6-clip character-variant monologues. Also: MiniMax Music API timed out generating fresh bg-music for this episode; Sound fell back to the existing music/Dark/dark-crystal-castles.mp3 track (deprecated fallback per sound.md §6, but tonally fine for this somber/tragic episode) — future runs should retry generation before falling back if time allows. 2026-07-13: YouTube upload (v=60h1w0mUe3o) deleted post-hoc — first assembly forgot the standard genshin CTA banner overlay (banner-genshin.png, 'GAIN FREE PRIMOGEMS / LINK IN BIO') that the Childe episode established as the norm for this game. Re-ran Editor (FFmpeg-only, no new API spend) first with the banner on clips 2-3, then per user feedback narrowed to clip 2 only — confirmed via pixel-sample + visual check present on clip 2, absent on clip 3+. Re-uploaded as v=7L_ZCAJBc0s, same 2026-07-18T20:59:00Z slot. Lesson: this game's redcon character-variant episodes should get the banner (single clip, not 2-3) by default going forward — check for it before presenting final.mp4 to the user for review, not after upload."
+        "notes": "Character-variant branch (not Traveler-POV crisis_rotation). Structure mirrors the Childe 'The Eleventh, Unchained' precedent: 1 title card + 6 story clips, ~35s story + CTA. Two character refs needed (canonical Ei, alternate 'Unmoved' Ei) plus a fresh Kujou Sara ref — none of the existing redcon-tagged Supabase refs (zhongli-seal, teppei, scaramouche, tartaglia-unchained) apply. IMPORTANT lesson: Scenarist's first monologue draft was 116 words for a fixed 6×5s=30s clip window — Chatterbox rendered it at 63.66s, forcing Editor into a 2.1x atempo stretch that sounded chipmunked. Had to send it back to Scenarist to trim to 66 words (~10-12/clip), re-render TTS, and re-assemble — final stretch factor 1.166x, in line with Childe's 1.17x. Target ~60-70 words total (not 100+) for future 6-clip character-variant monologues. Also: MiniMax Music API timed out generating fresh bg-music for this episode; Sound used the existing music/Dark/dark-crystal-castles.mp3 track in that historical run. Current rule: retry the same MiniMax Music request once, then stop the whole video; never repeat that local fallback. 2026-07-13: YouTube upload (v=60h1w0mUe3o) deleted post-hoc — first assembly forgot the standard genshin CTA banner overlay (banner-genshin.png, 'GAIN FREE PRIMOGEMS / LINK IN BIO') that the Childe episode established as the norm for this game. Re-ran Editor (FFmpeg-only, no new API spend) first with the banner on clips 2-3, then per user feedback narrowed to clip 2 only — confirmed via pixel-sample + visual check present on clip 2, absent on clip 3+. Re-uploaded as v=7L_ZCAJBc0s, same 2026-07-18T20:59:00Z slot. Lesson: this game's redcon character-variant episodes should get the banner (single clip, not 2-3) by default going forward — check for it before presenting final.mp4 to the user for review, not after upload."
       },
       {
         "date": "2026-07-08",

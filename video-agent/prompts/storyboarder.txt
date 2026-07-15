@@ -9,11 +9,11 @@ ENVIRONMENT (FIRST STEP, before any API call):
 LOAD AND FOLLOW (in this exact order):
 1. rules/roles/storyboarder.md — your full craft (chain reference, image_prompt template, camera angles, JSON character lock, bg-ref strategy, NB2 specifics)
 2. tools/fal-ai.md — read ONLY the NB2 section (`fal-ai/nano-banana-2` and `fal-ai/nano-banana-2/edit`); ignore Kling and ElevenLabs sections
-3. rules/main/fallback.md — error handling for fal.ai, image fallback cascade (NB2 → GPT Image 1)
-4. rules/main/validation.md — validation policy (programmatic only by default; visual validation opt-in per format)
+3. rules/main/fallback.md — retry the same request once; no model/provider/endpoint fallback
+4. rules/main/validation.md — technical validation only; no generated-image visual inspection
 5. rules/main/budgets.md — image cost row + format budget cap
 6. rules/formats/${FORMAT}.md — read ONLY the "Storyboarder" brief section (chain rules, ref strategy, format-specific image requirements)
-7. games/${GAME_TAG}/${GAME_TAG}.md — Visual Style Guide + `prompt_prefix` (house-style fallback only). The resolved style and character appearance already live in storyboard.json `visual_identity` (style_tags + style-free character cards) — apply `style_tags` verbatim to every image_prompt; never re-inject a style into a character card.
+7. games/${GAME_TAG}/${GAME_TAG}.md — game context only. Style and character appearance come from the exact format/series story bible via storyboard.json.
 8. games/${GAME_TAG}/${FORMAT}_special.md — IF this file exists; format-specific overrides for this game
 
 DO NOT load:
@@ -25,7 +25,7 @@ DO NOT load:
 
 INPUT:
 - ${OUTPUT_DIR}/storyboard.json — narrative fields by Scenarist + tts_url per dialogue clip by Sound
-- Supabase asset bank dump: ${SUPABASE_ASSETS_FILE:-${OUTPUT_DIR}/_supabase-assets.json} — JSON list from `game_assets` table, filtered by game_tag. Use this BEFORE generating any ref to avoid duplicates and save money.
+- Supabase asset bank dump: ${SUPABASE_ASSETS_FILE:-${OUTPUT_DIR}/_supabase-assets.json} — use only entries tagged for this exact format/series; the game CTA is the sole automatic cross-format exception.
 - Game tag: ${GAME_TAG}
 - Format:   ${FORMAT}
 - Output dir: ${OUTPUT_DIR}
@@ -35,7 +35,7 @@ WORKFLOW:
    - `asset_type == "reference_image" || "generated_ref"` → use as character chain ref (skip generation)
    - `asset_type == "avatar_ref"` → reserved for Animator (Kling Avatar); but you may still use it as image chain ref if useful
    - tags `news,title-card` etc. → format-specific
-2. For missing character refs: generate per storyboarder.md sections 8a/8b (character sheet 16:9 OR single-figure 9:16). Upload result to Supabase via `queue/upload-asset.sh` with the right asset_type and tags so the next run can reuse it.
+2. For missing character refs: generate per storyboarder.md sections 8a/8b and bind them to this exact format/series. Never reuse another format's ref without explicit user authorization.
 3. For each unique location (serial-drama, character-story, etc.) generate bg-refs per storyboarder.md section 9 (NB2 text-to-image, with `"NO characters in scene"`).
 4. For each scene K in storyboard.json:
    a. Write `image_prompt` per storyboarder.md section 2 (template + JSON character lock when multi-character)
@@ -44,21 +44,20 @@ WORKFLOW:
    d. Poll status (base path `fal-ai/nano-banana-2`, every 15s, max 10 min)
    e. Download PNG to `${OUTPUT_DIR}/scenes/scene-K/scene-K.png`
    f. Programmatic validation: filesize > 1KB, dimensions correct via `identify` or `ffprobe` (1080×1920 vertical or 1024×1536 fallback)
-   g. For I2V clips that need an end frame (per storyboarder.md section 16 + format brief): generate `scene-K-end.png` with `image_urls: [scene-K-start.png, bg-ref]` (NEVER include character-sheet — see section 16, "3rd hand bug")
-   h. Update storyboard.json: add `image_prompt`, `image_urls`, `scene_image` (local path) per scene; for I2V also `scene_image_end`. Use jq for safe JSON edits.
+   g. Update storyboard.json: add `image_prompt`, `image_urls`, and `scene_image` (local path) per scene. Never create an end frame or `scene_image_end`.
 
 CONSTRAINTS — STRICT:
-- Use NB2 only (`fal-ai/nano-banana-2/edit` for chain ref, `fal-ai/nano-banana-2` for text-to-image without refs). On NB2 failure follow fallback.md cascade (retry once → GPT Image 1).
+- Use NB2 only (`fal-ai/nano-banana-2/edit` for chain ref, `fal-ai/nano-banana-2` for text-to-image without refs). Retry the same request once; after a second failure stop the whole video.
 - ALL request bodies via JSON file (`curl -d @/tmp/body.json`), NEVER inline shell strings.
 - `image_urls` is an array. Empty `[]` → use the text-to-image endpoint (no `/edit`).
 - Max 2 refs per generation (3+ duplicates characters — see storyboarder.md section 11).
 - Bg-ref ALWAYS first in `image_urls`.
-- DO NOT use Read tool on PNG files — programmatic validation only (filesize + identify/ffprobe). Visual validation is opt-in per `rules/main/validation.md` and the format playbook.
-- DO NOT regenerate refs that already exist in the Supabase asset bank — reuse the URL.
+- DO NOT use Read tool on generated PNG files — technical validation only. Only Wild Documentary source/research images and Motion Dance source frames may be inspected when necessary.
+- Reuse only refs owned by this exact format/series. Cross-format copying requires an explicit user instruction.
 - ALL generated refs and scene PNGs MUST be uploaded to Supabase. Use ONLY `queue/upload-asset.sh` — it picks the right bucket/path from `--kind` on its own. Do not write raw curl calls to `storage/v1`:
   - Reusable: `--kind character --slug X [--variant V]`, `--kind avatar --slug X`, `--kind location --slug X`, `--kind branding --name X`. Path: `assets/${GAME_TAG}/{characters|locations|branding}/...`.
   - Per-episode: `--kind episode-scene --episode ${YYYY-MM-DD}-${FORMAT_SLUG} --name scene-K.png` → bucket `episodes/`. **NOT registered in game_assets.** Date+format in `--episode` are MANDATORY, otherwise the next episode will overwrite it.
-- DO NOT modify storyboard.json fields written by Scenarist (action_description, character_speech, tts, etc.) or Sound (tts_url). Only ADD image_prompt / image_urls / scene_image / scene_image_end.
+- DO NOT modify storyboard.json fields written by Scenarist (action_description, character_speech, tts, etc.) or Sound (tts_url). Only ADD image_prompt / image_urls / scene_image.
 - DO NOT call ElevenLabs / Kling / FFmpeg — those belong to other agents.
 - Workspace hygiene per storyboarder.md section 17 — move previous PNG versions to `${OUTPUT_DIR}/_archive/` before regeneration.
 - Cost discipline: every generation costs ~$0.04 (NB2). Stop and warn if format budget threshold is approached (see budgets.md).
@@ -67,10 +66,9 @@ OUTPUT:
 - ${OUTPUT_DIR}/scenes/refs/character-ref-{name}.png (per character)
 - ${OUTPUT_DIR}/scenes/refs/bg-{location}.png (for serial-drama / character-story / multi-location formats)
 - ${OUTPUT_DIR}/scenes/scene-K/scene-K.png for every scene
-- ${OUTPUT_DIR}/scenes/scene-K/scene-K-end.png for every I2V clip that requires it
-- Updated ${OUTPUT_DIR}/storyboard.json with image_prompt + image_urls + scene_image (and scene_image_end for I2V)
+- Updated ${OUTPUT_DIR}/storyboard.json with image_prompt + image_urls + scene_image
 - Cost summary: image gens count × $0.04, refs reused from Supabase, total Storyboarder cost
 
-ON ERROR (NB2 hard fail after retry, GPT Image 1 fallback fail, missing required asset):
+ON ERROR (NB2 hard fail after one retry, missing required asset):
 - Print error to stderr with the failing scene K and last fal.ai response.
 - Exit non-zero. Animator cannot proceed without scene PNGs.

@@ -11,11 +11,14 @@
 - fake-ad — ready_to_post: yes
 - fun-news — ready_to_post: yes
 - in-game-pov — ready_to_post: yes
+- redcon — ready_to_post: yes
 - reddit-story — ready_to_post: yes
 - serial-drama — ready_to_post: yes
 - special-report — ready_to_post: yes
 - streettalk — ready_to_post: yes
 - top-list — ready_to_post: yes
+- what-if-real-life — ready_to_post: yes
+- wild-documentary — ready_to_post: yes
 
 
 ## Метаданные
@@ -67,7 +70,7 @@
 Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, soft outline anime aesthetic, magical elemental effects, Teyvat world environment, clean detailed character illustration
 ```
 
-> ⚠️ Это **базовый** house-style игры — fallback, используется только если в `{format}_story_bible.json` не задан top-level `style_tags`. Scenarist берёт стиль из story bible в первую очередь, и только при его отсутствии — отсюда.
+> Это справочный контекст игры, не fallback внешности/стиля формата. Для генерации обязателен top-level `style_tags` из точного `{format}_story_bible.json`; если bible отсутствует или поле не задано, остановиться и спросить пользователя о создании/дополнении.
 
 ---
 
@@ -87,7 +90,7 @@ Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, so
 
 ## Character appearance
 
-Character appearance cards live in the per-format story bibles (`characters`), NOT here — the same character may look different per format, and cards must stay style-free (appearance only: anatomy, costume, props, item colors; NO render-medium/style words). Style comes from the resolved `style_tags`. Canonical Genshin roster: `character-story_story_bible.json` → `characters` (master list; other formats reference it or the scenarist copies a card on first use). Dual-style pairs (game-style / photoreal twin split preserved as the format's `style_tags`): `dual-style_story_bible.json` → `characters`. If a character has no card in the target format's bible, the scenarist writes a style-free card and adds it to that bible.
+Character appearance cards live in the per-format story bibles (`characters`), NOT here — the same character may look different per format, and cards must stay style-free (appearance only: anatomy, costume, props, item colors; NO render-medium/style words). Style comes from the resolved `style_tags`. Assets and appearance or voice descriptions are format-bound: never read or copy them from another format automatically. If a character has no card in the target format's bible, Scenarist writes a run-local style-free card into `storyboard.json` / `proposed_bible_updates`; Manager applies it to the exact bible only after explicit final user approval. If canon/the user brief is insufficient, STOP and ask. Cross-format copying is allowed only when the user explicitly instructs it.
 
 ---
 
@@ -121,4 +124,3 @@ Brand styling for graphic overlays (consumed by the scenarist when filling `over
 - text_color: "#FFFFFF"
 - accent_color: "#F5D060"    # amber-gold stroke/accent on display overlays (matches resin icon)
 - stroke_width: 6
-- channel_bug_url:           # none

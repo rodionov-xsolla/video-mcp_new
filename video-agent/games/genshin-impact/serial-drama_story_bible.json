@@ -7,7 +7,7 @@
   "created_at": "2026-06-04",
   "last_episode": 6,
   "planned_arc": {
-    "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-6 clips under serial-drama constraints (max 2 chars per frame; see production_rules for the EP4+ Kling I2V voice_ids pipeline — Avatar is retired, macro movement/combat IS allowed in I2V for this series, cliffhanger spoken line is Kling I2V dialogue not Avatar TTS). Childe is the reluctant protector — his every action should read as either threat or sacrifice until the last episode. No on-screen text. After shipping an episode, fold its loops/status into characters[], active_loops, episode_summaries. Do NOT re-invent episodes while this arc has unshipped entries.",
+    "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-6 clips under serial-drama constraints (max 2 chars per frame; see production_rules for the EP4+ Kling I2V voice_ids pipeline — Avatar is retired, macro movement/combat IS allowed in I2V for this series, cliffhanger spoken line is Kling I2V dialogue not Avatar TTS). Childe is the reluctant protector — his every action should read as either threat or sacrifice until the last episode. No on-screen text. Fold an episode's loops/status into characters[], active_loops, and episode_summaries only after the user explicitly approves the presented final video. Do NOT re-invent episodes while this arc has unshipped entries.",
     "episodes": [
       {
         "episode": 1,
@@ -718,7 +718,7 @@
     "For dialogue I2V, voice_ids order, <<<voice_N>>> tags, speaker names, and physical descriptors must all point to the same character.",
     "Any spoken line inside a dialogue I2V clip must have generate_audio:true, voice_ids, and <<<voice_N>>>; do not accidentally make a dialogue beat silent.",
     "If a required story beat does not fit the 2-voice or 512-character shot limits, split/add a clip instead of dropping the beat.",
-    "Generate background music with MiniMax Music (dramatic/tense mood, not comedic) unless the user explicitly asks for a local library track.",
+    "Always generate background music with MiniMax Music (dramatic/tense mood, not comedic); never skip it or substitute a local library track.",
     "NO on-screen text / title cards for this series (locked in planned_arc note) — do not add a Room-1701-style overlay-series.png; this series has none and should not get one.",
     "Max 6 scenes per episode per the format's $7-10 budget cap, same as every other serial-drama series.",
     "BURNED EP4 (2026-07-07): a multi_prompt shot placed <<<voice_1>>> immediately after the WRONG character's physical descriptor (voice_ids[0]=Agent but the tag followed Childe's descriptor) — Kling rendered both characters off-model/confused as a result (Agent lost his mask, Childe's face drifted). Before saving any multi_prompt, Scenarist must verify each <<<voice_N>>> tag sits immediately after the descriptor of the character at voice_ids[N-1], not just after whoever is mentioned last in the sentence. Also: character_description/prompt_descriptor must always include eye color — omitting it let NB2 invent a generic eye color and an unrequested hair accessory for Childe in EP4 scene 6.",

@@ -123,10 +123,10 @@ This data determines the NB2 prompt — the character must be in the **same shot
 - **Phase 0 mandatory:** extract frames from the reference video, determine shot/angle.
 - Generate the character through NB2 in the same shot as the reference video.
 - **`image_urls` must combine two roles** (identity + composition):
-  1. **Identity ref:** the character's stand-alone char-sheet (tight portrait/turnaround on neutral background) — `games/{GAME_TAG}/assets/refs/{char-slug}-sheet.png`. NEVER a prior wide-shot scene render — NB2 copies the composition of its visual refs, so a wide-shot identity ref produces a wide-shot result regardless of the text prompt.
+  1. **Identity ref:** a stand-alone char-sheet owned by this exact `motion-dance` format/series (tight portrait/turnaround on neutral background). Never use a generic game-wide or another-format ref unless the user explicitly authorizes the copy.
   2. **Composition ref:** `ref-frame-mid.jpg` (the middle frame of the reference dance video). This is what locks the framing/scale/angle — text instructions like "hips-up, 60% width" are overridden by visual refs, so the actual ref frame must be in `image_urls`.
 - Final shape: `image_urls: [char-sheet, ref-frame-mid.jpg]` (+ `bg-ref` first if a separate background ref exists).
-- If no char-sheet exists for this character yet — generate one FIRST (16:9, neutral bg, ~$0.04), save to `games/{GAME_TAG}/assets/refs/`, then run the scene generation. See `rules/roles/storyboarder.md` §8a.1.
+- If no motion-dance-owned char-sheet exists, generate one first (16:9, neutral bg, ~$0.04), tag/store it for this exact format/series, then run scene generation. See `rules/roles/storyboarder.md` §8a.1.
 - Character: framing must match the ref video frame literally (upper-body ref → upper-body NB2; full-body ref → full-body NB2). >5% of frame area (Kling requirement). Head not obscured (Motion Control requirement).
 - General rules — `rules/roles/storyboarder.md`
 
@@ -154,7 +154,7 @@ This data determines the NB2 prompt — the character must be in the **same shot
 ## Output files
 
 ```
-output/YYYY-MM-DD/{GAME_TAG}/motion-dance/
+${OUTPUT_DIR}/
 ├── ref-frame-first.jpg       # First frame of the reference video (analysis)
 ├── ref-frame-mid.jpg         # Middle frame of the reference video (analysis)
 ├── character.png             # Generated character image

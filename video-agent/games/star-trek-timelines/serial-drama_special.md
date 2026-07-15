@@ -2,6 +2,8 @@
 
 Специальные настройки формата Serial Drama для Star Trek Timelines.
 
+Apply this generic game-level file only when Manager has resolved `STORY_BIBLE_PATH` to `games/star-trek-timelines/serial-drama_story_bible.json`. If the resolved path is `games/star-trek-timelines/room1701_story_bible.json`, ignore this entire file: ROOM 1701's exact bible, cast, style, locations, voices, and episode state take precedence and must never be overwritten by these generic Airlock/Trek defaults.
+
 ---
 
 ## Стиль для serial-drama формата

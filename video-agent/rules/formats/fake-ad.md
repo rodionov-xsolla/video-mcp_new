@@ -40,13 +40,13 @@ Not for: news / patch recaps (use `news`), character lore (use `character-story`
 
 4. **Music is continuous and upbeat.** Unlike other formats (where music only plays at opener/CTA), fake-ad music runs through the ENTIRE video including the twist and packshot. Volume `0.25` (louder than default — commercial-style presence).
 
-5. **Dialogue/sketch exception.** If the user brief requires a character-driven sketch, proposal, interview, confession, or other dialogue setup, the format may use character dialogue instead of a single announcer. This is still `fake-ad` only if it preserves the core commercial structure: a sincere setup, an unexpected ad turn/twist, and a final packshot or channel CTA. In this exception, keep dialogue short enough for 5s clips, use the user's live story beats over the default table below, and make the ad line feel like a deliberate commercial interruption.
+5. **Dialogue/sketch exception.** If the user brief requires a character-driven sketch, proposal, interview, confession, or other dialogue setup, the format may use character dialogue instead of a single announcer. This is still `fake-ad` only if it preserves the core commercial structure: a sincere setup, an unexpected ad turn/twist, and the format's final product packshot. Do not synthesize a separate CTA or end card. In this exception, keep dialogue short enough for 5s clips, use the user's live story beats over the default table below, and make the ad line feel like a deliberate commercial interruption.
 
 ### Models
 
 - **Image:** Nano Banana 2 (5 scenes including packshot product hero shot)
 - **Video:** Kling I2V v3 Standard (`generate_audio: false`) — all 5 scenes
-- **Audio:** ElevenLabs TTS voiceover (one line per scene), music bed continuous
+- **Audio:** native model speech when intentionally available; otherwise a current-format-owned sample through Chatterbox; otherwise MiniMax. Music bed continuous.
 
 ---
 
@@ -56,9 +56,10 @@ Not for: news / patch recaps (use `news`), character lore (use `character-story`
 |---|---|---|
 | NB2 image | $0.08 | **$0.40** |
 | Kling I2V v3 Standard 5s (no audio) | $0.42 | **$2.10** |
-| ElevenLabs TTS (5 short lines) | ~$0.05 | **~$0.25** |
+| Routed speech generation (5 short lines) | provider-dependent | provider-dependent |
 | **Total** | | **~$2.75** |
-| Fallback (Kling 2.6 Pro no audio) | $0.35 | ~$2.40 total |
+
+Kling v3 failures get one retry with the same endpoint/settings. If the retry fails, STOP and report the error; do not switch model/provider or use a local fallback.
 
 ---
 
@@ -310,8 +311,8 @@ Generate a **standalone logo PNG** for the advertised product at the same time a
 
 ### Sound
 
-- ElevenLabs TTS for each scene with non-empty `tts` (all 5 scenes in this format).
-- Voice from `voices.announcer` in storyboard — use `voice` name string, NOT `voice_id` hash.
+- For each scene with non-empty `tts`, resolve speech as native model audio → approved sample owned by this `fake-ad` story bible through Chatterbox → otherwise MiniMax.
+- The announcer route comes only from this format's resolved story bible/storyboard. Retry once with the same route/settings, then STOP; never switch provider or borrow another format's voice/sample.
 - Upload each `.mp3` to Supabase → write `tts_url` back into scene in storyboard.json.
 - **Subtitles: announcer VO only** — the one universal style (editor.md §6). Only each scene's main `tts` goes into `voice-final.wav` and gets subtitled; reactions (`character_reactions[*].tts`) are NOT subtitled (they are not in voice-final). The packshot slogan/disclaimer is a graphic overlay via `tools/overlays.py` (types `slogan`, `disclaimer`), NOT a subtitle.
 - Music bed: upbeat commercial mood, `volume: 0.25`, continuous through ALL scenes including packshot. **NO music gate** (unlike fun-news/special-report, music does NOT go silent for dialogue — this is a commercial, VO rides on top of the music).
@@ -336,7 +337,7 @@ Generate a **standalone logo PNG** for the advertised product at the same time a
 ## Output files
 
 ```
-output/YYYY-MM-DD/{GAME_TAG}/fake-ad/
+${OUTPUT_DIR}/
 ├── storyboard.json
 ├── scenes/
 │   ├── refs/
@@ -364,13 +365,13 @@ output/YYYY-MM-DD/{GAME_TAG}/fake-ad/
 
 - [ ] Exactly **5 scenes** with beats: `setup`, `product`, `peak_effect`, `twist`, `packshot`
 - [ ] Scene 4 has `slogan` field (non-empty)
-- [ ] Scene 4 NB2 contains NO character (product only) — filesize > 50KB
+- [ ] Scene 4 storyboard/image prompt declares product only and excludes characters; generated file passes technical checks (decode, dimensions, filesize > 50KB)
 - [ ] All 5 Kling clips: `generate_audio: false`, duration ≈ 5.0s ±0.2s
 - [ ] `final.mp4` duration 20–30s (5 × 5s + transitions)
-- [ ] Slogan drawtext overlay applied to scene 4 (visible in final.mp4)
+- [ ] Slogan drawtext event is present in the Editor filtergraph for scene 4
 - [ ] Music runs continuously through ALL 5 clips including scene 4 (no gap, no gate)
 - [ ] Subtitles (`bold`) burned on scenes 0–4 for announcer VO only — character reactions NOT captioned
-- [ ] Twist (scene 3) shows the FAILURE completely — character actually falls/fails, not just starts to fall
+- [ ] Scene 3 storyboard and motion prompt encode the full failure arc, not only its start
 - [ ] Budget ≤ $3.50
 
 ---
@@ -386,14 +387,14 @@ output/YYYY-MM-DD/{GAME_TAG}/fake-ad/
 - ❌ Long VO lines (>15 words per scene). Commercial rhythm = punchy, 6–12 words.
 - ❌ Explaining the twist in the VO. Let the visual speak. Scene 3 VO may be minimal ("And then…") or even empty.
 - ❌ `-shortest` in FFmpeg. Always `apad`.
-- ❌ `voice_id` hash in ElevenLabs. Use `voice` name string.
-- ❌ Subtitle burn-in on any scene. No captions — this is a TV commercial. (Front-matter has `subtitles: true` for the announcer VO — if the channel wants captions; for none, set `subtitles: false`. By default the ad announcer is subtitled.)
+- ❌ ElevenLabs speech, provider switching after retry, or another format's voice/sample.
+- ❌ Missing announcer subtitles. This format follows the valid universal subtitle pipeline declared by `subtitles: true`; character reactions remain uncaptioned.
 
 ---
 
 ## Story Bible
 
-Create on first run: `games/{GAME_TAG}/fake-ad_story_bible.json`
+Resolve `games/{GAME_TAG}/fake-ad_story_bible.json` before production. If missing, STOP and ask whether the user wants it created. Only after explicit confirmation, create it using this schema:
 
 ```json
 {
@@ -463,7 +464,7 @@ Create on first run: `games/{GAME_TAG}/fake-ad_story_bible.json`
 }
 ```
 
-**Story Bible update (Manager, after editor confirms `final.mp4`):**
+**Story Bible update (Manager, only after the user explicitly approves the presented final video):**
 
 1. Add entry to `advertised_products` (product_name, slug, tagline, mechanic, date) — **DO NOT TRIM — this list is permanent.**
 2. `theme` → append to `recent_themes`; FIFO 5.

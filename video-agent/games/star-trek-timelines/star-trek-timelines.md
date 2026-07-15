@@ -10,10 +10,13 @@
 - fake-ad — ready_to_post: yes
 - fun-news — ready_to_post: yes
 - in-game-pov — ready_to_post: yes
+- redcon — ready_to_post: yes
 - reddit-story — ready_to_post: yes
 - room1701 — ready_to_post: yes
 - serial-drama — ready_to_post: yes
 - streettalk — ready_to_post: yes
+- what-if-real-life — ready_to_post: yes
+- wild-documentary — ready_to_post: yes
 
 
 ## Метаданные
@@ -24,7 +27,7 @@
 - **Аудитория:** Global, фанаты Star Trek, gacha/RPG игроки 25-45 лет
 - **Стиль арта:** Sci-fi LCARS UI, полуреалистичные 2D-портреты, 3D-корабли
 - **Премьера:** Январь 2016 (10+ лет активной работы)
-- **youtube_channel:** starfleet
+- **youtube_channel:** starfleetarchive
 
 ---
 
@@ -60,7 +63,7 @@
 - Для молодых персонажей (Chekov) — явно указывать `"realistic adult proportions, full-height figure"` в промпте, иначе модель генерирует карикатурные/непропорциональные фигуры
 - Не использовать эра-специфичные слова (`"TNG"`, `"TOS"`) в промптах — модель переопределяет цвет формы. Писать цвет явно: `"gold-yellow uniform"`, `"red uniform"`
 
-> ⚠️ Это **базовый** стиль игры — fallback, если в `{format}_story_bible.json` не задан top-level `style_tags`. Scenarist берёт стиль из story bible в первую очередь, и только при его отсутствии — отсюда (в `visual_identity.style_tags`).
+> Это справочный контекст игры, не fallback внешности/стиля формата. Для генерации обязателен top-level `style_tags` из точного `{format}_story_bible.json`; если bible отсутствует или поле не задано, остановиться и спросить пользователя о создании/дополнении.
 
 ### Prompt prefix
 ```
@@ -126,7 +129,7 @@ Star Trek Timelines style, cinematic sci-fi character portrait, cinematic Federa
 
 ## Character appearance
 
-Character appearance cards live in the per-format story bibles (`characters[]` / `characters{}`), NOT here — the same character may look different per format, and cards must stay style-free (appearance only; style comes from the resolved `style_tags`). Canonical Trek roster: `character-story_story_bible.json` → `characters`. ROOM 1701 cast (Alex, Michael, Emily, Anna): `room1701_story_bible.json` → `characters`. Recurring serial-drama cast: `serial-drama_story_bible.json` → `characters`. If a character has no card in the target format's bible, the scenarist writes a style-free card and adds it to that bible.
+Character appearance cards live in the per-format story bibles (`characters[]` / `characters{}`), NOT here — the same character may look different per format, and cards must stay style-free (appearance only; style comes from the resolved `style_tags`). Assets and appearance or voice descriptions are format-bound: never read or copy them from another format automatically. If a character has no card in the target format's bible, Scenarist writes a run-local style-free card into `storyboard.json` / `proposed_bible_updates`; Manager applies it to the exact bible only after explicit final user approval. If canon/the user brief is insufficient, STOP and ask. Cross-format copying is allowed only when the user explicitly instructs it.
 
 ---
 
@@ -202,4 +205,3 @@ Character appearance cards live in the per-format story bibles (`characters[]` /
 - **Текст:** "DOWNLOAD THE GAME · LINK IN BIO"
 - **Формат:** 720×1280, 30fps, ~5s — idle animation, star particles drifting
 - **Использование:** Editor скачивает, нормализует (scale+pad 1080×1920+30fps+AAC), конкатенирует в конец после всех сцен
-

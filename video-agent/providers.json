@@ -3,7 +3,12 @@
     "image_gen": "fal-ai",
     "video_gen": "fal-ai",
     "tts": "minimax",
-    "ffmpeg": "ffmpeg-api"
+    "ffmpeg": "local-ffmpeg"
+  },
+  "routing_policy": {
+    "speech": "intentional native audio, else exact-format-and-series approved sample via Chatterbox, else MiniMax",
+    "automatic_provider_or_model_fallback": false,
+    "retry": "one retry on the same route, then stop"
   },
   "providers": {
     "sjinn": {
@@ -11,7 +16,7 @@
       "auth_env": "SJINN_API_KEY",
       "tools_file": "tools/sjinn.md",
       "capabilities": ["image_gen", "video_gen"],
-      "status": "fallback",
+      "status": "user-authorized-only",
       "models": {
         "image_gen": "nano-banana-image-pro-api",
         "image_gen_basic": "nano-banana-image-api",
@@ -27,13 +32,16 @@
       "name": "fal.ai",
       "auth_env": "FAL_KEY",
       "tools_file": "tools/fal-ai.md",
-      "capabilities": ["image_gen", "video_gen", "tts", "avatar"],
+      "capabilities": ["image_gen", "video_gen", "tts", "music_gen", "sfx_gen", "avatar"],
       "models": {
         "image_gen": "fal-ai/nano-banana-2/edit",
-        "image_gen_fallback": "fal-ai/gpt-image-1/text-to-image",
+        "image_gen_alternate_user_only": "fal-ai/gpt-image-1/text-to-image",
         "video_gen_i2v": "fal-ai/kling-video/v3/standard/image-to-video",
-        "video_gen_i2v_fallback": "fal-ai/kling-video/v2.6/pro/image-to-video",
+        "video_gen_i2v_alternate_user_only": "fal-ai/kling-video/v2.6/pro/image-to-video",
         "tts": "fal-ai/minimax/speech-2.8-hd",
+        "tts_chatterbox": "fal-ai/chatterbox/text-to-speech",
+        "music_gen": "fal-ai/minimax-music/v2.6",
+        "sfx_gen": "fal-ai/elevenlabs/sound-effects",
         "avatar": "fal-ai/kling-video/ai-avatar/v2/standard",
         "motion_control": "fal-ai/kling-video/v2.6/standard/motion-control",
         "motion_control_v3": "fal-ai/kling-video/v3/standard/motion-control",
@@ -41,11 +49,11 @@
       },
       "pricing": {
         "image_gen": "~$0.04/image",
-        "image_gen_fallback": "~$0.02/image (GPT Image 1)",
+        "image_gen_alternate_user_only": "~$0.02/image (GPT Image 1)",
         "avatar": "$0.056/sec (Kling Avatar v2)",
         "motion_control": "$0.07/sec (Kling Motion Control v2.6 Standard)",
         "video_gen_i2v": "$0.084/sec (Kling v3 Standard, audio off)",
-        "video_gen_i2v_fallback": "$0.07/sec (Kling 2.6 Pro, audio off)",
+        "video_gen_i2v_alternate_user_only": "$0.07/sec (Kling 2.6 Pro, audio off)",
         "tts": "~$0.10/1k chars (~$0.001-0.005/phrase, MiniMax via fal.ai)"
       }
     },
@@ -73,12 +81,19 @@
       },
       "notes": "voice in voice_setting.voice_id; emotion: angry/happy/sad/neutral; tags: (laughs) (groans) (sighs); pause: <#0.5#>"
     },
+    "local-ffmpeg": {
+      "name": "Local FFmpeg",
+      "tools_file": "rules/roles/editor.md",
+      "capabilities": ["ffmpeg"],
+      "status": "active"
+    },
     "ffmpeg-api": {
       "name": "FFmpeg Cloud API",
       "auth_env": "FFMPEG_API_KEY",
       "tools_file": "tools/ffmpeg-api.md",
       "capabilities": ["ffmpeg"],
-      "base_url": "https://api.ffmpeg-api.com"
+      "base_url": "https://api.ffmpeg-api.com",
+      "status": "user-authorized-only"
     }
   }
 }

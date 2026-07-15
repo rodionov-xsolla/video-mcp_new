@@ -77,7 +77,7 @@
         "character_name": "Worf",
         "alternate_designation": "Worf, Son of None — Warlord of the Empire",
         "divergence_point": "2367, TNG 'Reunion' — after executing Duras, Worf refuses discommendation and seizes the Duras bloodline's ships/warriors instead of returning to Starfleet",
-        "tts_voice": "Daniel (ElevenLabs preset, mapped to MiniMax Deep_Voice_Man for generation) — flat/angry alternate-identity delivery, not the canonical Worf voice",
+        "tts_voice": "Deep_Voice_Man (MiniMax Speech 2.8-HD) — flat/angry alternate-identity delivery, not the canonical Worf voice",
         "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-07/redcon_final.mp4",
         "youtube_url": "https://www.youtube.com/watch?v=pbiuyIT-GAE",
         "yt_publish_at": "2026-07-11T20:59:00Z",

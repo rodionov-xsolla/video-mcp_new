@@ -21,7 +21,7 @@ LOAD AND FOLLOW (in this exact order):
 3. `games/{GAME_TAG}/{GAME_TAG}.md` — game config (Visual Style Guide, Character Prompt Blocks, Tone of Voice)
 4. `games/{GAME_TAG}/{FORMAT}_special.md` — IF this file exists; format-specific overrides for this game
 5. `rules/main/budgets.md` — budget limit for {FORMAT}
-6. `games/{GAME_TAG}/{FORMAT}_story_bible.json` OR `games/{GAME_TAG}/serial-drama_story_bible.json` — IF format is serial-drama or reddit-story; load and run State Analysis (characters, voices, active loops, anti-repetition) per scenarist.md / format brief
+6. The exact `games/{GAME_TAG}/{FORMAT}_story_bible.json` (or exact series-specific path supplied by Manager) — mandatory for every active format; load and run State Analysis. If missing, stop: Manager must ask the user whether to create it.
 
 DO NOT load:
 - `rules/roles/manager.md`, `storyboarder.md`, `animator.md`, `sound.md`, `editor.md` (other agents handle those)
@@ -32,7 +32,7 @@ OUTPUT:
 - `{OUTPUT_DIR}/storyboard.json` with all narrative fields per scenarist.md "Clip schema (JSON)":
   - visual_identity (character_description with 8+ details, environment_description, style_tags, color_palette, lighting)
   - For serial-drama: retention_strategy, active_loops, cliffhanger
-  - scenes/clips array with index, beats, clip_type, duration_sec, character_state, facial_expression, character_speech (or null), tts (text for ElevenLabs, dialogue only), environment_state, action_description
+  - scenes/clips array with index, beats, clip_type, duration_sec, character_state, facial_expression, character_speech (or null), external speech text only where the format requires it, environment_state, action_description
   - Format-specific extras (subtitle_emphasis, episode_number, music.mood, voices, hero) per format playbook
 
 CONSTRAINTS — STRICT:
@@ -46,7 +46,7 @@ CONSTRAINTS — STRICT:
 - Do NOT write Storyboarder fields (image_prompt, image_urls, scene_image)
 - Do NOT write Animator fields (motion_prompt)
 - Do NOT call any external API or read any binary file (PNG/MP4/MP3)
-- Do NOT update the story bible — Manager / Editor handles state transition after the full episode is rendered. You only READ.
+- Do NOT update the story bible — Manager may update it only after the user approves the final video. You only READ.
 
 RETURN to the parent agent: a short summary with the path to storyboard.json, format, clips count, total estimated duration, voices used, and any anti-repetition notes.
 

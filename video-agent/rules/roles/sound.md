@@ -19,7 +19,7 @@ From Manager:
 ## Outputs
 
 - `scenes/scene-K/scene-K.mp3` — TTS audio per dialogue clip only for Avatar/TTS-overlay formats. Not produced for serial-drama I2V dialogue.
-- `bg-music.mp3` — background music (optional)
+- `bg-music.mp3` — background music when required by the format; **always required for serial-drama**
 - (subtitles are NOT a Sound artifact; Editor generates them itself via whisper, see §8)
 
 ---
@@ -30,10 +30,11 @@ From Manager:
 
 | Condition | Engine |
 |---|---|
-| `game_tag == "genshin-impact"` (ANY format) | **Chatterbox** (§1b) — voice cloned from reference MP3 |
-| All other games and formats | **MiniMax** (§1a) — preset voices |
+| The format explicitly uses native generated dialogue (for example serial-drama Kling I2V) | **Native audio** — do not generate duplicate TTS |
+| The exact format/series story bible owns an approved voice sample | **Chatterbox** (§1b) with that exact sample |
+| Narrator/voice identity is not important, or the exact format has no approved sample | **MiniMax** (§1a) |
 
-**Genshin voice refs** live in Supabase Storage at `assets/genshin-impact/characters/{slug}/voice-1.mp3` (also voice-2.mp3, voice-3.mp3 where available). Use `voice-1.mp3` as the primary `audio_url` for Chatterbox. **105+ characters confirmed to have refs** — effectively the entire playable roster. For the rare character without a voice ref → fall back to MiniMax.
+Voice samples are format/series-bound. Never search for or reuse a sample from another format, even inside the same game. The only exception is an explicit user instruction to copy it.
 
 ---
 
@@ -106,12 +107,13 @@ RESULT_URL="https://queue.fal.run/fal-ai/minimax/requests/${REQUEST_ID}"
 
 **Forbidden:**
 - ❌ Kokoro TTS — low quality
-- ❌ ElevenLabs (`fal-ai/elevenlabs`) — replaced by MiniMax
+- ❌ ElevenLabs **TTS** (`fal-ai/elevenlabs/tts/*`)
+- ✅ `fal-ai/elevenlabs/sound-effects` remains allowed for sound effects only
 - ❌ Kling Lipsync — that's Avatar, not TTS
 
 ---
 
-## 1b. Chatterbox TTS via fal.ai (Genshin Impact serial-drama only)
+## 1b. Chatterbox TTS via fal.ai (only with an approved exact-format voice sample)
 
 Zero-shot voice cloning — no training, no extra cost. Pass the reference MP3 on every call.
 
@@ -128,7 +130,7 @@ Auth: `Authorization: Key $FAL_KEY`
 cat > /tmp/tts-K.json <<EOF
 {
   "text": "You shouldn't have come here.",
-  "audio_url": "https://<supabase>/assets/genshin-impact/characters/tartaglia/voice-ref.mp3",
+    "audio_url": "https://<supabase>/<exact-format-series>/voice-ref.mp3",
   "exaggeration": 0.55,
   "cfg": 0.5,
   "temperature": 0.7
@@ -164,11 +166,9 @@ curl -sSL -o /tmp/tts-K.wav "$AUDIO_URL"
 ffmpeg -i /tmp/tts-K.wav -codec:a libmp3lame -qscale:a 2 scenes/scene-K/scene-K.mp3
 ```
 
-### Reference voice files — upload once per series, reuse URL
+### Reference voice files — exact format/series ownership
 
-Reference MP3s live in `games/genshin-impact/`. Upload each to Supabase **once** before EP1 and store the permanent URL in the story bible `voice_ref_url` field.
-
-Subsequent episodes: read `voice_ref_url` from the story bible, pass directly as `audio_url`.
+Use only a permanent `voice_ref_url` already approved in the exact format/series story bible. A new sample remains run-local until the user approves the final video; Manager then records it in that same story bible. Missing or unapproved samples do not authorize cross-format lookup: use MiniMax when voice identity is unimportant, otherwise stop and ask the user.
 
 ### Polling (base path = `fal-ai/chatterbox`)
 
@@ -219,7 +219,7 @@ ffmpeg -y -f concat -safe 0 -i /tmp/chunks.txt \
 ```
 
 5. Measure combined duration (`ffprobe -i /tmp/tts-full.mp3 -show_entries format=duration`). If `dur(tts) > dur(timeline)` — apply `atempo` ≤ 1.1× in the final FFmpeg assembly (cap at 1.4× total).
-6. **Verify with Whisper** if available: `faster-whisper /tmp/tts-full.mp3 --model medium` — all N clips must appear in order and in full.
+6. Validate technically only: file exists, size is plausible, and `ffprobe` reports the expected duration range. Do not run semantic/AI review of the audio.
 
 **Chunk boundaries for 7-clip character-story (~90 words):**
 - Chunk 1: clips 1–3 (~38 words)
@@ -230,7 +230,7 @@ Never pass the whole monologue as a single Chatterbox call if total word count >
 
 ---
 
-### Emotion guide for Genshin characters
+### Example emotion guide for an exact-format approved Genshin voice sample
 
 | Character | Scene type | exaggeration | cfg |
 |---|---|---|---|
@@ -275,7 +275,7 @@ Never pass the whole monologue as a single Chatterbox call if total word count >
 
 ### Locking the voice in story_bible.json
 
-For serial-drama: one character = one voice across the whole series. Field `voice` in `story_bible.json characters[].voice`. **Do not change between episodes** — viewers notice.
+Within one format/series: one character = one voice across the whole series. Field `voice` in that format's `story_bible.json characters[].voice`. **Do not change between episodes** and do not borrow it for another format.
 
 ### One character = one voice = one pass within an episode
 
@@ -295,7 +295,7 @@ Cost:
 
 **Do NOT launch Avatar until the voice is approved.** Avatar is 10× the cost of TTS — don't burn money on lipsync with an unapproved voice.
 
-For serial-drama, approval is not required — voice is locked in story_bible.
+For an existing exact-format/series voice already approved and locked in its story bible, no extra per-run voice approval is required. A new or missing sample stops for user direction.
 
 ---
 
@@ -337,9 +337,9 @@ fal.ai TTS audio_url expires. Avatar polling takes 1–3 min — during that tim
 
 ## 6. Background music
 
-### Music is mandatory for ALL formats
+### Music follows the format; serial-drama music is mandatory
 
-There is no format without music. **Always GENERATE `bg-music.mp3` with MiniMax Music (`fal-ai/minimax-music/v2.6`).** Do NOT pull tracks from Supabase or the local `video-agent/music/` library — that path is deprecated (copyright strikes + off-mood picks). One freshly generated track per video, mood-matched to the format and the game, passed to Editor.
+Generate `bg-music.mp3` with MiniMax Music (`fal-ai/minimax-music/v2.6`) whenever the format requires music. **Serial-drama always requires a newly generated background track and may never skip it.** Do not pull tracks from Supabase or the local `video-agent/music/` library.
 
 | Format | Volume | Note |
 |---|---|---|
@@ -348,7 +348,7 @@ There is no format without music. **Always GENERATE `bg-music.mp3` with MiniMax 
 | **reddit-story** | `0.05` | Even quieter — narration must be clear |
 | **news, others** | `0.10–0.15` | By mood |
 
-### Generation — MiniMax Music (ALL formats)
+### Generation — MiniMax Music
 
 Full request/polling schema: `tools/fal-ai.md §8`. Essentials:
 - Endpoint: `POST https://queue.fal.run/fal-ai/minimax-music/v2.6`; polling base `fal-ai/minimax-music` (NOT the full path — see the base-path rule in fal-ai.md).
@@ -360,7 +360,7 @@ Full request/polling schema: `tools/fal-ai.md §8`. Essentials:
 
 **Build the `style` prompt** from (a) the format's emotional register (§11 mood map) + (b) the game's atmosphere (game config `music.mood` / Tone of Voice). Always instrumental, no vocals, fits a 9:16 short. Example (sitcom serial): `"instrumental low-density comedy underscore, light and playful, no vocals, no lyrics, no dramatic swell, suitable for a vertical short video"`.
 
-On generation failure after one retry → `rules/main/fallback.md`; proceed without music only if the format allows it, and flag Manager.
+On generation failure, retry the same request once. A second failure stops the whole video when music is required; never silently omit required music or switch route/provider/model.
 
 ### Mix parameters (passed to Editor)
 
@@ -372,7 +372,7 @@ On generation failure after one retry → `rules/main/fallback.md`; proceed with
 
 ## 7. Tone & pacing — TTS text
 
-ElevenLabs voice is expressive, but not magic. Adapt the text:
+Generated speech is expressive, but not magic. Adapt the text:
 
 - **Short lines ≤15 words** → 5s clip
 - **15–25 words** → 5–7s, check `ffprobe` after generation
@@ -380,7 +380,7 @@ ElevenLabs voice is expressive, but not magic. Adapt the text:
 
 ### Emotional markers in text
 
-ElevenLabs reacts to punctuation:
+Speech engines react to punctuation:
 - `!` — energetic
 - `…` — pause, contemplation
 - `?` — rising intonation
@@ -426,7 +426,7 @@ If the mismatch is > 40% — send it back to Scenarist, don't mask it with atemp
 - [ ] For gameplay-ai-avatar: voice approved with Manager BEFORE launching Avatar
 
 ### Music (if any)
-- [ ] `bg-music.mp3` generated by MiniMax Music for serial-drama unless user explicitly requested local music; otherwise selected/generated by mood
+- [ ] `bg-music.mp3` generated by MiniMax Music for serial-drama; it is never skipped or replaced with a local track
 - [ ] Volume agreed with Editor (0.45 serial-drama, 0.10 gameplay, 0.05 reddit-story)
 
 In debug mode — send Manager an explanation (which voices used, music mood, non-standard decisions).
