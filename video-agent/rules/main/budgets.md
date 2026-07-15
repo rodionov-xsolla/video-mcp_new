@@ -30,17 +30,17 @@ Tracking: after each generation, record the cost. Before the next one — check 
 | Model | Endpoint | Cost |
 |--------|----------|-----------|
 | Nano Banana 2 (image) | fal-ai/nano-banana-2/edit | ~$0.08 |
-| GPT Image 1 (fallback image) | fal-ai/gpt-image-1/text-to-image | ~$0.02 |
+| GPT Image 1 (alternate route; no automatic fallback) | fal-ai/gpt-image-1/text-to-image | ~$0.02 |
 | Kling v3 Standard I2V 5s (no audio) | fal-ai/kling-video/v3/standard/image-to-video | $0.42 |
 | Kling v3 Standard I2V 5s (with audio) | fal-ai/kling-video/v3/standard/image-to-video | $0.63 |
 | Kling v3 Standard I2V 10s (no audio) | fal-ai/kling-video/v3/standard/image-to-video | $0.84 |
 | Kling v3 Standard I2V 10s (with audio) | fal-ai/kling-video/v3/standard/image-to-video | $1.26 |
-| Kling 2.6 Pro I2V 5s (with audio, fallback) | fal-ai/kling-video/v2.6/pro/image-to-video | $0.70 |
-| Kling 2.6 Pro I2V 5s (no audio, fallback) | fal-ai/kling-video/v2.6/pro/image-to-video | $0.35 |
-| Kling 2.6 Pro I2V 10s (with audio, fallback) | fal-ai/kling-video/v2.6/pro/image-to-video | $1.40 |
-| Kling 2.6 Pro I2V 10s (no audio, fallback) | fal-ai/kling-video/v2.6/pro/image-to-video | $0.70 |
+| Kling 2.6 Pro I2V 5s (with audio; format-selected route) | fal-ai/kling-video/v2.6/pro/image-to-video | $0.70 |
+| Kling 2.6 Pro I2V 5s (no audio; format-selected route) | fal-ai/kling-video/v2.6/pro/image-to-video | $0.35 |
+| Kling 2.6 Pro I2V 10s (with audio; format-selected route) | fal-ai/kling-video/v2.6/pro/image-to-video | $1.40 |
+| Kling 2.6 Pro I2V 10s (no audio; format-selected route) | fal-ai/kling-video/v2.6/pro/image-to-video | $0.70 |
 | MiniMax TTS | fal-ai/minimax/speech-2.8-hd | ~$0.10/1k chars (~$0.001–0.005/phrase). `voice_setting.voice_id`, `emotion` |
-| Chatterbox TTS (Genshin only) | fal-ai/resemble-ai/chatterbox | ~$0.05–0.08/phrase. Zero-shot voice clone from reference MP3. |
+| Chatterbox TTS (approved exact-format sample only) | fal-ai/chatterbox/text-to-speech | ~$0.05–0.08/phrase. Zero-shot voice clone from the exact format/series reference MP3. |
 | Kling Lipsync | fal-ai/kling-video/lipsync/audio-to-video | ~$0.10/s |
 | HeyGen Avatar IV | fal-ai/heygen/avatar4/image-to-video | $0.10/s |
 | Kling Avatar v2 Standard | fal-ai/kling-video/ai-avatar/v2/standard | $0.056/s |

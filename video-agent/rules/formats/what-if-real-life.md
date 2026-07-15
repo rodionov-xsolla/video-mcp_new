@@ -1,5 +1,5 @@
 ---
-ready_to_post: no
+ready_to_post: yes
 subtitles: true
 overlays: true
 ---
@@ -18,7 +18,9 @@ This file is the **playbook**: when to use, concept, budget, role briefs. Craft 
 
 Keywords: "what if", "real life", "real world", "real-world", "что если", "в реальной жизни", "реальная жизнь", "fish out of water", "cameo", "mundane job", "ordinary life".
 
-Best fit when the game has a strongly characterized hero (Spock, Kratos, Master Chief, Geralt, an iconic Roblox/MOBA/MMO avatar) whose persona is so specific that putting them in any ordinary context generates instant absurdity. **Single-shot per video** — no story bible, no continuity. Each video is one premise, one persona, one location.
+Best fit when the game has a strongly characterized hero (Spock, Kratos, Master Chief, Geralt, an iconic Roblox/MOBA/MMO avatar) whose persona is so specific that putting them in any ordinary context generates instant absurdity. **Single-shot premise per video**, but a format-local story bible is mandatory for locked style, appearance, voice routing, and anti-repetition.
+
+Resolve `STORY_BIBLE_PATH` to `games/{GAME_TAG}/what-if-real-life_story_bible.json` before production. If it does not exist, ask the user whether to create it and STOP until they confirm. Never read appearance cards, images, or voice samples from another format unless the user explicitly tells you to copy a specific item. Update this bible only after the user explicitly approves the presented final video.
 
 ---
 
@@ -63,7 +65,7 @@ Pick ONE and stick with it for all character lines in the video.
 | `world-weary-monotone` | tired, low-pitch, treats every request as one more burden | "Of course you want oat milk. Everyone wants oat milk." |
 | `over-the-top-heroic` | declarative, epic phrasing for trivial actions | "I shall pour the coffee. AND ALL WHO ORDER IT SHALL DRINK." |
 
-Fix the mode in `storyboard.json → visual_identity.reaction_mode`. Sound uses it to choose ElevenLabs voice + stability + style; Scenarist uses it to write all character lines in one register; Animator picks Avatar v2 mouth-motion profile accordingly.
+Fix the mode in `storyboard.json → visual_identity.reaction_mode`. Sound uses it to direct the resolved speech route; Scenarist uses it to write all character lines in one register; Animator picks Avatar v2 mouth-motion profile accordingly.
 
 ---
 
@@ -76,12 +78,12 @@ Fix the mode in `storyboard.json → visual_identity.reaction_mode`. Sound uses 
 | Kling Avatar v2 10s (on-screen dialogue, 2 talkers) | $0.56 each | 0–1 | $0–$0.56 |
 | Kling I2V 5s with audio (physical gag) | $0.42–$0.63 | 0–1 | $0–$0.63 |
 | Kling I2V 5s no audio (silent vignette) | $0.42 | 0–2 | $0–$0.84 |
-| ElevenLabs TTS — character lines | ~$0.07 | 4–6 | $0.28–$0.42 |
-| ElevenLabs TTS — off-screen customer / narrator | ~$0.05 | 0–5 | $0–$0.25 |
+| Routed speech — character lines | provider-dependent | 4–6 | provider-dependent |
+| Routed speech — off-screen customer / narrator | provider-dependent | 0–5 | provider-dependent |
 | Title card (NB2 still, optional minor I2V) | $0.08 (+$0.42 if I2V) | 1 | $0.08–$0.50 |
 | **Typical total** | | | **$2.50–$4.50** |
 
-Max with 1–2 retries: **$6.00**. Stop at **$5.40**.
+Max with one same-provider retry for a failed request: **$6.00**. A second failure stops the video. Stop at **$5.40**.
 
 ---
 
@@ -111,7 +113,7 @@ Each vignette picks ONE of these. Sound, Animator, Editor read `scene.scene_type
 | `scene_type` | Audio source | Animation model | Notes |
 |---|---|---|---|
 | `dialogue-offscreen` (default) | `customer.mp3` (off-screen voice) + silence-padded Avatar TTS | Kling Avatar v2 — only the character is on screen | Cheapest dialogue option. Customer face never to camera (back-of-head, off-frame, or blurred bg). See "Recommended dialogue pattern" below. |
-| `dialogue-on-screen` | Two TTS tracks; both characters lipsynced | 2× Kling Avatar v2 (or HeyGen for second) — both faces visible | Doubles cost. Use sparingly, max 1 per video. |
+| `dialogue-on-screen` | Two speech tracks; both characters lipsynced | 2× the same format-selected Avatar route — both faces visible | Doubles cost. Use sparingly, max 1 per video. |
 | `monologue` | Narrator VO TTS over silent visuals | Kling I2V `generate_audio: false` + TTS overlay by Editor | Voice-of-god narration over the character doing something silly silently. |
 | `inner-thought` | Character TTS over silent I2V (the persona THINKS, doesn't speak — face stays still) | Kling I2V `generate_audio: false` + TTS overlay | "Subtitled internal monologue" — character on screen, eyes communicate, voice is internal. |
 | `physical-gag` | SFX only, no speech | Kling I2V `generate_audio: true` | Kratos crushes a juice box trying to open it. Sound = SFX from Kling. |
@@ -169,8 +171,8 @@ References:
       "scene_type": "dialogue-offscreen",
       "customer_line": "Can I get a latte with no almonds, no milk, no caffeine — but make it energizing?",
       "character_line": "This is not a beverage. This is a logical crime.",
-      "customer_voice": "Charlotte",
-      "character_voice": "Daniel",
+      "customer_voice": "{MINIMAX_PRESET_OR_FORMAT_SAMPLE}",
+      "character_voice": "{MINIMAX_PRESET_OR_FORMAT_SAMPLE}",
       "negative_prompt": "..."
     }
   ]
@@ -219,23 +221,19 @@ Other scene types have no overlays (subtitles only).
 
 - Dispatch per `scene_type`:
   - `dialogue-offscreen` → Kling Avatar v2 with silence-padded mp3 (do NOT trim leading silence — it's the pause that makes the bit work).
-  - `dialogue-on-screen` → 2× Kling Avatar v2 (or HeyGen for the second face if Avatar can't do dual). Coordinate timings via two padded mp3s so the two voices don't talk over each other.
+  - `dialogue-on-screen` → 2× Kling Avatar v2. Coordinate timings via two padded mp3s so the two voices don't talk over each other. Do not switch model/provider if a request fails.
   - `monologue`, `inner-thought` → Kling I2V with `generate_audio: false`.
   - `physical-gag` → Kling I2V with `generate_audio: true` for SFX.
-- Watch for Kling Avatar v2 CJK text artifacts in the bottom strip (y ≈ 1700–1850). Subtitles are designed to mask them — don't try to prompt them away, you'll only waste Avatar calls.
+- Apply the hardened negative prompt before generation. Generated media receives technical validation only; visual judgment belongs to the user during debug review.
+- A failed generation gets one retry with the same model/settings. A second failure stops the video and returns the error; no provider or local fallback.
 - **Debug mode:** before launching the Avatar batch, list planned clips with per-clip cost and get user OK (see `rules/roles/manager.md` Debug-mode safety rules).
 - General rules — `rules/roles/animator.md`.
 
 ### Sound
 
-- TTS for the character (one voice, one stability profile chosen by `reaction_mode`) and for any off-screen customers / narrator (varying voices per scene to feel like different people).
-- Voice picks by `reaction_mode`:
-  - `deadpan-logical` → `Daniel` stability 0.10 or `George` stability 0.30
-  - `gruff-angry` → `Adam` stability 0.10 style 0.9
-  - `naive-literal` → `Bill` (or any youthful clear voice) stability 0.50
-  - `military-formal` → `Daniel` stability 0.40
-  - `world-weary-monotone` → `George` stability 0.40
-  - `over-the-top-heroic` → `Adam` stability 0.15 style 0.7
+- Generate character, customer, and narrator speech in this order: intentional native model audio → Chatterbox only with an approved sample owned by this resolved `what-if-real-life` bible → otherwise MiniMax.
+- `reaction_mode` controls delivery direction, not a hardcoded ElevenLabs identity. New MiniMax presets or Chatterbox sample URLs go into run-local `proposed_bible_updates`; Manager stores them in this format's exact bible only after explicit final user approval. Never import them from another format.
+- On a failed speech request, retry once with the same route/settings, then STOP and report the error; do not switch provider or use a local fallback.
 - For each `dialogue-offscreen` scene: produce `customer.mp3` AND the silence-padded `scene-K.mp3` for Avatar.
 - For each `monologue` / `inner-thought` scene: produce a single TTS track for Editor to overlay.
 - Subtitles — NOT Sound's job. Editor generates the one universal ASS via whisper (editor.md §6).
@@ -267,7 +265,7 @@ Other scene types have no overlays (subtitles only).
   - `dialogue-on-screen`: assemble shot-reverse-shot cuts → burn ASS.
   - `monologue` / `inner-thought`: silent I2V → overlay TTS (scene-K.mp3) via amix → burn ASS with Default style timed from 0:00:00.00.
   - `physical-gag`: I2V with Kling SFX baked → keep audio → no subtitles.
-- bg-music.mp3 lookup: check `OUTPUT_DIR/bg-music.mp3` first (Sound writes it here), then `OUTPUT_DIR/build/bg-music.mp3`. Fail loudly if neither exists.
+- bg-music.mp3 must be the track generated for this run and format. Fail loudly if it is absent; do not select a local or another-format fallback.
 - Concat all scenes + CTA → `build/concat.mp4`.
 - Apply **1.18× speedup** (`setpts=PTS/1.18` + `atempo=1.18`) BEFORE music mix. Self-check: `duration(final) ≈ sum(scene_durations) / 1.18`.
 - Mix bg-music at volume 0.08.
@@ -279,7 +277,7 @@ Other scene types have no overlays (subtitles only).
 ## Output files
 
 ```
-output/YYYY-MM-DD/{GAME_TAG}/what-if-real-life/
+${OUTPUT_DIR}/
 ├── storyboard.json
 ├── bg-music.mp3
 ├── scenes/
@@ -305,14 +303,14 @@ output/YYYY-MM-DD/{GAME_TAG}/what-if-real-life/
 
 - [ ] 5–8 scenes total (incl. title card), CTA appended
 - [ ] Total duration after 1.18× speedup ≤ 32s
-- [ ] Photorealistic style preserved across all scenes — character rendered as tangibly present in the real-world setting (no leaked stylized-source look)
+- [ ] Every scene prompt includes the locked photorealistic `style_tags`; generated media passes technical validation only
 - [ ] `reaction_mode` consistent across all character lines — no tonal flip mid-video
 - [ ] No two vignettes share the same gag mechanic
 - [ ] For every `dialogue-offscreen` scene: off-screen voice audible (RMS > -30 dB on the dialogue interval)
-- [ ] For every `dialogue-offscreen` scene: customer's face is NOT turned to camera
+- [ ] Every `dialogue-offscreen` storyboard prompt declares the customer's face turned away from camera
 - [ ] Subtitles — one universal style (editor.md §6), no event overlap, text matches the scenarist's
-- [ ] No visible Kling Avatar v2 CJK artifact in any sampled frame (check at 1s and `clip_end − 0.3s` of each Avatar scene)
-- [ ] Music is from `Fun/`, volume 0.08, audible but not overpowering
+- [ ] No AI Vision or sampled-frame visual inspection is run; the user performs any visual review during debug
+- [ ] Music was generated for this run/format and mixed at volume 0.08
 - [ ] 1.18× speedup applied (NOT 1.15×)
 - [ ] CTA appended
 

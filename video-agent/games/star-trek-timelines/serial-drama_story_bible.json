@@ -7,15 +7,14 @@
   "created_at": "2026-04-14",
   "last_episode": 12,
   "planned_arc": {
-    "note": "Season 1 arc EP9–EP16. Core emotional engine: Kirk saves the monster that tried to kill Chekov — and every time he does 'the right thing', his crew gets more afraid. Mirror Kirk envies Kirk's loyal crew. Admiral pressures Kirk to eject the double or face Enterprise quarantine. Scenarist follows the beats and key_lines below as RAILS: keep cliffhanger spoken lines verbatim, adapt each episode into 3–5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion, protagonist always faces camera, cliffhanger line = Avatar TTS). Fold completed episodes into characters[], active_loops, episode_summaries as usual. Do NOT invent complex conspiracies or test protocols — the drama is simple: Kirk's mercy costs him his crew's trust.",
+    "note": "Season 1 arc EP9–EP16. Core emotional engine: Kirk saves the monster that tried to kill Chekov — and every time he does 'the right thing', his crew gets more afraid. Mirror Kirk envies Kirk's loyal crew. Admiral pressures Kirk to eject the double or face Enterprise quarantine. Scenarist follows the beats and key_lines below as RAILS: keep cliffhanger spoken lines verbatim, adapt each episode into 3–5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion, protagonist always faces camera, cliffhanger line = Kling native dialogue). Fold an approved episode into characters[], active_loops, episode_summaries only after explicit final user approval. Do NOT invent complex conspiracies or test protocols — the drama is simple: Kirk's mercy costs him his crew's trust.",
     "new_characters": [
       {
         "name": "Mirror Kirk",
         "role": "antagonist",
         "introduced_episode": 7,
         "character_description": "mirror-universe James T. Kirk, identical face structure to Kirk but harder and predatory, cold confident smirk showing teeth with no warmth, thin diagonal scar across left cheek, slicked darker hair pressed flat, dead-calm glacier eyes, black-and-silver Section 31 mirror universe uniform with sharp angular trim and no Starfleet delta, lean forward predatory posture",
-        "voice": "Daniel",
-        "elevenlabs_voice": "Daniel",
+        "voice_route": "missing-format-owned-native-ref",
         "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery."
       }
     ],
@@ -480,8 +479,7 @@
       "name": "Kirk",
       "role": "protagonist",
       "character_description": "Captain James T. Kirk, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
-      "voice": "Daniel",
-      "elevenlabs_voice": "Daniel",
+      "voice_route": "missing-format-owned-native-ref",
       "status": "EP12: Kept Mirror Kirk alive in sickbay despite Chekov's hatred. Kirk's mercy now has a new cost: Mirror Kirk has seen that the crew follows Kirk out of loyalty, not fear.",
       "aura_points": 1100,
       "relationships": {
@@ -496,8 +494,7 @@
       "name": "Worf",
       "role": "ally",
       "character_description": "Commander Worf, imposing Klingon-Human, prominent forehead ridges, dark skin, fierce disciplined expression, TNG Starfleet command red uniform with lieutenant commander pips, broad shoulders, intense dark eyes",
-      "voice": "George",
-      "elevenlabs_voice": "George",
+      "voice_route": "missing-format-owned-native-ref",
       "status": "EP12: Guarded Mirror Kirk in sickbay and defined loyalty clearly: 'We follow the captain. Not the face.'",
       "aura_points": 600,
       "relationships": {
@@ -508,8 +505,7 @@
       "name": "Chekov",
       "role": "victim",
       "character_description": "Ensign Pavel Chekov, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
-      "voice": "Charlie",
-      "elevenlabs_voice": "Charlie",
+      "voice_route": "missing-format-owned-native-ref",
       "status": "EP12: Saw Mirror Kirk restrained in sickbay and demanded to know why he was still alive. Chekov's fear has hardened into hatred.",
       "aura_points": 200,
       "relationships": {
@@ -520,8 +516,7 @@
       "name": "Spock",
       "role": "ally",
       "character_description": "Commander Spock, pointed Vulcan ears, sharply arched thick eyebrows, straight black bowl-cut hair, olive-tinted skin, calm emotionless expression with one eyebrow slightly raised, blue TOS science tunic with black collar and Starfleet delta badge, hands clasped behind back",
-      "voice": "Brian",
-      "elevenlabs_voice": "Brian",
+      "voice_route": "missing-format-owned-native-ref",
       "status": "EP6: Delivered cliffhanger 'Captain... it's you in there.' Present but background since EP7. Will observe and analyze.",
       "aura_points": 900,
       "relationships": {
@@ -532,8 +527,7 @@
       "name": "Scotty",
       "role": "crew",
       "character_description": "Chief Engineer Montgomery Scott, stocky build, round friendly face now tense and alarmed, swept-back dark hair with grey temples and short sideburns, wide desperate eyes, TOS red engineering tunic with black collar and Starfleet delta badge, hands raised in protest",
-      "voice": "George",
-      "elevenlabs_voice": "George",
+      "voice_route": "missing-format-owned-native-ref",
       "status": "EP12: At engineering controls during the Admiral's remote power cut. Detected the critical failure and delivered the cliffhanger: 'The brig just lost power.'",
       "aura_points": 450,
       "relationships": {
@@ -544,8 +538,7 @@
       "name": "Mirror_Kirk",
       "role": "antagonist",
       "character_description": "mirror-universe James T. Kirk, identical face structure to Kirk but harder and predatory, cold confident smirk showing teeth with no warmth, thin diagonal scar across left cheek, slicked darker hair pressed flat, dead-calm glacier eyes, black-and-silver Section 31 mirror universe uniform with sharp angular trim and no Starfleet delta, lean forward predatory posture",
-      "voice": "Daniel",
-      "elevenlabs_voice": "Daniel",
+      "voice_route": "missing-format-owned-native-ref",
       "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery.",
       "status": "EP12: Restrained on a sickbay biobed. Realized Kirk's real power is loyalty, not fear. Now wants more than survival — he wants to steal what Kirk has.",
       "aura_points": 0,
@@ -559,8 +552,7 @@
       "name": "Fleet_Admiral",
       "role": "antagonist",
       "character_description": "Starfleet Fleet Admiral, older distinguished male, silver-grey hair combed straight back, sharp strong cheekbones, four gold admiral pips on collar, dark navy Starfleet admiral uniform with gold trim, cold calculating expression, slight controlled cold smile",
-      "voice": "Liam",
-      "elevenlabs_voice": "Liam",
+      "voice_route": "missing-format-owned-native-ref",
       "status": "EP12: Escalated quarantine pressure by cutting partial power to Enterprise, causing the brig to lose power.",
       "aura_points": 0,
       "relationships": {

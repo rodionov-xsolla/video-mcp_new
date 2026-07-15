@@ -6,7 +6,7 @@ overlays: false
 
 # Format "Special Report" — Single-reporter investigative special from a game's lore
 
-> **Single video model — Kling Avatar v2 Standard.** Opener and CTA — pre-built from Supabase. Anchor — locked per game in story bible (DIFFERENT character from fun-news anchor for the same game). Reporter — single, locked per game, visits **3 locations** telling ONE unified ironic story. Tone — mock-journalistic / absurd-earnest. KEY VISUAL: reporter stands to the SIDE of frame, leaving room for the subject being investigated.
+> **Single video model — Kling Avatar v2 Standard.** Opener and CTA — pre-built from Supabase. Anchor and reporter — locked independently in this format's resolved story bible. Reporter visits **3 locations** telling ONE unified ironic story. Tone — mock-journalistic / absurd-earnest. KEY VISUAL: reporter stands to the SIDE of frame, leaving room for the subject being investigated.
 
 This file is the **playbook**: when to use, pipeline, role briefs. Craft rules — in `rules/roles/*.md`.
 
@@ -25,10 +25,10 @@ Keywords: "special report", "спецрепортаж", "специальный 
 
 ## Concept
 
-- **1 permanent anchor** (locked per game in story bible, DIFFERENT from fun-news anchor) + **1 permanent reporter** (locked per game)
+- **1 permanent anchor** + **1 permanent reporter**, both locked in this format's story bible without reading appearance or voice assignments from other formats
 - Reporter visits **exactly 3 locations** to tell ONE unified ironic/absurd investigative story
 - At each location: reporter stands to the **SIDE** of frame (~30% width), leaving 65-70% for the evidence/subject
-- **Only Kling Avatar v2 Standard** + ElevenLabs TTS (lipsync via `audio_url`)
+- **Only Kling Avatar v2 Standard** + routed speech audio (lipsync via `audio_url`)
 - **Opener and CTA — pre-built mp4 from Supabase**, not regenerated per episode
 - **Tone:** mock-journalistic / ironic-investigative / absurd-earnest — reporter treats absurd topic with full journalistic seriousness
 - **Duration:** 35–50s natural TTS speed (including opener + CTA)
@@ -39,7 +39,7 @@ Keywords: "special report", "спецрепортаж", "специальный 
 
 - **Image:** NB2 (3 per-episode on-location reporter edits + one-time anchor studio avatar)
 - **Video:** Kling Avatar v2 Standard ($0.056/s of input audio duration)
-- **Audio:** ElevenLabs TTS (per dialogue scene)
+- **Audio:** native model speech when intentionally available; otherwise a current-format-owned sample through Chatterbox; otherwise MiniMax
 
 ---
 
@@ -50,7 +50,7 @@ Keywords: "special report", "спецрепортаж", "специальный 
 Every special-report episode opens with a game-specific branded opener ("Genshin Special Report", "Roblox Special Report", etc.). Rules:
 - Show name: `"{GameName} Special Report"` — distinct from `"{GameName} Funtasy News"` (fun-news). Separate branding, separate opener mp4.
 - Visual style matches the game's aesthetic.
-- If a fun-news opener exists for this game, the special-report opener must look visually different (different color scheme or layout) — two shows, two brands.
+- Use this format's own opener and branding only. Never inspect, reuse, or derive it from another format's opener; CTA is the sole automatic cross-format asset exception.
 
 ### Opener music = CTA music (same rules as fun-news)
 
@@ -99,8 +99,8 @@ professional key light on reporter's face, no text overlay, no captions
 ### Phase 0: Initialization
 
 1. Read game config: `games/{GAME_TAG}/{GAME_TAG}.md`
-2. Read / create `games/{GAME_TAG}/special-report_story_bible.json`
-3. Query Supabase `game_assets` (filter `game_tag = "{GAME_TAG}"`):
+2. Resolve required `games/{GAME_TAG}/special-report_story_bible.json`. If missing, STOP and ask whether the user wants it created; create it only after explicit confirmation.
+3. Read Manager's prefiltered `SUPABASE_ASSETS_FILE`; it contains only assets owned by this `special-report` format/series plus the separately resolved game CTA. Do not run a broad `game_tag` query:
    - **Opener** — tag `special-report,opener` → mp4
    - **CTA** — tag `cta` → mp4 (can reuse fun-news CTA)
    - **Anchor studio avatar** — tag `special-report,avatar`, character = anchor → png
@@ -214,7 +214,7 @@ Same punctuation tax rules as fun-news (prefer commas/em-dashes over periods).
 ### Phase 4: Animation (Kling Avatar v2 only)
 
 For each dialogue scene:
-1. ElevenLabs TTS → mp3 → upload to Supabase
+1. Resolve speech source in this order: native model audio when intentionally supported for the scene → Chatterbox only when this resolved `special-report` story bible owns an approved sample for the speaker → otherwise MiniMax. Generate mp3 and upload to Supabase. Never read a sample or voice assignment from another format. On failure, retry once with the same source/settings, then STOP and report the error.
 2. Kling Avatar v2: `image_url` = per-location NB2 edit (reporter scenes) or studio avatar (anchor scenes). `audio_url` = TTS mp3 from Supabase.
 3. No speedup — natural TTS pace
 4. `apad=whole_dur=<raw_video_dur>` per scene (Avatar v2 trailing silence buffer)
@@ -234,7 +234,7 @@ VIDEO: opener → scene-1 → scene-2 → scene-3 → scene-4 → scene-5 (fade-
 AUDIO: per-scene apad → concat → adelay=2000 for opener offset → amix with music-timed.wav
 ```
 
-Output: `final.mp4` → Supabase `videos/{GAME_TAG}/{YYYY-MM-DD}/special-report_final.mp4`.
+Output: local `final.mp4`; after explicit user approval, Manager uploads through its canonical run-scoped path.
 
 ---
 
@@ -244,7 +244,7 @@ Output: `final.mp4` → Supabase `videos/{GAME_TAG}/{YYYY-MM-DD}/special-report_
 |---|---|
 | 3 reporter on-location NB2 edits | 3 × $0.08 = **$0.24** |
 | 5 Avatar v2 scenes (~8s avg each) | 5 × $0.45 ≈ **$2.25** |
-| ElevenLabs TTS (5 lines) | 5 × ~$0.07 ≈ **$0.35** |
+| Routed speech generation (5 lines) | provider-dependent |
 | **Steady-state total** | **~$2.85** |
 | Pilot extra (2 new avatars + opener NB2) | +~$0.50 |
 | **Pilot total** | **~$3.35** |
@@ -255,18 +255,18 @@ Output: `final.mp4` → Supabase `videos/{GAME_TAG}/{YYYY-MM-DD}/special-report_
 
 ## Voices
 
-| Role | Voice source | stability | style |
-|---|---|---|---|
-| Anchor | `voice_mapping.anchor` in story bible | 0.55 | omit |
-| Reporter | `voice_mapping.reporter` in story bible | 0.55 | omit |
+| Role | Speech source | Direction |
+|---|---|---|
+| Anchor | native → current-format sample via Chatterbox → MiniMax | locked in resolved story bible |
+| Reporter | native → current-format sample via Chatterbox → MiniMax | locked in resolved story bible |
 
-Use `voice` (name string), NOT `voice_id` hash.
+For MiniMax, `voice_mapping` stores the MiniMax preset; for Chatterbox it stores the approved current-format sample URL. ElevenLabs IDs are forbidden.
 
 ---
 
 ## Story Bible
 
-Create on first run: `games/{GAME_TAG}/special-report_story_bible.json`
+After explicit user confirmation on a missing-bible first run, create `games/{GAME_TAG}/special-report_story_bible.json`:
 
 ```json
 {
@@ -309,7 +309,7 @@ Create on first run: `games/{GAME_TAG}/special-report_story_bible.json`
 }
 ```
 
-**FIFO 5** on `episode_summaries`. Append after editor confirms `final.mp4`:
+**FIFO 5** on `episode_summaries`. Append only after the user explicitly approves the presented final video:
 ```json
 {
   "episode": N,
@@ -404,7 +404,7 @@ Before Phase 3, validate:
 ## Output files
 
 ```
-output/{YYYY-MM-DD}/{GAME_TAG}/special-report/
+${OUTPUT_DIR}/
 ├── storyboard.json
 ├── research.json
 ├── final.mp4
@@ -427,7 +427,7 @@ output/{YYYY-MM-DD}/{GAME_TAG}/special-report/
 - [ ] All 5 scene mp4s exist and each > 100KB
 - [ ] `ffprobe` duration ≥ 5s per scene
 - [ ] `final.mp4` duration 35–55s
-- [ ] Anchor character ≠ fun-news anchor for the same game (confirmed via story bible comparison)
+- [ ] Anchor and reporter are resolved only from this format's story bible
 - [ ] Reporter same character across scenes 2–4 (same `image_url` base)
 - [ ] `reporter_side` alternates across scenes 2–4 (or is intentionally consistent)
 - [ ] 3 location `image_prompt`s are visually distinct environments
@@ -437,11 +437,11 @@ output/{YYYY-MM-DD}/{GAME_TAG}/special-report/
 ## Anti-patterns
 
 - ❌ Reporter centered in frame (kills the format's core visual identity)
-- ❌ Same anchor as fun-news for the same game (defeats the purpose of having two formats)
+- ❌ Reading or copying an anchor, reporter, appearance card, asset, or voice assignment from another format without explicit user instruction
 - ❌ 3 locations with visually identical backgrounds (different names alone aren't enough)
 - ❌ Separate unrelated news items instead of ONE unified investigation
 - ❌ `-shortest` in FFmpeg (ALWAYS use `apad`)
-- ❌ `voice_id` hash instead of `voice` name in ElevenLabs
+- ❌ ElevenLabs or provider/sample switching after a failed speech generation
 - ❌ `atempo` speedup on Avatar v2 output
 - ❌ Reusing fun-news opener for special-report (separate brand, separate mp4)
 
@@ -450,7 +450,6 @@ output/{YYYY-MM-DD}/{GAME_TAG}/special-report/
 ## Role briefs
 
 ### Scenarist
-
 - Research 1 canon fact → design ONE investigative story with 3 escalating evidence beats
 - Scenes 2→3→4 are a continuous narrative arc (setup → escalation → surprising conclusion), NOT independent news items
 - Fill `reporter_side` ("left" or "right") in the storyboard for each reporter scene — alternate by default
@@ -468,7 +467,7 @@ output/{YYYY-MM-DD}/{GAME_TAG}/special-report/
 - Prompt template: see `KEY VISUAL RULE` section above
 
 **Scenes 1 and 5 (anchor studio):**
-- Frontal portrait, news desk with show branding — same rules as fun-news anchor
+- Frontal portrait, news desk with this format's own show branding and format-owned assets
 
 - General rules — `rules/roles/storyboarder.md`
 
@@ -482,9 +481,8 @@ output/{YYYY-MM-DD}/{GAME_TAG}/special-report/
 
 ### Sound
 
-- ElevenLabs TTS, `voice` name string, `stability: 0.55`, `style: omit`
-- Anchor voice: `voice_mapping.anchor` from story bible
-- Reporter voice: `voice_mapping.reporter` from story bible
+- Speech priority: native audio → approved sample owned by this `special-report` bible through Chatterbox → otherwise MiniMax
+- Anchor and reporter routes come only from this format's resolved story bible; retry the same route once, then stop
 - Ambient SFX: location-appropriate per reporter scene (optional, 0.10–0.15 vol)
 - Music: opener + CTA only; dialogue = silence (same gate as fun-news)
 - General rules — `rules/roles/sound.md`

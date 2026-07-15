@@ -22,22 +22,16 @@ Do NOT generate a title overlay PNG via Pillow — use the locked branding asset
 [1:v]scale=608:405,format=rgba,fade=t=in:st=0:d=0.5:alpha=1,fade=t=out:st=3.5:d=0.5:alpha=1[ovl];[0:v][ovl]overlay=0:85:format=auto[vovl];[vovl]ass={ASSFILE}[vout]
 ```
 
-## CTA (in-scene sign)
+## CTA
 
-Standard sign text for Star Trek Timelines wild-documentary: **"Download the game / Link in bio"**
-- Written in black marker on a small white rectangular card
-- Held by the creature facing the lens cleanly
-- Do NOT burn text into the video frame via ffmpeg — sign must be visible in the Kling-generated clip itself
+Append only the existing Star Trek CTA asset after the creature clips. Do not generate an in-scene sign, CTA frame, spoken substitute, or synthetic end card. If the asset is unavailable, stop and report the error.
 
-## Post-Animator validation (manager must do this)
+## Post-Animator validation (technical only)
 
-After the Animator phase, check that no two consecutive scene-N.mp4 files contain duplicated content (Kling CDN dedup bug — can occur silently during a retry):
+After the Animator phase, verify file count, expected index mapping, decodability, dimensions, durations, and hashes. Identical hashes across different scene indices are a technical duplicate signal; do not use AI Vision or visually compare generated frames.
 
 ```bash
-ls -lh OUTPUT_DIR/scenes/scene-*/scene-*.mp4
+shasum -a 256 OUTPUT_DIR/scenes/scene-*/scene-*.mp4
 ```
 
-If scene duplication detected (everything shifted by 1):
-1. Archive wrong file: `cp scenes/scene-N/scene-N.mp4 _archive/scene-N_wrong.mp4 && rm scenes/scene-N/scene-N.mp4`
-2. Shift correct files: `mv scene-(N+1).mp4 → scene-N.mp4`, etc.
-3. Re-animate only the last missing scene(s) — do NOT re-run all scenes
+If a file is technically missing, corrupt, or byte-identical to another index, retry that same Kling v3 request once with the same settings. A second failure stops the video with an error; do not shift guessed files or switch provider/model.

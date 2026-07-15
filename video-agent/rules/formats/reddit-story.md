@@ -127,7 +127,7 @@ Total TTS duration ≤ 58s.
 Final MP4 = TTS + 2s CTA ≈ 60s.
 
 CTA is taken from Supabase `game_assets` with tags `cta` + `video`.  
-If no CTA exists, fallback: fade-to-black → `SUBSCRIBE FOR MORE` drawtext for 2s.
+If no CTA exists or it fails technical validation: STOP and report the missing/invalid asset. Never synthesize a fade-to-black, text card, or end frame.
 
 ---
 
@@ -543,7 +543,7 @@ Only random gameplay clips are used.
 **NEVER normalize gameplay to 1080×810** — that is landscape (4:3) applied to portrait (3:4) clips, produces massive black bars baked into gp_norm files.
 
 **CTA:** query `game_assets` where `tags @> ['cta','video']` for this `game_tag`. Accept any `asset_type` (`promo_art` or `generated_ref`) — skip records tagged `legacy`.
-If no CTA exists, fallback: `fade-to-black → SUBSCRIBE FOR MORE drawtext, 2s`.
+If no technically valid CTA exists, STOP. There is no generated/text/end-frame fallback.
 
 - TTS overlay via `apad` (**NEVER `-shortest`**)
 - General rules — `rules/roles/editor.md`
@@ -553,7 +553,7 @@ If no CTA exists, fallback: `fade-to-black → SUBSCRIBE FOR MORE drawtext, 2s`.
 ## Output files
 
 ```text
-output/YYYY-MM-DD/{GAME_TAG}/reddit-story/
+${OUTPUT_DIR}/
 ├── storyboard.json
 ├── tts-output.mp3
 ├── gameplay-trimmed.mp4
@@ -562,7 +562,7 @@ output/YYYY-MM-DD/{GAME_TAG}/reddit-story/
 └── final.mp4
 ```
 
-Plus update:
+After the user explicitly approves the local `final.mp4`, Manager updates:
 
 ```text
 games/{GAME_TAG}/reddit-story_bible.json
@@ -576,7 +576,7 @@ games/{GAME_TAG}/reddit-story_bible.json
 
 - [ ] `games/{GAME_TAG}/gameplay/` contains at least one `.mp4`.
 - [ ] Supabase has background asset with tag `reddit-story-bg`.
-- [ ] CTA asset exists or fallback CTA is generated.
+- [ ] A technically valid game CTA asset exists; otherwise the run stopped before Editor.
 
 ### Script
 
@@ -607,7 +607,7 @@ games/{GAME_TAG}/reddit-story_bible.json
 - [ ] `pressure_source` does not duplicate recent stories.
 - [ ] `headline` and `hook` are not similar to the last 10.
 - [ ] Same tone is not repeated 3 times in a row.
-- [ ] `reddit-story_bible.json` is updated after video generation.
+- [ ] `reddit-story_bible.json` is unchanged before review and updated only after the user's explicit final OK.
 
 ### Technical
 

@@ -151,12 +151,12 @@ python tools/overlays.py storyboard.json \
 
 **Покрывает:**
 - Nano Banana 2 — T2I / I2I с chain reference. $0.08/img
-- GPT Image 1 — fallback без chain ref. $0.02/img  
+- GPT Image 1 — альтернативный маршрут только по предварительному/явному разрешению; не automatic fallback. $0.02/img  
 - Kling v3 Standard I2V — $0.084/с без audio, $0.126/с с audio. multi_prompt, elements
-- Kling v2.6 Pro — fallback I2V
+- Kling v2.6 Pro — отдельный format/user-selected I2V route; не automatic fallback
 - Veo 3 — T2V / I2V, $1.60–$3.20 за 8-секундный клип
 - MiniMax TTS — Speech 2.8-HD, $0.10/1k символов
-- ElevenLabs TTS через fal.ai — fallback
+- MiniMax TTS + exact-format Chatterbox; ElevenLabs TTS запрещён, ElevenLabs Sound Effects разрешён только для SFX
 - Kling Lipsync — audio-to-video lip-sync
 - Kling Avatar v2 — image + audio → avatar видео. $0.056/с
 
@@ -302,4 +302,3 @@ assets/{GAME}/gameplay/{name}.mp4
 | `upload-asset.sh` | 🟢 | вручную | Supabase Storage + game_assets |
 | `fal-ai.md` | 🟢 | справочник sub-агентов | — |
 | `ffmpeg-api.md` | 🟢 | справочник editor-агента | — |
-

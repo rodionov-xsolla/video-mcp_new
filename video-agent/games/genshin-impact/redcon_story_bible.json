@@ -6,8 +6,8 @@
   "title": "Genshin Impact — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
   "last_episode": 1,
-  "tts_engine": "chatterbox",
-  "tts_note": "Genshin ALWAYS uses Chatterbox via fal-ai/chatterbox/text-to-speech. Voice ref: assets/genshin-impact/characters/traveller/voice-1.mp3 (the Traveler's voice). Second-person monologue throughout. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
+  "tts_engine": "auto",
+  "tts_note": "Speech route for new episodes: intentional native audio → Chatterbox only with a redcon-owned approved sample recorded in this bible → otherwise MiniMax. Retry the same route once, then stop. Second-person monologue throughout. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "format_overrides": {
     "note": "Player-POV variant. Character = the Traveler (player). Each episode: one canonical Teyvat crisis, one cross-nation team assembled via gacha pulls, one divergence outcome made possible by a character the Traveler pulled.",
     "structure": "HOOK (clip 1, TTS starts, active mid-crisis) → TITLE CARD (clip 2, 3s silent) → CANON REMINDER (clip 3) → CHARACTER PULLED (clip 4) → DIVERGENCE (clip 5) → CONSEQUENCE (clip 6) → REVELATION (clip 7) → CTA asset",
@@ -28,8 +28,9 @@
     "character_slug": "traveller",
     "gender_note": "Default to Lumine (female, blonde twin) unless user specifies Aether. Both valid.",
     "description": "The Traveler — golden-haired wanderer from another world. Distinctive star-shaped hair accessory, traveler's outfit. Searching for their lost sibling across Teyvat.",
-    "voice_ref_path": "assets/genshin-impact/characters/traveller/voice-1.mp3",
-    "note": "Voice ref must be loaded for Chatterbox. Use Traveller.mp3 from game root if voice-1.mp3 missing."
+    "voice_route": "minimax",
+    "voice": "Deep_Voice_Man",
+    "note": "No redcon-owned approved sample is currently recorded here, so new player-POV episodes use MiniMax. Do not pull a sample from another format or use a local fallback."
   },
   "crisis_rotation": {
     "done": [

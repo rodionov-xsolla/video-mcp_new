@@ -6,7 +6,7 @@ overlays: false
 
 # Format "Streettalk" — Vox-pop street interview from the universe's «street»
 
-> **Single video model — Kling Avatar v2 Standard.** Opener and CTA pre-built from Supabase. Reporter (anchor) locked per game in story bible. Interviewees variable, chosen by topic. Tone — ironic / satirical / absurd. Channel branding (optional game-specific bug PNG) applied via `channel_bug_url` in story bible — empty string if the game has no corner branding.
+> **Single video model — Kling Avatar v2 Standard.** Opener and CTA pre-built from Supabase. Reporter (anchor) locked per game in story bible. Interviewees variable, chosen by topic. Tone — ironic / satirical / absurd.
 
 This file is the **playbook**: when to use, pipeline, role briefs. Craft rules — in `rules/roles/*.md`.
 
@@ -27,9 +27,8 @@ Keywords: "streettalk", "street talk", "street-talk", "vox pop", "vox-pop", "у�
 
 - **1 permanent reporter** (locked per game in story bible) + **3 interviewees** per episode (variable, chosen by topic from Supabase or generated)
 - **1 absurd question** per episode — reporter asks, 3 passers-by react with different angles
-- **Only Kling Avatar v2 Standard** + ElevenLabs TTS (lipsync via `audio_url`)
+- **Only Kling Avatar v2 Standard** + routed speech audio (lipsync via `audio_url`)
 - **Opener and CTA — pre-built mp4 from Supabase**, not regenerated per episode
-- **Channel bug** — `channel_bug_url` from story bible (game-specific optional PNG), overlaid by Editor (top-left, 110×110, 70% opacity, static). Empty string = no overlay.
 - **Tone:** absurd / satirical / dry-deadpan / earnest-cluelessness — one angle per interviewee, must differ across the 3
 - **Duration:** 30–45s after speedup (opener 2s + 5 dialogue scenes ~30-35s + CTA ~5s)
 - **Budget:** up to $7.00 hard cap for pilot; ~$3.00 steady-state EP2+
@@ -39,7 +38,7 @@ Keywords: "streettalk", "street talk", "street-talk", "vox pop", "vox-pop", "у�
 
 - **Image:** NB2 (per-episode on-location edits for reporter + interviewees on the show's signature location)
 - **Video:** Kling Avatar v2 Standard ($0.056/s of input audio duration)
-- **Audio:** ElevenLabs TTS (per dialogue scene)
+- **Audio:** intentional native speech → approved sample owned by this `streettalk` bible through Chatterbox → otherwise MiniMax
 
 ---
 
@@ -49,7 +48,7 @@ Keywords: "streettalk", "street talk", "street-talk", "vox pop", "vox-pop", "у�
 
 Every streettalk episode must open with a **game-specific branded opener** (pre-built in Supabase, reused every episode). Rules:
 - **Visual style** — matches the game's aesthetic exactly: if it's DS9, the opener looks like a DS9 newscast; if it's a fantasy game, the opener uses that world's visual language. NOT a generic "street interview" template.
-- **Show name formula — `{GameName} Streettalk`** (MANDATORY). The show is named after the game, not a generic channel brand. Examples: "Genshin Streettalk", "Roblox Streettalk", "Pokémon Streettalk", "Star Trek Streettalk". Never use "GLN" as the universal brand — "GLN" was invented for Star Trek and does not apply to other games.
+- **Show name formula — `{GameName} Streettalk`** (MANDATORY). The show is named after the game, not a generic channel brand. Examples: "Genshin Streettalk", "Roblox Streettalk", "Pokémon Streettalk", "Star Trek Streettalk". Never use "GLN" in Streettalk; GLN belongs only to Star Trek Fun News.
   - The `{GameName}` is the short recognizable name from the game config (e.g., "Genshin", "Roblox", "WWE") — not the full legal title.
   - Story bible `title` field: `"{GameName} Streettalk — {Location}"` (e.g., "Genshin Streettalk — Mondstadt Plaza").
   - Storyboard `show_name` field: same formula.
@@ -67,7 +66,7 @@ The opener and the CTA/packshot share the **same musical theme** — light and f
 ### TV attributes (all scenes)
 
 **Microphones:**
-- Reporter always holds a **broadcast handheld microphone with the show's name on the mic flag** — the flag text is `storyboard.json → show_name` short form (e.g., "Genshin Streettalk", "Roblox Streettalk"). NOT a generic channel logo, NOT "GLN Streettalk" for non-Star-Trek games, NOT a blank flag.
+- Reporter always holds a **broadcast handheld microphone with the show's name on the mic flag** — the flag text is `storyboard.json → show_name` short form (e.g., "Genshin Streettalk", "Star Trek Streettalk"). NOT a generic channel logo, NOT GLN, NOT a blank flag.
 - For interviewee scenes: reporter's mic is visible in the foreground from off-screen (standard vox-pop framing). The flag is still readable.
 - Include in NB2 prompt: `"reporter holds broadcast mic with '{show_name_short}' on the mic flag"` (reporter scenes) or `"reporter's mic with '{show_name_short}' flag in foreground"` (interviewee scenes). `show_name_short` = `"{GameName} Streettalk"` (without the location suffix).
 
@@ -89,9 +88,9 @@ On-location backgrounds must visually relate to the **specific question being as
 
 ### Phase 0: Initialization (manager)
 
-1. Read game config: `games/{GAME_TAG}/{GAME_TAG}.md`. Extract `channel_bug_url` if present (passed to Editor).
-2. Read / create `games/{GAME_TAG}/streettalk_story_bible.json` (see Story Bible section).
-3. **Query Supabase `game_assets`** (filter `game_tag = "{GAME_TAG}"`):
+1. Read game config: `games/{GAME_TAG}/{GAME_TAG}.md`.
+2. Resolve required `games/{GAME_TAG}/streettalk_story_bible.json`. If missing, STOP and ask whether the user wants it created; create it only after explicit confirmation.
+3. Read Manager's prefiltered `SUPABASE_ASSETS_FILE`, containing only this `streettalk` format/series plus the separately resolved game CTA. Do not run a broad `game_tag` query:
    - **Opener** — record matching the story bible's `opener_url` (tag `streettalk` + `opener` + `video`). If missing → flag for Phase 2 prep (one-time cost ~$0.50).
    - **CTA** — record with tag `cta` + `video`.
    - **Reporter base avatar** — record matching `reporter.character_name`, tag `streettalk` + `avatar` + `reporter` → `.png`. If missing → Phase 2 generates (one-time per game).
@@ -134,7 +133,7 @@ Scenarist populates `scenes[K].title_card`:
 ```json
 {
   "name": "Jake Sisko",
-  "subtitle": "GLN Streettalk Reporter",
+  "subtitle": "{GameName} Streettalk Reporter",
   "show": true
 }
 ```
@@ -165,14 +164,14 @@ Editor renders via drawtext (see Editor brief).
 
 **Opener (one-time prep, ~$0.50):**
 If `opener_url` empty in story bible:
-1. NB2 title card 9:16 (~$0.08): location background slightly blurred + huge centered "GLN STREETTALK" title text + small "{LOCATION_NAME}" subtitle + GLN logo in upper-left at full opacity (this is the opener — bug is large here). Style: tv-broadcast title card.
+1. NB2 title card 9:16 (~$0.08): location background slightly blurred + huge centered "{GAME_NAME} STREETTALK" title text + small "{LOCATION_NAME}" subtitle. No GLN logo or channel bug. Style: game-specific tv-broadcast title card.
 2. Kling I2V 5s **no audio** (~$0.42): subtle camera push-in, no characters, title-card animation.
 3. Trim to 2s, upload via `--kind branding --name streettalk-opener`, tags `streettalk,opener,video,{game-tag}`.
-4. Write URL into story bible `opener_url`.
+4. Write the URL into run-local `proposed_bible_updates.opener_url`; Manager applies it to the exact story bible only after explicit final user approval.
 
 **Per-episode interviewees:**
 For each of 3 interviewees:
-- If `character_name` is a canon character with existing ref in Supabase (any tag) — pull it as base, NB2-edit to on-location variant. ~$0.08 per interviewee.
+- If `character_name` has a ref owned by this exact Streettalk series/story bible — use it as the base and NB2-edit an on-location variant. A same-game ref from another format is treated as missing unless the user explicitly authorizes copying it. ~$0.08 per interviewee.
 - If NEW character — generate sheet + on-location ref. ~$0.16 per interviewee. Upload base ref tagged `streettalk,interviewee,{slug}` for future reuse.
 
 **Per-episode on-location edits (MANDATORY):**
@@ -185,7 +184,7 @@ NB2 /edit with:
            <resolved style_tags for this game/format — applied verbatim>,
            <anti-drift negatives derived from that style — e.g. the opposite render medium>,
            9:16 vertical, three-quarter medium close-up,
-           reporter holds GLN-branded microphone in foreground for reporter scenes,
+           reporter holds {GameName} Streettalk-branded microphone in foreground for reporter scenes,
            or mic visible in foreground from off-screen for interviewee scenes,
            mouth slightly open mid-speech for lipsync,
            professional broadcasting key light on face,
@@ -193,15 +192,11 @@ NB2 /edit with:
            NO on-screen text overlay, NO captions, NO LCARS UI"
 ```
 
-Upload per-episode scene PNGs to Supabase as `episodes/{game}/{date}-streettalk/scenes/scene-K.png` via `--kind episode-scene` (NOT registered in game_assets — per-episode files).
+Upload per-episode scene PNGs to the Manager-provided current-run episode namespace via `--kind episode-scene` (NOT registered in `game_assets`).
 
 ### Phase 3: Audio (sound)
 
-ElevenLabs TTS for each of the 5 scenes. Voice settings:
-- Reporter: from `voice_mapping.reporter.voice`, `stability: 0.55`, omit `style`. Fast & snappy news-on-the-street pace.
-- Interviewees: from `voice_mapping.interviewees[character_name]` (or fallback per-species default in story bible's `species_voice_defaults`). `stability: 0.55`.
-
-Use `voice` (name string), not `voice_id` hash.
+Generate speech for each of the 5 scenes. Resolve each speaker in this order: native model audio when intentionally supported → Chatterbox only with an approved sample owned by this resolved `streettalk` story bible → otherwise MiniMax. Reporter and interviewee assignments come only from this format's `voice_mapping` / format-local defaults. Never read a sample or assignment from another format. On failure, retry once with the same route/settings, then STOP and report the error.
 
 Subtitles are NOT Sound's job. Editor generates the one universal ASS via whisper from `build/voice-final.wav` (editor.md §6). No `timings.json`.
 
@@ -209,11 +204,9 @@ Subtitles are NOT Sound's job. Editor generates the one universal ASS via whispe
 
 A street-interview clip with NO ambient = uncanny / fake — viewers register the absence instantly. Sound must generate ONE ambient SFX track (length ≈ total dialogue audio + 2s buffer) and write its URL into `storyboard.json → music.ambient_url`.
 
-Generation via fal.ai (preferred order):
-1. `fal-ai/elevenlabs/sound-effects` — `prompt: <story bible's location.ambient_prompt>`, `duration_seconds: 22` (max). For >22s coverage, generate 2 clips and concat. Cost: ~$0.04/clip → ~$0.08 for 40s coverage.
-2. Fallback if EL not reachable: `fal-ai/stable-audio` (Stable Audio Open). Same prompt, can produce up to 47s in one call. ~$0.05–0.10.
+Generation via the configured SFX provider (`fal-ai/elevenlabs/sound-effects`): `prompt: <story bible's location.ambient_prompt>`, `duration_seconds: 22` (max). For >22s coverage, generate 2 clips and concat. Retry one failed request once with the same provider/settings; if it fails again, STOP and report the error. Do not switch providers or use a local fallback.
 
-Save raw output to `build/ambient.mp3`, upload to Supabase `episodes/{game}/{date}-streettalk/ambient.mp3`, write Supabase URL into storyboard.
+Save raw output to `build/ambient.mp3`, upload to the Manager-provided current-run episode namespace, and write the URL into storyboard.
 
 **Ambient prompt seed (per-game, from story bible's `location.ambient_prompt`).** Example for DS9 promenade: `"DS9 Promenade ambient: low chatter of multiple alien species voices in unintelligible languages, soft Bajoran-Cardassian station hum, distant footsteps on metal walkway, occasional door-chime and PADD beeps, no music no melody, urban marketplace texture with indoor reverb, layered crowd murmur, no clear English words"`.
 
@@ -234,7 +227,7 @@ The chosen track plays **only during opener (~2s) and CTA (~5s)**; during dialog
 ### Phase 4: Animation (animator) — Kling Avatar v2 only
 
 For each of the 5 scenes:
-1. **Sound's mp3** → upload to Supabase (`episodes/{game}/{date}-streettalk/tts/scene-K.mp3`).
+1. **Sound's mp3** → upload to the Manager-provided current-run episode namespace.
 2. **Kling Avatar v2 Standard** with:
    - `image_url` = scene's on-location PNG from Supabase
    - `audio_url` = TTS mp3 Supabase URL (NOT fal.ai temp)
@@ -249,7 +242,6 @@ List planned 5 Kling Avatar clips with per-clip cost (`audio_dur × $0.056`). Co
 **Inputs to editor sub-agent prompt (manager parses + passes):**
 - Standard: scene mp4s, opener.mp4, cta.mp4, bg-music.mp3, storyboard.json
 - Subtitles: the one universal style (editor.md §6), the orchestrator only passes `SUBTITLES=true`. Karaoke highlight is disabled by architecture.
-- **`CHANNEL_BUG_URL`** — from game config's `channel_bug_url` field (e.g. `https://.../assets/star-trek-timelines/branding/gln-bug.png`). Empty string if game has no channel branding.
 
 **Canonical single-pass `filter_complex` (per `editor.md` §0):**
 
@@ -260,7 +252,6 @@ INPUTS:
   [6] cta.mp4
   [7] bg-music.mp3
   [8] ambient.mp3  (Sound's generated DS9 promenade SFX — MANDATORY)
-  [9] gln-bug.png  (added IF CHANNEL_BUG_URL non-empty)
 
 VIDEO branch:
   [0:v] scale/pad/fps,setpts=PTS-STARTPTS                           → [vop]
@@ -268,12 +259,6 @@ VIDEO branch:
   [5:v] + fade=t=out:st=SPED_DUR-1:d=1.0 on scene-5 only
   [6:v] scale/pad/fps,setpts=PTS-STARTPTS                           → [vct]
   [vop][v1][v2][v3][v4][v5][vct] concat=n=7:v=1:a=0                 → [vcat]
-
-  IF CHANNEL_BUG_URL non-empty:
-    [9] scale=110:110[bug]
-    [vcat][bug] overlay=40:40:format=auto,format=yuv420p            → [vbug]
-  ELSE:
-    [vbug] = [vcat]
 
 AUDIO branch (THREE layers: dialogue + ambient + music):
   [k:a] atempo=${SP_k},asetpts=PTS-STARTPTS,apad=whole_dur=<sped_video_dur_k>  [ak]   (matches per-scene speedup from storyboard)
@@ -289,7 +274,7 @@ AUDIO branch (THREE layers: dialogue + ambient + music):
                           normalize=0                                → [aout]
 
 OUTPUT:
-  -map [vbug] -map [aout]
+  -map [vcat] -map [aout]
   -c:v libx264 -preset medium -crf 22 -pix_fmt yuv420p
   -c:a aac -b:a 128k -ar 44100 -ac 2
   -t TOTAL_DUR
@@ -303,13 +288,6 @@ OUTPUT:
 
 **Post-build audio self-check (Editor):**
 Run `volumedetect` on a 1-second window of the FIRST dialogue scene at the dialogue midpoint. Mean volume should be in [-25, -15] dB. If quieter (< -28 dB) → either ambient drowned the dialogue (lower ambient volume to 0.18) or Avatar v2 raw audio is unexpectedly soft (re-mix with `volume=1.3` on `[adlg]` branch).
-
-**Channel bug overlay rules (universal — see `editor.md` §13a):**
-- Position: `overlay=40:40` (40 px from top, 40 px from left)
-- Size: `scale=110:110` (the source PNG is 512×512 square; downscale to 110px for delicate TV-bug feel)
-- Opacity: applied via `format=auto` chain — if the PNG is already alpha-transparent ~70%, no further opacity needed. Otherwise add `colorchannelmixer=aa=0.7` before overlay.
-- Behavior: static, full-video duration (no fade in/out per pilot decision).
-- Apply **AFTER concat**, **BEFORE** subtitle ASS (ASS is per-scene in `[vk]` branches, not over `[vcat]`). The bug overlay goes between concat and the audio branches.
 
 **Per-scene `apad=whole_dur=<sped_video_dur>` is MANDATORY** — Avatar v2 trailing silence stacks lipsync drift across 5 scenes (~4s by scene 5) without it.
 
@@ -331,7 +309,7 @@ drawtext=fontfile='/Library/Fonts/Helvetica.ttf':text='{SUBTITLE}':
 - Position: lower-third, left-aligned (x=80, y from bottom ~270-340 px). Stays clear of TikTok bottom UI bar (which starts ~y=h-200).
 - Timing: shown from t=0.3s to t=2.0s, then disappears so the talking head is unobstructed for the rest of the scene.
 - Two-line: NAME (larger, bold) on top of SUBTITLE (smaller, regular).
-- Font: Helvetica Bold (name) + Helvetica Regular (subtitle). Fallback: Impact or system bold for name, system regular for subtitle.
+- Font: Helvetica Bold (name) + Helvetica Regular (subtitle). If either required font is unavailable, STOP and report the missing dependency; do not silently substitute another font.
 - White text + black outline (3px name, 2px subtitle) — readable against any background.
 - Use `ffmpeg-full` binary (libfreetype required for drawtext).
 
@@ -342,33 +320,24 @@ Title cards go BEFORE the ASS burn in the filter chain so the ASS subtitles can 
 
 If `title_card.show == false` for a scene, skip drawtext, just `[k:v] scale/pad/fps,setpts=...,ass=build/scene-k.ass [vk]`.
 
-**Output upload** — `final.mp4` → Supabase bucket `videos`, path `videos/{GAME_TAG}/{YYYY-MM-DD}/streettalk_final.mp4`.
+**Output upload** — after explicit user approval, Manager uploads `final.mp4` through its canonical run-scoped path.
 
 ---
 
 ## Voices
 
-| Role | Voice (ElevenLabs) | stability | style | Notes |
-|---|---|---|---|---|
-| Reporter (locked) | from `voice_mapping.reporter` in story bible | **0.55** | **omit** | Fast snappy news-on-the-street pace. |
-| Interviewee | from `voice_mapping.interviewees[character_name]` or species default | **0.55** | omit | Locked per character once first used. |
+| Role | Speech route | Notes |
+|---|---|---|
+| Reporter (locked) | native → format-owned Chatterbox sample → MiniMax | Fast snappy news-on-the-street pace. |
+| Interviewee | native → format-owned Chatterbox sample → MiniMax | Locked in this format when first used. |
 
-Use `voice` (name string), not `voice_id` hash.
-
-**Species-voice defaults** (in story bible, fallback when interviewee character is new):
-- Klingon → `Brian` (deep gruff baritone)
-- Vulcan → `George` (dry deadpan, slow)
-- Bajoran → `Adam` (warm earnest mid-range)
-- Ferengi → `Josh` (nasal whiny tenor)
-- Cardassian → `Daniel` (smooth manipulative baritone)
-- Romulan → `Antoni` (cold composed warm baritone)
-- Starfleet officer → `Liam` or `Charlotte` (depending on gender)
+Format-local species/character defaults may contain MiniMax preset names or approved `streettalk` sample URLs only. They are never imported from another format.
 
 ---
 
 ## Story Bible
 
-Create on first run: `games/{GAME_TAG}/streettalk_story_bible.json`
+After explicit user confirmation on a missing-bible first run, create `games/{GAME_TAG}/streettalk_story_bible.json`:
 
 ```json
 {
@@ -391,13 +360,13 @@ Create on first run: `games/{GAME_TAG}/streettalk_story_bible.json`
     "interviewees": {}
   },
   "species_voice_defaults": {
-    "klingon": "Brian",
-    "vulcan": "George",
-    "bajoran": "Adam",
-    "ferengi": "Josh",
-    "cardassian": "Daniel",
-    "romulan": "Antoni",
-    "starfleet": "Liam"
+    "klingon": "{MINIMAX_PRESET}",
+    "vulcan": "{MINIMAX_PRESET}",
+    "bajoran": "{MINIMAX_PRESET}",
+    "ferengi": "{MINIMAX_PRESET}",
+    "cardassian": "{MINIMAX_PRESET}",
+    "romulan": "{MINIMAX_PRESET}",
+    "starfleet": "{MINIMAX_PRESET}"
   },
   "location": {
     "slug": "",
@@ -414,12 +383,11 @@ Create on first run: `games/{GAME_TAG}/streettalk_story_bible.json`
   },
   "episode_summaries": [],
   "opener_url": "",
-  "cta_url": "",
-  "channel_bug_url": ""
+  "cta_url": ""
 }
 ```
 
-**FIFO 5** on `episode_summaries`. Append per episode (after editor confirms `final.mp4`):
+**FIFO 5** on `episode_summaries`. Append per episode only after the user explicitly approves the presented final video:
 
 ```json
 {
@@ -497,8 +465,7 @@ If collision → scenarist regenerates with cooldown.
   "subtitles": {"method": "ass-emit-only", "style": "bold", "word_highlight": true, "emphasis": {"scene_1": "...", "scene_2": "...", "scene_3": "...", "scene_4": "...", "scene_5": "..."}, "speedup": 1.5},
   "music": {"mood": "{game_mood_from_config}", "track_name": "{track_picked_by_sound}", "volume": 0.06},
   "opener": {"url": "supabase://branding/streettalk-opener.mp4"},
-  "cta":    {"url": "supabase://branding/cta.mp4"},
-  "channel_bug_url": ""
+  "cta":    {"url": "supabase://branding/cta.mp4"}
 }
 ```
 
@@ -510,7 +477,7 @@ If collision → scenarist regenerates with cooldown.
 - NB2 image: $0.08
 - Kling Avatar v2 Standard: $0.056/s of input audio
 - Kling I2V 5s (no audio): $0.42
-- ElevenLabs TTS: ~$0.06–0.10 per line
+- Routed speech generation: provider-dependent
 
 **Per-episode breakdown (steady-state, prep already in Supabase):**
 
@@ -522,9 +489,9 @@ If collision → scenarist regenerates with cooldown.
 | Location ref (Supabase) | $0 | one-time prep |
 | Interviewee on-location edits (3 × $0.08) | $0.24 | NB2 edits per episode |
 | Reporter scene edits (2 × $0.08) | $0.16 | scene 1 + scene 5 |
-| ElevenLabs TTS (5 lines, ~35s) | ~$0.30 | |
+| Routed speech generation (5 lines, ~35s) | provider-dependent | |
 | Kling Avatar v2 (5 scenes × ~7s audio = 35s × $0.056) | ~$1.96 | dominant cost |
-| Ambient SFX (1-2 clips via fal-ai/elevenlabs/sound-effects) | ~$0.08 | mandatory; silence breaks vox-pop |
+| Ambient SFX (1-2 clips via configured SFX provider) | ~$0.08 | mandatory; silence breaks vox-pop |
 | **Typical episode 2+** | **~$2.74** | well under cap |
 
 **Pilot (episode 1) overhead — one-time prep:**
@@ -552,7 +519,7 @@ If collision → scenarist regenerates with cooldown.
 ## Output files
 
 ```
-output/YYYY-MM-DD/{GAME_TAG}/streettalk/
+${OUTPUT_DIR}/
 ├── storyboard.json
 ├── scenes/
 │   ├── scene-1/                  # reporter intro
@@ -565,7 +532,6 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 │   └── scene-5/  ...             # reporter outro
 ├── build/                         # ffmpeg intermediates, ASS files (per editor.md workspace rule)
 │   ├── scene-1.ass ... scene-5.ass
-│   ├── gln-bug.png                # downloaded from Supabase
 │   ├── opener-raw.mp4
 │   ├── cta-raw.mp4
 │   ├── bg-music.mp3
@@ -597,18 +563,18 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 ### Storyboarder
 - Pull reporter avatar / location ref / opener from Supabase if present in story bible. Otherwise generate as one-time prep (logged to `pilot_prep_cost`).
 - 3 interviewees: each gets one on-location NB2 edit using base ref as `image_urls[0]`. Reporter gets two (scene 1 + scene 5).
-- All 5 scene images 9:16, three-quarter or frontal med-CU, mic visible per scene (reporter holds mic with show-name flag for intro/outro; mic with flag in foreground for interviewees). Show name on mic flag = `storyboard.json → show_name` short form, e.g. "Genshin Streettalk" — never "GLN Streettalk" for non-Star-Trek games.
+- All 5 scene images 9:16, three-quarter or frontal med-CU, mic visible per scene (reporter holds mic with show-name flag for intro/outro; mic with flag in foreground for interviewees). Show name on mic flag = `storyboard.json → show_name` short form, e.g. "Genshin Streettalk" or "Star Trek Streettalk" — never GLN.
 - **Background matches question topic** — inject topic-specific visual elements into every on-location edit. If the question is about food prices, background should hint at a market/vendor. If about Klingon honor, Klingon visual elements in background. Do not use the bare location ref as-is when a specific question topic offers a richer visual hook.
-- For each canon interviewee, base ref priority: `streettalk,interviewee` tag → any photoreal tag → generate fresh.
-- Upload per-episode scene PNGs to `episodes/{game}/{date}-streettalk/scenes/scene-K.png` (NOT registered in game_assets).
+- For each canon interviewee, use only a ref tagged for this `streettalk` format; if none exists, generate a fresh format-bound ref. Never pull a ref from another format without explicit user instruction.
+- Upload per-episode scene PNGs to the Manager-provided current-run episode namespace (NOT registered in `game_assets`).
 - New base refs for previously-unseen interviewees: tagged `streettalk,interviewee,{slug}` for future episodes.
 - General rules — `rules/roles/storyboarder.md`.
 
 ### Sound
-- ElevenLabs TTS for each of 5 scenes. Voice settings from `voices` block in storyboard.json.
-- `stability: 0.55`, `style` omitted, `voice` = name (not voice_id).
+- Generate speech for all 5 scenes via native audio → approved `streettalk` sample through Chatterbox → otherwise MiniMax. Read routes only from this format's resolved story bible.
+- Retry one failure once with the same route/settings, then stop; never switch provider or borrow another format's sample.
 - Replace periods with commas/em-dashes in reporter lines (anchor anti-pattern from fun-news).
-- Upload mp3s to Supabase `episodes/{game}/{date}-streettalk/tts/scene-K.mp3`.
+- Upload mp3s to the Manager-provided current-run episode namespace.
 - Generate music via MiniMax using a `style` prompt built from game config `music.mood` / atmosphere (instrumental, see `rules/roles/sound.md` §6); if the game has no `music.mood`, use a neutral instrumental prompt fitting the game's setting. Volume `0.06`.
 - General rules — `rules/roles/sound.md`.
 
@@ -623,15 +589,14 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 
 ### Editor
 - Canonical single-pass `filter_complex` per `editor.md` §0.
-- Inputs: opener + 5 scene mp4s + cta + bg-music + (optional) channel_bug PNG.
-- **Channel bug overlay** — apply after concat, before audio: `[8]scale=110:110[bug];[vcat][bug]overlay=40:40[vbug]`. See `editor.md` §13a for full spec.
+- Inputs: opener + 5 scene mp4s + cta + bg-music.
 - Per-scene `apad=whole_dur=<sped_video_dur>` on audio — mandatory.
 - Per-scene ASS burn-in inside each `[vk]` BEFORE concat.
 - `adelay=2000|2000` matches 2s opener silence prefix.
 - Fade-out on scene-5 video (last 1s before CTA) + afade-out on music.
 - `-t TOTAL_DUR` mandatory.
 - Atomic finalize: `build/final.tmp.mp4` → ffprobe-validate → `mv` to root.
-- Upload: `videos/{GAME_TAG}/{YYYY-MM-DD}/streettalk_final.mp4`.
+- Do not upload the final before review; Manager uploads it after explicit user approval.
 - General rules — `rules/roles/editor.md`.
 
 ---
@@ -640,7 +605,6 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 
 - [ ] 5 dialogue scenes with 3 distinct interviewee tones.
 - [ ] Reporter locked per story bible (not changed between episodes).
-- [ ] Channel bug overlaid IF `channel_bug_url` non-empty in storyboard.json / game config.
 - [ ] All scenes have on-location backgrounds matching story bible's `location` (not bare base refs).
 - [ ] Opener + CTA from Supabase (not regenerated per episode after pilot).
 - [ ] Avatar v2 with `image_url` + `audio_url` only (no extra params).
@@ -652,7 +616,7 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 - [ ] Ambient SFX present (file `build/ambient.mp3` exists, mixed at 0.25 in filter graph).
 - [ ] No theatrical announcer-speak in any scene's tts. Average sentence ≤ 8 words.
 - [ ] Reporter stays in their story-bible tone_signature register — no announcer voice.
-- [ ] show_name uses `{GameName} Streettalk` formula (not "GLN Streettalk" for non-Star-Trek games).
+- [ ] show_name uses `{GameName} Streettalk` formula; GLN is absent.
 - [ ] Mic flag in all 5 scene PNGs shows the correct show name (e.g., "Genshin Streettalk").
 - [ ] Music track matches game atmosphere (not a mismatched genre).
 
@@ -665,7 +629,7 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 - ❌ Opener and CTA with different music themes — same track/offset, same game-appropriate theme at both bookends.
 - ❌ Wrong game music — a fantasy RPG opener must not use trap phonk; a city-builder must not open with horror ambient. Generate via MiniMax with a `style` prompt built from the game mood.
 - ❌ Mic flag without show name — reporter's mic must bear the game-specific show name (e.g., "Genshin Streettalk", "Roblox Streettalk"). Generic, blank, or wrong-game flag breaks TV identity.
-- ❌ "GLN Streettalk" on mic/opener for non-Star-Trek games — "GLN" is Star Trek-specific. Other games use their own show name formula.
+- ❌ "GLN Streettalk" on any mic/opener — GLN belongs only to Star Trek Fun News. Streettalk always uses its `{GameName} Streettalk` identity.
 - ❌ On-location background unrelated to question topic — even at the signature location, inject question-specific visual elements (topic-related characters, signs, or props in background).
 - ❌ Studio/anchor scenes — streettalk is ENTIRELY on-location, never cuts back to a desk.
 - ❌ Same question/topic recycled within 5 episodes.
@@ -675,9 +639,7 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 - ❌ Bare character ref as scene image — must be on-location NB2 edit.
 - ❌ Character refs whose style conflicts with the resolved `style_tags` — Avatar v2 mirrors the input ref's style. Prefer refs matching the target style, and derive the anti-drift negative from `style_tags`.
 - ❌ Avatar v2 cost estimate as flat "N × 5s" — billed per second of input audio.
-- ❌ Channel bug at large opacity (>80%) — TV brand bugs are subtle, 70% max.
-- ❌ Channel bug NOT applied when `channel_bug_url` is set — silent regression. Editor must check.
-- ❌ `voice_id` hash — use `voice` name.
+- ❌ ElevenLabs speech, provider switching after retry, or another format's voice/sample.
 - ❌ fal.ai temp URLs for Kling — only Supabase permanent.
 - ❌ `-shortest` in FFmpeg — use `apad` + `-t TOTAL_DUR`.
 - ❌ Pre-encoding `-fast.mp4` per scene — speedup happens in editor's `filter_complex`.
@@ -685,7 +647,7 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 - ❌ Silent ambient track (no street SFX layer) — uncanny / fake immediately. Mandatory ambient at 0.25 volume.
 - ❌ Theatrical / announcer-speak in any line ("Ladies and gentlemen", "in conclusion", "without further ado"). Streettalk is vox-pop, not a speech.
 - ❌ Long sentences with 3+ periods. Each `.` is a 0.5s TTS pause; vox-pop must feel alive.
-- ❌ **Reporter missing arm/hand (Roblox EP1, scenes 1 & 5).** NB2 sometimes drops a limb when the character is tightly cropped. Fix: in reporter scene prompts, explicitly add `"both arms and hands fully visible, mic held with full hand grip, no missing limbs"`. If image_prompt already contains this and NB2 still clips an arm — regenerate once; the body geometry is the only acceptable re-roll reason for a scene PNG.
+- ❌ **Reporter missing arm/hand (Roblox EP1, scenes 1 & 5).** Prevent this in the prompt: explicitly add `"both arms and hands fully visible, mic held with full hand grip, no missing limbs"`. Generated frames receive technical validation only; any visual judgment is the user's during debug review.
 - ❌ **Interviewee off-center and wrong gaze direction (Roblox EP1, scene 2).** NB2 placed Bacon Hair far left of frame, looking away from the off-screen mic. Fix: interviewee image_prompt MUST include `"character centered in frame"` + `"eyes and body angled toward reporter's mic in foreground, three-quarter turn toward the mic side"`. Never let NB2 default to a neutral/profile pose for vox-pop — the character must always be turned toward the interviewer.
 
 ---
@@ -693,5 +655,5 @@ output/YYYY-MM-DD/{GAME_TAG}/streettalk/
 ## Future ideas
 
 - **Recurring extras**: `interviewee_pool` accumulates generic-NPC base refs (e.g. "Bajoran Bartender", "Mondstadt Merchant") that show up across episodes as recognizable side-characters — builds a universe of recurring faces per game.
-- **Crossover episodes**: pull a canon character from `serial-drama_story_bible.json` if their story-bible status allows ("active on DS9" etc.).
+- **Guest episodes**: define the guest independently in the `streettalk` story bible and create format-bound assets. Cross-format appearances/assets are used only when the user explicitly instructs it.
 - **Question types**: rotate question framings — political ("Should X be allowed Y?"), economic ("Will prices ever come down?"), pop-culture ("Is Z still cool?"), philosophical ("Does the universal translator make us lazier?").

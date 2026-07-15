@@ -1,7 +1,7 @@
 {
   "series_id": "streettalk-star-trek-timelines",
   "game_tag": "star-trek-timelines",
-  "title": "GLN Streettalk — DS9 Promenade",
+  "title": "Star Trek Streettalk — DS9 Promenade",
   "created_at": "2026-05-29",
   "last_episode": 0,
   "reporter": {
@@ -21,12 +21,12 @@
     "klingon": "Elegant_Man",
     "vulcan": "Determined_Man",
     "bajoran": "Deep_Voice_Man",
-    "ferengi": "Josh",
+    "ferengi": "Imposing_Manner",
     "cardassian": "Deep_Voice_Man",
-    "romulan": "Antoni",
+    "romulan": "Elegant_Man",
     "starfleet": "Imposing_Manner",
     "trill": "Inspirational_girl",
-    "human": "Antoni"
+    "human": "Elegant_Man"
   },
   "location": {
     "slug": "ds9-promenade",
@@ -45,6 +45,5 @@
   "episode_summaries": [],
   "opener_url": "",
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4",
-  "channel_bug_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/gln-bug.png",
   "notes": "Pilot episode (EP1, 2026-05-29) — Klingon opera + universal translator generational satire. Reporter is Jake Sisko (canonical DS9 character, son of Captain Benjamin Sisko, in canon an aspiring journalist — perfect fit for vox-pop streettalk format). Voice Liam selected for earnest young-reporter quality. Opener and reporter avatar to be generated in Phase 2 prep."
 }

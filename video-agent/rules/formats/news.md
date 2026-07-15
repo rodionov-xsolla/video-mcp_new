@@ -8,7 +8,7 @@ overlays: false
 
 > TODO(style-refactor): style must come from the resolved chain (story bible top-level `style_tags` → game config `prompt_prefix`); character cards are style-free. This file not yet audited for hardcoded house-style.
 
-> **Single video model — Kling Avatar v2 Standard.** No other video models. Opener and CTA — pre-built from Supabase. Characters — from Supabase `game_assets`.
+> **Single video model — Kling Avatar v2 Standard.** No other video models. Opener and CTA — pre-built from Supabase. Characters — only from the current `news` series entries in `SUPABASE_ASSETS_FILE`.
 
 This file is the **playbook**: when to use, pipeline, role briefs. Craft rules — in `rules/roles/*.md`.
 
@@ -24,7 +24,7 @@ Keywords: "новости", "news", "game news", "weekly news", "patch recap", "
 
 - **Anchor + Co-anchor** — two game characters at the news desk
 - **2–3 news items** per episode (minimum 2, found via web search)
-- **Only Kling Avatar v2 Standard** + ElevenLabs TTS (lipsync via audio_url)
+- **Only Kling Avatar v2 Standard** + routed speech audio (lipsync via `audio_url`)
 - **Opener and CTA — pre-built videos from Supabase**, not regenerated
 - **Duration:** 25–40s after speedup (excluding opener/CTA)
 - **Budget:** up to $4 (~$2.50 typical)
@@ -36,13 +36,8 @@ Keywords: "новости", "news", "game news", "weekly news", "patch recap", "
 ### Phase 0: Initialization
 
 1. Read game config: `games/{GAME_TAG}/{GAME_TAG}.md`
-2. **Query Supabase assets** — table `game_assets`, filter `game_tag = "{GAME_TAG}"`:
-
-```bash
-curl -s -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
-  -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
-  "${SUPABASE_URL}/rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*"
-```
+1a. Resolve the required current-format `STORY_BIBLE_PATH`. If it is missing, STOP and ask whether the user wants it created; create it only after explicit confirmation.
+2. Read Manager's prefiltered `SUPABASE_ASSETS_FILE`. It contains only assets owned by this `news` format/series plus the separately resolved game CTA. Do not run a broad `game_tag` query.
 
 Find from the result:
    - **Opener** — record with tag `opener` and `video` → download **`.mp4` video** (not the picture!)
@@ -85,7 +80,7 @@ Fallback: if <2 real news items — community highlight (meme, meta shift, recor
 
 ### Phase 2: Characters
 
-**Anchor and co-anchor are taken from Supabase `game_assets`.** Use the URL from Phase 0.
+**Anchor and co-anchor are taken only from the current-format entries in `SUPABASE_ASSETS_FILE`.** Use the URL from Phase 0.
 
 **Topic reporter:** if a story needs a topical character (e.g. a pirate for a pirate event), generation of a new one is allowed:
 1. **Character sheet** (NB2 text-to-image, 16:9) — concept art
@@ -108,7 +103,7 @@ With 3 news items — 4 scenes (anchor delivers #1 and #3, co-anchor — #2).
 **Scripts:**
 - **Scene 1:** `"Welcome to [Show]! [News #1 in detail, 25-35 words]. [Co-anchor name], what do you have?"`
 - **Scene 2:** `"Thanks [anchor]! [News #2 in detail, 25-35 words]. [Reaction/take]."`
-- **Scene 3:** `"[Thanks]. That's [Show] for today. Follow for more, see you next time!"` (15–20 words)
+- **Scene 3:** `"[Thanks]. That's [Show] for today. See you next time."` (10–15 words). The existing CTA asset follows; do not synthesize CTA language or an end card.
 
 **Handoff — by name, mandatory.** Anchors call each other by name like in a real newscast:
 - Anchor → Co-anchor: `"Sarah, what do you have?"` / `"Over to you, Sarah!"` / `"Sarah, tell us more"`
@@ -118,12 +113,12 @@ With 3 news items — 4 scenes (anchor delivers #1 and #3, co-anchor — #2).
 
 This creates the feeling of a live broadcast and links the scenes. Each handoff contains the **name** of the next/previous anchor.
 
-Tone — from game config (Tone of Voice). Every dialogue scene must have a `tts` field with the text for ElevenLabs.
+Tone — from game config (Tone of Voice). Every dialogue scene must have a `tts` field with its spoken text.
 
 ### Phase 4: Animation (Kling Avatar v2 only)
 
 For each dialogue scene:
-1. **ElevenLabs TTS** → `.mp3` → upload to Supabase
+1. **Resolve speech source:** native model audio when the selected scene model intentionally supports it; otherwise Chatterbox only with an approved voice sample owned by this `news` format; otherwise MiniMax. Never read a sample or voice assignment from another format. Generate `.mp3` and upload it to Supabase. On failure, retry once with the same source/settings, then STOP and report the error.
 2. **Kling Avatar v2** with parameters:
    - `image_url` = avatar ref from Supabase (9:16, not square!)
    - `audio_url` = TTS mp3 from Supabase (not fal.ai temp URL!)
@@ -159,12 +154,12 @@ Strict order:
 
 ## Voices
 
-| Role | Voice (ElevenLabs) | stability |
-|------|--------------------|-----------|
-| Anchor (male) | George or Daniel | 0.25 |
-| Co-anchor (female) | Charlotte or Rachel | 0.25 |
+| Role | Speech route | Direction |
+|------|--------------|-----------|
+| Anchor | native → format-owned sample via Chatterbox → MiniMax | energetic broadcaster |
+| Co-anchor | native → format-owned sample via Chatterbox → MiniMax | energetic broadcaster |
 
-`stability: 0.25` = energetic broadcaster tone. Use `voice` (name string), not `voice_id` hash.
+When MiniMax is selected, store its preset in `voice`; when Chatterbox is selected, store the current-format sample URL. Do not use ElevenLabs IDs.
 
 ---
 
@@ -185,8 +180,8 @@ Strict order:
     }
   },
   "voices": {
-    "anchor": {"voice": "George", "stability": 0.25, "language_code": "en"},
-    "co_anchor": {"voice": "Charlotte", "stability": 0.25, "language_code": "en"}
+    "anchor": {"route": "minimax", "voice": "{MINIMAX_PRESET}", "language_code": "en"},
+    "co_anchor": {"route": "minimax", "voice": "{MINIMAX_PRESET}", "language_code": "en"}
   },
   "scenes": [
     {"index": 1, "role": "anchor", "clip_type": "dialogue", "news_item_index": 1, "tts": "..."},
@@ -206,7 +201,7 @@ Strict order:
 | CTA (from Supabase) | $0 |
 | Avatar refs (from Supabase) | $0 |
 | New topic reporter (sheet + ref, if needed) | ~$0.12 |
-| ElevenLabs TTS (~25-35s) | ~$0.20 |
+| Routed speech generation (~25-35s) | provider-dependent |
 | Kling Avatar v2 (3 scenes, ~25-35s raw) | ~$1.40–2.00 |
 | **Typical** | **~$1.60–2.20** |
 
@@ -217,7 +212,7 @@ Strict order:
 ## Output files
 
 ```
-output/YYYY-MM-DD/{GAME_TAG}/news/
+${OUTPUT_DIR}/
 ├── research.json
 ├── storyboard.json
 ├── scenes/
@@ -256,7 +251,7 @@ output/YYYY-MM-DD/{GAME_TAG}/news/
 - General rules — `rules/roles/animator.md`
 
 ### Sound
-- ElevenLabs TTS for each dialogue scene
+- Generate speech for each dialogue scene using native audio → current-format-owned Chatterbox sample → otherwise MiniMax. Retry the same route once, then stop; do not switch providers.
 - Subtitles per-scene (not on concat)
 - Music: energetic/fun, `volume=0.10`
 - General rules — `rules/roles/sound.md`
@@ -286,9 +281,9 @@ output/YYYY-MM-DD/{GAME_TAG}/news/
 
 - Any video models other than Kling Avatar v2 Standard
 - Generating opener/CTA — taken from Supabase
-- Regenerating existing characters — anchor/co-anchor are from Supabase `game_assets`
+- Regenerating existing current-format characters — anchor/co-anchor come from the filtered `SUPABASE_ASSETS_FILE`
 - Subtitles on a concatenated video — whisper skips voices on concat
 - 1.3x speedup — too fast, only 1.18x
 - fal.ai temp URLs for Kling — only Supabase permanent URLs
-- `voice_id` hash — use `voice` name string
+- ElevenLabs or a voice/sample copied from another format
 - One avatar ref for both — each character = its own ref
