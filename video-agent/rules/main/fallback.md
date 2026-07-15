@@ -121,4 +121,4 @@ For any error that leads to `status='failed'`:
 | Video generation | 10 minutes |
 | File download (curl) | 120 seconds |
 | FFmpeg operation | 5 minutes |
-| **Whole pipeline (worker.sh)** | **40 minutes** |
+| **Whole pipeline (interactive manager run)** | **40 minutes** |

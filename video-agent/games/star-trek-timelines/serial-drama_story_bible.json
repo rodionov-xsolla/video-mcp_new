@@ -5,7 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 12,
+  "last_episode": 13,
   "planned_arc": {
     "note": "Season 1 arc EP9–EP16. Core emotional engine: Kirk saves the monster that tried to kill Chekov — and every time he does 'the right thing', his crew gets more afraid. Mirror Kirk envies Kirk's loyal crew. Admiral pressures Kirk to eject the double or face Enterprise quarantine. Scenarist follows the beats and key_lines below as RAILS: keep cliffhanger spoken lines verbatim, adapt each episode into 3–5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion, protagonist always faces camera, cliffhanger line = Kling native dialogue). Fold an approved episode into characters[], active_loops, episode_summaries only after explicit final user approval. Do NOT invent complex conspiracies or test protocols — the drama is simple: Kirk's mercy costs him his crew's trust.",
     "new_characters": [
@@ -13,7 +13,7 @@
         "name": "Mirror Kirk",
         "role": "antagonist",
         "introduced_episode": 7,
-        "character_description": "mirror-universe James T. Kirk, identical face structure to Kirk but harder and predatory, cold confident smirk showing teeth with no warmth, thin diagonal scar across left cheek, slicked darker hair pressed flat, dead-calm glacier eyes, black-and-silver Section 31 mirror universe uniform with sharp angular trim and no Starfleet delta, lean forward predatory posture",
+        "character_description": "mirror-universe double of the male Starfleet captain, identical face structure but harder and predatory, cold confident smirk showing teeth with no warmth, thin diagonal scar across left cheek, slicked darker hair pressed flat, dead-calm glacier eyes, black-and-silver Section 31 mirror universe uniform with sharp angular trim and no Starfleet delta, lean forward predatory posture",
         "voice_route": "missing-format-owned-native-ref",
         "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery."
       }
@@ -303,7 +303,7 @@
       {
         "episode": 13,
         "title": "The Wrong Captain",
-        "status": "unshipped",
+        "status": "shipped",
         "link": "The brig lost power. Mirror Kirk can get out.",
         "emotion": "Crew paranoia",
         "beats": [
@@ -478,24 +478,25 @@
     {
       "name": "Kirk",
       "role": "protagonist",
-      "character_description": "Captain James T. Kirk, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
+      "character_description": "Male Starfleet captain, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
       "voice_route": "missing-format-owned-native-ref",
-      "status": "EP12: Kept Mirror Kirk alive in sickbay despite Chekov's hatred. Kirk's mercy now has a new cost: Mirror Kirk has seen that the crew follows Kirk out of loyalty, not fear.",
+      "status": "EP13: Burst onto the bridge just as Mirror Kirk (disguised in a stolen command jacket) had his hand over the fire button. Confrontation not yet resolved.",
       "aura_points": 1100,
       "relationships": {
         "Worf": "uneasy alliance — Worf told the truth at great personal cost",
         "Chekov": "Chekov's trust is badly damaged — Kirk kept the man who tried to kill him alive",
         "Scotty": "loyalty confirmed EP6, role in conspiracy unresolved",
         "Fleet Admiral": "confirmed enemy — direct confrontation; now threatening quarantine",
-        "Mirror Kirk": "Kirk refuses to kill him while he is down, which makes Mirror Kirk envy his command"
+        "Mirror Kirk": "Kirk refuses to kill him while he is down, which makes Mirror Kirk envy his command",
+        "Mirror_Kirk": "Direct bridge confrontation now underway; Mirror Kirk has proven the disguise can fool the crew, at least briefly."
       }
     },
     {
       "name": "Worf",
       "role": "ally",
-      "character_description": "Commander Worf, imposing Klingon-Human, prominent forehead ridges, dark skin, fierce disciplined expression, TNG Starfleet command red uniform with lieutenant commander pips, broad shoulders, intense dark eyes",
+      "character_description": "Klingon-Human Starfleet commander, imposing build, prominent forehead ridges, dark skin, fierce disciplined expression, TNG Starfleet command red uniform with lieutenant commander pips, broad shoulders, intense dark eyes",
       "voice_route": "missing-format-owned-native-ref",
-      "status": "EP12: Guarded Mirror Kirk in sickbay and defined loyalty clearly: 'We follow the captain. Not the face.'",
+      "status": "EP13: Briefly deceived by Mirror Kirk's stolen-jacket disguise on the bridge before catching on. Hand went to his phaser, uncertain.",
       "aura_points": 600,
       "relationships": {
         "Kirk": "follows Kirk as captain, not merely the face — loyalty publicly reaffirmed in front of Mirror Kirk"
@@ -504,7 +505,7 @@
     {
       "name": "Chekov",
       "role": "victim",
-      "character_description": "Ensign Pavel Chekov, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
+      "character_description": "Young male Starfleet ensign, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
       "voice_route": "missing-format-owned-native-ref",
       "status": "EP12: Saw Mirror Kirk restrained in sickbay and demanded to know why he was still alive. Chekov's fear has hardened into hatred.",
       "aura_points": 200,
@@ -515,7 +516,7 @@
     {
       "name": "Spock",
       "role": "ally",
-      "character_description": "Commander Spock, pointed Vulcan ears, sharply arched thick eyebrows, straight black bowl-cut hair, olive-tinted skin, calm emotionless expression with one eyebrow slightly raised, blue TOS science tunic with black collar and Starfleet delta badge, hands clasped behind back",
+      "character_description": "Vulcan Starfleet commander, pointed Vulcan ears, sharply arched thick eyebrows, straight black bowl-cut hair, olive-tinted skin, calm emotionless expression with one eyebrow slightly raised, blue TOS science tunic with black collar and Starfleet delta badge, hands clasped behind back",
       "voice_route": "missing-format-owned-native-ref",
       "status": "EP6: Delivered cliffhanger 'Captain... it's you in there.' Present but background since EP7. Will observe and analyze.",
       "aura_points": 900,
@@ -526,9 +527,9 @@
     {
       "name": "Scotty",
       "role": "crew",
-      "character_description": "Chief Engineer Montgomery Scott, stocky build, round friendly face now tense and alarmed, swept-back dark hair with grey temples and short sideburns, wide desperate eyes, TOS red engineering tunic with black collar and Starfleet delta badge, hands raised in protest",
+      "character_description": "Male Starfleet chief engineer, stocky build, round friendly face now tense and alarmed, swept-back dark hair with grey temples and short sideburns, wide desperate eyes, TOS red engineering tunic with black collar and Starfleet delta badge, hands raised in protest",
       "voice_route": "missing-format-owned-native-ref",
-      "status": "EP12: At engineering controls during the Admiral's remote power cut. Detected the critical failure and delivered the cliffhanger: 'The brig just lost power.'",
+      "status": "EP13: Passed Mirror Kirk in a corridor without recognizing him (gave him an uneasy nod), then was on the bridge when Mirror Kirk ordered weapons fired.",
       "aura_points": 450,
       "relationships": {
         "Kirk": "loyal engineer — will execute Kirk's orders even the ones that scare him"
@@ -537,13 +538,13 @@
     {
       "name": "Mirror_Kirk",
       "role": "antagonist",
-      "character_description": "mirror-universe James T. Kirk, identical face structure to Kirk but harder and predatory, cold confident smirk showing teeth with no warmth, thin diagonal scar across left cheek, slicked darker hair pressed flat, dead-calm glacier eyes, black-and-silver Section 31 mirror universe uniform with sharp angular trim and no Starfleet delta, lean forward predatory posture",
+      "character_description": "Mirror-universe double of the male Starfleet captain, identical face structure but harder and predatory, cold confident smirk showing teeth with no warmth, thin diagonal scar across left cheek, slicked darker hair pressed flat, dead-calm glacier eyes, black-and-silver Section 31 mirror universe uniform with sharp angular trim and no Starfleet delta, lean forward predatory posture",
       "voice_route": "missing-format-owned-native-ref",
       "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery.",
-      "status": "EP12: Restrained on a sickbay biobed. Realized Kirk's real power is loyalty, not fear. Now wants more than survival — he wants to steal what Kirk has.",
+      "status": "EP13: Escaped the depowered brig, stole a command jacket to disguise himself as Kirk, fooled Scotty in a corridor and Worf/Scotty on the bridge for a few seconds, then ordered weapons trained on the Admiral's ship. Real Kirk arrived before the shot fired.",
       "aura_points": 0,
       "relationships": {
-        "Kirk": "mirror double — now envies Kirk's loyal crew and wants to prove he can command them faster",
+        "Kirk": "Now in direct bridge confrontation after impersonating him; proved the disguise works, at least briefly, on Kirk's own crew.",
         "Chekov": "designated target — Chekov fears and hates him"
       },
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/mirror-kirk/sheet.png"
@@ -561,8 +562,9 @@
     }
   ],
   "active_loops": [
-    "major: Mirror Kirk restrained in sickbay but newly envious of Kirk's loyal crew",
-    "major: Brig lost power — Mirror Kirk can escape in EP13",
+    "major: Mirror Kirk loose on the bridge with weapons access, disguised as Kirk",
+    "major: Worf and Scotty were briefly deceived by the disguise before the real Kirk arrived",
+    "major: Kirk and Mirror Kirk now face to face at the captain's chair, shot not yet stopped",
     "major: Chekov's hatred of Mirror Kirk now clashes directly with Kirk's mercy",
     "major: Admiral escalating quarantine pressure through remote power cuts",
     "major: Kirk's mercy keeps fracturing crew trust even as Worf reaffirms loyalty",
@@ -658,7 +660,11 @@
       "Because we don't kill people who are down.",
       "They actually listen to you without fear?",
       "We follow the captain. Not the face.",
-      "The brig just lost power."
+      "The brig just lost power.",
+      "Scotty, step away from the panel.",
+      "You see, Jim? They almost believed me.",
+      "I'll save them faster than you.",
+      "Something is wrong with him."
     ],
     "recent_hooks": [
       "authority-edict-coldopen",
@@ -669,13 +675,15 @@
       "capsule-hatch-opening-reveal",
       "sickbay-restraint-doorway",
       "loyalty-without-fear-reveal",
-      "remote-power-cut-brig"
+      "remote-power-cut-brig",
+      "stolen-uniform-corridor-passby"
     ],
     "recent_cliffhangers": [
       "disembodied-voice-through-static",
       "shuttle-escape-into-debris",
       "mirror-double-resurface-transporter",
-      "remote-power-cut-brig-escape-risk"
+      "remote-power-cut-brig-escape-risk",
+      "hand-hovering-over-fire-button"
     ]
   },
   "episode_summaries": [
@@ -782,6 +790,16 @@
       "duration_sec": 38,
       "youtube_url": "https://www.youtube.com/watch?v=pzbTE8gxTsQ",
       "yt_publish_at": "2026-06-25T20:59:00Z"
+    },
+    {
+      "episode": 13,
+      "language": "en",
+      "summary": "The brig's lost power lets Mirror Kirk slip out into the smoky corridor. He steals a captain's gold command jacket and disguises himself, passing right by Scotty in a corridor doorway - Scotty doesn't yet realize anything is wrong and gives him an uneasy nod. Mirror Kirk then walks onto the bridge; for a few seconds Worf and Scotty don't register who's actually in front of them. He orders weapons trained on the Admiral's ship. The real Kirk bursts onto the bridge just as Mirror Kirk's hand hovers over the fire button.",
+      "cliffhanger": "Mirror Kirk's hand hovers over the fire button: 'I'll save them faster than you.' The real Kirk has arrived, but the shot hasn't been stopped yet.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-14/serial-drama_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=O65DYybhRBw",
+      "yt_publish_at": "2026-07-19T20:59:00Z",
+      "duration_sec": 44
     }
   ]
 }

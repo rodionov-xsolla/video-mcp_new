@@ -1,0 +1,38 @@
+{
+  "game_tag": "star-trek-timelines",
+  "format": "what-if-real-life",
+  "note": "Mandatory format-local bible for one-premise what-if-real-life videos. Appearance cards and voice routes are owned independently by this format; never import them from another format without explicit user instruction.",
+  "style_tags": "Photorealistic cinematic live-action, shot on real camera with natural lens depth of field, tangible physical realism, naturalistic film grain, no sci-fi UI, no LCARS interface, no holographic overlays, no stylized/cartoon rendering — locked by the what-if-real-life format regardless of the game's normal 3D-cinematic-sci-fi house style",
+  "characters": {
+    "worf": {
+      "minimax_voice": "Deep_Voice_Man",
+      "voice_note": "Deep, gravelly, intense — Klingon honor in Starfleet uniform",
+      "character_description": "male Klingon Starfleet officer, prominent triangular cranial ridges on forehead, dark brown skin, long dark hair in warrior ponytail, groomed goatee, gold-and-black operations uniform, diagonal metal baldric sash, fierce honorable expression, broad muscular build",
+      "source": "authored independently for what-if-real-life"
+    },
+    "kirk": {
+      "minimax_voice": "Determined_Man",
+      "voice_note": "Charismatic, bold, emotionally direct — Kirk's confident swagger",
+      "character_description": "male Starfleet captain, athletic build, light brown hair swept to the side, confident charming smirk, gold-yellow command tunic with Starfleet delta badge, black trousers, upright commanding posture",
+      "source": "authored independently for what-if-real-life"
+    },
+    "data": {
+      "minimax_voice": "Imposing_Manner",
+      "voice_note": "Flat, over-enunciated, precise — android speech pattern, no contractions",
+      "character_description": "android male Starfleet officer, pale yellowish skin, slicked black hair, yellow-gold eyes, gold-and-black operations uniform, emotionless face, slight head tilt of curiosity, perfectly still posture",
+      "source": "authored independently for what-if-real-life; generate a fresh format-bound photorealistic ref"
+    },
+    "picard": {
+      "minimax_voice": "Elegant_Man",
+      "voice_note": "Measured, dignified, authoritative — fits Picard's philosophical command style",
+      "character_description": "bald male Starfleet captain, red and black TNG uniform with red shoulders black body, gold combadge, 4 rank pips, dignified expression, measured upright bearing, faint amused smile",
+      "source": "authored independently for what-if-real-life"
+    },
+    "scotty": {
+      "minimax_voice": "Deep_Voice_Man",
+      "voice_note": "Gravelly, exasperated, wounded professional pride — distinct register from Worf's combat-formal George voice",
+      "character_description": "male Starfleet chief engineer, early-to-mid-40s, stocky solid build, weathered practical face, short reddish-brown hair combed back, thick sideburns, red engineering uniform with black shoulders, sleeves pushed up over forearms, multitool clipped to belt, grease-smudged fingers, exasperated squint, jaw clenched with wounded pride",
+      "source": "authored independently for what-if-real-life EP (2026-07-09); no cross-format lookup or conflict check"
+    }
+  }
+}

@@ -30,7 +30,7 @@ Burn-tested EP2 (2026-06-08): forward loop scene-3→4→5→6 overwrote Lumine 
 
 ## EXECUTION SEQUENCE
 
-Every run follows this sequence. Inline programmatic validation runs inside `pipeline.sh` after each phase (jq on `storyboard.json`, `stat`/`ffprobe` on artifacts). If a check fails → STOP and show the error.
+Every run follows this sequence. Inline programmatic validation runs directly in the manager after each phase (jq on `storyboard.json`, `stat`/`ffprobe` on artifacts). If a check fails → STOP and show the error.
 
 ```
 PHASE 0 — Initialization
@@ -138,11 +138,15 @@ Without this phrase — work autonomously.
 
 6. **Character sheets:** use only refs owned by the exact current format/series. If missing, Storyboarder creates a fresh format/series-bound ref during its existing phase; never use the legacy game-wide batch generator.
 
-7. **Query ALL assets from Supabase** (single query for the whole game):
+7. **Query assets from Supabase, filtered to the current format.** Character/avatar refs are NEVER shared across formats — different formats render the same game in different art styles (e.g. `fun-news`'s talking-head anchor render vs `redcon`'s cinematic 3D vs `what-if-real-life`'s photoreal). Reusing a ref tagged for a different format silently imports its style. Burned 2026-07-09: the redcon Q episode reused a `fun-news`-tagged Q avatar as the "canonical self" ref, producing a visible style mismatch against the freshly generated alternate self.
+
+   **Series-scoped formats (serial-drama and any format that runs multiple parallel shows in the same game via separate story bibles) need a finer key than `FORMAT` alone.** `serial-drama` currently runs at least two distinct shows in `star-trek-timelines` — "The Airlock" (`series_id: star-trek-airlock`, cinematic ship-set 3D) and "ROOM 1701" (`series_id: room-1701`, explicitly "not Pixar" bedroom-sitcom look) — same format engine, different `style_tags` in each show's story bible. Tagging a character ref with just `serial-drama` would let the two shows cross-contaminate each other's style. For these formats, tag and filter by **`series_id`** (from the show's `{format}_story_bible.json` → top-level `series_id`), in addition to the `FORMAT` tag:
+
    ```bash
    curl -s -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
      -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
-     "${SUPABASE_URL}/rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*"
+     "${SUPABASE_URL}/rest/v1/game_assets?game_tag=eq.{GAME_TAG}&tags=cs.{${FORMAT}}&select=*"
+   # Series-scoped formats: also require series_id in tags, e.g. tags=cs.{serial-drama,star-trek-airlock}
    ```
 
    **Only rows whose `tags` contain the current `FORMAT` slug (and `series_id`, where applicable) are eligible for reuse.** A row for the same character tagged with a *different* format or series, or with no matching tag at all, is NOT a match. The only asset shared automatically across formats is the game CTA; openers, title cards, character refs, appearance text and voice samples stay format/series-bound.
@@ -158,9 +162,9 @@ Without this phrase — work autonomously.
    | `prompt_block` | **Scenarist** | Use as `character_description` |
    | `asset_type = gameplay_clip` | **Editor** | Download for reddit-story / gameplay-ai-avatar |
 
-   **If an asset is missing:**
+   **If an asset is missing (i.e. no row tagged with the current `FORMAT`):**
    - **Opener / CTA:** STOP — notify the user. These assets must be uploaded in advance
-   - **Character refs / avatar refs:** generation in Phase 3 is allowed, but **mandatory upload** of the result to Supabase via `queue/upload-asset.sh` with the right tags
+   - **Character refs / avatar refs:** generation in Phase 3 is allowed, but **mandatory upload** of the result to Supabase via `queue/upload-asset.sh --tags "{FORMAT},..."`. The `FORMAT` tag is mandatory, not optional — it's what makes the ref eligible for reuse next time and what keeps it from being reused by a different format.
    - **Gameplay clips:** STOP for reddit-story / gameplay-ai-avatar
 
    **After generating ANY new character** Storyboarder must:
@@ -177,7 +181,7 @@ Delegate via `Agent(subagent_type="scenarist")` (model: sonnet, defined in `.cla
 
 **Output:** `$OUTPUT_DIR/storyboard.json`.
 
-**Validation:** `pipeline.sh` checks inline that `storyboard.json` exists and has a non-empty clips/scenes array (`jq '(.clips // .scenes // []) | length'`). If absent → STOP.
+**Validation:** manager checks inline that `storyboard.json` exists and has a non-empty clips/scenes array (`jq '(.clips // .scenes // []) | length'`). If absent → STOP.
 
 In debug mode — stop for approval.
 
@@ -187,7 +191,7 @@ In debug mode — stop for approval.
 
 Delegate via `Agent(subagent_type="sound")` (model: haiku, defined in `.claude/agents/sound.md`). Sub-agent loads `rules/roles/sound.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` inside). Template: `prompts/sound.txt`.
 
-**Validation:** `pipeline.sh` checks inline that every dialogue clip has a scene-K.mp3 (size ≥ 5KB). If a TTS file is missing or undersized → STOP. Catching it here costs $0; finding it after Kling costs $2+.
+**Validation:** manager checks inline that every dialogue clip has a scene-K.mp3 (size ≥ 5KB). If a TTS file is missing or undersized → STOP. Catching it here costs $0; finding it after Kling costs $2+.
 
 **When the format requires music, validate `bg-music.mp3` exists** — `[ -s "$OUTPUT_DIR/bg-music.mp3" ]` (≥ 10KB). It is mandatory for serial-drama. If required music is missing, stop; never continue without it.
 
@@ -212,7 +216,7 @@ If output of one stage (TTS, images) is needed as input for the next expensive s
 3. Use ONLY the Supabase URL for the next stage
 4. NEVER use temporary fal.ai result URLs as input to expensive generation
 
-**Validation:** `pipeline.sh` checks inline that every scene has an MP4 ≥ 100KB. If any are missing or undersized → STOP and investigate before Editor.
+**Validation:** manager checks inline that every scene has an MP4 ≥ 100KB. If any are missing or undersized → STOP and investigate before Editor.
 
 **Output:** `scenes/scene-K/scene-K.mp4` per clip.
 
@@ -245,7 +249,9 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
 
 **Output:** `final.mp4` (1080×1920).
 
-**Validation:** `pipeline.sh` checks inline that `final.mp4` exists, is ≥ 100KB, and has a sane `ffprobe` duration. If anything is off → STOP (moov atom missing usually means the encode was killed mid-run; never background ffmpeg).
+**Validation:** manager checks inline that `final.mp4` exists, is ≥ 100KB, and has a sane `ffprobe` duration. If anything is off → STOP (moov atom missing usually means the encode was killed mid-run; never background ffmpeg).
+
+**Do not hand the Editor manual math.** Pass only the parameters listed above (`GAME_TAG`, `FORMAT`, `OUTPUT_DIR`, `LANGUAGE`, booleans, paths) plus short context facts (which scenes changed, special conditions). Never compute and pass specific clip durations, `filter_complex` graphs, `TOTAL_DUR`/`MAIN_DUR` formulas, or input ordering yourself — the Editor derives all of that from `storyboard.json` and `rules/roles/editor.md` §0/§6. Handing it your own numbers means it follows your math instead of the real files, and a wrong manual calculation produces a badly-cut/sped-up result. Exception: font-patch commands (e.g. `sed` Helvetica→Montserrat) and `fontsdir` — those aren't in editor.md and are fine to pass along.
 
 ### PHASE 6 — Review gate + Upload and logging
 
@@ -265,6 +271,8 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
    - No `youtube_channel` field → no channel mapped yet. Do NOT guess. Skip the YT upload and tell the user which channel to map (Supabase URL stays the deliverable).
 
    **Metadata.** Title: `storyboard.json → title` (fallback: idea). Description: `storyboard.json → description` (fallback: empty). Tags: `GAME_TAG + format_slug + storyboard.json → youtube_tags`.
+
+   **YouTube title hard limit — 100 characters.** `storyboard.json → title`/`headline` (e.g. reddit-story's full headline) is often longer — it's written for narration/on-screen text, not the YouTube title field. The API rejects anything over 100 chars with a misleading `"invalid or empty video title"` / `reason: invalidTitle` error that gives no hint about length (burned 2026-07-13, genshin reddit-story: 117-char headline silently failed upload, `set -euo pipefail` in `youtube-upload.sh` exits with no error text since the failing `curl` is inside a bare `$(...)` assignment). **Always check `echo -n "$TITLE" | wc -c` before upload; if >100, write a shorter YouTube-only title** (keep the full headline as the in-video hook/narration, just shorten what goes to `youtube-upload.sh`).
 
    **Privacy is always `private`** — videos are uploaded privately so the user can review before publishing.
 
@@ -383,7 +391,7 @@ Phase 5  → final.mp4                                [check: final.mp4 ≥ 100K
 Phase 6  → local final.mp4 shown → user OK → Supabase + scheduled YT + log + bible update
 Phase 7  → git push
 ```
-All inline checks live in `pipeline.sh`.
+All inline checks are run directly by the manager (jq/ffprobe/stat), not by a script.
 
 Output structure:
 ```
@@ -522,7 +530,6 @@ Assets are mirrored in Supabase (`game_assets` table).
 Automatic processing via Supabase. Table `video_tasks`: `pending → running → completed/failed`.
 
 Scripts:
-- `queue/worker.sh` — auto-worker, polls the queue every 30s
 - `queue/check-queue.sh` — check + atomic claim of a task
 - `queue/update-task.sh` — status update
 - `queue/add-task.sh` — add a task

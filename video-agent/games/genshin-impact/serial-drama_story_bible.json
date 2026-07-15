@@ -5,7 +5,7 @@
   "title": "Don't Save Me",
   "style_tags": "Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, soft outline anime aesthetic, magical elemental effects, Teyvat world environment, clean detailed character illustration, Liyue Harbor setting, cinematic 9:16 vertical composition",
   "created_at": "2026-06-04",
-  "last_episode": 4,
+  "last_episode": 6,
   "planned_arc": {
     "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-6 clips under serial-drama constraints (max 2 chars per frame; see production_rules for the EP4+ Kling I2V voice_ids pipeline — Avatar is retired, macro movement/combat IS allowed in I2V for this series, cliffhanger spoken line is Kling I2V dialogue not Avatar TTS). Childe is the reluctant protector — his every action should read as either threat or sacrifice until the last episode. No on-screen text. Fold an episode's loops/status into characters[], active_loops, and episode_summaries only after the user explicitly approves the presented final video. Do NOT re-invent episodes while this arc has unshipped entries.",
     "episodes": [
@@ -215,7 +215,10 @@
           "whether the Agent is truly down or just subdued",
           "if Lumine forgives the setup",
           "how many more Fatui are nearby"
-        ]
+        ],
+        "status": "done",
+        "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-10/serial-drama_final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=71r1aiq9tus"
       },
       {
         "episode": 6,
@@ -257,7 +260,8 @@
           "how Fatui got inside Golden House first",
           "whether Childe's shoulder holds for another fight",
           "what Lumine decides about trusting him"
-        ]
+        ],
+        "status": "done"
       },
       {
         "episode": 7,
@@ -435,16 +439,16 @@
     {
       "name": "Childe",
       "role": "protagonist",
-      "character_description": "male Fatui Harbinger Tartaglia, dark blue and red Fatui uniform with hydro-red accents, short bright orange hair, sharp teal-blue eyes, sharp confident grin softening into something genuine, hydro blades manifested at his sides, athletic lean build",
+      "character_description": "male Fatui Harbinger, dark blue and red Fatui uniform with hydro-red accents, short bright orange hair, sharp teal-blue eyes, sharp confident grin softening into something genuine, hydro blades manifested at his sides, athletic lean build",
       "voice": null,
       "voice_ref": "games/genshin-impact/Childe.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/voice-ref.mp3",
-      "status": "EP4: Bandaged by Lumine in the empty teahouse. Deflected with jokes, then admitted the order was always about her. She pulled away in silence right as the Agent walked in and saw the bandage — read as proof Childe protected her.",
+      "status": "EP6: Ran the docks favoring his wounded shoulder, chose to keep running toward the Golden House without consulting Lumine again, and defended that choice when she confronted him ('I chose a chance' / 'Not to me, no.'). Walked her straight into the Agent's trap.",
       "aura_points": 98,
       "relationships": {
-        "Lumine": "confessed the order was about her; she pulled away in silence, unresolved whether she forgives him",
-        "Agent": "the Agent now has visible proof (the wound) that Childe protected Lumine instead of completing the mission",
-        "Fatui": "loyal until the moment he isn't"
+        "Lumine": "she believed the betrayal was real until his whispered signal; unclear how much trust this earns back given how many times he's deceived her now (fake fight, confession, and now fake betrayal)",
+        "Agent": "just openly turned on him in front of him — subtlety is over, Childe has now acted against Fatui directly, not just suspected of it",
+        "Fatui": "loyal until the moment he isn't — that moment has now visibly arrived"
       },
       "prompt_descriptor": "male Fatui Harbinger Tartaglia, short bright orange hair, sharp teal-blue eyes, dark blue and red Fatui uniform with hydro-red accents, hydro blades manifested at his sides, sharp confident grin, athletic lean build",
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/sheet.png",
@@ -454,15 +458,15 @@
     {
       "name": "Lumine",
       "role": "protagonist",
-      "character_description": "female Traveler Lumine, white and gold traveler outfit with star constellation motifs and flowing white sash, long blonde hair with signature silver star-shaped hair clip, sharp determined expression with a hint of wariness, one-handed sword at her side, graceful athletic build",
+      "character_description": "female Traveler, white and gold traveler outfit with star constellation motifs and flowing white sash, long blonde hair with signature silver star-shaped hair clip, sharp determined expression with a hint of wariness, one-handed sword at her side, graceful athletic build",
       "voice": null,
       "voice_ref": "games/genshin-impact/Traveller.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/voice-ref.mp3",
-      "status": "EP4: Bandaged Childe's wound, pressed him until he admitted the order was always about her. Pulled her hands away in silence — the Agent walked in seconds later.",
+      "status": "EP6: Confronted Childe for deciding for her again ('You chose for me again' / 'I'm not a piece on your board'), softened slightly at his answer, then found the Agent waiting inside the door they'd been running toward.",
       "aura_points": 72,
       "relationships": {
-        "Childe": "he confessed the order was about her; she pulled away in silence, unresolved",
-        "Agent": "active threat — directly targeted"
+        "Childe": "he faked handing her over without warning her first, again — she went along once she understood, but this is the second time he's decided something for her without asking",
+        "Agent": "just punched him down — no longer just a target, now an active combatant"
       },
       "prompt_descriptor": "female Traveler Lumine, long blonde hair with silver star-shaped hair clip, white and gold traveler outfit with star constellation motifs and flowing white sash, one-handed sword at her side, graceful athletic build",
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/sheet.png",
@@ -476,11 +480,11 @@
       "voice": null,
       "voice_ref": "games/genshin-impact/Fatui_dottore.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fatui-agent/voice-ref.mp3",
-      "status": "EP4: Walked in on Childe's bandaged shoulder — visible proof of protection. Says 'You protected her' — implication of defection now confirmed to his face, not just suspected.",
+      "status": "EP6: Revealed alive and composed inside the Golden House, having anticipated their escape route - greets them with cold amusement ('How romantic. You both came yourselves.'), not subdued by EP5's punch as they'd hoped.",
       "aura_points": 0,
       "relationships": {
-        "Childe": "has now personally witnessed proof of Childe's defection (the wound); next move unknown",
-        "Lumine": "active target — now confirmed present in Liyue"
+        "Childe": "was fully deceived by the fake handover; Childe's defection is no longer just suspected or visible — it was just acted on directly against him",
+        "Lumine": "just punched him down herself — no longer a passive target, an active combatant against Fatui"
       },
       "prompt_descriptor": "male Fatui Agent, silver Fatui half-mask obscuring the upper face, dark charcoal and black Fatui operative coat with deep crimson Fatui insignia, hands clasped behind his back, compact build radiating controlled menace",
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fatui-agent/sheet.png",
@@ -489,20 +493,22 @@
     }
   ],
   "active_loops": [
-    "major: whether the Agent reports Childe's defection to Snezhnaya now that he's seen the wound",
-    "major: whether Lumine forgives Childe for the deception now that she knows the order was about her",
-    "major: how Childe talks his way out of being caught red-handed protecting her",
-    "eternal: Childe's loyalty — now visibly compromised in front of his own superior",
-    "eternal: Lumine does not trust Childe unconditionally — Golden House + blade + fake fight + confession = four deceits, one bullet, one truth"
+    "major: Fatui Agent revealed alive and waiting inside the Golden House with reinforcements - he was not out of the fight",
+    "major: Lumine and Childe walked straight into a trap they were fleeing toward, not away from",
+    "major: whether Lumine still trusts Childe's judgment after this second unilateral choice",
+    "eternal: Childe's loyalty - now visibly compromised in front of his own superior, and now openly turned on him",
+    "eternal: Lumine does not trust Childe unconditionally - Golden House + blade + fake fight + confession + fake betrayal + this unasked choice = six deceits, one bullet, one truth"
   ],
   "closed_loops": [
     "minor: will Childe acknowledge Lumine in public — YES, violently and apologetically",
     "EP2: whether Childe's blade-draw fooled the Fatui watcher — YES, staged; watcher stayed in position until EP3 shot",
     "EP2: whether Childe will choose Lumine over orders — answered implicitly: stepped into bullet",
-    "EP4: whether Childe would admit the order was about Lumine — YES, forced out by her"
+    "EP4: whether Childe would admit the order was about Lumine — YES, forced out by her",
+    "EP5: whether the Agent reports Childe's defection to Snezhnaya — SUPERSEDED: Agent is now down from Lumine's punch, defection is no longer just visible but openly acted on",
+    "EP5: whether Childe would fake-hand Lumine over to the Agent — YES, staged; she believed it was real until his whispered signal"
   ],
   "world_state": {
-    "location": "Empty Liyue teahouse after closing, night — EP4",
+    "location": "Same Liyue teahouse, night — EP5, moments after EP4's cliffhanger",
     "important_items": [
       "Burned Fatui order — ash on Northland Bank desk; Lumine witnessed it being read and destroyed",
       "Lumine's presence in Liyue — now known to the Agent",
@@ -534,7 +540,12 @@
       "EP4: Childe admitted the order was always about Lumine",
       "EP4: Lumine pulled her hands away in silence",
       "EP4: The Fatui Agent entered through the door and saw the bandage",
-      "EP4: Cliffhanger — Agent: 'You protected her.'"
+      "EP4: Cliffhanger — Agent: 'You protected her.'",
+      "EP5: Childe stepped back from Lumine toward the Agent, appearing to hand her over",
+      "EP5: Childe gripped Lumine's wrist as she fought him, believing the betrayal was real",
+      "EP5: Childe whispered the real plan in her ear: 'When I blink — hit him.'",
+      "EP5: The Agent stepped forward to take her; Childe met his eyes and blinked",
+      "EP5: Cliffhanger — Lumine's fist connects with the Agent; Childe: 'Now I believe you.'"
     ]
   },
   "anti_repetition": {
@@ -594,7 +605,11 @@
       "I know.",
       "Then why do you keep lying?",
       "Because the truth wouldn't stop you.",
-      "You protected her."
+      "You protected her.",
+      "Good choice.",
+      "I trusted you.",
+      "When I blink — hit him.",
+      "Now I believe you."
     ],
     "recent_hooks": [
       "burning-scroll-reveal",
@@ -607,7 +622,9 @@
       "childe-steps-between-two-parties",
       "lumine-desperate-opening-call",
       "blade-drawn-as-protection-performance",
-      "silent-wound-tending-in-media-res"
+      "silent-wound-tending-in-media-res",
+      "fake-betrayal-handover-setup",
+      "pursuit-toward-the-trap"
     ],
     "recent_cliffhangers": [
       "agent-ultimatum-prove-loyalty",
@@ -620,10 +637,23 @@
       "childe-kneeling-before-fatui",
       "season-cliff-next-time-without-orders",
       "blade-at-lumine-whispered-apology-watcher",
-      "silent-inspection-single-cold-line"
+      "silent-inspection-single-cold-line",
+      "lumine-punch-childe-reveal-signal",
+      "agent-reveals-doors-already-open-mocking-line"
     ]
   },
   "episode_summaries": [
+    {
+      "episode": 5,
+      "language": "en",
+      "summary": "Childe steps back from Lumine toward the Fatui Agent, and the Agent orders him to bring her closer — Lumine believes she's being handed over for real. He grips her wrist as she fights him, then leans in and whispers the real plan in her ear: 'When I blink — hit him.' As the Agent steps forward to take her, Childe meets his eyes and blinks.",
+      "cliffhanger": "Lumine's fist connects with the Agent — Childe smiles: 'Now I believe you.'",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-10/serial-drama_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=71r1aiq9tus",
+      "yt_publish_at": "2026-07-16T20:59:00Z",
+      "duration_sec": 38,
+      "notes": "All 6 clips stayed in the same Liyue teahouse from EP4 (no location change) — first pass wrongly moved scenes 3-6 to an invented market street to accommodate a diegetic 'FREE PRIMOGEMS' banner request; re-rendered those 4 scenes back into the teahouse, with the banner glimpsed through the open door/window instead. Also re-confirmed and fixed a Childe costume-drift bug (invented armor+cape+pendant under dramatic close-shot framing) during the same fix. See production_rules for both lessons."
+    },
     {
       "episode": 1,
       "language": "en",
@@ -665,6 +695,17 @@
       "yt_publish_at": "2026-07-10T20:59:00Z",
       "duration_sec": 50,
       "notes": "First episode on the Kling I2V voice_ids pipeline (retired Avatar+Chatterbox from EP1-3). 6 clips, macro movement allowed (user override). Added: diegetic in-scene promo poster (scenes 4-5), pop-up promo banner (top, 80px margin, fade in/out ~5.5s after clip 1), episode title strip (restored, matches EP1-3 convention). Scene 6 required a re-render: a multi_prompt voice-tag misattribution + missing eye-color in Childe's bible descriptor caused character identity drift/confusion — fixed and documented in production_rules."
+    },
+    {
+      "episode": 6,
+      "language": "en",
+      "summary": "Lumine and Childe sprint down the night docks with Fatui pursuers behind them, Childe favoring his wounded shoulder. They reach the Golden House and press against its closed doors, catching their breath, before Lumine turns on him: he chose for her again, without asking. He says he chose a chance. She insists she's not a piece on his board; he answers quietly that she's not, not to him. The doors behind them creak open from the inside.",
+      "cliffhanger": "The Fatui Agent steps out of the now-open Golden House doors, cold and amused: 'How romantic. You both came yourselves.'",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-14/serial-drama_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=R1iy_rdibds",
+      "yt_publish_at": "2026-07-23T20:59:00Z",
+      "duration_sec": 38,
+      "notes": "Major continuity rework mid-production: an attempt to stage the accusation exchange (originally scenes 4-5) as separate independently-generated scenes at a 'side wall' location broke spatially (characters appeared to teleport, then swap left/right positions across cuts) - fixed by merging the whole exchange into ONE multi_prompt I2V clip (13s, 4 shots) from a single start frame instead, keeping Lumine fixed LEFT / Childe fixed RIGHT throughout. Also split the reveal into two scenes: a silent Agent-reveal (no voice_ids, introduced via Kling `elements` since the Agent wasn't in the start frame) followed by his cliffhanger line. A pursuit scene (running toward the Golden House) also needed 3 iterations to get right: characters must run AWAY from camera toward their actual destination door (not toward camera with the door as incidental backdrop), and that destination door must be generated as a direct NB2-edit descendant of the door asset used in the arrival scene, not an independently-generated 'similar' building, or the two doors visibly don't match on the cut. See rules/formats/serial-drama.md's location-bg-ref-reuse and blocking-continuity burn notes (2026-07-14) for the full writeup. Also user-requested pop-up 'GAIN FREE PRIMOGEMS' banner overlay on scenes 1-2 (top-anchored, post-production, not diegetic)."
     }
   ],
   "production_rules": [
@@ -680,6 +721,7 @@
     "Always generate background music with MiniMax Music (dramatic/tense mood, not comedic); never skip it or substitute a local library track.",
     "NO on-screen text / title cards for this series (locked in planned_arc note) — do not add a Room-1701-style overlay-series.png; this series has none and should not get one.",
     "Max 6 scenes per episode per the format's $7-10 budget cap, same as every other serial-drama series.",
-    "BURNED EP4 (2026-07-07): a multi_prompt shot placed <<<voice_1>>> immediately after the WRONG character's physical descriptor (voice_ids[0]=Agent but the tag followed Childe's descriptor) — Kling rendered both characters off-model/confused as a result (Agent lost his mask, Childe's face drifted). Before saving any multi_prompt, Scenarist must verify each <<<voice_N>>> tag sits immediately after the descriptor of the character at voice_ids[N-1], not just after whoever is mentioned last in the sentence. Also: character_description/prompt_descriptor must always include eye color — omitting it let NB2 invent a generic eye color and an unrequested hair accessory for Childe in EP4 scene 6."
+    "BURNED EP4 (2026-07-07): a multi_prompt shot placed <<<voice_1>>> immediately after the WRONG character's physical descriptor (voice_ids[0]=Agent but the tag followed Childe's descriptor) — Kling rendered both characters off-model/confused as a result (Agent lost his mask, Childe's face drifted). Before saving any multi_prompt, Scenarist must verify each <<<voice_N>>> tag sits immediately after the descriptor of the character at voice_ids[N-1], not just after whoever is mentioned last in the sentence. Also: character_description/prompt_descriptor must always include eye color — omitting it let NB2 invent a generic eye color and an unrequested hair accessory for Childe in EP4 scene 6.",
+    "BURNED EP5 (2026-07-10): a diegetic promo-banner request (worded as a 'market banner') pulled Scenarist into inventing a whole Liyue market-street setting and moving 4 scenes out of the locked teahouse continuity from EP4 — an unmotivated location jump the viewer couldn't parse. See rules/formats/serial-drama.md 'Diegetic product placement' section: banner/poster requests must be scoped to fit the LOCKED location (glimpse through a window/door if the prop doesn't naturally belong indoors), never used as license to invent a new setting. Same episode also re-confirmed the costume-drift risk: a close/dramatic 'leaning in, urgent whisper' framing drifted Childe into an invented silvery armor+cape+pendant even with the correct ref attached and correct prompt_descriptor text present — for any dramatic close shot, add an explicit 'standard uniform only — no armor, no cape, no pendant, no mask' corrective clause, not just the normal locked descriptor."
   ]
 }

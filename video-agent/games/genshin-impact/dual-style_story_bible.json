@@ -3,7 +3,7 @@
   "game_tag": "genshin-impact",
   "title": "Genshin Impact Dual Style",
   "created_at": "2026-06-09",
-  "last_episode": 4,
+  "last_episode": 5,
   "character_pool": [
     {
       "character_name": "venti",
@@ -129,14 +129,14 @@
       "display_name": "Nilou",
       "has_actor_counterpart": true,
       "actor_name": "Dua Lipa",
-      "last_seen_episode": null
+      "last_seen_episode": 5
     },
     {
       "character_name": "yelan",
       "display_name": "Yelan",
       "has_actor_counterpart": true,
       "actor_name": "Ana de Armas",
-      "last_seen_episode": null
+      "last_seen_episode": 5
     },
     {
       "character_name": "cyno",
@@ -144,6 +144,34 @@
       "has_actor_counterpart": true,
       "actor_name": "Rami Malek",
       "last_seen_episode": null
+    },
+    {
+      "character_name": "xiao",
+      "display_name": "Xiao",
+      "has_actor_counterpart": true,
+      "actor_name": "Tom Holland",
+      "last_seen_episode": null
+    },
+    {
+      "character_name": "kazuha",
+      "display_name": "Kazuha",
+      "has_actor_counterpart": true,
+      "actor_name": "Robert Pattinson",
+      "last_seen_episode": 5
+    },
+    {
+      "character_name": "ganyu",
+      "display_name": "Ganyu",
+      "has_actor_counterpart": true,
+      "actor_name": "Gal Gadot",
+      "last_seen_episode": null
+    },
+    {
+      "character_name": "albedo",
+      "display_name": "Albedo",
+      "has_actor_counterpart": true,
+      "actor_name": "Ryan Gosling",
+      "last_seen_episode": 5
     }
   ],
   "character_rotation": {
@@ -163,19 +191,23 @@
       "Keqing",
       "Fischl",
       "Shenhe",
-      "Eula"
+      "Eula",
+      "Yelan",
+      "Kazuha",
+      "Nilou",
+      "Albedo"
     ],
     "recent_actors": [
-      "Florence Pugh",
-      "Eva Green",
-      "Henry Cavill",
-      "Margot Robbie",
       "Timothée Chalamet",
       "Sydney Sweeney",
       "Zendaya",
       "Anya Taylor-Joy",
       "Emily Blunt",
-      "Scarlett Johansson"
+      "Scarlett Johansson",
+      "Ana de Armas",
+      "Robert Pattinson",
+      "Dua Lipa",
+      "Ryan Gosling"
     ],
     "recent_environments": [
       "Mondstadt windswept cliff edge",
@@ -193,15 +225,19 @@
       "plain soft violet-tinted seamless studio floor",
       "plain dark charcoal seamless studio floor with gold undertone",
       "plain icy blue seamless studio floor",
-      "plain silver-blue seamless studio floor"
+      "plain silver-blue seamless studio floor",
+      "plain deep-navy studio floor",
+      "plain wind-swept beige studio floor",
+      "plain teal-tinted studio floor",
+      "plain ivory-and-gold studio floor"
     ],
     "recent_action_types": [
       "walking-approach",
       "walking-approach",
-      "walking-approach",
-      "walking-approach",
-      "walking-approach",
-      "walking-approach"
+      "bow-draw-aim-stance",
+      "leaf-whirl-sword-flourish",
+      "dance-spin-flourish",
+      "geo-crystal-summon-stance"
     ],
     "cooldown_episodes": 10
   },
@@ -298,7 +334,7 @@
       ],
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/genshin-impact/2026-06-10-dual-style-ep3/final.mp4",
       "duration_sec": 25.21,
-      "cost_usd": 3.20,
+      "cost_usd": 3.2,
       "notes": "NO HEAD/FACE MOVEMENT rule added. Simple backgrounds used after Neuvillette/Chalamet face distortion."
     },
     {
@@ -330,8 +366,40 @@
       ],
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/genshin-impact/2026-06-15-dual-style-ep4/final.mp4",
       "duration_sec": 25.21,
-      "cost_usd": 2.80,
+      "cost_usd": 2.8,
       "notes": "EP4 format: simple studio backgrounds, strict NO HEAD/FACE MOVEMENT. Keqing/Zendaya SFX scene-1 reduced to 0.06 (was too loud)."
+    },
+    {
+      "episode": 5,
+      "date": "2026-07-09",
+      "characters": [
+        "Yelan",
+        "Kazuha",
+        "Nilou",
+        "Albedo"
+      ],
+      "environments": [
+        "plain deep-navy studio floor",
+        "plain wind-swept beige studio floor",
+        "plain teal-tinted studio floor",
+        "plain ivory-and-gold studio floor"
+      ],
+      "actors": [
+        "Ana de Armas",
+        "Robert Pattinson",
+        "Dua Lipa",
+        "Ryan Gosling"
+      ],
+      "action_types": [
+        "bow-draw-aim-stance",
+        "leaf-whirl-sword-flourish",
+        "dance-spin-flourish",
+        "geo-crystal-summon-stance"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-09/dual-style_final.mp4",
+      "duration_sec": 25.21,
+      "cost_usd": 6.11,
+      "notes": "Chibi default rejected by user, full Storyboarder redo with accurate in-game proportions. Introduced Kling `elements` face-lock + multi_prompt for macro-motion (walking) shots — camera must be in FRONT (dolly-back), not behind, so faces stay visible. generate_audio:true injected unwanted music on energetic prompts — clip audio stripped at Editor, only bg-music.mp3 kept in final mix. Went over $5 budget (~$6.11) due to iteration (chibi redo + per-scene face-lock re-renders)."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4",
@@ -456,6 +524,30 @@
       "name": "Cyno",
       "actor_counterpart": "Rami Malek",
       "character_description": "male General Mahamatra Cyno, white and gold Egyptian-style armor with Anubis jackal headdress and hieroglyph motifs, dark hair under the ornate jackal mask, medium complexion, intense stoic expression with quiet authority, electro polearm, lean agile powerful build"
+    },
+    {
+      "slug": "xiao",
+      "name": "Xiao",
+      "actor_counterpart": "Tom Holland",
+      "character_description": "male Anemo adept Xiao, dark teal and gold traditional Chinese outfit with a small guoba mask attached at the hip, dark green-black messy short hair, fair complexion, aloof melancholic brooding expression, twin polearm daggers, slender agile androgynous build"
+    },
+    {
+      "slug": "kazuha",
+      "name": "Kazuha",
+      "actor_counterpart": "Robert Pattinson",
+      "character_description": "male wandering swordsman Kazuha, red and white traditional Japanese haori with maple leaf motifs, sword sheathed at hip, reddish-brown windswept hair tied in a small ponytail, fair complexion, calm serene contemplative expression, katana, tall lean elegant build"
+    },
+    {
+      "slug": "ganyu",
+      "name": "Ganyu",
+      "actor_counterpart": "Gal Gadot",
+      "character_description": "female half-qilin adeptus Ganyu, pale blue and white elegant outfit with fur-trimmed cloak and qilin-horn ornaments, dark blue-black hair with a single curved horn, fair complexion, shy composed graceful expression, ornate cryo bow, slender elegant build"
+    },
+    {
+      "slug": "albedo",
+      "name": "Albedo",
+      "actor_counterpart": "Ryan Gosling",
+      "character_description": "male alchemist Albedo, cream-white and gold ornate coat with alchemical sigils and a rose brooch, short pale blond hair, fair complexion, calm intellectual faint smile, geo sword with alchemy tools at belt, slender scholarly build"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "game_tag": "genshin-impact",
-  "total_stories": 3,
+  "total_stories": 4,
   "stories": [
     {
       "id": 1,
@@ -40,19 +40,39 @@
       "youtube_url": "https://www.youtube.com/watch?v=wQkCJ_frsLc",
       "yt_publish_at": "2026-07-11T20:59:00Z",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-07/reddit-story_final.mp4"
+    },
+    {
+      "id": 4,
+      "date": "2026-07-13",
+      "tone": "bittersweet-to-warm",
+      "theme": "friendship-neglect-vs-overwhelm",
+      "moral_engine": "feeling replaced/abandoned",
+      "false_verdict": "best friend deliberately excluded narrator because of her new fiancé",
+      "pressure_source": "mutual friend group chat consensus (\"she's moved on, get over it\")",
+      "resolution_type": "positive",
+      "headline": "My best friend stopped inviting me to our nightly Genshin sessions after her engagement. I thought she'd replaced me.",
+      "youtube_title": "My best friend stopped inviting me to our Genshin nights after her engagement.",
+      "offerwall_angle": "free Primogems via link-in-bio — woven into the story as the human_action/reveal beat (narrator short on primogems, clicks bio link, pulls Kazuha, uses the pull as her excuse to reach out), plus silent CTA overlay 'Free Primogems — link in bio'",
+      "gameplay_offset_sec": 260,
+      "output_dir": "output/2026-07-13/genshin-impact/reddit-story",
+      "youtube_url": "https://www.youtube.com/watch?v=XnAiZFzXa34",
+      "yt_publish_at": "2026-07-20T20:59:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-13/reddit-story_final.mp4"
     }
   ],
   "anti_repetition": {
-    "recent_themes": ["sibling-reconnection", "f2p-triumph", "parent-judgment-to-connection"],
-    "recent_tones": ["touching", "rage-to-relief", "soft-drama"],
-    "recent_moral_engines": ["f2p-mockery", "judgment for hobby"],
-    "recent_false_verdicts": ["forever F2P loser who will never pull a 5-star", "immature adult wasting time on a kids' game"],
-    "recent_pressure_sources": ["toxic co-op friend", "dad's repeated dismissal in front of family"],
+    "recent_themes": ["sibling-reconnection", "f2p-triumph", "parent-judgment-to-connection", "friendship-neglect-vs-overwhelm"],
+    "recent_tones": ["touching", "rage-to-relief", "soft-drama", "bittersweet-to-warm"],
+    "recent_moral_engines": ["f2p-mockery", "judgment for hobby", "feeling replaced/abandoned"],
+    "recent_false_verdicts": ["forever F2P loser who will never pull a 5-star", "immature adult wasting time on a kids' game", "best friend deliberately excluded narrator over her engagement"],
+    "recent_pressure_sources": ["toxic co-op friend", "dad's repeated dismissal in front of family", "mutual friend group chat consensus"],
     "recent_hooks": [
       "My sister and I used to be close. Then high school hit and we just drifted.",
       "He called me a forever F2P loser. Said Hu Tao would never be mine.",
-      "He said it once. Flat. That anime kids stuff. No argument. Just walked away."
+      "He said it once. Flat. That anime kids stuff. No argument. Just walked away.",
+      "The invites stopped after her engagement. No text, just silence."
     ],
+    "recent_gameplay_offsets_sec": [260],
     "banned_combos": []
   }
 }

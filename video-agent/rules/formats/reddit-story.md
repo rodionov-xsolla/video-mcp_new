@@ -36,11 +36,11 @@ Run parameters:
 
 ## Concept
 
-- **Gameplay:** pre-made clips from `games/{GAME_TAG}/gameplay/`, random shuffle, **not tied to text** — pure background visual
+- **Gameplay:** pre-made clips from `games/{GAME_TAG}/gameplay/`, random shuffle, **not tied to text** — pure background visual. Editor picks the trim start offset (`-ss`) — must vary meaningfully run-to-run (3-4+ min apart from recent episodes' offsets for this `game_tag`, tracked in `reddit-story_bible.json` as `gameplay_offset_sec`), not the same narrow window every time.
 - **Background:** static image from Supabase `game_assets` where `tags @> ['reddit-story-bg']` for this `game_tag`. Editor downloads it to `build/bg.png`. If not found — STOP and ask Manager to upload one.
 - **TTS:** MiniMax via fal.ai (`fal-ai/minimax/speech-2.8-hd`), narrator voice `Determined_Man`, emotion `neutral`, speed 0.90
 - **Subtitles:** word-highlight via Whisper ASS, mandatory
-- **Duration:** up to 60s (~150–170 words)
+- **Duration:** target 45–70s (~150–220 words). Flexible on the upper end — **never trim the concrete relationship setup just to hit a shorter runtime.** A tight duration with a generic/faceless setup is worse than a slightly longer story with a specific one.
 - **CTA:** overlay only, never voiced
 - **No AI video generation** — only TTS + ffmpeg assembly
 - **Budget:** $2 max (typical $0.30–0.50)
@@ -115,6 +115,7 @@ Justice was restored.
 |---|---|---:|
 | **headline** | Short catchy summary of the whole story — a hook that makes the viewer want to know how it happened | 1–2s |
 | **hook** | A specific unfair or shocking detail that opens the story | 3–5s |
+| **setup** | Concrete establishment of the relationship/situation BEFORE the conflict starts: how long, since when, a specific recurring ritual or shared detail (names, frequency, a habit). Without this the story reads generic/faceless — viewer needs to feel "these two were actually close" before the injustice lands. | 5–8s |
 | **identification** | "I just wanted…" — human reason to care | 5–8s |
 | **injustice** | Wrong accusation, humiliation, exclusion, stolen credit | 8–12s |
 | **pressure** | Team, chat, friend, guild, system or timer makes it worse | 10–15s |
@@ -123,8 +124,8 @@ Justice was restored.
 | **justice resolution** | Hero restored, villain exposed, truth recognized | 5–8s |
 | **CTA** | Fade-to-black → `Subscribe for more` | 2s |
 
-Total TTS duration ≤ 58s.  
-Final MP4 = TTS + 2s CTA ≈ 60s.
+Total TTS duration ≤ 68s (flex up from the old 58s cap to make room for the **setup** beat — do not cut setup to force the story back under 58s).  
+Final MP4 = TTS + 2s CTA ≈ up to 70s.
 
 CTA is taken from Supabase `game_assets` with tags `cta` + `video`.  
 If no CTA exists or it fails technical validation: STOP and report the missing/invalid asset. Never synthesize a fade-to-black, text card, or end frame.
@@ -620,7 +621,8 @@ games/{GAME_TAG}/reddit-story_bible.json
 - [ ] `ffmpeg-full` is used.
 - [ ] `apad + -t` is used.
 - [ ] `-shortest` is not used.
-- [ ] Final duration ≤60s.
+- [ ] Final duration ≤70s (TTS ≤68s + 2s CTA) — flexed up from 60s to preserve the setup beat, see Structure/Anti-patterns.
+- [ ] Setup beat present — concrete relationship detail (how long, since when, a specific ritual), not just generic "I wanted X".
 - [ ] Budget ≤$2.
 
 ---
@@ -630,6 +632,8 @@ games/{GAME_TAG}/reddit-story_bible.json
 ### Narrative anti-patterns
 
 - ❌ Story about gameplay mechanics only.
+- ❌ Conflict/pressure/false-verdict built on in-game mechanics — fleet/guild politics, leaderboard rank, gauntlet standings, cheat/macro accusations, kicks, ranked system drama — **even when the mechanic genuinely exists in that game.** User feedback 2026-07-13 (STT gauntlet-leaderboard-macro pitch rejected hard: "никому не всрался этот флот... прекрати использовать эту ингейм срань"): existing-in-game is not the bar — interesting-to-a-human-viewer is. The injustice/pressure must come from real relationships (family judgment, misunderstanding, distance, a life circumstance), with the game described in plain language (a "crew", "his ships", "we play Fridays") never jargon (fleet, gauntlet, leaderboard, rank, cheat). Model examples: STT EP6 (silent grandfather), EP7 (offshore father) — human situation only, game is backdrop.
+- ❌ Cutting/skipping the concrete relationship **setup** (how long, since when, a specific ritual/detail) to fit a shorter runtime — reads generic/faceless. Duration budget flexes up to 68s TTS for this; a longer, specific story beats a short, generic one.
 - ❌ No moral injustice.
 - ❌ No false verdict.
 - ❌ Narrator is a perfect victim with no human flaw.
