@@ -20,6 +20,8 @@ Authorization: Key $FAL_KEY
 **Стоимость:** ~$0.08 за изображение
 
 > **Основная модель для всех сцен, character refs, bg-assets.**
+>
+> **Storyboarder execution rule:** все NB2 text/edit вызовы выполняются только через `tools/fal_runner.py` по job contract из `tools/SCRIPTS.md`. Storyboarder не исполняет curl-примеры, submit/poll/download snippets или endpoint вручную. Код ниже — reference-only для сопровождения runner; при расхождении executable allowlist/state machine runner имеет приоритет.
 
 ### 1a. Text-to-Image (без референса — для character references)
 
@@ -35,7 +37,7 @@ Authorization: Key $FAL_KEY
 
 > **Используй этот endpoint для генерации сцен** с chain reference (image_urls обязателен).
 
-### Запрос
+### Raw HTTP запрос (reference-only; Storyboarder не исполняет)
 
 ```bash
 curl -s -X POST "https://queue.fal.run/fal-ai/nano-banana-2/edit" \
@@ -56,7 +58,7 @@ curl -s -X POST "https://queue.fal.run/fal-ai/nano-banana-2/edit" \
 | Параметр | Тип | Обязательный | Описание |
 |----------|-----|-------------|----------|
 | `prompt` | string | Да | Текстовое описание (мин 3 символа, макс 50000) |
-| `image_urls` | array of strings | Нет | URL-ы референсных изображений для chain reference консистентности. Сцена 1: [character-ref-url], Сцена N: [character-ref-url, scene-(N-1)-url]. **Не передавай поле вообще** если нет референса (пустой массив `[]` вызывает ошибку) |
+| `image_urls` | array of strings | Нет | URL-ы референсных изображений для chain reference консистентности. Runner `nb2.edit` принимает 1–4 уникальных permanent HTTPS URL; более строгий format/role limit всё равно действует. Для `nb2.text` поле нужно **полностью опустить** — пустой `[]` вызывает ошибку |
 | `aspect_ratio` | enum | Нет | `"9:16"` для вертикального видео. Варианты: "1:1", "16:9", "9:16", "4:3", "3:4" и др. По умолчанию: "auto" |
 | `num_images` | integer | Нет | 1-4, по умолчанию 1 |
 | `output_format` | enum | Нет | "jpeg", "png", "webp". По умолчанию "png" |
@@ -79,7 +81,7 @@ curl -s -X POST "https://queue.fal.run/fal-ai/nano-banana-2/edit" \
 }
 ```
 
-### Polling и скачивание (ОБЯЗАТЕЛЬНО)
+### Raw polling/download (reference-only; в pipeline это делает runner)
 
 Оба endpoint'а (с `/edit` и без) — **асинхронные**. Нужен polling.
 
@@ -187,7 +189,9 @@ curl -s -o scene-1.png "$IMAGE_URL"
 **Метод:** POST (асинхронный — нужен polling)
 **Стоимость:** $0.084/сек без аудио (5s = $0.42, 10s = $0.84) | $0.126/сек с аудио (5s = $0.63, 10s = $1.26)
 
-> Используй только когда этот endpoint выбран playbook/Manager для текущего запуска. `generate_audio` задаёт формат: serial-drama dialogue использует `true` с `voice_ids`/`multi_prompt`; silent/action clips обычно используют `false`.
+> Используй только когда этот endpoint выбран Scenarist/Manager/Animator для текущего запуска. Они определяют duration, request shape и `generate_audio` по сценарию и format playbook, затем передают уже готовый provider payload runner'у.
+>
+> **Execution rule:** все v3 Standard I2V формы выполняются через schema-v3 `tools/kling_runner.py`. Полный `payload` (`prompt` или `multi_prompt`, `voice_ids`, `elements`, будущие provider fields) передаётся без изменений и без format-specific решений внутри runner. Curl/poll/download ниже — reference-only. Другие инструменты выбирает оркестратор; совместимый fal queue endpoint добавляется в `tools/video_routes.json`, другой protocol использует отдельный adapter.
 
 ### Отправка запроса
 
@@ -950,7 +954,7 @@ curl -s -o bg-music.mp3 "$AUDIO_URL"
 2. **Перед дорогой генерацией (Kling I2V, Avatar) — загрузи ВСЕ входные файлы в Supabase Storage.** Используй ТОЛЬКО постоянные Supabase URL как `start_image_url`, `end_image_url`, `audio_url`. Временные fal.ai URL протухают → генерация стоимостью $0.42–$1.40 пропадает.
 3. **Polling — по 2-сегментному base пути.** НЕ по полному submit endpoint. См. таблицу в "Общий паттерн polling".
 4. **Проверяй размер** скачанного файла (>1000 байт для изображений, >10000 для видео).
-5. **`generate_audio: false`** для всех I2V (anullsrc правило) — звук добавляется на этапе сборки.
+5. **`generate_audio` выбирают Scenarist/Manager/Animator по storyboard и format playbook до создания job.** Native dialogue/SFX/ambient используют `true` и их оплаченный audio сохраняется; silent I2V использует `false` и получает `anullsrc` только при сборке.
 6. **Не отправляй больше 3 параллельных запросов** — rate limiting.
 7. **Сохраняй request_id** — нужен для polling и отмены задач.
 

@@ -12,6 +12,27 @@ Video/image generation via fal.ai is asynchronous. After submitting a request:
 2. Poll status every **15 seconds**
 3. Maximum wait time per generation: **10 minutes**
 
+### NB2 Storyboarder override — runner owns recovery
+
+Every Storyboarder NB2 text/edit request goes through `tools/fal_runner.py`. Its durable state machine overrides the generic manual submit/poll/retry rules in this file:
+
+- Never submit, poll, fetch, download, or retry NB2 with direct curl/HTTP.
+- After preflight, keep the job JSON immutable. Resume `PENDING`, interrupted poll/download, or `VALIDATED` upload failure by rerunning the **same job file and `job_id`**.
+- A definitive provider generation failure becomes `PAID_RETRY_REQUIRED`; runner does not issue a replacement paid POST by default. Only explicit authorization permits one same-contract retry via `--allow-paid-retry`. Do not add a role/manager wrapper retry.
+- `UNKNOWN` / `AmbiguousSubmitError` means the POST may have succeeded without a safely recorded response. **Never resubmit.** Stop and report `state_path`.
+- `FAILED` and `INPUT_REJECTED` are terminal for that job. Generic advice below to edit a rejected request and retry does not authorize mutation/resubmission of a runner job.
+- The runner has no safe reset command for a claimed canonical output. Never delete state or `_claims` manually; preserve them and stop for an explicit recovery decision.
+
+### Kling v3 Standard Animator override — runner owns recovery
+
+All schema-v3 video jobs follow the same transport safety contract. The runner never chooses a semantic fallback: recovery resumes the exact saved route and payload. A different tool, duration, audio setting, or request body is an orchestrator decision represented by a new job after the current run has stopped:
+
+- Never wrap the runner in a submit/poll/download retry loop; rerun the same immutable job to resume its saved request ID.
+- `UNKNOWN` is ambiguous and must never be resubmitted.
+- A definitive remote generation failure becomes `PAID_RETRY_REQUIRED`; one replacement POST requires separate explicit authorization and `--allow-paid-retry`.
+- `VALIDATED` resumes only Supabase upload; `DONE` is idempotent. `FAILED` and `INPUT_REJECTED` are terminal.
+- Do not delete or move the runner's state, request, claim, MP4, or job contract.
+
 ### ⚠️ CRITICAL: Base URL for status/result
 
 Submit goes to the **full** endpoint, but status and result use the **2-segment base path** only.
@@ -40,14 +61,14 @@ base = "/".join(endpoint.split("/")[:2])
 |--------|--------|
 | `IN_QUEUE` / `IN_PROGRESS` | Continue polling |
 | `COMPLETED` | Fetch the result via GET /requests/{REQUEST_ID}, continue pipeline |
-| `FAILED` | Retry the same serialized request once; if it fails again, stop the whole video |
-| Timeout 10 min | Cancel, retry the same route once; a second timeout stops the whole video |
+| `FAILED` | Generic non-runner call: retry the same serialized request once. NB2/Kling runner: let saved state decide; terminal runner `FAILED` stops |
+| Timeout 10 min | Generic non-runner call: cancel/retry once. NB2/Kling runner: rerun the same job to resume the saved request ID; never submit a replacement |
 
 ---
 
 ## Failure policy — no automatic fallback
 
-The chosen provider, model and route remain fixed for the request. A transient/API/download/zero-byte failure gets one retry with the same serialized request. For deterministic HTTP 400/422, content-filter rejection, or a local FFmpeg command defect, correct only the rejected input/parameter/command and retry once on the same route. If that attempt fails, stop the whole video and return the actual error.
+The chosen provider, model and route remain fixed for the request. A transient/API/download/zero-byte failure gets one retry with the same serialized request. For deterministic HTTP 400/422, content-filter rejection, or a local FFmpeg command defect, correct only the rejected input/parameter/command and retry once on the same route. If that attempt fails, stop the whole video and return the actual error. For NB2 and allowlisted Kling v3 Standard runner jobs, the runner overrides above apply instead: do not mutate or wrap-retry the job.
 
 Do not switch to GPT Image, Kling 2.6, Ken Burns, another provider, a local substitute, or a no-audio/no-music result. A different model may be used only after the stopped run when the user explicitly authorizes that separate route.
 
@@ -117,7 +138,7 @@ For any error that leads to `status='failed'`:
 
 | Operation | Timeout |
 |----------|---------|
-| Image generation (Nano Banana 2) | 120 seconds |
+| Image generation (Nano Banana 2 runner polling window) | 10 minutes |
 | Video generation | 10 minutes |
 | File download (curl) | 120 seconds |
 | FFmpeg operation | 5 minutes |

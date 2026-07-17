@@ -47,7 +47,9 @@ Ask the **key question**: Is there speech/dialogue in the video?
 
 Ask:
 - `generate_audio`: true (Kling generates SFX) or false (silence, anullsrc)?
-- Need start + end frames for each clip? (yes = better continuity, +$0.04/clip)
+- Request shape per clip mode: single `prompt` or native `multi_prompt`?
+- Are `elements` required for any multi-prompt mode? If yes, define a separate element-required mode; never silently omit them.
+- Start frame only (end/tail frames are forbidden by this pipeline).
 - `negative_prompt` mandatory? (yes for multi-char or dual-style)
 - Number of characters in frame? (1 / 2 / variable)
 
@@ -332,7 +334,7 @@ Keywords: "{keyword1}", "{keyword2}", ...
 
 ## Step 6. Updating cross-cutting files
 
-After creating the playbook, update 4 files:
+After creating the playbook, update the cross-cutting files below. Never add format names, duration/audio tables, or format policy branches to an execution runner.
 
 ### 6a. `rules/main/budgets.md`
 
@@ -368,6 +370,14 @@ Find the listing of format files (lines 119-126). Add:
 ```
 │       ├── {slug}.md           # {display_name}
 ```
+
+### 6e. Execution integration (only if a new tool/endpoint is introduced)
+
+- Existing tool/route: no runner or route-registry change. The format playbook tells Scenarist/Manager/Animator how to choose duration, audio and payload; Animator places the resolved provider payload unchanged into a schema-v3 job.
+- New fal.ai video endpoint using the same queue protocol: add only a descriptor to `tools/video_routes.json` (`submit_url`, `poll_base`, `result_url_path`). Do not edit runner Python.
+- New provider/protocol: add a separate small transport adapter behind the orchestration layer. Do not place provider or format branches into `kling_runner.py`.
+
+Run `python3 tools/kling_runner.py --preflight JOB` with representative schema-v3 jobs for the new format's selected payloads. Preflight verifies transport/output contracts, not format semantics; review the exact payload against the format playbook before any paid call.
 
 ---
 
@@ -417,6 +427,7 @@ Show the user the checklist:
 - [ ] `CLAUDE.md` has the slug in the format list
 - [ ] `manager.md` has the keywords in the Format detection table
 - [ ] `STRUCTURE.md` has the file in the listing
+- [ ] Existing routes required no runner changes; any new fal queue endpoint is data-only in `video_routes.json`; representative schema-v3 jobs pass preflight
 - [ ] Keywords DO NOT overlap with existing formats
 - [ ] Budget realistic: `typical_cost` ≤ `budget_max`
 - [ ] All role briefs filled or marked SKIP with a reason
