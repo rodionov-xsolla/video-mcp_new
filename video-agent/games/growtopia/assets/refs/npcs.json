@@ -379,5 +379,16 @@
     "wiki_file": "user-provided (google thumbnail)",
     "note": "default player avatar; low-res screenshot w/ background — rough reference only",
     "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/growtopian-default-skin/sheet.png"
+  },
+  {
+    "name": "Boss Ghost",
+    "slug": "boss-ghost",
+    "file": "boss-ghost.png",
+    "nb2_file": "nb2/boss-ghost.png",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/File:Slobby_page1.png",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Boss_Ghost",
+    "wiki_file": "Slobby page1.png",
+    "note": "boss; first frame cropped from 4x2 sprite sheet",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/boss-ghost/sheet.png"
   }
 ]
