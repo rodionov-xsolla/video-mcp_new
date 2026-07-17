@@ -1,0 +1,44 @@
+{
+  "schema_version": 3,
+  "job_id": "replace-with-unique-elements-job-v1",
+  "route": "kling.v3.standard.i2v",
+  "artifact_kind": "scene_video",
+  "output_dir": "/ABSOLUTE/OUTPUT_DIR",
+  "output_path": "scenes/scene-1/scene-1.mp4",
+  "payload": {
+    "multi_prompt": [
+      {
+        "prompt": "@Element1 walks beside the stylized hero while the camera tracks backward, face locked forward.",
+        "duration": "5"
+      }
+    ],
+    "start_image_url": "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/episodes/GAME/EPISODE/scenes/scene-1.png",
+    "duration": "5",
+    "generate_audio": true,
+    "negative_prompt": "blur, low quality, morphing face, identity drift, body deformation",
+    "shot_type": "customize",
+    "elements": [
+      {
+        "frontal_image_url": "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/episodes/GAME/EPISODE/refs/character-front.png",
+        "reference_image_urls": [
+          "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/episodes/GAME/EPISODE/refs/character-side.png"
+        ]
+      }
+    ]
+  },
+  "expect": {
+    "kind": "video",
+    "duration_seconds": 5,
+    "duration_tolerance_seconds": 0.4,
+    "audio": "required",
+    "min_bytes": 100000,
+    "min_width": 600,
+    "min_height": 1000,
+    "orientation": "portrait"
+  },
+  "supabase": {
+    "game": "replace-game-tag",
+    "episode": "YYYY-MM-DD-dual-style-run-id",
+    "name": "scene-1.mp4"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": 3,
+  "job_id": "replace-with-unique-serial-dialogue-job-v1",
+  "route": "kling.v3.standard.i2v",
+  "artifact_kind": "scene_video",
+  "output_dir": "/ABSOLUTE/OUTPUT_DIR",
+  "output_path": "scenes/scene-1/scene-1.mp4",
+  "payload": {
+    "multi_prompt": [
+      {
+        "prompt": "[STYLE_TAGS] dark-haired officer in blue on the left raises one hand. <<<voice_1>>> \"First line.\"",
+        "duration": "3"
+      },
+      {
+        "prompt": "[STYLE_TAGS] blond officer in red on the right leans closer. <<<voice_2>>> \"Second line.\"",
+        "duration": "3"
+      }
+    ],
+    "start_image_url": "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/episodes/GAME/EPISODE/scenes/scene-1.png",
+    "duration": "6",
+    "generate_audio": true,
+    "negative_prompt": "blur, low quality, morphing faces, identity drift, style drift",
+    "shot_type": "customize",
+    "voice_ids": [
+      "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/episodes/GAME/voices/voice-1.mp3",
+      "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/episodes/GAME/voices/voice-2.mp3"
+    ]
+  },
+  "expect": {
+    "kind": "video",
+    "duration_seconds": 6,
+    "duration_tolerance_seconds": 0.4,
+    "audio": "required",
+    "min_bytes": 100000,
+    "min_width": 600,
+    "min_height": 1000,
+    "orientation": "portrait"
+  },
+  "supabase": {
+    "game": "replace-game-tag",
+    "episode": "YYYY-MM-DD-serial-drama-run-id",
+    "name": "scene-1.mp4"
+  }
+}
