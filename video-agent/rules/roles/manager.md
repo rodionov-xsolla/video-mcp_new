@@ -24,7 +24,7 @@ Burn-tested EP2 (2026-06-08): forward loop scene-3→4→5→6 overwrote Lumine 
 
 **ffmpeg final encode — NEVER background.** The `final.mp4` encode (concat + subtitles + music + title strip) MUST run synchronously with timeout ≥ 180s. If the process ends before writing the `moov` atom the file is unplayable ("moov atom not found"). Do NOT use `run_in_background: true` for ffmpeg encodes. Do NOT write temp files to `/tmp` — use `OUTPUT_DIR/build/` to avoid tmp filesystem overflow.
 
-**Retry discipline.** A failed operation gets one retry on the same provider/model/endpoint/route. For a deterministic rejected input or command, correct only that rejected input/command before the retry. A second failure stops the whole video with the actual error; never keep re-rolling or switch routes.
+**Retry discipline.** A failed operation gets one retry on the same provider/model/endpoint/route. For a deterministic rejected input or command, correct only that rejected input/command before the retry. A second failure stops the whole video with the actual error; never keep re-rolling or switch routes. **NB2 exception:** `tools/fal_runner.py` owns retry/resume safety. Manager never adds a wrapper retry, never replaces `UNKNOWN`, and never deletes runner state/claims.
 
 ---
 
@@ -39,7 +39,7 @@ PHASE 0 — Initialization
   mkdir -p $OUTPUT_DIR
   Read rules/formats/$FORMAT.md (Manager section) + games/$GAME_TAG/$GAME_TAG.md
   Resolve exact STORY_BIBLE_PATH for the current format/series; if missing, ask before creating
-  Query Supabase for assets filtered to exact game + format + series; game CTA is the only automatic cross-format exception
+  Query Supabase for assets filtered to exact game + format + series; resolve CTA only from exact STORY_BIBLE_PATH
 
 PHASE 1 — Script
   Agent(scenarist) — pass GAME_TAG, FORMAT, IDEA, OUTPUT_DIR, LANGUAGE
@@ -50,8 +50,8 @@ PHASE 2 — Audio (if dialogue clips exist)
   Validate: scene-K.mp3 present for every dialogue clip, tts_url written back
 
 PHASE 3 — Images
-  Agent(storyboarder) — pass GAME_TAG, FORMAT, OUTPUT_DIR, EXISTING_REFS_JSON
-  Validate: every scene PNG present and ≥ 1KB
+  Agent(storyboarder) — pass GAME_TAG, FORMAT, OUTPUT_DIR, STORY_BIBLE_PATH, optional SUPABASE_ASSETS_FILE
+  Validate: every scene has runner DONE state + local PNG + matching permanent scene_image_url
 
 PHASE 4 — Animation
   Agent(animator) — pass GAME_TAG, FORMAT, OUTPUT_DIR
@@ -149,7 +149,7 @@ Without this phrase — work autonomously.
    # Series-scoped formats: also require series_id in tags, e.g. tags=cs.{serial-drama,star-trek-airlock}
    ```
 
-   **Only rows whose `tags` contain the current `FORMAT` slug (and `series_id`, where applicable) are eligible for reuse.** A row for the same character tagged with a *different* format or series, or with no matching tag at all, is NOT a match. The only asset shared automatically across formats is the game CTA; openers, title cards, character refs, appearance text and voice samples stay format/series-bound.
+   **Only rows whose `tags` contain the current `FORMAT` slug (and `series_id`, where applicable) are eligible for reuse.** A row for the same character tagged with a *different* format or series, or with no matching tag at all, is NOT a match. CTA wording and asset are not selected through a broad asset-bank exception: use only the values recorded in the exact `STORY_BIBLE_PATH`. Openers, title cards, character refs, appearance text and voice samples also stay format/series-bound.
 
    **Distribute assets to roles:**
 
@@ -164,20 +164,17 @@ Without this phrase — work autonomously.
 
    **If an asset is missing (i.e. no row tagged with the current `FORMAT`):**
    - **Opener / CTA:** STOP — notify the user. These assets must be uploaded in advance
-   - **Character refs / avatar refs:** generation in Phase 3 is allowed, but **mandatory upload** of the result to Supabase via `queue/upload-asset.sh --tags "{FORMAT},..."`. The `FORMAT` tag is mandatory, not optional — it's what makes the ref eligible for reuse next time and what keeps it from being reused by a different format.
+   - **Character refs:** generation in Phase 3 is allowed only through `tools/fal_runner.py`, with the exact format/series tags in the required job `supabase` block. The runner validates and uploads through `queue/upload-asset.sh`. Avatar-specific NB2 output is currently outside the runner allowlist; if required and missing, STOP rather than bypassing the runner.
    - **Gameplay clips:** STOP for reddit-story / gameplay-ai-avatar
 
-   **After generating ANY new character** Storyboarder must:
-   1. Upload to Supabase Storage
-   2. Register in `game_assets` via `queue/upload-asset.sh`
-   3. Next time the character will already be in Supabase
+   **After generating ANY new character** Storyboarder must return runner `phase: "DONE"`, a validated local PNG, and the permanent `supabase_url`; the runner performs Storage upload and `game_assets` registration. That URL becomes the only downstream ref.
 
 8. **Story bible** — every production format/series uses the exact resolved `STORY_BIBLE_PATH`. Missing file → ask the user whether to create it and STOP. Keep proposed updates run-local; Manager writes them only after explicit final user approval in Phase 6.
 
 ### PHASE 1 — Script
 Delegate via `Agent(subagent_type="scenarist")` (model: sonnet, defined in `.claude/agents/scenarist.md`). The sub-agent will load `rules/roles/scenarist.md` itself — you do NOT read it. In the `prompt`, pass: `GAME_TAG`, `FORMAT` (playbook), `IDEA`, `OUTPUT_DIR` (absolute), `LANGUAGE`, `EXISTING_REFS_JSON` if applicable. Template: `prompts/scenarist.txt`.
 
-> ⚠️ **ALWAYS use the prompt template as the base** (`prompts/{role}.txt`). The templates contain critical boilerplate: `.env` loading (`set -a; source "$(git rev-parse --show-toplevel)/video-agent/.env"; set +a`), env verification, and constraint reminders. Writing a shorter custom prompt drops these and causes hard-to-debug failures (missing FAL_KEY, wrong subtitle style, etc.).
+> ⚠️ **ALWAYS use the prompt template as the base** (`prompts/{role}.txt`). The templates contain critical environment/CLI gates and constraint reminders. For Storyboarder this includes the mandatory `fal_runner.py` preflight/run contract; a shorter custom prompt can silently reintroduce direct HTTP or temporary URLs.
 
 **Output:** `$OUTPUT_DIR/storyboard.json`.
 
@@ -198,16 +195,20 @@ Delegate via `Agent(subagent_type="sound")` (model: haiku, defined in `.claude/a
 **Output:** `scenes/scene-K/scene-K.mp3` per dialogue clip, `bg-music.mp3`, `tts_url` written back into storyboard.json.
 
 ### PHASE 3 — Images (Storyboarder)
-Delegate via `Agent(subagent_type="storyboarder")` (model: sonnet, defined in `.claude/agents/storyboarder.md`). The sub-agent loads `rules/roles/storyboarder.md` itself. In the `prompt`, pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` already inside), `EXISTING_REFS_JSON` (existing character/bg refs from Supabase). Template: `prompts/storyboarder.txt`.
+Delegate via `Agent(subagent_type="storyboarder")` (model: sonnet, defined in `.claude/agents/storyboarder.md`). The sub-agent loads `rules/roles/storyboarder.md` itself. In the `prompt`, pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` already inside), exact `STORY_BIBLE_PATH`, and optional `SUPABASE_ASSETS_FILE` only when a real dump exists. Do not invent or require `${OUTPUT_DIR}/_supabase-assets.json`. Template: `prompts/storyboarder.txt`.
 
-**Workspace hygiene:** before regenerating any asset — move previous files to `output/.../_archive/`. The output folder must contain only current files.
+**Transport gate:** Storyboarder must create one immutable schema-v1 job JSON with mandatory Supabase metadata per NB2 artifact, run `python3 tools/fal_runner.py --preflight JOB`, then `python3 tools/fal_runner.py JOB`. Direct fal.ai curl/HTTP is a Phase 3 failure. Runner semantics override Manager's generic retry: resume an interruption with the same job; `UNKNOWN` is never resubmitted or reset. `PAID_RETRY_REQUIRED` needs explicit authorization before the same job may run once with `--allow-paid-retry`.
 
-**Validation:** check technically that every scene has a PNG ≥ 1KB, valid dimensions, correct index/path mapping, and no unintended duplicate hashes. Do not inspect generated PNGs visually.
+**Workspace hygiene:** archive legacy/unclaimed files normally. A runner-claimed canonical path has no safe reset command; never delete or move `_claims`, state, request, or PNG files manually. Preserve it and stop for an explicit recovery decision.
 
-**Output:** `scenes/refs/character-ref.png`, `scenes/scene-K/scene-K.png` (start frame only — no end frames; see storyboarder.md §14.8).
+**Validation:** for every scene, require (a) local `scene_image` PNG present and ≥1 KB, (b) a matching `${OUTPUT_DIR}/build/fal/{job_id}/state.json` with `phase: "DONE"` and the same `output_path`, (c) non-empty HTTPS `scene_image_url` exactly equal to state `supabase_url`, and (d) no fal/fal.media URL in `scene_image_url` or downstream `image_urls`. Also validate dimensions, correct index/path mapping, and no unintended duplicate hashes. The read-only command is in `rules/main/validation.md`. Do not inspect generated PNGs visually. Any missing/mismatched state or URL stops Phase 3 before Animator.
+
+**Output:** `scenes/refs/character-ref.png`, `scenes/scene-K/scene-K.png`, plus permanent `scene_image_url` values in storyboard (start frames only — no end frames; see storyboarder.md §14.8).
 
 ### PHASE 4 — Animation (Animator)
 Delegate via `Agent(subagent_type="animator")` (model: sonnet, defined in `.claude/agents/animator.md`). Sub-agent loads `rules/roles/animator.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute) and use only the route declared by that format. Serial-drama uses Kling I2V native audio for dialogue; Gameplay AI Avatar is inactive. Template: `prompts/animator.txt`. If many scenes do not fit one pass, split them into batches while keeping the same selected route.
+
+**Video execution boundary:** Scenarist/Manager/Animator select the tool, duration, audio policy and full provider payload from the storyboard and exact format playbook. Every Kling v3 Standard I2V request then uses one immutable schema-v3 `kling_runner.py` job: `route + untouched payload + technical expect + output/upload destination`, preflight, real run. Runner never makes format decisions or simplifies fields. Direct fal HTTP or mutating the selected request is a Phase 4 failure. Runner `UNKNOWN` is never resubmitted; `PAID_RETRY_REQUIRED` needs explicit authorization. New formats on an existing route require no runner change; compatible new fal queue endpoints are data-only entries in `tools/video_routes.json`.
 
 **CRITICAL — Upload to Supabase before expensive generation:**
 If output of one stage (TTS, images) is needed as input for the next expensive stage (Kling Avatar, I2V):
@@ -216,7 +217,7 @@ If output of one stage (TTS, images) is needed as input for the next expensive s
 3. Use ONLY the Supabase URL for the next stage
 4. NEVER use temporary fal.ai result URLs as input to expensive generation
 
-**Validation:** manager checks inline that every scene has an MP4 ≥ 100KB. If any are missing or undersized → STOP and investigate before Editor.
+**Validation:** manager checks inline that every scene has an MP4 ≥ 100KB. For `kling_runner.py` jobs also require matching `phase: "DONE"` state, `scene_video == output_path`, and permanent `scene_video_url == supabase_url`. If any are missing or mismatched → STOP before Editor.
 
 **Output:** `scenes/scene-K/scene-K.mp4` per clip.
 
@@ -382,10 +383,10 @@ Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
 ## Phase contracts
 
 ```
-Phase 0  → format rules + game config loaded; EXISTING_REFS_JSON ready
+Phase 0  → format rules + game config loaded; optional SUPABASE_ASSETS_FILE ready when queried
 Phase 1  → storyboard.json                          [check: clips/scenes array non-empty]
 Phase 2  → scene-K.mp3 + tts_url in storyboard      [check: all dialogue MP3s ≥ 5KB]
-Phase 3  → scene-K.png + image_url in storyboard    [check: all PNGs ≥ 1KB]
+Phase 3  → runner DONE + scene-K.png + scene_image_url [check: state/local/permanent URL agree]
 Phase 4  → scene-K.mp4                              [check: all MP4s ≥ 100KB]
 Phase 5  → final.mp4                                [check: final.mp4 ≥ 100KB, ffprobe duration sane]
 Phase 6  → local final.mp4 shown → user OK → Supabase + scheduled YT + log + bible update
@@ -412,12 +413,12 @@ output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/{RUN_ID}/
 
 ## Context7 — mandatory API check
 
-Before calling ANY external API (fal.ai, Kling, MiniMax, Chatterbox, Supabase) **strictly mandatory** — verify against current docs via the **Context7** MCP server:
+Before calling an external API not pinned behind a repository runner, verify current docs via the **Context7** MCP server:
 
 1. `resolve-library-id` → get the library/service ID
 2. `get-library-docs` → read current parameters, endpoints, request formats
 
-**Do not rely on memory.** Parameters change regularly. Use Context7 whenever in doubt.
+**Do not rely on memory.** Parameters change regularly. For Storyboarder NB2, `tools/fal_runner.py` is the pinned executable contract: do not replace its endpoint/parameters or bypass it based on a manual docs lookup.
 
 ---
 
@@ -425,8 +426,9 @@ Before calling ANY external API (fal.ai, Kling, MiniMax, Chatterbox, Supabase) *
 
 | Model | Endpoint | Cost |
 |--------|----------|-----------|
+| Nano Banana 2 via `tools/fal_runner.py` | pinned `nb2.text` / `nb2.edit` | ~$0.08/image |
 | GPT Image 2 medium (image) | `fal-ai/gpt-image-2` (verify via Context7) | ~$0.04 |
-| Kling v3 Standard I2V (primary) | `fal-ai/kling-video/v3/standard/image-to-video` | $0.084/s ($0.42/5s no audio; always `generate_audio: false`) |
+| Kling v3 Standard I2V (primary) | `fal-ai/kling-video/v3/standard/image-to-video` | $0.084/s without audio, $0.126/s with audio; Scenarist/Manager/Animator choose exact `generate_audio` from storyboard + format playbook |
 | Kling 2.6 Pro I2V (user-authorized route only; never automatic fallback) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.07/s ($0.35/5s no audio) |
 | MiniMax TTS (via fal.ai) | `fal-ai/minimax/speech-2.8-hd` | ~$0.10/1k chars. `voice_setting.voice_id`, `emotion`. Field is `prompt` not `text`. |
 | Kling Lipsync | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/s |

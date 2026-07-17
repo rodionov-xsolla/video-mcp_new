@@ -144,6 +144,8 @@ video-agent/
 │   │   └── oxide.md
 │   ├── kekele/
 │   │   └── kekele.md
+│   ├── growtopia/
+│   │   └── growtopia.md         # Конфиг игры (pixel-art sandbox; рефы — TODO, парсер)
 │   ├── marvel-snap/
 │   │   ├── gameplay/
 │   │   └── reddit-story_bible.json
