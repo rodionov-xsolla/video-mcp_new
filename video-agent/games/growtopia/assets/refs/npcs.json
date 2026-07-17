@@ -1,0 +1,383 @@
+[
+  {
+    "name": "A Burglar",
+    "slug": "a-burglar",
+    "file": "a-burglar.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/f/fa/A_Burglar_Sprites.png/revision/latest?cb=20200707134332",
+    "wiki_page": "https://growtopia.fandom.com/wiki/A_Burglar",
+    "wiki_file": "A Burglar Sprites.png",
+    "nb2_file": "nb2/a-burglar.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/a-burglar/sheet.png"
+  },
+  {
+    "name": "Alan, The Alien",
+    "slug": "alan-the-alien",
+    "file": "alan-the-alien.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/416/y-offset/1536/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Alan%2C_The_Alien",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/alan-the-alien.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/alan-the-alien/sheet.png"
+  },
+  {
+    "name": "Alien Computer",
+    "slug": "alien-computer",
+    "file": "alien-computer.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/4032/y-offset/1472/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Alien_Computer",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/alien-computer.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/alien-computer/sheet.png"
+  },
+  {
+    "name": "Alien Menace",
+    "slug": "alien-menace",
+    "file": "alien-menace.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/3872/y-offset/1504/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Alien_Menace",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/alien-menace.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/alien-menace/sheet.png"
+  },
+  {
+    "name": "Alien Ship",
+    "slug": "alien-ship",
+    "file": "alien-ship.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/352/y-offset/1536/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Alien_Ship",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/alien-ship.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/alien-ship/sheet.png"
+  },
+  {
+    "name": "Box of Supplies",
+    "slug": "box-of-supplies",
+    "file": "box-of-supplies.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/4064/y-offset/1472/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Box_of_Supplies",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/box-of-supplies.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/box-of-supplies/sheet.png"
+  },
+  {
+    "name": "Crazy Jim",
+    "slug": "crazy-jim",
+    "file": "crazy-jim.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/992/y-offset/480/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Crazy_Jim",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/crazy-jim.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/crazy-jim/sheet.png"
+  },
+  {
+    "name": "Crime In Progress",
+    "slug": "crime-in-progress",
+    "file": "crime-in-progress.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/4064/y-offset/256/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Crime_In_Progress",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/crime-in-progress.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/crime-in-progress/sheet.png"
+  },
+  {
+    "name": "Criminal Mastermind",
+    "slug": "criminal-mastermind",
+    "file": "criminal-mastermind.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/3904/y-offset/1504/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Criminal_Mastermind",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/criminal-mastermind.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/criminal-mastermind/sheet.png"
+  },
+  {
+    "name": "Dummy Alien Computer",
+    "slug": "dummy-alien-computer",
+    "file": "dummy-alien-computer.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/3104/y-offset/1504/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Dummy_Alien_Computer",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/dummy-alien-computer.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/dummy-alien-computer/sheet.png"
+  },
+  {
+    "name": "Dungeons Cryptkeeper",
+    "slug": "dungeons-cryptkeeper",
+    "file": "dungeons-cryptkeeper.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/3616/y-offset/1856/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Dungeons_Cryptkeeper",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/dungeons-cryptkeeper.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/dungeons-cryptkeeper/sheet.png"
+  },
+  {
+    "name": "Dungeons Shopkeeper",
+    "slug": "dungeons-shopkeeper",
+    "file": "dungeons-shopkeeper.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/2272/y-offset/1824/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Dungeons_Shopkeeper",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/dungeons-shopkeeper.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/dungeons-shopkeeper/sheet.png"
+  },
+  {
+    "name": "Fashion Show Bouncer",
+    "slug": "fashion-show-bouncer",
+    "file": "fashion-show-bouncer.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/3808/y-offset/1920/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Fashion_Show_Bouncer",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/fashion-show-bouncer.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/fashion-show-bouncer/sheet.png"
+  },
+  {
+    "name": "Founder of the Fancy Gentleman Club",
+    "slug": "founder-of-the-fancy-gentleman-club",
+    "file": "founder-of-the-fancy-gentleman-club.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/3808/y-offset/1504/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Founder_of_the_Fancy_Gentleman_Club",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/founder-of-the-fancy-gentleman-club.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/founder-of-the-fancy-gentleman-club/sheet.png"
+  },
+  {
+    "name": "Geoff, The Guard",
+    "slug": "geoff-the-guard",
+    "file": "geoff-the-guard.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/448/y-offset/1536/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Geoff%2C_The_Guard",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/geoff-the-guard.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/geoff-the-guard/sheet.png"
+  },
+  {
+    "name": "Legendary Wizard",
+    "slug": "legendary-wizard",
+    "file": "legendary-wizard.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/4064/y-offset/192/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Legendary_Wizard",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/legendary-wizard.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/legendary-wizard/sheet.png"
+  },
+  {
+    "name": "Lincoln, The Leprechaun",
+    "slug": "lincoln-the-leprechaun",
+    "file": "lincoln-the-leprechaun.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/384/y-offset/1536/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Lincoln%2C_The_Leprechaun",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/lincoln-the-leprechaun.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/lincoln-the-leprechaun/sheet.png"
+  },
+  {
+    "name": "Lock-Bot",
+    "slug": "lock-bot",
+    "file": "lock-bot.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/1568/y-offset/448/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Lock-Bot",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/lock-bot.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/lock-bot/sheet.png"
+  },
+  {
+    "name": "Locke The Salesman",
+    "slug": "locke-the-salesman",
+    "file": "locke-the-salesman.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/1504/y-offset/288/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Locke_The_Salesman",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/locke-the-salesman.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/locke-the-salesman/sheet.png"
+  },
+  {
+    "name": "Mark, The Mechanic",
+    "slug": "mark-the-mechanic",
+    "file": "mark-the-mechanic.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/3936/y-offset/1504/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Mark%2C_The_Mechanic",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/mark-the-mechanic.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/mark-the-mechanic/sheet.png"
+  },
+  {
+    "name": "Master Peng",
+    "slug": "master-peng",
+    "file": "master-peng.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/1824/y-offset/512/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Master_Peng",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/master-peng.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/master-peng/sheet.png"
+  },
+  {
+    "name": "Nutcracker",
+    "slug": "nutcracker",
+    "file": "nutcracker.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/928/y-offset/928/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Nutcracker",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/nutcracker.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/nutcracker/sheet.png"
+  },
+  {
+    "name": "Pet Battle Gym Healer",
+    "slug": "pet-battle-gym-healer",
+    "file": "pet-battle-gym-healer.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/1952/y-offset/1888/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Pet_Battle_Gym_Healer",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/pet-battle-gym-healer.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/pet-battle-gym-healer/sheet.png"
+  },
+  {
+    "name": "Pet Battle Gym Leader",
+    "slug": "pet-battle-gym-leader",
+    "file": "pet-battle-gym-leader.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/1888/y-offset/1888/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Pet_Battle_Gym_Leader",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/pet-battle-gym-leader.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/pet-battle-gym-leader/sheet.png"
+  },
+  {
+    "name": "Pet Battle Gym Trainer",
+    "slug": "pet-battle-gym-trainer",
+    "file": "pet-battle-gym-trainer.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/1920/y-offset/1888/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Pet_Battle_Gym_Trainer",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/pet-battle-gym-trainer.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/pet-battle-gym-trainer/sheet.png"
+  },
+  {
+    "name": "Pet Trainer",
+    "slug": "pet-trainer",
+    "file": "pet-trainer.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/3616/y-offset/416/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Pet_Trainer",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/pet-trainer.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/pet-trainer/sheet.png"
+  },
+  {
+    "name": "Robert, The Robot",
+    "slug": "robert-the-robot",
+    "file": "robert-the-robot.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/3840/y-offset/1504/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Robert%2C_The_Robot",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/robert-the-robot.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/robert-the-robot/sheet.png"
+  },
+  {
+    "name": "Shady Salesman",
+    "slug": "shady-salesman",
+    "file": "shady-salesman.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/416/y-offset/1600/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Shady_Salesman",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/shady-salesman.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/shady-salesman/sheet.png"
+  },
+  {
+    "name": "ShockBot (disambiguation)",
+    "slug": "shockbot-disambiguation",
+    "file": "shockbot-disambiguation.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/576/y-offset/704/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/ShockBot_%28disambiguation%29",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/shockbot-disambiguation.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/shockbot-disambiguation/sheet.png"
+  },
+  {
+    "name": "ShooterBot (disambiguation)",
+    "slug": "shooterbot-disambiguation",
+    "file": "shooterbot-disambiguation.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/1216/y-offset/704/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/ShooterBot_%28disambiguation%29",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/shooterbot-disambiguation.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/shooterbot-disambiguation/sheet.png"
+  },
+  {
+    "name": "SpikeBot (disambiguation)",
+    "slug": "spikebot-disambiguation",
+    "file": "spikebot-disambiguation.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/608/y-offset/704/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/SpikeBot_%28disambiguation%29",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/spikebot-disambiguation.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/spikebot-disambiguation/sheet.png"
+  },
+  {
+    "name": "The Bartender",
+    "slug": "the-bartender",
+    "file": "the-bartender.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/3584/y-offset/1504/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/The_Bartender",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/the-bartender.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/the-bartender/sheet.png"
+  },
+  {
+    "name": "The Bouncer",
+    "slug": "the-bouncer",
+    "file": "the-bouncer.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/3616/y-offset/1504/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/The_Bouncer",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/the-bouncer.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/the-bouncer/sheet.png"
+  },
+  {
+    "name": "The Monster Nian",
+    "slug": "the-monster-nian",
+    "file": "the-monster-nian.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/0/y-offset/1632/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/The_Monster_Nian",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/the-monster-nian.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/the-monster-nian/sheet.png"
+  },
+  {
+    "name": "The Ringmaster",
+    "slug": "the-ringmaster",
+    "file": "the-ringmaster.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/1728/y-offset/224/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/The_Ringmaster",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/the-ringmaster.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/the-ringmaster/sheet.png"
+  },
+  {
+    "name": "Tomb Robber",
+    "slug": "tomb-robber",
+    "file": "tomb-robber.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/2144/y-offset/576/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Tomb_Robber",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/tomb-robber.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/tomb-robber/sheet.png"
+  },
+  {
+    "name": "Walter, The Manager",
+    "slug": "walter-the-manager",
+    "file": "walter-the-manager.webp",
+    "source_url": "https://static.wikia.nocookie.net/growtopia/images/8/8f/ItemSprites.png/revision/latest/window-crop/width/32/x-offset/4000/y-offset/1472/window-width/32/window-height/32?format=webp&fill=cb-20260219100732",
+    "wiki_page": "https://growtopia.fandom.com/wiki/Walter%2C_The_Manager",
+    "wiki_file": "atlas-crop",
+    "nb2_file": "nb2/walter-the-manager.png",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/walter-the-manager/sheet.png"
+  },
+  {
+    "name": "Growtopian (default skin)",
+    "slug": "growtopian-default-skin",
+    "file": "growtopian-default-skin.jpg",
+    "nb2_file": "nb2/growtopian-default-skin.png",
+    "source_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSXtwW37bC4G4wtckNqCSpqg00fmo40PHlVLYd9lupAGRdJdQAUcy5JryV&s=10",
+    "wiki_page": null,
+    "wiki_file": "user-provided (google thumbnail)",
+    "note": "default player avatar; low-res screenshot w/ background — rough reference only",
+    "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/growtopian-default-skin/sheet.png"
+  }
+]
