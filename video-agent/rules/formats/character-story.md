@@ -6,7 +6,7 @@ overlays: false
 
 # Format "Character Story" — first-person lore monologue with visualization
 
-A tightly-cut lore video: the character tells their story in first person while Kling I2V visualizes the key moments. TTS overlay on silent picture; subtitles via `add_subtitles.py` (whisper word-timestamps → ASS chunks of 3 words, burned in before audio mix).
+A tightly-cut lore video: the character tells their story in first person while Kling I2V visualizes the key moments. TTS overlay on silent picture; subtitles use the universal whisper-timed ASS pipeline from `rules/roles/editor.md`.
 
 This file is the **playbook**: when to use, concept, budget, role briefs. Craft rules — in `rules/roles/*.md`.
 
@@ -16,12 +16,14 @@ This file is the **playbook**: when to use, concept, budget, role briefs. Craft 
 
 Keywords: "character story", "история персонажа", "лор", "lore", "backstory", "origin story", "предыстория".
 
+Before generation, resolve the exact `games/{GAME_TAG}/character-story_story_bible.json`. It must own this format's `style_tags`, character appearance data, eligible refs, and any approved voice sample. Missing or incomplete bible → STOP and ask the user whether to create or complete it. Never auto-create it or borrow another format's data.
+
 ---
 
 ## Concept
 
 - **Genre:** lore monologue, first-person visual storytelling
-- **Style:** resolved from the style chain — the story bible's top-level `style_tags` (if present) takes precedence, else the game config `prompt_prefix` in `games/{GAME_TAG}/{GAME_TAG}.md`.
+- **Style:** exact `character-story` story bible `style_tags`, unless the user gives a live override. Game-wide and other-format style/appearance data are not fallbacks.
 - **Duration:** 30–40s (6–8 clips × 5s)
 - **Budget:** up to $6.00 per video. Stop if spend > $5.40.
 - **Frame format:** 9:16 (608×1080) for all scenes
@@ -29,8 +31,8 @@ Keywords: "character story", "история персонажа", "лор", "lor
 ### Models
 
 - **Image:** NB2 (`fal-ai/nano-banana-2/edit`) — character refs + scene images
-- **Video:** Kling v3 Standard I2V (`fal-ai/kling-video/v3/standard/image-to-video`) — `generate_audio: false`. Fallback to v2.6 Pro only on v3 artifacts. v3 supports native `multi_prompt`.
-- **Audio:** ElevenLabs TTS overlay (`fal-ai/elevenlabs/tts/eleven-v3`) — first-person monologue
+- **Video:** Kling v3 Standard I2V (`fal-ai/kling-video/v3/standard/image-to-video`) — `generate_audio: false`. Keep the selected model/endpoint/route and serialized request fixed; retry once, then stop. Kling 2.6 is not an automatic fallback. v3 supports native `multi_prompt`.
+- **Audio:** Chatterbox only when the exact `character-story` story bible owns an approved character sample. If no sample exists and voice identity is important, STOP and ask; use MiniMax only when the user accepts a non-identity-critical voice. ElevenLabs TTS and cross-format samples are forbidden.
 - **Music:** yes, mood per plot, `volume` per mood (0.10–0.20)
 
 ### Key mechanic
@@ -49,8 +51,8 @@ The character does NOT speak on camera (no lipsync). Video = visualization of wh
 
 | Component | Cost |
 |---|---|
-| ElevenLabs TTS (~40s monologue) | ~$0.20 |
-| Music (local) | $0.00 |
+| External TTS (approved exact-format Chatterbox sample, or user-authorized MiniMax) | see `providers.json` |
+| MiniMax Music | see `providers.json` |
 | Character ref (one per age variant — typically 1 or 2) | $0.08 each |
 
 | Variant | Clips | Cost |
@@ -93,7 +95,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - First-person, character voice
 - ~80–120 words for 30–40s
 - Short sentences, punchy phrases
-- Voice picked from ElevenLabs by character traits
+- Voice route follows exact-format ownership: approved Character Story sample → Chatterbox; user-authorized non-identity-critical voice → MiniMax
 - Every 5s (1 clip) ≈ 10–15 words
 
 ---
@@ -115,7 +117,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - camera_angle differs between adjacent clips, AND every clip specifies an active camera move (push-in / pull-back / lateral dolly / low boom / crane up / handheld drift). No "camera holds steady" clips.
 - Number of characters in frame — per plot (1–2, max 2 in frame)
 - **No bg-reference generation** — environment goes into `image_prompt` as text only
-- Voice: pick from ElevenLabs by character (Daniel — confident, George — neutral, Charlie — young, Charlotte — female)
+- Voice intent comes from the character and exact Character Story bible. Record intent, not an ElevenLabs voice name; Sound resolves the permitted Chatterbox/MiniMax route.
 - General script rules — `rules/roles/scenarist.md`
 
 **Storyboard.json — extra fields:**
@@ -127,9 +129,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
   "character_name": "{name}",
   "tts": {
     "full_text": "{full monologue}",
-    "voice": "{voice name}",
-    "stability": 0.25,
-    "style": 0.75,
+    "voice_intent": "{character-specific delivery intent}",
     "language_code": "{ISO 639-1}"
   },
   "music": {
@@ -157,11 +157,11 @@ The structure is flexible — the scenarist adapts it to the specific character'
 
 ### Storyboarder
 
-- Style: resolved from the style chain — the story bible's top-level `style_tags` (if present) overrides the game config for all clips, else use `prompt_prefix` from `games/{GAME_TAG}/{GAME_TAG}.md`. Apply the resolved style verbatim to every clip.
+- Style: use the exact `character-story` story bible `style_tags` (or live user override) verbatim for every clip. Never fall back to game-wide or another format's style/appearance data.
 - All frames 9:16 (608×1080)
-- Character ref: create an anchor ref (neutral pose, dark background) from game config
+- Character ref: use only an anchor recorded by the exact Character Story bible and owned by the exact game/format/series. If missing, generate a fresh Character Story-bound anchor from that bible's appearance text; never copy another format's ref or appearance description.
 - **No bg-reference generation.** Environment is baked into the scene prompt via `image_prompt`. Do NOT generate separate bg PNGs for character-story — use text description of the location in the prompt only.
-- Chain: `scene-1` refs = `[character-ref]`; `scene-N` (N≥2) refs = `[character-ref, scene-(N-1).png]`. No bg ref (background comes through text in `image_prompt`), but the prev-scene chain is mandatory for continuity between frames (verified on Picard EP1: Storyboarder used the chain for clips 3/5/6/7 → continuity improved). See storyboarder.md §10.
+- Chain: `scene-1` refs = `[exact-character-story-ref]`; `scene-N` (N≥2) refs = `[exact-character-story-ref, same-run scene-(N-1).png]`. No bg ref (background comes through text in `image_prompt`), but the same-run prev-scene chain is mandatory for continuity between frames. See storyboarder.md §10.
 - If 2 characters in frame — both via refs, max 2 refs per image
 - `image_prompt` describes the visual action from `action_description`, NOT the monologue text
 - **One PNG per clip — start frame only.** Do NOT generate `scene-K-end.png`. End frames waste $0.08/clip and are FORBIDDEN with `multi_prompt`. See storyboarder.md §14.8.
@@ -169,7 +169,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
 
 ### Animator
 
-- All clips via **Kling v3 Standard I2V** (`generate_audio: false`); fallback v2.6 Pro only on v3 artifacts
+- All clips via **Kling v3 Standard I2V** (`generate_audio: false`). Retry the same serialized request once on the same route, then stop the whole video; Kling 2.6 requires separate explicit authorization after the stopped run.
 - **Start frame only.** Do NOT pass `tail_image_url` / end frame. Identity is held by `image_url` (start frame, chain-ref'd by Storyboarder) + the chain consistency Kling already enforces between adjacent frames. End frames make Kling interpolate-then-freeze and produce static clips.
 - **Motion is mandatory, not optional.** Every clip must specify three concurrent layers:
   1. **Camera move** — pick one per clip: slow push-in, slow pull-back, lateral dolly, low boom up, crane up, parallax handheld drift. Distribute variety across the 6–8 clips. NEVER "camera holds steady".
@@ -188,12 +188,13 @@ The structure is flexible — the scenarist adapts it to the specific character'
 
 ### Sound
 
-- **TTS:** ElevenLabs via fal.ai (`fal-ai/elevenlabs/tts/eleven-v3`)
-  - `voice` = name string (Daniel, George, Charlie, Charlotte), NOT voice_id
-  - One voice for the whole video (single character)
-  - `stability` and `style` per character traits
-  - Generate the full monologue in **one request** (it's a single continuous voice; one request keeps prosody coherent and gets a single mp3 the subtitle pipeline can whisper-align in one pass)
-  - Save full mp3 → upload to Supabase. Editor mixes it over the concatenated picture.
+- **TTS route:** follow `rules/roles/sound.md`.
+  - Approved sample owned by the exact `character-story` bible → Chatterbox.
+  - No approved sample and identity-critical character voice → STOP and ask the user.
+  - MiniMax is allowed only when the user accepts a non-identity-critical voice.
+  - ElevenLabs TTS and cross-format voice lookup are forbidden. Keep one voice intent for the whole video.
+  - Chatterbox monologues are split into safe chunks of at most 35 words; never send an 80+ word monologue in one request. Concatenate the validated chunks into the single final narration track used for alignment.
+  - Save locally and upload only when a downstream API needs a permanent run-scoped URL. Editor mixes the final narration over the concatenated picture.
 - **Subtitles: one universal style (editor.md §6)**
   - **NEVER** generate one PIL PNG per `tts_segment` — produces unreadable 13-word slabs glued to 5s clip duration. Banned.
   - Run `add_subtitles.py` ONCE on the full `tts-output.mp3` against the picture-only concat (Editor produces it before audio mix).
@@ -263,6 +264,8 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 
 ## Validation before publishing
 
+Generated PNG/MP4/audio receives technical validation only (path, size, hash, dimensions, codec, duration, schema). Visual continuity/style/age-progression items below are prompt/schema requirements and user-review criteria; they do not authorize AI Vision, frame sampling, or machine semantic inspection.
+
 - [ ] `format: "character-story"` in storyboard.json
 - [ ] `character_speech: null` for all clips (voice via TTS, not in video)
 - [ ] `tts_segment` filled for each clip
@@ -276,8 +279,8 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 - [ ] camera_angle differs between adjacent clips, and every clip has an active camera move (no "holds steady")
 - [ ] motion_prompt has three concurrent layers (camera + environment + character) and uses continuous-tense verbs
 - [ ] motion_prompt contains NONE of the banned freeze phrases (then settles / then steady / then holds / hold position / no morphing / camera holds steady)
-- [ ] TTS via fal.ai ElevenLabs (`voice` name, not `voice_id`)
-- [ ] Subtitles via `add_subtitles.py` (ASS, chunk 3, fontsize 72, marginv 200) — NOT PIL PNG by `tts_segment`
+- [ ] TTS uses approved exact-character-story Chatterbox, or user-authorized MiniMax; no ElevenLabs TTS or cross-format sample
+- [ ] Subtitles use the universal `add_subtitles.py` contract from `rules/roles/editor.md` — no format-local chunk/font/margin overrides and no PIL PNG by `tts_segment`
 - [ ] If TTS longer than picture timeline: `atempo` ≤ 1.4× in audio mix; subtitles via whisper from voice-final.wav (no manual --atempo)
 - [ ] fps normalized to 30 before concat
 - [ ] One ffmpeg pipeline, not layered
@@ -289,7 +292,7 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 
 ## Visual style consistency — HARD RULE
 
-**All clips in an episode must share the same visual style.** The target style is determined by the story bible's top-level `style_tags` (if present) or the game config `prompt_prefix` — and must be applied identically to every clip, including clips with child characters or scenes that trigger NB2 safety filters.
+**All clips in an episode must share the same visual style.** The target style comes from the exact Character Story bible's top-level `style_tags` (or a live user override) and must be applied identically to every clip, including clips with child characters or scenes that trigger NB2 safety filters. Missing style data stops generation; never fall back to game-wide or another format.
 
 **If NB2 rejects a prompt:** rewrite the `image_prompt` and `negative_prompt` using neutral language (avoid: occupation, refugee, soldier, war, violence, terrified, attack, battle, enemy). Do NOT change the image style, do NOT drop the character ref from `image_urls`. The character ref anchors the visual style — removing it causes NB2 to lose the style anchor and produce inconsistent output.
 
@@ -302,8 +305,8 @@ output/YYYY-MM-DD/{GAME_TAG}/character-story/
 - ❌ `generate_audio: true` in Kling I2V (voice is bad, use TTS overlay)
 - ❌ Kling Avatar (format does not use lipsync)
 - ❌ `character_speech ≠ null` (voice only via TTS overlay)
-- ❌ `voice_id` hash instead of `voice` name in ElevenLabs
-- ❌ TTS by fragments (generate the whole monologue in one request)
+- ❌ ElevenLabs TTS, a cross-format voice sample, or Chatterbox without an approved exact-character-story sample
+- ❌ Sending an 80+ word monologue in one Chatterbox request, or changing route/voice intent between chunks
 - ❌ Monologue text = description of footage (voice complements, doesn't duplicate)
 - ❌ character ref directly as scene image (each clip = its own PNG)
 - ❌ Generating scene-K-end.png and/or passing `tail_image_url` to Kling — wastes $0.08/clip and biases Kling toward static interpolation

@@ -62,6 +62,16 @@ Growtopia — 2D песочница-MMO, где мир состоит из бл�
 Growtopia style, 2D pixel-art sprite, retro flat side-view design, blocky pixelated proportions, thick clean black outlines, bright saturated candy colors, simple tile-based sandbox world backdrop, no 3D rendering
 ```
 
+### ⚠️ Animating the sprite via Kling I2V — "Minecraft morph" (burned 2026-07-17)
+The blocky Growtopia skin **very easily morphs into a 3D Minecraft look** under I2V. `NOT Minecraft` negatives do NOT fix it — it is fixed by start-frame composition and camera motion (full write-up in `rules/roles/animator.md §3.2`). In short, for growtopia pixel scenes:
+- **Grounded composition is mandatory:** the character stands inside a full flat tiled Growtopia world (platforms, blocks, World Lock — reading like a "2D game screenshot"). Do NOT isolate the sprite on empty sky and do NOT place it in a perspective 3D "cave" — in both cases Kling reconstructs voxel 3D.
+- **Camera:** a gentle push-in toward the character, or near-locked. No pull-backs / fly-overs "above the block world" and no orbits "toward frontal" — those trigger 3D reconstruction.
+- **Do not rotate the sprite:** no head/body turns to frontal (a side-view sprite has no valid 3D frontal view).
+- Liveliness comes from 2D particles and environment, not from camera motion.
+
+### Default-skin costume — locked
+Canon is fixed (see the LOCKED block in `## Character Prompt Blocks` → Growtopian Avatar, and `games/growtopia/character-story_story_bible.json.characters[].canonical_costume`): tan skin, **cyan/turquoise shirt (~#3FC1D6)**, **medium-blue pants (~#5B6DC8)**. Otherwise NB2 drifts the colors from scene to scene (seen: nude / red / cyan within one video) — always spell out the exact colors in every scene prompt.
+
 ---
 
 ## Character Prompt Blocks
@@ -70,8 +80,10 @@ Growtopia style, 2D pixel-art sprite, retro flat side-view design, blocky pixela
 
 ### Аватары и сеты
 
-#### Growtopian Avatar (базовый игрок)
-`2D pixel-art Growtopian avatar, blocky humanoid, large square head, two simple dot eyes and small smile, short pixel torso in bright colored t-shirt, plain pixel pants, tiny blocky hands, side-view stance, retro sprite look`
+#### Growtopian Avatar (base player) — LOCKED default-skin costume
+> The default-skin canon is fixed so NB2 stops producing different colors from scene to scene. Skin tan/beige (~#C9A67C), shirt bright cyan/turquoise (~#3FC1D6), pants medium-blue (~#5B6DC8), white eyes with black pupils, thick outline, no hats/sets.
+
+`2D pixel-art Growtopian avatar, blocky humanoid, tan/beige blocky skin, large square head, two white dot eyes with black pupils and a small flat mouth, thick clean black outline, bright cyan/turquoise short-sleeve t-shirt, medium-blue pants, tiny blocky hands, no hat, no cosmetic set, canonical unmodified default skin, side-view stance, retro sprite look`
 
 #### Legendary Wizard set
 `2D pixel-art Growtopian in Legendary Wizard set, long flowing purple robe, tall pointed wizard hat with yellow stars, big white pixel beard, glowing magic staff with sparkling orb, faint arcane glow, side-view heroic pose`
@@ -196,11 +208,19 @@ Growtopia style, 2D pixel-art sprite, retro flat side-view design, blocky pixela
 
 ## CTA
 
-- **Статус:** TODO — ассет не загружен
-- **Контент (план):** пиксельный логотип Growtopia + анимация World Lock + текст «FOLLOW FOR MORE» / «LINK IN BIO»
-- **После генерации:** залить в Supabase `assets/growtopia/branding/cta.mp4` и вставить строку в `game_assets` (`asset_type=cta`, `game_tag=growtopia`)
-- **Формат:** 1080×1920, 30fps, ~3s
-- **Модель:** Kling I2V (стилизованный кадр + лёгкое движение)
+- **Status:** ✅ READY (2026-07-17)
+- **Video:** `assets/growtopia/branding/cta.mp4` — `game_assets` (`asset_type=generated_ref`, `character_name=branding:cta`, tags `cta,branding`). Editor finds it by the `cta` tag.
+  - `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4`
+- **Content:** a Growtopia pixel scene, text "Get free gems" / "Link in bio" + a down-arrow, gems, sun. 3s, ~9:16 (720×1280 from Kling; Editor scales to 1080×1920).
+- **Source frame:** `assets/growtopia/branding/cta-source.png` (ChatGPT art). Animated with Kling v3 I2V (idle-v2): camera locked, only the arrow (bob) + sun shimmer move, everything else static.
+- **⚠️ Lesson (2026-07-17):** Kling I2V **morphs text even on a minimal idle** — tested on v1 (lots of motion) AND v2 (only arrow+sun moving, text explicitly frozen via negatives) → the text still "jumped". Conclusion: **a text-heavy CTA cannot be animated cleanly through I2V.** The right approach for text CTAs is **compositing** (animate the background in Kling WITHOUT text, overlay the text as a static ffmpeg layer), or a static CTA. The arrow bounce also comes out too harsh. The current `cta.mp4` (v2) was accepted as "good enough" but carries this text defect. Full write-up in `rules/roles/animator.md §3.2`.
+
+## Pop-up (overlay banner)
+
+- **Status:** ✅ READY (2026-07-17)
+- **Image:** `assets/growtopia/branding/popup.png` — `game_assets` (`asset_type=generated_ref`, `character_name=branding:popup`, tags `popup,overlay,branding`).
+  - `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/popup.png`
+- **Content:** a horizontal banner "Get FREE GEMS! / Link in Bio!" with gems, a miner character, and a chest. For overlaying on videos (not a full-screen CTA).
 
 ---
 

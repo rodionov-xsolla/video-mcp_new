@@ -25,10 +25,10 @@ Not for: news / patch recaps (use `news`), lore monologue (use `character-story`
 ## Concept
 
 - **Genre:** stylized listicle countdown (Buzzfeed-meets-MTV-countdown, in game style)
-- **Style:** game-specific — pulled from `games/{GAME_TAG}/{GAME_TAG}.md` (`prompt_prefix`, `palette`, `lighting`)
+- **Style:** taken from the exact `top-list` story bible (`style_tags`, palette, lighting), unless the user gives a live override. Game-wide or another format's style/appearance data is not a fallback.
 - **Style consistency rule (HARD):** the visual style is described ONCE at the video level in `visual_identity.style_tags` and applied VERBATIM to every scene's `image_prompt`. All 7 scenes must look like the same artist/render pipeline made them. Mixing two different render media in the same video looks broken — even a single off-style scene wrecks the countdown rhythm. Per-scene style overrides are FORBIDDEN.
-- **Style confirmation at video start (MANDATORY).** Before kicking off Scenarist, Manager MUST confirm the target visual style with the user via the resolved style chain (live user instruction → story bible `style_tags` → game config `prompt_prefix`). The default is to MATCH the resolved chain (the game's house style) so the video reads as on-brand. If the user wants something different (illustration, comic, retro), they must say so at the start — drift discovered mid-pipeline costs an additional NB2 regen pass and may sink the budget. The chosen style is then frozen in `visual_identity.style_tags` and applied verbatim per the previous rule.
-- **Anchor-ref style trap:** Supabase character refs from other formats may have been generated in a different style than this video's locked `style_tags`. When you pull them as `/edit` anchor refs, NB2 copies that style and breaks consistency for THIS video. **If an existing Supabase ref is in a different visual style than the locked `style_tags`, do NOT use it as a ref — generate the scene text-to-image with detailed character_description + style tags instead.** Pay $0.08 of NB2 to keep the video coherent; do not save pennies and ship a broken-looking ad.
+- **Style resolution at video start (MANDATORY).** Manager resolves the target style as live user instruction → exact `top-list` story bible `style_tags`. When the exact bible or required style data is missing, STOP and ask whether to create or complete it before generation; never auto-create it or fall back to game-wide data. The chosen style is frozen in `visual_identity.style_tags` and applied verbatim per the previous rule.
+- **Anchor-ref ownership (HARD):** only refs owned by the exact `game + top-list + series` may be passed to NB2. Do not inspect refs visually to decide whether another format's asset is "close enough". Resolve ownership from the exact story bible and metadata. If an owned ref is missing, generate a new top-list-bound ref or use the NB2 text endpoint with the full top-list-owned character description and omit `image_urls` entirely.
 - **N:** fixed **5 items**
 - **Order:** **5 → 1** (climax at #1)
 - **Rank #1 is ALWAYS rendered as 2 clips × 5s = 10s total** — split visually (wide hero shot → close-up payoff) with narrator carrying across both halves. This gives the climax breathing room and a cinematic match-cut moment that no other rank gets.
@@ -39,9 +39,9 @@ Not for: news / patch recaps (use `news`), lore monologue (use `character-story`
 
 ### Models
 
-- **Image:** Nano Banana 2 (title card + 5 item illustrations, 6 generations total)
-- **Video:** Kling I2V v3 Standard (`generate_audio: false`) — primary; Kling 2.6 Pro fallback
-- **Audio:** ElevenLabs TTS narrator overlay (1 short line per item + optional title intro line); music bed under everything
+- **Image:** Nano Banana 2 (title card + 4 ranked items + 2 rank-1 climax images, 7 generations total)
+- **Video:** Kling I2V v3 Standard (`generate_audio: false`). Keep the selected model/endpoint/route fixed; retry the same serialized request once, then stop. Kling 2.6 is not an automatic fallback.
+- **Audio:** MiniMax TTS narrator overlay by default. Chatterbox is allowed only with an approved sample owned by the exact `top-list` story bible. ElevenLabs TTS and cross-format voice samples are forbidden. Music bed stays under everything.
 - **Pre-built assets:** title card is generated inline. CTA is a **pack-shot from Supabase if the game has one** (query `game_assets` for `tags @> ["cta"]` and `asset_type` containing "video"); otherwise fall back to a drawtext CTA overlay on the rank-1 part-2 clip. Star Trek Timelines, for example, has `assets/star-trek-timelines/refs/cta.mp4` ready.
 
 ---
@@ -52,15 +52,13 @@ Not for: news / patch recaps (use `news`), lore monologue (use `character-story`
 |---|---|---|
 | NB2 image | $0.08 | $0.56 |
 | Kling v3 Standard I2V 5s (no audio) | $0.42 | $2.94 |
-| Kling 2.6 Pro I2V 5s (no audio, fallback) | $0.35 | $2.45 |
-| ElevenLabs TTS (~6–8 short lines, ≤10 words) | ~$0.05 | ~$0.30 |
+| External TTS (MiniMax, or Chatterbox with an approved exact-format sample) | see `providers.json` | see `providers.json` |
 | NB2 anchor refs (per new character — when not in Supabase) | $0.08 | varies |
 
 | Variant | Total |
 |---|---|
 | Typical (v3 Standard, all anchors in Supabase) | **~$3.80** |
 | Worst case (2 new anchor refs to generate) | ~$3.96 |
-| Fallback (2.6 Pro) | ~$3.31 |
 
 Slightly more than the previous 6-clip layout because rank-1 is split into 2 clips for the climax. 
 
@@ -96,7 +94,7 @@ Two-stage build (fallback when there is no locked reference), the same as a regu
 1. **NB2 image** (608×1080):
    - Composition: hero collage / silhouette montage of the 5 items behind a big foreground title plate
    - Text baked into the image: `"TOP 5"` (huge) and `"{THEME}"` (e.g. `"STARFLEET WOMEN"`)
-   - Style: from `games/{GAME_TAG}/{GAME_TAG}.md` — `prompt_prefix`, `palette`, `lighting`
+   - Style: from the locked exact-top-list `visual_identity` (`style_tags`, `palette`, `lighting`)
    - Font: read `top_font` from `games/{GAME_TAG}/top-list_special.md` if present, otherwise default **"Montserrat Black"** or **"Bebas Neue"** (bold, sans-serif, high stroke), accent color from game `palette`
    - Add: lens-flare, sparkles, magical particles, embers — whatever fits the game's tone
 
@@ -114,7 +112,7 @@ Two-stage build (fallback when there is no locked reference), the same as a regu
 NB2 image of the character / location / item, **no number-text baked in** (numbers are added by Editor as a drawtext/PIL overlay, so we can iterate fast without re-rendering NB2):
 
 - Composition: hero pose / iconic shot of the item. Character/object occupies center 50–70% of frame, leaves room top-left or top-right for the number overlay
-- Style: from game config (`prompt_prefix`, `palette`, `lighting`)
+- Style: from the locked exact-top-list `visual_identity` (`style_tags`, `palette`, `lighting`)
 - For locations: wide establishing shot, optional foreground silhouette for depth
 - For items/weapons: 3/4 hero-product angle on a stylized background (smoke, sparks, energy)
 
@@ -183,7 +181,7 @@ No per-scene drawtext / manual style / position override.
 
 ### NB2 chain
 
-- **Anchor ref:** for each item, if the character already exists in Supabase `game_assets` (`character_name=eq.{name}`), **check the ref's visual style BEFORE using it**. If it matches the locked `visual_identity.style_tags` for this video → pull and use as `image_urls[0]`. If it's in a different style than the locked `style_tags` → **DO NOT USE IT**. Generate text-to-image with `image_urls: []` + the full character_description + locked style_tags. The $0.08 NB2 spend is worth far more than a broken-looking scene.
+- **Anchor ref:** use only a permanent ref explicitly recorded by the exact `top-list` story bible and tagged for the exact game/format/series. Never search broadly by character name, visually inspect candidates, or reuse another format's ref. If no owned ref exists, call the NB2 text endpoint with the full top-list-owned `character_description` + locked style tags and omit `image_urls` entirely (never pass an empty array).
 - **Chain strategy:** `[anchor_ref?, prev_scene?]` (max 2 refs). Title card has no prev_scene — pure text-to-image with style refs only. For ranks 5–2 each character is different, so chaining on prev_scene would bleed the previous character's identity into the next — usually anchor-only is safer. **The rank-1 climax pair IS the exception**: scene 6 ALWAYS chains on scene 5 (same character, style continuity guaranteed by the pair).
 - **Identity:** `visual_identity.character_description` is verbatim across the brief; per-item `character_description` overrides for that specific entry only.
 - **Style verbatim:** the EXACT `visual_identity.style_tags` string is appended to every `image_prompt` (every scene, no exceptions). Storyboarder MUST copy-paste it; rewording or paraphrasing loses style fidelity.
@@ -204,7 +202,7 @@ Combined with a tighter crop (close-up vs scene 5's wide hero), the second image
 ### Selection rules for ranked characters (HARD RULE)
 
 - When the user asks for a demographic/category-limited ranking (male characters, women, villains, archons, ships, locations, weapons), every ranked entry MUST satisfy that category. Do not include a mascot, companion, child character, object, or mixed-gender duo unless the user explicitly asks for it.
-- If the game config has ready `Character Prompt Blocks`, Scenarist MUST prefer those exact blocks for the ranked entries. If a chosen character is missing from the game config, either pick a nearby eligible character that is already present or add the missing prompt block to the game config/rules before writing the storyboard.
+- Character appearance text must come from the exact `top-list` story bible. Do not reuse game-wide or another format's Character Prompt Blocks. If an eligible entry lacks a top-list-owned description, stop and ask whether to add it rather than silently copying or substituting an appearance.
 - The ranking should have one clear principle stated in `description` or `ranking_basis`: popularity / lore impact / meta power / visual charisma / comedy value. Do not silently mix criteria scene by scene.
 - For live-service games, avoid claiming "current meta" unless the user explicitly requests a patch/meta ranking and the latest game state has been verified. For evergreen shorts, prefer lore impact + recognizability + visual variety.
 - Keep rank variety visual as well as narrative: adjacent entries should not share the same dominant element/color/faction/location if an equally strong alternative exists.
@@ -213,6 +211,8 @@ Combined with a tighter crop (close-up vs scene 5's wide hero), the second image
 
 Every game that runs `top-list` keeps local state in `games/{GAME_TAG}/top-list_story_bible.json`.
 Manager loads it through `tools/build_context.py` during Phase 0 and updates it after the final video is approved/published.
+
+Generation may not start without this exact bible and its required style/appearance/asset ownership data. Missing or incomplete bible → STOP and ask the user whether to create or complete it; never auto-create it or borrow data from another format.
 
 Purpose:
 - Prevent repeating the same top list under a slightly different title.
@@ -291,13 +291,13 @@ After publishing:
 
 ---
 
-## Voice (ElevenLabs TTS)
+## Voice generation
 
-| Role | Voice | stability | Notes |
+| Role | Default route | Voice intent | Notes |
 |---|---|---|---|
-| Narrator | `George` (energetic male) or `Charlotte` (energetic female) | 0.30 | Use `voice` name string, NOT `voice_id` hash. Per-game override allowed via `games/{TAG}/top-list_special.md` |
+| Narrator | MiniMax | energetic countdown host | Chatterbox only with an approved exact-top-list sample recorded in the story bible |
 
-Lines are **short** (8–15 words). Style direction in TTS prompt: `"energetic countdown host, building excitement toward number one"`.
+Lines are **short** (8–15 words). Voice intent: `"energetic countdown host, building excitement toward number one"`. ElevenLabs TTS and cross-format samples are forbidden.
 
 ---
 
@@ -318,7 +318,7 @@ Lines are **short** (8–15 words). Style direction in TTS prompt: `"energetic c
 - Names are spoken in TTS, not rendered as overlays.
 
 ## Narrator
-- `narrator_voice`: "George" / "Charlotte" / etc.
+- `voice_intent`: e.g. "energetic countdown host"
 - `tone_directive`: extra direction for TTS
 
 ## Music
@@ -337,15 +337,15 @@ If file absent → defaults from this playbook.
   "theme": "STARFLEET WOMEN",
   "game_tag": "star-trek",
   "visual_identity": {
-    "style_tags": "from game config",
-    "palette": "from game config",
-    "lighting": "from game config",
+    "style_tags": "from exact top-list story bible",
+    "palette": "from exact top-list story bible",
+    "lighting": "from exact top-list story bible",
     "top_font": "Eurostile Bold Extended",
     "accent_color": "#F5A623"
   },
   "music": {"mood": "orchestral-sci-fi", "volume": 0.15},
   "voices": {
-    "narrator": {"voice": "Charlotte", "stability": 0.30, "language_code": "en"}
+    "narrator": {"voice_intent": "energetic countdown host", "language_code": "en"}
   },
   "scenes": [
     {
@@ -413,24 +413,24 @@ If file absent → defaults from this playbook.
 - `camera_angle` different for adjacent scenes (including across the rank-1 pair: e.g. wide hero → close-up push-in).
 - `motion_hint` ≥2 different actions; intensity escalates 5→1; rank-1 part 2 is the most intense.
 - `cta_overlay: true` ONLY on the rank-1 part-2 scene (index 6) when no Supabase CTA pack-shot exists. NOT on part 1.
-- Read `games/{GAME_TAG}/{GAME_TAG}.md` for style, palette, lighting. If `games/{GAME_TAG}/top-list_special.md` exists, override accordingly.
+- Read style, palette, lighting, and appearance only from the exact `top-list` story bible (or live user override). `top-list_special.md` may supply format-owned layout/font directives, but never cross-format appearance/style/voice assets.
 - General rules — `rules/roles/scenarist.md`
 
 ### Storyboarder
 
 - **7 NB2 generations** (title + 4 items + 2 climax clips for rank-1). All 608×1080 (9:16).
-- **Title card NB2**: bake `"TOP 5"` + `"{theme}"` text into the image using `top_font` from `visual_identity` (defaults Montserrat Black / Bebas Neue). Style refs only, no prior-scene ref. Add sparkles/lens-flare/particles aligned with game palette.
+- **Title card NB2**: bake `"TOP 5"` + `"{theme}"` text into the image using `top_font` from `visual_identity` (defaults Montserrat Black / Bebas Neue). Use only exact-top-list-owned style refs, no prior-scene ref. Add sparkles/lens-flare/particles aligned with the locked palette.
 - **Item NB2**: do NOT bake numbers — numbers are an Editor overlay. Compose with center 50–70% subject + clear space top-left for the `#N` overlay.
 - **No on-screen text on character images (HARD RULE).** Per-item NB2 outputs must be CLEAN illustrations — no character-card layout, no game UI labels, no nameplate banners, no era/series logos ("STAR TREK: DEEP SPACE NINE", "VOYAGER" etc.), no #N number, no caption strip, no rarity stars/borders. All text and number callouts come from Editor drawtext overlays. Every per-item `image_prompt` MUST end with `". Clean illustration with NO on-screen text, NO captions, NO labels, NO logos, NO nameplate banners, NO game UI of any kind."` Push the same intent into NB2 `negative_prompt` and into the per-clip Kling `negative_prompt` so any drift is caught: `"on-screen text, character card layout, trading card, nameplate, banner text, game UI labels, captions, watermark, rarity stars, series logo, era label, subtitle"`.
 - **Rank-1 climax pair (scenes 5 + 6):** generate part 1 first (wide hero shot, ≥7-detail backdrop, dramatic establishing composition). Then generate part 2 using part 1 as `[anchor_ref?, scene-5_image]` chain — same character, closer angle, same lighting/palette. Part 2 = closer crop, more intimate; show eyes/face cleanly for the emotional payoff.
-- Chain refs: `[anchor_ref?, prev_scene]` for items; title card uses no prev_scene; rank-1 part 2 ALWAYS chains on part 1.
-- If a character already has a Supabase `game_assets` ref (`character_name=eq.{name}`) and its style matches `visual_identity.style_tags` — pull and use it as anchor. If it is missing or style-mismatched, generate the scene text-to-image from the full `character_description` + locked style tags instead of anchoring to a wrong-style ref. Only generate/upload a reusable anchor sheet when the user plans repeated use of that character in this format; one-off top-list entries can stay text-to-image to avoid anchor-sheet overhead.
+- Chain refs: `[exact_top_list_anchor_ref?, same_run_prev_scene?]`; title card uses no prior-scene ref; rank-1 part 2 ALWAYS chains on part 1 from the same run.
+- An anchor is eligible only when the exact `top-list` story bible records it and its metadata matches the exact game/format/series. Do not visually compare or borrow another format's asset. If the owned anchor is missing, use NB2 text-to-image with the full top-list-owned `character_description` and omit `image_urls`, or generate/upload a new reusable top-list-bound anchor when repeated use is planned.
 - Character description verbatim from `visual_identity` + per-scene additions.
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
 
-- **Model:** Kling I2V v3 Standard (primary), Kling 2.6 Pro (fallback).
+- **Model:** Kling I2V v3 Standard. The model/endpoint/route and serialized request stay fixed; retry once on failure, then stop. Kling 2.6 requires a separate explicit user authorization after the stopped run.
 - **All 7 scenes:** `duration: 5`, `generate_audio: false`, **NO end frame** (start frame only — end frames make Kling interpolate-then-freeze).
 - **Three motion layers per clip (MANDATORY).** Every clip's `motion_prompt` must specify three concurrent layers, each continuing throughout the full 5s — no "then settles" / "then steady" / "then dies" cues (Kling reads those as freeze):
   1. **Camera move** — pick one per clip: slow push-in, slow pull-back, lateral dolly, low boom up, crane up, parallax handheld drift, slow arc. Distribute variety across the 7 clips. NEVER "camera holds steady".
@@ -452,11 +452,11 @@ If file absent → defaults from this playbook.
 
 ### Sound
 
-- **ElevenLabs TTS** for each scene that has non-empty `tts` (title card may skip).
-- Voice from `voices.narrator` in storyboard. Use `voice` name, NOT `voice_id`.
-- Upload each `.mp3` to Supabase → write `audio_url` back into the scene.
-- **Subtitles per-scene** via drawtext on `-scaled.mp4` BEFORE concat (font: Montserrat Bold 44px, lower third, white + 4px black stroke).
-- **Music bed**: pull mood from `visual_identity` (or game config), `volume=0.15`, mix via `amix` + `apad` on the concatenated video. Never `-shortest`.
+- **TTS route:** MiniMax for the narrator by default; Chatterbox only with an approved exact-top-list sample from the story bible. ElevenLabs TTS is forbidden.
+- Voice intent comes from `voices.narrator`; never look up or reuse another format's sample.
+- Save each `.mp3` locally; upload only when a downstream API requires a permanent run-scoped URL.
+- **Subtitles are not generated by Sound.** Editor builds one universal whisper-timed `build/subs.ass` from the final shaped voice track and burns it as the last video filter.
+- **Music bed**: generate with MiniMax Music from the storyboard mood, `volume=0.15`. Retry the same request once, then stop; never substitute a local/Supabase track or silently omit music.
 - General rules — `rules/roles/sound.md`
 
 ### Editor
@@ -465,8 +465,8 @@ If file absent → defaults from this playbook.
   - `rank_number` `#{N}` huge top-left (display font ~220px, accent stroke), full duration
 - `item_name` overlays are banned for top-list. Names are carried by `tts`.
 - Rank-1 pair (scenes 5 + 6) both show `#1`. They are visually continuous (same rank), but distinct shots.
-- Title card (scene 0): NO number/name overlay (text is in NB2). Only subtitle if `tts` present.
-- Per-scene pipeline: subtitles → rank overlay → normalize (1080×1920, 30fps, `-c:v libx264 -preset slow -crf 20`, AAC 128k).
+- Title card (scene 0): NO number/name overlay (text is in NB2). Its optional narration is handled by the universal ASS timeline.
+- Per-scene branches apply rank overlays and normalization before concat. Burn the one universal ASS only after concat, as the last video filter.
 - Concat with re-encode (NOT `-c copy`); hard cuts, NO crossfade between items (countdown rhythm). Hard cut also between rank-1 part 1 and part 2 — the match-cut is the moment, not a dissolve.
 - **CTA pack-shot from Supabase (preferred):** query `game_assets` for `tags @> ["cta"]` + video asset. If present, normalize (1080×1920, 30fps, AAC 128k) and concatenate AFTER scene 6 as the final clip. Apply fade-to-black on the pack-shot tail (last 0.5–1.0s), NOT on scene 6. Music fades 0.5s before the pack-shot starts.
 - **CTA fallback (only if no Supabase pack-shot):** drawtext `"Follow for more tops →"` lower-center on translucent black box on scene 6, last 1.5s. Fade-to-black final 1.0s of scene 6.
@@ -505,11 +505,13 @@ output/YYYY-MM-DD/{GAME_TAG}/top-list/
 
 ## Validation before publishing
 
+Generated PNG/MP4/audio receives technical validation only (path, size, hash, dimensions, codec, duration, schema). Visual composition and text-legibility items below are prompt/schema requirements and user-review criteria; they do not authorize AI Vision, frame sampling, or machine semantic inspection.
+
 - [ ] `format: "top-list"`, `theme` set, exactly **7 scenes** (1 title + 4 items + 2 rank-1 climax clips)
 - [ ] `category` and `ranking_basis` set at top level
 - [ ] Story bible checked before Scenarist; theme/category/winner/full lineup do not violate recent cooldown
 - [ ] Ranks present: 5, 4, 3, 2, 1, 1 (rank 1 appears twice with `part: 1` and `part: 2`); no other duplicates / gaps
-- [ ] Title-card NB2 contains legible `"TOP 5"` + `"{theme}"` (visual check during Storyboarder — programmatic only: filesize > 50KB)
+- [ ] Title-card prompt/schema contains `"TOP 5"` + `"{theme}"`; generated file passes programmatic size/dimension/hash checks, with appearance left to user review
 - [ ] Item NB2s have NO number baked in (numbers come from Editor overlay)
 - [ ] All 7 Kling clips `generate_audio: false`, duration 5s ±0.2s
 - [ ] `camera_angle` different for adjacent scenes (including across rank-1 pair: part 1 wide → part 2 close)
@@ -517,10 +519,11 @@ output/YYYY-MM-DD/{GAME_TAG}/top-list/
 - [ ] Each item TTS begins with the correct rank phrase ("In fifth place / Number four / At three / Runner-up / Topping the list")
 - [ ] Each ranked item TTS says the exact scene `name` (rank-1 part 1 must say it; part 2 may omit it)
 - [ ] Rank-1 TTS split across two parts: part 1 ≤10w; part 2 ≤10w and ends with literal "Follow for more tops."
-- [ ] Per-scene drawtext/overlay applied BEFORE concat (subtitles + rank overlays only; no `item_name` overlays)
+- [ ] TTS uses MiniMax, or Chatterbox only with an approved exact-top-list sample; no ElevenLabs TTS or cross-format voice sample
+- [ ] Rank overlays are applied on per-scene branches before concat; one universal whisper-timed ASS is burned last after concat; no `item_name` overlays
 - [ ] CTA: if game has Supabase pack-shot video → concatenated after scene 6 (no drawtext CTA on scene 6, no fade-to-black on scene 6 — fade goes on pack-shot tail). If no pack-shot → drawtext CTA on scene 6 last 1.5s + fade-to-black on scene 6 last 1.0s.
-- [ ] Per-item NB2 outputs are CLEAN illustrations — no on-screen text, no character-card layout, no game UI labels, no era logos, no nameplate banners (visual check during regression review; programmatic only checks filesize/dims)
-- [ ] Visual style was confirmed with the user at video start; `visual_identity.style_tags` matches that decision and is applied verbatim to every `image_prompt`
+- [ ] Per-item prompts/negative prompts enforce CLEAN illustrations with no on-screen text, character-card layout, game UI labels, era logos, or nameplate banners; generated files receive technical checks only
+- [ ] `visual_identity.style_tags` was resolved from the exact top-list bible or a live user override and applied verbatim to every `image_prompt`
 - [ ] Every `motion_prompt` includes three concurrent layers (camera move + environment motion + character action) and contains NONE of the banned freeze phrases (`then settles`, `then steady`, `camera holds steady`, `hold position`, `no morphing`, `maintain exact character appearance`)
 - [ ] Every Kling clip has the universal anti-text `negative_prompt` set
 - [ ] Music `volume=0.15`, mixed via `amix` + `apad`, NO `-shortest`. Music fades 0.5s before pack-shot starts (if pack-shot path used).
@@ -536,10 +539,10 @@ output/YYYY-MM-DD/{GAME_TAG}/top-list/
 - ❌ Counting UP (1→5). Always 5→1 with climax on #1.
 - ❌ Same `camera_angle` on adjacent items (kills rhythm).
 - ❌ `generate_audio: true` on Kling I2V — wastes ~$1.20/video, TTS+music bed already cover sound.
-- ❌ Subtitles applied AFTER concat — whisper misses voices on concatenated tracks.
+- ❌ Per-scene drawtext subtitles or format-local subtitle styling. Use one universal whisper-timed ASS on the final shaped voice timeline and burn it last.
 - ❌ Crossfade between item clips — countdown needs hard cuts for snap rhythm.
 - ❌ `-shortest` in FFmpeg (universal). Always `apad` on music side.
-- ❌ `voice_id` hash in ElevenLabs — use `voice` name string.
+- ❌ ElevenLabs TTS, a cross-format voice sample, or Chatterbox without an approved exact-top-list sample.
 - ❌ Title card NB2 without `negative_prompt` for text legibility — Kling warps text without it.
 - ❌ Generating a brand-new CTA video inside the top-list run. If a game already has a Supabase CTA pack-shot, use it. If it does not, use the drawtext fallback on rank-1 part 2.
 - ❌ TTS lines longer than 15 words on rank 5–2, or longer than 10 words on rank-1 parts — eats into the 5s clip, narration runs over the next clip's overlay.
@@ -547,10 +550,10 @@ output/YYYY-MM-DD/{GAME_TAG}/top-list/
 - ❌ Identical `camera_angle` between rank-1 part 1 and part 2 — the climax pair must visually contrast (wide → close).
 - ❌ CTA overlay on rank-1 part 1 — only part 2 carries the CTA and the fade-to-black.
 - ❌ Mixing visual styles between scenes (e.g. a rendered 3D look in one scene, a painted illustration in the next). Style is locked at the VIDEO level in `visual_identity.style_tags` and applied verbatim to every `image_prompt`. Even one off-style scene breaks the countdown rhythm.
-- ❌ Pulling a Supabase anchor ref without checking its style. Refs generated for other formats in a different style than this video's locked `style_tags` will hijack the style of THIS video. If style doesn't match → generate text-to-image instead.
+- ❌ Pulling a broad Supabase anchor by character name or visually comparing candidates. Use only the exact-top-list ref recorded in the story bible and ownership metadata; otherwise use text-to-image with top-list-owned appearance data or generate a new top-list-bound ref.
 - ❌ Scene 6 looking identical to scene 5. The chain reference makes NB2 reproduce part 1 unless the prompt explicitly demands a NEW visual element (crown / laurel wreath / fireworks / pedestal / #1 banner) plus a tighter crop. No winner beat = broken climax cut.
 - ❌ Per-item NB2 outputs containing baked text — character-card layouts, game UI labels, era/series logos ("STAR TREK: DEEP SPACE NINE"), nameplate banners, rarity stars. Per-item images must be CLEAN; all callouts come from Editor drawtext overlays.
-- ❌ Generating a top-list video without first confirming the visual style with the user. Style drift discovered mid-pipeline costs an extra NB2 regen pass and risks busting the budget.
+- ❌ Generating without resolved exact-top-list `style_tags`, or silently falling back to game-wide/another-format style data.
 - ❌ `motion_prompt` with "camera holds steady" / "then settles" / "then steady" / "hold position" / "no morphing" / "maintain exact character appearance" — Kling reads these as freeze cues and produces static clips. Every clip needs three concurrent motion layers (camera + environment + character).
 - ❌ Using a drawtext CTA overlay when the game already has a Supabase pack-shot video. The pack-shot is the on-brand, branded ending; drawtext is the fallback.
 - ❌ Skipping `top-list_story_bible.json` or forgetting to update it after publishing. Repeating the same "Top 5 men/villains/locations" kills the format faster than a weak individual entry.

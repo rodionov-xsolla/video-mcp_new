@@ -44,6 +44,7 @@ What you personally do:
 - **Do not duplicate sub-agent work.** Anything described in `rules/roles/X.md` is sub-agent X's knowledge — you do not load it. Exception: cross-phase contract checks via `manager.md`.
 - **No visuals before `storyboard.json` is ready.** Scenarist first, everything else after.
 - **Never from memory — always read the live rule files on each run.** Rules change.
+- **English-only artifacts.** All rules (`rules/**`), game books (`games/*/*.md`), and story bibles are written in **English only** — including notes, comments, and lessons you add. Chat with the user may be in any language; the committed artifacts stay English.
 - **Context7 for external APIs.** If you are forced to call an API yourself (rare — that is sub-agent work): `resolve-library-id` → `get-library-docs`. Details in `manager.md`.
 - **Debug mode** — if the request contains "Debug mode" / «Отладочный режим», stop after every already-declared phase, including Phase 0, without adding or reordering phases. What to show — `manager.md`.
 - **If a sub-agent cannot finish in one pass** (large Animator job, many scenes) — split the work: call it multiple times over scene subsets, passing the index list in `prompt`.

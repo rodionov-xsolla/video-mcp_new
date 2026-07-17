@@ -18,7 +18,7 @@ Keywords: "in-game pov", "pov", "от первого лица", "first person", 
 
 Best fit when the game has either (a) a **named canon event/battle** with high stakes (Wolf 359, a famous raid, a story climax) or (b) **tense gameplay scenarios** that read instantly in first person (a 1vX clutch, a boss enrage, a horde rush). Games with neither strong lore nor readable POV gameplay are a weak fit — pick `character-story` or `what-if-real-life` instead.
 
-**Single-shot per video** — no story bible, no continuity between videos. Each video is one situation, one POV, one predetermined outcome.
+**Single-shot per video** — no narrative continuity between videos. Each video is one situation, one POV, one predetermined outcome. The exact-format story bible is still mandatory for style, owned assets, voice ownership, and anti-repetition.
 
 ### Manager asks before Scenarist runs
 
@@ -28,7 +28,7 @@ Best fit when the game has either (a) a **named canon event/battle** with high s
 The answer is passed to Scenarist as `OUTCOME` and locked into `storyboard.json → outcome`. The whole script (which moves work, where the % lands, the final plate) is written to serve that predetermined ending. If the user does not specify and cannot be asked, default to a **50/50 author's choice**, leaning to `death` only when the situation is canonically lethal (e.g. a battle the faction historically lost).
 
 **Step 2 — Story bible check (mandatory, before Scenarist):**
-Read `games/{GAME_TAG}/in-game-pov_story_bible.json` if it exists. Pass the full `used_situations[]` array and `anti_repetition` block to Scenarist in the prompt. Scenarist must not repeat any situation or threat type from that list. If the file does not exist — create it after the video is published (see Phase 5).
+Read `games/{GAME_TAG}/in-game-pov_story_bible.json`. Pass the full `used_situations[]` array and `anti_repetition` block to Scenarist in the prompt. Scenarist must not repeat any situation or threat type from that list. If the file is missing or lacks the required style/asset/voice ownership data, STOP and ask the user whether to create or complete it before generation. Never auto-create it.
 
 **Step 3 — After publishing (mandatory):**
 Update `games/{GAME_TAG}/in-game-pov_story_bible.json` — add the new situation entry with date, outcome, threat_type, and published: true. Push to git with the episode commit.
@@ -39,21 +39,21 @@ Update `games/{GAME_TAG}/in-game-pov_story_bible.json` — add the new situation
 
 - **Genre:** first-person survival manual / immersive POV
 - **Perspective:** pure environmental POV. Second person ("ты"/"вы"). The protagonist is **never shown** — no face, no reflection, no over-the-shoulder, **no hands**. The camera IS their eyes. We look at the world, we walk through it, we breathe.
-- **Style:** resolved from the style chain — story bible `style_tags` if present, else game config `prompt_prefix` (which for this format is the game's house style).
+- **Style:** exact `in-game-pov` story bible `style_tags`, unless the user gives a live override. Game config and another format are not style/appearance fallbacks. Missing style data stops generation for user direction.
 - **Duration:** 35–45s (title card + 5–6 POV clips × 5s + CTA).
 - **Budget:** up to $7.00 per video. Stop if spend > $6.30.
 - **Frame format:** 9:16 (608×1080) for all scenes.
 
 ### Models
 
-- **Image:** NB2 (`fal-ai/nano-banana-2/edit`) — title card + one PNG per POV clip. No character-face ref. No prop refs unless a specific object needs continuity.
-- **Video:** Kling v3 Standard I2V (`fal-ai/kling-video/v3/standard/image-to-video`) — one 5s call per clip, `generate_audio: true` (POV combat SFX: explosions, alarms, gunfire, hull groan, heavy breathing). Fallback to v2.6 Pro only on v3 artifacts.
-- **Audio:** ElevenLabs TTS — second-person narrator (one voice, clips 1–N) overlaid on the picture. TTS does NOT start on title card. Kling SFX kept underneath at low volume. Music bed under everything.
+- **Image:** NB2 (`fal-ai/nano-banana-2/edit`) — title card + one PNG per POV clip. Any optional continuity ref must be owned by this exact `in-game-pov` format/series or come from the same run. No character-face ref. No cross-format prop refs.
+- **Video:** Kling v3 Standard I2V (`fal-ai/kling-video/v3/standard/image-to-video`) — one 5s call per clip, `generate_audio: true` (POV combat SFX: explosions, alarms, gunfire, hull groan, heavy breathing). The route is fixed for the run: retry the same serialized request once, then stop; Kling 2.6 is not an automatic fallback.
+- **Audio:** MiniMax TTS for the non-identity-critical second-person narrator. Use Chatterbox only when the exact `in-game-pov` story bible owns an approved voice sample. ElevenLabs TTS and cross-format voice samples are forbidden. TTS starts on the title card and voices its displayed situation title. Kling SFX stay underneath at low volume. Music bed under everything.
 - **HUD overlays:** drawn by `tools/overlays.py` (NOT baked into NB2). See "## Overlays" below.
 
 ### Key mechanics
 
-1. **Title card first.** Scene 0 is a game-styled title card (not POV) that names the situation and shows the starting survival %. It plays 3–5s with Kling ambient SFX. **Optional title card TTS:** a brief 1–2 sentence situational intro (e.g. "Attack on the Akademiya. Survival chance — eight percent.") is allowed when the Manager decides the viewer needs verbal context to land the hook. If clip 0 has a `tts_segment`, TTS_OFFSET = 0 in the Editor (no adelay). If absent, TTS_OFFSET = 5s (default). The hook lives here visually — title card TTS is ambient framing, not POV narration.
+1. **Title card first and voiced.** Scene 0 is a game-styled title card (not POV) that names the situation and shows the starting survival %. Its `tts_segment` is mandatory: voice the displayed situation title, then the starting survival % (e.g. "Attack on the Akademiya. Survival chance — eight percent."). TTS starts at 0; `TTS_OFFSET = 0` in the Editor. The title card plays 3–5s with Kling ambient SFX underneath.
 2. **POV = environmental, never hands.** From clip 1 onward: pure look-around / walk-through / reaction POV. No hands gripping controls. No weapon barrels. Camera sees the world — corridors, consoles, windows, other crew, debris — as the viewer walks and breathes.
 3. **Location variety mandatory.** Each POV clip is a different space aboard the ship (or outside it): bridge, corridor, engineering, escape pod bay, airlock, porthole exterior view. Never two consecutive clips in the same location.
 4. **Each shot is a CUT, not a camera pan.** Shots do not flow into each other — there is a hard cut between them, and the viewer is instantly dropped into a new location. The cut IS the movement between places; it is invisible. Within a shot, only the environment moves (alarms strobe, doors slam, crew runs past). `tts_segment` opens by placing the viewer IN the new situation: `"Вы на мостике — объявлена эвакуация."` NOT: `"Вы поворачиваете голову к мостику."` — head-turn narration implies one continuous camera; here every shot is a fresh location drop.
@@ -93,8 +93,8 @@ from `games/{tag}/{tag}.md` → `## Overlay brand` (font role → brand font).**
 
 | Component | Cost |
 |---|---|
-| ElevenLabs TTS (~30s second-person narration over POV clips) | ~$0.18 |
-| Music (local) | $0.00 |
+| External TTS (MiniMax, or Chatterbox with an approved exact-format sample) | see `providers.json` |
+| MiniMax Music | see `providers.json` |
 | HUD overlays (Editor drawtext) | $0.00 |
 
 | Variant | Clips | Cost |
@@ -102,9 +102,9 @@ from `games/{tag}/{tag}.md` → `## Overlay brand` (font role → brand font).**
 | Base (recommended) | title card + 5 POV × 5s + CTA | ~$4.44 |
 | Extended | title card + 6 POV × 5s + CTA | ~$5.15 |
 
-Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
+Budget ceiling including permitted retries: **$7.00**. Each failed request gets at most one retry; stop spending at **$6.30**.
 
-> SFX note: `generate_audio: true` is **experimental** for this format (combat ambience boosts immersion). Because the camera shows no faces and no one talks on screen, Kling has nothing to lip-sync and rarely produces the "bad voice" problem. Still, push `voices, speech, dialogue, vocals, music` into the Kling `negative_prompt` so it stays pure SFX. If a clip comes back with garbled speech, re-run that single clip with `generate_audio: false` (saves $0.21).
+> SFX note: `generate_audio: true` is **experimental** for this format (combat ambience boosts immersion). Because the camera shows no faces and no one talks on screen, Kling has nothing to lip-sync and rarely produces the "bad voice" problem. Still, push `voices, speech, dialogue, vocals, music` into the Kling `negative_prompt` so it stays pure SFX. A failed generation gets one identical retry; never switch automatically to `generate_audio: false` or another model. A different configuration requires a stopped run and explicit user authorization.
 
 ---
 
@@ -112,7 +112,7 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 
 | Phase | Timing | Goal | Clips |
 |---|---|---|---|
-| **TITLE CARD** | 0–5s | Visual hook — situation name + starting survival %. No narrator TTS. Atmospheric SFX only. | scene 0 (5s) |
+| **TITLE CARD** | 0–5s | Visual hook — situation name + starting survival %. Narrator voices both from t=0; atmospheric SFX stays underneath. | scene 0 (5s) |
 | **HOOK** | 5–10s | Drop them in. Narrator opens: "Ты оказался…" POV clip 1. | scene 1 (5s) |
 | **THREAT** | 10–20s | What is killing you right now. Counter drops. Different location per clip. | scenes 2–3 (5s each) |
 | **MOVES** | 20–35s | The survival manual — concrete steps. Counter moves per step. Each clip = new location. | scenes 3–5 (5s each) |
@@ -145,11 +145,11 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 ### The narration
 
 - Second person, present tense, imperative. One voice for the whole video.
-- **Word cap: `tts.full_text` ≤ 67 words total** (all clips combined, including clip 0 if it has tts_segment). At ~0.5s/word ElevenLabs pace, 67 words ≈ 33s — fits the 30s video window with headroom for the 1.4× atempo cap. Per-clip guideline: title card ≤ 8 words; each POV clip ≤ 12 words.
+- **Word cap: `tts.full_text` ≤ 67 words total** (all clips combined, including the mandatory clip-0 `tts_segment`). At the target narrator pace, 67 words ≈ 33s — fits the full story timeline with headroom for the 1.4× atempo cap. Per-clip guideline: title card ≤ 8 words; each POV clip ≤ 12 words.
 - **Last POV clip rule: the final POV clip's `tts_segment` MUST end with `"You died."` (outcome = death) or `"You survived."` (outcome = survive), always EN, always the final two words of the segment.** This synchronises the verbal narration with the outcome plate visual. The scenarist writes this as the closing beat of the last segment — it is NOT an afterthought append.
 - Short, clipped, urgent. Each clip ≈ 10–12 words (strict cap).
-- Normally starts on clip 1 (after the title card); see Key Mechanics item 1 for the optional clip 0 TTS exception.
-- Does NOT repeat the title card text verbatim — the visual established it; narration moves the story forward.
+- Starts on clip 0. The title-card segment speaks the displayed situation title verbatim, followed by the starting survival %.
+- From clip 1 onward, narration does not repeat the title; it moves the story forward.
 - **Each `tts_segment` opens by placing the viewer IN the new location** — not describing how they arrived. The cut is the transport. Pattern: `"[Where you are] — [what is happening / immediate threat or action]."` Examples: `"Вы на мостике — объявлена эвакуация."` / `"Вы бежите по коридору — дверь закрывается."` / `"Вы нашли выход через вентиляцию."` / `"Вы выбрались — но это реакторный отсек. Он взрывается."` Each sentence = a new world.
 
 ---
@@ -185,7 +185,7 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 **Rules:**
 - Scenarist reads this file before choosing a situation. Never reuse a `threat_type` from the last 3 entries. Never reuse the same core premise (even if the title differs).
 - Manager updates this file after the video is published (`published: true`, `status: "completed"`). If the video had errors and was never published, still log it with `published: false` and `status: "error"`.
-- If the file does not exist for a game, create it after the first in-game-pov for that game.
+- If the file does not exist or is incomplete, stop before generation and ask the user whether to create or complete it.
 
 ---
 
@@ -204,15 +204,15 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
   - `duration` — `"5"` (string)
   - `location` — human-readable location name. **MUST differ between adjacent clips** (location variety is the immersion engine).
   - `survival_pct` — (pov only) integer 0–100. Starts at the hook value matching `hook_plate`, moves per narration step, lands at 0 (`death`) or 60–85 (`survive`) on the final clip.
-  - `tts_segment` — (pov only) **10–12 word** narration fragment (hard cap — see word cap rule). Second person, present tense, imperative. Opens by placing the viewer IN the new location. **Final POV clip only:** segment MUST end with `"You died."` or `"You survived."` (always EN).
+  - `tts_segment` — mandatory on every clip. On the title card: the displayed situation title + starting survival %, ≤8 words. On POV clips: **10–12 word** narration fragment (hard cap — see word cap rule), second person, present tense, imperative, opening by placing the viewer IN the new location. **Final POV clip only:** segment MUST end with `"You died."` or `"You survived."` (always EN).
   - `action_description` — what the viewer sees and feels from first person. Three layers: camera movement + environment reaction + atmospheric element. No hands, no body, no weapon barrels.
 - **Graphic overlays → `clips[].overlays[]`** (rendered by `tools/overlays.py`, NOT subtitles — layout in the `## Overlays` section above, schema in `rules/roles/scenarist.md`; font/color/stroke from game `## Overlay brand`):
-  - **Title card (clip 0):** two `title` overlays — situation name (size 130, 2 lines via `\n`, y680/840) + hook plate `"SURVIVAL CHANCE: N%"` (size 60, label role, y1030). `action_description` = wide cinematic, NOT POV. No `tts_segment`.
+  - **Title card (clip 0):** two `title` overlays — situation name (size 130, 2 lines via `\n`, y680/840) + hook plate `"SURVIVAL CHANCE: N%"` (size 60, label role, y1030). `action_description` = wide cinematic, NOT POV. `tts_segment` is mandatory and voices the displayed situation title + starting survival %.
   - **Each POV clip:** one `hud_counter` overlay — `text:"SURVIVAL N%"`, top-right, `enable:[0,5]` (whole 5s clip). N = that clip's `survival_pct`.
   - **Last POV clip (outcome):** add `outcome_plate` (`"YOU SURVIVED"` green / `"YOU DIED"` red — always EN), center, `enable:["gte", clip_dur-1.5]`, fade_in 0.4.
-- **Narrator normally starts on clip 1** (after title card). Exception: if the Manager authorizes title card TTS, add a `tts_segment` to clip 0 (situation + survival %, not POV voice). In that case TTS_OFFSET = 0 in Editor. First POV tts_segment (clip 1) still opens: "You are in…" / "Ты оказался…". All `tts_segment` values concatenated in index order → `tts.full_text`.
-- **No character-face ref. No prop/vehicle ref** unless absolutely required for continuity.
-- Voice: pick from ElevenLabs by tone (tense tactical instructor — `Daniel` confident, `George` neutral-grave, `Adam` urgent). Lock in `tts.voice`.
+- **Narrator starts on clip 0.** Its mandatory `tts_segment` voices the displayed situation title + starting survival %. `TTS_OFFSET = 0` in Editor. First POV `tts_segment` (clip 1) still opens: "You are in…" / "Ты оказался…". All `tts_segment` values concatenate in index order → `tts.full_text`.
+- **No character-face ref. No prop/vehicle ref** unless absolutely required for continuity. Any allowed ref must be owned by this exact format/series or generated inside the current run.
+- Voice intent: tense tactical instructor. Sound resolves it to MiniMax unless the exact `in-game-pov` story bible owns an approved Chatterbox sample; never encode an ElevenLabs voice name in the storyboard.
 - General script rules — `rules/roles/scenarist.md`.
 
 **Storyboard.json — schema:**
@@ -224,10 +224,8 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
   "outcome": "death",
   "situation": "Osial rises — you are a Millelith soldier at Liyue Harbor",
   "tts": {
-    "full_text": "{all tts_segments from clips index 1–N, in order, space-joined}",
-    "voice": "George",
-    "stability": 0.30,
-    "style": 0.65,
+    "full_text": "{all tts_segments from clips index 0–N, in order, space-joined}",
+    "voice_intent": "tense tactical instructor",
     "language_code": "ru"
   },
   "music": { "mood": "tense", "volume": 0.12 },
@@ -237,6 +235,7 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
       "clip_type": "title_card",
       "duration": "5",
       "location": "Liyue Harbor — sea exterior",
+      "tts_segment": "Osial rises. Survival chance — five percent.",
       "overlays": [
         {"type":"title","text":"OSIAL\nRISES","position":"(w-text_w)/2,680","font":"ULT","size":130,"color":"white","stroke":{"color":"black","width":4},"line_gap":160},
         {"type":"title","text":"SURVIVAL CHANCE: 5%","position":"(w-text_w)/2,1030","font":"MED","size":60,"color":"red"}
@@ -315,12 +314,12 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 
 ### Storyboarder
 
-- Style resolved from the style chain — story bible `style_tags` if present, else game config `prompt_prefix` (the game's house style for this format). Apply it verbatim.
+- Style comes from the exact `in-game-pov` story bible `style_tags` (or a live user override) and is applied verbatim. Never fall back to another format or game-wide appearance/style data.
 - All frames 9:16 (608×1080).
 - **Generate ONE PNG per clip** — title card + every POV clip. N clips → N PNGs.
   - `clip 0` (title card) → `scene-0.png` — wide **cinematic establishing shot**, NOT first-person POV. Atmospheric crisis from a dramatic angle. NB2 `negative_prompt` must include `text, captions, ui, hud, hands, person pov, first person view`.
   - `clip 1` → `scene-1.png` — **first-person environmental view** of that clip's location. NEVER show protagonist face, body, or hands.
-  - `clip 2+` → `scene-K.png` — same rules. Chain the previous clip's PNG as an `image_url` ref for visual consistency (environment lighting/tone carryover). Max 2 refs (bg-ref + prev-scene).
+  - `clip 2+` → `scene-K.png` — same rules. Chain only the previous clip's PNG from this same run as an `image_url` ref for visual consistency (environment lighting/tone carryover). Any additional ref must be owned by this exact format/series. Max 2 refs.
 - POV `image_prompt` cues: emergency lighting, smoke, debris, other characters (fleeing), environmental chaos — but **NO numbers/text/UI** (Editor overlays only).
 
 - **Camera height — STRICT:** camera is ALWAYS at standing human eye level (~160–170 cm). NEVER elevated, overhead, bird's-eye, or from tiered seating height. Describe explicitly: `"camera at standing human eye level"`. If the action_description says "from elevated seating" — ignore it; plant the camera at floor level among the people.
@@ -336,7 +335,7 @@ Max with 1–2 retries: **$7.00**. Stop at **$6.30**.
 
 **Architecture: one Kling v3 Standard I2V call per clip (5s each).** N clips → N Kling calls. Simple, controllable, no chaining artifacts.
 
-- All calls via **Kling v3 Standard I2V** (`fal-ai/kling-video/v3/standard/image-to-video`), `generate_audio: true`. Fallback v2.6 Pro only on v3 artifacts.
+- All calls via **Kling v3 Standard I2V** (`fal-ai/kling-video/v3/standard/image-to-video`), `generate_audio: true`. Keep the model, endpoint, route, and serialized request fixed; retry once on failure, then stop the whole video. Never switch automatically to Kling 2.6.
 
 **Call structure per clip:**
 - `start_image_url` — Supabase URL of `scene-K.png` (Storyboarder uploaded it)
@@ -383,18 +382,19 @@ Total: {N+1} × $0.63 = ${total}  (cap $6.30)
 Proceed? (y/n)
 ```
 
-**Per-clip output:** download to `scenes/scene-K.mp4`, validate (filesize > 100KB, ffprobe duration ~5s). On garbled speech: re-run that single clip with `generate_audio: false`.
+**Per-clip output:** download to `scenes/scene-K.mp4`, validate technically (filesize > 100KB, codec, ffprobe duration ~5s). Do not inspect generated media semantically. A failed request gets one identical retry; a second failure stops the whole video.
 
 Polling: base `fal-ai/kling-video`, every 15s, max 10 min per clip.
 
-**Pricing:** (N+1) clips × $0.63 per clip. Base (6 clips total) = $3.78 + title card $0.63 = **$4.41** (well within $6.30 cap). If garbled speech on a clip: re-run with `generate_audio: false` (saves $0.21 per clip).
+**Pricing:** (N+1) clips × $0.63 per clip. Base (6 clips total) = $3.78 + title card $0.63 = **$4.41** (well within $6.30 cap). A separately authorized no-audio configuration is a new stopped-run decision, never an automatic fallback.
 
 ### Sound
 
-- **TTS:** ElevenLabs via fal.ai (`fal-ai/elevenlabs/tts/eleven-v3`).
-  - `voice` = name string (Daniel/George/Adam), NOT voice_id. One voice for the whole video.
-  - Generate narration from `tts.full_text` (covers clips 1–N, and clip 0 if it has a `tts_segment`). One request, one mp3.
-  - Save → upload to Supabase.
+- **TTS route:** follow `rules/roles/sound.md`.
+  - Default narrator route: MiniMax (`fal-ai/minimax/speech-2.8-hd`).
+  - Chatterbox is allowed only with an approved sample owned by the exact `in-game-pov` story bible; split long Chatterbox narration into safe chunks as required by Sound.
+  - ElevenLabs TTS and cross-format voice lookup are forbidden. Keep one voice intent for the whole video.
+  - Save locally and upload only when a downstream stage needs a permanent run-scoped URL.
 - **Subtitles:** NOT Sound's job. One universal style, generated by Editor via whisper from `build/voice-final.wav` (see `rules/roles/editor.md` §6). No `--style`/`--chunk`/`--text`/`--offset`/`--atempo`.
 - **Speed control:** if TTS duration > POV-clips timeline, Editor applies `atempo` (cap 1.4×). Subtitles are computed from the already sped-up speech — nothing to recompute. If mismatch > 40% → back to Scenarist to shorten.
 - **Music:** generated via MiniMax with a `tense`/`drama` `style` prompt (instrumental, see `rules/roles/sound.md` §6), `volume` from storyboard (default 0.12). Never fun/upbeat. Music starts from t=0 (over the title card and through the whole video).
@@ -424,14 +424,14 @@ FRAG=$(python3 tools/overlays.py storyboard.json --scene-index $K --workdir buil
 - Hard cuts, no crossfade.
 - Concat-list entries: `scene-0-hud.mp4` + `scene-1-hud.mp4` + … + `scene-N-hud.mp4`. No duplicates.
 - Output: `build/concat-noaudio.mp4` (silent; CTA NOT yet appended).
-- `MAIN_DUR` = (N+1) × 5s. `TTS_OFFSET` = 5s (title card duration).
+- `MAIN_DUR` = (N+1) × 5s. `TTS_OFFSET = 0` because title-card narration is mandatory.
 
-**Stage 2 — Subtitle burn-in:** the canonical path, editor.md §6 — `python3 tools/add_subtitles.py build/voice-final.wav build/subs.ass --storyboard storyboard.json --lang {lang} --main-dur {MAIN_DUR}`, then `ass=build/subs.ass` as the last video filter. The title-card lead silence is already in `voice-final.wav` (adelay), so `--offset` is not needed.
+**Stage 2 — Subtitle burn-in:** the canonical path, editor.md §6 — `python3 tools/add_subtitles.py build/voice-final.wav build/subs.ass --storyboard storyboard.json --lang {lang} --main-dur {MAIN_DUR}`, then `ass=build/subs.ass` as the last video filter. TTS starts at 0, so `--offset` is not needed.
 
 **Stage 3 — Final audio mix (one ffmpeg pass):**
 - Inputs: `build/concat-subbed.mp4` + `tts-output.mp3` + Kling SFX (baked in each clip's audio — preserve) + music + `cta-scaled.mp4`.
 - **Audio levels:** narrator TTS = 1.0 (front), Kling combat SFX = ~0.30 (bed), music = `music.volume` (~0.12). Mix all three over MAIN_DUR.
-- TTS delayed by `TTS_OFFSET` in the mix: `adelay={TTS_OFFSET_MS}|{TTS_OFFSET_MS}` on the TTS input. **TTS_OFFSET = 0** if `clips[0].tts_segment` exists (narrator starts with title card); **TTS_OFFSET = 5000ms** (default) if clip 0 has no tts_segment (title card plays with SFX + music only).
+- TTS starts at the beginning of the mix with `TTS_OFFSET = 0`; do not add title-card lead silence.
 - `apad=whole_dur=${MAIN_DUR}` on TTS. NOT `-shortest`.
 - Music fade out 1.0s before CTA. `-t TOTAL_DUR`.
 
@@ -475,13 +475,15 @@ output/YYYY-MM-DD/{GAME_TAG}/in-game-pov/
 
 ## Validation before publishing
 
+Generated PNG/MP4/audio receives technical validation only (path, size, hash, dimensions, codec, duration, schema). The semantic checklist items below are prompt/schema requirements and user-review criteria, not authorization for AI Vision, frame sampling, or machine visual/audio interpretation.
+
 - [ ] `format: "in-game-pov"` in storyboard.json
 - [ ] `outcome` set to `survive` or `death` (the value the Manager asked the user for)
 - [ ] Story bible checked — situation is NOT a repeat of any `used_situations[]` entry (different threat type, premise, core scenario)
 - [ ] All narration is **second person, present tense** — no first-person, no past tense
 - [ ] `tts.full_text` ≤ 67 words total (count before passing to Sound)
 - [ ] Last POV clip `tts_segment` ends with `"You died."` (death) or `"You survived."` (survive) — always EN
-- [ ] `clips[0].clip_type: "title_card"` — no `tts_segment`, wide cinematic `action_description`
+- [ ] `clips[0].clip_type: "title_card"` — mandatory `tts_segment` voices the displayed situation title + starting survival %, with a wide cinematic `action_description`
 - [ ] All other clips are `clip_type: "pov"`, each with `type`, `location`, `survival_pct`, `tts_segment`, `action_description`
 - [ ] First `tts_segment` (clip 1) opens: "Ты оказался…" (does NOT repeat title card verbatim)
 - [ ] No `tts_segment` describes head turns or movement TOWARD a location — each opens by placing viewer IN the new situation
@@ -495,12 +497,12 @@ output/YYYY-MM-DD/{GAME_TAG}/in-game-pov/
 - [ ] All images 608×1080 (9:16); one PNG per clip (start frame only)
 - [ ] No character-face ref; no prop-ref unless explicitly needed
 - [ ] Kling I2V `generate_audio: true`; `negative_prompt` forbids voices/speech/music/on-screen-text/hands/protagonist
-- [ ] No garbled speech in any clip (if found → re-run that clip with `generate_audio: false`)
-- [ ] Audio mix: narrator 1.0, Kling SFX ~0.30, music ~0.12; TTS delayed by title card duration
+- [ ] Kling audio exists when `generate_audio: true`; validate the audio stream technically. If the user rejects its content, stop for an explicitly authorized rerun configuration.
+- [ ] Audio mix: narrator 1.0, Kling SFX ~0.30, music ~0.12; TTS starts at 0 on the title card
 - [ ] Every clip has an active camera move in the motion_prompt (no "holds steady") — endpoint verb present
 - [ ] Every motion_prompt starts with `"Environmental first-person POV."` for clips 1–N; title card uses slow push-in
-- [ ] TTS via fal.ai ElevenLabs (`voice` name, not `voice_id`), one request for the whole narration
-- [ ] Subtitles — universal whisper style (editor.md §6); if clip 0 has tts_segment: TTS_OFFSET = 0 (no silence gap before narration); if clip 0 has no tts_segment: 5s title-card lead silence via adelay in Editor
+- [ ] TTS via MiniMax, or Chatterbox only with an approved exact-format sample; no ElevenLabs TTS or cross-format sample
+- [ ] Subtitles — universal whisper style (editor.md §6); clip 0 has mandatory `tts_segment`; `TTS_OFFSET = 0`
 - [ ] fps normalized to 30 before concat; concat-list has exactly N+1 story clips + CTA; single-pass audio mix; music fade before CTA
 - [ ] `-shortest` NOT used (use `apad`)
 - [ ] After publishing: story bible updated in `games/{GAME_TAG}/in-game-pov_story_bible.json`
@@ -522,10 +524,10 @@ output/YYYY-MM-DD/{GAME_TAG}/in-game-pov/
 - ❌ Static survival % (must move per clip — it's the retention hook)
 - ❌ Final % / outcome plate contradicting the locked `outcome` field
 - ❌ **Warning plates** (center-screen overlays like `⚠ HULL BREACH`) — they look artificial and are removed from this format
-- ❌ `generate_audio: true` left on a clip that came back with garbled speech (re-run with `false`)
+- ❌ Automatically switching a POV clip from `generate_audio: true` to `false` after failure or semantic rejection
 - ❌ Dropping the Kling SFX track in the mix (it's the immersion bed — keep at ~0.30)
 - ❌ Moving narrator subtitles up into the HUD zone (HUD top-right, subs lower third)
-- ❌ TTS starting over the title card without Manager authorization — default TTS_OFFSET = 5s (title card plays silent); only use TTS_OFFSET = 0 when clip 0 explicitly has a `tts_segment`
+- ❌ Silent title card or a missing clip-0 `tts_segment` — the displayed situation title and starting survival % must be voiced from t=0
 - ❌ **Duplicate scene in concat-list** — a freeze-extended scene REPLACES its entry; never append it as a second entry
 - ❌ Character-face ref or prop-ref without explicit Scenarist justification
 - ❌ End-frame PNGs or `tail_image_url` in Kling (causes freeze artifacts)

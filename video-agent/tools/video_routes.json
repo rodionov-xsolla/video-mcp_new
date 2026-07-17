@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "routes": {
+    "kling.v3.standard.i2v": {
+      "protocol": "fal_queue",
+      "submit_url": "https://queue.fal.run/fal-ai/kling-video/v3/standard/image-to-video",
+      "poll_base": "https://queue.fal.run/fal-ai/kling-video",
+      "result_url_path": ["video", "url"]
+    }
+  }
+}

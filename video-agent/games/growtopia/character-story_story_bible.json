@@ -1,0 +1,50 @@
+{
+  "format": "character-story",
+  "game_tag": "growtopia",
+  "_note": "Durable scaffold for the character-story format. Canonical style = Growtopia 2D pixel-art. Per-run style overrides (e.g. realistic flashback clips) are passed live to the scenarist/storyboarder and are NOT baked here. Episodes are logged only after an explicit, approved, non-test run.",
+  "style_tags": [
+    "Growtopia 2D pixel-art sprite",
+    "retro flat side-view design",
+    "blocky pixelated proportions",
+    "thick clean black outlines",
+    "bright saturated candy colors",
+    "simple tile-based sandbox world backdrop",
+    "strictly 2D flat side-view — NOT Minecraft, NOT 3D voxel, NOT isometric, no 3D rendering"
+  ],
+  "characters": [
+    {
+      "name": "growtopian-default-skin",
+      "role": "the nameless default-skin Growtopian — the everyplayer avatar",
+      "appearance": "2D pixel-art Growtopian avatar, blocky humanoid, tan/beige blocky skin (~#C9A67C), large square head, two white dot eyes with black pupils and a small flat mouth, thick clean black outline, LOCKED CANONICAL COSTUME: a bright cyan/turquoise short-sleeve t-shirt (~#3FC1D6) and medium-blue pants (~#5B6DC8), tiny blocky hands, no hat, no cosmetic set, canonical unmodified default skin, retro flat sprite look",
+      "canonical_costume": {
+        "_note": "HARD LOCK — every clip/scene must render this exact costume so the default skin never drifts between scenes. Do not let NB2 improvise different colors.",
+        "skin": "tan/beige blocky (~#C9A67C)",
+        "shirt": "bright cyan/turquoise short-sleeve t-shirt (~#3FC1D6)",
+        "pants": "medium-blue pants (~#5B6DC8)",
+        "face": "two white dot eyes with black pupils, small flat mouth, thick black outline",
+        "accessories": "none — no hat, no cosmetic set, unmodified default skin"
+      },
+      "ref": {
+        "asset_type": "reference_image",
+        "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/growtopian-default-skin/sheet.png",
+        "tags": ["growtopia", "default-skin", "player-avatar"],
+        "eligible_for": "pixel clips only (canonical raw default-skin sprite; not a competing-format stylized render)"
+      }
+    }
+  ],
+  "narrator": {
+    "provider": "minimax",
+    "voice_id": "Decent_Boy",
+    "register": "young teen boy (~13), NOT an adult man; light youthful timbre, warm, reflective first-person. Casual_Guy/Young_Knight/Deep_Voice_Man read too adult for a child narrator (burned 2026-07-17).",
+    "language": "en",
+    "note": "No approved Chatterbox sample owned by this bible. The default skin is the nameless everyplayer, so voice identity is not critical — MiniMax narration is acceptable per user authorization."
+  },
+  "cta": {
+    "status": "ready",
+    "standard_asset_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4",
+    "append_standard_asset_after_in_scene": true,
+    "note": "Growtopia CTA (3s idle) registered 2026-07-17 in game_assets (tags cta,branding). Pop-up overlay banner also available at branding/popup.png (tags popup,overlay)."
+  },
+  "covered_characters": [],
+  "episodes": []
+}
