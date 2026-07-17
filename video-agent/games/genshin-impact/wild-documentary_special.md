@@ -21,9 +21,14 @@ Do NOT generate a title overlay PNG via Pillow — use the locked branding asset
 [1:v]scale=608:405,format=rgba,fade=t=in:st=0:d=0.5:alpha=1,fade=t=out:st=3.5:d=0.5:alpha=1[ovl];[0:v][ovl]overlay=0:85:format=auto[vovl];[vovl]ass={ASSFILE}[vout]
 ```
 
-## CTA
+## CTA (in-scene sign + standard asset)
 
-Append only the existing Genshin CTA asset after the creature clips. Do not generate an in-scene sign, CTA frame, spoken substitute, or synthetic end card. If the asset is unavailable, stop and report the error.
+The exact `STORY_BIBLE_PATH` is the sole source for this format's CTA. Read `cta.sign_text` and `cta.standard_asset_url` from `games/genshin-impact/wild-documentary_story_bible.json`; do not duplicate or hard-code either value in this special file.
+
+- Store the bible phrase verbatim in `sign_text`, set `cta_in_scene: true`, and show the creature presenting the small white rectangular card face-on to the lens.
+- Generate the readable card in the NB2 start frame; Kling only animates the approach and presentation while preserving the lettering.
+- Do not burn or repair the wording with ffmpeg drawtext or subtitles.
+- After the in-scene CTA clip, append the bible's `cta.standard_asset_url`. Missing or unavailable values are blocking errors.
 
 ## Visual style for wild-documentary
 

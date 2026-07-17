@@ -12,6 +12,11 @@
     "overlay_supabase": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/wild-documentary-overlay.png",
     "label": "TEYVAT WILDLIFE"
   },
+  "cta": {
+    "sign_text": "Free primogems link in bio",
+    "standard_asset_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4",
+    "append_standard_asset_after_in_scene": true
+  },
   "covered_creatures": [
     "Cryo Slime"
   ],

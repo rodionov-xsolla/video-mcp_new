@@ -6,7 +6,7 @@ overlays: true
 
 # Format "Wild Documentary" — game creatures filmed as real wildlife, narrated by an elderly naturalist
 
-A short-form nature documentary where iconic game creatures are portrayed as real animals discovered in their natural habitat. Hidden-camera footage aesthetic: shaky handheld, telephoto lens, found footage grain. An elderly male naturalist (David Attenborough register) provides hushed, awe-filled VO over each clip. No lipsync, no dialogue — just ambient sound, creature behavior, and the narrator quietly observing. No generated sign, end frame, or synthetic CTA; append only the existing game CTA asset.
+A short-form nature documentary where iconic game creatures are portrayed as real animals discovered in their natural habitat. Hidden-camera footage aesthetic: shaky handheld, telephoto lens, found footage grain. An elderly male naturalist (David Attenborough register) provides hushed, awe-filled VO over each clip. No lipsync, no dialogue — just ambient sound, creature behavior, and the narrator quietly observing. The final generated creature clip is an in-scene CTA hook: the animal approaches the camera holding a small white handwritten sign. The standard game CTA asset is appended after it.
 
 This file is the **playbook**: when to use, concept, budget, role briefs. Craft rules (TTS, NB2, Kling I2V, ffmpeg) — in `rules/roles/*.md`.
 
@@ -40,7 +40,7 @@ Best fit for games with iconic, visually-recognizable creatures (Pokémon Go, Ge
 
 Every clip: Kling generates the visual + ambient sound. MiniMax TTS generates the narration separately. Editor extracts Kling audio, attenuates it (vol 0.20), mixes with TTS at full volume. Viewers hear: rustling leaves, animal breathing, distant wildlife — underneath a calm elderly voice describing what they're seeing.
 
-**CTA:** append the existing game CTA clip from Supabase after the final creature observation. If it is missing, STOP and report the error. Do not generate a sign, CTA frame, replacement end card, or spoken substitute.
+**CTA-in-scene:** the last generated creature clip has `cta_in_scene: true`. Resolve both the exact sign wording and the standard CTA asset exclusively from the exact current `STORY_BIBLE_PATH` at `cta.sign_text` and `cta.standard_asset_url`; never use a global or cross-game fallback. Its NB2 start frame shows the creature approaching the camera with the story-bible sign facing the lens; Kling animates the approach and presentation without regenerating the text. The narrator reacts quietly to the message. Append the story-bible standard CTA asset after this generated CTA scene. If either CTA field is missing or empty, STOP before generation and ask to complete the exact bible.
 
 ### Locked across the format
 
@@ -50,11 +50,13 @@ Every clip: Kling generates the visual + ambient sound. MiniMax TTS generates th
 - **Naturalist voice:** `Deep_Voice_Man`, speed 0.90, emotion `neutral` — one voice, same narrator across all clips. (`Patient_Man` 0.80 tested and rejected — too slow.)
 - **Narration tone:** hushed, slightly breathless, factual but reverent. Short sentences. Never exclamatory. Never fourth-wall-breaking. Example: *"Notice how it adjusts its weight before the strike — remarkable."*
 - **No speedup** (unlike comedy formats) — pace is contemplative
-- **Negative prompt (all clips):** `text in frame, subtitles, watermark, game UI, game HUD, cartoon style, anime style, CJK characters`
+- **Negative prompt (non-CTA clips):** `text in frame, subtitles, watermark, game UI, game HUD, cartoon style, anime style, CJK characters`
+- **CTA sign exception:** the last clip permits only the exact `sign_text` on the white card; reject extra text, misspellings, printed typography, UI, and watermarks.
 
 ### Variable per video
 
 - Which creatures (3–5), their characteristic behavior, their real-world biome analogue
+- CTA sign text and standard CTA asset: mandatory values from the exact story bible's top-level `cta` object; no global, game-config, special-file, or cross-game fallback
 - Narration lines per creature (12–20 words each, 5s window)
 
 ---
@@ -81,7 +83,7 @@ Max with 1 technical retry per failed request: **$5.00**. Retry once with the sa
 | Creature clip 2 | yes | 5s | Second creature, different biome |
 | Creature clip 3 | yes | 5s | Third creature |
 | Creature clip 4 | optional | 5s | Fourth creature |
-| Final creature clip | yes | 5s | Last creature completes the final natural behavior; narrator closes the observation |
+| CTA-in-scene clip | yes | 5s | Last creature approaches with a white handwritten sign; narrator reacts |
 | Standard CTA | yes | ~5s | Channel CTA from Supabase, appended as-is |
 
 Total pre-speed: 20–30s. No speedup applied. Hard cap 35s.
@@ -96,7 +98,7 @@ Total pre-speed: 20–30s. No speedup applied. Hard cap 35s.
 - Each segment: 12–20 words, past-tense or present-progressive, describes what the camera sees
 - Clip 1: slightly louder (discovery framing): *"In the dense undergrowth of the Amazon basin, something extraordinary has been caught on camera..."*
 - Clips 2–N: hushed observation: *"Its flower releases spores at precisely twelve degrees celsius. We do not yet know why."*
-- Final creature clip: a short, hushed concluding observation with no CTA language
+- CTA-in-scene clip: a short, hushed reaction to the sign, such as *"...and it seems to be leaving us a message. Curious."*
 - Total narration: ~70–100 words for 20–30s of video
 - One TTS call, full text joined, clips get `tts_segment` timestamps aligned by Editor
 
@@ -150,7 +152,7 @@ Example error (EP1 tribbles): manager described "no visible eyes" from memory �
 ### Scenarist
 - Choose 3–5 creatures. Each creature gets: biome analogue, ONE characteristic behavior to film, 1–2 naturalist sentences.
 - All narration is first-person plural ("we observe…", "notice how…") or impersonal ("the creature…"). Never second-person.
-- Last creature clip is a normal closing wildlife observation. It contains no sign, CTA text, or synthetic end frame.
+- Last generated creature clip: `cta_in_scene: true`, with `sign_text` copied verbatim from the exact story bible's `cta.sign_text`. Missing value is a blocking configuration error.
 - `clip_type: "action"` for all clips — no dialogue, no Avatar.
 - `character_speech: null` for all clips — no lipsync anywhere.
 - No title card scene — cold open on creature.
@@ -178,6 +180,7 @@ Example error (EP1 tribbles): manager described "no visible eyes" from memory �
       "clip_type": "action",
       "character_speech": null,
       "tts_segment": "In the dense undergrowth, something has been caught on camera. A creature not seen in decades.",
+      "cta_in_scene": false,
       "action_description": "...",
       "camera_style": "handheld telephoto, leaves partially occlusing frame",
       "image_prompt": "...",
@@ -187,10 +190,12 @@ Example error (EP1 tribbles): manager described "no visible eyes" from memory �
       "index": 4,
       "creature_name": "Pikachu",
       "biome": "Japanese mountain forest",
-      "behavior": "pausing at the edge of the forest and returning to cover",
+      "behavior": "approaching camera, holding sign",
       "clip_type": "action",
       "character_speech": null,
-      "tts_segment": "With one final glance, it disappears quietly into the forest.",
+      "tts_segment": "It seems to be leaving us a message. Remarkable.",
+      "cta_in_scene": true,
+      "sign_text": "{exact STORY_BIBLE_PATH -> cta.sign_text}",
       "action_description": "...",
       "camera_style": "fixed trail camera, night vision tint, slight fisheye distortion",
       "image_prompt": "...",
@@ -235,7 +240,7 @@ RAW wildlife photography, Canon 5D Mark IV, [focal length], ISO 3200, heavy film
 
 **Prompt detail rule:** every image_prompt must describe the creature's key distinguishing features explicitly (horn shape, armor texture, fur color). Never write "a Sumpter Beast" without also describing what it looks like — NB2 will invent its own interpretation. Include: exact horn description ("two short curved horns growing outward from sides of skull, curving slightly upward at tips like a yak"), armor type ("rough stone-textured armor plates"), fur ("thick coarse dark grey-brown bristly fur mane"). If the prompt is vague, the creature will be wrong.
 
-**Creature vertical placement rule (mandatory — subtitle safe zone):** the creature must be positioned in the **central vertical zone of the frame (roughly 20%–75% from the top)**. Never place the creature in the bottom quarter of the frame — that area is covered by subtitles (ASS burn-in). In wide shots where the creature is small, keep it at mid-frame height, not hovering near the ground. In the image_prompt, use explicit placement language: `"creature at mid-frame, center of image, not near bottom edge"`. This applies to all creature clips.
+**Creature vertical placement rule (mandatory — subtitle safe zone):** the creature must be positioned in the **central vertical zone of the frame (roughly 20%–75% from the top)**. Never place the creature in the bottom quarter of the frame — that area is covered by subtitles (ASS burn-in). In wide shots where the creature is small, keep it at mid-frame height, not hovering near the ground. In the image_prompt, use explicit placement language: `"creature at mid-frame, center of image, not near bottom edge"`. This applies to all creature clips, including the CTA clip.
 
 **Scene visual contrast rule (mandatory):** adjacent clips must differ in at least TWO of the following — or the edit will look like a jump cut:
   - Camera distance (wide / medium / extreme close-up)
@@ -246,7 +251,7 @@ RAW wildlife photography, Canon 5D Mark IV, [focal length], ISO 3200, heavy film
 Recommended rhythm for single-creature videos: **wide establishing → extreme close-up detail → dramatic behavior → CTA approach**. Never two consecutive wide shots or two consecutive medium shots. No two scenes with identical shot type in the entire video.
 
 - **Camera style variety:** alternate between handheld telephoto, fixed trail camera, ground-level concealed, elevated wide. Set `camera_style` in each clip.
-- **No CTA-in-scene:** no creature sign, generated end frame, or CTA text belongs in any image prompt.
+- **CTA-in-scene clip:** first verify that storyboard `sign_text` exactly equals `STORY_BIBLE_PATH -> cta.sign_text`. Its `image_prompt` MUST include that exact text, phrased as `"a small white rectangular card with handwritten black marker text reading '{sign_text}'"`. Put the text phrase near the start of the prompt and require the card to face the lens cleanly. NB2 owns readable sign text. If debug review finds the result illegible or misspelled, stop and follow the Storyboarder runner's claimed-output regeneration policy; never resubmit the same job or delete its state/claim. Do not ask Kling to regenerate lettering and do not burn replacement text in Editor.
 - **No bg-reference files** — environment goes into `image_prompt` inline.
 - **One PNG per clip — start frame only.** No end frames.
 - General rules — `rules/roles/storyboarder.md`
@@ -278,7 +283,7 @@ Motion prompts must have three concurrent motion layers:
 **No repeated shot types across the episode.** If clip 1 is a wide telephoto, clip 2 cannot also be a wide telephoto. Check the full clip list before writing each motion prompt — vary distance, angle, and creature behavior.
 
 - **Avoid fast motion** — documentary wildlife is slow, heavy, deliberate. Use: "moves slowly", "breathes deeply", "turns its head gradually".
-- Do not request sign text, a white card, a generated CTA, or an end frame in Kling.
+- **CTA-in-scene clip:** do not ask Kling to generate or rewrite sign text. Animate only the creature's slow approach, stop, and presentation of the already-visible white card; preserve the NB2 lettering and keep the card facing the lens.
 - After generation: audio is embedded in the MP4. Pass local paths to Editor.
 - General rules — `rules/roles/animator.md`
 
@@ -331,7 +336,7 @@ the universal ASS. No `--style`/`--text`/`--atempo` — timings are correct by c
 
 **Key rules:**
 - **No speedup** on video (`setpts` NOT applied) — documentary pace is deliberate.
-- **No in-scene CTA or end frame** — never burn or generate "follow for more", a sign, or replacement CTA text.
+- **No drawtext replacement for the sign** — the handwritten sign exists in the NB2/Kling visual. Never burn its wording as drawtext or subtitles, and never replace a misspelled card in Editor.
 - **Subtitles — universal style**, generated by Editor via whisper (editor.md §6). Single-voice: `voice-final.wav` = TTS after atempo.
 - **Concat order:** creature clips in storyboard index order, then standard CTA clip appended from Supabase (`assets/{GAME_TAG}/branding/cta.mp4`).
 - bg-music: SKIP unless `music` block present in storyboard.json.
@@ -346,9 +351,9 @@ Burn a two-line title card at the start of every episode:
 - **Render method:** Pillow PNG (RGBA, match video resolution) → ffmpeg overlay composite. Do NOT use drawtext with `.ttc` font paths — causes squares on some builds. Use system fonts: `Arial`, `Liberation Sans`, or `DejaVu Sans`.
 - **Style:** Line 1 — large uppercase bold white; Line 2 — smaller regular weight white. No background box, no drop shadow (film grain provides contrast).
 
-#### CTA asset rule
+#### CTA sign and asset rule
 
-Use only the existing game CTA asset after the creature clips. If it is missing or invalid, STOP and report the error; do not synthesize a replacement CTA or end card.
+The last generated creature clip carries the in-scene handwritten sign. Resolve its exact `sign_text` and the appended standard asset only from the exact story bible's top-level `cta` object. Never fall back to another game's bible, the game config, a special file, or a global phrase. If either value is missing or the standard asset is invalid, STOP and report the configuration error; do not synthesize a replacement end card.
 
 - General rules — `rules/roles/editor.md`
 
@@ -395,10 +400,11 @@ ${OUTPUT_DIR}/
 - [ ] TTS narration continuous (not cut per-clip), audible — RMS > -30 dB
 - [ ] `atempo` applied to TTS: `TTS_DUR / VID_DUR` in range 0.95–1.10
 - [ ] ASS subtitles — universal whisper style (editor.md §6), text matches the narration
-- [ ] No generated sign, in-scene CTA, synthetic end frame, or CTA text overlay exists
+- [ ] Last generated creature clip has `cta_in_scene: true`, the creature approaches/presents the white card, and the card contains the exact resolved `sign_text`
+- [ ] Sign text comes from the NB2 start frame and is preserved by Kling; no drawtext/subtitle replacement is burned in Editor
 - [ ] No speedup on video — `ffprobe duration` ≈ sum of clip durations
 - [ ] No two adjacent clips with same camera distance AND same lighting
-- [ ] Last creature clip is a normal closing observation with no CTA language
+- [ ] Narrator gives only a brief observational reaction to the CTA sign; the creature never speaks
 - [ ] Title overlay filter event is configured for 0–4s with Line 1 = `"{GAME_WORLD} DOCUMENTARY"` and Line 2 = creature name
 - [ ] Standard CTA clip from Supabase appended after creature clips
 - [ ] No AI Vision or machine visual inspection runs on generated media; the user performs any visual review during debug
@@ -425,7 +431,8 @@ ${OUTPUT_DIR}/
 - ❌ Skipping atempo normalization — TTS duration ≠ video duration; without atempo the narration is cut or runs long
 - ❌ Manual ASS generation with `--text`/`--atempo`/`--style` — those flags are removed; Editor does it universally via whisper
 - ❌ Using local ffmpeg (`/usr/local/bin/ffmpeg`) for subtitle burn — it lacks libfreetype; use `ffmpeg-full`
-- ❌ Generating or burning "follow for more", a creature-held sign, replacement CTA, or synthetic end frame
+- ❌ Burning the sign wording as drawtext/subtitles — it must be part of the NB2 start frame and preserved through Kling
+- ❌ Asking Kling to generate or correct readable sign text — Kling animates the existing card; NB2 owns the lettering
 - ❌ Sending multi-prompt as `"multi_prompt[0]: ... multi_prompt[1]: ..."` string to Kling — not parsed; write one unified prompt
 - ❌ Kling prompt over 512 chars — silently truncated or rejected with 422
 - ❌ Polling Kling at `.../v3/standard/image-to-video/requests/{ID}/status` — returns 405; use `.../kling-video/requests/{ID}/status`
