@@ -30,6 +30,26 @@
         "tags": ["growtopia", "default-skin", "player-avatar"],
         "eligible_for": "pixel clips only (canonical raw default-skin sprite; not a competing-format stylized render)"
       }
+    },
+    {
+      "name": "tomb-robber-criminal-mastermind",
+      "role": "one character across two career-stage costumes — rises from a small-time tomb robber to the infamous Criminal Mastermind. Not the generic NPC sprites of the same names (those are tagged growtopia/npc/pixel-sprite, a different format's untagged style) — this is a fresh character-story-bound anchor with its own two-stage appearance card.",
+      "costume_stages": {
+        "tomb-robber (early stage)": "blocky humanoid Growtopian build with a large square head, tan/beige blocky skin, two white dot eyes with black pupils peering out above a dusty cloth bandana pulled up over the lower face, thick clean black outline running along every edge of the body, a frayed brown leather chest wrap over a tattered off-white undershirt, a weathered canvas satchel slung diagonally across one shoulder, tan cargo-wrapped pants, a small rusted crowbar holstered at the hip, tiny blocky hands smudged with dust, no cape or coat, scruffy unpolished silhouette",
+        "criminal-mastermind (later stage)": "same blocky humanoid Growtopian build and large square head, tan/beige blocky skin, two sharp white dot eyes with black pupils now half-hidden behind a thin black domino eye-mask, thick clean black outline running along every edge of the body, a long tailored dark-purple coat with a high collar over a crisp black shirt, polished black trousers, a slim silver-topped cane held in one gloved blocky hand, a small glint of gold cufflinks at the wrist, upright confident posture, no bandana, no satchel"
+      },
+      "refs": {
+        "tomb-robber (early stage)": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/tomb-robber-criminal-mastermind/variants/tomb-robber-2026-07-20.png",
+          "tags": ["character-story", "character-reference"]
+        },
+        "criminal-mastermind (later stage)": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/tomb-robber-criminal-mastermind/variants/criminal-mastermind-2026-07-20.png",
+          "tags": ["character-story", "character-reference"]
+        }
+      }
     }
   ],
   "narrator": {
@@ -43,8 +63,21 @@
     "status": "ready",
     "standard_asset_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4",
     "append_standard_asset_after_in_scene": true,
-    "note": "Growtopia CTA (3s idle) registered 2026-07-17 in game_assets (tags cta,branding). Pop-up overlay banner also available at branding/popup.png (tags popup,overlay)."
+    "sign_text": "Get free gems, link in bio",
+    "note": "Growtopia CTA (3s idle) registered 2026-07-17 in game_assets (tags cta,branding). Pop-up overlay banner also available at branding/popup.png (tags popup,overlay). sign_text is the in-scene CTA phrase used on an early/mid clip (cta_in_scene: true, NB2-painted lettering, Kling animates around it without touching the text) — this is a per-run placement choice (e.g. clip 2 in the 2026-07-20 episode), not fixed to a specific clip index. The standard_asset_url card still appends after the last story clip regardless."
   },
-  "covered_characters": [],
-  "episodes": []
+  "covered_characters": ["tomb-robber-criminal-mastermind"],
+  "episodes": [
+    {
+      "ep": 1,
+      "character": "tomb-robber-criminal-mastermind",
+      "date": "2026-07-20",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-20/character-story/20260720-185337-61064/final.mp4",
+      "yt_url": null,
+      "yt_publish_at": null,
+      "cta_in_scene_clip_index": 2,
+      "cta_sign": "Get free gems, link in bio",
+      "note": "First character-story episode for growtopia. Nameless default-skin everyplayer angle was tried first and rejected by the user as flat/contrived; pivoted to this NPC-based rise-to-infamy arc instead. Music volume mixed at 0.1275 (reduced 15% from the format-default 0.15 per user request post-review)."
+    }
+  ]
 }
