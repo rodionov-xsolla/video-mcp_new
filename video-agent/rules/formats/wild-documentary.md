@@ -1,12 +1,12 @@
 ---
-ready_to_post: no
+ready_to_post: yes
 subtitles: true
 overlays: true
 ---
 
 # Format "Wild Documentary" — game creatures filmed as real wildlife, narrated by an elderly naturalist
 
-A short-form nature documentary where iconic game creatures are portrayed as real animals discovered in their natural habitat. Hidden-camera footage aesthetic: shaky handheld, telephoto lens, found footage grain. An elderly male naturalist (David Attenborough register) provides hushed, awe-filled VO over each clip. No lipsync, no dialogue — just ambient sound, creature behavior, and the narrator quietly observing. Ends with the last creature holding a white sign in its mouth/paw (in-scene CTA hook).
+A short-form nature documentary where iconic game creatures are portrayed as real animals discovered in their natural habitat. Hidden-camera footage aesthetic: shaky handheld, telephoto lens, found footage grain. An elderly male naturalist (David Attenborough register) provides hushed, awe-filled VO over each clip. No lipsync, no dialogue — just ambient sound, creature behavior, and the narrator quietly observing. The final generated creature clip is an in-scene CTA hook: the animal approaches the camera holding a small white handwritten sign. The standard game CTA asset is appended after it.
 
 This file is the **playbook**: when to use, concept, budget, role briefs. Craft rules (TTS, NB2, Kling I2V, ffmpeg) — in `rules/roles/*.md`.
 
@@ -16,7 +16,7 @@ This file is the **playbook**: when to use, concept, budget, role briefs. Craft 
 
 Keywords: "documentary", "wildlife", "дикая природа", "документалка", "натуралист", "naturalist", "nature doc", "hidden camera", "скрытая камера", "wild creatures", "wild pokémon", "wild pokemon", "дикие покемоны", "как выглядели бы в природе", "creatures in the wild".
 
-Best fit for games with iconic, visually-recognizable creatures (Pokémon Go, Genshin monsters, WoW beasts, FF summons). Each video = 3–5 different creatures, each shown doing one characteristic behavior. **Single-episode format** — no serial continuity.
+Best fit for games with iconic, visually-recognizable creatures (Pokémon Go, Genshin monsters, WoW beasts, FF summons). Each video = 3–5 different creatures, each shown doing one characteristic behavior. A resolved format-local story bible is mandatory even though episodes are self-contained. If it is missing, ask the user whether to create it and stop until they confirm. Update its state only after the user explicitly approves the presented final video.
 
 ---
 
@@ -26,36 +26,37 @@ Best fit for games with iconic, visually-recognizable creatures (Pokémon Go, Ge
 - **Style:** ultra-realistic — creatures rendered as real animals in real biomes. NOT game-art style. "How would this creature actually look and move if it existed?"
 - **Duration:** 20–30s (4–5 clips × 5s, no speedup)
 - **Budget:** up to $5.00 per video. Stop if spend > $4.50.
-- **Frame format:** 9:16 (608×1080)
+- **Frame format:** 9:16 (1080×1920)
 - **Speedup:** NONE — documentary pacing is deliberate and slow
 
 ### Models
 
 - **Image:** NB2 (`fal-ai/nano-banana-2/edit`) — ultra-realistic wildlife photography style
 - **Video:** Kling v3 Standard I2V (`generate_audio: true`) — ambient creature/environment sounds baked in
-- **Audio:** MiniMax TTS (naturalist narration) overlaid over Kling's embedded audio
+- **Audio:** intentional native speech when supported → approved sample owned by this `wild-documentary` bible through Chatterbox → otherwise MiniMax, over Kling's embedded ambient audio
 - **Music:** none, or barely audible ambient underscore (vol 0.05)
 
 ### Key mechanic
 
 Every clip: Kling generates the visual + ambient sound. MiniMax TTS generates the narration separately. Editor extracts Kling audio, attenuates it (vol 0.20), mixes with TTS at full volume. Viewers hear: rustling leaves, animal breathing, distant wildlife — underneath a calm elderly voice describing what they're seeing.
 
-**CTA-in-scene:** the last creature clip has `cta_in_scene: true`. The NB2 image shows the creature approaching the camera holding a small white handwritten sign. The Kling animation shows it stopping and presenting the sign. The naturalist whispers something like *"...and it seems to be leaving us a message."* The standard CTA clip is appended after.
+**CTA-in-scene:** the last generated creature clip has `cta_in_scene: true`. Resolve both the exact sign wording and the standard CTA asset exclusively from the exact current `STORY_BIBLE_PATH` at `cta.sign_text` and `cta.standard_asset_url`; never use a global or cross-game fallback. Its NB2 start frame shows the creature approaching the camera with the story-bible sign facing the lens; Kling animates the approach and presentation without regenerating the text. The narrator reacts quietly to the message. Append the story-bible standard CTA asset after this generated CTA scene. If either CTA field is missing or empty, STOP before generation and ask to complete the exact bible.
 
 ### Locked across the format
 
-- **Aspect ratio:** 9:16, 608×1080
+- **Aspect ratio:** 9:16, 1080×1920
 - **Style:** photorealistic wildlife photography — no game UI, no game art, no stylized look
 - **Camera aesthetic:** grainy, telephoto compression, shallow depth of field, shaky handheld or fixed trail camera, partial occlusion by leaves/branches
 - **Naturalist voice:** `Deep_Voice_Man`, speed 0.90, emotion `neutral` — one voice, same narrator across all clips. (`Patient_Man` 0.80 tested and rejected — too slow.)
 - **Narration tone:** hushed, slightly breathless, factual but reverent. Short sentences. Never exclamatory. Never fourth-wall-breaking. Example: *"Notice how it adjusts its weight before the strike — remarkable."*
 - **No speedup** (unlike comedy formats) — pace is contemplative
-- **Negative prompt (all clips):** `text in frame, subtitles, watermark, game UI, game HUD, cartoon style, anime style, CJK characters`
+- **Negative prompt (non-CTA clips):** `text in frame, subtitles, watermark, game UI, game HUD, cartoon style, anime style, CJK characters`
+- **CTA sign exception:** the last clip permits only the exact `sign_text` on the white card; reject extra text, misspellings, printed typography, UI, and watermarks.
 
 ### Variable per video
 
 - Which creatures (3–5), their characteristic behavior, their real-world biome analogue
-- CTA sign text: always `"follow for more"` (locked)
+- CTA sign text and standard CTA asset: mandatory values from the exact story bible's top-level `cta` object; no global, game-config, special-file, or cross-game fallback
 - Narration lines per creature (12–20 words each, 5s window)
 
 ---
@@ -70,7 +71,7 @@ Every clip: Kling generates the visual + ambient sound. MiniMax TTS generates th
 | MiniMax TTS narration (~15 words/clip) | ~$0.01 | 4–5 | $0.04–$0.06 |
 | **Typical total** | | | **$3.20–$4.01** |
 
-Max with 1 retry per problem clip: **$5.00**. Stop at **$4.50**.
+Max with 1 technical retry per failed request: **$5.00**. Retry once with the same provider/settings; a second failure stops the video with an error. No provider/model/local fallback. Stop at **$4.50**.
 
 ---
 
@@ -82,7 +83,7 @@ Max with 1 retry per problem clip: **$5.00**. Stop at **$4.50**.
 | Creature clip 2 | yes | 5s | Second creature, different biome |
 | Creature clip 3 | yes | 5s | Third creature |
 | Creature clip 4 | optional | 5s | Fourth creature |
-| CTA-in-scene clip | yes | 5s | Last creature holds white handwritten sign, narrator reacts |
+| CTA-in-scene clip | yes | 5s | Last creature approaches with a white handwritten sign; narrator reacts |
 | Standard CTA | yes | ~5s | Channel CTA from Supabase, appended as-is |
 
 Total pre-speed: 20–30s. No speedup applied. Hard cap 35s.
@@ -97,15 +98,15 @@ Total pre-speed: 20–30s. No speedup applied. Hard cap 35s.
 - Each segment: 12–20 words, past-tense or present-progressive, describes what the camera sees
 - Clip 1: slightly louder (discovery framing): *"In the dense undergrowth of the Amazon basin, something extraordinary has been caught on camera..."*
 - Clips 2–N: hushed observation: *"Its flower releases spores at precisely twelve degrees celsius. We do not yet know why."*
-- CTA-in-scene clip: whispered reaction to the sign: *"...and it appears to be inviting us closer. Curious."*
+- CTA-in-scene clip: a short, hushed reaction to the sign, such as *"...and it seems to be leaving us a message. Curious."*
 - Total narration: ~70–100 words for 20–30s of video
 - One TTS call, full text joined, clips get `tts_segment` timestamps aligned by Editor
 
 ---
 
-## Manager — Phase 0: Creature Research (mandatory before Scenarist)
+## Manager — Phase 0: Creature Research
 
-Before calling the Scenarist, the Manager must do a short web search for every creature in the request. The goal: correct biomes, real lore-accurate behaviors, canonical habitat. Never rely on training data alone — creature lore changes, wikis are authoritative.
+Before calling the Scenarist, Manager performs the format's existing Phase 0 creature research. Keep the declared phase ownership and order unchanged.
 
 **For each creature:**
 1. Search `{creature name} {game name} habitat wiki` (Memory Alpha, Bulbapedia, Fandom, etc.)
@@ -115,8 +116,8 @@ Before calling the Scenarist, the Manager must do a short web search for every c
    - **Social behavior** — solitary, pack, colony, swarm, etc.
    - **Characteristic behaviors** — the one thing they're famous for (purring, multiplying, elemental attacks, etc.)
    - **Known environmental preferences** — temperature, humidity, terrain
-3. Write a **1-paragraph habitat summary** per creature (3–5 sentences max)
-4. Pass this summary to Scenarist in the prompt as `CREATURE_RESEARCH` block
+3. Write a **1-paragraph habitat summary** per creature (3–5 sentences max) into `research.json`
+4. Include structured `CREATURE_RESEARCH` and, only when necessary, `CREATURE_ANATOMY` blocks in that artifact for the later script/storyboard phases
 
 **What to do with the research:**
 - Use home biome as the primary biome for clip 1 (establishing shot)
@@ -124,13 +125,13 @@ Before calling the Scenarist, the Manager must do a short web search for every c
 - If the canon habitat is a spaceship/interior (e.g. tribbles live on starbases, not planets) — use the closest real-world biome analogue that fits the creature's ecological niche (e.g. tribbles → warm granary, food storage, dense colony nest)
 - If no canonical habitat exists — note this explicitly and use a plausible analogue based on creature biology
 
-**Search tools:** use WebSearch. Two queries per creature is enough. If the wiki page is returned, read it.
+**Search tools (existing Manager Phase 0 research scope):** use WebSearch. Two queries per creature is enough. If the wiki page is returned, read it.
 
 **Do NOT skip this step for "well-known" creatures** — training data has errors and omissions. EP1 tribbles were placed in a "Federation grassland" with no lore basis because this step was skipped.
 
-### Visual ref inspection (mandatory — read the local asset before describing anatomy)
+### Visual ref inspection (existing Manager Phase 0 scope, only when genuinely necessary)
 
-After the web search, open the local game art ref with the Read tool (`games/{GAME_TAG}/assets/` or wherever the user pointed you) and inspect it visually. Write an **anatomy checklist** covering every visible feature:
+After web research, Scenarist may inspect an authoritative source image only when the textual sources leave a genuine anatomy ambiguity or the user explicitly points to a source asset. This is the sole image-inspection exception and applies only to the source reference, never generated media. If necessary, Scenarist opens the local game art ref (`games/{GAME_TAG}/assets/` or the user-provided path) and writes an **anatomy checklist** into `research.json` covering the relevant visible features:
 
 - Eyes: present / absent / partially hidden / how many
 - Limbs: visible / count / type (paws, fins, tentacles)
@@ -140,7 +141,7 @@ After the web search, open the local game art ref with the Read tool (`games/{GA
 - Body proportions: relative head-to-body size, stance
 - Any distinctive markings
 
-Pass this checklist to Scenarist AND Storyboarder in the prompt as `CREATURE_ANATOMY` block. **This block overrides any training-data assumptions.** Storyboarder must use it verbatim in image_prompts — never invent or omit features that appear in the ref.
+Pass `CREATURE_ANATOMY` only when source inspection was actually necessary. It overrides training-data assumptions. Otherwise use authoritative textual research and do not run image inspection as a routine gate. In debug mode, stop at the existing Phase 0 boundary.
 
 Example error (EP1 tribbles): manager described "no visible eyes" from memory — original ref clearly shows small eyes. Anatomy was wrong in all 5 generated scenes as a result.
 
@@ -149,10 +150,9 @@ Example error (EP1 tribbles): manager described "no visible eyes" from memory �
 ## Role briefs
 
 ### Scenarist
-
 - Choose 3–5 creatures. Each creature gets: biome analogue, ONE characteristic behavior to film, 1–2 naturalist sentences.
 - All narration is first-person plural ("we observe…", "notice how…") or impersonal ("the creature…"). Never second-person.
-- Last creature clip: `cta_in_scene: true`, `sign_text: "follow for more"` — always this exact text.
+- Last generated creature clip: `cta_in_scene: true`, with `sign_text` copied verbatim from the exact story bible's `cta.sign_text`. Missing value is a blocking configuration error.
 - `clip_type: "action"` for all clips — no dialogue, no Avatar.
 - `character_speech: null` for all clips — no lipsync anywhere.
 - No title card scene — cold open on creature.
@@ -195,9 +195,9 @@ Example error (EP1 tribbles): manager described "no visible eyes" from memory �
       "character_speech": null,
       "tts_segment": "It seems to be leaving us a message. Remarkable.",
       "cta_in_scene": true,
-      "sign_text": "follow for more",
+      "sign_text": "{exact STORY_BIBLE_PATH -> cta.sign_text}",
       "action_description": "...",
-      "camera_style": "fixed trail camera, night vision tint, fisheye slight distortion",
+      "camera_style": "fixed trail camera, night vision tint, slight fisheye distortion",
       "image_prompt": "...",
       "negative_prompt": "..."
     }
@@ -233,16 +233,14 @@ RAW wildlife photography, Canon 5D Mark IV, [focal length], ISO 3200, heavy film
 
 #### Creature ref workflow (mandatory — do this before generating any scene)
 
-1. **Read the original game art ref** (`games/{GAME_TAG}/assets/`) or search for authoritative creature descriptions (wiki, in-game codex). Do NOT rely on memory or training data — the creature may look nothing like you expect.
+1. Use authoritative creature descriptions (wiki, in-game codex). Inspect the original game art ref (`games/{GAME_TAG}/assets/`) only when a genuine anatomy ambiguity remains or the user explicitly asks; never inspect generated media.
 2. **Write an exhaustive creature description** covering every anatomical feature: body shape, size proportions, armor/skin/fur texture, exact color with patches/gradients, horn shape (angle, length, curvature, attachment point), eye type, limb count and proportions, any distinctive features. The more specific the better — vague descriptions produce generic animals.
-3. **Generate one photorealistic creature ref image** (NB2, `image_urls: [game_art_ref_url]`) — wide or 3/4 view showing full body. This is the canonical photorealistic render of the creature.
-4. **Use this ref as the anchor for ALL subsequent scene images.** Do NOT chain refs scene-to-scene (chain degradation causes each scene to look like a different animal). Two anchor types:
-   - **Body/wide shots:** `image_urls: [scene-1.png]` (first approved photorealistic scene)
-   - **Face/close-up/CTA shots:** `image_urls: [scene with best horn/face profile]` (a profile or ridge shot showing correct features)
+3. **Generate one format-bound photorealistic creature ref image** (NB2, with the authoritative game art source only if source inspection was necessary) — wide or 3/4 view showing full body.
+4. **Use this same format-bound ref as the anchor for ALL subsequent scene images.** Do NOT chain refs scene-to-scene and do not borrow an image from another format. Generated media receives technical validation only; the user performs any visual review during debug.
 
 **Prompt detail rule:** every image_prompt must describe the creature's key distinguishing features explicitly (horn shape, armor texture, fur color). Never write "a Sumpter Beast" without also describing what it looks like — NB2 will invent its own interpretation. Include: exact horn description ("two short curved horns growing outward from sides of skull, curving slightly upward at tips like a yak"), armor type ("rough stone-textured armor plates"), fur ("thick coarse dark grey-brown bristly fur mane"). If the prompt is vague, the creature will be wrong.
 
-**Creature vertical placement rule (mandatory — subtitle safe zone):** the creature must be positioned in the **central vertical zone of the frame (roughly 20%–75% from the top)**. Never place the creature in the bottom quarter of the frame — that area is covered by subtitles (ASS burn-in). In wide shots where the creature is small, keep it at mid-frame height, not hovering near the ground. In the image_prompt, use explicit placement language: `"creature at mid-frame, center of image, not near bottom edge"`. This applies to ALL clips including the CTA.
+**Creature vertical placement rule (mandatory — subtitle safe zone):** the creature must be positioned in the **central vertical zone of the frame (roughly 20%–75% from the top)**. Never place the creature in the bottom quarter of the frame — that area is covered by subtitles (ASS burn-in). In wide shots where the creature is small, keep it at mid-frame height, not hovering near the ground. In the image_prompt, use explicit placement language: `"creature at mid-frame, center of image, not near bottom edge"`. This applies to all creature clips, including the CTA clip.
 
 **Scene visual contrast rule (mandatory):** adjacent clips must differ in at least TWO of the following — or the edit will look like a jump cut:
   - Camera distance (wide / medium / extreme close-up)
@@ -253,7 +251,7 @@ RAW wildlife photography, Canon 5D Mark IV, [focal length], ISO 3200, heavy film
 Recommended rhythm for single-creature videos: **wide establishing → extreme close-up detail → dramatic behavior → CTA approach**. Never two consecutive wide shots or two consecutive medium shots. No two scenes with identical shot type in the entire video.
 
 - **Camera style variety:** alternate between handheld telephoto, fixed trail camera, ground-level concealed, elevated wide. Set `camera_style` in each clip.
-- **CTA-in-scene clip:** the `image_prompt` MUST include the exact sign text from `sign_text` field in the storyboard. Always phrase it as: `"a small white rectangular card with handwritten black marker text reading '{sign_text}'"`. NB2 is more reliable at rendering text than Kling I2V — the card must face the lens clearly. If NB2 renders the text illegible on the first attempt, retry once with the text phrase at the very start of the prompt. DO NOT attempt to fix via Kling prompt (Animator has no role in sign text) and DO NOT burn drawtext overlay (Editor has no role in sign text).
+- **CTA-in-scene clip:** first verify that storyboard `sign_text` exactly equals `STORY_BIBLE_PATH -> cta.sign_text`. Its `image_prompt` MUST include that exact text, phrased as `"a small white rectangular card with handwritten black marker text reading '{sign_text}'"`. Put the text phrase near the start of the prompt and require the card to face the lens cleanly. NB2 owns readable sign text. If debug review finds the result illegible or misspelled, stop and follow the Storyboarder runner's claimed-output regeneration policy; never resubmit the same job or delete its state/claim. Do not ask Kling to regenerate lettering and do not burn replacement text in Editor.
 - **No bg-reference files** — environment goes into `image_prompt` inline.
 - **One PNG per clip — start frame only.** No end frames.
 - General rules — `rules/roles/storyboarder.md`
@@ -261,7 +259,7 @@ Recommended rhythm for single-creature videos: **wide establishing → extreme c
 ### Animator
 
 - All clips: **Kling v3 Standard I2V, `generate_audio: true`** — let Kling generate ambient nature sounds.
-- Fallback to v2.6 Pro only if v3 produces visible artifacts (anatomical distortion).
+- Retry one technically failed v3 request once with the same endpoint/settings. If it fails again, STOP and report the error. Do not switch to v2.6 or another provider.
 - **Start frame only.** No `tail_image_url`.
 - **Kling prompt hard limit: 512 characters.** Count before submitting. Truncate by removing secondary details (dragonfly, specific leaf movement etc.) — keep creature motion + camera motion + grain/texture as the core.
 - **Polling URL:** status at `https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}/status` — NOT the model path. Using the model path (`.../v3/standard/image-to-video/requests/...`) returns 405.
@@ -285,14 +283,14 @@ Motion prompts must have three concurrent motion layers:
 **No repeated shot types across the episode.** If clip 1 is a wide telephoto, clip 2 cannot also be a wide telephoto. Check the full clip list before writing each motion prompt — vary distance, angle, and creature behavior.
 
 - **Avoid fast motion** — documentary wildlife is slow, heavy, deliberate. Use: "moves slowly", "breathes deeply", "turns its head gradually".
-- **CTA-in-scene clip:** do NOT attempt to generate sign text via Kling prompt — Kling cannot reliably render readable text. Just describe the creature approaching and stopping with "a white card visible". Text on the card comes from NB2 (if legible) — Animator has no role in sign text.
+- **CTA-in-scene clip:** do not ask Kling to generate or rewrite sign text. Animate only the creature's slow approach, stop, and presentation of the already-visible white card; preserve the NB2 lettering and keep the card facing the lens.
 - After generation: audio is embedded in the MP4. Pass local paths to Editor.
 - General rules — `rules/roles/animator.md`
 
 ### Sound
 
-- **TTS:** one MiniMax call with the joined full narration text (`tts.full_text` from storyboard.json).
-  - `voice_id: "Deep_Voice_Man"`, `speed: 0.90`, `emotion: "neutral"`
+- **Speech:** use intentional native speech when supported → Chatterbox only with an approved narrator sample owned by this resolved `wild-documentary` bible → otherwise MiniMax. The current bibles resolve to MiniMax `Deep_Voice_Man`, speed `0.90`, emotion `neutral`.
+  - Retry the same route/settings once on a technical failure, then STOP; no provider or local fallback.
   - Upload to Supabase as `tts-narration.mp3`
 - **Segmentation for Editor:** provide a `tts_segments.json` with per-clip word counts and estimated timestamps so Editor can align narration to clips. Rough formula: ~0.45s per word at speed 0.90.
 - **No background music** (default). If the user explicitly requests it: ambient nature underscore generated via MiniMax (instrumental) at vol 0.05 maximum.
@@ -338,7 +336,7 @@ the universal ASS. No `--style`/`--text`/`--atempo` — timings are correct by c
 
 **Key rules:**
 - **No speedup** on video (`setpts` NOT applied) — documentary pace is deliberate.
-- **No drawtext sign text overlay** — the sign exists only in the visual (NB2/Kling). Never burn "follow for more" or any CTA text as a drawtext/subtitle overlay.
+- **No drawtext replacement for the sign** — the handwritten sign exists in the NB2/Kling visual. Never burn its wording as drawtext or subtitles, and never replace a misspelled card in Editor.
 - **Subtitles — universal style**, generated by Editor via whisper (editor.md §6). Single-voice: `voice-final.wav` = TTS after atempo.
 - **Concat order:** creature clips in storyboard index order, then standard CTA clip appended from Supabase (`assets/{GAME_TAG}/branding/cta.mp4`).
 - bg-music: SKIP unless `music` block present in storyboard.json.
@@ -353,9 +351,9 @@ Burn a two-line title card at the start of every episode:
 - **Render method:** Pillow PNG (RGBA, match video resolution) → ffmpeg overlay composite. Do NOT use drawtext with `.ttc` font paths — causes squares on some builds. Use system fonts: `Arial`, `Liberation Sans`, or `DejaVu Sans`.
 - **Style:** Line 1 — large uppercase bold white; Line 2 — smaller regular weight white. No background box, no drop shadow (film grain provides contrast).
 
-#### CTA sign text rule
+#### CTA sign and asset rule
 
-The in-scene CTA sign text is **always `"follow for more"`** for this format. Scenarist sets `sign_text: "follow for more"` on the CTA clip — no exceptions, no channel-specific overrides unless the user explicitly instructs otherwise in the session.
+The last generated creature clip carries the in-scene handwritten sign. Resolve its exact `sign_text` and the appended standard asset only from the exact story bible's top-level `cta` object. Never fall back to another game's bible, the game config, a special file, or a global phrase. If either value is missing or the standard asset is invalid, STOP and report the configuration error; do not synthesize a replacement end card.
 
 - General rules — `rules/roles/editor.md`
 
@@ -364,7 +362,7 @@ The in-scene CTA sign text is **always `"follow for more"`** for this format. Sc
 ## Output files
 
 ```
-output/YYYY-MM-DD/{GAME_TAG}/wild-documentary/
+${OUTPUT_DIR}/
 ├── storyboard.json
 ├── tts-narration.mp3
 ├── tts_segments.json             # per-clip word counts + estimated timestamps
@@ -389,11 +387,11 @@ output/YYYY-MM-DD/{GAME_TAG}/wild-documentary/
 ## Validation before publishing
 
 - [ ] `format: "wild-documentary"` in storyboard.json
-- [ ] Creature ref generated from original game asset / wiki, NOT from memory — all anatomical features verified
+- [ ] Creature anatomy comes from authoritative research; source-image inspection occurred only if genuinely necessary
 - [ ] All scene image_prompts include explicit creature feature description (horns, armor, fur, color)
-- [ ] All body/wide scene images use scene-1 anchor ref; all face/CTA scenes use profile-scene anchor ref
+- [ ] All scene generations use the same format-bound creature ref; no cross-format image is used
 - [ ] `character_speech: null` for ALL clips (no lipsync anywhere)
-- [ ] All images 9:16, photorealistic wildlife style (NOT game art, NOT cartoon)
+- [ ] All image prompts declare 9:16 and the locked photorealistic wildlife style; generated files pass technical decode/dimension checks
 - [ ] No two clips with identical shot type (camera distance + creature pose)
 - [ ] All Kling clips generated with `generate_audio: true`
 - [ ] Every Kling motion prompt includes `"no face morphing, no facial deformation, anatomy stable throughout"`
@@ -402,13 +400,14 @@ output/YYYY-MM-DD/{GAME_TAG}/wild-documentary/
 - [ ] TTS narration continuous (not cut per-clip), audible — RMS > -30 dB
 - [ ] `atempo` applied to TTS: `TTS_DUR / VID_DUR` in range 0.95–1.10
 - [ ] ASS subtitles — universal whisper style (editor.md §6), text matches the narration
-- [ ] No drawtext "follow for more" or any sign text overlay burned on video
+- [ ] Last generated creature clip has `cta_in_scene: true`, the creature approaches/presents the white card, and the card contains the exact resolved `sign_text`
+- [ ] Sign text comes from the NB2 start frame and is preserved by Kling; no drawtext/subtitle replacement is burned in Editor
 - [ ] No speedup on video — `ffprobe duration` ≈ sum of clip durations
 - [ ] No two adjacent clips with same camera distance AND same lighting
-- [ ] Last creature clip has `cta_in_scene: true`, creature approaching/holding card
-- [ ] Title overlay present: Line 1 = `"{GAME_WORLD} DOCUMENTARY"`, Line 2 = creature name; visible 0–4s
+- [ ] Narrator gives only a brief observational reaction to the CTA sign; the creature never speaks
+- [ ] Title overlay filter event is configured for 0–4s with Line 1 = `"{GAME_WORLD} DOCUMENTARY"` and Line 2 = creature name
 - [ ] Standard CTA clip from Supabase appended after creature clips
-- [ ] No game UI, no stylized art, no CJK text in any frame
+- [ ] No AI Vision or machine visual inspection runs on generated media; the user performs any visual review during debug
 
 ---
 
@@ -421,8 +420,8 @@ output/YYYY-MM-DD/{GAME_TAG}/wild-documentary/
 - ❌ Creature placed in the bottom quarter of the frame — subtitles burn into that zone; always specify "creature at mid-frame, center of image, not near bottom edge" in image_prompt
 - ❌ Not overriding game config style — for stylized games (Pokémon GO etc.) MUST add `style_override` to storyboard
 - ❌ Vague creature description in image_prompt — write every feature explicitly (horn shape, armor texture, fur color, body proportions). "A Sumpter Beast" without description = NB2 invents a random animal
-- ❌ Skipping creature ref research — always read the original game asset or wiki before writing prompts. Never rely on training data for creature appearance
-- ❌ Chain refs scene-to-scene — causes visual drift, each scene looks like a different animal. Use ONE approved anchor ref for all body shots, ONE profile/ridge scene for all face/CTA shots
+- ❌ Skipping creature research — always read authoritative textual sources; inspect a source image only when the permitted necessity condition above is met. Never rely on training data alone
+- ❌ Chain refs scene-to-scene or assets from another format — use one format-bound creature ref for all shots
 - ❌ Face morphing in Kling — must add `"no face morphing, no facial deformation, anatomy stable throughout"` to EVERY motion prompt
 - ❌ Putting motion budget on the face in wide/medium shots — lock the head, animate the body and environment
 - ❌ Same shot type repeated — no two clips with identical camera distance + creature pose. Vary: wide telephoto → extreme close-up → dramatic action → CTA trail cam
@@ -432,8 +431,8 @@ output/YYYY-MM-DD/{GAME_TAG}/wild-documentary/
 - ❌ Skipping atempo normalization — TTS duration ≠ video duration; without atempo the narration is cut or runs long
 - ❌ Manual ASS generation with `--text`/`--atempo`/`--style` — those flags are removed; Editor does it universally via whisper
 - ❌ Using local ffmpeg (`/usr/local/bin/ffmpeg`) for subtitle burn — it lacks libfreetype; use `ffmpeg-full`
-- ❌ Burning "follow for more" or any sign text as drawtext/subtitle overlay — breaks documentary immersion
-- ❌ Trying to get Kling to render readable sign text — unreliable; text belongs in NB2 image_prompt
+- ❌ Burning the sign wording as drawtext/subtitles — it must be part of the NB2 start frame and preserved through Kling
+- ❌ Asking Kling to generate or correct readable sign text — Kling animates the existing card; NB2 owns the lettering
 - ❌ Sending multi-prompt as `"multi_prompt[0]: ... multi_prompt[1]: ..."` string to Kling — not parsed; write one unified prompt
 - ❌ Kling prompt over 512 chars — silently truncated or rejected with 422
 - ❌ Polling Kling at `.../v3/standard/image-to-video/requests/{ID}/status` — returns 405; use `.../kling-video/requests/{ID}/status`

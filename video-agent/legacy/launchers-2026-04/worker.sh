@@ -5,15 +5,17 @@
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-AGENT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+AGENT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+QUEUE_DIR="$AGENT_DIR/queue"
 LOG_FILE="$SCRIPT_DIR/worker.log"
 POLL_INTERVAL=30        # секунд между проверками очереди
 TASK_TIMEOUT=2400       # 40 минут максимум на одну задачу
 COOLDOWN_AFTER_TASK=5   # секунд после завершения задачи
 
-# PIPELINE_MODE = pipeline (default — sub-agent через pipeline.sh, переключает модели) | legacy (монолитный claude -p, всё на Opus)
+# PIPELINE_MODE = pipeline (default — sub-agent через legacy/launchers-2026-04/pipeline.sh, переключает модели) | legacy (монолитный claude -p, всё на Opus)
 # Опт-аут: PIPELINE_MODE=legacy ./worker.sh
 PIPELINE_MODE="${PIPELINE_MODE:-pipeline}"
+PIPELINE_SH="$AGENT_DIR/legacy/launchers-2026-04/pipeline.sh"
 
 # macOS не имеет timeout — используем gtimeout из coreutils
 if command -v timeout &>/dev/null; then
@@ -55,8 +57,8 @@ log "Agent dir:     $AGENT_DIR"
 log "Poll interval: ${POLL_INTERVAL}s"
 log "Task timeout:  ${TASK_TIMEOUT}s"
 log "Pipeline mode: $PIPELINE_MODE"
-if [ "$PIPELINE_MODE" = "pipeline" ] && [ ! -x "$AGENT_DIR/pipeline.sh" ]; then
-  log "ERROR: PIPELINE_MODE=pipeline but $AGENT_DIR/pipeline.sh not found or not executable"
+if [ "$PIPELINE_MODE" = "pipeline" ] && [ ! -x "$PIPELINE_SH" ]; then
+  log "ERROR: PIPELINE_MODE=pipeline but $PIPELINE_SH not found or not executable"
   exit 1
 fi
 

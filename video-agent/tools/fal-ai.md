@@ -20,6 +20,8 @@ Authorization: Key $FAL_KEY
 **Стоимость:** ~$0.08 за изображение
 
 > **Основная модель для всех сцен, character refs, bg-assets.**
+>
+> **Storyboarder execution rule:** все NB2 text/edit вызовы выполняются только через `tools/fal_runner.py` по job contract из `tools/SCRIPTS.md`. Storyboarder не исполняет curl-примеры, submit/poll/download snippets или endpoint вручную. Код ниже — reference-only для сопровождения runner; при расхождении executable allowlist/state machine runner имеет приоритет.
 
 ### 1a. Text-to-Image (без референса — для character references)
 
@@ -35,7 +37,7 @@ Authorization: Key $FAL_KEY
 
 > **Используй этот endpoint для генерации сцен** с chain reference (image_urls обязателен).
 
-### Запрос
+### Raw HTTP запрос (reference-only; Storyboarder не исполняет)
 
 ```bash
 curl -s -X POST "https://queue.fal.run/fal-ai/nano-banana-2/edit" \
@@ -56,7 +58,7 @@ curl -s -X POST "https://queue.fal.run/fal-ai/nano-banana-2/edit" \
 | Параметр | Тип | Обязательный | Описание |
 |----------|-----|-------------|----------|
 | `prompt` | string | Да | Текстовое описание (мин 3 символа, макс 50000) |
-| `image_urls` | array of strings | Нет | URL-ы референсных изображений для chain reference консистентности. Сцена 1: [character-ref-url], Сцена N: [character-ref-url, scene-(N-1)-url]. **Не передавай поле вообще** если нет референса (пустой массив `[]` вызывает ошибку) |
+| `image_urls` | array of strings | Нет | URL-ы референсных изображений для chain reference консистентности. Runner `nb2.edit` принимает 1–4 уникальных permanent HTTPS URL; более строгий format/role limit всё равно действует. Для `nb2.text` поле нужно **полностью опустить** — пустой `[]` вызывает ошибку |
 | `aspect_ratio` | enum | Нет | `"9:16"` для вертикального видео. Варианты: "1:1", "16:9", "9:16", "4:3", "3:4" и др. По умолчанию: "auto" |
 | `num_images` | integer | Нет | 1-4, по умолчанию 1 |
 | `output_format` | enum | Нет | "jpeg", "png", "webp". По умолчанию "png" |
@@ -79,7 +81,7 @@ curl -s -X POST "https://queue.fal.run/fal-ai/nano-banana-2/edit" \
 }
 ```
 
-### Polling и скачивание (ОБЯЗАТЕЛЬНО)
+### Raw polling/download (reference-only; в pipeline это делает runner)
 
 Оба endpoint'а (с `/edit` и без) — **асинхронные**. Нужен polling.
 
@@ -122,13 +124,13 @@ ls -la scene-1.png
 
 ---
 
-## 1c. GPT Image 1 — fallback генерация изображений
+## 1c. GPT Image 1 — справочник альтернативного маршрута
 
 **Endpoint:** `https://queue.fal.run/fal-ai/gpt-image-1/text-to-image`
 **Метод:** POST (асинхронный — нужен polling)
 **Стоимость:** ~$0.02 за изображение
 
-> **Используй ТОЛЬКО как fallback**, если Nano Banana 2 не работает. GPT Image 1 не поддерживает `image_urls` (нет chain reference), поэтому консистентность персонажа хуже.
+> Автоматически не использовать. Этот endpoint допустим только если он выбран для отдельного запуска заранее или явно разрешён пользователем после остановленного запуска. Ошибка Nano Banana 2 не разрешает переключение.
 
 ### Запрос
 
@@ -187,7 +189,9 @@ curl -s -o scene-1.png "$IMAGE_URL"
 **Метод:** POST (асинхронный — нужен polling)
 **Стоимость:** $0.084/сек без аудио (5s = $0.42, 10s = $0.84) | $0.126/сек с аудио (5s = $0.63, 10s = $1.26)
 
-> **Основная модель для I2V.** Всегда используй `generate_audio: false` — звук генерируется отдельно через TTS/anullsrc.
+> Используй только когда этот endpoint выбран Scenarist/Manager/Animator для текущего запуска. Они определяют duration, request shape и `generate_audio` по сценарию и format playbook, затем передают уже готовый provider payload runner'у.
+>
+> **Execution rule:** все v3 Standard I2V формы выполняются через schema-v3 `tools/kling_runner.py`. Полный `payload` (`prompt` или `multi_prompt`, `voice_ids`, `elements`, будущие provider fields) передаётся без изменений и без format-specific решений внутри runner. Curl/poll/download ниже — reference-only. Другие инструменты выбирает оркестратор; совместимый fal queue endpoint добавляется в `tools/video_routes.json`, другой protocol использует отдельный adapter.
 
 ### Отправка запроса
 
@@ -197,8 +201,7 @@ RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/kling-video/v3/standard
   -H "Content-Type: application/json" \
   -d '{
     "prompt": "Worf stands at the bridge console, turns slowly toward camera, jaw set with determination, low-angle push-in, dramatic lighting",
-    "start_image_url": "https://supabase.../scene-1-start.png",
-    "end_image_url": "https://supabase.../scene-1-end.png",
+    "start_image_url": "https://supabase.../scene-1.png",
     "duration": "5",
     "generate_audio": false,
     "negative_prompt": "blur, distort, low quality, static, morphing faces"
@@ -213,10 +216,10 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 |----------|-----|-------------|----------|
 | `prompt` | string | Да | Описание анимации: камера, позиции, действия. Технический, не литературный |
 | `start_image_url` | string | Да | URL начального кадра (постоянный Supabase URL) |
-| `end_image_url` | string | Нет | URL конечного кадра (почти идентичен start, с минимальным сдвигом). ⚠️ ЗАПРЕЩЁН вместе с `multi_prompt` (Kling 422) |
+| `end_image_url` | string | Нет | API parameter exists, but this pipeline forbids it and never creates end frames |
 | `multi_prompt` | list | Нет | Массив шотов для одного непрерывного клипа из одного `start_image_url`. См. §2d и `animator.md §5a`. Передавать ЛИБО `prompt`, ЛИБО `multi_prompt`, не оба |
 | `duration` | enum | Нет | `"3"`–`"15"` секунд, по умолчанию "5" |
-| `generate_audio` | boolean | Нет | **Всегда `false`** — anullsrc правило. I2V без аудио |
+| `generate_audio` | boolean | Нет | Follow the exact format: `true` for serial-drama native dialogue with `voice_ids`; otherwise as declared by the format |
 | `cfg_scale` | float | Нет | Сила следования промпту, 0.0–1.0, по умолчанию 0.5 |
 | `negative_prompt` | string | Нет | Что исключить |
 | `elements` | list | Нет | Кастомные персонажи/объекты, которые можно ввести в кадр и звать из промпта (`@Element1`, `@Element2`). Каждый элемент: `frontal_image_url` + `reference_image_urls` (**обязателен, ≥1 URL**) ЛИБО `video_url` (только 1 video-элемент на запрос). Все URL — постоянные Supabase. ✅ burn-tested 2026-06-01, работает с `multi_prompt` — см. §2c |
@@ -409,13 +412,13 @@ curl -s -o output.mp4 "$VIDEO_URL"
 
 ---
 
-## 2b. Kling 2.6 Pro — fallback I2V модель
+## 2b. Kling 2.6 Pro — справочник альтернативного I2V-маршрута
 
 **Endpoint:** `https://queue.fal.run/fal-ai/kling-video/v2.6/pro/image-to-video`
 **Метод:** POST (асинхронный — нужен polling)
 **Стоимость:** $0.07/сек без аудио (5s = $0.35, 10s = $0.70) | $0.14/сек с аудио (5s = $0.70, 10s = $1.40)
 
-> **Используй ТОЛЬКО как fallback**, если Kling v3 Standard не работает или возвращает ошибки.
+> Автоматически не использовать вместо Kling v3. Endpoint допустим только когда его заранее задаёт playbook/Manager или пользователь явно разрешает отдельный новый маршрут после остановки.
 
 ### Отправка запроса
 
@@ -441,9 +444,9 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 | `prompt` | string | Да | Описание анимации |
 | `start_image_url` | string | Да | URL исходного изображения |
 | `duration` | enum | Нет | `"5"` или `"10"` секунд, по умолчанию "5" |
-| `generate_audio` | boolean | Нет | **Всегда `false`** — anullsrc правило |
+| `generate_audio` | boolean | Нет | Follow the exact format; never override its native/silent audio rule |
 | `negative_prompt` | string | Нет | Что исключить |
-| `end_image_url` | string | Нет | Изображение для концовки |
+| `end_image_url` | string | Нет | API parameter exists, but this pipeline forbids it and never creates end frames |
 
 ### Polling статуса
 
@@ -488,7 +491,9 @@ curl -s -o scene-1.mp4 "$VIDEO_URL"
 
 ---
 
-## 4. MiniMax TTS — основной TTS для ВСЕХ форматов
+## 4. MiniMax TTS — внешняя речь без важной идентичности голоса
+
+Использовать, когда формат требует внешний TTS, но у точного format/series нет утверждённого voice sample либо рассказчик/голос не важен. При утверждённом sample точного формата используется Chatterbox по `rules/roles/sound.md`; format-native dialogue не дублируется TTS.
 
 **Endpoint:** `https://queue.fal.run/fal-ai/minimax/speech-2.8-hd`
 **Метод:** POST (async, polling через `fal-ai/minimax`)
@@ -589,13 +594,13 @@ RESULT_URL="https://queue.fal.run/fal-ai/minimax/requests/${REQUEST_ID}"
 
 ---
 
-## 4a. ElevenLabs TTS — через fal.ai (override MiniMax по запросу юзера)
+## 4a. ElevenLabs TTS — ЗАПРЕЩЁННЫЙ legacy-справочник
 
 **Endpoint:** `https://queue.fal.run/fal-ai/elevenlabs/tts/eleven-v3`
 **Polling base:** `fal-ai/elevenlabs`
 **Стоимость:** ~$0.03–0.05 за фразу
 
-> Используется когда юзер явно просит ElevenLabs вместо MiniMax. ELEVENLABS_API_KEY в .env не нужен — fal.ai использует свой аккаунт.
+> **Не вызывать. ElevenLabs TTS запрещён.** Разрешён только отдельный endpoint `fal-ai/elevenlabs/sound-effects` для SFX; это не TTS.
 
 ### Запрос
 
@@ -682,9 +687,9 @@ RESULT_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}"
 3. Проверить статус:
    - "IN_QUEUE" / "IN_PROGRESS" → продолжить polling
    - "COMPLETED" → GET https://queue.fal.run/{BASE}/requests/{request_id} → скачать результат
-   - "FAILED" → обработать ошибку (см. rules/fallback.md)
+   - "FAILED" → повторить тот же serialized request один раз; вторая ошибка останавливает весь ролик
 4. Таймаут: 10 минут максимум
-5. При таймауте: fallback
+5. При таймауте: один повтор того же route/request; второй таймаут останавливает весь ролик
 ```
 
 **Если использовать полный путь вместо base — fal.ai вернёт пустой body, 404 или 405. Деньги за генерацию будут потрачены, результат не скачается.**
@@ -718,7 +723,7 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 | Параметр | Тип | Обязательный | Описание |
 |----------|-----|-------------|----------|
 | `video_url` | string | Да | URL исходного видео (из Kling I2V) |
-| `audio_url` | string | Да | URL аудиофайла с речью (из ElevenLabs TTS через fal.ai) |
+| `audio_url` | string | Да | URL внешней речи от маршрута, выбранного Sound (MiniMax или exact-format Chatterbox) |
 
 ### Polling и получение результата
 
@@ -742,10 +747,10 @@ Result: https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
 ### Пайплайн с липсинком
 
 ```
-Image → Kling I2V (анимация) → ElevenLabs TTS (голос, через fal.ai) → Kling Lipsync (видео + аудио → липсинк) → FFmpeg (склейка)
+Image → Kling I2V (анимация) → Sound-selected external speech → Kling Lipsync (видео + аудио → липсинк) → FFmpeg (склейка)
 ```
 
-**ВАЖНО:** `audio_url` должен быть публичным URL. ElevenLabs TTS через fal.ai возвращает URL с fal.media — скачай локально и залей в Supabase для стабильного URL.
+**ВАЖНО:** `audio_url` должен быть доступен endpoint на всё время запроса; используй постоянный run-scoped URL для выбранного Sound-маршрута.
 
 ---
 
@@ -949,7 +954,7 @@ curl -s -o bg-music.mp3 "$AUDIO_URL"
 2. **Перед дорогой генерацией (Kling I2V, Avatar) — загрузи ВСЕ входные файлы в Supabase Storage.** Используй ТОЛЬКО постоянные Supabase URL как `start_image_url`, `end_image_url`, `audio_url`. Временные fal.ai URL протухают → генерация стоимостью $0.42–$1.40 пропадает.
 3. **Polling — по 2-сегментному base пути.** НЕ по полному submit endpoint. См. таблицу в "Общий паттерн polling".
 4. **Проверяй размер** скачанного файла (>1000 байт для изображений, >10000 для видео).
-5. **`generate_audio: false`** для всех I2V (anullsrc правило) — звук добавляется на этапе сборки.
+5. **`generate_audio` выбирают Scenarist/Manager/Animator по storyboard и format playbook до создания job.** Native dialogue/SFX/ambient используют `true` и их оплаченный audio сохраняется; silent I2V использует `false` и получает `anullsrc` только при сборке.
 6. **Не отправляй больше 3 параллельных запросов** — rate limiting.
 7. **Сохраняй request_id** — нужен для polling и отмены задач.
 

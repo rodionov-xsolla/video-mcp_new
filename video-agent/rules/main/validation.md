@@ -4,11 +4,13 @@ Central policy for validating generated binary assets (PNG/MP4/MP3). Applied by 
 
 ## Rule: programmatic-only. No Read on binaries.
 
-**Never use the Read tool on PNG/MP4/MP3.** Vision tokens are expensive, bloat the context, and don't pay off — broken output is caught at the next stage (Kling artifacts in MP4, weird Editor output in final.mp4) and at the human review of the final video.
+**Never use the Read tool, AI Vision, sampled-frame inspection, pixel-diff, or semantic media QA on generated PNG/MP4/MP3.** The only exceptions are source material explicitly declared by the format: a Wild Documentary research/source image when genuinely necessary, and Motion Dance source-video frames. These exceptions never apply to generated outputs or `final.mp4`.
 
 Validation is done via bash.
 
 ### For PNG (images)
+
+For Storyboarder NB2 outputs, `tools/fal_runner.py` is the validation authority: it checks PNG signature/chunks/CRC, decompresses image data, requires full ffmpeg decode, minimum dimensions, and portrait 9:16 (documented 2:3 fallback). Do not repeat generation because a valid 2:3 fallback is not exactly 1080×1920.
 
 ```bash
 # File downloaded
@@ -20,7 +22,36 @@ identify -format "%wx%h" scene-1.png   # → "1080x1920"
 ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 scene-1.png
 ```
 
+### Storyboarder Phase 3 handoff — runner state + permanent URL
+
+Manager may accept a scene only when all four facts agree:
+
+1. `storyboard.json` has a local `scene_image` for that clip, and the PNG exists/is >1 KB.
+2. The matching `${OUTPUT_DIR}/build/fal/{job_id}/state.json` has `phase: "DONE"` and `output_path == scene_image`.
+3. Storyboard has a non-empty HTTPS `scene_image_url`, and it equals that state's `supabase_url`.
+4. Neither `scene_image_url` nor any downstream `image_urls[]` contains a temporary fal/fal.media host.
+
+Example read-only gate (adapt `.clips` to `.scenes` when required by the schema):
+
+```bash
+while IFS=$'\t' read -r idx local_path permanent_url; do
+  [ -s "$local_path" ] || { echo "scene-$idx local PNG missing"; exit 1; }
+  [ "$(stat -f%z "$local_path" 2>/dev/null || stat -c%s "$local_path")" -gt 1000 ] || exit 1
+  case "$permanent_url" in https://*) ;; *) echo "scene-$idx permanent URL missing"; exit 1 ;; esac
+  case "$permanent_url" in *fal.media*|*queue.fal.run*) echo "scene-$idx temporary URL"; exit 1 ;; esac
+  jq -se --arg p "$local_path" --arg u "$permanent_url" \
+    '[.[] | select(.phase == "DONE" and .output_path == $p and .supabase_url == $u)] | length == 1' \
+    "$OUTPUT_DIR"/build/fal/*/state.json >/dev/null || {
+      echo "scene-$idx has no matching DONE runner state"; exit 1;
+    }
+done < <(jq -r '(.clips // .scenes)[] | [.index, .scene_image, .scene_image_url] | @tsv' "$OUTPUT_DIR/storyboard.json")
+```
+
+Missing state/URL is a Phase 3 failure. Do not launch Animator and do not manually upload or substitute a URL.
+
 ### For MP4 (video)
+
+For schema-v3 fal video jobs, Scenarist/Manager/Animator own the semantic plan and exact provider payload. `tools/kling_runner.py` validates only execution safety: registered route descriptor, immutable canonical payload, permanent URLs at any payload depth, saved request ID, and the caller-supplied technical `expect` (duration/tolerance, audio required/optional/forbidden, minimum bytes/dimensions, orientation). It fully decodes the MP4, uploads it and byte-verifies the permanent public copy. Animator handoff requires runner `phase: "DONE"`, local `scene_video == output_path`, and permanent `scene_video_url == supabase_url`.
 
 ```bash
 # File downloaded (Kling returns <1KB JSON on error)
@@ -78,7 +109,7 @@ Any duplicate md5 → a cascade-copy bug (one line overwrote several). STOP and 
 
 ### 3. Filename = f(index) — names are derived from the clip index, never a free counter
 
-TTS and scene files are named strictly from `clips[].index`: `scene-{index}.png/.mp4/.mp3`, `tts` keyed to the same index. **No `-new`, `-v2`, `-fixed` parallel files** — a regeneration overwrites the same name (archive the old one first, see storyboarder §17). Drifting names (`ep6-scene-2.mp3` actually belonging to clip 3) are what let the wrong audio/PNG reach the wrong clip.
+TTS and canonical scene files are named strictly from `clips[].index`: `scene-{index}.png/.mp4/.mp3`, `tts` keyed to the same index. **No `-new`, `-v2`, `-fixed` parallel files in canonical handoff.** A runner-claimed canonical PNG cannot be overwritten or reset manually. The runner has no safe reset command: preserve its output, state, request, and claim, then STOP for an explicit recovery decision. Drifting names (`ep6-scene-2.mp3` actually belonging to clip 3) are what let the wrong audio/PNG reach the wrong clip.
 
 ### 4. scene_image_url ↔ index — the PNG under a clip is that clip's own PNG
 
@@ -91,16 +122,16 @@ For dialogue clips, the face ref must match `clip.hero`. (EP6: the Admiral clip 
 
 **Print the mapping table** (`clip# → image_url → audio_url → expected text → hero`) and confirm all four checks pass before launching Kling. This is the single highest-ROI gate in the pipeline — it catches 4 of the 5 most expensive EP6 bugs with zero vision tokens.
 
-## Time-gated PNG overlays — prove the composite, don't sample variance
+## Time-gated PNG overlays — technical validation only
 
 `overlay=...:enable='between(t,START,END)'` on a plain `-i overlay.png` input is a silent no-op: a single still image has a PTS that never advances, so `between(t,...)` never evaluates true and the overlay never appears — ffmpeg exits 0, no warning. Feed the PNG a real timeline first: `-loop 1 -t <total_duration> -i overlay.png`.
 
-Frame-variance/stddev sampling on the output is NOT sufficient proof the overlay rendered — ordinary scene content already produces high variance, so a broken (missing) overlay and a working one can both pass a variance threshold. To actually verify: extract a frame from inside the overlay window and one from outside it (or from a version rendered without the overlay filter), and diff them (pixel mean/stddev delta, or eyeball via Read — this specific check is worth the vision tokens, unlike routine PNG/MP4 validation). Burned in ROOM 1701 EP3 (2026-07-07, `serial-drama.md`): Editor reported the title card as burned in based on variance sampling; it was actually absent from the delivered final.mp4, caught only on user review.
+Validate the PNG input timeline, `enable=between(...)` expression, filtergraph construction, encode exit status, output streams and duration. Do not extract or compare frames to prove visual presence; the user performs visual review.
 
 ## Asset selection: by path, not by visual inspection
 
-Where the right asset depends on game/format (CTA, openers, character refs, bg refs) — **resolve by `GAME_TAG`-scoped path or by Supabase URL recorded in the story bible / game config.** Never pick from a generic location and then visually verify the branding — the path is the validation.
+Where the right asset depends on game/format/series — resolve by exact ownership metadata or by the URL recorded in the exact resolved story bible. Images, appearance text, voice samples, openers and title assets require exact game + format + series ownership. CTA wording and asset must be read from that same exact story bible; there is no automatic cross-format/global lookup.
 
 Examples:
-- CTA → `games/{GAME_TAG}/assets/cta/cta.mp4` or previous-episode `output/.../{GAME_TAG}/.../cta-fallback.mp4`. Never `video-agent/cta-star-trek-timelines.mp4` (star-trek-timelines branded, wrong for any other game).
+- CTA → both wording and asset come from the exact resolved current format/series story bible. If missing or invalid, STOP; never synthesize, guess, or copy a global/cross-game fallback.
 - Character refs → `games/{GAME_TAG}/{format}_story_bible.json → supabase_assets.char_refs`. Never re-derive from a wide-shot scene render.

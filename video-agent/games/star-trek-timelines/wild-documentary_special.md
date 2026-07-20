@@ -22,22 +22,21 @@ Do NOT generate a title overlay PNG via Pillow — use the locked branding asset
 [1:v]scale=608:405,format=rgba,fade=t=in:st=0:d=0.5:alpha=1,fade=t=out:st=3.5:d=0.5:alpha=1[ovl];[0:v][ovl]overlay=0:85:format=auto[vovl];[vovl]ass={ASSFILE}[vout]
 ```
 
-## CTA (in-scene sign)
+## CTA (in-scene sign + standard asset)
 
-Standard sign text for Star Trek Timelines wild-documentary: **"Download the game / Link in bio"**
-- Written in black marker on a small white rectangular card
-- Held by the creature facing the lens cleanly
-- Do NOT burn text into the video frame via ffmpeg — sign must be visible in the Kling-generated clip itself
+The exact `STORY_BIBLE_PATH` is the sole source for this format's CTA. Read `cta.sign_text` and `cta.standard_asset_url` from `games/star-trek-timelines/wild-documentary_story_bible.json`; do not duplicate or hard-code either value in this special file.
 
-## Post-Animator validation (manager must do this)
+- Store the bible phrase verbatim in `sign_text`, set `cta_in_scene: true`, and show the creature presenting the small white rectangular card face-on to the lens.
+- Generate the readable card in the NB2 start frame; Kling only animates the approach and presentation while preserving the lettering.
+- Do not burn or repair the wording with ffmpeg drawtext or subtitles.
+- After the in-scene CTA clip, append the bible's `cta.standard_asset_url`. Missing or unavailable values are blocking errors.
 
-After the Animator phase, check that no two consecutive scene-N.mp4 files contain duplicated content (Kling CDN dedup bug — can occur silently during a retry):
+## Post-Animator validation (technical only)
+
+After the Animator phase, verify file count, expected index mapping, decodability, dimensions, durations, and hashes. Identical hashes across different scene indices are a technical duplicate signal; do not use AI Vision or visually compare generated frames.
 
 ```bash
-ls -lh OUTPUT_DIR/scenes/scene-*/scene-*.mp4
+shasum -a 256 OUTPUT_DIR/scenes/scene-*/scene-*.mp4
 ```
 
-If scene duplication detected (everything shifted by 1):
-1. Archive wrong file: `cp scenes/scene-N/scene-N.mp4 _archive/scene-N_wrong.mp4 && rm scenes/scene-N/scene-N.mp4`
-2. Shift correct files: `mv scene-(N+1).mp4 → scene-N.mp4`, etc.
-3. Re-animate only the last missing scene(s) — do NOT re-run all scenes
+If a file is technically missing, corrupt, or byte-identical to another index, retry that same Kling v3 request once with the same settings. A second failure stops the video with an error; do not shift guessed files or switch provider/model.

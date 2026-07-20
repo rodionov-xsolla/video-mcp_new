@@ -14,7 +14,8 @@
 temp/
 .DS_Store
 concat-list.txt
+__pycache__/
+*.pyc
 
 # Keep config and text files
 !music/tracks.json
-tools/__pycache__/

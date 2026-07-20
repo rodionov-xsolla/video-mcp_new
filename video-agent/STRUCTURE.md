@@ -108,7 +108,6 @@ video-agent/
 ├── CLAUDE.md                    # Entry point агента
 ├── STRUCTURE.md                 # Этот файл
 ├── providers.json               # Активные API-провайдеры
-├── pipeline.sh                  # Запуск генерации (sub-agent orchestrator)
 │
 ├── rules/
 │   ├── main/
@@ -145,6 +144,8 @@ video-agent/
 │   │   └── oxide.md
 │   ├── kekele/
 │   │   └── kekele.md
+│   ├── growtopia/
+│   │   └── growtopia.md         # Конфиг игры (pixel-art sandbox; рефы — TODO, парсер)
 │   ├── marvel-snap/
 │   │   ├── gameplay/
 │   │   └── reddit-story_bible.json
@@ -173,7 +174,6 @@ video-agent/
 │   └── tracks.json
 │
 └── queue/
-    ├── worker.sh
     ├── add-task.sh
     ├── check-queue.sh
     ├── update-task.sh

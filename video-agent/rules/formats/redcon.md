@@ -1,5 +1,5 @@
 ---
-ready_to_post: no
+ready_to_post: yes
 subtitles: true
 overlays: false
 ---
@@ -11,6 +11,8 @@ overlays: false
 A serious, cinematic "What If?" for game characters: one divergence point in canon, one alternative fate, told in first-person by the alternate-self. Think Marvel's What If? or DC Elseworlds — not comedy, but genuine tragedy, horror, or triumph that *could have been*. The character narrates their own alternate history as TTS overlay over I2V visualizations.
 
 This file is the **playbook**: when to use, concept, budget, role briefs. Craft rules — in `rules/roles/*.md`.
+
+Resolve required `games/{GAME_TAG}/redcon_story_bible.json` before production. If missing, STOP and ask whether the user wants it created; create it only after explicit confirmation. All assets, appearance cards, and voice routes remain owned by this format.
 
 ---
 
@@ -36,8 +38,8 @@ Keywords: "redcon", "what if lore", "alternate history", "альтернатив
 ### Models
 
 - **Image:** NB2 (`fal-ai/nano-banana-2/edit`) — character refs + scene images
-- **Video:** Kling v3 Standard I2V (`fal-ai/kling-video/v3/standard/image-to-video`) — `generate_audio: false`. Fallback to v2.6 Pro only if v3 produces artifacts. v3 supports native `multi_prompt` for multi-beat clips.
-- **Audio:** ElevenLabs TTS overlay — first-person monologue as the alternate-self
+- **Video:** Kling v3 Standard I2V (`fal-ai/kling-video/v3/standard/image-to-video`) — `generate_audio: false`. v3 supports native `multi_prompt` for multi-beat clips. A failed request is retried once with the same endpoint/settings; a second failure stops the video with an error. No v2.6, provider, or local fallback.
+- **Audio:** native speech when intentionally provided by the scene model; otherwise an approved sample owned by this resolved `redcon` bible through Chatterbox; otherwise MiniMax
 - **Music:** Dark/ folder only — dramatic, tense, atmospheric
 
 ### Key mechanic
@@ -55,7 +57,7 @@ Same as `character-story`: character does NOT speak on camera (no lipsync). I2V 
 | Story clip image (NB2) | $0.08 |
 | Story clip I2V 5s (Kling v3 Standard, no audio) | $0.42 |
 | **Per story clip** | **~$0.50** |
-| ElevenLabs TTS (~40s monologue) | ~$0.20 |
+| Routed speech generation (~40s monologue) | provider-dependent |
 | Character refs (1–2) | $0.08 each |
 
 | Variant | Clips | Cost |
@@ -264,22 +266,23 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
 
 ### Animator
 
-- All clips via **Kling v3 Standard I2V** (`generate_audio: false`); fallback v2.6 Pro only on v3 artifacts
+- All clips via **Kling v3 Standard I2V** (`generate_audio: false`). Retry a failed request once with the same endpoint/settings, then STOP; never switch to v2.6 or another provider.
 - For multi-beat clips use v3's native `multi_prompt` array. **Segment length: 2–3s each. Max clip duration: 7s.** Never use 5+5=10s — 7s is the hard cap per pass. Example: divergence + transformation → 3s+3s=6s per clip.
 - **Start frame only.** No `tail_image_url`.
 - Title card clip: very slow camera drift (parallax or gentle push-in). Minimal motion — text must remain readable throughout 5s.
 - Story clips: **active, dynamic prompts only** — three concurrent layers (camera + primary action + atmosphere), continuous present-tense verbs, no freeze phrases ("remains still", "holds position", "stays motionless" are banned).
-- **Known failure mode (user-flagged, 2026-07-07 Worf episode):** redcon's monologue-over-static-shot pacing tends to read as static even when `motion_prompt` technically satisfies the three-layer rule — the talking-head/portrait framing common to this format leaves little room for perceptible camera or environment motion. Compensate by pushing camera movement harder than usual (push-in/pull-out/orbit, not just drift) and favoring wider or three-quarter framing over tight portraits so there's visible depth/parallax to move through. Re-check the assembled clip, not just the prompt text, against "does this look static" before calling a clip done.
+- **Known failure mode (user-flagged, 2026-07-07 Worf episode):** redcon's monologue-over-static-shot pacing tends to read as static even when `motion_prompt` technically satisfies the three-layer rule — the talking-head/portrait framing common to this format leaves little room for perceptible camera or environment motion. Prevent this in the prompt by using stronger camera movement (push-in/pull-out/orbit) and wider or three-quarter framing. Generated media receives technical validation only; the user makes any visual judgment during debug review.
 - Duration: 5s for standard clips, up to 7s for multi-prompt clips
 - General rules — `rules/roles/animator.md`
 
 ### Sound
 
 - **TTS:** full monologue as ONE audio file (`tts-output.mp3`). All `tts_segment` values joined in order, clip 1 skipped (null). Mandatory chunking per `sound.md §1b` if total > 80 words.
-- **Voice engine:** `game_tag == "genshin-impact"` → **Chatterbox** with character's `voice-1.mp3` from Supabase (`assets/genshin-impact/characters/{slug}/voice-1.mp3`). All other games → MiniMax preset voice matching the alternate-self identity. See `rules/roles/sound.md §1`.
+- **Speech route:** native model audio when intentionally supported → Chatterbox only when the resolved `redcon` bible owns an approved sample for this speaker → otherwise MiniMax. Never resolve a sample or assignment from another format. Retry the same route once on failure, then STOP; do not switch provider. See `rules/roles/sound.md §1`.
 - Generate `tts-output.mp3`, upload to Supabase as episode-tts asset
 - **Subtitles:** the one universal whisper style from `build/voice-final.wav` (the title-card lead silence is already inside via adelay) — `rules/roles/editor.md` §6. No `--offset`/`--text`.
 - Music: generated via MiniMax with a dark `style` prompt (instrumental, see `rules/roles/sound.md` §6) — never upbeat/fun
+- Story bible state is updated only after the user explicitly approves the presented final video.
 - General rules — `rules/roles/sound.md`
 
 ### Editor
@@ -325,7 +328,7 @@ General rules — `rules/roles/editor.md`
 ## Output files
 
 ```
-output/YYYY-MM-DD/{GAME_TAG}/redcon/
+${OUTPUT_DIR}/
 ├── storyboard.json
 ├── scenes/
 │   ├── refs/
@@ -367,7 +370,7 @@ output/YYYY-MM-DD/{GAME_TAG}/redcon/
 - [ ] Music from Dark/ only
 - [ ] Subtitles via `add_subtitles.py` with `--offset 5`
 - [ ] TTS delayed 5s in final mix (after title card)
-- [ ] CTA included
+- [ ] Existing game CTA asset included; if missing, production stopped (no synthetic CTA/end card)
 - [ ] `-shortest` NOT used
 
 ---

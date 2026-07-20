@@ -4,7 +4,7 @@
 
 **Lumine (Traveler)** is the default protagonist for Genshin fake ads unless the brief specifies otherwise. She's the perfect straight-man — earnest, determined, and deeply afflicted by resin anxiety.
 
-If the user brief specifies canonical characters, product, setting, or a sketch/dialogue premise, that live brief overrides this Lumine/Resin Energy default completely. Keep only the Genshin visual style, Supabase asset reuse, and packshot/CTA discipline from this file. Do not force Lumine, Paimon, resin anxiety, Resin Energy, or the resin notification into briefs about other characters or products.
+If the user brief specifies canonical characters, product, setting, or a sketch/dialogue premise, that live brief overrides this Lumine/Resin Energy default completely. Keep only the Genshin visual style, format-bound Supabase assets, and packshot discipline from this file. Do not force Lumine, Paimon, resin anxiety, Resin Energy, the resin notification, or a synthetic CTA/end card into briefs about other characters or products.
 
 Character prompt block (copy verbatim for scenes 0–3):
 ```
@@ -18,7 +18,7 @@ Paimon: small floating fairy companion, round child-like face with big expressiv
 
 ## Announcer voice
 
-**Voice:** `George`, **stability:** 0.35, **speed:** 1.0
+**Speech route:** native audio if intentionally supported → approved sample owned by this `fake-ad` bible through Chatterbox → otherwise MiniMax (`Deep_Voice_Man` for this default), **speed:** 1.0. Retry the same route once on failure, then stop.
 
 Tone directive for TTS: `"TV commercial announcer, confident and deadpan, building calm authority — the product is a calming energy drink, so the voice mirrors the zen the product promises"`.
 
@@ -79,7 +79,7 @@ accent_color=#F5D060 amber-gold matching the resin icon). Layout (position/size/
 
 ## Music mood
 
-**`"upbeat-commercial"` → fallback `"happy-energetic"` → fallback `"fun-news"` mood track.**
+Generate the `"upbeat-commercial"` mood track through the configured music provider. Retry that same request once on failure, then stop; do not switch to a local track or another format's music.
 
 The music must stay cheerful and bouncy even through the twist. The key irony of this ad: upbeat commercial jingle plays as the hero achieves enlightenment and quits the game.
 
@@ -95,4 +95,4 @@ Volume: `0.25`.
 
 ## Budget note
 
-NB2 costs ~$0.08/image × 5 = $0.40. Budget cap: $3.50. Genshin anime style renders cleanly in NB2 — no special fallback needed unless anime cel-shading breaks (retry with more explicit style_tags).
+NB2 costs ~$0.08/image × 5 = $0.40. Budget cap: $3.50. If a generation request fails technically, retry it once with the same provider/settings; a second failure stops the video with an error. Visual judgment is left to the user during debug review.

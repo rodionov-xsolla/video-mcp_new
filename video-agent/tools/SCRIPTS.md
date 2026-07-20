@@ -16,35 +16,272 @@
 
 ## Оркестратор
 
+Оркестратор — интерактивный manager-агент (`../CLAUDE.md`), не скрипт: каждая фаза — отдельный вызов `Agent(subagent_type=...)`, инлайн-валидация (`jq`, `stat`, `ffprobe`) манагер делает сам после каждой фазы.
+
+`pipeline.sh` и `queue/worker.sh` (bash-версия того же оркестратора, звавшая `codex exec`/`claude -p`) архивированы в `../legacy/launchers-2026-04/` — не рабочий путь, обе найденные попытки запуска падали на Scenarist. Не использовать.
+
 ---
 
-### `pipeline.sh` 🟠
+## Storyboarder / NB2
 
-**Роль:** Главная точка входа для генерации. Запускает 5 фаз последовательно, каждая — отдельный Claude-вызов с пинованной моделью. После каждой фазы — инлайн-валидация (`jq`, `stat`, `ffprobe`).
+### `fal_runner.py` 🟠
 
-**Запуск:**
+**Роль:** единственный transport/state layer для всех Storyboarder-вызовов Nano Banana 2 (~$0.08 за generation): text-to-image refs/backgrounds и edit-сцен. Runner фиксирует endpoint и параметры, защищает от повторного платного POST, возобновляет poll/download/upload, валидирует PNG, автоматически вызывает `queue/upload-asset.sh`, считает warning helper-а ошибкой и побайтово проверяет публичную копию. Прямые `curl`/fal.ai HTTP-вызовы из Storyboarder запрещены.
+
+Перед работой:
+
 ```bash
-./pipeline.sh <GAME_TAG> "idea" [FORMAT] [OUTPUT_DIR] [TASK_ID]
+test -f tools/fal_runner.py
+python3 tools/fal_runner.py --help >/dev/null
 ```
 
-**Фазы и модели:**
+Runner сам читает `.env` по умолчанию. Для real-run нужны `FAL_KEY`, а для job с upload также `SUPABASE_URL` и `SUPABASE_SERVICE_ROLE_KEY`; `--preflight` полностью offline и не тратит деньги. Jobs используют schema v1.
 
-| Фаза | Субагент | Модель | Результат |
-|------|----------|--------|-----------|
-| 0 | — | bash | `git pull`, asset query → `_supabase-assets.json` |
-| 1 | scenarist | Sonnet 4.6 | `storyboard.json` |
-| 2 | sound | Haiku 4.5 | `scene-K/scene-K.mp3` |
-| 3 | storyboarder | Sonnet 4.6 | `scene-K/scene-K.png` |
-| 4 | animator | Sonnet 4.6 | `scene-K/scene-K.mp4` |
-| 5 | editor | Sonnet 4.6 | `final.mp4` + Supabase URL |
+#### Полная job schema
 
-**Читает:** `.env`, `prompts/*.txt`, game/format/rules файлы (делегирует субагентам)  
-**Пишет:** `{OUTPUT_DIR}/pipeline.log`, `claude-{phase}.log`, все артефакты фаз, статус в Supabase `video_tasks`
+Job — отдельный неизменяемый JSON-файл на один PNG. Неизвестные поля отклоняются.
 
-**⚠ Подводные камни:**
-- Модели переопределяются через env: `PIPELINE_SCENARIST_MODEL`, `PIPELINE_EDITOR_MODEL` и т.д.
-- При падении любой фазы обновляет статус задачи в Supabase и останавливается — повтор с той же фазы невозможен без ручного вмешательства
-- `TASK_ID` опционален — без него статус в `video_tasks` не обновляется (при ручном запуске норм, при queue-запуске — обязателен)
+```json
+{
+  "schema_version": 1,
+  "job_id": "unique-stable-id",
+  "route": "nb2.text | nb2.edit",
+  "artifact_kind": "character_reference | location_reference | scene_start",
+  "output_dir": "/absolute/path/to/episode-output",
+  "output_path": "relative/path/inside/output-dir.png",
+  "input": {
+    "prompt": "3..50000 characters",
+    "image_urls": ["https://permanent-ref.example/ref.png"],
+    "seed": 12345
+  },
+  "supabase": {
+    "game": "game-tag",
+    "episode": "YYYY-MM-DD-format-slug",
+    "name": "scene-1.png",
+    "slug": "asset-slug",
+    "variant": "optional-character-variant",
+    "tags": "format-slug,series-id"
+  }
+}
+```
+
+Правила полей:
+
+- `job_id`: 1–128 символов, первый символ ASCII letter/digit, далее только letters/digits и `._-`; он же имя state-каталога.
+- `route: "nb2.text"`: `input.image_urls` нужно **полностью опустить**, не передавать `[]`.
+- `route: "nb2.edit"`: требуется 1–4 уникальных HTTPS URL. Только постоянные URL; `fal.media` запрещён. Более строгий лимит активного format/role всё равно действует.
+- `input.seed` необязателен, но если указан — только integer, не boolean.
+- Отдельного поля `negative_prompt` в schema нет. Storyboarder дописывает все resolved negative constraints в конец `input.prompt`; добавление `negative_prompt` как соседнего поля будет отклонено preflight.
+- `output_dir` — абсолютный путь. `output_path` — относительный `.png` внутри него; end-frame имена запрещены.
+- Runner фиксирует `aspect_ratio: "9:16"`, `num_images: 1`, `output_format: "png"`, `resolution: "1K"`, `safety_tolerance: "5"`. Выход должен быть декодируемым portrait PNG: 9:16 либо документированный fallback 2:3, минимум 600×1000 и >1 KB.
+- Поле `supabase` технически необязательно для локального runner job, но обязательно для Storyboarder. Производные upload arguments входят в `contract_sha256`, поэтому destination нельзя поменять после claim.
+
+`artifact_kind` определяет upload kind; произвольный kind передать нельзя:
+
+| artifact_kind | `upload-asset.sh --kind` | Обязательные `supabase` поля | Назначение |
+|---|---|---|---|
+| `character_reference` | `character` | `game`, `slug`; опционально `variant`, `tags` | reusable ref в `assets/` + `game_assets` |
+| `location_reference` | `location` | `game`, `slug`; опционально `tags` | reusable location в `assets/` + `game_assets` |
+| `scene_start` | `episode-scene` | `game`, `episode`, `name` | per-episode PNG в `episodes/`, без записи в `game_assets` |
+
+Не используйте `variant` для `location_reference`. Avatar/branding/video не входят в текущий allowlist runner.
+
+#### Команды: preflight, запуск, resume
+
+```bash
+JOB="$OUTPUT_DIR/build/fal/jobs/scene-1-v1.job.json"
+
+python3 tools/fal_runner.py --preflight "$JOB"
+python3 tools/fal_runner.py "$JOB"
+```
+
+Успешный real-run печатает одну JSON summary со следующими ключевыми полями:
+
+```json
+{
+  "ok": true,
+  "job_id": "scene-1-v1",
+  "phase": "DONE",
+  "output_path": "/absolute/.../scenes/scene-1/scene-1.png",
+  "state_path": "/absolute/.../build/fal/scene-1-v1/state.json",
+  "supabase_url": "https://.../scene-1.png"
+}
+```
+
+Preflight offline проверяет JSON/schema/path/payload и вычисляет два hash: `payload_sha256` для точного fal request body и `contract_sha256` для контракта, включая route, artifact kind, canonical output и Supabase destination. После успешного preflight job JSON считается immutable. Reference URLs проверяются перед submit, а публичный Supabase файл — побайтово после upload.
+
+**Resume всегда тем же job:** после прерванного poll, истёкшего download URL или ошибки Supabase снова запустить `python3 tools/fal_runner.py "$JOB"`. Не менять job JSON, `job_id` или `output_path`. Runner продолжит сохранённый `request_id`; при `VALIDATED` повторит только upload; при `DONE` вернёт idempotent summary без сети/оплаты.
+
+**Не заменять ambiguous POST:** состояния `UNKNOWN`/ambiguous submit означают, что POST мог пройти и уже стоить денег. Не создавать replacement job, не архивировать его и не делать второй POST; остановиться и сообщить state path.
+
+**Платный retry только явно:** definitive provider generation failure становится `PAID_RETRY_REQUIRED`. По умолчанию второй POST не выполняется. После отдельного явного разрешения можно один раз возобновить тот же immutable job командой `python3 tools/fal_runner.py --allow-paid-retry "$JOB"`. Флаг нельзя добавлять заранее или автоматически. Безопасный повтор submit после definitive 429 не требует этого флага, потому что request не был принят.
+
+**Claimed canonical regeneration:** у runner нет безопасной команды reset/archive. Никогда не удалять и не перемещать PNG/state/request/claim вручную; сохранить их и остановиться для отдельного решения о восстановлении.
+
+#### Text ref job
+
+Новый ref в текущем runner MVP — portrait single-figure PNG, не обязательный legacy 16:9 sheet. Prompt строится в порядке backdrop → subject/anatomy → camera/lighting → constraints.
+
+```json
+{
+  "schema_version": 1,
+  "job_id": "20260716-mugato-wild-documentary-ref-v1",
+  "route": "nb2.text",
+  "artifact_kind": "character_reference",
+  "output_dir": "/ABSOLUTE/OUTPUT_DIR",
+  "output_path": "scenes/refs/mugato-ref-v1.png",
+  "input": {
+    "prompt": "Neutral damp-forest reference clearing with unobtrusive foliage; a single full-body Mugato with exhaustive canon anatomy; eye-level wildlife reference camera and soft natural overcast light; portrait 9:16, one creature only, all anatomy visible, no lettering."
+  },
+  "supabase": {
+    "game": "star-trek-timelines",
+    "slug": "mugato",
+    "variant": "wild-documentary",
+    "tags": "wild-documentary,character-reference"
+  }
+}
+```
+
+Для location ref поменять `artifact_kind` на `location_reference`, убрать `variant`, указать location `slug`, а prompt должен явно фиксировать пустую сцену (`NO characters in scene` согласно роли/формату).
+
+#### Edit scene job
+
+Scene job создаётся только после того, как все нужные ref jobs завершились и их постоянные `supabase_url` записаны в `input.image_urls`.
+
+```json
+{
+  "schema_version": 1,
+  "job_id": "20260716-mugato-scene-1-v1",
+  "route": "nb2.edit",
+  "artifact_kind": "scene_start",
+  "output_dir": "/ABSOLUTE/OUTPUT_DIR",
+  "output_path": "scenes/scene-1/scene-1.png",
+  "input": {
+    "prompt": "A rain-dark Neural forest clearing behind wet foreground leaves; one canon-accurate Mugato at mid-frame with every defining anatomical feature explicit; concealed telephoto camera, natural overcast light, heavy film grain; portrait 9:16, anatomy locked to the reference, no text or UI.",
+    "image_urls": [
+      "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/mugato/variants/wild-documentary.png"
+    ]
+  },
+  "supabase": {
+    "game": "star-trek-timelines",
+    "episode": "2026-07-16-wild-documentary",
+    "name": "scene-1.png"
+  }
+}
+```
+
+Tracked template: `tools/examples/fal-nb2-edit-scene.job.json`. Заменить `output_dir`, permanent Supabase ref URL, game/episode/name, prompt и уникальный `job_id`; затем обязательно запустить preflight. Placeholder URL синтаксически валиден для preflight, но real-run ожидаемо остановится на reference check, пока его не заменят.
+
+#### Storyboard write-back и CTA
+
+После `DONE`:
+
+- `scene_image` = локальный `output_path` из summary;
+- `scene_image_url` = постоянный `supabase_url` из summary/state;
+- `image_urls` = только постоянные Supabase URLs нужных refs в правильном role-defined порядке;
+- `result_url` из state и любые fal/fal.media URLs никогда не пишутся в storyboard и не передаются Animator.
+
+Для CTA sign сначала прочитать `cta.sign_text` из **точного resolved story bible**. Положить строку в storyboard и NB2 prompt verbatim, потребовать только её и отсутствие любого дополнительного текста. Global phrase, другой game/format bible, special file или guessed fallback запрещены. Missing/empty CTA field — stop до job creation.
+
+#### Dependency order и bounded concurrency
+
+1. Reusable character/location ref jobs: строго синхронно до `DONE` + Supabase URL.
+2. Scene jobs с previous-scene/scene-to-scene refs: строго по dependency order.
+3. Только независимые scene jobs, когда формат не использует previous-scene chain, можно запускать foreground batch с максимум 3 процессами. Каждый job должен иметь уникальные `job_id`, `output_path`, state и claim.
+
+Пример для заранее проверенного списка независимых jobs (`scene-jobs.txt`, один путь на строку):
+
+```bash
+xargs -P 3 -n 1 sh -c '
+  python3 tools/fal_runner.py --preflight "$1" &&
+  python3 tools/fal_runner.py "$1"
+' sh < scene-jobs.txt
+```
+
+`xargs` остаётся foreground и ждёт все jobs. Не использовать detached `&`, не запускать зависимые сцены параллельно и не добавлять отдельный batch runner.
+
+**Состояние на диске:**
+
+```text
+${OUTPUT_DIR}/build/fal/jobs/{job-file}.job.json   # authored immutable job
+${OUTPUT_DIR}/build/fal/{job_id}/request.json     # canonical payload, writes runner
+${OUTPUT_DIR}/build/fal/{job_id}/state.json       # phase/request_id/result/upload state
+${OUTPUT_DIR}/build/fal/_claims/*.json            # output-path ownership; не удалять
+```
+
+---
+
+## Animator / fal.ai Video Execution
+
+### `kling_runner.py` 🟠
+
+**Роль:** format-agnostic transport/state layer для fal.ai video routes из `tools/video_routes.json`. Scenarist/Manager/Animator заранее выбирают инструмент, duration, audio policy и создают полный provider `payload`. Runner не знает форматов, не переписывает payload и не решает, нужны ли `prompt`, `multi_prompt`, `voice_ids`, `elements` или другие provider fields. Он только проверяет permanent input URLs, безопасно выполняет submit/poll/download/upload и валидирует MP4 по переданному оркестратором `expect`.
+
+Новый формат на существующем route не требует никаких изменений runner или registry. Новый endpoint с тем же fal queue protocol добавляется одной записью в `tools/video_routes.json` (`submit_url`, `poll_base`, `result_url_path`). Другой provider/protocol получает отдельный adapter; generic runner core и существующие jobs не расширяются format-specific branches.
+
+Один immutable job создаёт один MP4:
+
+```json
+{
+  "schema_version": 3,
+  "job_id": "unique-scene-video-id",
+  "route": "kling.v3.standard.i2v",
+  "artifact_kind": "scene_video",
+  "output_dir": "/absolute/episode/output",
+  "output_path": "scenes/scene-1/scene-1.mp4",
+  "payload": {
+    "prompt": "exact provider request authored by Animator",
+    "start_image_url": "https://permanent-supabase/scene-1.png",
+    "duration": "5",
+    "generate_audio": true,
+    "negative_prompt": "resolved technical constraints"
+  },
+  "expect": {
+    "kind": "video",
+    "duration_seconds": 5,
+    "duration_tolerance_seconds": 0.4,
+    "audio": "required",
+    "min_bytes": 100000,
+    "min_width": 600,
+    "min_height": 1000,
+    "orientation": "portrait"
+  },
+  "supabase": {
+    "game": "game-tag",
+    "episode": "YYYY-MM-DD-format-run-id",
+    "name": "scene-1.mp4"
+  }
+}
+```
+
+Граница ответственности:
+
+- `payload` — любой непустой canonical JSON object; runner передаёт его без field allowlist, type conversion или format-specific validation;
+- все URL, найденные внутри payload на любой глубине, должны быть permanent HTTPS и проверяются до paid submit; fal temporary URLs запрещены;
+- `expect` задаёт техническую проверку результата: duration/tolerance, audio `required|optional|forbidden`, minimum bytes/dimensions и orientation;
+- route descriptor, exact payload, exact `expect`, Supabase destination и output path входят в immutable contract hash;
+- runner recovery никогда не меняет payload или route. Смена инструмента/параметров — решение оркестратора и новый job после остановленного запуска.
+
+Команды:
+
+```bash
+JOB="$OUTPUT_DIR/build/video/jobs/scene-1-v3.job.json"
+
+python3 tools/kling_runner.py --preflight "$JOB"
+python3 tools/kling_runner.py "$JOB"   # invoke with Bash timeout ≥150s (see below)
+```
+
+**Poll window / Bash timeout (updated 2026-07-17).** `--poll-timeout` default is **140s**: the runner polls up to 140s then self-exits gracefully into a resumable `PENDING` state, rather than being SIGKILLed by an external ~120s tool timeout mid-download. **Always invoke the run command with a Bash timeout of ~150s** (`timeout: 150000`) so the 140s window runs uninterrupted with headroom for the final status fetch. Kling renders that take longer than 140s simply exit-and-resume: rerun the exact same command; the runner continues the saved `request_id` and **re-fetches a fresh result URL** (never reuses a stale one — `result_url(force)` + `EXPIRED_LINK_HTTP` 403/404/410 handling), so no paid generation or download link is ever lost across a resume.
+
+После успешного preflight job неизменяем. Для resume повторяется ровно та же вторая команда с тем же job/job_id: runner продолжает сохранённый request ID, бесплатно обновляет истёкший result URL, повторяет только upload из `VALIDATED`, а для `DONE` возвращает `skipped: true`.
+
+`UNKNOWN` означает ambiguous paid POST: второй submit запрещён. Definitive provider failure становится `PAID_RETRY_REQUIRED`; только отдельное явное разрешение допускает один повтор того же контракта:
+
+```bash
+python3 tools/kling_runner.py --allow-paid-retry "$JOB"
+```
+
+Runner не имеет archive/reset и не выполняет automatic batch. State хранится в `${OUTPUT_DIR}/build/video/{job_id}/`, claim — в `${OUTPUT_DIR}/build/video/_claims/`. Tracked templates: `tools/examples/kling-v3-standard-scene-video.job.json`, `tools/examples/kling-v3-serial-dialogue.job.json`, `tools/examples/kling-v3-elements.job.json`.
 
 ---
 
@@ -151,19 +388,19 @@ python tools/overlays.py storyboard.json \
 
 **Покрывает:**
 - Nano Banana 2 — T2I / I2I с chain reference. $0.08/img
-- GPT Image 1 — fallback без chain ref. $0.02/img  
+- GPT Image 1 — альтернативный маршрут только по предварительному/явному разрешению; не automatic fallback. $0.02/img  
 - Kling v3 Standard I2V — $0.084/с без audio, $0.126/с с audio. multi_prompt, elements
-- Kling v2.6 Pro — fallback I2V
+- Kling v2.6 Pro — отдельный format/user-selected I2V route; не automatic fallback
 - Veo 3 — T2V / I2V, $1.60–$3.20 за 8-секундный клип
 - MiniMax TTS — Speech 2.8-HD, $0.10/1k символов
-- ElevenLabs TTS через fal.ai — fallback
+- MiniMax TTS + exact-format Chatterbox; ElevenLabs TTS запрещён, ElevenLabs Sound Effects разрешён только для SFX
 - Kling Lipsync — audio-to-video lip-sync
 - Kling Avatar v2 — image + audio → avatar видео. $0.056/с
 
 **Критичные правила из документа:**
 - fal.media URL — временные, скачивать немедленно
 - Polling base path = первые 2 сегмента endpoint (не полный путь с версией)
-- `generate_audio: false` для всех I2V (audio добавляется отдельно)
+- `generate_audio` выбирается оркестратором по storyboard + format playbook до создания exact payload; native-audio режимы сохраняют оплаченный audio, silent-режимы используют `false`
 - multi_prompt: каждый shot ≤ 512 символов (жёсткий лимит Kling)
 - Elements: максимум 3 на запрос
 - Параллельных запросов: не более 3
@@ -290,16 +527,42 @@ assets/{GAME}/gameplay/{name}.mp4
 
 ---
 
+## Игровые данные / ассеты
+
+### `growtopia_parser.py` 🟢
+
+**Роль:** Парсит спрайты NPC из Growtopia Fandom-вики (`Category:NPCs`) через MediaWiki API (без HTML-скрейпинга; только stdlib + `certifi`). Складывает сырой спрайт в `games/growtopia/assets/refs/{slug}.*` и с `--preprocess` — готовый под NB2 PNG в `refs/nb2/{slug}.png` (первый кадр + nearest-neighbor апскейл до ~512px, чтобы сохранить резкие пиксели). Пишет манифест `refs/npcs.json` (name → file → source_url → wiki_page) — заготовка под будущую заливку в Supabase.
+
+**Запуск:**
+```bash
+python3 tools/growtopia_parser.py --dry-run                 # список NPC, без скачивания
+python3 tools/growtopia_parser.py --preprocess              # полный прогон + NB2-версии
+python3 tools/growtopia_parser.py --limit 1 --preprocess    # тест на одном
+```
+
+**Выбор картинки (важно):** канонический игровой спрайт берётся из `<span class="growsprite">` карточки, чей заголовок совпадает с именем NPC (window-crop из общего атласа `ItemSprites.png`). Если такого нет — только файл со словом `sprite` в имени, иначе `NO IMAGE`. Промо-рендеры, UI-диалоги, постеры и юзер-фото сознательно **не** берутся (мусор для пиксель-рефа). Известные wiki-плейсхолдеры (баннер «REPORT») отсекаются по md5 (`JUNK_HASHES`).
+
+**Читает:** Growtopia Fandom API  
+**Пишет:** локальные файлы в `games/growtopia/assets/refs/` (картинки `.webp/.png` в git не попадают — игнор `*.png`/`*.webp`; в git идёт только `npcs.json`)
+
+**⚠ Подводные камни:**
+- NPC-боссы/квестовые без atlas-спрайта (Growganoth, Buddy, Dr. Destructo, бот-левелы) → `NO IMAGE`, при необходимости добавляются вручную
+- Fandom отдаёт WebP под именем `.PNG` — расширение определяется по магическим байтам, не по URL
+- Resume-friendly: уже скачанные (по манифесту) пропускаются
+
+---
+
 ## Быстрая таблица
 
 | Скрипт | Важность | Вызывается | Мутирует |
 |--------|----------|------------|----------|
-| `pipeline.sh` | 🟠 | вручную / worker | всё (оркестратор) |
+| `fal_runner.py` | 🟠 | storyboarder-агент | NB2 job state + PNG + Supabase |
+| `kling_runner.py` | 🟠 | animator-агент | format-agnostic fal video payload state + MP4 + Supabase |
 | `add_subtitles.py` | 🟠 | editor-агент | .ass файл |
 | `overlays.py` | 🟡 | editor-агент | temp .txt файлы |
 | `log-video.sh` | 🟢 | manager (после OK) | Supabase video_agent_runs |
 | `youtube-upload.sh` | 🟠 | manager (после OK) | YouTube + Supabase |
 | `upload-asset.sh` | 🟢 | вручную | Supabase Storage + game_assets |
+| `growtopia_parser.py` | 🟢 | вручную (сетап тайтла) | локальные рефы Growtopia + `npcs.json` |
 | `fal-ai.md` | 🟢 | справочник sub-агентов | — |
 | `ffmpeg-api.md` | 🟢 | справочник editor-агента | — |
-

@@ -1,21 +1,56 @@
 # Storyboarder / Director — prompting and image generation
 
-You are the storyboarder and director. Manager passes you: `storyboard.json` with narrative fields from Scenarist, game config, refs from Supabase. You translate scene descriptions into `image_prompt`s: pick camera, lens, angle. Generate PNGs via Nano Banana 2 (NB2). After each image, validate programmatically (filesize + dimensions via bash). **Do NOT Read the PNG** — quality is enforced at the prompt level, not by visual inspection. See `rules/main/validation.md`.
+You are the storyboarder and director. Manager passes you: `storyboard.json` with narrative fields from Scenarist, game config, refs from Supabase. You translate scene descriptions into `image_prompt`s: pick camera, lens, angle. Generate PNGs via Nano Banana 2 (NB2) through the mandatory runner below. The runner downloads, validates, and uploads each artifact. **Do NOT Read the PNG** — quality is enforced at the prompt level, not by visual inspection. See `rules/main/validation.md`.
 
 **Core principle:** ~$0.08 per PNG vs $0.42 per I2V. Quality is achieved through prompt engineering: precise `character_description` (8+ details), stable `image_urls` for chain reference, negative prompts. Programmatic validation of filesize+dimensions is sufficient for default formats.
 
-Model: **NB2** (`fal-ai/nano-banana-2/edit`). Aspect: `"9:16"` (608×1080). Before the first call — check Context7 for the current endpoint and parameters.
+Model: **NB2**, pinned by `tools/fal_runner.py` to `nb2.text` or `nb2.edit`. Requested aspect: `"9:16"`; the runner accepts decoded portrait outputs at 9:16 and the documented 2:3 fallback.
+
+### Mandatory NB2 transport and state layer
+
+`tools/fal_runner.py` is the only allowed transport/state layer for **every** NB2 text or edit generation: reusable character refs, location refs, variants, element refs, and scene start frames. Direct `curl`, direct fal.ai HTTP, hand-written submit/poll/download loops, and manual replacement requests are forbidden.
+
+Before creating any paid job, verify the tracked CLI is available:
+
+```bash
+test -f tools/fal_runner.py
+python3 tools/fal_runner.py --help >/dev/null
+```
+
+Create one immutable `schema_version: 1` job JSON per generated artifact, preferably under `${OUTPUT_DIR}/build/fal/jobs/`. The exact schema and examples are documented in `tools/SCRIPTS.md`. Every Storyboarder job must include a `supabase` block, even though the runner also supports local-only jobs without it. Any storyboard `negative_prompt` must be appended as concrete constraints inside `input.prompt`; `negative_prompt` is not a runner input field. Run these commands in order:
+
+```bash
+python3 tools/fal_runner.py --preflight "$JOB"
+python3 tools/fal_runner.py "$JOB"
+```
+
+The preflight is offline/read-only and validates the job contract. **After a successful preflight, the job file is immutable.** The real run owns reference checks, submit, pinned polling URLs, download recovery, PNG decode/ratio validation, automatic upload through `queue/upload-asset.sh`, and byte-for-byte public-copy verification. Runner state and its canonical request are stored at `${OUTPUT_DIR}/build/fal/{job_id}/state.json` and `request.json`; the state/claim contract hash also binds the Supabase destination.
+
+The current allowlist supports `character_reference`, `location_reference`, and `scene_start`. Character-like element refs may use `character_reference` with a scoped variant. If a format needs an unsupported NB2 artifact/upload kind (for example an Avatar-specific or branding output), STOP and report the missing runner contract; never bypass the runner.
+
+**Resume, retry, and regeneration contract:**
+
+- After an interrupted poll, download, or Supabase upload, rerun the **same job file with the same `job_id`**. Do not create another paid request and do not edit the job.
+- Runner handling of ambiguous POST responses, pinned request IDs, and terminal states overrides the generic fallback rule for NB2. In particular, `UNKNOWN` means stop and report it; never submit a replacement because the first POST may already be billable.
+- A definitive provider failure becomes `PAID_RETRY_REQUIRED`; stop and request explicit authorization. Only after authorization may the same immutable job be rerun once with `--allow-paid-retry`. Never add that flag automatically.
+- There is no safe runner reset command. Never delete or move `_claims`, state, request, or claimed PNG files manually; stop and preserve the claimed job for explicit recovery decisions.
+
+**Permanent URL handoff:** a generation is complete only when runner output/state has `phase: "DONE"` and a non-empty HTTPS `supabase_url`. Copy that permanent URL into `storyboard.json`: reusable refs go into downstream `image_urls`; each scene records the local file as `scene_image` and the permanent URL as `scene_image_url`. Never pass `result_url` or any temporary fal/fal.media URL downstream.
+
+**Job prompt contract:** preserve the exact resolved style/identity content and order the concrete prompt as scene/backdrop → subject and explicit anatomy → camera and lighting → constraints. For a CTA sign, copy the exact text verbatim from the exact resolved story bible, require that text and no additional lettering, and do not introduce a global/game fallback. Validate the required story-bible field before creating the job.
+
+**Dependency order:** finish each required reusable ref job synchronously through `DONE`/Supabase first, then build scene jobs with those permanent URLs. Independent scene jobs may use bounded foreground concurrency only when the active format has no previous-scene dependency; cap concurrency at 3 and keep one isolated job/state directory per artifact. Otherwise generate in dependency order, one job at a time. Do not add a second batch transport.
 
 ### How NB2 works
 
-NB2 is an edit model with chain reference support via `image_urls`. Main strength: takes multiple refs and composes them into a new scene per the prompt. Check the current endpoint limit before a batch; do not assume an old ref-count limit.
+NB2 is an edit model with chain reference support via `image_urls`. Main strength: takes multiple refs and composes them into a new scene per the prompt. The runner hard contract is 1–4 unique permanent HTTPS refs for `nb2.edit`; a format may impose a stricter composition limit.
 
 - **Natural sentences beat tag lists.** `"warrior standing on a cliff, cape billowing"` beats `"warrior, cliff, cape, wind, epic"`.
-- **Order matters:** earlier details have stronger influence → character and pose at the start, decor at the end.
+- **Order matters:** serialize the concrete job prompt as scene/backdrop → subject and anatomy → camera/lighting → constraints, while retaining every locked identity/style detail.
 - **Spatial relationships work:** `"behind the table"`, `"slightly above and to the left"`, `"one step from the doorframe"` — model places correctly.
 - **Positive framing:** the model handles negations poorly. Describe what you want: `not smiling` → `neutral closed-mouth expression`, `no extra characters` → `single figure, alone in frame`.
-- **`image_urls` is an array, not a string.** Pass as `["url1", "url2"]`. Empty array `[]` is an error. Without refs, use the text-to-image endpoint (`fal-ai/nano-banana-2`, no `/edit`).
-- **JSON body for API calls:** always pass request body via JSON file (`curl -d @/tmp/body.json`), never inline strings in shell. Universal rule for ALL fal.ai calls (NB2, Kling, ElevenLabs).
+- **`image_urls` is an array, not a string.** Pass 1–4 unique permanent HTTPS refs for `nb2.edit`. Empty array `[]` is an error. Without refs, use `nb2.text` and omit the field entirely.
+- **NB2 request contract:** put the prompt and refs in the runner job JSON. The Storyboarder never constructs a fal.ai HTTP request body itself.
 - **JSON templates for series:** for series of 5+ images, JSON templates give ~92% color/composition accuracy vs ~68% for plain text. Patterns — see section 2.1.
 
 ---
@@ -24,16 +59,15 @@ NB2 is an edit model with chain reference support via `image_urls`. Main strengt
 
 - `storyboard.json` — narrative fields: `beats`, `action_description`, `character_state`, `facial_expression`, `character_speech`, `tts`, `environment_state`, `clip_type`
 - `visual_identity` — `character_description`, `style_tags`, `lighting`, `color_palette`, `environment_description`
-- `existing_refs` — from Supabase `game_assets` (use instead of regenerating, if present)
-- `format` — determines whether location bg-refs and I2V end frames are needed
+- `existing_refs` — only Supabase `game_assets` owned by the exact current format/series; CTA is resolved separately and exclusively from the exact story bible
+- `format` — resolves the exact format/series asset ownership and image requirements
 
 ## Outputs
 
 - `scenes/refs/character-ref-{name}.png` (one per character, reused)
 - `scenes/refs/bg-{location}.png` (for serial-drama — one per location)
 - `scenes/scene-K/scene-K.png` (one per scene)
-- `scenes/scene-K/scene-K-end.png` (only for I2V clips)
-- updated `storyboard.json` with filled `image_prompt` for each scene
+- updated `storyboard.json` with `image_prompt`, permanent `image_urls`, local `scene_image`, and permanent `scene_image_url` for each scene
 
 ---
 
@@ -164,40 +198,13 @@ When converting to `image_prompt`, describe each character as **one continuous b
 one with ridges other without..." — attributes will mix
 ```
 
-#### Start/End frame pair — shared vs variable
+#### I2V start-frame lock
 
-For I2V clips: JSON explicitly declares what is shared, what changes.
-
-```json
-{
-  "frame_pair": {
-    "shared": {
-      "character": "Worf (from character lock)",
-      "background": "bg-bridge.png",
-      "camera": "medium close-up, eye level",
-      "lighting": "amber three-point"
-    },
-    "start": {
-      "expression": "neutral, mouth closed",
-      "gaze": "looking forward",
-      "hand": "arms at sides",
-      "env_detail": "panel indicator red"
-    },
-    "end": {
-      "expression": "alert, eyebrow raised",
-      "gaze": "looking slightly left",
-      "hand": "right hand at chest level",
-      "env_detail": "panel indicator green"
-    }
-  }
-}
-```
-
-**Rule:** everything in `shared` is verbatim identical in both prompts. Differences come only from `start` / `end`. If a field is missing in `end` — copy from `start`.
+For I2V clips, generate one complete start frame containing every character, prop, and interaction object needed by the motion prompt. Do not declare or generate an end frame.
 
 #### Edit operations — preserve / change
 
-For bg variants and end frames via the edit endpoint:
+For bg variants and location restyling via the edit endpoint:
 
 ```json
 {
@@ -436,29 +443,19 @@ monitor screen displaying "RED ALERT" in bold white sans-serif font
 
 ### 8. Character reference (Phase 2)
 
-#### 8a. Character sheet (concept art, 16:9)
+#### 8a. Canonical character reference (runner MVP: portrait)
 
-Primary character visual asset is the **character concept art sheet**: multiple projections + isolated equipment on one horizontal sheet.
+For newly generated refs, create a **single-figure portrait reference**. The current runner pins 9:16 output and validates only decoded portrait 9:16 (or the documented 2:3 fallback), so do not require or request a new 16:9 multi-view sheet. An existing exact-format/series-owned horizontal sheet may still be reused as an input reference; it is simply not a valid new runner output.
 
-**Priority:** if `games/{GAME_TAG}/assets/refs/{slug}-sheet.png` already exists — use it. Otherwise — generate or run `tools/gen-character-cards.sh {GAME_TAG}` for batch generation.
-
-Prompt template (NB2 text-to-image, endpoint `fal-ai/nano-banana-2`):
+Prompt template for an `nb2.text` / `character_reference` job:
 ```
-character reference sheet, concept art, professional game art layout,
-[GAME_STYLE_PREFIX], [CHARACTER_DESCRIPTION],
-large full body front-facing view in the right half of the image,
-full body back view on the left side slightly smaller,
-isolated key equipment items shown separately around the figures: [EQUIPMENT],
-clean white background, soft even lighting, no text labels no watermarks,
-horizontal composition, 16:9 aspect ratio
+clean neutral reference backdrop,
+[CHARACTER_DESCRIPTION with exhaustive anatomy and equipment], single full-body front or three-quarter view,
+eye-level portrait camera, soft even reference lighting, [GAME_STYLE_PREFIX],
+one character only, all limbs visible, no text labels, vertical composition, 9:16 aspect ratio
 ```
 
-Parameters:
-- `aspect_ratio: "16:9"`
-- No `image_urls` — this is text-to-image, not edit. Do not pass empty array `[]` — error.
-- `safety_tolerance: "5"`
-
-Save as `games/{GAME_TAG}/assets/refs/{slug}-sheet.png`.
+Omit `image_urls` entirely for text-to-image. The runner supplies the pinned generation constants and uploads the validated PNG via the job's required `supabase` block. Save locally under `scenes/refs/` and use the returned permanent Supabase URL as the locked downstream ref.
 
 #### 8a.1 New character = new character ref (ALWAYS)
 
@@ -468,33 +465,21 @@ Every new character in any format requires its own character sheet/reference. Av
 
 **Prompt wording:** scene image prompts may include the character name for bookkeeping, but the visual description must immediately follow it: `Alex — slim young man in black cap, navy hoodie...`. A bare name is not enough for NB2/Kling.
 
-**Sheet is mandatory even for "ad-hoc" characters in single-clip formats** (motion-dance one-offs). It's tempting to skip the sheet and render the character straight into the scene — DON'T. The next run that wants the same character will only have your wide-shot scene render to chain off, and NB2 will copy its composition (wide shot → wide-shot output, regardless of text prompt). One $0.04 sheet now saves $1+ of mis-framed Kling Motion Control / Avatar calls later. Treat the sheet as the deliverable, the scene render as a downstream artifact.
+**A canonical ref is mandatory even for "ad-hoc" characters in single-clip formats** (motion-dance one-offs). It's tempting to skip the ref and render the character straight into the scene — DON'T. The next run that wants the same character will only have your wide-shot scene render to chain off, and NB2 will copy its composition (wide shot → wide-shot output, regardless of text prompt). One ~$0.08 ref now saves $1+ of mis-framed Kling Motion Control / Avatar calls later. Treat the ref as the deliverable, the scene render as a downstream artifact.
+
+**Format-scoped reuse — no exceptions.** A character/avatar ref belongs to exactly one format. Never reuse a ref (canonical, variant, or avatar) that was generated for a different format, even for the same character — different formats render the same game in different art styles (cinematic 3D vs news-anchor talking-head vs photoreal, etc.), and borrowing a ref across that boundary bakes in a visible style mismatch against everything generated fresh for the current format. Concretely: any candidate from the story bible or `game_assets` is only usable if its `tags` contain the **current** `{format}` slug. No tag for this format = treat it as not existing, and generate a fresh one (tagged with `{format}` on upload, so future episodes of this format can reuse it). Burned 2026-07-09: a redcon episode reused a `fun-news`-tagged Q avatar as the "canonical self" ref, producing a visible style mismatch against the freshly generated alternate self.
+
+**Series-scoped formats need the series, not just the format.** `serial-drama` (and any format that runs multiple parallel shows in the same game off separate story bibles) can have two shows with genuinely different `style_tags` — e.g. `star-trek-timelines`'s "The Airlock" (`series_id: star-trek-airlock`, cinematic ship-set 3D) vs "ROOM 1701" (`series_id: room-1701`, explicitly "not Pixar" bedroom-sitcom look). Tagging only `serial-drama` would let the two shows reuse each other's refs. Read the current episode's `series_id` from its `{format}_story_bible.json` and require BOTH the `{format}` tag AND the `{series_id}` tag on any candidate ref; tag new refs with both on upload.
+
+This also applies **within** an episode when creating a new variant (evil-self, aged, costumed) of a character that already has a same-format canonical ref: chain-generate the variant via NB2 image-edit off that canonical ref (`image_urls: [canonical_ref_url]`, prompt describing what changes), never via pure text-to-image — text-to-image with no image anchor drifts in rendering style even when the text repeats the same style_tags verbatim.
 
 Order:
-1. **First — check the series story bible** (`games/{GAME_TAG}/{format}_story_bible.json` → `supabase_assets.char_refs`). If a canonical character sheet exists there (e.g. `noob-sheet`, `preppy-girl-sheet`, `shadow-sheet`), **use its Supabase URL as the `image_urls` chain reference for any new per-episode character ref or scene PNG**. The prompt should describe a single full-body front view extracted from the reference sheet. **Never regenerate the character from text alone when a canon sheet exists** — text-only generation drifts (e.g. Roblox-noob arms can render as green instead of yellow, accessories like Bella's sunglasses get dropped). One $0.04 wasted ref is cheap; downstream scene PNGs and Kling clips that drift cost much more.
-2. Then — check the general asset bank (`game_assets`) for any other refs (props, locations) → use the URL
-3. If neither has it — generate character sheet/reference. Generate an avatar ref only if the active format uses Kling Avatar.
-3. **MANDATORY: upload to Supabase** immediately after generation:
-   ```bash
-   # Character sheet (canonical)
-   bash queue/upload-asset.sh --kind character --game {GAME_TAG} --slug {slug} \
-     ./sheet.png --tags "{format},character-sheet"
-   # Character variant (young / mature / borg / prophet / cadet / child / adult / ...)
-   bash queue/upload-asset.sh --kind character --game {GAME_TAG} --slug {slug} \
-     --variant {variant} ./variant.png --tags "{format}"
-   # Avatar ref (Kling Avatar v2) — only when the active format uses Avatar
-   bash queue/upload-asset.sh --kind avatar --game {GAME_TAG} --slug {slug} \
-     ./avatar.png --tags "{format},avatar"
-   # Location bg-ref (slug WITHOUT bg- prefix)
-   bash queue/upload-asset.sh --kind location --game {GAME_TAG} --slug {loc-slug} \
-     ./bg.png --tags "{format}"
-   # Branding (cta, opener, title-card)
-   bash queue/upload-asset.sh --kind branding --game {GAME_TAG} --name opener-{format} \
-     ./opener.mp4 --tags "{format},opener"
-   ```
-   **Generation is incomplete without the Supabase upload.** The next agent won't find the asset and will regenerate it = money down the drain.
+1. **First — check the series story bible** (`games/{GAME_TAG}/{format}_story_bible.json` → `supabase_assets.char_refs`). If a canonical character sheet exists there for **this format** (e.g. `noob-sheet`, `preppy-girl-sheet`, `shadow-sheet`), **use its Supabase URL as the `image_urls` chain reference for any new per-episode character ref or scene PNG**. The prompt should describe a single full-body front view extracted from the reference sheet. **Never regenerate the character from text alone when a canon sheet exists** — text-only generation drifts (e.g. Roblox-noob arms can render as green instead of yellow, accessories like Bella's sunglasses get dropped). One ~$0.08 wasted ref is cheap; downstream scene PNGs and Kling clips that drift cost much more.
+2. Then — check the general asset bank (`game_assets`) for any other refs (props, locations) tagged with **this format** → use the URL. Ignore rows for the same character/prop tagged with a different format.
+3. If neither has it — generate a character reference through an `nb2.text` or anchored `nb2.edit` runner job. Do not generate an Avatar-specific ref until the runner has an allowlisted Avatar artifact/upload contract.
+4. **MANDATORY automatic Supabase upload:** every ref job includes `supabase.game`, `supabase.slug`, the exact format/series `supabase.tags`, and an optional character `variant`. The runner derives `--kind character` and invokes `queue/upload-asset.sh` only after validation. Do not call the upload helper separately. Generation is incomplete until runner `DONE` returns a permanent `supabase_url`.
 
-   > Per-episode scene PNG / TTS use a **different kind**: `--kind episode-scene` / `episode-tts` with `--episode {YYYY-MM-DD}-{format}`. These files are written to the `episodes/` bucket and are NOT registered in `game_assets` (disposable per-episode output).
+   > Scene jobs use `artifact_kind: "scene_start"` plus `supabase.episode` and `supabase.name`; the runner derives `--kind episode-scene`. These episode files are not registered in `game_assets`.
 
 Applies to ALL formats: news (anchor + co-anchor), serial-drama (multiple characters with sheets/refs), gameplay-ai-avatar (avatar), character-story (hero).
 
@@ -506,7 +491,7 @@ Character sheet **cannot** be passed directly into `image_urls` for scene genera
 
 **If the sheet works as chain ref** (verify on the first scene: result has one figure, no sheet layout leaking) — you may use the sheet. Add to the prompt: `"Use only the front-facing view of the character from the reference sheet. Keep the facial features exactly consistent."`
 
-**If it does not work** — generate a separate single-figure ref (NB2 text-to-image, endpoint `fal-ai/nano-banana-2`):
+**If it does not work** — generate a separate single-figure ref with an `nb2.text` / `character_reference` runner job:
 ```
 [STYLE_TAGS], [CHARACTER_DESCRIPTION],
 full body character pose, front-facing view, neutral dark background,
@@ -523,12 +508,14 @@ Save as `scenes/refs/character-ref-{name}.png` (per-episode, as before).
 
 ### 9. Background asset — scene-ref workflow
 
+This section is a default only for formats whose exact active Storyboarder brief requires bg refs. The active format has precedence over these generic patterns. If it explicitly says `no bg-reference files`, skip this entire section and do not create a paid location-ref job. `wild-documentary` uses only its permanent creature ref for every scene and also forbids previous-scene chaining.
+
 #### 9.1 Two-step generation: bg refs first, then mini-scenes
 
-Episode image generation goes STRICTLY in two steps:
+For formats that require bg refs, episode image generation goes STRICTLY in two steps:
 
 **Step 1 — BG refs (empty scene refs by location):**
-First, generate empty backgrounds WITHOUT characters via NB2 text-to-image (`fal-ai/nano-banana-2`, no `/edit`). Each unique location and each unique angle inside a location = its own bg ref.
+First, generate empty backgrounds WITHOUT characters through `nb2.text` / `location_reference` runner jobs. Each unique location and each unique angle inside a location = its own bg ref.
 
 Examples for a single location (LUXURIA plaza):
 - `bg-luxuria-plaza.png` — wide overview with fountain (for scenes 1-2)
@@ -574,18 +561,20 @@ Inside one location (a plaza) different zones and shots = different bg refs.
 
 **Edit endpoint: "preserve → change".** NB2 edit works better when first you describe what to keep, then what to change. Format: `"Keep: [what to keep]. Change: [what to change]. Do not alter: [guarantees]."` JSON template for edit operations — see section 2.1 "Edit operations".
 
-Applies to: bg variants, end frames, location restyling.
+Applies to bg variants and location restyling. End frames are not created.
 
 ---
 
 ### 10. Chain reference (Phase 3, scene PNG)
 
+The exact active format decides whether scene-to-scene chaining is allowed. The patterns below apply only when that format requires or permits continuity refs. An explicit format prohibition wins; for `wild-documentary`, pass only its permanent creature-ref URL to each independent scene and never add a bg or previous-scene URL.
+
 #### 10.0 Cross-episode anchor — mandatory ref for multi-episode series
 
-When generating EP2+ scenes with the same characters — use the end frame of the last scene from the previous episode as the primary anchor for proportions and style. This prevents proportion drift between episodes (head grows, height shifts, style drifts).
+When generating EP2+ scenes with the same characters, use an approved scene PNG from the same exact format/series as an optional proportions/style anchor. End frames do not exist.
 
 **Refs order for EP2+ scene:**
-1. `image_urls: [ep1-last-scene-end.png, bg-ref, char-sheet]` — EP1 end frame as primary anchor
+1. `image_urls: [approved-prior-scene.png, bg-ref, char-sheet]` — only from the same exact format/series
 2. In the prompt: `"Match proportions and style of the character in the first reference image exactly."`
 
 Without a cross-episode anchor every episode is generated "from scratch" off the char sheet → proportions drift.
@@ -595,7 +584,7 @@ Without a cross-episode anchor every episode is generated "from scratch" off the
 For a scene that continues in the same location as the previous one, the primary chain ref is **the previous approved scene PNG of THIS episode**, plus the location bg-ref — not the character sheet alone, and not an older episode's scene that merely happens to contain the location. The character sheet locks the face; the **environment (set design, the pod, walls, props, scale) is carried by the previous scene PNG**. Skip it and the environment redesigns itself every frame (EP7: the escape pod's size and the hatch changed shape scene to scene because generation chained off char sheets / a wrong-episode frame instead of the previous in-episode scene).
 
 - Continuation in same location → `image_urls: [previous-scene-of-this-episode, bg-ref-or-char-sheet]` (bg/prev frame ALWAYS first, §11).
-- Do NOT reach into an older episode's scene as a "scale reference" unless it's the same shot type AND actually depicts the thing you're anchoring (EP7: I pulled EP6 scene-8 for "pod scale", but scene-8 was a character at a wall LCARS panel — so LCARS panels bled into the new frame and the pod scale didn't transfer). Verify what the ref actually shows before using it.
+- Do NOT reach into another episode or format as a scale reference unless its exact ownership and intended content are recorded in the resolved story bible/storyboard metadata. Do not machine-inspect the image to decide.
 - One pivotal visual fact (how a reveal happens, the design of a hero prop) that spans several scenes: lock it in the FIRST scene that establishes it, then chain every dependent scene off that frame. Changing it later means regenerating every downstream scene by hand (EP7 hatch→steam change cascaded across scenes 6/7/8 and wasted an already-rendered clip).
 
 Standard pattern for one character in a scene:
@@ -616,13 +605,9 @@ For formats without bg ref (news, gameplay-ai-avatar):
 
 Fal.ai URLs are temporary → download locally immediately after generation; in the chain, use Supabase URLs, not expired fal.ai.
 
-#### 10.1 End frame as ref for character consistency
+#### 10.1 Previous approved scene as ref for character consistency
 
-For complex multi-character scenes, when you need to exactly match the previous frame (same characters, same pose), use a ref chain:
-- `image_urls: [end-frame-of-previous-clip, char-sheet-1, char-sheet-2]`
-- End frame as primary ref for style and pose, char sheets for facial consistency
-
-**Beware of watermarks:** the end frame may carry text/watermarks from the previous generation. If you see text on the ref — add `"NO text NO watermarks NO logos NO titles"` to the prompt. If text still bleeds through — drop the end frame from refs and use only bg + char-sheets.
+For complex multi-character scenes, use the immediately previous approved start/scene PNG from this run plus the exact-format character sheets when the endpoint's ref limit allows it. Never use an end frame or a scene from another format.
 
 ---
 
@@ -655,7 +640,7 @@ Wrong anchor → wrong character generated.
 
 - **Rule:** anchor = the less ethnically specific character (e.g. Kirk-ref), describe the second one in text.
 - **For Klingon in text:** explicitly write `"Klingon warrior, NOT Vulcan, dark brown skin, prominent ridged forehead"`.
-- **Same anchor** for start and end frames of one I2V clip.
+- **One start-frame anchor** per I2V clip; end frames are forbidden.
 
 ---
 
@@ -840,67 +825,22 @@ Write the URLs back into `storyboard.json` (clip's `elements` field) so Animator
 
 For each I2V clip generate ONE image: `scene-K.png` (start frame only). **`scene-K-end.png` is NEVER generated** — see §14.8.
 
-Cost: 1 × $0.08 per clip (GPT Image 2 edit).
+Cost: one start-image generation per clip on the format-selected image route.
 
-**Character consistency:** all objects and characters from the start frame MUST be present in the end frame. Kling interpolates between two frames — if an object is in one and missing in the other, Kling will dissolve it like a ghost.
-
-Exception: a character may disappear between start and end **only if** in `storyboard.json` for this clip there is explicit justification (e.g. `"action_description": "figure walks behind the door"`). In that case the end frame shows the character partially behind the frame edge / behind the door — not just removed from the scene.
-
-**Minimal change (CRITICAL):** start and end are nearly identical in composition, perspective, scale.
-
-Allowed to change: facial expression, indicator color, hand gesture, head turn, small details.
-
-**FORBIDDEN to change:** depth/perspective, frame scale, camera angle, distance to the object, character orientation/mirroring (if Kirk faces right in start — he faces right in end).
-
-**NB2 CANNOT change camera angle through the prompt.** Trying to describe low-angle / tilt / dolly in the prompt text → model distorts perspective (raises floor, stretches walls) instead of moving the camera. Camera moves are Kling's job through `motion_prompt`, NOT the difference between start and end frames. End frame MUST have the same angle as the start frame.
-
-✅ Correct: Kirk and Worf at the airlock door, indicator red → same characters at the door, indicator green, heads turned.
-
-❌ Wrong: Kirk and Worf at the start of the corridor (far shot) → at the door (close-up) — deformation.
-❌ Wrong: start eye-level → end low-angle — NB2 will distort geometry, not move the camera.
-❌ Wrong: two characters in start → empty room in end — Kling will dissolve the figures.
-
-### 16.1 Interaction object — MUST be on the start frame
-
-If the character interacts with an object (hits a panel, grabs a lever, picks up a PADD) — that object **MUST be on the start frame near the contact point**.
-
-Without this, the end frame draws the object in a new location → Kling interpolates → wall/panel "slides in" or morphs instead of the character's hand moving.
-
-| Action | Start frame | End frame |
-|---|---|---|
-| Hits panel | Character stands NEXT to the panel, hand within reach | Hand ON the panel, panel cracked |
-| Grabs lever | Lever visible near the hand | Hand on the lever |
-| Picks up PADD | PADD visible on belt/table | PADD in hand |
-| Pulls from pocket (reveal) | Object NOT yet visible — that's OK | Object in hand |
-
-### 16.2 End-frame prompting — director pose, not technical spec
-
-End-frame prompt = standard template `[STYLE][CHARACTER][STATE][EXPRESSION][ENV][CAMERA]`, 40–80 words. Do NOT use:
-
-- ❌ "Keep/Change" edit format → 3rd hand (model preserves old hands + draws new)
-- ❌ "Edit this image. Change only..." → pose does not change
-- ❌ Describing both hands separately without context → ballet/contortion
-- ❌ Re-prompting at 100+ words → worse, not better
-
-Working pattern:
-1. Director pose (3/4 turn, over the shoulder, leaning on wall) — NOT frontal
-2. Hands: **describe only if there is an active action** ("right palm slamming against wall panel", "left hand gripping PADD") — needed for Kling to understand trajectory. If no active action — only one body-pose gesture, do NOT describe the second hand.
-3. Start = closed pose (head down), End = opening (head up, gesture, environment changed)
-
-**Avatar-based dialogue and I2V dialogue clips:** only one image (start). End frame not needed.
+All characters, props, and interaction objects needed by the clip must already be visible in this start frame. Camera movement and micro-motion belong only in Animator's `motion_prompt`; Storyboarder does not create a destination frame.
 
 ---
 
 ### 17. Workspace hygiene — archive before regeneration
 
-Before regenerating any PNG — move the previous version to `_archive/`:
+For a legacy/unclaimed PNG, archive the previous version before replacement:
 
 ```bash
 mkdir -p "${OUTPUT}/_archive"
 mv "${OUTPUT}/scenes/scene-K/scene-K.png" "${OUTPUT}/_archive/scene-K_$(date +%H%M).png"
 ```
 
-Output folder must contain only current files. The user should not have to figure out which of the five `scene-5.png` is the correct one.
+Output folder must contain only current files. The user should not have to figure out which of the five `scene-5.png` is the correct one. **Do not run the legacy `mv` command above on a runner-claimed canonical output.** The runner has no safe reset command: preserve its output, state, request, and claim, then STOP for an explicit recovery decision.
 
 ---
 
@@ -910,17 +850,11 @@ When refining a prompt: **take the working version and add the missing element**
 
 ---
 
-### 19. Sequential generation + programmatic validation
+### 19. Dependency-aware generation + programmatic validation
 
-Generate **one PNG at a time**. After each:
-1. Download locally
-2. **Programmatic check** (see `rules/main/validation.md`):
-   - `[ -s file.png ] && [ $(stat -f%z file.png) -gt 1000 ]`
-   - `identify -format "%wx%h" file.png` → expected dimensions (1080×1920 for vertical)
-3. Pass → next PNG
-4. Fail (empty / corrupt / wrong dimensions) → regenerate with the same prompt
+Generate each dependency chain one PNG at a time: every required character/location ref must reach runner `DONE` and yield a permanent Supabase URL before any dependent scene job is created. Scenes with previous-scene or other scene-to-scene dependencies remain sequential. Only mutually independent scenes may run with bounded foreground concurrency (maximum 3), when the active format explicitly allows it; each still has its own immutable job file, job ID, output path, state, and claim.
 
-Only after ALL images pass — hand off to Manager.
+The runner owns download and **programmatic validation** (see `rules/main/validation.md`): full PNG decode, filesize/signature/chunk checks, minimum dimensions, and portrait ratio. A technically failed download is recovered under the same job; do not manually regenerate or construct a second fal request. Only after every job has `phase: "DONE"`, a non-empty `supabase_url`, and its storyboard write-back complete may Storyboarder hand off to Manager.
 
 **Do NOT Read the PNG.** Quality is enforced at the prompt-engineering level (precise `character_description`, stable `image_urls` chain refs, negative prompts) — not by post-hoc visual inspection. Real visual errors surface in the final video and are caught at human review. See `rules/main/validation.md`.
 
@@ -929,17 +863,18 @@ Only after ALL images pass — hand off to Manager.
 ## Checklist before handing off to Manager
 
 - [ ] Each scene has an `image_prompt` (40–80 words), added to `storyboard.json`
-- [ ] **Every `image_prompt` opens with the full `style_tags` prefix from the bible** — never a shortened style string (EP6 scene 8 lost the prefix and drifted off-style)
+- [ ] Every `image_prompt` contains the full `style_tags` from the bible verbatim and follows scene/backdrop → subject/anatomy → camera/lighting/style → constraints
 - [ ] Each character referenced from ONE locked ref URL across all its clips; every ref URL verified 200 before use
 - [ ] `camera_angle` differs between adjacent scenes
 - [ ] Lipsync scenes have `mouth slightly open with teeth visible` in the prompt
 - [ ] All character refs created or pulled from Supabase
 - [ ] All location bg refs created (for serial-drama)
-- [ ] All scene PNGs created, programmatic validation passed (filesize > 1KB, dimensions correct)
+- [ ] All scene PNG jobs are `DONE`; runner validation passed and each has a non-empty permanent `supabase_url`
 - [ ] For I2V clips: start frame only (`scene-K.png`), programmatic validation passed — end frames are NEVER generated (see §14.8 / §16)
 - [ ] `image_urls` includes every visible/speaking character ref plus the needed location ref. If the current endpoint rejects that many refs, split the scene or reduce visible characters; never silently omit a speaking character ref
 - [ ] No extra characters, style consistent
-- [ ] All files downloaded locally and uploaded to Supabase
+- [ ] All files downloaded locally and uploaded automatically by the runner; no temporary fal URL appears in storyboard fields
+- [ ] Every scene has both local `scene_image` and permanent `scene_image_url`; every downstream `image_urls` entry is permanent
 - [ ] Paths to all files saved for handoff to Animator
 
 In debug mode — send Manager an explanation (what was generated, which regenerations occurred, why).

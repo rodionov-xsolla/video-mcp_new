@@ -134,78 +134,28 @@ Report: which video was published (title/URL), to which platform, post-now or sc
 
 ---
 
-## YouTube — scheduled upload after video generation
+## YouTube — scheduled upload after final-video approval
 
-Separate flow: triggered **after generation completes** (Editor saved `final.mp4` to Supabase) or by a direct user command.
+Separate flow: Editor first returns a technically valid local `final.mp4`; Manager shows it to the user. Only after explicit approval does Manager upload it to Supabase and start this scheduled YouTube flow.
 
 **No-exception rule:** no immediate publishing. Private upload with a scheduled open date only. Every upload requires explicit user confirmation — **even when debug mode is off**.
 
 ### YouTube channels ↔ game_tag
 
-| game_tag | `--channel` |
-|---|---|
-| `star-trek-timelines` | `starfleet` |
-| `genshin-impact` | `genshin` |
+| game_tag | Public channel | `--channel` alias |
+|---|---|---|
+| `star-trek-timelines` | `starfleetarchive` | `starfleet` |
+| `genshin-impact` | `genshinsnap` | `genshin` |
 
 If game_tag is not in the table — inform the user that the channel is not configured and stop.
 
-### YT step 1 — ask for confirmation
+### YT step 1 — confirm approval state
 
-Before any upload, query Supabase and show the user:
-
-```python
-import subprocess, json, os
-
-url = os.environ["SUPABASE_URL"]
-key = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
-game_tag = "GAME_TAG_HERE"
-
-# Last scheduled date for this game_tag
-resp = subprocess.run([
-    "curl", "-sS",
-    f"{url}/rest/v1/video_agent_runs"
-    f"?game_tag=eq.{game_tag}&yt_published=not.is.null"
-    f"&order=yt_published.desc&limit=1"
-    f"&select=yt_published,input_idea",
-    "-H", f"apikey: {key}", "-H", f"Authorization: Bearer {key}",
-], capture_output=True, text=True)
-last = json.loads(resp.stdout)
-
-# How many videos are waiting to be uploaded
-resp2 = subprocess.run([
-    "curl", "-sS",
-    f"{url}/rest/v1/video_agent_runs"
-    f"?game_tag=eq.{game_tag}&yt_published=is.null&status=eq.completed"
-    f"&output_video_url=not.is.null&select=id",
-    "-H", f"apikey: {key}", "-H", f"Authorization: Bearer {key}",
-], capture_output=True, text=True)
-pending = json.loads(resp2.stdout)
-
-print(json.dumps({"last": last[0] if last else None, "pending_count": len(pending)}))
-```
-
-Show the user:
-> 4 videos in queue. Last one scheduled for June 12 (11:59 PM MSK). Next slot: June 13. How many to upload?
-
-**Wait for the answer. Do not upload anything before confirmation.**
+Require Manager's explicit confirmation that the user approved this exact local final video. That approval is sufficient for its Supabase upload and scheduled YouTube upload; do not ask a second redundant confirmation. A direct bulk-queue command still requires the user to specify the batch.
 
 ### YT step 2 — calculate publish date
 
-```python
-import datetime
-
-def next_publish_date(last_yt_published: str | None) -> str:
-    if last_yt_published:
-        last = datetime.datetime.fromisoformat(last_yt_published.replace("Z", "+00:00"))
-        next_date = last.date() + datetime.timedelta(days=1)
-    else:
-        next_date = datetime.date.today() + datetime.timedelta(days=1)
-    return f"{next_date.isoformat()}T20:59:00Z"
-```
-
-- Time is always `20:59:00Z` (11:59 PM MSK)
-- Each subsequent video in the batch = previous date + 1 day
-- If no `yt_published` records exist for this game_tag — start from tomorrow
+Query the target channel's existing scheduled/public videos and choose the nearest future free calendar date. Publication time is always **23:50 Moscow time (`20:50:00Z`)**. The chosen date must also satisfy: the same format is not scheduled on either adjacent calendar date (`D-1` or `D+1`). If the nearest free date violates that rule, advance one day at a time until both conditions pass. Apply the same calculation independently to every video in a batch.
 
 ### YT step 3 — fetch videos from queue
 
@@ -258,8 +208,8 @@ bash video-agent/queue/log-publish.sh \
 
 ```
 Uploaded 2 videos to YouTube:
-- "I Almost Quit Star Trek" → youtube.com/watch?v=xxx — goes public June 13 at 11:59 PM MSK
-- "My teammate was a surgeon" → youtube.com/watch?v=yyy — goes public June 14 at 11:59 PM MSK
+- "I Almost Quit Star Trek" → youtube.com/watch?v=xxx — goes public June 13 at 23:50 MSK
+- "My teammate was a surgeon" → youtube.com/watch?v=yyy — goes public June 14 at 23:50 MSK
 
 2 videos still in queue.
 ```

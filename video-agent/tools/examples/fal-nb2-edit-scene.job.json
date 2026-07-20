@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "job_id": "replace-with-unique-scene-job-v1",
+  "route": "nb2.edit",
+  "artifact_kind": "scene_start",
+  "output_dir": "/ABSOLUTE/OUTPUT_DIR",
+  "output_path": "scenes/scene-1/scene-1.png",
+  "input": {
+    "prompt": "A specific story backdrop with concrete spatial landmarks; one explicitly described subject with exhaustive anatomy and physical action; a precise camera position, lens, and natural lighting; portrait 9:16, identity locked to the reference, only story-required text and no additional lettering.",
+    "image_urls": [
+      "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/assets/GAME_TAG/characters/CHARACTER/variants/FORMAT.png"
+    ]
+  },
+  "supabase": {
+    "game": "replace-game-tag",
+    "episode": "YYYY-MM-DD-format-slug",
+    "name": "scene-1.png"
+  }
+}

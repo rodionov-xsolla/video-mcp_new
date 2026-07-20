@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 1,
+  "last_episode": 2,
   "tts_engine": "minimax",
   "tts_note": "MiniMax Speech 2.8-HD. Voice: Deep_Voice_Man (authoritative, measured). Second-person monologue throughout — NOT first-person alternate-self. Voiceover opens with the CTA hook on the teaser clip, then continues second-person through story clips.",
   "format_overrides": {
@@ -46,18 +46,25 @@
         "date": "2026-07-06",
         "crew_assembled": ["Data", "Scotty", "Julian Bashir", "Ro Laren"],
         "note": "Frequency modulation cracked before Allied fleet annihilated. Dominion War ended 6 months early."
+      },
+      {
+        "crisis": "Hobus supernova — destruction of Romulus (2387), SAVED",
+        "episode": 2,
+        "date": "2026-07-13",
+        "crew_assembled": ["Spock (Ambassador)", "Geordi La Forge", "T'Pol"],
+        "note": "Successful-outcome divergence (not a canon-averting rescue of a doomed loss, but a straight-up fix of the original tragedy): in canon Ambassador Spock's red matter ship arrived too late and Romulus was destroyed, which is why Spock ends up flung into the past in the 2009 film. In this timeline the cross-era crew (Geordi rebuilding the deployment rig faster than canon, T'Pol locking the containment math, Spock firing the red matter in time) deployed containment before the shockwave hit — Romulus survived. First bible episode to use the new 8-part player-POV structure (TEASER with TTS starting immediately → 3s silent TITLE CARD → HOOK+CTA → CANON REMINDER → CREW ASSEMBLED → DIVERGENCE → REVELATION → CTA asset)."
       }
     ],
     "do_not_repeat": [
       "Borg cube / Wolf 359",
-      "Breen weapon / Chin'toka"
+      "Breen weapon / Chin'toka",
+      "Hobus supernova / Romulus"
     ],
     "candidates_for_future": [
       "Xindi superweapon — Delphic Expanse (2153)",
       "V'Ger approaching Earth (2273)",
       "Changeling infiltration of Starfleet Command (2372)",
-      "Praxis explosion + Khitomer Accords (2293)",
-      "Hobus supernova — destruction of Romulus (2387)"
+      "Praxis explosion + Khitomer Accords (2293)"
     ]
   },
   "style_tags": "Star Trek Timelines style, semi-realistic Pixar-quality 3D, cinematic Federation lighting, deep space environment, Starfleet uniform details, clean cinematic frame, no cartoon, no chibi",
@@ -70,11 +77,24 @@
         "character_name": "Worf",
         "alternate_designation": "Worf, Son of None — Warlord of the Empire",
         "divergence_point": "2367, TNG 'Reunion' — after executing Duras, Worf refuses discommendation and seizes the Duras bloodline's ships/warriors instead of returning to Starfleet",
-        "tts_voice": "Daniel (ElevenLabs preset, mapped to MiniMax Deep_Voice_Man for generation) — flat/angry alternate-identity delivery, not the canonical Worf voice",
+        "tts_voice": "Deep_Voice_Man (MiniMax Speech 2.8-HD) — flat/angry alternate-identity delivery, not the canonical Worf voice",
         "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-07/redcon_final.mp4",
         "youtube_url": "https://www.youtube.com/watch?v=pbiuyIT-GAE",
         "yt_publish_at": "2026-07-11T20:59:00Z",
         "notes": "User-requested one-off ('what if Worf became a villain'), not the player-POV crisis-rotation format. Included a user-requested CTA banner image overlay (fade in/out, top-anchored) on clip 3 only — required extending tools/overlays.py: (1) build_image_overlay_frags() needed fade_in/fade_out support for image overlays (previously text-only), which surfaced an eof_action=repeat default that stalls the whole filtergraph when combined with an infinite loop=-1 still-image source — fixed with eof_action=pass; (2) banner placement/scope went through 3 rounds of user feedback (all clips -> clips 2-3 top -> clip 3 only) — final: top-anchored, y=80, width~1010 (35px side margins), fade ~0.5s, clip 3 only. Also flagged in rules/formats/redcon.md: this format's monologue-over-static-shot pacing reads as static even with technically-compliant motion_prompt — push camera movement harder and prefer wider framing over tight portraits."
+      },
+      {
+        "date": "2026-07-09",
+        "character_name": "Q",
+        "alternate_designation": "The Absolute Judge — Executioner of the Continuum",
+        "divergence_point": "2364, TNG 'Encounter at Farpoint' — Q puts humanity on trial aboard the Enterprise-D and, refusing to accept Picard's proof that humanity can change, condemns the Federation instead of granting mercy",
+        "outcome": "Captured: Picard, frozen conscious as an eternal witness to his species' failure. Died: the Starfleet officer who raised a phaser at Q, unmade on the spot as a warning. Q then turns on his own Continuum and destroys the members who try to stop him, becoming uncontested — and, with no equal left to judge him, his own eternal prisoner.",
+        "tts_voice": "Deep_Voice_Man (MiniMax Speech 2.8-HD), cold/commanding judge delivery — not the canonical playful-trickster Q tone",
+        "new_asset": "Alternate-self 'Absolute Judge' Q ref generated (darker palette, gold-white eyes, black-and-crimson robe, unstable energy corona) at assets/star-trek-timelines/characters/q/variants/absolute-judge.png — chained from the existing canonical-self q/avatar.png for the 'before' shots",
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-09/redcon_final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=m9tCCBoivuc",
+        "yt_publish_at": "2026-07-14T20:59:00Z",
+        "notes": "User-requested one-off ('what if Q became evil'), same character-variant branch as the Worf episode. Total pipeline cost ~$3.67 (Sound $0.09, Storyboarder $0.64, Animator $2.94, Editor $0.00). Applied the Worf postmortem note proactively this run — Storyboarder used wide framing and Animator used harder camera pushes/orbits from the start, no retro-fix needed."
       }
     ]
   },
@@ -98,6 +118,25 @@
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/videos/star-trek-timelines/2026-07-06/redcon_final.mp4",
       "youtube_url": null,
       "notes": "First bible episode. Note: used old structure (no pre-title-card teaser clip) — new Player-POV structure applies from EP2 onwards."
+    },
+    {
+      "episode": 2,
+      "date": "2026-07-13",
+      "crisis": "Hobus supernova — destruction of Romulus (2387), SAVED",
+      "crew": ["Spock (Ambassador)", "Geordi La Forge", "T'Pol"],
+      "tts_voice": "Deep_Voice_Man",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-13/redcon_final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=42mWhkvaTZE",
+      "yt_publish_at": "2026-07-16T20:59:00Z",
+      "duration_sec": 38.33,
+      "cost_breakdown": {
+        "scenarist_storyboarder": 3.77,
+        "sound": 0.11,
+        "animator": 2.77,
+        "editor": 0.0,
+        "total_usd": 6.65
+      },
+      "notes": "First episode to use the new 8-part player-POV structure end to end (TEASER with TTS starting immediately → 3s silent TITLE CARD → HOOK+CTA → CANON REMINDER → CREW ASSEMBLED → DIVERGENCE → REVELATION → CTA asset). New redcon-tagged character refs generated for Ambassador Spock, Geordi La Forge, T'Pol. Incident: Storyboarder's upload-asset.sh call for T'Pol used --upsert on the shared canonical path characters/tpol/sheet.png (tagged motion-dance in game_assets, no --variant given), overwriting that file's bytes with the redcon-style render — original unrecoverable, no local cache existed. motion-dance is not currently a linked format for star-trek-timelines, so no active run is affected, but the game_assets row was retagged with CORRUPTED-redcon-style-2026-07-13-needs-regen so motion-dance regenerates its own T'Pol ref before next use. Recommend adding a pre-flight tag check to upload-asset.sh (refuse/warn on upsert to a canonical character path if the existing row's tags don't include the current format) to prevent recurrence."
     }
   ]
 }

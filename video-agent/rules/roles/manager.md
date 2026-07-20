@@ -24,21 +24,22 @@ Burn-tested EP2 (2026-06-08): forward loop scene-3→4→5→6 overwrote Lumine 
 
 **ffmpeg final encode — NEVER background.** The `final.mp4` encode (concat + subtitles + music + title strip) MUST run synchronously with timeout ≥ 180s. If the process ends before writing the `moov` atom the file is unplayable ("moov atom not found"). Do NOT use `run_in_background: true` for ffmpeg encodes. Do NOT write temp files to `/tmp` — use `OUTPUT_DIR/build/` to avoid tmp filesystem overflow.
 
-**Re-roll discipline — diagnose before re-generating.** Before re-rolling any clip > $0.30 (I2V $0.42–0.84, Avatar $0.28+), state the root-cause HYPOTHESIS in one line, fix THAT, then regenerate. Do not iterate on the surface symptom. If you've regenerated the same scene more than twice and it's still wrong, STOP — the problem is your diagnosis (wrong chain ref, under-detailed prompt, a Kling limitation), not the dice. EP7 burned scene-6 four times (one 9s I2V = $0.76 each) chasing "too small → too big → opens wrong way" instead of naming the two real causes up front (wrong/missing background ref + under-specified opening mechanics). A clean serial-drama episode is ~$2.5; EP7 ate nearly the whole ~$10 cap largely on re-rolls. When a fix has downstream dependents (a pivotal frame other scenes chain off), get it RIGHT and approved before generating the dependents — changing it later re-burns every dependent clip.
+**Retry discipline.** A failed operation gets one retry on the same provider/model/endpoint/route. For a deterministic rejected input or command, correct only that rejected input/command before the retry. A second failure stops the whole video with the actual error; never keep re-rolling or switch routes. **NB2 exception:** `tools/fal_runner.py` owns retry/resume safety. Manager never adds a wrapper retry, never replaces `UNKNOWN`, and never deletes runner state/claims.
 
 ---
 
 ## EXECUTION SEQUENCE
 
-Every run follows this sequence. Inline programmatic validation runs inside `pipeline.sh` after each phase (jq on `storyboard.json`, `stat`/`ffprobe` on artifacts). If a check fails → STOP and show the error.
+Every run follows this sequence. Inline programmatic validation runs directly in the manager after each phase (jq on `storyboard.json`, `stat`/`ffprobe` on artifacts). If a check fails → STOP and show the error.
 
 ```
 PHASE 0 — Initialization
   git pull origin main
+  Create one RUN_ID and OUTPUT_DIR=output/YYYY-MM-DD/GAME_TAG/FORMAT/RUN_ID
   mkdir -p $OUTPUT_DIR
   Read rules/formats/$FORMAT.md (Manager section) + games/$GAME_TAG/$GAME_TAG.md
-  For serial-drama / reddit-story: read games/$GAME_TAG/${FORMAT}_story_bible.json
-  Query Supabase for EXISTING_REFS_JSON (game_assets)
+  Resolve exact STORY_BIBLE_PATH for the current format/series; if missing, ask before creating
+  Query Supabase for assets filtered to exact game + format + series; resolve CTA only from exact STORY_BIBLE_PATH
 
 PHASE 1 — Script
   Agent(scenarist) — pass GAME_TAG, FORMAT, IDEA, OUTPUT_DIR, LANGUAGE
@@ -49,8 +50,8 @@ PHASE 2 — Audio (if dialogue clips exist)
   Validate: scene-K.mp3 present for every dialogue clip, tts_url written back
 
 PHASE 3 — Images
-  Agent(storyboarder) — pass GAME_TAG, FORMAT, OUTPUT_DIR, EXISTING_REFS_JSON
-  Validate: every scene PNG present and ≥ 1KB
+  Agent(storyboarder) — pass GAME_TAG, FORMAT, OUTPUT_DIR, STORY_BIBLE_PATH, optional SUPABASE_ASSETS_FILE
+  Validate: every scene has runner DONE state + local PNG + matching permanent scene_image_url
 
 PHASE 4 — Animation
   Agent(animator) — pass GAME_TAG, FORMAT, OUTPUT_DIR
@@ -61,13 +62,13 @@ PHASE 5 — Assembly
   Validate: final.mp4 present and ≥ 100KB; ffprobe duration sane
 
 PHASE 6 — Review gate (MANDATORY, both debug and non-debug)
-  Show user the Supabase public URL. WAIT FOR EXPLICIT OK.
-  Only after OK: YouTube upload → log-video.sh → story bible update → git push
+  Show user the local final.mp4. WAIT FOR EXPLICIT OK.
+  Only after OK: Supabase upload → scheduled YouTube → log-video.sh → story bible update → git push
 ```
 
 **Rules for this sequence:**
 - Never do sub-agent work yourself. Each phase = exactly one `Agent(...)` call.
-- Validation is filesize / ffprobe / jq only — **no visual Read on PNG/MP4**.
+- Validation is filesize / ffprobe / jq only — **no machine visual inspection of generated PNG/MP4**. The only source-material exceptions are the format-declared Wild Documentary research image when necessary and Motion Dance source frames.
 - If a phase fails validation, fixing before the next phase is much cheaper than fixing after Kling spend ($2+).
 
 ---
@@ -103,7 +104,7 @@ If the user request contains the phrase **"Debug mode"** (or RU «Отладоч
   | 0 | … | anchor | VoiceName | new / locked-from-EP1 / … |
   | 2 | … | reporter_1 | VoiceName | … |
 
-  For every voice, check ALL story bibles for this game (`serial-drama`, `fun-news`, `streettalk`, etc.) and flag any voice that is **already assigned to a different character** in any other format. Example: `George` is Spock in serial-drama — using it for Worf in fun-news creates a cross-format conflict. Surface these conflicts explicitly: `"⚠ George — already Spock in serial-drama. Use for Worf?"`. Do not start TTS until the user confirms the full mapping.
+  Resolve each voice only from the exact current format/series bible. Do not inspect or compare voice assignments from other formats. Do not start external speech generation until the user confirms the current mapping.
 
 Without this phrase — work autonomously.
 
@@ -127,20 +128,28 @@ Without this phrase — work autonomously.
 
 4. **Detect format** (see table below).
 
+   `gameplay-ai-avatar` is currently inactive. If detected/requested, STOP and report that the format is disabled; do not enter generation phases.
+
 5. **Read format & game context directly:**
    - `rules/formats/{FORMAT}.md` — format playbook (Manager section + general structure; per-role briefs are loaded by sub-agents).
-   - `games/{GAME_TAG}/{GAME_TAG}.md` — game config (Visual Style Guide, `prompt_prefix` house-style fallback, Tone of Voice). Style resolves as: story bible top-level `style_tags` → else game `prompt_prefix`. Character appearance lives in the format story bible `characters[]`, not in the game config.
+   - `games/{GAME_TAG}/{GAME_TAG}.md` — game context and Tone of Voice. Style and appearance resolve only from the exact format/series story bible; the game config is not a fallback for them.
    - `games/{GAME_TAG}/{FORMAT}_special.md` — IF the file exists, read it for format+game overrides.
-   - For serial-drama / reddit-story: `games/{GAME_TAG}/{FORMAT}_story_bible.json` — persistent series state. Sub-agents read it themselves; the Manager only needs the path.
+   - Exact `STORY_BIBLE_PATH` for the current format/series — persistent state. It is mandatory for production. If missing, STOP and ask whether to create it; never auto-create it.
 
-6. **Character sheets:** check `games/{GAME_TAG}/assets/refs/` for `{slug}-sheet.png` for needed characters. If missing — run `tools/gen-character-cards.sh {GAME_TAG}` for batch generation of concept art sheets (~$0.04 per character).
+6. **Character sheets:** use only refs owned by the exact current format/series. If missing, Storyboarder creates a fresh format/series-bound ref during its existing phase; never use the legacy game-wide batch generator.
 
-7. **Query ALL assets from Supabase** (single query for the whole game):
+7. **Query assets from Supabase, filtered to the current format.** Character/avatar refs are NEVER shared across formats — different formats render the same game in different art styles (e.g. `fun-news`'s talking-head anchor render vs `redcon`'s cinematic 3D vs `what-if-real-life`'s photoreal). Reusing a ref tagged for a different format silently imports its style. Burned 2026-07-09: the redcon Q episode reused a `fun-news`-tagged Q avatar as the "canonical self" ref, producing a visible style mismatch against the freshly generated alternate self.
+
+   **Series-scoped formats (serial-drama and any format that runs multiple parallel shows in the same game via separate story bibles) need a finer key than `FORMAT` alone.** `serial-drama` currently runs at least two distinct shows in `star-trek-timelines` — "The Airlock" (`series_id: star-trek-airlock`, cinematic ship-set 3D) and "ROOM 1701" (`series_id: room-1701`, explicitly "not Pixar" bedroom-sitcom look) — same format engine, different `style_tags` in each show's story bible. Tagging a character ref with just `serial-drama` would let the two shows cross-contaminate each other's style. For these formats, tag and filter by **`series_id`** (from the show's `{format}_story_bible.json` → top-level `series_id`), in addition to the `FORMAT` tag:
+
    ```bash
    curl -s -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
      -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
-     "${SUPABASE_URL}/rest/v1/game_assets?game_tag=eq.{GAME_TAG}&select=*"
+     "${SUPABASE_URL}/rest/v1/game_assets?game_tag=eq.{GAME_TAG}&tags=cs.{${FORMAT}}&select=*"
+   # Series-scoped formats: also require series_id in tags, e.g. tags=cs.{serial-drama,star-trek-airlock}
    ```
+
+   **Only rows whose `tags` contain the current `FORMAT` slug (and `series_id`, where applicable) are eligible for reuse.** A row for the same character tagged with a *different* format or series, or with no matching tag at all, is NOT a match. CTA wording and asset are not selected through a broad asset-bank exception: use only the values recorded in the exact `STORY_BIBLE_PATH`. Openers, title cards, character refs, appearance text and voice samples also stay format/series-bound.
 
    **Distribute assets to roles:**
 
@@ -153,50 +162,53 @@ Without this phrase — work autonomously.
    | `prompt_block` | **Scenarist** | Use as `character_description` |
    | `asset_type = gameplay_clip` | **Editor** | Download for reddit-story / gameplay-ai-avatar |
 
-   **If an asset is missing:**
+   **If an asset is missing (i.e. no row tagged with the current `FORMAT`):**
    - **Opener / CTA:** STOP — notify the user. These assets must be uploaded in advance
-   - **Character refs / avatar refs:** generation in Phase 3 is allowed, but **mandatory upload** of the result to Supabase via `queue/upload-asset.sh` with the right tags
+   - **Character refs:** generation in Phase 3 is allowed only through `tools/fal_runner.py`, with the exact format/series tags in the required job `supabase` block. The runner validates and uploads through `queue/upload-asset.sh`. Avatar-specific NB2 output is currently outside the runner allowlist; if required and missing, STOP rather than bypassing the runner.
    - **Gameplay clips:** STOP for reddit-story / gameplay-ai-avatar
 
-   **After generating ANY new character** Storyboarder must:
-   1. Upload to Supabase Storage
-   2. Register in `game_assets` via `queue/upload-asset.sh`
-   3. Next time the character will already be in Supabase
+   **After generating ANY new character** Storyboarder must return runner `phase: "DONE"`, a validated local PNG, and the permanent `supabase_url`; the runner performs Storage upload and `game_assets` registration. That URL becomes the only downstream ref.
 
-8. **Story bibles** — for serial-drama / reddit-story: Scenarist reads `games/{GAME_TAG}/{FORMAT}_story_bible.json` itself (see `prompts/scenarist.txt`). You update the bible manually only AFTER the episode completes (Phase 6, step 4).
+8. **Story bible** — every production format/series uses the exact resolved `STORY_BIBLE_PATH`. Missing file → ask the user whether to create it and STOP. Keep proposed updates run-local; Manager writes them only after explicit final user approval in Phase 6.
 
 ### PHASE 1 — Script
 Delegate via `Agent(subagent_type="scenarist")` (model: sonnet, defined in `.claude/agents/scenarist.md`). The sub-agent will load `rules/roles/scenarist.md` itself — you do NOT read it. In the `prompt`, pass: `GAME_TAG`, `FORMAT` (playbook), `IDEA`, `OUTPUT_DIR` (absolute), `LANGUAGE`, `EXISTING_REFS_JSON` if applicable. Template: `prompts/scenarist.txt`.
 
-> ⚠️ **ALWAYS use the prompt template as the base** (`prompts/{role}.txt`). The templates contain critical boilerplate: `.env` loading (`set -a; source "$(git rev-parse --show-toplevel)/video-agent/.env"; set +a`), env verification, and constraint reminders. Writing a shorter custom prompt drops these and causes hard-to-debug failures (missing FAL_KEY, wrong subtitle style, etc.).
+> ⚠️ **ALWAYS use the prompt template as the base** (`prompts/{role}.txt`). The templates contain critical environment/CLI gates and constraint reminders. For Storyboarder this includes the mandatory `fal_runner.py` preflight/run contract; a shorter custom prompt can silently reintroduce direct HTTP or temporary URLs.
 
-**Output:** `output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/storyboard.json`.
+**Output:** `$OUTPUT_DIR/storyboard.json`.
 
-**Validation:** `pipeline.sh` checks inline that `storyboard.json` exists and has a non-empty clips/scenes array (`jq '(.clips // .scenes // []) | length'`). If absent → STOP.
+**Validation:** manager checks inline that `storyboard.json` exists and has a non-empty clips/scenes array (`jq '(.clips // .scenes // []) | length'`). If absent → STOP.
 
 In debug mode — stop for approval.
 
 ### PHASE 2 — Audio (Sound)
 
-**Only if dialogue clips exist.** If the storyboard has no dialogue clips — skip this entire phase.
+**TTS generation is skipped if the storyboard has no clips requiring external speech.** The Sound phase still runs whenever the format requires music; serial-drama always requires Sound to generate `bg-music.mp3` even though its dialogue is native Kling audio.
 
 Delegate via `Agent(subagent_type="sound")` (model: haiku, defined in `.claude/agents/sound.md`). Sub-agent loads `rules/roles/sound.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` inside). Template: `prompts/sound.txt`.
 
-**Validation:** `pipeline.sh` checks inline that every dialogue clip has a scene-K.mp3 (size ≥ 5KB). If a TTS file is missing or undersized → STOP. Catching it here costs $0; finding it after Kling costs $2+.
+**Validation:** manager checks inline that every dialogue clip has a scene-K.mp3 (size ≥ 5KB). If a TTS file is missing or undersized → STOP. Catching it here costs $0; finding it after Kling costs $2+.
 
-**Output:** `scenes/scene-K/scene-K.mp3` per dialogue clip, `tts_url` written back into storyboard.json.
+**When the format requires music, validate `bg-music.mp3` exists** — `[ -s "$OUTPUT_DIR/bg-music.mp3" ]` (≥ 10KB). It is mandatory for serial-drama. If required music is missing, stop; never continue without it.
+
+**Output:** `scenes/scene-K/scene-K.mp3` per dialogue clip, `bg-music.mp3`, `tts_url` written back into storyboard.json.
 
 ### PHASE 3 — Images (Storyboarder)
-Delegate via `Agent(subagent_type="storyboarder")` (model: sonnet, defined in `.claude/agents/storyboarder.md`). The sub-agent loads `rules/roles/storyboarder.md` itself. In the `prompt`, pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` already inside), `EXISTING_REFS_JSON` (existing character/bg refs from Supabase). Template: `prompts/storyboarder.txt`.
+Delegate via `Agent(subagent_type="storyboarder")` (model: sonnet, defined in `.claude/agents/storyboarder.md`). The sub-agent loads `rules/roles/storyboarder.md` itself. In the `prompt`, pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` already inside), exact `STORY_BIBLE_PATH`, and optional `SUPABASE_ASSETS_FILE` only when a real dump exists. Do not invent or require `${OUTPUT_DIR}/_supabase-assets.json`. Template: `prompts/storyboarder.txt`.
 
-**Workspace hygiene:** before regenerating any asset — move previous files to `output/.../_archive/`. The output folder must contain only current files.
+**Transport gate:** Storyboarder must create one immutable schema-v1 job JSON with mandatory Supabase metadata per NB2 artifact, run `python3 tools/fal_runner.py --preflight JOB`, then `python3 tools/fal_runner.py JOB`. Direct fal.ai curl/HTTP is a Phase 3 failure. Runner semantics override Manager's generic retry: resume an interruption with the same job; `UNKNOWN` is never resubmitted or reset. `PAID_RETRY_REQUIRED` needs explicit authorization before the same job may run once with `--allow-paid-retry`.
 
-**Validation:** `pipeline.sh` checks inline that every scene has a PNG ≥ 1KB. Before launching Animator, also eyeball the PNGs for cascade-copy mistakes (duplicate ref'd characters, wrong background) and re-roll if needed — fixing here costs Nano Banana ($0.04) instead of Kling I2V ($0.42+).
+**Workspace hygiene:** archive legacy/unclaimed files normally. A runner-claimed canonical path has no safe reset command; never delete or move `_claims`, state, request, or PNG files manually. Preserve it and stop for an explicit recovery decision.
 
-**Output:** `scenes/refs/character-ref.png`, `scenes/scene-K/scene-K.png` (start frame only — no end frames; see storyboarder.md §14.8).
+**Validation:** for every scene, require (a) local `scene_image` PNG present and ≥1 KB, (b) a matching `${OUTPUT_DIR}/build/fal/{job_id}/state.json` with `phase: "DONE"` and the same `output_path`, (c) non-empty HTTPS `scene_image_url` exactly equal to state `supabase_url`, and (d) no fal/fal.media URL in `scene_image_url` or downstream `image_urls`. Also validate dimensions, correct index/path mapping, and no unintended duplicate hashes. The read-only command is in `rules/main/validation.md`. Do not inspect generated PNGs visually. Any missing/mismatched state or URL stops Phase 3 before Animator.
+
+**Output:** `scenes/refs/character-ref.png`, `scenes/scene-K/scene-K.png`, plus permanent `scene_image_url` values in storyboard (start frames only — no end frames; see storyboarder.md §14.8).
 
 ### PHASE 4 — Animation (Animator)
-Delegate via `Agent(subagent_type="animator")` (model: sonnet, defined in `.claude/agents/animator.md`). Sub-agent loads `rules/roles/animator.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute). Kling I2V for action clips, Kling Avatar for dialogue. Template: `prompts/animator.txt`. If many scenes don't fit one pass — split: call the sub-agent multiple times with explicit scene-index lists in the prompt.
+Delegate via `Agent(subagent_type="animator")` (model: sonnet, defined in `.claude/agents/animator.md`). Sub-agent loads `rules/roles/animator.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute) and use only the route declared by that format. Serial-drama uses Kling I2V native audio for dialogue; Gameplay AI Avatar is inactive. Template: `prompts/animator.txt`. If many scenes do not fit one pass, split them into batches while keeping the same selected route.
+
+**Video execution boundary:** Scenarist/Manager/Animator select the tool, duration, audio policy and full provider payload from the storyboard and exact format playbook. Every Kling v3 Standard I2V request then uses one immutable schema-v3 `kling_runner.py` job: `route + untouched payload + technical expect + output/upload destination`, preflight, real run. Runner never makes format decisions or simplifies fields. Direct fal HTTP or mutating the selected request is a Phase 4 failure. Runner `UNKNOWN` is never resubmitted; `PAID_RETRY_REQUIRED` needs explicit authorization. New formats on an existing route require no runner change; compatible new fal queue endpoints are data-only entries in `tools/video_routes.json`.
 
 **CRITICAL — Upload to Supabase before expensive generation:**
 If output of one stage (TTS, images) is needed as input for the next expensive stage (Kling Avatar, I2V):
@@ -205,14 +217,12 @@ If output of one stage (TTS, images) is needed as input for the next expensive s
 3. Use ONLY the Supabase URL for the next stage
 4. NEVER use temporary fal.ai result URLs as input to expensive generation
 
-**Validation:** `pipeline.sh` checks inline that every scene has an MP4 ≥ 100KB. If any are missing or undersized → STOP and investigate before Editor.
+**Validation:** manager checks inline that every scene has an MP4 ≥ 100KB. For `kling_runner.py` jobs also require matching `phase: "DONE"` state, `scene_video == output_path`, and permanent `scene_video_url == supabase_url`. If any are missing or mismatched → STOP before Editor.
 
 **Output:** `scenes/scene-K/scene-K.mp4` per clip.
 
 ### PHASE 5 — Assembly (Editor)
-Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude/agents/editor.md`). Sub-agent loads `rules/roles/editor.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute), `OPENER_PATH` / `CTA_PATH` if applicable, `LANGUAGE`, `CHANNEL_BUG_URL` (see rule below), **+ two booleans from the front-matter (see below)**. All scene MP4s and audio tracks are already on disk in `OUTPUT_DIR/scenes/`. Template: `prompts/editor.txt`.
-
-**`CHANNEL_BUG_URL` rule:** GLN ("Galactic Lol Network") is a Star Trek-specific brand — pass a URL only if `GAME_TAG == star-trek-timelines` **and** `FORMAT == fun-news`. In every other case pass an empty string (`CHANNEL_BUG_URL=""`). The URL is read from `games/star-trek-timelines/fun-news_story_bible.json` → `channel_branding.channel_bug_url`.
+Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude/agents/editor.md`). Sub-agent loads `rules/roles/editor.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute), `OPENER_PATH` / `CTA_PATH` if applicable, `LANGUAGE`, **+ two booleans from the front-matter (see below)**. There is no channel-wide bug input. The GLN overlay exists only inside the exact `star-trek-timelines + fun-news` playbook and is resolved there from its own story bible.
 
 **Subtitles are universal — the orchestrator only passes on/off.**
 
@@ -240,15 +250,17 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
 
 **Output:** `final.mp4` (1080×1920).
 
-**Validation:** `pipeline.sh` checks inline that `final.mp4` exists, is ≥ 100KB, and has a sane `ffprobe` duration. If anything is off → STOP (moov atom missing usually means the encode was killed mid-run; never background ffmpeg).
+**Validation:** manager checks inline that `final.mp4` exists, is ≥ 100KB, and has a sane `ffprobe` duration. If anything is off → STOP (moov atom missing usually means the encode was killed mid-run; never background ffmpeg).
+
+**Do not hand the Editor manual math.** Pass only the parameters listed above (`GAME_TAG`, `FORMAT`, `OUTPUT_DIR`, `LANGUAGE`, booleans, paths) plus short context facts (which scenes changed, special conditions). Never compute and pass specific clip durations, `filter_complex` graphs, `TOTAL_DUR`/`MAIN_DUR` formulas, or input ordering yourself — the Editor derives all of that from `storyboard.json` and `rules/roles/editor.md` §0/§6. Handing it your own numbers means it follows your math instead of the real files, and a wrong manual calculation produces a badly-cut/sped-up result. Exception: font-patch commands (e.g. `sed` Helvetica→Montserrat) and `fontsdir` — those aren't in editor.md and are fine to pass along.
 
 ### PHASE 6 — Review gate + Upload and logging
 
-**MANDATORY — show user Supabase URL first (both debug and non-debug).** After Editor uploads `final.mp4` to Supabase, STOP and show the user the public URL. Wait for explicit OK before proceeding to YouTube upload, git push, and `log-video.sh`. "Non-debug: no questions" applies only to the YouTube upload channel/privacy — not to the user review gate. Lesson burned EP10 (2026-06-09): pushed git and logged before user watched → had to redo voices and rebuild 3 times.
+**MANDATORY — show the local `final.mp4` first (both debug and non-debug).** Editor does not upload the final. STOP and wait for explicit user approval before Supabase, YouTube, logging, story-bible mutation, or git push.
 
 1. Upload `final.mp4` to Supabase Storage:
    - Bucket: `videos`
-   - Path: `videos/{GAME_TAG}/{YYYY-MM-DD}/{format_slug}_final.mp4`
+   - Object path: `{GAME_TAG}/{YYYY-MM-DD}/{format_slug}/{RUN_ID}/final.mp4`
    - Get the public URL
 
 2. **Upload to YouTube.**
@@ -260,6 +272,8 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
    - No `youtube_channel` field → no channel mapped yet. Do NOT guess. Skip the YT upload and tell the user which channel to map (Supabase URL stays the deliverable).
 
    **Metadata.** Title: `storyboard.json → title` (fallback: idea). Description: `storyboard.json → description` (fallback: empty). Tags: `GAME_TAG + format_slug + storyboard.json → youtube_tags`.
+
+   **YouTube title hard limit — 100 characters.** `storyboard.json → title`/`headline` (e.g. reddit-story's full headline) is often longer — it's written for narration/on-screen text, not the YouTube title field. The API rejects anything over 100 chars with a misleading `"invalid or empty video title"` / `reason: invalidTitle` error that gives no hint about length (burned 2026-07-13, genshin reddit-story: 117-char headline silently failed upload, `set -euo pipefail` in `youtube-upload.sh` exits with no error text since the failing `curl` is inside a bare `$(...)` assignment). **Always check `echo -n "$TITLE" | wc -c` before upload; if >100, write a shorter YouTube-only title** (keep the full headline as the in-video hook/narration, just shorten what goes to `youtube-upload.sh`).
 
    **Privacy is always `private`** — videos are uploaded privately so the user can review before publishing.
 
@@ -277,7 +291,7 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
    echo "YouTube: $YOUTUBE_URL (scheduled: $YT_PUBLISH_AT)"
    ```
 
-   **Scheduling — the script auto-schedules.** `youtube-upload.sh` (omit `--publish-at`) queries the channel's upload playlist, finds all taken `publishAt` dates, and picks the nearest free slot at 20:59 UTC. Do NOT pick a date manually — you will collide with already-queued videos.
+   **Scheduling rule:** use the nearest future free channel date at `20:50:00Z` (`23:50` Moscow). Reject a candidate if the channel date is occupied or the same format is scheduled on the previous or next calendar date. Do not publish immediately. The current scripts do not yet enforce every part of this rule; do not claim compliance until that separate implementation is approved.
 
    **Before uploading — always verify the current queue on the channel** so you know what's already scheduled:
    ```bash
@@ -295,13 +309,8 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
 
    **Debug vs non-debug:**
    - **Non-debug:** upload as `private` on the routed channel. No questions.
-   - **Debug mode:** STOP before the YT upload. Show the user:
-     - the Supabase **public URL** (clickable — this is how they watch the result),
-     - the **destination channel**, the **title**, **description**, and **tags**.
-
-     Ask: «Заливаю как private на `<channel>`?» Wait for OK. Apply any metadata edits the user gives, then run the upload. The script re-checks `channelId` against `YOUTUBE_CHANNEL_ID_<CHANNEL>` and warns on mismatch.
-
-   - On error — log and continue (Supabase URL is the primary deliverable).
+   - In debug mode, the Phase 6 final approval authorizes the configured Supabase + scheduled YouTube steps. Ask again only if destination metadata changed after approval.
+   - On upload failure, retry once through the same route; a second failure stops with the actual error. Do not continue as if publication completed.
 
 3. **Log to `video_agent_runs`** (catalog of generated videos: date, title, format, links). Upsert by `output_video_url` — INSERT on first generation, UPDATE on regeneration to the same path (created_at preserved, no dupes):
    ```bash
@@ -311,20 +320,20 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
      --format "$format_slug" \
      --video-url "$SUPABASE_VIDEO_URL" \
      --youtube-url "$YOUTUBE_URL" \        # omit if YT upload was skipped
-     --yt-publish-at "$YT_PUBLISH_AT"      # actual YouTube publishAt date from upload output; use --immediate instead if it went public now
+     --yt-publish-at "$YT_PUBLISH_AT"      # scheduled publishAt; immediate publication is forbidden
    ```
-   - `--video-url` is the Supabase public URL from step 1 (stable per game/date/format → the upsert key, mapped to `output_video_url`).
+   - `--video-url` is the unique run-scoped Supabase public URL from step 1 (mapped to `output_video_url`).
    - `--title` lands in `input_idea` (the table's NOT NULL title field). `--format` and `--youtube-url` in their own columns.
-   - `--yt-publish-at` is the actual scheduled date captured from `youtube-upload.sh` output (`SCHEDULED_FOR=...`). This is what gets stored in `yt_published` — NOT the current timestamp. **If `--youtube-url` is set, one of `--yt-publish-at` or `--immediate` is now required — the script errors instead of silently defaulting to `now()`** (burned EP: Klingon Targ logged as published 07.07 while actually scheduled for 10.07, because `--yt-publish-at` was dropped).
+   - `--yt-publish-at` is the actual scheduled date captured from the upload output. Immediate publication is not part of this workflow.
    - Requires `UNIQUE(output_video_url)` + `format`/`youtube_url` columns — see `queue/setup.sql` (run the ALTERs once in the SQL editor).
 
    **Publication timestamp fields** (`yt_published`, `tt_published`, `inst_published`): each stores the UTC datetime when the video was published to that platform, `NULL` = not yet published. The manager only ever sets `yt_published` (via `log-video.sh`). **TikTok and Instagram publishing is a separate process — the manager does NOT trigger it and does NOT mention it to the user after generation.** Those platforms are handled by a dedicated mobile-mcp posting agent launched independently via its own command — runbook: `rules/roles/publisher.md` (triggered by «Опубликовать в тик-ток» / «Опубликовать в инстаграм»; uses `queue/fetch-for-publish.sh` to stage the video on the phone, then `queue/log-publish.sh` to mark it published).
 
-4. **Update story bible** (if the format uses one) — characters, aura, relationships, active_loops, episode_summary, cliffhanger, anti_repetition. You write this; no sub-agent does it.
+4. **Update the exact story bible** only now, after explicit final user approval — characters, aura, relationships, active_loops, episode_summary, cliffhanger, anti_repetition. You write this; no sub-agent does it.
 
-### PHASE 7 — Git push (MANDATORY after completion)
+### PHASE 7 — Git push to the current user branch (MANDATORY after completion)
 
-If rule/config/story-bible files were edited — push to main so changes reach other agents.
+If rule/config/story-bible files were edited, commit only those scoped files and push the current branch. Never push or auto-merge directly to `main`.
 
 ```bash
 git add CLAUDE.md video-agent/rules/ video-agent/tools/ \
@@ -336,10 +345,7 @@ git diff --cached --quiet || {
   git commit -m "Update rules after {format} run ({GAME_TAG})
 
 Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
-  git push
-  gh pr create --title "Rules update: {format} / {GAME_TAG}" \
-               --body "Auto-update after run" --base main 2>/dev/null || true
-  gh pr merge --squash --auto 2>/dev/null || true
+  git push origin HEAD
 }
 ```
 
@@ -377,20 +383,20 @@ Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
 ## Phase contracts
 
 ```
-Phase 0  → format rules + game config loaded; EXISTING_REFS_JSON ready
+Phase 0  → format rules + game config loaded; optional SUPABASE_ASSETS_FILE ready when queried
 Phase 1  → storyboard.json                          [check: clips/scenes array non-empty]
 Phase 2  → scene-K.mp3 + tts_url in storyboard      [check: all dialogue MP3s ≥ 5KB]
-Phase 3  → scene-K.png + image_url in storyboard    [check: all PNGs ≥ 1KB]
+Phase 3  → runner DONE + scene-K.png + scene_image_url [check: state/local/permanent URL agree]
 Phase 4  → scene-K.mp4                              [check: all MP4s ≥ 100KB]
 Phase 5  → final.mp4                                [check: final.mp4 ≥ 100KB, ffprobe duration sane]
-Phase 6  → Supabase URL shown → user OK → YT + log + bible update
+Phase 6  → local final.mp4 shown → user OK → Supabase + scheduled YT + log + bible update
 Phase 7  → git push
 ```
-All inline checks live in `pipeline.sh`.
+All inline checks are run directly by the manager (jq/ffprobe/stat), not by a script.
 
 Output structure:
 ```
-output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/
+output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/{RUN_ID}/
 ├── storyboard.json
 ├── scenes/
 │   ├── refs/
@@ -407,12 +413,12 @@ output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/
 
 ## Context7 — mandatory API check
 
-Before calling ANY external API (fal.ai, ElevenLabs, Kling, HeyGen, Supabase) **strictly mandatory** — verify against current docs via the **Context7** MCP server:
+Before calling an external API not pinned behind a repository runner, verify current docs via the **Context7** MCP server:
 
 1. `resolve-library-id` → get the library/service ID
 2. `get-library-docs` → read current parameters, endpoints, request formats
 
-**Do not rely on memory.** Parameters change regularly (example: `voice_id` → `voice` in fal.ai ElevenLabs). Use Context7 whenever in doubt.
+**Do not rely on memory.** Parameters change regularly. For Storyboarder NB2, `tools/fal_runner.py` is the pinned executable contract: do not replace its endpoint/parameters or bypass it based on a manual docs lookup.
 
 ---
 
@@ -420,9 +426,10 @@ Before calling ANY external API (fal.ai, ElevenLabs, Kling, HeyGen, Supabase) **
 
 | Model | Endpoint | Cost |
 |--------|----------|-----------|
+| Nano Banana 2 via `tools/fal_runner.py` | pinned `nb2.text` / `nb2.edit` | ~$0.08/image |
 | GPT Image 2 medium (image) | `fal-ai/gpt-image-2` (verify via Context7) | ~$0.04 |
-| Kling v3 Standard I2V (primary) | `fal-ai/kling-video/v3/standard/image-to-video` | $0.084/s ($0.42/5s no audio; always `generate_audio: false`) |
-| Kling 2.6 Pro I2V (fallback) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.07/s ($0.35/5s no audio; always `generate_audio: false`) |
+| Kling v3 Standard I2V (primary) | `fal-ai/kling-video/v3/standard/image-to-video` | $0.084/s without audio, $0.126/s with audio; Scenarist/Manager/Animator choose exact `generate_audio` from storyboard + format playbook |
+| Kling 2.6 Pro I2V (user-authorized route only; never automatic fallback) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.07/s ($0.35/5s no audio) |
 | MiniMax TTS (via fal.ai) | `fal-ai/minimax/speech-2.8-hd` | ~$0.10/1k chars. `voice_setting.voice_id`, `emotion`. Field is `prompt` not `text`. |
 | Kling Lipsync | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/s |
 | HeyGen Avatar IV | `fal-ai/heygen/avatar4/image-to-video` | $0.10/s |
@@ -502,8 +509,7 @@ queue/upload-asset.sh --kind episode-tts   --game GAME --episode 2026-05-28-redc
 games/{GAME_TAG}/
 ├── {GAME_TAG}.md                       # Game config (mandatory)
 ├── {format}_special.md                 # Format-specific rules (optional)
-├── serial-drama_story_bible.json       # Story bible: serial drama
-├── reddit-story_bible.json             # Story bible: reddit story
+├── {format}_story_bible.json           # Mandatory exact-format/series story bible
 ├── gameplay/                           # .mp4 clips for Reddit Story, Gameplay AI Avatar
 └── assets/
     ├── refs/                           # Character refs (generated once, reused)
@@ -511,11 +517,11 @@ games/{GAME_TAG}/
 ```
 
 Game config (`{GAME_TAG}.md`) contains:
-- Visual Style Guide (palette, lighting, `prompt_prefix` house-style fallback)
+- Visual Style Guide (reference context only; not a format style fallback)
 - Tone of Voice
 - Music (optional)
 
-Character appearance is NOT in the game config — it lives per-format in `{FORMAT}_story_bible.json` `characters[]` (style-free cards). Style is `style_tags` in that bible, falling back to the game `prompt_prefix`.
+Character appearance and style live per-format/series in `{FORMAT}_story_bible.json` (`characters[]`, `style_tags`). If the exact bible is missing or incomplete, stop and ask whether to create/complete it.
 
 Assets are mirrored in Supabase (`game_assets` table).
 
@@ -526,7 +532,6 @@ Assets are mirrored in Supabase (`game_assets` table).
 Automatic processing via Supabase. Table `video_tasks`: `pending → running → completed/failed`.
 
 Scripts:
-- `queue/worker.sh` — auto-worker, polls the queue every 30s
 - `queue/check-queue.sh` — check + atomic claim of a task
 - `queue/update-task.sh` — status update
 - `queue/add-task.sh` — add a task
