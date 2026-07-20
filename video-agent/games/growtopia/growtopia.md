@@ -69,6 +69,10 @@ The blocky Growtopia skin **very easily morphs into a 3D Minecraft look** under 
 - **Do not rotate the sprite:** no head/body turns to frontal (a side-view sprite has no valid 3D frontal view).
 - Liveliness comes from 2D particles and environment, not from camera motion.
 
+**"2D side-scroller" style-anchor phrasing — pick by static vs. dynamic (tested 2026-07-20, scene-6, both variants passed):**
+- **Static shot** (character idle/holding pose, no traversal): add the side-scroller/platformer framing (e.g. "2D side-scrolling platformer game scene, flat side-view like Mario or Terraria") purely as a **style-anchor phrase**, paired with the grounded-composition + locked/push-in camera rules above — NO lateral camera track, NO background scroll. This is the "safe" branch — default here.
+- **Dynamic shot** (character explicitly traversing/running/jumping across the world): the side-scroller framing may drive an actual **horizontal camera track or background tile-scroll** (camera follows the character sideways, or the world scrolls past) — this is the "risky" branch and is more likely to trip the 3D/voxel reconstruction than the safe branch, so treat it as a deliberate trade for traversal motion, not a default. Keep "flat 2D sprite, no rotation, no 3D volume" in the prompt and negatives regardless.
+
 ### Default-skin costume — locked
 Canon is fixed (see the LOCKED block in `## Character Prompt Blocks` → Growtopian Avatar, and `games/growtopia/character-story_story_bible.json.characters[].canonical_costume`): tan skin, **cyan/turquoise shirt (~#3FC1D6)**, **medium-blue pants (~#5B6DC8)**. Otherwise NB2 drifts the colors from scene to scene (seen: nude / red / cyan within one video) — always spell out the exact colors in every scene prompt.
 
