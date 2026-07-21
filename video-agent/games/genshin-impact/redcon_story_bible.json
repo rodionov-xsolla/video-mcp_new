@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Genshin Impact — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 1,
+  "last_episode": 2,
   "tts_engine": "auto",
   "tts_note": "Speech route for new episodes: intentional native audio → Chatterbox only with a redcon-owned approved sample recorded in this bible → otherwise MiniMax. Retry the same route once, then stop. Second-person monologue throughout. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "format_overrides": {
@@ -40,15 +40,21 @@
         "date": "2026-07-06",
         "pulled_character": "Nahida",
         "note": "Nahida senses Akasha tampering early, alerts Traveler before transformation completes. Gnosis recovered, Scaramouche stopped before ascending."
+      },
+      {
+        "crisis": "Osial breaks free and threatens Liyue Harbor (Chapter I Act III, Farewell, Archaic Lord)",
+        "episode": 2,
+        "date": "2026-07-21",
+        "pulled_character": "Xiao",
+        "note": "Xiao intercepts Osial's rampaging form near Guyun Stone Forest before it reaches the harbor and before Zhongli must fake his death; contract renewed openly, no succession/power-vacuum gap. Zhongli was deliberately NOT the pulled character — pulling him would only replay his own canonical solution (weak-pattern warning in redcon.md)."
       }
     ],
     "do_not_repeat": [
       "Teppei/Baizhu Delusion (refs created 2026-06-30, never released — skip, used as format example in redcon.md)",
-      "Osial/Zhongli Liyue (ref zhongli-seal created, never released — available for future if needed)",
-      "Scaramouche Gnosis / Shouki no Kami"
+      "Scaramouche Gnosis / Shouki no Kami",
+      "Osial/Zhongli Liyue — used episode 2 (2026-07-21), pulled hero was Xiao not Zhongli"
     ],
     "candidates_for_future": [
-      "Osial unleashed — Liyue Harbor threatened (Archon Quest Chapter I Act III)",
       "Raiden Shogun's Vision Hunt Decree — Inazuma civil war (Chapter II)",
       "Fontaine sinking prophecy — The Hydro Archon's trial (Chapter IV)",
       "Dvalin corruption — Stormterror attacks Mondstadt (Prologue Act II)",
@@ -101,6 +107,18 @@
       "youtube_url": "https://www.youtube.com/watch?v=Kr8q96xPdVo",
       "youtube_scheduled": "2026-07-07T20:59:00Z",
       "notes": "First episode. Player-POV variant. Hook structure (no teaser ASS overlay). Nahida pulls via free Primogems → senses Akasha tampering 3 min early → Gnosis never fuses."
+    },
+    {
+      "episode": 2,
+      "date": "2026-07-21",
+      "crisis": "Osial breaks free and threatens Liyue Harbor (Chapter I Act III, Farewell, Archaic Lord)",
+      "pulled_character": "Xiao",
+      "crew": ["Xiao", "Zhongli"],
+      "tts_voice": "MiniMax Deep_Voice_Man (no Chatterbox sample recorded for the Traveler in this bible)",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-21/redcon/20260721-121028-86031/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=FghEOPg0aqc",
+      "youtube_scheduled": "2026-07-24T20:59:00Z",
+      "notes": "Xiao pulled via free Primogems instead of Zhongli (Zhongli already canonically solves this crisis himself — pulling him would replay his own solution, a weak divergence per redcon.md). Xiao intercepts Osial near Guyun Stone Forest before the harbor is threatened, so Zhongli never fakes his death or vanishes from Liyue politics. Fresh refs generated: xiao-ref (teal-green hair, gaunt features, golden eyes, teal high-collared robe, carved turquoise mask on forehead, black-and-teal polearm) and zhongli-ref civilian-open look (tan double-breasted coat, burgundy vest, amber-streaked hair) — distinct from the older zhongli-seal ref used in the unrelated character-variant branch. Monologue trimmed from an initial 102-word draft to 90 words (Player-POV target 75-95) before TTS render to avoid atempo stretch."
     }
   ]
 }
