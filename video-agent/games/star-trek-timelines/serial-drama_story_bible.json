@@ -5,7 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 13,
+  "last_episode": 14,
   "planned_arc": {
     "note": "Season 1 arc EP9–EP16. Core emotional engine: Kirk saves the monster that tried to kill Chekov — and every time he does 'the right thing', his crew gets more afraid. Mirror Kirk envies Kirk's loyal crew. Admiral pressures Kirk to eject the double or face Enterprise quarantine. Scenarist follows the beats and key_lines below as RAILS: keep cliffhanger spoken lines verbatim, adapt each episode into 3–5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion, protagonist always faces camera, cliffhanger line = Kling native dialogue). Fold an approved episode into characters[], active_loops, episode_summaries only after explicit final user approval. Do NOT invent complex conspiracies or test protocols — the drama is simple: Kirk's mercy costs him his crew's trust.",
     "new_characters": [
@@ -346,7 +346,7 @@
       {
         "episode": 14,
         "title": "Stop the Shot",
-        "status": "unshipped",
+        "status": "shipped",
         "link": "Mirror Kirk's hand is over the fire button.",
         "emotion": "Worf's anger + fear of war",
         "beats": [
@@ -562,9 +562,9 @@
     }
   ],
   "active_loops": [
-    "major: Mirror Kirk loose on the bridge with weapons access, disguised as Kirk",
-    "major: Worf and Scotty were briefly deceived by the disguise before the real Kirk arrived",
-    "major: Kirk and Mirror Kirk now face to face at the captain's chair, shot not yet stopped",
+    "major: Chekov trapped in the airlock sector again, air venting",
+    "major: Tactical panel destroyed — no easy override left for the airlock",
+    "major: Mirror Kirk loose on the ship (shot was stopped, but he was not recaptured)",
     "major: Chekov's hatred of Mirror Kirk now clashes directly with Kirk's mercy",
     "major: Admiral escalating quarantine pressure through remote power cuts",
     "major: Kirk's mercy keeps fracturing crew trust even as Worf reaffirms loyalty",
@@ -643,10 +643,6 @@
   },
   "anti_repetition": {
     "recent_phrases": [
-      "I know. That's why we won't become like him.",
-      "The signal's breaking up!",
-      "Leave him there, Captain.",
-      "You'll come for me anyway, Jim.",
       "If he comes back, I'll be at the airlock again.",
       "I won't let a man die.",
       "He's not a man to me.",
@@ -664,26 +660,28 @@
       "Scotty, step away from the panel.",
       "You see, Jim? They almost believed me.",
       "I'll save them faster than you.",
-      "Something is wrong with him."
+      "Something is wrong with him.",
+      "We don't execute people without a trial.",
+      "While you wait for a trial, they kill.",
+      "Then I'll stop both of you.",
+      "Panel's burning! The blast went to the airlock!",
+      "Captain... not again."
     ],
     "recent_hooks": [
-      "authority-edict-coldopen",
-      "betrayal-silence-beat",
-      "shuttle-escape-into-debris",
-      "tractor-beam-double-signal",
       "dual-transporter-beam-reveal",
       "capsule-hatch-opening-reveal",
       "sickbay-restraint-doorway",
       "loyalty-without-fear-reveal",
       "remote-power-cut-brig",
-      "stolen-uniform-corridor-passby"
+      "stolen-uniform-corridor-passby",
+      "confrontation-lunge-interrupt"
     ],
     "recent_cliffhangers": [
-      "disembodied-voice-through-static",
       "shuttle-escape-into-debris",
       "mirror-double-resurface-transporter",
       "remote-power-cut-brig-escape-risk",
-      "hand-hovering-over-fire-button"
+      "hand-hovering-over-fire-button",
+      "trapped-behind-sealed-glass-air-venting"
     ]
   },
   "episode_summaries": [
@@ -799,6 +797,16 @@
       "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-14/serial-drama_final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=O65DYybhRBw",
       "yt_publish_at": "2026-07-19T20:59:00Z",
+      "duration_sec": 44
+    },
+    {
+      "episode": 14,
+      "language": "en",
+      "summary": "Kirk lunges at Mirror Kirk in the captain's chair as the weapons finish charging. Worf hauls Mirror Kirk off the chair while Kirk holds him at bay, refusing to let anyone execute a helpless prisoner even mid-crisis. Scotty smashes the tactical override to abort the shot — the panel ruptures, and the electrical discharge races down a conduit straight into the airlock sector.",
+      "cliffhanger": "Kirk reaches the emergency compartment glass to find Chekov trapped again as air vents around him in a hissing white fog. Chekov looks straight at him and says: 'Captain... not again.'",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-21/serial-drama/20260721-151211-28971/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=2Lpz1DiZBhE",
+      "yt_publish_at": "2026-07-24T20:59:00Z",
       "duration_sec": 44
     }
   ]
