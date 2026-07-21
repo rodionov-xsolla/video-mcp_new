@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 2,
+  "last_episode": 3,
   "tts_engine": "minimax",
   "tts_note": "MiniMax Speech 2.8-HD. Voice: Deep_Voice_Man (authoritative, measured). Second-person monologue throughout — NOT first-person alternate-self. Voiceover opens with the CTA hook on the teaser clip, then continues second-person through story clips.",
   "format_overrides": {
@@ -53,15 +53,22 @@
         "date": "2026-07-13",
         "crew_assembled": ["Spock (Ambassador)", "Geordi La Forge", "T'Pol"],
         "note": "Successful-outcome divergence (not a canon-averting rescue of a doomed loss, but a straight-up fix of the original tragedy): in canon Ambassador Spock's red matter ship arrived too late and Romulus was destroyed, which is why Spock ends up flung into the past in the 2009 film. In this timeline the cross-era crew (Geordi rebuilding the deployment rig faster than canon, T'Pol locking the containment math, Spock firing the red matter in time) deployed containment before the shockwave hit — Romulus survived. First bible episode to use the new 8-part player-POV structure (TEASER with TTS starting immediately → 3s silent TITLE CARD → HOOK+CTA → CANON REMINDER → CREW ASSEMBLED → DIVERGENCE → REVELATION → CTA asset)."
+      },
+      {
+        "crisis": "Xindi superweapon — Delphic Expanse (2153)",
+        "episode": 3,
+        "date": "2026-07-21",
+        "crew_assembled": ["Tuvok", "Degra (Xindi councilor, canon character)"],
+        "note": "Prevention, not a last-second stop: canon has Archer's crew barely stopping the finished superweapon after a probe strike already killed 7 million people in Florida. Here Tuvok mind-melds with Xindi engineer Degra BEFORE the Council authorizes the weapon program, shattering the Sphere Builders' implanted visions — the Council never builds it, the probe strike never happens. Deliberately avoided a hero who'd just replay Archer's own last-second rescue (weak-pattern warning in redcon.md)."
       }
     ],
     "do_not_repeat": [
       "Borg cube / Wolf 359",
       "Breen weapon / Chin'toka",
-      "Hobus supernova / Romulus"
+      "Hobus supernova / Romulus",
+      "Xindi superweapon / Delphic Expanse — used episode 3 (2026-07-21), pulled hero was Tuvok"
     ],
     "candidates_for_future": [
-      "Xindi superweapon — Delphic Expanse (2153)",
       "V'Ger approaching Earth (2273)",
       "Changeling infiltration of Starfleet Command (2372)",
       "Praxis explosion + Khitomer Accords (2293)"
@@ -137,6 +144,25 @@
         "total_usd": 6.65
       },
       "notes": "First episode to use the new 8-part player-POV structure end to end (TEASER with TTS starting immediately → 3s silent TITLE CARD → HOOK+CTA → CANON REMINDER → CREW ASSEMBLED → DIVERGENCE → REVELATION → CTA asset). New redcon-tagged character refs generated for Ambassador Spock, Geordi La Forge, T'Pol. Incident: Storyboarder's upload-asset.sh call for T'Pol used --upsert on the shared canonical path characters/tpol/sheet.png (tagged motion-dance in game_assets, no --variant given), overwriting that file's bytes with the redcon-style render — original unrecoverable, no local cache existed. motion-dance is not currently a linked format for star-trek-timelines, so no active run is affected, but the game_assets row was retagged with CORRUPTED-redcon-style-2026-07-13-needs-regen so motion-dance regenerates its own T'Pol ref before next use. Recommend adding a pre-flight tag check to upload-asset.sh (refuse/warn on upsert to a canonical character path if the existing row's tags don't include the current format) to prevent recurrence."
+    },
+    {
+      "episode": 3,
+      "date": "2026-07-21",
+      "crisis": "Xindi superweapon — Delphic Expanse (2153)",
+      "crew": ["Tuvok", "Degra (Xindi councilor)"],
+      "tts_voice": "MiniMax Deep_Voice_Man",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-21/redcon/20260721-132718-32946/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=RwSsrSVyIjo",
+      "yt_publish_at": "2026-07-26T20:59:00Z",
+      "duration_sec": 38.33,
+      "cost_breakdown": {
+        "scenarist_storyboarder": 0.8,
+        "sound": 0.08,
+        "animator": 3.19,
+        "editor": 0.0,
+        "total_usd": 4.07
+      },
+      "notes": "Tuvok mind-melds with Xindi councilor Degra before the Council authorizes the superweapon, so the program is never built and the canon probe strike (7 million dead in Florida) never happens — prevention, not a last-second stop, avoiding a reskin of Archer's own canonical rescue. Two incidents this run, both fixed before publish: (1) Sound initially generated TTS at voice_setting.speed=0.9 (dramatic default), giving 47.2s against a 30s TTS-clip window — 57% mismatch, over sound.md's 40% send-back threshold and the 1.4x atempo cap; regenerated at speed=1.05 (40.9s, 36% mismatch, atempo 1.35x) with no wording changes; also caught the Sound sub-agent falsely claiming it re-uploaded the fixed file to Supabase when the stale 47.2s file was still live there (verified by MD5 mismatch) — re-uploaded manually. (2) User found a ghosting artifact in scene 5 (Player+Tuvok two-shot): the transporter-shimmer effect in the image_prompt bled across both characters, producing a floating/duplicated collar. Storyboarder regenerated scene-5 with an explicit body-gap clause + continuity lock (documented in redcon.md's Storyboarder section); Animator re-rendered the clip from the fixed image. Also found the title card overlapping: title_lines had only 2 long strings, libass auto-wrapped each onto 2 physical lines but the ASS events only reserved 2 y-slots, so the wrapped lines collided. Editor reflowed into 4 short balanced lines and verified actual glyph width before finalizing (documented in redcon.md's Editor section)."
     }
   ]
 }
