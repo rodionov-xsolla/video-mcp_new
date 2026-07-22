@@ -1,6 +1,6 @@
 {
   "game_tag": "star-trek-timelines",
-  "total_stories": 8,
+  "total_stories": 9,
   "stories": [
     {
       "id": 1,
@@ -130,6 +130,44 @@
       "youtube_url": "https://www.youtube.com/watch?v=KWhB7KqbqTs",
       "yt_publish_at": "2026-07-22T20:59:00Z",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-13/reddit-story-brother_final.mp4"
+    },
+    {
+      "id": 9,
+      "date": "2026-07-22",
+      "tone": "humiliation-to-respect",
+      "theme": "roommate-mocks-trek-then-borrows-it-for-a-date",
+      "moral_engine": "private expertise mocked publicly, then borrowed for social approval",
+      "game_situation": "two roommates share a Friday-night Star Trek ritual before one seeks dating advice",
+      "false_verdict": "the narrator's Star Trek interest is embarrassing and socially useless",
+      "pressure_source": "the roommate's jokes in front of mutual friends and his dating anxiety",
+      "narrator_flaw": "wanted the roommate humbled and added trivia that encouraged him to pretend",
+      "human_action": "wrote honest conversation starters and let the roommate tell the truth when challenged",
+      "reveal": "Maya recognizes the narrator's phrasing after Jake confuses Sisko with Picard",
+      "resolution_type": "positive-social-restoration",
+      "headline": "My roommate mocked my Star Trek obsession, then borrowed it to impress his date.",
+      "youtube_title": "My roommate mocked my Star Trek obsession, then borrowed it to impress his date.",
+      "offerwall_angle": "downloaded Star Trek Timelines from the link in bio as an early, user-required native setup beat; no service name or voiced CTA",
+      "gameplay_segments": [
+        {
+          "file": "Startrek_gameplay_5.mp4",
+          "offset_sec": 4.2,
+          "duration_sec": 23.0
+        },
+        {
+          "file": "Startrek_gameplay_2.mp4",
+          "offset_sec": 1.1,
+          "duration_sec": 20.0
+        },
+        {
+          "file": "Startrek_gameplay_6.mp4",
+          "offset_sec": 1.5,
+          "duration_sec": 21.959
+        }
+      ],
+      "output_dir": "output/2026-07-22/star-trek-timelines/reddit-story/20260722-161732-reddit-roommate",
+      "youtube_url": "https://www.youtube.com/watch?v=BiLSwEnr308",
+      "yt_publish_at": "2026-07-28T20:59:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-22/reddit-story/20260722-161732-reddit-roommate/final.mp4"
     }
   ],
   "anti_repetition": {
@@ -137,51 +175,59 @@
       "marriage-reconnection-through-shared-trek-nostalgia",
       "silent-grandfather-known-through-shared-game",
       "offshore-father-nightly-ritual-with-son",
-      "sibling-connection-through-shared-interest"
+      "sibling-connection-through-shared-interest",
+      "roommate-mocks-trek-then-borrows-it-for-a-date"
     ],
     "recent_tones": [
       "touching",
       "touching",
       "touching",
-      "quietly-proud"
+      "quietly-proud",
+      "humiliation-to-respect"
     ],
     "recent_moral_engines": [
       "emotional withdrawal mistaken for indifference",
       "n/a \u2014 genuine fan story, no accusation arc",
       "n/a \u2014 genuine fan story, no accusation arc",
-      "n/a \u2014 genuine family story, no accusation arc"
+      "n/a \u2014 genuine family story, no accusation arc",
+      "private expertise mocked publicly, then borrowed for social approval"
     ],
     "recent_game_situations": [
       "husband plays nightly while marriage grows silent after second child",
       "grandson spends time with a silent retired-engineer grandfather via the game",
       "offshore father and son share a nightly crew across an 11-year rotation",
-      "younger brother with autism explains his crew every Friday"
+      "younger brother with autism explains his crew every Friday",
+      "roommates share a Friday-night Star Trek ritual before one seeks dating advice"
     ],
     "recent_false_verdicts": [
       "narrator was using the game to avoid his wife",
       "null \u2014 no injustice arc",
       "null \u2014 no injustice arc",
-      "null \u2014 no injustice arc"
+      "null \u2014 no injustice arc",
+      "the narrator's Star Trek interest is embarrassing and socially useless"
     ],
     "recent_pressure_sources": [
       "months of mutual silence between spouses",
       "n/a \u2014 no pressure/accusation source, genuine story",
       "n/a \u2014 no pressure/accusation source, genuine story",
-      "family pressuring narrator to get brother off the game"
+      "family pressuring narrator to get brother off the game",
+      "roommate's jokes in front of mutual friends and his dating anxiety"
     ],
     "recent_resolution_types": [
       "positive",
       "positive",
       "positive",
-      "positive"
+      "positive",
+      "positive-social-restoration"
     ],
     "recent_hooks": [
       "bio link download, nightly escape, wife sits down and asks about Spock, late father's TOS connection, Thursday ritual",
       "bio link download, quiet grandfather, deliberately-wrong crew build as excuse to sit near him, Apollo-era antenna-array reveal",
       "bio link download, offshore rotation, son overhears a call and downloads the game too, nightly ritual, surprise in-person reunion on Gauntlet night",
-      "bio link download, brother with autism explains his crew every Friday, family pressure to stop, cousin unlocks unprompted connection at dinner"
+      "bio link download, brother with autism explains his crew every Friday, family pressure to stop, cousin unlocks unprompted connection at dinner",
+      "bio link download, six months of space-homework jokes, roommate borrows a Trek cheat sheet for a date, Maya recognizes the narrator's phrasing"
     ],
-    "note": "story 8 (2026-07-13) breaks the 3x-touching streak with tone quietly-proud, still no injustice arc (genuine family story) \u2014 that is now 3 of the last 4 STT episodes without an accusation arc. HARD RULE added 2026-07-13: never build reddit-story conflict on in-game mechanics (fleet/gauntlet/leaderboard/cheat) even when the mechanic is real \u2014 user rejected this hard for STT. If reintroducing an injustice arc, source the false_verdict/pressure from real relationships only, never game mechanics.",
+    "note": "story 9 (2026-07-22) returns to a real-world injustice arc with funny social restoration after the family-focused run. Its conflict comes from a roommate relationship and dating anxiety, never game mechanics. HARD RULE added 2026-07-13 remains active: never build reddit-story conflict on in-game mechanics (fleet/gauntlet/leaderboard/cheat), even when the mechanic is real. Source false verdicts and pressure from real relationships only.",
     "banned_combos": []
   }
 }
