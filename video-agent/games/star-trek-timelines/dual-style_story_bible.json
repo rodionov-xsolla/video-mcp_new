@@ -1,0 +1,191 @@
+{
+  "series_id": "dual-style-star-trek-timelines",
+  "game_tag": "star-trek-timelines",
+  "title": "Star Trek Dual Style",
+  "created_at": "2026-07-22",
+  "last_episode": 1,
+  "format_variant_note": "This series deviates from the base dual-style format (cartoon-left/photoreal-right). Both figures are photorealistic, matching live-action Star Trek television cinematography, and are the SAME real actor playing both their character's original persona and its corrupted/alternate-universe persona. No anime/cel-shaded style anywhere. Name-caption drawtext overlays (ORIGINAL X / VS / ALTERNATE X) are used per scene in addition to the promo banner.",
+  "character_pool": [
+    {
+      "character_name": "picard",
+      "display_name": "Picard",
+      "actor_name": "Patrick Stewart",
+      "pair_with": "locutus-borg",
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "locutus-borg",
+      "display_name": "Locutus of Borg",
+      "actor_name": "Patrick Stewart",
+      "pair_with": "picard",
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "data",
+      "display_name": "Data",
+      "actor_name": "Brent Spiner",
+      "pair_with": "lore",
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "lore",
+      "display_name": "Lore",
+      "actor_name": "Brent Spiner",
+      "pair_with": "data",
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "kirk",
+      "display_name": "Kirk",
+      "actor_name": "William Shatner",
+      "pair_with": "mirror-kirk",
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "mirror-kirk",
+      "display_name": "Mirror Kirk",
+      "actor_name": "William Shatner",
+      "pair_with": "kirk",
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "worf",
+      "display_name": "Worf",
+      "actor_name": "Michael Dorn",
+      "pair_with": "regent-worf",
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "regent-worf",
+      "display_name": "Regent Worf",
+      "actor_name": "Michael Dorn",
+      "pair_with": "worf",
+      "last_seen_episode": 1
+    }
+  ],
+  "character_rotation": {
+    "recent_characters": [
+      "Picard",
+      "Locutus of Borg",
+      "Data",
+      "Lore",
+      "Kirk",
+      "Mirror Kirk",
+      "Worf",
+      "Regent Worf"
+    ],
+    "recent_actors": [
+      "Patrick Stewart",
+      "Brent Spiner",
+      "William Shatner",
+      "Michael Dorn"
+    ],
+    "recent_environments": [
+      "TNG Enterprise-D bridge, red alert lighting",
+      "TNG engineering corridor, cool blue lighting",
+      "ISS Enterprise mirror-universe bridge, harsher red/gold lighting",
+      "DS9 ops/command deck, imperial dark lighting"
+    ],
+    "recent_action_types": [
+      "micro-motion-servo-twitch",
+      "micro-motion-vapor-hiss",
+      "micro-motion-chain-sway",
+      "micro-motion-console-flare"
+    ],
+    "cooldown_episodes": 10
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-07-22",
+      "characters": [
+        "Picard/Locutus of Borg",
+        "Data/Lore",
+        "Kirk/Mirror Kirk",
+        "Worf/Regent Worf"
+      ],
+      "environments": [
+        "TNG Enterprise-D bridge, red alert lighting",
+        "TNG engineering corridor, cool blue lighting",
+        "ISS Enterprise mirror-universe bridge, harsher red/gold lighting",
+        "DS9 ops/command deck, imperial dark lighting"
+      ],
+      "actors": [
+        "Patrick Stewart",
+        "Brent Spiner",
+        "William Shatner",
+        "Michael Dorn"
+      ],
+      "action_types": [
+        "micro-motion-servo-twitch",
+        "micro-motion-vapor-hiss",
+        "micro-motion-chain-sway",
+        "micro-motion-console-flare"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-22/dual-style/20260722-134827-75423/final.mp4",
+      "duration_sec": 25.21,
+      "cost_usd": 2.43,
+      "notes": "Series launch (EP1): new format variant for this game -- both sides photorealistic (not cartoon+realistic), same real actor plays the original vs the corrupted/alternate-universe persona (Picard/Locutus, Data/Lore, Kirk/Mirror Kirk, Worf/Regent Worf). Motion pattern A (micro-motion, no head/face movement) used for this low-risk launch episode. Name-caption drawtext overlay per scene (ORIGINAL X / alternate name), sized small and positioned high (size 54, y=h-text_h-480) after an initial pass was judged too large and too low. Continuous promo banner (banner-st1, Starfleet delta + Enterprise) spans scenes 2-3 without a fade at the cut. A static, non-animated title-card intro was built, reviewed, and removed at user request because it did not clearly convey episode content -- final cut opens cold on scene 1; the title-card-bg.png asset was kept in Supabase for possible reuse or rework. No per-scene SFX; bg-music only."
+    }
+  ],
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4",
+  "style_tags": "Photorealistic Star Trek dual-style: both figures are the exact same real actor, side by side, sharing one continuous space (no split panel). LEFT is the character's original/classic television persona (canon uniform, standard appearance, live-action photorealistic rendering). RIGHT is the corrupted/alternate-universe/evil-duplicate persona (Borg implants, mirror-universe uniform, or android-duplicate features as appropriate), same actor, same face, transformed costume/technology only. Both sides photorealistic, real skin textures, cinema-quality lighting matching TNG/TOS/DS9 television cinematography — no anime, no cel-shading, no illustrated rendering on either side.",
+  "characters": [
+    {
+      "pair_slug": "picard-locutus",
+      "actor_name": "Patrick Stewart",
+      "original": {
+        "slug": "picard",
+        "name": "Picard",
+        "character_description": "photorealistic Patrick Stewart as Captain Jean-Luc Picard, bald head, commanding authoritative expression, red-and-black Starfleet TNG-era captain's uniform with pips on collar, standing with calm dignified posture, real skin textures, cinema-quality lighting matching TNG bridge scenes"
+      },
+      "alternate": {
+        "slug": "locutus-borg",
+        "name": "Locutus of Borg",
+        "character_description": "photorealistic Patrick Stewart as Locutus of Borg, same bald head and facial features, pale grey-white assimilated skin, black mechanical Borg exoskeleton plating over torso and one arm, ocular implant over one eye with red laser targeting glow, tubes and cybernetic implants across skull and neck, cold emotionless expression, matches the exact TNG 'Best of Both Worlds' Locutus design"
+      }
+    },
+    {
+      "pair_slug": "data-lore",
+      "actor_name": "Brent Spiner",
+      "original": {
+        "slug": "data",
+        "name": "Data",
+        "character_description": "photorealistic Brent Spiner as Lieutenant Commander Data, pale gold-tinted synthetic android skin, short black hair, calm neutral android expression, gold-and-black Starfleet TNG uniform with pips, real skin textures showing subtle android sheen, cinema-quality lighting matching TNG bridge scenes"
+      },
+      "alternate": {
+        "slug": "lore",
+        "name": "Lore",
+        "character_description": "photorealistic Brent Spiner as Lore, identical pale gold-tinted android face and short black hair to Data, but wearing civilian/rogue dark asymmetric clothing instead of a Starfleet uniform, subtle smug malevolent smirk, colder more calculating eyes, same synthetic skin texture and cinema-quality lighting as the original"
+      }
+    },
+    {
+      "pair_slug": "kirk-mirrorkirk",
+      "actor_name": "William Shatner",
+      "original": {
+        "slug": "kirk",
+        "name": "Kirk",
+        "character_description": "photorealistic William Shatner as Captain James T. Kirk, classic TOS-era gold command tunic with black trim, clean-shaven, confident heroic expression, real skin textures, cinema-quality lighting matching original series bridge scenes"
+      },
+      "alternate": {
+        "slug": "mirror-kirk",
+        "name": "Mirror Kirk",
+        "character_description": "photorealistic William Shatner as Mirror Universe Kirk, same face, groomed goatee, dark Terran Empire uniform with sash and dagger at the belt, agonizer device visible at hip, predatory ruthless expression, same skin texture and cinema-quality lighting as the original, matches the classic TOS 'Mirror, Mirror' ISS Enterprise design"
+      }
+    },
+    {
+      "pair_slug": "worf-regentworf",
+      "actor_name": "Michael Dorn",
+      "original": {
+        "slug": "worf",
+        "name": "Worf",
+        "character_description": "photorealistic Michael Dorn as Worf, full Klingon forehead ridges and dark hair, TNG/DS9-era gold-and-black Starfleet uniform with sash, stern honorable expression, real skin/prosthetic textures, cinema-quality lighting matching DS9 bridge/ops scenes"
+      },
+      "alternate": {
+        "slug": "regent-worf",
+        "name": "Regent Worf",
+        "character_description": "photorealistic Michael Dorn as Mirror Universe Regent Worf, identical Klingon forehead ridges and face, dark Terran/Klingon-Cardassian Alliance regent armor with heavy shoulder plating and chain accents, imperious tyrannical expression, same textures and cinema-quality lighting as the original, matches the DS9 Mirror Universe design"
+      }
+    }
+  ]
+}
