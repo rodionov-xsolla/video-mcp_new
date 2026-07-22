@@ -5,7 +5,7 @@
   "title": "Genshin Impact — Character Story",
   "format": "character-story",
   "created_at": "2026-06-29",
-  "last_episode": 12,
+  "last_episode": 13,
   "tts_engine": "chatterbox",
   "tts_note": "Genshin ALWAYS uses Chatterbox via fal-ai/chatterbox/text-to-speech. Voice refs at assets/genshin-impact/characters/{slug}/voice-1.mp3. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "voice_ref_base": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/{slug}/voice-1.mp3",
@@ -40,7 +40,8 @@
       "Dehya",
       "Navia",
       "Hu Tao",
-      "Raiden Shogun"
+      "Raiden Shogun",
+      "Furina"
     ],
     "done_male": [
       "Xiao",
@@ -60,7 +61,8 @@
       "Hu Tao",
       "Wanderer",
       "Raiden Shogun",
-      "Tartaglia"
+      "Tartaglia",
+      "Furina"
     ],
     "cooldown_episodes": 20,
     "selection_note": "Pick characters with strong lore arcs and tragic backstories. Prioritize 5-star characters with high popularity. Alternate male/female for variety. Avoid repeating characters used in dual-style within 4 episodes."
@@ -251,6 +253,22 @@
       "yt_publish_at": "2026-07-21T20:59:00Z",
       "tts_engine": "chatterbox",
       "notes": "3 age variants (child/young/mature). Extended clips 3-6 via setpts to match TTS duration. EP12. Publication audit on 2026-07-14 confirmed the Supabase object is byte-identical to the latest local final.mp4 and the Genshin Snap upload is fully processed and scheduled."
+    },
+    {
+      "episode": 13,
+      "date": "2026-07-21",
+      "character": "Furina",
+      "character_slug": "furina",
+      "gender": "female",
+      "idea": "Furina — The Human Who Played an Archon for 500 Years | Character Story EP13 | Genshin Impact",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/furina/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-21/character-story_final.mp4",
+      "final_sha256": "855725971afcfa94452cd09e0f91d5a6ff3b33a29338ea8cbf4d2a48f0553632",
+      "duration_sec": 40.33,
+      "youtube_url": "https://www.youtube.com/watch?v=VekVby61CYI",
+      "yt_publish_at": "2026-07-28T20:59:00Z",
+      "tts_engine": "chatterbox",
+      "notes": "2 age variants (young_masquerade_start clips 3-4 / present clips 1,2,5-7); new reusable ref furina/variants/young-masquerade-2026-07-21.png. Hook = Focalors execution (Oratrice verdict); promo clip 2 with USER-OVERRIDDEN wording: \"Get free Primogems — link in bio. And now... my story.\" (replaces bible tts_template_en for this ep). Monologue trimmed 99→77 words across 2 scenarist passes: Chatterbox delivery ran +47% vs 35s timeline; final per-clip atempo 1.18-1.30 (cap 1.4). Lesson: draft segments <=12 spoken words for Chatterbox 0.46-0.56 s/word."
     }
   ],
   "next_planned": null,
