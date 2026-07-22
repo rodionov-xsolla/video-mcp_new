@@ -5,7 +5,7 @@
   "title": "Don't Save Me",
   "style_tags": "Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, soft outline anime aesthetic, magical elemental effects, Teyvat world environment, clean detailed character illustration, Liyue Harbor setting, cinematic 9:16 vertical composition",
   "created_at": "2026-06-04",
-  "last_episode": 6,
+  "last_episode": 7,
   "planned_arc": {
     "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-6 clips under serial-drama constraints (max 2 chars per frame; see production_rules for the EP4+ Kling I2V voice_ids pipeline — Avatar is retired, macro movement/combat IS allowed in I2V for this series, cliffhanger spoken line is Kling I2V dialogue not Avatar TTS). Childe is the reluctant protector — his every action should read as either threat or sacrifice until the last episode. No on-screen text. Fold an episode's loops/status into characters[], active_loops, and episode_summaries only after the user explicitly approves the presented final video. Do NOT re-invent episodes while this arc has unshipped entries.",
     "episodes": [
@@ -302,7 +302,8 @@
           "how many Fatui are in the chamber",
           "whether the Agent accepts what just happened or escalates",
           "what Lumine does with this revelation"
-        ]
+        ],
+        "status": "done"
       },
       {
         "episode": 8,
@@ -493,9 +494,10 @@
     }
   ],
   "active_loops": [
-    "major: Fatui Agent revealed alive and waiting inside the Golden House with reinforcements - he was not out of the fight",
-    "major: Lumine and Childe walked straight into a trap they were fleeing toward, not away from",
-    "major: whether Lumine still trusts Childe's judgment after this second unilateral choice",
+    "major: Childe just revealed mid-combat that his strikes were never meant to land — Lumine now knows",
+    "major: a charging Fatui soldier was stopped by Childe's blade, thrown to protect Lumine rather than defeat her",
+    "major: the Agent ordered Childe to defeat her for real — he did the opposite, in front of witnesses",
+    "major: unknown how many more Fatui soldiers remain in the Golden House chamber",
     "eternal: Childe's loyalty - now visibly compromised in front of his own superior, and now openly turned on him",
     "eternal: Lumine does not trust Childe unconditionally - Golden House + blade + fake fight + confession + fake betrayal + this unasked choice = six deceits, one bullet, one truth"
   ],
@@ -706,6 +708,17 @@
       "yt_publish_at": "2026-07-23T20:59:00Z",
       "duration_sec": 38,
       "notes": "Major continuity rework mid-production: an attempt to stage the accusation exchange (originally scenes 4-5) as separate independently-generated scenes at a 'side wall' location broke spatially (characters appeared to teleport, then swap left/right positions across cuts) - fixed by merging the whole exchange into ONE multi_prompt I2V clip (13s, 4 shots) from a single start frame instead, keeping Lumine fixed LEFT / Childe fixed RIGHT throughout. Also split the reveal into two scenes: a silent Agent-reveal (no voice_ids, introduced via Kling `elements` since the Agent wasn't in the start frame) followed by his cliffhanger line. A pursuit scene (running toward the Golden House) also needed 3 iterations to get right: characters must run AWAY from camera toward their actual destination door (not toward camera with the door as incidental backdrop), and that destination door must be generated as a direct NB2-edit descendant of the door asset used in the arrival scene, not an independently-generated 'similar' building, or the two doors visibly don't match on the cut. See rules/formats/serial-drama.md's location-bg-ref-reuse and blocking-continuity burn notes (2026-07-14) for the full writeup. Also user-requested pop-up 'GAIN FREE PRIMOGEMS' banner overlay on scenes 1-2 (top-anchored, post-production, not diegetic)."
+    },
+    {
+      "episode": 7,
+      "language": "en",
+      "summary": "Inside the Golden House, the Fatui Agent orders Childe to defeat Lumine for real to prove his loyalty. Childe raises his weapon and combat begins, but every strike lands near her, never on her. Lumine catches the pattern and questions him mid-fight. Behind her, a Fatui soldier charges — Childe's blade flies past her and pins the soldier to the wall instead.",
+      "cliffhanger": "Lumine, realizing: 'You were protecting me the whole time?'",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-21/serial-drama/20260721-173607-63344/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=Uqz9_89tbmI",
+      "yt_publish_at": "2026-07-26T20:59:00Z",
+      "duration_sec": 38,
+      "notes": "Scene 1's start frame briefly rendered a duplicate background Lumine (two instances instead of one); a reproducibility test with byte-identical prompt+refs got a correct single-instance result on retry, confirming this was generation-to-generation randomness, not a deterministic prompt bug. DEVIATION FROM `production_rules` ABOVE (\"NO on-screen text / title cards for this series\"): user explicitly requested and approved an on-screen 'EPISODE 7 / Golden House Again' drawtext overlay (Montserrat-Black, top of frame, scene 1 only, t=0-3s) for this episode specifically, previewed via a standalone ffmpeg frame before committing. Treat this as a one-off unless the user confirms it should become the new default for this series — do not silently carry it into EP8+ without re-confirming."
     }
   ],
   "production_rules": [
