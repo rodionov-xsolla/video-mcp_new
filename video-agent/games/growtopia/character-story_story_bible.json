@@ -30,6 +30,44 @@
         "tags": ["growtopia", "default-skin", "player-avatar"],
         "eligible_for": "pixel clips only (canonical raw default-skin sprite; not a competing-format stylized render)"
       }
+    },
+    {
+      "name": "OldGrower",
+      "role": "Veteran Growtopia player — the comeback legend; rags-to-riches-to-scam-to-riches arc",
+      "age_variants": {
+        "young": {
+          "description": "Newbie player, basic white t-shirt and blue pants, no accessories, eager hopeful expression, fresh start",
+          "appearance": "Growtopia pixel-art character: blocky 2D pixel humanoid, chibi proportions with large head and small body, simple dot eyes and small mouth, basic white t-shirt and blue pants, no accessories, clean pixel edges, retro 16-bit game sprite aesthetic, eager hopeful expression, slim build",
+          "ref": {
+            "asset_type": "reference_image",
+            "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/oldgrower-young/variants/young.png",
+            "tags": ["growtopia", "character-story", "OldGrower", "young"]
+          }
+        },
+        "mature": {
+          "description": "Veteran player, golden crown, white angel wings, Rayman Fist weapon, royal purple outfit with gold trim, confident wise stance",
+          "appearance": "Growtopia pixel-art character: blocky 2D pixel humanoid, chibi proportions with large head and small body, simple dot eyes and small mouth, golden crown on head, white angel wings spread on back, holding Rayman fist weapon in right hand, royal purple outfit with gold trim and pixel detail stitching, confident wise expression, broader stance, clean pixel edges, retro 16-bit game sprite aesthetic",
+          "ref": {
+            "asset_type": "reference_image",
+            "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/oldgrower-mature/variants/mature.png",
+            "tags": ["growtopia", "character-story", "OldGrower", "mature"]
+          }
+        }
+      },
+      "voice_style": "Nostalgic male narrator, warm and reflective, slight rasp of experience, speaks with reverence for the old days. Starts heavy and broken in hook, builds warmth during origin, sharpens with pride during empire-building, drops to devastation during scam, rebuilds quiet determination, finishes with earned confidence.",
+      "story_arc": {
+        "hook": "I lost everything in Growtopia. My world, my items, my reputation. But that's not how my story ends.",
+        "origin": "Started as a noob with nothing. First day, someone gave me a World Lock. Changed my life forever.",
+        "turning_point": "Built an empire. Thousands of worlds. Then the great scam took it all — Crown, Wings, Locks, years of work, gone.",
+        "revelation": "Came back with nothing but knowledge. Built it all again. Now richer than ever. The real treasure in Growtopia is knowledge."
+      },
+      "environments_used": [
+        "Beginner world with basic blocks and a single small tree",
+        "Bustling trade world with vending machines and display boxes",
+        "Empty devastated world with broken blocks and cracked ground",
+        "Grand rebuilt world with pixel-art castle, fountains, and Diamond Lock display cases"
+      ],
+      "items_featured": ["World Lock", "Diamond Lock", "Angel Wings", "Rayman Fist", "Magplant"]
     }
   ],
   "narrator": {
@@ -45,6 +83,15 @@
     "append_standard_asset_after_in_scene": true,
     "note": "Growtopia CTA (3s idle) registered 2026-07-17 in game_assets (tags cta,branding). Pop-up overlay banner also available at branding/popup.png (tags popup,overlay)."
   },
-  "covered_characters": [],
-  "episodes": []
+  "covered_characters": ["OldGrower"],
+  "episodes": [
+    {
+      "ep": 1,
+      "character": "OldGrower",
+      "title": "The Legend of Growtopia: A Veteran's Tale",
+      "date": "2026-07-21",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-21/character-story/final.mp4",
+      "note": "Test run approved by user 2026-07-22. Uploaded post-hoc."
+    }
+  ]
 }
