@@ -14,8 +14,10 @@
         "role": "antagonist",
         "introduced_episode": 7,
         "character_description": "mirror-universe double of the male Starfleet captain, identical face structure but harder and predatory, cold confident smirk showing teeth with no warmth, thin diagonal scar across left cheek, slicked darker hair pressed flat, dead-calm glacier eyes, black-and-silver Section 31 mirror universe uniform with sharp angular trim and no Starfleet delta, lean forward predatory posture",
-        "voice_route": "missing-format-owned-native-ref",
-        "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery."
+        "voice_route": "kling-native-preset-name-confirmed-working",
+        "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery. Confirmed working across EP9-EP14 as a bare Kling voice_ids preset name.",
+        "voice_id_kling": "Daniel",
+        "voice_stability": 0.25
       }
     ],
     "episodes": [
@@ -479,7 +481,7 @@
       "name": "Kirk",
       "role": "protagonist",
       "character_description": "Male Starfleet captain, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
-      "voice_route": "missing-format-owned-native-ref",
+      "voice_route": "kling-native-preset-name-confirmed-working",
       "status": "EP13: Burst onto the bridge just as Mirror Kirk (disguised in a stolen command jacket) had his hand over the fire button. Confrontation not yet resolved.",
       "aura_points": 1100,
       "relationships": {
@@ -489,76 +491,89 @@
         "Fleet Admiral": "confirmed enemy — direct confrontation; now threatening quarantine",
         "Mirror Kirk": "Kirk refuses to kill him while he is down, which makes Mirror Kirk envy his command",
         "Mirror_Kirk": "Direct bridge confrontation now underway; Mirror Kirk has proven the disguise can fool the crew, at least briefly."
-      }
+      },
+      "voice_id_kling": "Daniel",
+      "voice_stability": 0.6,
+      "voice_note": "Confirmed working across EP9-EP14 (14 shipped episodes) as a bare Kling voice_ids preset name — not a Supabase-hosted voice-reference URL. See rules/formats/serial-drama.md nb2.edit/voice-route notes for context on why this differs from the URL-based convention other series (e.g. Genshin) use. warm commanding delivery"
     },
     {
       "name": "Worf",
       "role": "ally",
       "character_description": "Klingon-Human Starfleet commander, imposing build, prominent forehead ridges, dark skin, fierce disciplined expression, TNG Starfleet command red uniform with lieutenant commander pips, broad shoulders, intense dark eyes",
-      "voice_route": "missing-format-owned-native-ref",
+      "voice_route": "kling-native-preset-name-confirmed-working",
       "status": "EP13: Briefly deceived by Mirror Kirk's stolen-jacket disguise on the bridge before catching on. Hand went to his phaser, uncertain.",
       "aura_points": 600,
       "relationships": {
         "Kirk": "follows Kirk as captain, not merely the face — loyalty publicly reaffirmed in front of Mirror Kirk"
-      }
+      },
+      "voice_id_kling": "George",
+      "voice_note": "Confirmed working across EP9-EP14 (14 shipped episodes) as a bare Kling voice_ids preset name — not a Supabase-hosted voice-reference URL. See rules/formats/serial-drama.md nb2.edit/voice-route notes for context on why this differs from the URL-based convention other series (e.g. Genshin) use."
     },
     {
       "name": "Chekov",
       "role": "victim",
       "character_description": "Young male Starfleet ensign, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
-      "voice_route": "missing-format-owned-native-ref",
+      "voice_route": "kling-native-preset-name-confirmed-working",
       "status": "EP12: Saw Mirror Kirk restrained in sickbay and demanded to know why he was still alive. Chekov's fear has hardened into hatred.",
       "aura_points": 200,
       "relationships": {
         "Kirk": "trust is fractured — Kirk's mercy toward Mirror Kirk feels like betrayal"
-      }
+      },
+      "voice_id_kling": "Charlie",
+      "voice_note": "Confirmed working across EP9-EP14 (14 shipped episodes) as a bare Kling voice_ids preset name — not a Supabase-hosted voice-reference URL. See rules/formats/serial-drama.md nb2.edit/voice-route notes for context on why this differs from the URL-based convention other series (e.g. Genshin) use."
     },
     {
       "name": "Spock",
       "role": "ally",
       "character_description": "Vulcan Starfleet commander, pointed Vulcan ears, sharply arched thick eyebrows, straight black bowl-cut hair, olive-tinted skin, calm emotionless expression with one eyebrow slightly raised, blue TOS science tunic with black collar and Starfleet delta badge, hands clasped behind back",
-      "voice_route": "missing-format-owned-native-ref",
+      "voice_route": "unresolved-no-confirmed-voice-id",
       "status": "EP6: Delivered cliffhanger 'Captain... it's you in there.' Present but background since EP7. Will observe and analyze.",
       "aura_points": 900,
       "relationships": {
         "Kirk": "deep bond — acts independently but always in Kirk's interests"
-      }
+      },
+      "voice_note": "Has spoken lines in the planned_arc script, but no confirmed working voice_id_kling was found in any checked prior episode storyboard.json (checked all local runs under output/*/star-trek-timelines/serial-drama/). Resolve a real voice_id_kling from an actual future render before assuming one — do not guess/invent a preset name in advance."
     },
     {
       "name": "Scotty",
       "role": "crew",
       "character_description": "Male Starfleet chief engineer, stocky build, round friendly face now tense and alarmed, swept-back dark hair with grey temples and short sideburns, wide desperate eyes, TOS red engineering tunic with black collar and Starfleet delta badge, hands raised in protest",
-      "voice_route": "missing-format-owned-native-ref",
+      "voice_route": "kling-native-preset-name-confirmed-working",
       "status": "EP13: Passed Mirror Kirk in a corridor without recognizing him (gave him an uneasy nod), then was on the bridge when Mirror Kirk ordered weapons fired.",
       "aura_points": 450,
       "relationships": {
         "Kirk": "loyal engineer — will execute Kirk's orders even the ones that scare him"
-      }
+      },
+      "voice_id_kling": "George",
+      "voice_note": "Confirmed working across EP9-EP14 (14 shipped episodes) as a bare Kling voice_ids preset name — not a Supabase-hosted voice-reference URL. See rules/formats/serial-drama.md nb2.edit/voice-route notes for context on why this differs from the URL-based convention other series (e.g. Genshin) use."
     },
     {
       "name": "Mirror_Kirk",
       "role": "antagonist",
       "character_description": "Mirror-universe double of the male Starfleet captain, identical face structure but harder and predatory, cold confident smirk showing teeth with no warmth, thin diagonal scar across left cheek, slicked darker hair pressed flat, dead-calm glacier eyes, black-and-silver Section 31 mirror universe uniform with sharp angular trim and no Starfleet delta, lean forward predatory posture",
-      "voice_route": "missing-format-owned-native-ref",
-      "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery.",
+      "voice_route": "kling-native-preset-name-confirmed-working",
+      "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery. Confirmed working across EP9-EP14 (14 shipped episodes) as a bare Kling voice_ids preset name — not a Supabase-hosted voice-reference URL. See rules/formats/serial-drama.md nb2.edit/voice-route notes for context on why this differs from the URL-based convention other series (e.g. Genshin) use. same voice as Kirk by design, colder/flatter delivery",
       "status": "EP13: Escaped the depowered brig, stole a command jacket to disguise himself as Kirk, fooled Scotty in a corridor and Worf/Scotty on the bridge for a few seconds, then ordered weapons trained on the Admiral's ship. Real Kirk arrived before the shot fired.",
       "aura_points": 0,
       "relationships": {
         "Kirk": "Now in direct bridge confrontation after impersonating him; proved the disguise works, at least briefly, on Kirk's own crew.",
         "Chekov": "designated target — Chekov fears and hates him"
       },
-      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/mirror-kirk/sheet.png"
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/mirror-kirk/sheet.png",
+      "voice_id_kling": "Daniel",
+      "voice_stability": 0.25
     },
     {
       "name": "Fleet_Admiral",
       "role": "antagonist",
       "character_description": "Starfleet Fleet Admiral, older distinguished male, silver-grey hair combed straight back, sharp strong cheekbones, four gold admiral pips on collar, dark navy Starfleet admiral uniform with gold trim, cold calculating expression, slight controlled cold smile",
-      "voice_route": "missing-format-owned-native-ref",
+      "voice_route": "unresolved-no-confirmed-voice-id",
       "status": "EP12: Escalated quarantine pressure by cutting partial power to Enterprise, causing the brig to lose power.",
       "aura_points": 0,
       "relationships": {
         "Kirk": "confirmed enemy — pressuring Kirk to abandon his principles"
-      }
+      },
+      "voice_note": "Has spoken lines in the planned_arc script, but no confirmed working voice_id_kling was found in any checked prior episode storyboard.json (checked all local runs under output/*/star-trek-timelines/serial-drama/). Resolve a real voice_id_kling from an actual future render before assuming one — do not guess/invent a preset name in advance."
     }
   ],
   "active_loops": [
