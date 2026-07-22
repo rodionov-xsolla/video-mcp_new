@@ -1,0 +1,78 @@
+{
+  "game_tag": "growtopia",
+  "format": "reddit-story",
+  "total_stories": 1,
+  "stories": [
+    {
+      "id": 1,
+      "date": "2026-07-22",
+      "tone": "touching",
+      "theme": "cousin-childhood-world-restoration",
+      "moral_engine": "a secret act of care is mistaken for abandonment",
+      "game_situation": "rebuilding a younger cousin's first Growtopia world from childhood screenshots",
+      "false_verdict": "the narrator had outgrown and forgotten his younger cousin",
+      "pressure_source": "three weeks of unanswered messages followed by the cousin withdrawing before his birthday",
+      "narrator_flaw": "kept the surprise secret too long and ignored messages instead of reassuring his cousin",
+      "human_action": "rebuilt the first world from screenshots, obtained missing blocks with Gems, apologized, and sent the world name",
+      "reveal": "the restored sign still carried BEST CUZINS FOREVR, the cousin's distinctive childhood typo",
+      "resolution_type": "social-restoration",
+      "headline": "My cousin thought I forgot him while I secretly rebuilt our childhood Growtopia world.",
+      "offerwall_angle": "Gems from the link in bio are used to buy missing blocks for the reconstruction; silent CTA only; no game-download mention",
+      "gameplay_segments": [
+        {
+          "file": "Growtopia 1.mp4",
+          "offset_sec": 84.9,
+          "duration_sec": 32.67
+        },
+        {
+          "file": "growtopia 2.mp4",
+          "offset_sec": 154.2,
+          "duration_sec": 32.67
+        }
+      ],
+      "output_dir": "output/2026-07-22/growtopia/reddit-story/20260722-173047-reddit-cousin-world",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-22/reddit-story/20260722-173047-reddit-cousin-world/final.mp4"
+    }
+  ],
+  "style_tags": "not applicable - reddit-story uses ready-made gameplay and no generated images or AI video",
+  "assets": {
+    "reddit_story_bg": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/locations/reddit-story.png",
+    "cta": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4"
+  },
+  "series_rules": {
+    "conflict_source": "real relationships and life circumstances, never game mechanics alone",
+    "game_role": "Growtopia is the shared place and visual background for the human story",
+    "promotion": "Gems from the link in bio may appear as a native story action; never mention a service name or voice a separate CTA"
+  },
+  "anti_repetition": {
+    "recent_themes": [
+      "cousin-childhood-world-restoration"
+    ],
+    "recent_tones": [
+      "touching"
+    ],
+    "recent_moral_engines": [
+      "a secret act of care is mistaken for abandonment"
+    ],
+    "recent_game_situations": [
+      "rebuilding a younger cousin's first Growtopia world from childhood screenshots"
+    ],
+    "recent_false_verdicts": [
+      "the narrator had outgrown and forgotten his younger cousin"
+    ],
+    "recent_pressure_sources": [
+      "three weeks of unanswered messages before the cousin's birthday"
+    ],
+    "recent_resolution_types": [
+      "social-restoration"
+    ],
+    "recent_hooks": [
+      "cousin stops answering before his birthday after three weeks of silence; restored typo sign reveals the surprise"
+    ],
+    "recent_gameplay_sources": [
+      "Growtopia 1.mp4@84.9",
+      "growtopia 2.mp4@154.2"
+    ],
+    "banned_combos": []
+  }
+}
