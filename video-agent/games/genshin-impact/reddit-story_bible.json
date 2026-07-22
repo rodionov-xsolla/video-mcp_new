@@ -1,6 +1,6 @@
 {
   "game_tag": "genshin-impact",
-  "total_stories": 4,
+  "total_stories": 5,
   "stories": [
     {
       "id": 1,
@@ -58,21 +58,46 @@
       "youtube_url": "https://www.youtube.com/watch?v=XnAiZFzXa34",
       "yt_publish_at": "2026-07-20T20:59:00Z",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-13/reddit-story_final.mp4"
+    },
+    {
+      "id": 5,
+      "date": "2026-07-22",
+      "tone": "humiliation-to-respect",
+      "theme": "creative-authorship-restored",
+      "moral_engine": "public authorship accusation despite an authentic hand-created process",
+      "game_situation": "a weekly first-semester college painting critique centered on a Furina portrait",
+      "false_verdict": "the narrator used generative AI and lied about painting the Furina portrait",
+      "pressure_source": "Professor Hale's public suspicion and classmates whispering that the narrator cheated",
+      "narrator_flaw": "froze under scrutiny and kept incomplete, disorganized digital progress evidence",
+      "human_action": "stayed after class, requested one chance to respond, and brought the physical sketchbook",
+      "reveal": "dated thumbnails, pose studies, color tests, and evolving mistakes documented the painting's creation",
+      "resolution_type": "positive",
+      "headline": "My professor called my Furina painting AI-generated, until my sketchbook proved him wrong.",
+      "youtube_title": "My professor called my Furina painting AI-generated, until my sketchbook proved him wrong.",
+      "offerwall_angle": "Primogems from the link in bio are used to pull Furina, whose pose inspires the painting; silent CTA overlay 'Free Primogems — link in bio'; no game-download mention",
+      "gameplay_file": "Cut.mp4",
+      "gameplay_offset_sec": 20,
+      "gameplay_duration_sec": 63.648,
+      "output_dir": "output/2026-07-22/genshin-impact/reddit-story/20260722-165532-reddit-furina-art",
+      "youtube_url": "https://www.youtube.com/watch?v=cog7l86_-o8",
+      "yt_publish_at": "2026-07-27T20:59:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-22/reddit-story/20260722-165532-reddit-furina-art/final.mp4"
     }
   ],
   "anti_repetition": {
-    "recent_themes": ["sibling-reconnection", "f2p-triumph", "parent-judgment-to-connection", "friendship-neglect-vs-overwhelm"],
-    "recent_tones": ["touching", "rage-to-relief", "soft-drama", "bittersweet-to-warm"],
-    "recent_moral_engines": ["f2p-mockery", "judgment for hobby", "feeling replaced/abandoned"],
-    "recent_false_verdicts": ["forever F2P loser who will never pull a 5-star", "immature adult wasting time on a kids' game", "best friend deliberately excluded narrator over her engagement"],
-    "recent_pressure_sources": ["toxic co-op friend", "dad's repeated dismissal in front of family", "mutual friend group chat consensus"],
+    "recent_themes": ["sibling-reconnection", "f2p-triumph", "parent-judgment-to-connection", "friendship-neglect-vs-overwhelm", "creative-authorship-restored"],
+    "recent_tones": ["touching", "rage-to-relief", "soft-drama", "bittersweet-to-warm", "humiliation-to-respect"],
+    "recent_moral_engines": ["f2p-mockery", "judgment for hobby", "feeling replaced/abandoned", "public authorship accusation"],
+    "recent_false_verdicts": ["forever F2P loser who will never pull a 5-star", "immature adult wasting time on a kids' game", "best friend deliberately excluded narrator over her engagement", "narrator used generative AI and lied about painting the Furina portrait"],
+    "recent_pressure_sources": ["toxic co-op friend", "dad's repeated dismissal in front of family", "mutual friend group chat consensus", "professor's public suspicion and classmates whispering about cheating"],
     "recent_hooks": [
       "My sister and I used to be close. Then high school hit and we just drifted.",
       "He called me a forever F2P loser. Said Hu Tao would never be mine.",
       "He said it once. Flat. That anime kids stuff. No argument. Just walked away.",
-      "The invites stopped after her engagement. No text, just silence."
+      "The invites stopped after her engagement. No text, just silence.",
+      "My professor called my Furina painting AI-generated, until my sketchbook proved him wrong."
     ],
-    "recent_gameplay_offsets_sec": [260],
+    "recent_gameplay_offsets_sec": [260, 20],
     "banned_combos": []
   }
 }
