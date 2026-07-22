@@ -2,18 +2,23 @@
 
 ## Posting status
 
-- **ready_to_post:** no   <!-- yes only when the game is tested and cleared for posting -->
+- **ready_to_post:** yes   <!-- yes only when the game is tested and cleared for posting -->
 
 **Formats (linked to this game):**
 
-- (none configured yet)
+- character-story — ready_to_post: yes (tested 2026-07-17, final.mp4 produced)
+- top-list — ready_to_post: yes (untested — first run pending)
+- fun-news — ready_to_post: yes (untested — first run pending)
+- what-if-real-life — ready_to_post: yes (untested — first run pending)
+- reddit-story — ready_to_post: yes (untested — first run pending)
+- dual-style — ready_to_post: yes (untested — first run pending)
+
+> ⚠️ **No YouTube channel mapped yet** (`youtube_channel: none`). Per Phase 6 routing rule, YT upload is skipped until a channel is mapped — deliverable stays Supabase-only. Also no opener asset yet (CTA + pop-up are ready).
 
 
 > TODO(style-refactor): character appearance must move to per-format story bibles `characters[]` (style-free); style → top-level `style_tags` in the bible, fallback = `prompt_prefix`. This game config not yet migrated (see star-trek-timelines / genshin-impact for the pattern).
 
-> TODO(assets): нет референсов в Supabase. Нужно спарсить спрайты предметов/сетов с вики (см. `tools/growtopia_parser.py`) и загрузить как `reference_image` с тегом `growtopia`.
-
-> TODO(assets): забрать **стандартный (дефолтный) скин Growtopian** (базовый аватар игрока) как отдельный реф. Источник — канонический спрайт с вики (не Google-кэш-превью). Референс от юзера: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSXtwW37bC4G4wtckNqCSpqg00fmo40PHlVLYd9lupAGRdJdQAUcy5JryV&s=10` (низкое качество, только как ориентир).
+> DONE (2026-07-16): 39 NPC/character reference sprites uploaded to Supabase, incl. the canonical default-skin Growtopian avatar. Full list and URLs in `## Референсные изображения (Supabase)` below.
 
 ## Метаданные
 
@@ -136,11 +141,49 @@ Canon is fixed (see the LOCKED block in `## Character Prompt Blocks` → Growtop
 
 ## Референсные изображения (Supabase)
 
-> **TODO** — референсов пока нет. Спрайты будут спарсены с вики (`tools/growtopia_parser.py`) и загружены в Supabase с `game_tag=growtopia`, `asset_type=reference_image`. До этого storyboarder работает по текстовым промптам выше.
+**Status: ✅ READY (uploaded 2026-07-16, PR #90 merged).** 39 NPC/character reference sprites live in Supabase (`game_assets`, `asset_type=reference_image`, `game_tag=growtopia`, path `assets/growtopia/characters/{slug}/sheet.png`). Full manifest with names/slugs/URLs: `games/growtopia/assets/refs/npcs.json`.
 
 | Персонаж / предмет | Supabase URL |
 |--------------------|--------------|
-| (parser pending)   | —            |
+| A Burglar | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/a-burglar/sheet.png |
+| Alan, The Alien | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/alan-the-alien/sheet.png |
+| Alien Computer | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/alien-computer/sheet.png |
+| Alien Menace | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/alien-menace/sheet.png |
+| Alien Ship | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/alien-ship/sheet.png |
+| Boss Ghost | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/boss-ghost/sheet.png |
+| Box of Supplies | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/box-of-supplies/sheet.png |
+| Crazy Jim | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/crazy-jim/sheet.png |
+| Crime In Progress | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/crime-in-progress/sheet.png |
+| Criminal Mastermind | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/criminal-mastermind/sheet.png |
+| Dummy Alien Computer | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/dummy-alien-computer/sheet.png |
+| Dungeons Cryptkeeper | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/dungeons-cryptkeeper/sheet.png |
+| Dungeons Shopkeeper | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/dungeons-shopkeeper/sheet.png |
+| Fashion Show Bouncer | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/fashion-show-bouncer/sheet.png |
+| Founder of the Fancy Gentleman Club | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/founder-of-the-fancy-gentleman-club/sheet.png |
+| Geoff, The Guard | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/geoff-the-guard/sheet.png |
+| Growtopian (default skin) | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/growtopian-default-skin/sheet.png |
+| Legendary Wizard | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/legendary-wizard/sheet.png |
+| Lincoln, The Leprechaun | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/lincoln-the-leprechaun/sheet.png |
+| Lock-Bot | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/lock-bot/sheet.png |
+| Locke The Salesman | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/locke-the-salesman/sheet.png |
+| Mark, The Mechanic | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/mark-the-mechanic/sheet.png |
+| Master Peng | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/master-peng/sheet.png |
+| Nutcracker | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/nutcracker/sheet.png |
+| Pet Battle Gym Healer | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/pet-battle-gym-healer/sheet.png |
+| Pet Battle Gym Leader | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/pet-battle-gym-leader/sheet.png |
+| Pet Battle Gym Trainer | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/pet-battle-gym-trainer/sheet.png |
+| Pet Trainer | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/pet-trainer/sheet.png |
+| Robert, The Robot | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/robert-the-robot/sheet.png |
+| Shady Salesman | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/shady-salesman/sheet.png |
+| ShockBot (disambiguation) | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/shockbot-disambiguation/sheet.png |
+| ShooterBot (disambiguation) | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/shooterbot-disambiguation/sheet.png |
+| SpikeBot (disambiguation) | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/spikebot-disambiguation/sheet.png |
+| The Bartender | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/the-bartender/sheet.png |
+| The Bouncer | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/the-bouncer/sheet.png |
+| The Monster Nian | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/the-monster-nian/sheet.png |
+| The Ringmaster | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/the-ringmaster/sheet.png |
+| Tomb Robber | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/tomb-robber/sheet.png |
+| Walter, The Manager | https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/walter-the-manager/sheet.png |
 
 ---
 

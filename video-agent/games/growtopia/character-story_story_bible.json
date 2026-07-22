@@ -45,6 +45,24 @@
     "append_standard_asset_after_in_scene": true,
     "note": "Growtopia CTA (3s idle) registered 2026-07-17 in game_assets (tags cta,branding). Pop-up overlay banner also available at branding/popup.png (tags popup,overlay)."
   },
-  "covered_characters": [],
-  "episodes": []
+  "covered_characters": ["growtopian-default-skin", "tomb-robber", "criminal-mastermind"],
+  "episodes": [
+    {
+      "episode": 1,
+      "date": "2026-07-17",
+      "character": "growtopian-default-skin",
+      "title": "I'm the default skin every Growtopia player starts as",
+      "output_dir": "output/2026-07-17/growtopia/character-story/20260717-110657-14100",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-17/character-story/20260717-110657-14100/final.mp4",
+      "notes": "LIVE OVERRIDE run: alternates pixel (clips 1,5,6) and photorealistic (clips 2,3,4) styles as a narrative device — same character before/after entering the game. Not baked into the bible per _note above; per-run override only."
+    },
+    {
+      "episode": 2,
+      "date": "2026-07-20",
+      "character": "tomb-robber / criminal-mastermind",
+      "title": "The Tomb Robber Who Became the Criminal Mastermind",
+      "output_dir": "output/2026-07-20/growtopia/character-story/20260720-185337-61064",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-20/character-story/20260720-185337-61064/final.mp4"
+    }
+  ]
 }
