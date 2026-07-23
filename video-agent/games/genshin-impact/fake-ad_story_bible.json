@@ -3,7 +3,13 @@
   "game_tag": "genshin-impact",
   "title": "Genshin Impact Fake Ad",
   "created_at": "2026-06-18",
-  "last_episode": 1,
+  "last_episode": 2,
+  "style_tags": "premium modern Genshin-style vertical short, anime cel-shaded fantasy art, vibrant clean character shapes, painterly Teyvat environment, cinematic full-frame composition, magical star, Primogem and gacha energy, luminous elemental particles, edge-to-edge 9:16 image",
+  "characters": {
+    "Lumine": "young adult woman with a slim athletic build, fair skin, amber-gold eyes, long pale-blonde hair with two face-framing locks, a white star-shaped flower ornament above her left temple, a sleeveless white traveler dress with gold filigree, a short dark bodice panel, detached white sleeves, black fingerless gloves, a flowing split white sash, and gold-accented knee-high boots",
+    "Mona": "young adult woman with a slender build, fair skin, teal-green eyes, long dark-violet hair tied into high twin tails with red ribbons, a wide-brimmed purple astrologer hat with a red underside and gold eight-point star, a fitted purple astrologer bodysuit with gold star ornaments, a short red-lined cape, patterned dark tights, purple high-heeled boots, white gloves, and a blue Hydro Vision at her hip"
+  },
+  "product_design": "an ornate palm-sized celestial compass with a polished brass body, four concentric rotating rings, a midnight-blue enamel face, one long gold needle, a central eight-point star, crescent and constellation engravings, a luminous turquoise Primogem-shaped crystal at the crown, pink-and-blue Intertwined Fate inlays around the rim, three small articulated feet, and no lettering or logo on the physical prop",
   "advertised_products": [
     {
       "episode": 1,
@@ -12,21 +18,38 @@
       "tagline": "Doesn't restore resin. Helps you outlive the wait.",
       "game_mechanic_referenced": "original-resin",
       "date": "2026-06-18"
+    },
+    {
+      "episode": 2,
+      "product_name": "Mona's 50/50 Compass",
+      "product_slug": "monas-50-50-compass",
+      "tagline": "The stars are on your side.",
+      "game_mechanic_referenced": "character-event-wish-fifty-fifty",
+      "date": "2026-07-23"
     }
   ],
   "anti_repetition": {
-    "recent_lines": ["Doesn't restore resin. Helps you outlive the wait."],
-    "recent_themes": ["resin-economy"],
-    "recent_tones": ["zen-deadpan"],
-    "recent_hooks": [
-      "Lumine exhausted at resin cap, Resin Energy drink appears, runs through domain effortlessly, sits meditating — enlightenment achieved, walks away from game, Paimon holds sign: she's fine"
+    "recent_lines": [
+      "Doesn't restore resin. Helps you outlive the wait.",
+      "The stars are on your side.",
+      "Follow the needle. Claim your Primogems. Watch the sky turn gold.",
+      "A five-star Mona! Clearly, the stars have excellent taste."
     ],
-    "recent_twist_types": ["enlightenment-walk-away"],
-    "recent_problem_types": ["resin-anxiety"],
-    "recent_characters": ["Lumine"],
+    "recent_themes": ["resin-economy", "primogem-fortune"],
+    "recent_tones": ["zen-deadpan", "celebratory-celestial-deadpan"],
+    "recent_hooks": [
+      "Lumine exhausted at resin cap, Resin Energy drink appears, runs through domain effortlessly, sits meditating — enlightenment achieved, walks away from game, Paimon holds sign: she's fine",
+      "Free Primogem stars gather around Lumine at a Starfell Valley wish observatory, Mona reveals a celestial prediction compass, the needle locks and a golden wish launches, the five-star resolves to a Mona portrait token, Lumine laughs, Mona gives a proud flourish, the packshot promises that the stars are on the Traveler's side"
+    ],
+    "recent_twist_types": ["enlightenment-walk-away", "proud-mona-self-selection"],
+    "recent_problem_types": ["resin-anxiety", "primogem-giveaway-opportunity"],
+    "recent_characters": ["Lumine", "Mona"],
     "recent_environments": [
       "Mondstadt city plaza cobblestone medieval fantasy windmill golden afternoon light",
-      "Mondstadt hillside meadow green rolling hills wildflowers pastoral serenity"
+      "Mondstadt hillside meadow green rolling hills wildflowers pastoral serenity",
+      "Starfell Valley cliffside wish altar under constellation night sky",
+      "astrologer's brass instrument table at open-air observatory",
+      "armillary platform glowing with golden wish light"
     ],
     "banned_combos": []
   },
@@ -50,6 +73,27 @@
       "duration_sec": 25.0,
       "cost_usd": 2.75,
       "notes": "Pilot episode. Twist: Lumine achieves enlightenment and walks away from the game."
+    },
+    {
+      "episode": 2,
+      "date": "2026-07-23",
+      "product_name": "Mona's 50/50 Compass",
+      "product_slug": "monas-50-50-compass",
+      "character": "Mona",
+      "theme": "primogem-fortune",
+      "twist_type": "proud-mona-self-selection",
+      "problem_type": "primogem-giveaway-opportunity",
+      "environments": [
+        "Starfell Valley cliffside wish altar under constellation night sky",
+        "astrologer's brass instrument table at open-air observatory",
+        "armillary platform glowing with golden wish light"
+      ],
+      "tone": "celebratory-celestial-deadpan",
+      "hook": "Free Primogem stars gather around Lumine at a Starfell Valley wish observatory, Mona reveals a celestial prediction compass, the needle locks and a golden wish launches, the five-star resolves to a Mona portrait token, Lumine laughs, Mona gives a proud flourish, the packshot promises that the stars are on the Traveler's side",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-23/fake-ad/20260723-145515-96341/final.mp4",
+      "duration_sec": 30.040998,
+      "cost_usd": 2.8006,
+      "notes": "Full-frame 9:16 fan-made parody ad with English voice-over, baked subtitles, scene CTA, and branded end CTA. Scheduled on Genshin Snap for 2026-07-29T20:50:00Z."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4"
