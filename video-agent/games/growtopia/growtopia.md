@@ -10,8 +10,8 @@
 - top-list — ready_to_post: yes (untested — first run pending)
 - fun-news — ready_to_post: yes (untested — first run pending)
 - what-if-real-life — ready_to_post: yes (untested — first run pending)
-- reddit-story — ready_to_post: yes (untested — first run pending)
-- dual-style — ready_to_post: yes (untested — first run pending)
+- reddit-story — ready_to_post: yes (tested 2026-07-22, final.mp4 produced and approved)
+- dual-style — ready_to_post: yes (tested 2026-07-22, final.mp4 produced)
 
 > ⚠️ **No YouTube channel mapped yet** (`youtube_channel: none`). Per Phase 6 routing rule, YT upload is skipped until a channel is mapped — deliverable stays Supabase-only. Also no opener asset yet (CTA + pop-up are ready).
 
@@ -256,11 +256,25 @@ Canon is fixed (see the LOCKED block in `## Character Prompt Blocks` → Growtop
 ## CTA
 
 - **Status:** ✅ READY (2026-07-17)
-- **Video:** `assets/growtopia/branding/cta.mp4` — `game_assets` (`asset_type=generated_ref`, `character_name=branding:cta`, tags `cta,branding`). Editor finds it by the `cta` tag.
+- **Video:** `assets/growtopia/branding/cta.mp4` — `game_assets` (`asset_type=generated_ref`, `character_name=branding:cta`, tags `cta,video,branding`). Editor finds it by the required `cta` + `video` tags.
   - `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4`
 - **Content:** a Growtopia pixel scene, text "Get free gems" / "Link in bio" + a down-arrow, gems, sun. 3s, ~9:16 (720×1280 from Kling; Editor scales to 1080×1920).
 - **Source frame:** `assets/growtopia/branding/cta-source.png` (ChatGPT art). Animated with Kling v3 I2V (idle-v2): camera locked, only the arrow (bob) + sun shimmer move, everything else static.
 - **⚠️ Lesson (2026-07-17):** Kling I2V **morphs text even on a minimal idle** — tested on v1 (lots of motion) AND v2 (only arrow+sun moving, text explicitly frozen via negatives) → the text still "jumped". Conclusion: **a text-heavy CTA cannot be animated cleanly through I2V.** The right approach for text CTAs is **compositing** (animate the background in Kling WITHOUT text, overlay the text as a static ffmpeg layer), or a static CTA. The arrow bounce also comes out too harsh. The current `cta.mp4` (v2) was accepted as "good enough" but carries this text defect. Full write-up in `rules/roles/animator.md §3.2`.
+
+## Reddit Story production assets
+
+- **Status:** ✅ TESTED (2026-07-22). The first approved episode is recorded in `games/growtopia/reddit-story_bible.json`.
+- **Game-specific rules:** `games/growtopia/reddit-story_special.md`.
+- **Background:** `game_assets` (`asset_type=generated_ref`, `character_name=location:reddit-story`, tags `reddit-story-bg,bg-ref,location`).
+  - `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/locations/reddit-story.png`
+- **Gameplay clip 01:** `game_assets` (`asset_type=gameplay_clip`, `character_name=growtopia-gameplay-01`, tags `gameplay,reddit-story,vertical`).
+  - Local mirror: `games/growtopia/assets/Growtopia 1.mp4`
+  - `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/gameplay/growtopia-01.mp4`
+- **Gameplay clip 02:** `game_assets` (`asset_type=gameplay_clip`, `character_name=growtopia-gameplay-02`, tags `gameplay,reddit-story,vertical`).
+  - Local mirror: `games/growtopia/assets/growtopia 2.mp4`
+  - `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/gameplay/growtopia-02.mp4`
+- **Approved episode:** `https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-22/reddit-story/20260722-173047-reddit-cousin-world/final.mp4`
 
 ## Pop-up (overlay banner)
 
