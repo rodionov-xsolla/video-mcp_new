@@ -33,10 +33,37 @@ overlays[] schema (in each clip/scene of storyboard.json):
     "line_gap": 160                   // optional y step between \\n lines (default = size*1.25)
   }
 
+  COMMERCIAL graphic types:
+  {
+    "type": "product_logo",
+    "asset_ref": "product_logo_url",  // top-level storyboard URL field
+    "position": "90,110",
+    "size": 330,                      // rendered width in px
+    "enable": [0.0, 5.0]
+  }
+  {
+    "type": "mode_chips",
+    "items": [
+      {"text": "STUN", "color": "#66ccff"},
+      {"text": "KILL", "color": "#ff3344"}
+    ],
+    "position": "90,1110",
+    "size": 40,
+    "chip_width": 210,                // optional
+    "chip_height": 76,                // optional
+    "chip_gap": 15,                   // optional
+    "enable": [0.0, 5.0]
+  }
+
+  `render_as: "active selector chip"` on a text overlay adds a solid
+  mode-colored plate behind the label. `starburst` is rendered as a bright
+  commercial burst badge (rectangular safe fallback for the ffmpeg compositor).
+
   IMAGE overlay type (static PNG from URL, displayed over the clip):
   {
     "type": "image",
     "url": "https://...banner.png",   // downloaded to workdir at encode time
+    "local_path": "/abs/banner.png",  // optional preferred local source
     "width": 400,                     // px, -1 = keep aspect relative to height
     "height": -1,                     // px, -1 = keep aspect relative to width
     "position": "top-left|top-right|center|bottom-center|top-center|{x},{y}",
@@ -197,6 +224,22 @@ def _write_textfile(workdir: str, scene_idx, oi, li, text: str) -> str:
     return path
 
 
+def _numeric_position(pos, default_x: int = 40, default_y: int = 40) -> tuple[int, int]:
+    """Resolve a literal x,y position for plate-like commercial graphics."""
+    if isinstance(pos, str) and "," in pos:
+        x_raw, y_raw = pos.split(",", 1)
+        try:
+            return int(float(x_raw.strip())), int(float(y_raw.strip()))
+        except ValueError:
+            pass
+    if isinstance(pos, dict):
+        try:
+            return int(float(pos.get("x", default_x))), int(float(pos.get("y", default_y)))
+        except (TypeError, ValueError):
+            pass
+    return default_x, default_y
+
+
 def build_overlay_drawtexts(ov: dict, scene_idx, oi: int, workdir: str) -> list[str]:
     """One overlay object -> list of drawtext filters (one per \\n line)."""
     font = resolve_font(ov.get("font", "IMPACT"))
@@ -259,8 +302,100 @@ def build_overlay_drawtexts(ov: dict, scene_idx, oi: int, workdir: str) -> list[
     return filters
 
 
-def _download_img(url: str, workdir: str, scene_idx, oi: int) -> str:
+def build_mode_chips_filters(ov: dict, scene_idx, oi: int, workdir: str) -> list[str]:
+    """Render a horizontal row of solid commercial mode chips."""
+    items = ov.get("items") or []
+    if not items:
+        return []
+    x0, y0 = _numeric_position(ov.get("position"), 90, 1110)
+    size = int(ov.get("size", 40))
+    chip_w = int(ov.get("chip_width", 210))
+    chip_h = int(ov.get("chip_height", 76))
+    gap = int(ov.get("chip_gap", 15))
+    en = _enable_expr(ov.get("enable"))
+    enable_suffix = f":enable='{en}'" if en else ""
+    font = resolve_font(ov.get("font", "IMPACT")) or resolve_font("IMPACT")
+    filters: list[str] = []
+
+    for item_idx, item in enumerate(items):
+        x = x0 + item_idx * (chip_w + gap)
+        fill = resolve_color(item.get("color", "white"))
+        filters.append(
+            f"drawbox=x={x}:y={y0}:w={chip_w}:h={chip_h}:"
+            f"color={fill}@0.88:t=fill{enable_suffix}"
+        )
+        tf = _write_textfile(workdir, scene_idx, oi, item_idx, str(item.get("text", "")))
+        parts = [
+            f"drawtext=textfile='{tf}'",
+            f"fontfile='{font}'",
+            f"fontsize={size}",
+            "fontcolor=0x0A0A12",
+            "expansion=none",
+            f"x={x}+(%d-text_w)/2" % chip_w,
+            f"y={y0}+(%d-text_h)/2" % chip_h,
+        ]
+        if en:
+            parts.append(f"enable='{en}'")
+        filters.append(":".join(parts))
+    return filters
+
+
+def build_active_selector_filters(ov: dict, scene_idx, oi: int, workdir: str) -> list[str]:
+    """Render a filled active-mode plate followed by its label."""
+    x, y = _numeric_position(ov.get("position"), 70, 1510)
+    size = int(ov.get("size", 48))
+    text = str(ov.get("text", ""))
+    width = int(ov.get("chip_width", max(380, min(900, len(text) * size * 0.58 + 52))))
+    height = int(ov.get("chip_height", size + 34))
+    fill = resolve_color(ov.get("color", "white"))
+    en = _enable_expr(ov.get("enable"))
+    enable_suffix = f":enable='{en}'" if en else ""
+    box = (
+        f"drawbox=x={x}:y={y}:w={width}:h={height}:"
+        f"color={fill}@0.88:t=fill{enable_suffix}"
+    )
+    label = dict(ov)
+    label["position"] = f"{x + 22},{y + 12}"
+    label["color"] = "#0a0a12"
+    label["stroke"] = {"color": "#0a0a12", "width": 0}
+    return [box, *build_overlay_drawtexts(label, scene_idx, oi, workdir)]
+
+
+def build_starburst_filters(ov: dict, scene_idx, oi: int, workdir: str) -> list[str]:
+    """Render a high-contrast commercial burst badge and centered label."""
+    x, y = _numeric_position(ov.get("position"), 760, 250)
+    width = int(ov.get("badge_width", 250))
+    height = int(ov.get("badge_height", 128))
+    accent = resolve_color(ov.get("accent_color", "#ffd700"))
+    en = _enable_expr(ov.get("enable"))
+    enable_suffix = f":enable='{en}'" if en else ""
+    box = (
+        f"drawbox=x={x}:y={y}:w={width}:h={height}:"
+        f"color={accent}@0.94:t=fill{enable_suffix}"
+    )
+    label = dict(ov)
+    label["position"] = f"{x}+(%d-text_w)/2,{y}+(%d-text_h)/2" % (width, height)
+    label["stroke"] = {"color": ov.get("color", "#0a0a12"), "width": 0}
+    return [box, *build_overlay_drawtexts(label, scene_idx, oi, workdir)]
+
+
+def build_overlay_filters(ov: dict, scene_idx, oi: int, workdir: str) -> list[str]:
+    """Dispatch text and code-native commercial graphic overlays."""
+    ov_type = ov.get("type")
+    if ov_type == "mode_chips":
+        return build_mode_chips_filters(ov, scene_idx, oi, workdir)
+    if ov_type == "starburst":
+        return build_starburst_filters(ov, scene_idx, oi, workdir)
+    if ov.get("render_as") == "active selector chip":
+        return build_active_selector_filters(ov, scene_idx, oi, workdir)
+    return build_overlay_drawtexts(ov, scene_idx, oi, workdir)
+
+
+def _download_img(url: str, workdir: str, scene_idx, oi: int,
+                  local_path: str | None = None) -> str:
     """Download an image URL to workdir and return the local path (cached)."""
+    if local_path and os.path.isfile(local_path):
+        return local_path
     os.makedirs(workdir, exist_ok=True)
     ext = (url.rsplit(".", 1)[-1].split("?")[0] if "." in url else "png")[:4]
     local = os.path.join(workdir, f"img-s{scene_idx}-{oi}.{ext}")
@@ -335,7 +470,7 @@ def build_image_overlay_frags(ov: dict, scene_idx, oi: int, workdir: str,
     url = ov.get("url", "").strip()
     if not url:
         return "", ""
-    local = _download_img(url, workdir, scene_idx, oi)
+    local = _download_img(url, workdir, scene_idx, oi, ov.get("local_path"))
     w = int(ov.get("width", -1))
     h = int(ov.get("height", -1))
     # keep aspect if one dim is -1; ffmpeg scale allows -1
@@ -385,7 +520,7 @@ def scene_fragment(scene: dict, scene_idx, workdir: str,
     if text_ovls:
         all_dt = []
         for oi, ov in enumerate(text_ovls):
-            all_dt.extend(build_overlay_drawtexts(ov, scene_idx, oi, workdir))
+            all_dt.extend(build_overlay_filters(ov, scene_idx, oi, workdir))
         if all_dt:
             dt_out = f"[v{scene_idx}dt]" if img_ovls else out_label
             parts.append(f"{cur}" + ",".join(all_dt) + f"{dt_out}")
@@ -412,6 +547,37 @@ def scene_idx(s: dict):
 def find_scenes(sb: dict) -> list[dict]:
     arr = sb.get("scenes") or sb.get("clips") or []
     return sorted(arr, key=scene_idx)
+
+
+def resolve_asset_overlays(sb: dict) -> None:
+    """Resolve storyboard-level asset refs into ordinary image overlays."""
+    for scene in find_scenes(sb):
+        resolved = []
+        for ov in (scene.get("overlays") or []):
+            if ov.get("type") != "product_logo":
+                resolved.append(ov)
+                continue
+            asset_ref = ov.get("asset_ref", "product_logo_url")
+            url = sb.get(asset_ref, "")
+            if not isinstance(url, str) or not url.startswith("https://"):
+                print(
+                    f"  [warn] product logo asset ref '{asset_ref}' is missing — overlay skipped",
+                    file=sys.stderr,
+                )
+                continue
+            resolved.append({
+                "type": "image",
+                "url": url,
+                "local_path": sb.get(asset_ref.replace("_url", "_local_path")),
+                "width": int(ov.get("size", 330)),
+                "height": -1,
+                "position": ov.get("position", "top-left"),
+                "enable": ov.get("enable"),
+                "opacity": ov.get("opacity", 1.0),
+                "fade_in": ov.get("fade_in", 0),
+                "fade_out": ov.get("fade_out", 0),
+            })
+        scene["overlays"] = resolved
 
 
 def channel_bug_fragment(bug_label: str, in_label: str, out_label: str) -> str:
@@ -447,6 +613,7 @@ def main():
 
     with open(args.storyboard, encoding="utf-8") as f:
         sb = json.load(f)
+    resolve_asset_overlays(sb)
     scenes = find_scenes(sb)
 
     if args.check:

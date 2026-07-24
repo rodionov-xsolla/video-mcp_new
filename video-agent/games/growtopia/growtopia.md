@@ -67,7 +67,35 @@ Growtopia — 2D песочница-MMO, где мир состоит из бл�
 Growtopia style, 2D pixel-art sprite, retro flat side-view design, blocky pixelated proportions, thick clean black outlines, bright saturated candy colors, simple tile-based sandbox world backdrop, no 3D rendering
 ```
 
-### ⚠️ Animating the sprite via Kling I2V — "Minecraft morph" (burned 2026-07-17)
+### Approved generated-video treatment — pseudo-isometric 2.5D (user-locked 2026-07-24)
+
+For newly generated vertical videos, use a **bright pseudo-isometric 2.5D pixel-art diorama** unless the exact format/series story bible or a live user instruction explicitly requires the legacy side-view treatment:
+
+- Native edge-to-edge 9:16 with a large foreground, readable midground action platform and receding background tiles.
+- Front-facing or three-quarter Growtopians and products share one coherent projected grid with the blocks and shadows.
+- Crisp illustrated pixel art with thick outlines and a cheerful cyan/green/gold palette.
+- Preserve Growtopia identity without becoming Minecraft, voxel sculpture, smooth CGI or photoreal 3D.
+- Do not paste flat side-view sprites into a perspective environment.
+
+Suggested prompt block:
+```
+Growtopia-inspired crisp 2D pixel art, pseudo-isometric 2.5D diorama, blocky pixelated proportions, thick clean black outlines, bright cheerful cyan green and gold palette, coherent three-quarter projection, layered foreground midground and receding tile platforms, native edge-to-edge vertical 9:16, illustrated perspective rather than volumetric 3D, no Minecraft, no voxel CGI
+```
+
+### ⚠️ Kling I2V — no Elements by default (user-locked 2026-07-24)
+
+**Do not attach separate Kling Elements for Growtopia by default.** The approved pseudo-isometric test showed excessive character/product geometry morphing when Elements were attached. Animate the complete approved scene PNG directly; an Element is allowed only after an explicit live user request.
+
+- The start frame must already contain the final coherent character, product, Gems, text and perspective.
+- Prefer near-locked shots, tiny character actions, restrained particles and subtle differential parallax.
+- Avoid camera orbits, perspective flips, large body turns and object reconstruction.
+- For timers or exact diegetic text, bake the exact value into the start frame and keep the shot nearly static.
+- Never ask Kling to redraw, count down or rotate text-bearing objects.
+
+### Legacy flat side-view Kling branch — "Minecraft morph" (burned 2026-07-17)
+
+The guidance below applies only when the exact format/series bible or the user explicitly selects the legacy flat side-view treatment.
+
 The blocky Growtopia skin **very easily morphs into a 3D Minecraft look** under I2V. `NOT Minecraft` negatives do NOT fix it — it is fixed by start-frame composition and camera motion (full write-up in `rules/roles/animator.md §3.2`). In short, for growtopia pixel scenes:
 - **Grounded composition is mandatory:** the character stands inside a full flat tiled Growtopia world (platforms, blocks, World Lock — reading like a "2D game screenshot"). Do NOT isolate the sprite on empty sky and do NOT place it in a perspective 3D "cave" — in both cases Kling reconstructs voxel 3D.
 - **Camera:** a gentle push-in toward the character, or near-locked. No pull-backs / fly-overs "above the block world" and no orbits "toward frontal" — those trigger 3D reconstruction.
