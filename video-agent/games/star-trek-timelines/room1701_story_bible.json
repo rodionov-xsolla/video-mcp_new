@@ -6,7 +6,7 @@
   "genre": "sitcom",
   "style_tags": "semi-realistic stylized 3D characters, modern nerdy shared bedroom interior, warm casual lighting, practical props (phones, laptops, game controllers, Star Trek posters), intimate close-ups and 3/4 face shots, cozy bedroom aesthetic with sci-fi geeky decor, natural soft lighting from screens and lamps, not Disney, not Pixar, not DreamWorks, not toy-like",
   "created_at": "2026-06-25",
-  "last_episode": 4,
+  "last_episode": 5,
   "show_concept": "Two geeky roommates (Alex and Michael) live in Room 1701 and play Star Trek Timelines all the time. They treat every everyday problem like a Starfleet mission. Emily, their cool neighbor, is sharp, sarcastic, and unexpectedly good at handling people. Anna is the girl Alex is pursuing — warm, playful, and increasingly drawn to Michael's nerd sincerity. The show is a fast sitcom about awkward dating comedy and Star Trek geek humor.",
   "production_rules": [
     "Do NOT rely on readable phone UI — phone can glow in hands but meaning comes from acting/dialogue",
@@ -38,6 +38,12 @@
     {
       "name": "Alex",
       "role": "protagonist",
+      "status": "Anna liked the authentic Room 1701 and warmed to Alex's real nerdy side, but he lost control of her tutorial after guessing a crew member by appearance.",
+      "relationships": {
+        "Anna": "Gaining warmth through authenticity, but his insecurity and weak game knowledge still push her toward Michael.",
+        "Michael": "Still his best friend and accidental romantic rival.",
+        "Emily": "Relies on her practical help and sarcastic emotional cover."
+      },
       "character_description": "young man, late 20s, slim build, slightly nervous energy, warm brown eyes, messy chestnut-brown hair visible under a black baseball cap with a Starfleet delta, dark navy Star Trek Timelines hoodie with logo, black cargo pants, blue-and-white sneakers, usually holding a phone with anxious grip, shy worried smile, practical warm bedroom lighting",
       "visual_prompt": "Alex - slim young man in black baseball cap with Starfleet delta, messy chestnut-brown hair, large warm brown eyes, dark navy Star Trek Timelines hoodie, black cargo pants, blue-and-white sneakers, anxious grip on phone, shy worried expression",
       "prompt_descriptor": "slim young man late 20s messy chestnut-brown hair under black baseball cap with gold Starfleet delta badge large warm brown expressive eyes dark navy Star Trek Timelines hoodie with gold Starfleet command delta logo black cargo pants blue-and-white sneakers",
@@ -50,6 +56,12 @@
     {
       "name": "Michael",
       "role": "co-protagonist",
+      "status": "Restored Room 1701's nerd identity and took over Anna's crew-selection question with effortless confidence, still treating the moment as a tutorial rather than romantic competition.",
+      "relationships": {
+        "Alex": "Loyal roommate whose dating mission he keeps disrupting without realizing it.",
+        "Anna": "Increasingly trusted as her game expert; he reads the connection as purely educational.",
+        "Emily": "Accepts her sarcasm as background mission control."
+      },
       "character_description": "young man, late 20s, stocky confident build, intense focused eyes, wild curly bright orange-ginger hair, round black-framed glasses, yellow-gold Star Trek hoodie with black delta insignia, black joggers, gray NCC-1701 slippers, black headphones around neck, badge, holds phone/tablet like a command console, very serious mission-briefing expression",
       "visual_prompt": "Michael - stocky young man with wild curly orange-ginger hair, round black-framed glasses, yellow-gold Star Trek hoodie with black delta, black joggers, gray NCC-1701 slippers, black headphones around neck, badge, intense serious expression",
       "prompt_descriptor": "stocky young man late 20s wild voluminous curly bright orange-ginger hair round thick black-framed glasses large expressive eyes bright YELLOW-GOLD Star Trek Timelines hoodie with black Starfleet command delta logo black headphones hanging around neck clip-on ID badge",
@@ -62,6 +74,12 @@
     {
       "name": "Emily",
       "role": "neighbor",
+      "status": "Helped Alex prepare the room while pretending she only wanted to protect the carpet; she continues to support him without making her feelings obvious.",
+      "relationships": {
+        "Alex": "Quietly protective and emotionally perceptive, disguised as friendly sarcasm.",
+        "Michael": "Treats his mission logic as useful chaos to manage.",
+        "Anna": "Friendly observer of the growing triangle."
+      },
       "character_description": "young woman, late 20s, confident relaxed posture, sharp intelligent eyes, dark wavy hair with vivid purple ombre tips, black off-shoulder top with gold Starfleet delta, purple cargo pants, black Converse sneakers, black choker with Starfleet delta charm, usually holding a black Star Trek coffee mug, slight sarcastic smirk, effortlessly cool",
       "visual_prompt": "Emily - young woman with dark wavy hair and vivid purple ombre tips, sharp eyes, black off-shoulder top with gold Starfleet delta, purple cargo pants, black Converse, black choker with Starfleet delta charm, holding black Star Trek mug, dry sarcastic smirk",
       "prompt_descriptor": "young woman late 20s dark wavy hair with vivid purple ombre tips sharp intelligent eyes black off-shoulder top with gold Starfleet delta logo purple cargo pants black Converse sneakers black choker with Starfleet delta charm holding black Star Trek coffee mug",
@@ -74,6 +92,12 @@
     {
       "name": "Anna",
       "role": "recurring guest / love interest",
+      "status": "Preferred the authentic nerdy Room 1701 over Alex's fake-normal setup, then turned to Michael when Alex could not answer her crew-selection question.",
+      "relationships": {
+        "Alex": "Likes his authentic side and the effort he made, but is unsure whether he can guide her in the game.",
+        "Michael": "Drawn to his effortless competence and nerd sincerity.",
+        "Emily": "Comfortable with her dry, practical presence in the room."
+      },
       "character_description": "young woman, late 20s, warm confident posture, large warm brown eyes, medium-length wavy dark brown hair, friendly open smile, beige ribbed henley top, blue straight-leg jeans with rolled cuffs, beige sneakers, simple gold necklace, often holding a coffee cup, naturally charming and playful energy",
       "visual_prompt": "Anna - young woman with medium wavy dark brown hair, large warm brown eyes, friendly smile, beige ribbed henley top, blue straight-leg jeans rolled at cuffs, beige sneakers, gold necklace, holding a coffee cup, warm natural lighting",
       "prompt_descriptor": "young woman late 20s medium-length wavy dark brown hair large warm brown eyes friendly open smile beige ribbed henley top blue straight-leg jeans with rolled cuffs beige sneakers simple gold necklace holding a coffee cup",
@@ -103,10 +127,50 @@
     "Will Alex manage to keep Anna's attention now that Michael accidentally charmed her?",
     "Will Michael realize he's accidentally becoming a romantic rival?",
     "Will Emily ever actually join them?",
-    "Will Michael accept that Anna is texting Alex now, not him?",
-    "Can Alex hide Room 1701's mess (and Michael's shrine of props) before Anna arrives for the tutorial tomorrow?"
+    "Will Anna prefer Alex's authentic nerdy side over Michael's effortless game competence?",
+    "Can Alex regain control of Anna's tutorial after Michael takes over the crew-selection question?"
   ],
+  "closed_loops": [
+    "Alex got Room 1701 ready before Anna arrived — resolved in EP5 when she rejected the fake-normal version and preferred the authentic nerdy room."
+  ],
+  "world_state": {
+    "location": "Room 1701",
+    "important_items": [
+      "Assemble Your Crew poster",
+      "crew board and glowing tablet",
+      "Star Trek collectibles restored by Michael"
+    ],
+    "key_events": [
+      "Anna visited Room 1701 for the promised tutorial.",
+      "Anna preferred the authentic nerdy room over Alex's fake-normal setup.",
+      "Alex guessed a crew member by appearance, and Anna turned to Michael for the real answer."
+    ]
+  },
+  "anti_repetition": {
+    "recent_phrases": [
+      "The bridge needs identity.",
+      "The bridge needs plausible deniability.",
+      "Show me your roster."
+    ],
+    "recent_hooks": [
+      "Spoken countdown cleanup hook: Anna arrives in ten minutes."
+    ],
+    "recent_cliffhangers": [
+      "Competence-transfer cliffhanger: Anna turns from Alex to Michael for crew-selection help."
+    ]
+  },
   "episode_summaries": [
+    {
+      "episode": 5,
+      "title": "Room Inspection",
+      "language": "en",
+      "summary": "Anna comes to Room 1701 for the promised tutorial. Alex and Emily try to make the room look normal, while Michael restores the hidden poster, tablet, and collectibles because 'the bridge needs identity.' Anna prefers the authentic nerdy room and warms to Alex's real side. When she asks which crew member she should use, Alex guesses by appearance; Anna turns to Michael, who immediately takes command of the tutorial.",
+      "cliffhanger": "Anna asks Michael for the real crew-selection answer. Michael says, 'Show me your roster,' and Alex realizes he has lost control of his own tutorial.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-24/serial-drama/20260724-142230-room-inspection/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=AxRAGm6qREc",
+      "yt_publish_at": "2026-07-30T20:50:00Z",
+      "duration_sec": 48.3
+    },
     {
       "episode": 4,
       "title": "Crash Course",
@@ -228,12 +292,16 @@
       {
         "episode": 5,
         "title": "Room Inspection",
-        "status": "planned",
+        "status": "done",
         "location": "room-1701",
         "cast": ["Alex", "Michael", "Emily", "Anna"],
-        "summary": "Anna comes to Room 1701. Alex tries to make the room look normal, hiding posters and props. Michael keeps putting them back because 'the bridge needs identity.' Emily helps clean, but pretends she only came to protect the carpet.",
+        "summary": "Anna comes to Room 1701 for the promised tutorial. Alex and Emily try to make the room look normal, while Michael restores the hidden poster, tablet, and collectibles because 'the bridge needs identity.' Anna prefers the authentic nerdy room and warms to Alex's real side before his weak crew-selection answer sends her back to Michael.",
         "game_cta_point": "Room 1701 becomes a physical extension of the game: posters, crew board, phones, sci-fi props. Anna likes the nerdy version more than Alex's fake 'normal' version.",
-        "cliffhanger": "Anna says the room is weirdly cool — then asks Michael a very specific game question Alex cannot answer."
+        "cliffhanger": "Anna asks Michael for the real crew-selection answer. Michael says, 'Show me your roster,' and Alex realizes he has lost control of his own tutorial.",
+        "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-24/serial-drama/20260724-142230-room-inspection/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=AxRAGm6qREc",
+        "yt_publish_at": "2026-07-30T20:50:00Z",
+        "duration_sec": 48.3
       },
       {
         "episode": 6,
