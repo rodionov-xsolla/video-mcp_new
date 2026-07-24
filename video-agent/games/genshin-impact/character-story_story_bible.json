@@ -5,7 +5,7 @@
   "title": "Genshin Impact — Character Story",
   "format": "character-story",
   "created_at": "2026-06-29",
-  "last_episode": 12,
+  "last_episode": 13,
   "tts_engine": "chatterbox",
   "tts_note": "Genshin ALWAYS uses Chatterbox via fal-ai/chatterbox/text-to-speech. Voice refs at assets/genshin-impact/characters/{slug}/voice-1.mp3. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "voice_ref_base": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/{slug}/voice-1.mp3",
@@ -40,7 +40,8 @@
       "Dehya",
       "Navia",
       "Hu Tao",
-      "Raiden Shogun"
+      "Raiden Shogun",
+      "Furina"
     ],
     "done_male": [
       "Xiao",
@@ -60,7 +61,8 @@
       "Hu Tao",
       "Wanderer",
       "Raiden Shogun",
-      "Tartaglia"
+      "Tartaglia",
+      "Furina"
     ],
     "cooldown_episodes": 20,
     "selection_note": "Pick characters with strong lore arcs and tragic backstories. Prioritize 5-star characters with high popularity. Alternate male/female for variety. Avoid repeating characters used in dual-style within 4 episodes."
