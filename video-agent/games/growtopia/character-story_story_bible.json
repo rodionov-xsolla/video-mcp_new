@@ -68,6 +68,23 @@
         "eligible_for": "pixel clips"
       },
       "status": "covered"
+    },
+    {
+      "name": "Criminal Mastermind",
+      "slug": "criminal-mastermind",
+      "role": "the calculating criminal architect who engineers every major heist in Growtopia",
+      "appearance": "2D pixel-art Growtopian sprite, blocky humanoid NPC, large square head, tiny dot eyes with black pupils, small flat mouth, thick clean black outlines, dark navy blazer, white shirt, monocle over right eye, slicked-back dark hair, tiny blocky gloved hands, composed criminal-mastermind silhouette",
+      "ref": {
+        "asset_type": "reference_image",
+        "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/criminal-mastermind/sheet.png",
+        "tags": [
+          "growtopia",
+          "criminal-mastermind",
+          "npc"
+        ],
+        "eligible_for": "pixel clips"
+      },
+      "status": "covered"
     }
   ],
   "narrator": {
@@ -85,7 +102,19 @@
   },
   "covered_characters": [
     "Legendary Wizard",
-    "Tomb Robber"
+    "Tomb Robber",
+    "Criminal Mastermind"
   ],
-  "episodes": []
+  "episodes": [
+    {
+      "date": "2026-07-27",
+      "run_id": "20260727-142624-5453bd",
+      "character": "Criminal Mastermind",
+      "slug": "criminal-mastermind",
+      "language": "en",
+      "status": "approved_final_saved",
+      "final_video_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-27/character-story_final.mp4",
+      "notes": "Final timing-fixed build approved by user; voice-over rebuilt from per-scene MP3s, subtitles regenerated to match scene slots. Do not repeat this character for future Growtopia character-story runs."
+    }
+  ]
 }
