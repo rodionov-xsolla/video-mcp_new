@@ -27,9 +27,47 @@
       "ref": {
         "asset_type": "reference_image",
         "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/growtopian-default-skin/sheet.png",
-        "tags": ["growtopia", "default-skin", "player-avatar"],
+        "tags": [
+          "growtopia",
+          "default-skin",
+          "player-avatar"
+        ],
         "eligible_for": "pixel clips only (canonical raw default-skin sprite; not a competing-format stylized render)"
       }
+    },
+    {
+      "name": "Legendary Wizard",
+      "slug": "legendary-wizard",
+      "role": "the ancient all-knowing Legendary Wizard of Growtopia",
+      "appearance": "2D pixel-art Growtopian sprite, blocky humanoid, classic wizard silhouette, long purple robes, tall pointed hat, white beard, staff, thick clean black outlines, bright saturated candy colors, retro flat side-view sprite",
+      "ref": {
+        "asset_type": "reference_image",
+        "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/legendary-wizard/sheet.png",
+        "tags": [
+          "growtopia",
+          "legendary-wizard",
+          "npc"
+        ],
+        "eligible_for": "pixel clips"
+      },
+      "status": "covered"
+    },
+    {
+      "name": "Tomb Robber",
+      "slug": "tomb-robber",
+      "role": "the sneaky Tomb Robber who pillages ancient ruins across Growtopia",
+      "appearance": "2D pixel-art Growtopian sprite, blocky humanoid, dark outfit, explorer/thief gear, thick clean black outlines, retro flat side-view sprite",
+      "ref": {
+        "asset_type": "reference_image",
+        "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/tomb-robber/sheet.png",
+        "tags": [
+          "growtopia",
+          "tomb-robber",
+          "npc"
+        ],
+        "eligible_for": "pixel clips"
+      },
+      "status": "covered"
     }
   ],
   "narrator": {
@@ -45,6 +83,9 @@
     "append_standard_asset_after_in_scene": true,
     "note": "Growtopia CTA (3s idle) registered 2026-07-17 in game_assets (tags cta,branding). Pop-up overlay banner also available at branding/popup.png (tags popup,overlay)."
   },
-  "covered_characters": [],
+  "covered_characters": [
+    "Legendary Wizard",
+    "Tomb Robber"
+  ],
   "episodes": []
 }
