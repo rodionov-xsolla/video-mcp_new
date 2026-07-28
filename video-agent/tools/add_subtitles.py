@@ -127,7 +127,12 @@ def get_duration(path: str) -> float:
          "-of", "default=nw=1:nk=1", path],
         text=True,
     )
-    return float(out.strip())
+    out = out.strip()
+    try:
+        return float(out)
+    except ValueError:
+        import json as _json
+        return float(_json.loads(out)["format"]["duration"])
 
 
 def fmt_ass_time(sec: float) -> str:
