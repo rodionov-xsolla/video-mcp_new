@@ -1,0 +1,285 @@
+{
+  "series_id": "growtopia-the-wrong-world-en",
+  "game_tag": "growtopia",
+  "language": "en",
+  "title": "THE WRONG WORLD",
+  "genre": "fantasy drama with fish-out-of-water comedy",
+  "created_at": "2026-07-24",
+  "last_episode": 1,
+  "show_concept": "Jim accidentally uses a Glitched World Lock on his phone and pulls a living Growtopia Default Skin into the real world. The visitor is frightened, displaced, and certain that his pixel world was already real. Jim becomes his guide through ordinary human life while they search for a way home. Neither notices that the same open phone portal has allowed a Demonic Growtopian to begin crossing into Jim's empty bedroom. The series balances dramatic portal mystery and escalating danger with the Default Skin applying Growtopia rules to real-world objects, buildings, money, doors, and ownership.",
+  "style_tags": "dual-realm animated cinematic series. Growtopia and phone-portal imagery uses crisp illustrated 2D pixel art in a bright pseudo-isometric 2.5D diorama, blocky pixelated proportions, thick clean black outlines, cheerful cyan green and gold palette, coherent three-quarter projection, and layered tile platforms, no Minecraft and no voxel CGI. Real-world scenes transform into high-end stylized 3D animated-feature visuals with appealing rounded adult proportions, expressive eyes and brows, detailed soft skin and fabric, warm practical apartment lighting, cinematic depth of field, polished global illumination, emotionally readable faces, and grounded physical environments. Characters crossing the portal visibly transition from flat pixel sprites into expressive stylized 3D human or humanoid forms while preserving exact canonical Growtopia costume colors, silhouette, props, and moral identity.",
+  "title_card": {
+    "type": "text",
+    "line_1": "THE WRONG WORLD",
+    "line_2_template": "EPISODE {episode}: {title}",
+    "placement": "freeze_frame_interstitial_after_scene_1",
+    "duration_sec": 2,
+    "style": "Montserrat Black, centered white text, subtle cyan pixel-glitch edge, black translucent backing box"
+  },
+  "cta": {
+    "asset_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4",
+    "duration_sec": 3,
+    "position": "after_cliffhanger",
+    "text_note": "Use the approved existing Growtopia CTA as-is. Do not generate replacement lettering."
+  },
+  "production_rules": [
+    "Maximum 6 scenes and $7 total generation cost per episode.",
+    "Every episode begins with a spoken conflict hook, followed by the separate text title-card interstitial.",
+    "Every episode ends on a dramatic cliffhanger before the locked Growtopia CTA.",
+    "All scene clips use Kling v3 Standard I2V, including dialogue. Kling Avatar is forbidden.",
+    "Dialogue uses Kling native audio with generate_audio:true, shot_type:customize, multi_prompt, and no more than 2 voice_ids per request.",
+    "Voice samples are series-owned. Initial voice directions are locked here; permanent voice URLs remain null until the Debug-mode Sound phase is explicitly approved and generates them.",
+    "Do not use character names in NB2 or Kling visual prompts. Use the exact state-appropriate prompt_descriptor and the matching owned reference image.",
+    "Generate fresh series-owned character references. Do not reuse character refs from another Growtopia format automatically.",
+    "Do not attach separate Kling Elements by default. Animate the approved complete scene PNG directly.",
+    "Real-world Default Skin must retain canonical tan skin, bright cyan/turquoise shirt, medium-blue pants, and white sneakers in every scene.",
+    "In-game Default Skin must retain canonical tan blocky skin, bright cyan/turquoise shirt, and medium-blue pants.",
+    "Demonic Growtopian must retain dark red skin, black horns, black bat wings, glowing red eyes, and a dark smoky aura in both pixel and real-world states.",
+    "Portal transitions use restrained square pixel particles and colored light. Do not reconstruct or rotate bodies during animation.",
+    "The real world is stylized cinematic 3D feature animation, not photoreal live action. Preserve adult proportions and emotional facial acting without toy-like anatomy or oversized chibi heads.",
+    "When a character materializes, the generated start frame already shows the character landed or mostly formed; Kling performs only small settling motion and fading particles.",
+    "For the EP1 cliffhanger, the generated start frame already contains part of the Demonic red claw emerging from the phone. Kling only extends the hand slightly and grips the bedspread.",
+    "Do not rely on readable phone UI. The Glitched World Lock and portal meaning must be conveyed through dialogue, acting, color, and physical props.",
+    "Keep EP1 production inside Jim's bedroom, apartment window area, and immediate hallway so the real-world introduction feels intimate and continuous.",
+    "Background music is mandatory and must be generated with MiniMax Music.",
+    "Clamp every subtitle event to its dialogue scene window. No subtitle may overlap action scenes, the title interstitial, cliffhanger silence, or CTA."
+  ],
+  "characters": [
+    {
+      "name": "Jim",
+      "role": "human protagonist and reluctant guide",
+      "status": "A curious young Growtopia player who has just used the unknown Glitched World Lock in his bedroom.",
+      "relationships": {
+        "Default": "Not yet met; he will become responsible for helping the displaced visitor.",
+        "Demonic": "Unaware that the item has opened the real world to a hostile character."
+      },
+      "character_description": "teenage boy, 14-15 years old, slim build with youthful adolescent proportions and a smaller frame, warm light-brown skin, thoughtful dark brown eyes, short tousled dark brown hair, charcoal-gray zip hoodie over a faded green t-shirt, black straight-leg jeans, gray socks, smooth youthful face with no adult facial structure, slightly tired expression, curious but cautious posture, ordinary modern bedroom lighting",
+      "prompt_descriptor": "slim teenage boy 14-15 years old youthful adolescent build warm light-brown skin thoughtful dark brown eyes short tousled dark brown hair charcoal-gray zip hoodie over faded green t-shirt black straight-leg jeans gray socks smooth youthful face",
+      "voice_route": "kling-native",
+      "voice_note": "Teenage boy, natural and warm, slightly tired, grounded, nervous humor under pressure.",
+      "voice_seed_text": "I don't know what that item did, but I promise I will find a way to send you home.",
+      "voice_id_kling": null,
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/jim/variants/lukas-preview.mp3"
+    },
+    {
+      "name": "Default",
+      "role": "good displaced Growtopian",
+      "status": "Living inside his own Growtopia world immediately before the Glitched World Lock pulls him into Jim's bedroom.",
+      "relationships": {
+        "Jim": "Unknown human who accidentally pulls him into reality.",
+        "Demonic": "A hostile presence connected to the portal, not yet visible to Jim."
+      },
+      "character_description": "humanized real-world form of the canonical Growtopia Default Skin, young man early 20s, warm tan skin, large sincere brown eyes, short squared dark brown hair, bright cyan/turquoise short-sleeve t-shirt, medium-blue straight-leg pants, clean white sneakers, simple unadorned clothing, vulnerable open expression, faint cyan square pixel particles around the body immediately after materialization",
+      "prompt_descriptor": "young man early 20s warm tan skin large sincere brown eyes short squared dark brown hair bright cyan turquoise short-sleeve t-shirt medium-blue straight-leg pants clean white sneakers faint cyan square pixel particles",
+      "states": {
+        "pixel_world": {
+          "character_description": "canonical unmodified Growtopia Default Skin, tan beige blocky pixel skin, large square head, two white pixel eyes with black pupils, small flat mouth, bright cyan turquoise short-sleeve shirt, medium-blue pants, tiny blocky hands, no hat, no cosmetic set, thick clean black outline",
+          "prompt_descriptor": "canonical blocky pixel humanoid tan beige skin large square head two white pixel eyes black pupils small flat mouth bright cyan turquoise shirt medium-blue pants tiny blocky hands no hat no cosmetic set"
+        },
+        "real_world": {
+          "character_description": "young adult human form with warm tan skin, large sincere brown eyes, short squared dark brown hair, bright cyan turquoise short-sleeve t-shirt, medium-blue straight-leg pants, white sneakers, natural adult anatomy, faint residual cyan square pixel particles",
+          "prompt_descriptor": "young man early 20s warm tan skin large sincere brown eyes short squared dark brown hair bright cyan turquoise short-sleeve t-shirt medium-blue straight-leg pants clean white sneakers faint cyan square pixel particles"
+        }
+      },
+      "voice_route": "kling-native",
+      "voice_note": "Young adult male, sincere and direct, emotionally real, confused rather than foolish, with dry literal reactions.",
+      "voice_seed_text": "You keep calling this the real world. I was real before you pulled me out.",
+      "voice_id_kling": null,
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/default/variants/sterling-preview.mp3"
+    },
+    {
+      "name": "Demonic",
+      "role": "hostile Growtopian crossing into reality",
+      "status": "Still on the far side of the phone portal; only his red claw and part of a black wing enter the real world at the end of EP1.",
+      "relationships": {
+        "Default": "An ominous pursuer connected to the world Default left behind.",
+        "Jim": "The human whose Glitched World Lock has opened an unguarded door."
+      },
+      "character_description": "stylized cinematic 3D humanoid demonic Growtopian, tall lean adult male build, dark crimson-red skin, glowing red eyes, curved matte-black horns, sharp controlled grin, large folded black bat wings, fitted black layered clothing with deep red accents, long black clawed fingers, faint dark smoke and red square pixel particles, calm predatory posture",
+      "prompt_descriptor": "tall lean adult male humanoid dark crimson-red skin glowing red eyes curved matte-black horns sharp controlled grin large folded black bat wings fitted black layered clothing deep red accents long black clawed fingers faint dark smoke red square pixel particles",
+      "states": {
+        "pixel_world": {
+          "character_description": "Growtopia-style Demonic set avatar, dark red blocky pixel skin, black bat wings, curved black horns, glowing red pixel eyes, sharp-toothed grin, dark smoky aura, thick clean black outlines",
+          "prompt_descriptor": "blocky pixel humanoid dark red skin black bat wings curved black horns glowing red pixel eyes sharp-toothed grin dark smoky aura"
+        },
+        "real_world": {
+          "character_description": "tall lean stylized cinematic 3D humanoid with dark crimson-red skin, glowing red eyes, matte-black horns, black bat wings, fitted black clothing, deep red accents, long black clawed fingers, dark smoke and red square pixel particles",
+          "prompt_descriptor": "tall lean adult male humanoid dark crimson-red skin glowing red eyes curved matte-black horns large folded black bat wings fitted black layered clothing long black clawed fingers dark smoke red square pixel particles"
+        }
+      },
+      "voice_route": "kling-native",
+      "voice_note": "Low controlled adult male voice, quiet and intelligent, threatening without shouting.",
+      "voice_seed_text": "You opened a door between worlds. You should have checked what was waiting behind it.",
+      "voice_id_kling": null,
+      "ref_url": null
+    },
+    {
+      "name": "Monster Nian",
+      "role": "hostile Growtopian crossing into reality — actual EP1 cliffhanger antagonist",
+      "status": "Still on the far side of the phone portal; only a claw and forearm enter Jim's bedroom at the very end of EP1. User overrode the planned Demonic cliffhanger with this canonical Growtopia mob for EP1 specifically; the multi-episode arc (episodes 2-10) still refers to \"Demonic\" as the season villain — relationship between the two (same threat, or a separate follow-on antagonist) is unresolved and needs a decision before EP2.",
+      "relationships": {
+        "Jim": "The human whose Glitched World Lock has opened an unguarded door.",
+        "Default": "An ominous pursuer connected to the world Default left behind."
+      },
+      "character_description": "canonical Growtopia Monster Nian mob, red mane/fur, bright turquoise-dark-green scaled body and claws, no wings, no horns, no humanoid demonic traits — a game creature, not a person",
+      "prompt_descriptor": "Monster Nian red mane turquoise dark green scaled body claws no wings no horns game-creature paw and forearm",
+      "voice_route": "none",
+      "voice_note": "Non-speaking creature for EP1 — silent cliffhanger, no dialogue.",
+      "voice_seed_text": null,
+      "voice_id_kling": null,
+      "ref_url": null
+    }
+  ],
+  "locations": [
+    {
+      "name": "Jim's Bedroom",
+      "slug": "jims-bedroom",
+      "description": "Small believable modern young-adult bedroom at night, low wooden bed with dark blue blanket, smartphone resting on the bed, compact desk with monitor, warm bedside lamp, narrow window overlooking city lights, gray walls, a few subtle gaming objects, ordinary apartment realism, enough clear floor space for two characters, no branded text",
+      "visual_prompt": "small high-end stylized 3D animated-feature modern young-adult bedroom at night, low wooden bed with dark blue blanket, smartphone on bed, compact desk and monitor, warm bedside lamp, narrow window with city lights, gray walls, subtle gaming objects, polished global illumination, emotionally warm cinematic medium framing",
+      "ref_url": null
+    },
+    {
+      "name": "Apartment Hallway",
+      "slug": "apartment-hallway",
+      "description": "Immediate hallway outside Jim's bedroom, warm ceiling light, pale walls, simple front door with ordinary metal key lock, small mirror, elevator visible farther down the corridor, realistic modest apartment building",
+      "visual_prompt": "high-end stylized 3D animated-feature modest apartment hallway, warm ceiling light, pale walls, simple front door with ordinary metal key lock, small wall mirror, elevator farther down corridor, grounded proportions, polished cinematic lighting",
+      "ref_url": null
+    },
+    {
+      "name": "Default's Growtopia World",
+      "slug": "defaults-growtopia-world",
+      "description": "Bright Growtopia-inspired home world with cyan sky, green grass tiles, brown dirt blocks, simple wooden door, planted trees, small World Lock pedestal, layered pseudo-isometric platforms and cheerful pixel colors",
+      "visual_prompt": "Growtopia-inspired crisp 2D pixel art pseudo-isometric 2.5D diorama, cyan sky, green grass tiles, brown dirt blocks, simple wooden door, planted trees, small World Lock pedestal, thick black outlines, cheerful layered tile platforms, no Minecraft, no voxel CGI",
+      "ref_url": null
+    }
+  ],
+  "important_items": [
+    {
+      "name": "Glitched World Lock",
+      "description": "corrupted Growtopia World Lock physical prop, recognizable small lock-block silhouette, brown wooden pixel body, gold keyhole, cyan crack through the center, alternating cyan and red square particles, unstable portal glow",
+      "ref_url": null,
+      "status": "Used once by Jim; currently associated with the phone portal."
+    }
+  ],
+  "active_loops": [
+    "Why did the Glitched World Lock pull Default into Jim's reality?",
+    "Can Jim return Default to his own world?",
+    "Who is the Demonic Growtopian and why is he following through the portal?",
+    "Is Monster Nian (EP1 cliffhanger) the same threat as the planned Demonic season arc, or a separate antagonist — needs a decision before EP2.",
+    "What happens to a Growtopia world when its living protector is pulled out?",
+    "Can real-world doors, buildings, and ownership be affected by World Locks?"
+  ],
+  "closed_loops": [],
+  "world_state": {
+    "location": "Apartment hallway, just outside Jim's bedroom, immediately after EP1",
+    "important_items": [
+      "Jim's phone",
+      "Glitched World Lock"
+    ],
+    "key_events": [
+      "EP1: Jim used the Glitched World Lock; Default materialized in Jim's bedroom, both reacted in simultaneous panicked disbelief.",
+      "EP1: Jim decided to hide Default and look for a way to send him back; they left the bedroom together.",
+      "EP1: alone in the empty bedroom, a Monster Nian claw and forearm emerged from the still-glowing phone."
+    ]
+  },
+  "anti_repetition": {
+    "recent_phrases": [
+      "Where—why is this room so HUGE— what IS this place?!",
+      "Wait— what are you doing in my ROOM?!",
+      "...Okay but seriously, where am I?",
+      "Wait... the lock— what did I DO?!",
+      "we can't have anyone see you looking like... that",
+      "We need to get you somewhere safe till I figure out how to send you back."
+    ],
+    "recent_hooks": [
+      "Jim taps Use on the Glitched World Lock and the phone screen reveals real Growtopia gameplay before the flash."
+    ],
+    "recent_cliffhangers": [
+      "A Monster Nian claw and forearm emerge from the phone, human-scaled, in the empty bedroom after Jim and Default leave."
+    ]
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "title": "Press Undo",
+      "summary": "Jim taps Use on the Glitched World Lock; the phone briefly shows real Growtopia gameplay before Default materializes in his bedroom, already mid-panic. Jim and Default are both simultaneously stunned — Default at the huge ordinary room, Jim at a stranger appearing in it — before Jim realizes it's tied to the lock. A beat of dark physical comedy (Default nearly swats a lamp, thinking it's a farmable block) gives way to Jim deciding they need to hide Default and find a way to send him home; they leave the bedroom together. Left empty, the still-glowing phone lets a Monster Nian claw and forearm push into the room.",
+      "cliffhanger": "A Monster Nian claw and forearm emerge from the phone, human-scaled, in the empty bedroom.",
+      "notes": "Jim locked at 14-15 years old (teenage, not young adult) and the EP1 antagonist locked as Monster Nian (canonical Growtopia mob, no wings) per explicit user override of the original Demonic-season-arc plan for this cliffhanger specifically."
+    }
+  ],
+  "planned_arc": {
+    "note": "Season 1 follows Jim and Default trying to reopen the portal while Demonic learns how Growtopia ownership rules can corrupt the real world. Fish-out-of-water comedy grows from Default treating ordinary life literally, but every episode advances the portal mystery and threat.",
+    "episodes": [
+      {
+        "episode": 1,
+        "title": "Press Undo",
+        "status": "completed",
+        "summary": "Jim taps Use on the Glitched World Lock and sees real Growtopia gameplay on his phone before Default materializes in his bedroom, already panicking. Jim and Default are both simultaneously stunned; a physical gag with a lamp leads into Jim's decision to hide Default and search for a way home. They leave the bedroom together. Left alone, a Monster Nian claw and forearm emerge from the still-glowing phone.",
+        "cliffhanger": "In the empty bedroom, a Monster Nian claw and forearm emerge from the phone, human-scaled."
+      },
+      {
+        "episode": 2,
+        "title": "Outside",
+        "status": "planned",
+        "summary": "Jim introduces Default to traffic, shops, food, money, and the rule that real buildings cannot be broken for blocks. Default is overwhelmed but fascinated. Back at the apartment, unseen red pixel traces spread from the bedroom.",
+        "cliffhanger": "Jim's ordinary front-door lock has been replaced by a glowing World Lock from the inside."
+      },
+      {
+        "episode": 3,
+        "title": "World Locked",
+        "status": "planned",
+        "summary": "Jim and Default discover that the apartment has become a locked world. Neighbors cannot enter or leave. Default recognizes the work as deliberate and admits that someone hostile may have followed him.",
+        "cliffhanger": "A calm demonic voice speaks through every locked door: 'Owner online.'"
+      },
+      {
+        "episode": 4,
+        "title": "Real Inventory",
+        "status": "planned",
+        "summary": "Default learns that touching portal-corrupted objects can pull them into a temporary real-world inventory. Jim sees a possible way to recover the Glitched World Lock, but Demonic steals a key object first.",
+        "cliffhanger": "Jim reaches into the inventory glow and pulls out an object that belonged to Default's world."
+      },
+      {
+        "episode": 5,
+        "title": "The Trade",
+        "status": "planned",
+        "summary": "Demonic finally approaches Jim directly and offers to reopen the portal in exchange for ownership of one real-world room. Default calls it an obvious scam, but the offer includes proof that his world still exists.",
+        "cliffhanger": "Jim accepts the trade without telling Default."
+      },
+      {
+        "episode": 6,
+        "title": "One Room",
+        "status": "planned",
+        "summary": "The traded room becomes a small Growtopia biome inside the apartment. Default feels at home for the first time, while Jim realizes Demonic can expand the conversion through connected doors.",
+        "cliffhanger": "A second real apartment begins pixelating through the shared wall."
+      },
+      {
+        "episode": 7,
+        "title": "The Wizard",
+        "status": "planned",
+        "summary": "Jim and Default force open a tiny stable portal and pull through a Legendary Wizard who knows the Glitched World Lock's origin. His arrival adds comic chaos but confirms that the two realities are collapsing together.",
+        "cliffhanger": "The Wizard reveals that Default was not selected randomly."
+      },
+      {
+        "episode": 8,
+        "title": "Not an NPC",
+        "status": "planned",
+        "summary": "Default learns that Jim initially believed he was only game code. Their trust breaks just as Demonic offers Default a guaranteed path home. Jim must prove that he now believes Default's world is genuinely alive.",
+        "cliffhanger": "Default walks through Demonic's portal alone."
+      },
+      {
+        "episode": 9,
+        "title": "Unlocked",
+        "status": "planned",
+        "summary": "Jim and the Wizard follow Default into the unstable border between worlds. They discover that Demonic needs a willing Growtopian to place the final lock on reality.",
+        "cliffhanger": "Default raises the Glitched World Lock over the real city."
+      },
+      {
+        "episode": 10,
+        "title": "The Wrong World",
+        "status": "planned",
+        "summary": "Default rejects Demonic's deal and helps Jim break the first real-world lock. The portal stabilizes long enough to choose between home and his new friendship, but the broken lock has already opened routes for other characters.",
+        "cliffhanger": "After the portal closes, a cheerful unfamiliar voice speaks from Jim's phone: 'You buying or selling?'"
+      }
+    ]
+  }
+}
