@@ -2,98 +2,218 @@
   "series_id": "dual-style-star-trek-timelines",
   "game_tag": "star-trek-timelines",
   "title": "Star Trek Dual Style",
+  "production_contract": "dual-style-v3",
+  "comparison_mode": "canonical-alternate",
   "created_at": "2026-07-22",
-  "last_episode": 1,
-  "format_variant_note": "This series deviates from the base dual-style format (cartoon-left/photoreal-right). Both figures are photorealistic, matching live-action Star Trek television cinematography, and are the SAME real actor playing both their character's original persona and its corrupted/alternate-universe persona. No anime/cel-shaded style anywhere. Name-caption drawtext overlays (ORIGINAL X / VS / ALTERNATE X) are used per scene in addition to the promo banner.",
-  "character_pool": [
-    {
-      "character_name": "picard",
-      "display_name": "Picard",
-      "actor_name": "Patrick Stewart",
-      "pair_with": "locutus-borg",
-      "last_seen_episode": 1
-    },
-    {
-      "character_name": "locutus-borg",
-      "display_name": "Locutus of Borg",
-      "actor_name": "Patrick Stewart",
-      "pair_with": "picard",
-      "last_seen_episode": 1
-    },
-    {
-      "character_name": "data",
-      "display_name": "Data",
-      "actor_name": "Brent Spiner",
-      "pair_with": "lore",
-      "last_seen_episode": 1
-    },
-    {
-      "character_name": "lore",
-      "display_name": "Lore",
-      "actor_name": "Brent Spiner",
-      "pair_with": "data",
-      "last_seen_episode": 1
-    },
-    {
-      "character_name": "kirk",
-      "display_name": "Kirk",
-      "actor_name": "William Shatner",
-      "pair_with": "mirror-kirk",
-      "last_seen_episode": 1
-    },
-    {
-      "character_name": "mirror-kirk",
-      "display_name": "Mirror Kirk",
-      "actor_name": "William Shatner",
-      "pair_with": "kirk",
-      "last_seen_episode": 1
-    },
-    {
-      "character_name": "worf",
-      "display_name": "Worf",
-      "actor_name": "Michael Dorn",
-      "pair_with": "regent-worf",
-      "last_seen_episode": 1
-    },
-    {
-      "character_name": "regent-worf",
-      "display_name": "Regent Worf",
-      "actor_name": "Michael Dorn",
-      "pair_with": "worf",
-      "last_seen_episode": 1
-    }
-  ],
+  "last_episode": 2,
+  "style_tags": "Photorealistic canonical live-action Star Trek comparison. LEFT is the original/Prime screen persona; RIGHT is the exact canonical Mirror, assimilated, corrupted, possessed or duplicate persona of the same character and same recognizable screen performer. Preserve each persona's canonical face, hair, facial hair, makeup, prosthetics, uniform, insignia, accessories and props. Both figures share one continuous cinematic Star Trek environment with no split panel.",
   "character_rotation": {
     "recent_characters": [
-      "Picard",
-      "Locutus of Borg",
-      "Data",
-      "Lore",
-      "Kirk",
-      "Mirror Kirk",
-      "Worf",
-      "Regent Worf"
-    ],
-    "recent_actors": [
-      "Patrick Stewart",
-      "Brent Spiner",
-      "William Shatner",
-      "Michael Dorn"
+      "Picard/Locutus of Borg",
+      "Data/Lore",
+      "Kirk/Mirror Kirk",
+      "Worf/Regent Worf",
+      "Spock/Mirror Spock",
+      "Kira Nerys/Intendant Kira",
+      "Philippa Georgiou/Emperor Georgiou",
+      "Hoshi Sato/Empress Hoshi",
+      "Jonathan Archer/Mirror Archer"
     ],
     "recent_environments": [
       "TNG Enterprise-D bridge, red alert lighting",
       "TNG engineering corridor, cool blue lighting",
       "ISS Enterprise mirror-universe bridge, harsher red/gold lighting",
-      "DS9 ops/command deck, imperial dark lighting"
+      "DS9 ops/command deck, imperial dark lighting",
+      "Federation-Vulcan orbital diplomatic gallery with a flush luminous star-map aisle",
+      "Cardassian-patterned upper Promenade with a broad clear center deck",
+      "Sealed mycelial cartography atrium with a blue-guide-strip causeway",
+      "Communications archive with a broad graphite concourse under copper conduits",
+      "Captured USS Defiant shuttlebay with a long painted centerline"
     ],
     "recent_action_types": [
-      "micro-motion-servo-twitch",
-      "micro-motion-vapor-hiss",
-      "micro-motion-chain-sway",
-      "micro-motion-console-flare"
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach"
     ],
-    "cooldown_episodes": 10
+    "cooldown_episodes": 7
   },
+  "character_pool": [
+    {
+      "pair_slug": "picard-locutus",
+      "display_name": "Picard / Locutus of Borg",
+      "last_seen_episode": 1
+    },
+    {
+      "pair_slug": "data-lore",
+      "display_name": "Data / Lore",
+      "last_seen_episode": 1
+    },
+    {
+      "pair_slug": "kirk-mirror-kirk",
+      "display_name": "Kirk / Mirror Kirk",
+      "last_seen_episode": 1
+    },
+    {
+      "pair_slug": "worf-regent-worf",
+      "display_name": "Worf / Regent Worf",
+      "last_seen_episode": 1
+    },
+    {
+      "pair_slug": "spock-mirror-spock",
+      "display_name": "Spock / Mirror Spock",
+      "last_seen_episode": 2
+    },
+    {
+      "pair_slug": "kira-intendant-kira",
+      "display_name": "Kira Nerys / Intendant Kira",
+      "last_seen_episode": 2
+    },
+    {
+      "pair_slug": "georgiou-emperor-georgiou",
+      "display_name": "Philippa Georgiou / Emperor Georgiou",
+      "last_seen_episode": 2
+    },
+    {
+      "pair_slug": "hoshi-empress-hoshi",
+      "display_name": "Hoshi Sato / Empress Hoshi",
+      "last_seen_episode": 2
+    },
+    {
+      "pair_slug": "archer-mirror-archer",
+      "display_name": "Jonathan Archer / Mirror Archer",
+      "last_seen_episode": 2
+    }
+  ],
+  "characters": [
+    {
+      "pair_slug": "picard-locutus",
+      "screen_performer": "Patrick Stewart",
+      "original": {
+        "slug": "picard",
+        "name": "Picard",
+        "character_description": "photorealistic Patrick Stewart as Captain Jean-Luc Picard, bald head, commanding authoritative expression, red-and-black Starfleet TNG-era captain's uniform with pips on collar, standing with calm dignified posture, real skin textures, cinema-quality lighting matching TNG bridge scenes"
+      },
+      "alternate": {
+        "slug": "locutus-borg",
+        "name": "Locutus of Borg",
+        "character_description": "photorealistic Patrick Stewart as Locutus of Borg, same bald head and facial features, pale grey-white assimilated skin, black mechanical Borg exoskeleton plating over torso and one arm, ocular implant over one eye with red laser targeting glow, tubes and cybernetic implants across skull and neck, cold emotionless expression, matches the exact TNG Best of Both Worlds design"
+      }
+    },
+    {
+      "pair_slug": "data-lore",
+      "screen_performer": "Brent Spiner",
+      "original": {
+        "slug": "data",
+        "name": "Data",
+        "character_description": "photorealistic Brent Spiner as Lieutenant Commander Data, pale gold-tinted synthetic android skin, short black hair, calm neutral android expression, gold-and-black Starfleet TNG uniform with pips, real skin textures showing subtle android sheen"
+      },
+      "alternate": {
+        "slug": "lore",
+        "name": "Lore",
+        "character_description": "photorealistic Brent Spiner as Lore, identical pale gold-tinted android face and short black hair, dark asymmetric civilian clothing, subtle smug malevolent smirk and colder calculating eyes"
+      }
+    },
+    {
+      "pair_slug": "kirk-mirror-kirk",
+      "screen_performer": "William Shatner",
+      "original": {
+        "slug": "kirk",
+        "name": "Kirk",
+        "character_description": "photorealistic William Shatner as Captain James T. Kirk, classic TOS-era gold command tunic with black trim, clean-shaven, confident heroic expression"
+      },
+      "alternate": {
+        "slug": "mirror-kirk",
+        "name": "Mirror Kirk",
+        "character_description": "photorealistic William Shatner as Mirror Universe Kirk, same face, groomed goatee, Terran Empire uniform with sash, belt dagger and agonizer, predatory ruthless expression matching TOS Mirror, Mirror"
+      }
+    },
+    {
+      "pair_slug": "worf-regent-worf",
+      "screen_performer": "Michael Dorn",
+      "original": {
+        "slug": "worf",
+        "name": "Worf",
+        "character_description": "photorealistic Michael Dorn as Worf, full Klingon forehead ridges and dark hair, TNG/DS9-era gold-and-black Starfleet uniform with sash, stern honorable expression"
+      },
+      "alternate": {
+        "slug": "regent-worf",
+        "name": "Regent Worf",
+        "character_description": "photorealistic Michael Dorn as Mirror Universe Regent Worf, identical Klingon face, dark Klingon-Cardassian Alliance regent armor with heavy shoulder plating and chain accents, imperious tyrannical expression"
+      }
+    },
+    {
+      "pair_slug": "spock-mirror-spock",
+      "screen_performer": "Leonard Nimoy",
+      "original": {
+        "slug": "spock",
+        "name": "Spock",
+        "character_description": "canonical live-action TOS Spock, recognizable Leonard Nimoy face, pointed Vulcan ears, sharply arched eyebrows, straight black bowl-cut hair, clean-shaven face, blue Starfleet science tunic with black collar, delta insignia, lean upright build and restrained logical expression"
+      },
+      "alternate": {
+        "slug": "mirror-spock",
+        "name": "Mirror Spock",
+        "character_description": "canonical live-action Mirror Spock, the same recognizable Leonard Nimoy face and Vulcan features, straight black bowl-cut hair, distinctive black goatee, Terran Empire blue science uniform with imperial sash and decorations, controlled intimidating expression"
+      }
+    },
+    {
+      "pair_slug": "kira-intendant-kira",
+      "screen_performer": "Nana Visitor",
+      "original": {
+        "slug": "kira-nerys",
+        "name": "Kira Nerys",
+        "character_description": "canonical live-action Major Kira Nerys, recognizable Nana Visitor face, short auburn hair, Bajoran nose ridges and earring, fitted red Bajoran militia uniform with rank insignia, athletic adult build and alert principled expression"
+      },
+      "alternate": {
+        "slug": "intendant-kira",
+        "name": "Intendant Kira",
+        "character_description": "canonical live-action Intendant Kira, the same recognizable Nana Visitor face, short auburn hair and Bajoran nose ridges, elaborate Bajoran earring, fitted black Mirror Universe leather costume with metallic details and high boots, imperious predatory expression"
+      }
+    },
+    {
+      "pair_slug": "georgiou-emperor-georgiou",
+      "screen_performer": "Michelle Yeoh",
+      "original": {
+        "slug": "philippa-georgiou",
+        "name": "Philippa Georgiou",
+        "character_description": "canonical live-action Captain Philippa Georgiou, recognizable Michelle Yeoh face, natural dark hair in the canonical Starfleet style, dark navy-and-gold Discovery-era captain uniform with command insignia and structured shoulders, calm authoritative expression"
+      },
+      "alternate": {
+        "slug": "emperor-georgiou",
+        "name": "Emperor Georgiou",
+        "character_description": "canonical live-action Emperor Philippa Georgiou, the same recognizable Michelle Yeoh face, canonical imperial hair and makeup, ornate black-and-gold Terran imperial armor and ceremonial layers with imperial insignia, cold commanding expression"
+      }
+    },
+    {
+      "pair_slug": "hoshi-empress-hoshi",
+      "screen_performer": "Linda Park",
+      "original": {
+        "slug": "hoshi-sato",
+        "name": "Hoshi Sato",
+        "character_description": "canonical live-action Prime Hoshi Sato, recognizable Linda Park face, straight dark hair in the canonical Enterprise-era style, blue NX-01 Starfleet jumpsuit with communications division details and shoulder piping, attentive intelligent expression"
+      },
+      "alternate": {
+        "slug": "empress-hoshi",
+        "name": "Empress Hoshi",
+        "character_description": "canonical live-action Mirror Hoshi Sato as Empress, the same recognizable Linda Park face, canonical Mirror-era dark hair and makeup, structured fully covered Terran imperial officer uniform with imperial insignia and metallic accessories, calculating triumphant expression"
+      }
+    },
+    {
+      "pair_slug": "archer-mirror-archer",
+      "screen_performer": "Scott Bakula",
+      "original": {
+        "slug": "jonathan-archer",
+        "name": "Jonathan Archer",
+        "character_description": "canonical live-action Captain Jonathan Archer, recognizable Scott Bakula face, short light-brown hair, clean-shaven face, blue NX-01 command jumpsuit with gold command piping and Enterprise mission patch, tall athletic adult build and steady idealistic expression"
+      },
+      "alternate": {
+        "slug": "mirror-archer",
+        "name": "Mirror Archer",
+        "character_description": "canonical live-action Mirror Jonathan Archer, the same recognizable Scott Bakula face and short light-brown hair, exact dark Terran Empire NX-01 uniform with imperial insignia, weapon belt and canonical battle-worn details, ambitious ruthless expression"
+      }
+    }
+  ],
   "episode_summaries": [
     {
       "episode": 1,
@@ -110,7 +230,7 @@
         "ISS Enterprise mirror-universe bridge, harsher red/gold lighting",
         "DS9 ops/command deck, imperial dark lighting"
       ],
-      "actors": [
+      "screen_performers": [
         "Patrick Stewart",
         "Brent Spiner",
         "William Shatner",
@@ -125,67 +245,46 @@
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-22/dual-style/20260722-134827-75423/final.mp4",
       "duration_sec": 25.21,
       "cost_usd": 2.43,
-      "notes": "Series launch (EP1): new format variant for this game -- both sides photorealistic (not cartoon+realistic), same real actor plays the original vs the corrupted/alternate-universe persona (Picard/Locutus, Data/Lore, Kirk/Mirror Kirk, Worf/Regent Worf). Motion pattern A (micro-motion, no head/face movement) used for this low-risk launch episode. Name-caption drawtext overlay per scene (ORIGINAL X / alternate name), sized small and positioned high (size 54, y=h-text_h-480) after an initial pass was judged too large and too low. Continuous promo banner (banner-st1, Starfleet delta + Enterprise) spans scenes 2-3 without a fade at the cut. A static, non-animated title-card intro was built, reviewed, and removed at user request because it did not clearly convey episode content -- final cut opens cold on scene 1; the title-card-bg.png asset was kept in Supabase for possible reuse or rework. No per-scene SFX; bg-music only."
+      "notes": "Historical predecessor retained for cooldown continuity only. Its static micro-motion and legacy label treatment are non-normative under dual-style-v3."
+    },
+    {
+      "episode": 2,
+      "date": "2026-07-30",
+      "characters": [
+        "Spock/Mirror Spock",
+        "Kira Nerys/Intendant Kira",
+        "Philippa Georgiou/Emperor Georgiou",
+        "Hoshi Sato/Empress Hoshi",
+        "Jonathan Archer/Mirror Archer"
+      ],
+      "environments": [
+        "Federation-Vulcan orbital diplomatic gallery with a flush luminous star-map aisle",
+        "Cardassian-patterned upper Promenade with a broad clear center deck",
+        "Sealed mycelial cartography atrium with a blue-guide-strip causeway",
+        "Communications archive with a broad graphite concourse under copper conduits",
+        "Captured USS Defiant shuttlebay with a long painted centerline"
+      ],
+      "screen_performers": [
+        "Leonard Nimoy",
+        "Nana Visitor",
+        "Michelle Yeoh",
+        "Linda Park",
+        "Scott Bakula"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-30/dual-style/20260730-144421-13671/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=Jm_25nfxk_8",
+      "youtube_publish_at": "2026-08-03T20:50:00Z",
+      "duration_sec": 30.208005,
+      "cost_usd": 4.46,
+      "notes": "User-approved canonical-alternate episode produced under the unified dual-style-v3 method: official screen-persona references, same canonical performer within every pair, no fancasting, two scene-derived headshots and two Kling elements per scene, synchronized forward walk with front dolly-back, exact pair-title overlays, clean native ambience plus a new MiniMax music bed. One completed Hoshi image result returned a provider 422 and was replaced by a successful rerun. Spectral audit found no accidental Kling music in any accepted scene."
     }
   ],
-  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4",
-  "style_tags": "Photorealistic Star Trek dual-style: both figures are the exact same real actor, side by side, sharing one continuous space (no split panel). LEFT is the character's original/classic television persona (canon uniform, standard appearance, live-action photorealistic rendering). RIGHT is the corrupted/alternate-universe/evil-duplicate persona (Borg implants, mirror-universe uniform, or android-duplicate features as appropriate), same actor, same face, transformed costume/technology only. Both sides photorealistic, real skin textures, cinema-quality lighting matching TNG/TOS/DS9 television cinematography — no anime, no cel-shading, no illustrated rendering on either side.",
-  "characters": [
-    {
-      "pair_slug": "picard-locutus",
-      "actor_name": "Patrick Stewart",
-      "original": {
-        "slug": "picard",
-        "name": "Picard",
-        "character_description": "photorealistic Patrick Stewart as Captain Jean-Luc Picard, bald head, commanding authoritative expression, red-and-black Starfleet TNG-era captain's uniform with pips on collar, standing with calm dignified posture, real skin textures, cinema-quality lighting matching TNG bridge scenes"
-      },
-      "alternate": {
-        "slug": "locutus-borg",
-        "name": "Locutus of Borg",
-        "character_description": "photorealistic Patrick Stewart as Locutus of Borg, same bald head and facial features, pale grey-white assimilated skin, black mechanical Borg exoskeleton plating over torso and one arm, ocular implant over one eye with red laser targeting glow, tubes and cybernetic implants across skull and neck, cold emotionless expression, matches the exact TNG 'Best of Both Worlds' Locutus design"
-      }
-    },
-    {
-      "pair_slug": "data-lore",
-      "actor_name": "Brent Spiner",
-      "original": {
-        "slug": "data",
-        "name": "Data",
-        "character_description": "photorealistic Brent Spiner as Lieutenant Commander Data, pale gold-tinted synthetic android skin, short black hair, calm neutral android expression, gold-and-black Starfleet TNG uniform with pips, real skin textures showing subtle android sheen, cinema-quality lighting matching TNG bridge scenes"
-      },
-      "alternate": {
-        "slug": "lore",
-        "name": "Lore",
-        "character_description": "photorealistic Brent Spiner as Lore, identical pale gold-tinted android face and short black hair to Data, but wearing civilian/rogue dark asymmetric clothing instead of a Starfleet uniform, subtle smug malevolent smirk, colder more calculating eyes, same synthetic skin texture and cinema-quality lighting as the original"
-      }
-    },
-    {
-      "pair_slug": "kirk-mirrorkirk",
-      "actor_name": "William Shatner",
-      "original": {
-        "slug": "kirk",
-        "name": "Kirk",
-        "character_description": "photorealistic William Shatner as Captain James T. Kirk, classic TOS-era gold command tunic with black trim, clean-shaven, confident heroic expression, real skin textures, cinema-quality lighting matching original series bridge scenes"
-      },
-      "alternate": {
-        "slug": "mirror-kirk",
-        "name": "Mirror Kirk",
-        "character_description": "photorealistic William Shatner as Mirror Universe Kirk, same face, groomed goatee, dark Terran Empire uniform with sash and dagger at the belt, agonizer device visible at hip, predatory ruthless expression, same skin texture and cinema-quality lighting as the original, matches the classic TOS 'Mirror, Mirror' ISS Enterprise design"
-      }
-    },
-    {
-      "pair_slug": "worf-regentworf",
-      "actor_name": "Michael Dorn",
-      "original": {
-        "slug": "worf",
-        "name": "Worf",
-        "character_description": "photorealistic Michael Dorn as Worf, full Klingon forehead ridges and dark hair, TNG/DS9-era gold-and-black Starfleet uniform with sash, stern honorable expression, real skin/prosthetic textures, cinema-quality lighting matching DS9 bridge/ops scenes"
-      },
-      "alternate": {
-        "slug": "regent-worf",
-        "name": "Regent Worf",
-        "character_description": "photorealistic Michael Dorn as Mirror Universe Regent Worf, identical Klingon forehead ridges and face, dark Terran/Klingon-Cardassian Alliance regent armor with heavy shoulder plating and chain accents, imperious tyrannical expression, same textures and cinema-quality lighting as the original, matches the DS9 Mirror Universe design"
-      }
-    }
-  ]
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4"
 }

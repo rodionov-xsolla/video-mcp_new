@@ -136,7 +136,7 @@ Without this phrase — work autonomously.
    - `games/{GAME_TAG}/{FORMAT}_special.md` — IF the file exists, read it for format+game overrides.
    - Exact `STORY_BIBLE_PATH` for the current format/series — persistent state. It is mandatory for production. If missing, STOP and ask whether to create it; never auto-create it.
 
-   **Versioned contract gate:** when `FORMAT == "dual-style"`, `rules/formats/dual-style.md` contract `dual-style-v2` is the sole production method. Require Scenarist output `production_contract: "dual-style-v2"` and reject any static/subtle/legacy Pattern A/B branch before Phase 2. Game configs and story bibles provide source facts and rotation, not alternate composition, motion, audio or assembly methods.
+   **Versioned contract gate:** when `FORMAT == "dual-style"`, `rules/formats/dual-style.md` contract `dual-style-v3` is the sole production method. Require Scenarist output `production_contract: "dual-style-v3"` plus exactly one valid `comparison_mode` (`source-vs-live-action` or `canonical-alternate`), and reject any mixed mode, second format slug, or static/subtle/legacy Pattern A/B branch before Phase 2. Game configs and story bibles provide source facts and rotation, not alternate motion, audio or assembly methods.
 
 6. **Character sheets:** use only refs owned by the exact current format/series. If missing, Storyboarder creates a fresh format/series-bound ref during its existing phase; never use the legacy game-wide batch generator.
 
@@ -151,7 +151,7 @@ Without this phrase — work autonomously.
    # Series-scoped formats: also require series_id in tags, e.g. tags=cs.{serial-drama,star-trek-airlock}
    ```
 
-   **Only rows whose `tags` contain the current `FORMAT` slug (and `series_id`, where applicable) are eligible for reuse.** A row for the same character tagged with a *different* format or series, or with no matching tag at all, is NOT a match. **Dual-style-v2 canonical-source exception:** for the left/source figure only, an untagged game-wide `reference_image` is the preferred canonical design source, exactly as declared in `rules/formats/dual-style.md`; it does not authorize reuse of an asset tagged for another format. CTA wording and asset are not selected through a broad asset-bank exception: use only the values recorded in the exact `STORY_BIBLE_PATH`. Openers, title cards, actor headshots, appearance text and voice samples otherwise stay format/series-bound.
+   **Only rows whose `tags` contain the current `FORMAT` slug (and `series_id`, where applicable) are eligible for reuse.** A row for the same character tagged with a *different* format or series, or with no matching tag at all, is NOT a match. **Dual-style-v3 `source-vs-live-action` canonical-source exception:** for the left/source figure only, an untagged game-wide `reference_image` is the preferred canonical design source, exactly as declared in `rules/formats/dual-style.md`; it does not authorize reuse of an asset tagged for another format. `canonical-alternate` instead requires series-owned `dual-style` refs for both personas. CTA wording and asset are not selected through a broad asset-bank exception: use only the values recorded in the exact `STORY_BIBLE_PATH`. Openers, title cards, actor headshots, appearance text and voice samples otherwise stay format/series-bound.
 
    **Distribute assets to roles:**
 
@@ -362,7 +362,7 @@ Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
 |---|---|---|
 | "news", "новости", "game news", "patch recap", "обновление" | News | `rules/formats/news.md` |
 | "serial", "episode", "series", "ep1", "ep2", "сериал" | Serial Drama | `rules/formats/serial-drama.md` |
-| "dual-style", "game vs reality" | Dual-style | `rules/formats/dual-style.md` |
+| "dual-style", "game vs reality", "dual identity", "canon vs alternate", "prime vs mirror", "mirror selves" | Dual-style | `rules/formats/dual-style.md` |
 | "gameplay ai avatar", "ai avatar", "talking head", "offerwall", "offer", "оффер", "бонус" | Gameplay AI Avatar | `rules/formats/gameplay-ai-avatar.md` |
 | "reddit story", "storytime", "история игрока", "narrated gameplay" | Reddit Story | `rules/formats/reddit-story.md` |
 | "character story", "история персонажа", "лор", "lore", "backstory", "origin story", "предыстория" | Character Story | `rules/formats/character-story.md` |
@@ -396,11 +396,11 @@ Phase 7  → git push
 ```
 All inline checks are run directly by the manager (jq/ffprobe/stat), not by a script.
 
-For `dual-style-v2`, append these hard gates to the normal phase checks:
+For `dual-style-v3`, append these hard gates to the normal phase checks:
 
-- Phase 1: `production_contract == "dual-style-v2"`; every scene has `character_speech:null`, 5s duration, a forward-walk/front-dolly `action_description`, `sfx:false`, `music_required:true`, `generate_audio:true`, and `multi_prompt:true`.
-- Phase 3: every accepted scene has one canonical source ref, a safe unobstructed walking/camera-retreat lane, and one derived frontal actor headshot with permanent URLs.
-- Phase 4: exact one-entry `multi_prompt + elements` payload, exact no-music ending, prompt ≤400 UTF-8 bytes, audio stream present.
+- Phase 1: `production_contract == "dual-style-v3"` and one valid `comparison_mode`; every scene has `character_speech:null`, 5s duration, a forward-walk/front-dolly `action_description`, `sfx:false`, `music_required:true`, `generate_audio:true`, and `multi_prompt:true`.
+- Phase 3: every accepted scene has a safe unobstructed walking/camera-retreat lane and permanent canonical references. `source-vs-live-action` requires one derived right-actor headshot; `canonical-alternate` requires two scene-derived headshots and exact pair-title overlay text.
+- Phase 4: exact one-entry `multi_prompt + elements` payload, exact no-music ending, prompt ≤400 UTF-8 bytes, audio stream present. Require one element in `source-vs-live-action`, two in `canonical-alternate`.
 - Phase 5: `bg-music.mp3` present; any flagged contaminated Kling-audio scene muted; clean ambience/music/final loudness measured per the format playbook.
 
 Output structure:

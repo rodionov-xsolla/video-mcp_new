@@ -1,12 +1,12 @@
 ---
 ready_to_post: yes
 subtitles: false
-overlays: false
+overlays: true
 ---
 
-# Format "Dual-Style" — cartoon + realistic
+# Format "Dual-Style" — one character, two canonical presentations
 
-In one frame: the canonical game character on the left next to a recognizable photorealistic live-action actor on the right. Both walk toward a front-facing retreating camera in one shared environment. The contrast between source-game authenticity and a believable real-world adaptation is the main device.
+In one frame, two clearly related presentations of a character walk toward a front-facing retreating camera in one shared environment. The comparison may translate a stylized source character into live action, or compare an original live-action persona with its canonical alternate. Both are the same format and production pipeline.
 
 This file is the **playbook**. Craft rules (NB2, Kling I2V, ffmpeg) — in `rules/roles/*.md`.
 
@@ -14,18 +14,27 @@ This playbook is game-agnostic — every rule below applies identically whether 
 
 ## Canonical contract and precedence
 
-**Contract version: `dual-style-v2`. There is one production method. Do not use or invent "Pattern A", "Pattern B", static, subtle-motion, wig-match, studio-default, or other named variants.**
+**Contract version: `dual-style-v3`. There is one production method with one required comparison selector. Do not create another format slug for a different source medium, and do not use or invent "Pattern A", "Pattern B", static, subtle-motion, wig-match, studio-default, or other named variants.**
 
 Every new `storyboard.json` must contain:
 
 ```json
-"production_contract": "dual-style-v2"
+"format": "dual-style",
+"production_contract": "dual-style-v3",
+"comparison_mode": "source-vs-live-action"
 ```
+
+`comparison_mode` is mandatory and must be exactly one of:
+
+- `source-vs-live-action` — LEFT is the canonical stylized/game character; RIGHT is a recognizable live-action actor adapting that character.
+- `canonical-alternate` — LEFT is the original/Prime canonical live-action persona; RIGHT is its canonical alternate, Mirror, assimilated, corrupted, possessed, or duplicate persona, played by the same screen performer.
+
+Select the mode once in Phase 0 from the concept and keep it fixed for the whole episode. A missing, unknown, or mixed mode is a hard stop. The selector changes identity/reference details, headshot count, element count, and label policy only; it never changes the shared motion, camera, environment, audio, or assembly method.
 
 Precedence is:
 
 1. The user's explicit live instruction for the current run.
-2. This `dual-style-v2` contract.
+2. This `dual-style-v3` contract.
 3. Game config and the exact dual-style story bible for source facts, cast rotation, and continuity only.
 4. Generic role craft rules in `rules/roles/*.md`.
 5. Historical episode notes and old output files are evidence only, never instructions.
@@ -36,26 +45,28 @@ Story-bible `style_tags` contain visual rendering and appearance only. Do not pu
 
 The following are invariant unless the user explicitly changes them:
 
-- canonical game/source rendering on the left; recognizable live-action actor on the right;
-- neither a selected source character nor actor has appeared in the previous 7 published episodes of the same series;
-- actor keeps their real face, natural hair, natural adult height, and natural build;
-- the costume is a near-identical practical construction, not a copied anime body/hair treatment and not loose color-inspired couture;
+- fixed LEFT/RIGHT roles for the selected comparison mode;
+- neither selected character/pair nor any newly cast actor has appeared in the previous 7 published episodes of the same series;
+- all identities, costumes, makeup, prosthetics, insignia, accessories, and props are anchored to canonical source references;
 - one continuous, interesting, physically walkable environment with no divider;
 - synchronized measured forward walk; front camera dollies backward;
-- accepted scene PNG plus a derived frontal actor headshot; Kling `elements` plus single-shot `multi_prompt`;
+- accepted scene PNG plus scene-derived frontal headshot(s); Kling `elements` plus single-shot `multi_prompt`;
 - `generate_audio: true` for diegetic ambience, with a strict no-music clause;
 - one newly generated instrumental MiniMax track; no separate SFX by default;
-- no subtitles or overlays by default; CTA remains mandatory.
+- no subtitles; CTA remains mandatory;
+- no overlays in `source-vs-live-action` unless explicitly requested; one pair-title overlay per scene is mandatory in `canonical-alternate`.
 
 ---
 
 ## When to use
 
-Keywords: "dual-style", "game vs reality", "meet your character IRL", cosplay content, "which character are you".
+Keywords: "dual-style", "game vs reality", "meet your character IRL", cosplay content, "which character are you", "dual identity", "canon vs alternate", "prime vs mirror", "mirror selves".
 
 ---
 
-## Pop-up promo banner (user override — `overlays: false` by default, opt-in per episode)
+## Pop-up promo banner (opt-in per episode)
+
+The overlay pipeline stays enabled for the unified format. `source-vs-live-action` writes no overlay entries by default; `canonical-alternate` writes its mandatory pair titles. Promo banners are additional entries only when the user requests them.
 
 When the user asks for a promo/pop-up banner on a specific clip (e.g. "поп-ап баннер на клипе N сверху"), add ONE `overlays[]` entry of `type: "image"` to that scene only in storyboard.json — see `tools/overlays.py` schema. Sizing convention:
 - **Large, not a small corner badge** — `width = canvas_width - 60` (1080 - 2×30, i.e. 30px side margin each side), `height: -1` (keep aspect ratio).
@@ -65,9 +76,8 @@ When the user asks for a promo/pop-up banner on a specific clip (e.g. "поп-а
 
 ---
 
-## Concept
+## Shared concept
 
-- **Cartoon left + realistic right** (positioning fixed for the whole video)
 - **Default: 3 clips × 5s**. An explicit user-requested pair/clip count replaces 3; always use exactly one pair per clip.
 - **Model:** Kling v3 Standard I2V, `generate_audio: true`, `elements`, one-entry `multi_prompt`
 - **Speech:** NO, `character_speech: null` everywhere
@@ -91,9 +101,19 @@ Multi-character video: 1 clip = 1 pair (cartoon + realistic of one character), c
 
 ---
 
-## Key prompting rules
+## `source-vs-live-action` mode
 
-### 0. Locked template — the only method
+Use this mode only when the right side is a real-world adaptation of a stylized/game source character.
+
+- LEFT: canonical source rendering, canonical proportions and height class.
+- RIGHT: a specific recognizable actor keeping their real face, natural hair, natural adult height, natural build, and age.
+- The right costume is a near-identical practical construction of the source design: preserve silhouette, panels, cutouts, color blocking, signature ornaments/armor/accessories, and prop while translating material physics.
+- One scene-derived frontal headshot and one Kling element are required for the right actor.
+- No pair-title overlay unless the user explicitly requests one.
+
+### Key prompting rules
+
+#### 0. Locked template — the only method
 
 Only the per-episode inputs change: character, actor, source-backed costume anchors, particles, environment, lighting, and frontal framing. Do not rewrite the method from theory and do not recover an older method from output files.
 
@@ -142,7 +162,7 @@ blur, distort, deformed, extra limbs, extra fingers, morphing face, smoothing fa
 
 **Storyboarder ref policy:** use a single canonical reference image (see §Storyboarder role brief) as the sole chain-ref — no separate two-figure "cartoon + actor together" pre-generation step is needed by default; it adds cost and has not been shown to be necessary when the rest of this template is followed.
 
-### 1. Style isolation markers (mandatory)
+#### 1. Style isolation markers (mandatory)
 
 The canonical chain-ref carries the source-game rendering — without explicit isolation, NB2 can apply it to BOTH figures.
 
@@ -166,22 +186,22 @@ Explicitly bind each style to its side using the phrase:
 **Negative prompt must include:**
 > `anime style on right figure, cartoon right side, cel-shaded right side, illustrated right figure, anime on both sides`
 
-### 2. Connection between versions
+#### 2. Connection between versions
 - Near-identical costume design: same silhouette, panels, cutouts, exact color placement, signature ornaments/armor/accessories and props; only material physics become live-action practical
 - Matched starting stance and forward-walking direction
 - Actor identity stays real: natural hair, face, age, height and build do not copy the source character
 
-### 3. Positioning
+#### 3. Positioning
 - Anime/cartoon version **always** on the left, realistic **always** on the right (or fixed the other way around — one decision for the whole video)
 - `side by side`, not one behind the other
 
-### 4. Sizes in frame
+#### 4. Sizes in frame
 - **Cartoon/source side keeps the canonical source proportions and canonical height class.** Do not turn a normally proportioned source character into chibi, and do not enlarge a canonically small/chibi character into an adult body.
 - **Do NOT force matching heights between the two figures.** Each figure keeps its OWN natural proportions: cartoon side = the character's accurate in-game proportions (petite/tall/whatever the character actually is); photorealistic side = the actor's own real natural adult height and build. Contrast comes from render style (cel-shaded vs photorealistic) and from each figure being true to its own source (game model vs real person), not from forcing one figure's scale onto the other. Shrinking an adult actor to match a petite/child-coded character's proportions reads as a dwarf/child, not a stylistic contrast.
 - `character_description` and `image_prompt` must state "canonical source-game height and proportions, not rescaled" for the source figure and "actor's own natural adult height and build, not scaled, shrunk, enlarged or aged to match the character" for the photorealistic figure.
 - Anchor cartoon fidelity to the character's chain-ref `sheet.png` (face/costume/silhouette) rather than letting the prompt override what the reference image shows.
 
-### 5. Single shared space — no panel divide (mandatory)
+#### 5. Single shared space — no panel divide (mandatory)
 
 Both versions must occupy **one continuous environment**. A visible dividing line or split-panel effect means the prompt used positional language ("on the left half / on the right half") that forced the AI into a diptych layout.
 
@@ -193,7 +213,7 @@ Both versions must occupy **one continuous environment**. A visible dividing lin
 
 The environment description, lighting, and ground plane must be written as **one scene** that both figures inhabit together. The positioning words `left` / `right` may still appear to anchor each figure within the description, but the scene framing must never imply two separate panels or halves.
 
-### 6. Actor-as-realistic counterpart (default)
+#### 6. Actor-as-realistic counterpart (default)
 
 The realistic side depicts a **specific publicly known, widely recognizable actor** who could plausibly play the character in a live-action adaptation. A generic person is allowed only by explicit user instruction.
 
@@ -218,12 +238,118 @@ The realistic side depicts a **specific publicly known, widely recognizable acto
 
 ---
 
+## `canonical-alternate` mode
+
+Use this mode when the source franchise is already live action and both sides are official screen personas of the same character.
+
+- LEFT: the original/Prime canonical screen persona.
+- RIGHT: a canonical alternate, Mirror, assimilated, corrupted, possessed, or duplicate persona.
+- Both figures use the same recognizable canonical screen performer. There is no fancasting and no unrelated Hollywood actor.
+- Each persona follows its own canonical hair, facial hair, makeup, prosthetics, uniform, accessories, insignia, and weapons. The natural-hair adaptation rule from `source-vs-live-action` does not apply because neither side is a newly cast adaptation.
+- One accepted scene requires two frontal headshots derived from that same scene: left/original and right/alternate.
+- Kling receives two `elements`, one for each persona, and the exact shared one-entry `multi_prompt`.
+
+### Canonical reference policy
+
+Preferred source order for each persona:
+
+1. an exact series-owned `dual-style` reference;
+2. an official canonical screen reference uploaded as a series-owned `dual-style` asset;
+3. a fresh format-owned reference generated from a source-verified, style-free appearance card.
+
+Never invent distinctive uniform, insignia, hairstyle, makeup, prosthetic, or weapon details from memory. Use 4–6 source-backed visual anchors per persona. The two derived headshots are per-episode assets, not reusable `game_assets`.
+
+Character-card semantic order:
+
+```text
+"original": "Recognizable photorealistic {screen performer} as canonical {Original Name}: {source-backed face, hair, makeup/prosthetic, uniform, insignia, prop and build anchors}. Exact live-action screen persona, real skin and practical materials."
+"alternate": "The same recognizable {screen performer} as canonical {Alternate Name}: same underlying face and adult proportions, with {source-backed alternate hair/facial hair, makeup/prosthetic, uniform/armor, insignia, accessory and prop anchors}. Exact live-action alternate persona, not a generic redesign."
+```
+
+Scene-prompt semantic order:
+
+```text
+One seamless shared live-action environment with no split screen, diptych, panel border or dividing line. Describe a broad level dry center aisle with several meters of clear floor ahead and behind both figures and a safe camera retreat corridor; keep consoles, rails, weapons, fire, debris and drops safely to the sides. LEFT only: canonical {Original Name} from the attached original reference. RIGHT only: canonical {Alternate Name} from the attached alternate reference, with the same recognizable screen performer but exact alternate costume/makeup. Both stand side by side, fully visible on solid ground, prepared to walk toward the frontal camera. {frontal framing}, unified face light, vertical 9:16.
+```
+
+Image negative prompt, verbatim:
+
+```text
+blur, distort, merged characters, single character, text overlay, watermark, split screen, diptych, dividing line, illustrated, cartoon, anime, game render, different actors, unrelated faces, face swap, matching uniforms, missing alternate details, generic redesign, deformed proportions, extra limbs, unsafe footing, cliff edge, narrow ledge, blocked walking path
+```
+
+Motion prompt, exact shape:
+
+```text
+Front camera dollies back as @Element1 original left and @Element2 alternate right walk toward it in measured sync, centered facing lens. Faces locked: no head, eye, expression or identity change; no morphing. Only legs, costume fabric, hair and {particles} move. DIEGETIC AMBIENCE ONLY. NO MUSIC: no beat, melody, instruments, score or soundtrack.
+```
+
+Keep `{particles}` at no more than 24 ASCII characters. Measure the final substituted prompt as UTF-8 bytes and require ≤400 bytes.
+
+Kling negative prompt, verbatim:
+
+```text
+blur, distort, deformed, extra limbs, extra fingers, morphing face, changing identity, different actors, smoothing facial features, changing skin color, altering proportions, running, jogging, sprinting, split screen, dividing line, merged characters, single character, banding in blacks, posterization, harsh color shift, overexposed clipping
+```
+
+Exact provider payload:
+
+```json
+{
+  "start_image_url": "{accepted permanent scene PNG URL}",
+  "multi_prompt": [
+    {
+      "prompt": "{exact substituted canonical-alternate motion template, <=400 UTF-8 bytes}",
+      "duration": "5"
+    }
+  ],
+  "shot_type": "customize",
+  "duration": "5",
+  "aspect_ratio": "9:16",
+  "generate_audio": true,
+  "elements": [
+    {
+      "frontal_image_url": "{original_headshot_url}",
+      "reference_image_urls": ["{same scene PNG URL}"]
+    },
+    {
+      "frontal_image_url": "{alternate_headshot_url}",
+      "reference_image_urls": ["{same scene PNG URL}"]
+    }
+  ],
+  "negative_prompt": "{exact canonical-alternate Kling negative prompt}"
+}
+```
+
+No bare `prompt`, no `end_image_url`, and no real performer name in Kling-facing text.
+
+### Pair-title overlay — mandatory
+
+Every scene displays:
+
+```text
+{ORIGINAL NAME} VS {ALTERNATE NAME}
+```
+
+Render it locally after scene generation; never ask the image model to draw text.
+
+- top-center at a safe position checked against both faces;
+- uppercase, bold condensed sans serif;
+- original name white, `VS` warm gold, alternate name pale gold/white;
+- subtle dark backing or stroke, never a full-width opaque banner;
+- maximum 960px text width; shrink or use a balanced two-line layout rather than clipping;
+- short 0.15–0.25s fade at the cut;
+- never cover a face, key prosthetic, or CTA.
+
+---
+
 ## Storyboard extensions
 
 ```json
 {
   "format": "dual-style",
-  "production_contract": "dual-style-v2",
+  "production_contract": "dual-style-v3",
+  "comparison_mode": "source-vs-live-action",
   "visual_identity": {
     "character_description": {
       "cartoon": "[Name] in the canonical source-game rendering and canonical height/proportions, not rescaled. [4-6 source-backed costume/silhouette/prop anchors], [one expression], [one build phrase].",
@@ -256,12 +382,12 @@ The realistic side depicts a **specific publicly known, widely recognizable acto
 ```
 
 - `style_tags` must include **both** styles
-- `production_contract` must equal `dual-style-v2`; missing or different value is a hard stop
+- `production_contract` must equal `dual-style-v3` and `comparison_mode` must be valid; missing or different values are a hard stop
 - `image_prompt` follows §0's semantic order and names 4–6 source-backed design anchors without an exhaustive micro-accessory inventory
 
 ---
 
-## Game config requirement
+## Game config requirement (`source-vs-live-action` only)
 
 `games/{GAME_TAG}/{GAME_TAG}.md` must contain **TWO** versions of each character:
 
@@ -273,21 +399,24 @@ The realistic side depicts a **specific publicly known, widely recognizable acto
 `recognizable photorealistic [actor], real face/natural hair/natural adult height and build, wearing a near-identical practical construction of the source costume, real skin textures, [emotion]`
 ```
 
-If these blocks are missing — Manager must flag and stop until they are added.
+In `source-vs-live-action`, if these blocks are missing, Manager must flag and stop until they are added. `canonical-alternate` instead uses the exact series-owned character cards and canonical references in its dual-style story bible.
 
 ---
 
 ## Role briefs
 
 ### Scenarist
-- Write `production_contract: "dual-style-v2"`; default 3 clips × 5s, or exactly the user-requested count; `character_speech: null` everywhere
-- Cartoon and realistic markers mandatory in image_prompt (see above)
-- Source costume and near-identical practical adaptation, with natural actor hair/height/build
+- Write `production_contract: "dual-style-v3"` and the one valid `comparison_mode`; default 3 clips × 5s, or exactly the user-requested count; `character_speech: null` everywhere
+- In `source-vs-live-action`, cartoon and realistic markers are mandatory; preserve the near-identical practical costume adaptation with natural actor hair/height/build.
+- In `canonical-alternate`, use the same canonical screen performer for both official personas and write the exact `{ORIGINAL} VS {ALTERNATE}` overlay text for every scene.
 - Every `action_description` is the same production action: both figures walk toward a front-facing retreating camera; only environment, starting stance and particles vary
 - `negative_prompt`: use the §0 locked list verbatim
 - General rules — `rules/roles/scenarist.md`
 
 ### Storyboarder
+- Apply the reference/headshot branch selected by `comparison_mode`. `source-vs-live-action` uses one right-actor headshot; `canonical-alternate` uses two scene-derived headshots, one per persona.
+- For `canonical-alternate`, use exact series-owned canonical screen references for both personas and never fancast.
+- The following source-reference rules apply to `source-vs-live-action`:
 - **Source ref, preferred order:**
   1. **First choice: the canonical game-wide `reference_image` for that character (untagged / no format tag) if one exists in `game_assets`.** This is the artist-accurate design source — anchor the cartoon-side `image_prompt` and NB2 chain-ref to it directly. This is a standing, format-specific exception to the general "refs never cross formats" rule, authorized for dual-style.
   2. If no canonical game-wide ref exists, use an existing dual-style-tagged asset for that character if one exists.
@@ -305,7 +434,7 @@ If these blocks are missing — Manager must flag and stop until they are added.
 - `duration: "5"`; without `end_image_url`
 - `character_speech: null` → Kling does not receive speech text
 - One model for the whole video
-- **Exact payload shape — no bare `prompt`, no alternate branch:**
+- **Exact `source-vs-live-action` payload shape — no bare `prompt`:**
   ```json
   {
     "start_image_url": "{accepted permanent scene PNG URL}",
@@ -335,6 +464,7 @@ If these blocks are missing — Manager must flag and stop until they are added.
   - Every episode requires the Storyboarder-generated frontal headshot side-asset for every character pairing — do not skip it.
   - **Camera direction for walking shots — camera must be IN FRONT of the figures (receding/dolly-back tracking, retreating at their walking pace), never behind.** The whole point of dual-style is comparing the two faces side by side; a behind-the-figures tracking shot shows only backs/backs-of-heads and defeats the format.
   - Use the exact Kling `negative_prompt` list from §0 verbatim.
+- In `canonical-alternate`, use the exact two-element payload and prompt lists from that mode's section. Both headshots and the accepted scene URL are mandatory.
 - General rules — `rules/roles/animator.md`
 
 ### Sound
@@ -359,6 +489,7 @@ If these blocks are missing — Manager must flag and stop until they are added.
 - **Accidental Kling music is the only dual-style exception to the generic "never discard paid I2V audio" rule.** If a clip is flagged as containing a score/melody, mute that clip's native audio completely; never place it beneath the MiniMax track. Keep clean ambience from the other clips. Record which clip was muted in storyboard notes.
 - **SFX mixing** (only when explicitly requested and `scene-K-sfx.mp3` files are present): align each file to its scene start using `amix` or per-stream `adelay`; SFX target approximately `-28 LUFS`. NEVER `-shortest`.
 - **Music plays through the full video including CTA** — do not cut music before the CTA clip. Apply `afade=t=out` only at the very end of the last clip.
+- In `canonical-alternate`, render the mandatory exact pair-title overlay on every scene. In `source-vs-live-action`, render no comparison overlay unless the user requested one.
 - General rules — `rules/roles/editor.md`
 
 ---
@@ -381,12 +512,13 @@ ${OUTPUT_DIR}/
 
 ## Validation
 
-- [ ] `production_contract == "dual-style-v2"`; no Pattern A/B, static, subtle-motion, wig-match, or studio-default branch
-- [ ] Exact source-rendering markers are bound to the left figure only; source height/proportions remain canonical
-- [ ] Realistic markers in image_prompt (`photorealistic`, `real skin textures`)
-- [ ] Realistic character card names the actor's REAL physical features (skin tone, eye color, distinguishing facial feature) BEFORE costume details — not costume-only description (see §0 locked template)
-- [ ] Actor retains real face, natural hair color/style/length, natural adult height/build, and age; no copied character wig or actor shrinking
-- [ ] Costume is a near-identical practical construction with 4–6 source-backed design anchors, not palette-inspired couture or simplified cosplay
+- [ ] `production_contract == "dual-style-v3"` and one valid `comparison_mode`; no second format slug, Pattern A/B, static, subtle-motion, wig-match, or studio-default branch
+- [ ] `source-vs-live-action`: one scene-derived right-actor headshot and one element; no overlay unless requested
+- [ ] `canonical-alternate`: same canonical screen performer for both personas, two scene-derived headshots and two elements, exact pair-title overlay on every scene
+- [ ] In `source-vs-live-action`, exact source-rendering markers are bound to the left figure only; source height/proportions remain canonical
+- [ ] In `source-vs-live-action`, realistic markers appear in image_prompt (`photorealistic`, `real skin textures`)
+- [ ] In `source-vs-live-action`, the realistic card names the actor's real physical features before costume details
+- [ ] In `source-vs-live-action`, the actor retains real face, natural hair, adult height/build, and age; costume is a near-identical practical construction with 4–6 source-backed anchors
 - [ ] Every distinctive design detail (hair color/style, signature accessories) is sourced from an actual canonical/dual-style reference image, never invented from memory
 - [ ] Environment is source-world-specific and interesting, with solid dry footing, broad unobstructed forward lane and camera retreat corridor; hazards/scenery stay safely to the sides
 - [ ] Every `action_description` already declares synchronized forward walking and front dolly-back; Animator motion_prompt follows the §0 template verbatim
@@ -394,7 +526,7 @@ ${OUTPUT_DIR}/
 - [ ] Every Kling motion prompt ends with the exact strong diegetic-only/no-music clause and is ≤400 UTF-8 bytes after substitutions
 - [ ] If a clip still contains accidental Kling music: Editor mutes that clip's native audio before mixing `bg-music.mp3`
 - [ ] Clean Kling ambience is near `-28 LUFS`, MiniMax music near `-20 LUFS`, final near `-20 LUFS` and ≤`-2 dBTP`
-- [ ] Cartoon and realistic on fixed sides (for the whole video)
+- [ ] Comparison roles remain on fixed sides for the whole video
 - [ ] `character_speech: null` in all clips
 - [ ] `camera_angle` different for adjacent clips
 - [ ] `style_tags` include both styles; `lighting`/`color_palette` unified
@@ -430,7 +562,7 @@ ${OUTPUT_DIR}/
 - ❌ `character_speech ≠ null` (Kling I2V does not generate voice)
 - ❌ `-shortest` in ffmpeg
 - ❌ Re-deriving the prompt method from theory instead of copying the §0 locked template verbatim — trying successive unverified "fixes" without a controlled comparison against a known-working example tends to make likeness worse, not better. When something worked before, copy its literal structure first; only vary per-episode names/details.
-- ❌ Recovering Pattern A/B or another legacy branch from a historical episode note/output; `dual-style-v2` is the only normative method
+- ❌ Recovering Pattern A/B or another legacy branch from a historical episode note/output; `dual-style-v3` with a required comparison mode is the only normative method
 - ❌ Instructing Animator to keep motion "static/subtle" for any scene — contradicts the mandatory walking + dolly-back pattern (see §0 and Animator brief) and produces motionless statue clips
 - ❌ Inventing hair color/style or costume details "from known character facts" without an actual reference image to check against — verify against a real canonical/dual-style asset every time
 - ❌ Citing a specific past episode/game/date as the justification for a rule — state the rule itself; this playbook must transfer cleanly to any game
@@ -446,7 +578,8 @@ Required path: `games/{GAME_TAG}/dual-style_story_bible.json`. If it is missing,
   "series_id": "dual-style-{GAME_TAG}",
   "game_tag": "{GAME_TAG}",
   "title": "{Game} Dual Style",
-  "production_contract": "dual-style-v2",
+  "production_contract": "dual-style-v3",
+  "comparison_mode": "source-vs-live-action",
   "created_at": "{TODAY}",
   "last_episode": 0,
   "character_pool": [
@@ -488,12 +621,12 @@ Required path: `games/{GAME_TAG}/dual-style_story_bible.json`. If it is missing,
 }
 ```
 
-**`action_types`** — under `dual-style-v2`, every produced clip uses `"walking-approach"`. Visual variety belongs in characters, environments, starting silhouettes, particles, lens height and framing; it never changes the motion contract.
+**`action_types`** — under `dual-style-v3`, every produced clip uses `"walking-approach"`. Visual variety belongs in characters, environments, starting silhouettes, particles, lens height and framing; it never changes the motion contract.
 
 **Story Bible update (Manager, only after the user explicitly approves the local `final.mp4`):**
 
 1. Characters used → append each to `recent_characters`; retain the flattened characters from the last **7 episodes**.
-2. Actors used → append to `recent_actors`; retain the flattened actors from the last **7 episodes**. This is episode-based, not a 7- or 10-name limit.
+2. In `source-vs-live-action`, actors used → append to `recent_actors`; retain the flattened actors from the last **7 episodes**. In `canonical-alternate`, store canonical screen performers only as episode provenance; cooldown is enforced on the character pair, not treated as fancasting rotation.
 3. Environments used → append each to `recent_environments`; trim to last **6 episodes' worth** (FIFO).
 4. Action types used → append each to `recent_action_types`; retain the flattened values from the last **6 episodes**.
 5. For each character featured: set `character_pool[].last_seen_episode = current episode number`.
@@ -508,7 +641,8 @@ Before Phase 1 (scenarist), manager validates proposed character/environment sel
 
 - [ ] None of the selected characters appear in `recent_characters` (last 7 episodes).
 - [ ] None of the selected environments appear in `recent_environments` (last 6 episodes).
-- [ ] None of the selected actors appear in `recent_actors` (last 7 episodes, flattened; not merely the last N names).
+- [ ] In `source-vs-live-action`, none of the newly cast actors appear in `recent_actors` (last 7 episodes, flattened).
+- [ ] In `canonical-alternate`, none of the selected original/alternate pairs appear in `recent_characters` (last 7 episodes).
 - [ ] Every proposed `action_type` is `walking-approach`; repetition is expected and exempt from generic action-rotation checks.
 - [ ] Prefer characters with the lowest (or null) `last_seen_episode` when choosing from the pool.
 

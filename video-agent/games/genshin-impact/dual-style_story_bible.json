@@ -2,7 +2,8 @@
   "series_id": "dual-style-genshin-impact",
   "game_tag": "genshin-impact",
   "title": "Genshin Impact Dual Style",
-  "production_contract": "dual-style-v2",
+  "production_contract": "dual-style-v3",
+  "comparison_mode": "source-vs-live-action",
   "created_at": "2026-06-09",
   "last_episode": 7,
   "character_pool": [
@@ -522,7 +523,7 @@
       "youtube_publish_at": "2026-08-03T20:50:00Z",
       "duration_sec": 25.21,
       "cost_usd": 4.54,
-      "notes": "User-approved five-pair override. The realistic side preserves each actor's recognizable identity, natural hair and adult height while translating the Genshin costume almost identically in practical real-world materials. All environments provide a broad safe forward-walking lane for the paired figures and front dolly-back camera. Used frontal headshots, Kling elements face-lock, a one-entry multi_prompt, walking approach and generate_audio:true. Scene 1 accidentally contained Kling-generated music, so its baked audio was muted before the dedicated MiniMax background track was mixed; scenes 2-5 retain quiet diegetic ambience. This method is now the canonical dual-style-v2 contract; legacy Pattern A/B labels are non-normative."
+      "notes": "User-approved five-pair override. The realistic side preserves each actor's recognizable identity, natural hair and adult height while translating the Genshin costume almost identically in practical real-world materials. All environments provide a broad safe forward-walking lane for the paired figures and front dolly-back camera. Used frontal headshots, Kling elements face-lock, a one-entry multi_prompt, walking approach and generate_audio:true. Scene 1 accidentally contained Kling-generated music, so its baked audio was muted before the dedicated MiniMax background track was mixed; scenes 2-5 retain quiet diegetic ambience. This episode is the source-vs-live-action mode of the unified dual-style-v3 contract; legacy Pattern A/B labels are non-normative."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4",
