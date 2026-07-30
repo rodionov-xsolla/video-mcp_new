@@ -80,9 +80,11 @@ blur, distort, merged characters, single character, text overlay, watermark, ani
 
 **Animator motion_prompt — exact shape, ALWAYS walking + dolly-back, regardless of what the scene's narrative pose says:**
 ```
-Camera in front, dollying backward at the pace both figures walk forward, keeping them centered facing the lens. {Anime role} on left and @Element1 photorealistic figure on right walk forward together, synchronized stride, same distance from camera. ++Both faces locked static, forward++ — no head turn, no neck rotation, no eye movement, no expression change, no morphing. Only {2-3 things that may move: legs, fabric, hair, elemental glow} shift with stride, then settle.
+Front camera dollies back as both walk toward it, centered and facing lens. {Anime role} left and @Element1 photoreal right walk in measured sync at equal camera distance. Faces locked forward: no head, eye, expression or identity change; no morphing. Only legs, fabric, natural hair and {particles} move. DIEGETIC AMBIENCE ONLY. NO MUSIC: no beat, melody, instruments, score or soundtrack.
 ```
 **This is mandatory verbatim structure, not a suggestion, and there is no "static/subtle" variant** (see §Face stability below) — every clip walks toward camera with a dolly-back retreat, full stop. If Scenarist wrote a non-walking action_description (standing, sitting, mid-swing), Animator still converts it to this walking template for the motion_prompt — the narrative pose is the STARTING silhouette, not the final motion. Never instruct Animator to keep motion "subtle" or "static" for any scene; that directly contradicts this mandatory pattern and produces motionless clips.
+
+Before preflight, measure the final substituted prompt as UTF-8 bytes (`len(prompt.encode("utf-8"))`), not character count. Hard-require **≤400 bytes** to retain margin below Kling `multi_prompt[].prompt`'s 512-byte provider limit; a near-limit prompt can pass a character-count check and still fail at deferred result fetch.
 
 **Kling negative_prompt — reuse verbatim:**
 ```
@@ -245,7 +247,7 @@ If these blocks are missing — Manager must flag and stop until they are added.
 - `duration`: "5" or "10"; without `end_image_url`
 - `character_speech: null` → Kling does not receive speech text
 - One model for the whole video
-- **`generate_audio: true` risk — unwanted music.** Kling's native audio can add background music/score on top of ambient SFX when the motion_prompt reads "cinematic"/energetic (see `rules/roles/animator.md` generate_audio note). If the episode has a separately-generated `bg-music.mp3` (the dual-style default via Sound), either add an explicit anti-music clause to every motion_prompt (`"ambient environmental sound only, no music, no score, no soundtrack"`) or have Editor strip the baked-in clip audio entirely at concat time and rely solely on `bg-music.mp3`.
+- **`generate_audio: true` risk — unwanted music.** Kling can add a score even when the intended output is ambient SFX. Every motion prompt must end with the exact strong clause from §0: `DIEGETIC AMBIENCE ONLY. NO MUSIC: no beat, melody, instruments, score or soundtrack.` Avoid `cinematic`, `epic`, `dramatic`, `trailer`, and rhythm/tempo language in Kling-facing text. If Kling still bakes music into an individual clip, Editor must mute that clip's native audio before mixing the separately generated `bg-music.mp3`; never stack the accidental score under the intended track.
 - **Face stability — one mandatory pattern, no exceptions:**
   - **Macro-motion (walking toward camera) with `elements` face-lock is the only supported pattern — see the §0 locked template's motion_prompt and reuse it verbatim, substituting only names/details.** Requires the Storyboarder-generated frontal headshot passed as `elements[0].frontal_image_url`, with the scene PNG as `reference_image_urls`. **`elements` is mandatory-paired with `multi_prompt: true`** — passing `elements` with a bare top-level `prompt` causes a deferred 500 at result-fetch (`rules/roles/animator.md` §4). Reference the bound face as `@Element1` in the shot prompt; still state the explicit face-lock clause (no head turn/no morphing) even with `elements` — the binding reduces drift, it does not by itself guarantee zero motion.
   - **No "keep it static/subtle" override, ever, for any scene, regardless of the narrative pose Scenarist wrote.** Every clip walks forward into a dolly-back retreat per the §0 template; there is no static variant. An instruction to keep motion "subtle" for an idle-stance scene directly contradicts this pattern and produces motionless statue clips.
@@ -303,7 +305,8 @@ ${OUTPUT_DIR}/
 - [ ] Every distinctive design detail (hair color/style, signature accessories) is sourced from an actual canonical/dual-style reference image, never invented from memory
 - [ ] Animator motion_prompt follows the §0 walking + dolly-back template verbatim — no "static/subtle" override regardless of the scene's narrative pose
 - [ ] Camera is in front (dolly-back), not behind, for macro-motion shots; `elements` + `multi_prompt: true` used for face-lock (mandatory every episode); frontal headshot side-asset generated for every character pairing; no real actor name in motion_prompt
-- [ ] If `generate_audio: true` + separate `bg-music.mp3` exists: anti-music clause in motion_prompt, or Editor strips baked-in clip audio at concat
+- [ ] Every Kling motion prompt ends with the exact strong diegetic-only/no-music clause and is ≤400 UTF-8 bytes after substitutions
+- [ ] If a clip still contains accidental Kling music: Editor mutes that clip's native audio before mixing `bg-music.mp3`
 - [ ] Costume/pose/details match between versions
 - [ ] Cartoon and realistic on fixed sides (for the whole video)
 - [ ] `character_speech: null` in all clips
@@ -331,6 +334,8 @@ ${OUTPUT_DIR}/
 - ❌ Passing Kling `elements` with a bare top-level `prompt` (no `multi_prompt: true`) — causes a deferred 500 at result-fetch, not an immediate error
 - ❌ Real actor name in Animator/Kling-facing motion_prompt text — Kling doesn't parse identity from names; use `elements`/the image for likeness, describe the figure only by role/position in motion_prompt
 - ❌ `generate_audio: true` with an energetic/cinematic motion_prompt and no anti-music clause, when a separate `bg-music.mp3` already exists — Kling may bake in its own unwanted score on top
+- ❌ Counting prompt characters instead of serialized UTF-8 bytes — near-limit `multi_prompt` text can fail only at result fetch; enforce ≤400 bytes before preflight
+- ❌ Mixing an accidental Kling score beneath the intended `bg-music.mp3` — mute the contaminated clip audio first
 - ❌ `character_speech ≠ null` (Kling I2V does not generate voice)
 - ❌ `-shortest` in ffmpeg
 - ❌ Re-deriving the prompt method from theory instead of copying the §0 locked template verbatim — trying successive unverified "fixes" without a controlled comparison against a known-working example tends to make likeness worse, not better. When something worked before, copy its literal structure first; only vary per-episode names/details.
