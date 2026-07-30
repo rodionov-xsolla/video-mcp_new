@@ -2,6 +2,7 @@
   "series_id": "dual-style-genshin-impact",
   "game_tag": "genshin-impact",
   "title": "Genshin Impact Dual Style",
+  "production_contract": "dual-style-v2",
   "created_at": "2026-06-09",
   "last_episode": 7,
   "character_pool": [
@@ -242,6 +243,16 @@
       "Arataki Itto"
     ],
     "recent_actors": [
+      "Gal Gadot",
+      "Tom Holland",
+      "Florence Pugh",
+      "Eva Green",
+      "Henry Cavill",
+      "Margot Robbie",
+      "Timothée Chalamet",
+      "Sydney Sweeney",
+      "Zendaya",
+      "Anya Taylor-Joy",
       "Emily Blunt",
       "Scarlett Johansson",
       "Ana de Armas",
@@ -259,10 +270,6 @@
       "Jason Momoa"
     ],
     "recent_environments": [
-      "Mondstadt windswept cliff edge",
-      "Wuwang Hill misty graveyard at dusk",
-      "Liyue Harbor stone dock at golden hour",
-      "Dawn Winery stone courtyard at night",
       "Inazuma throne room",
       "Liyue harbor arena at dusk",
       "Fontaine open theater stage plain wooden floor",
@@ -290,15 +297,33 @@
       "underground Inazuma oni festival arena central runway"
     ],
     "recent_action_types": [
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "bow-draw-aim-stance",
+      "leaf-whirl-sword-flourish",
       "dance-spin-flourish",
       "geo-crystal-summon-stance",
       "cryo-blade-ready-stance",
       "electro-judgment-stance",
       "twin-dagger-flourish",
       "cryo-frost-veil-stance",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
       "walking-approach"
     ],
-    "cooldown_episodes": 10
+    "cooldown_episodes": 7
   },
   "episode_summaries": [
     {
@@ -459,7 +484,7 @@
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-22/dual-style/20260722-121125-97418/final.mp4",
       "duration_sec": 25.21,
       "cost_usd": 2.67,
-      "notes": "Actor cast fully reassigned at user request: all 4 actors (Emma Stone, Idris Elba, Jacob Elordi, Jenna Ortega) confirmed never used before in this series, overriding stale bible assignments for Xiao/Ganyu (previously Tom Holland/Gal Gadot, already used for other characters in EP2) and swapping Ayaka/Cyno actors too per explicit user correction. Cyno realistic-side description explicitly encodes Idris Elba real dark skin tone, overriding generic bible complexion wording, per user requirement that actor and character visually match. Pattern B (walking-approach + Kling elements face-lock) used. sfx:false this run (ambient audio relies on bg-music.mp3 only, no per-scene CassetteAI SFX, per user override of default sfx:true). Scene 4 (Ganyu) bow required one NB2 re-gen after user caught the weapon floating/detached from the hand — fixed by adding explicit hand-grip-contact language (logged as a new anti-pattern in rules/roles/storyboarder.md). Small pop-up promo banner (Primogems CTA) added on scenes 2-3 at user request, non-default sizing (450px wide vs the format-default full-width banner, positioned higher at y=40)."
+      "notes": "Actor cast fully reassigned at user request: all 4 actors (Emma Stone, Idris Elba, Jacob Elordi, Jenna Ortega) confirmed never used before in this series, overriding stale bible assignments for Xiao/Ganyu (previously Tom Holland/Gal Gadot, already used for other characters in EP2) and swapping Ayaka/Cyno actors too per explicit user correction. Cyno realistic-side description explicitly encodes Idris Elba real dark skin tone, overriding generic bible complexion wording, per user requirement that actor and character visually match. Used walking approach with Kling elements face-lock. sfx:false this run (ambient audio relies on bg-music.mp3 only, no per-scene CassetteAI SFX, per user override of default sfx:true). Scene 4 (Ganyu) bow required one NB2 re-gen after user caught the weapon floating/detached from the hand — fixed by adding explicit hand-grip-contact language (logged as a new anti-pattern in rules/roles/storyboarder.md). Small pop-up promo banner (Primogems CTA) added on scenes 2-3 at user request, non-default sizing (450px wide vs the format-default full-width banner, positioned higher at y=40)."
     },
     {
       "episode": 7,
@@ -497,11 +522,11 @@
       "youtube_publish_at": "2026-08-03T20:50:00Z",
       "duration_sec": 25.21,
       "cost_usd": 4.54,
-      "notes": "User-approved five-pair override. The realistic side preserves each actor's recognizable identity, natural hair and adult height while translating the Genshin costume almost identically in practical real-world materials. All environments provide a broad safe forward-walking lane for the paired figures and front dolly-back camera. Pattern B uses frontal headshots, Kling elements face-lock, walking approach and generate_audio:true. Scene 1 accidentally contained Kling-generated music, so its baked audio was muted before the dedicated MiniMax background track was mixed; scenes 2-5 retain quiet diegetic ambience. Future Kling prompts now require the strong no-music clause and a maximum of 400 UTF-8 bytes."
+      "notes": "User-approved five-pair override. The realistic side preserves each actor's recognizable identity, natural hair and adult height while translating the Genshin costume almost identically in practical real-world materials. All environments provide a broad safe forward-walking lane for the paired figures and front dolly-back camera. Used frontal headshots, Kling elements face-lock, a one-entry multi_prompt, walking approach and generate_audio:true. Scene 1 accidentally contained Kling-generated music, so its baked audio was muted before the dedicated MiniMax background track was mixed; scenes 2-5 retain quiet diegetic ambience. This method is now the canonical dual-style-v2 contract; legacy Pattern A/B labels are non-normative."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4",
-  "style_tags": "Dual-style split-frame format: LEFT side is the canonical Genshin game render — anime cel-shaded, clean bold outlines, vibrant saturated colors and the character's elemental particle aura. RIGHT side is the assigned real-world actor in photoreal live action with recognizable identity, natural adult height, natural hair color and a plausible real-world hairstyle rather than copied anime hair. The actor wears an almost identical adaptation of the character's costume: preserve the silhouette, panel layout, color blocking, signature accessories and props, but construct them from believable practical fabrics, leather, metal and tailored layers. Both figures occupy one continuous environment with no divider, positioned on a broad unobstructed path that supports synchronized forward walking and a front-facing dolly-back camera.",
+  "style_tags": "LEFT figure only is the canonical Genshin game render: anime cel-shaded, clean bold outlines, vibrant saturated colors and the character's elemental particle aura. RIGHT figure only is the assigned real-world actor in photoreal live action with recognizable identity, natural adult height, natural hair color and a plausible real-world hairstyle rather than copied anime hair. The actor wears an almost identical adaptation of the character's costume: preserve the silhouette, panel layout, color blocking, signature accessories and props, but construct them from believable practical fabrics, leather, metal and tailored layers. Both figures share one continuous visual world with no divider.",
   "characters": [
     {
       "slug": "venti",

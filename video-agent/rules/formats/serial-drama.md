@@ -119,7 +119,7 @@ Serial-drama dialogue is I2V, so `duration_sec` is the actual rendered clip leng
 - Estimate spoken timing before generation: `speech_seconds = word_count / words_per_second`. Default pace is ~2.4 words/sec; relaxed/sarcastic lines can be slower, tension/mission-rant beats can be faster. Avoid accidentally cramming too many words into a short shot.
 - Add acting/pause padding when needed: +0.2s for a simple line, +0.4–0.7s for pause/comma/reaction, +0.8–1.2s for prop handoff or physical beat.
 - One Kling dialogue request can use at most 2 `voice_ids`. The series/story bible may have 3+ reusable character voices, but each request remaps only the voices used in that clip to local `<<<voice_1>>>` / `<<<voice_2>>>` tags. If a scene needs 3 speaking characters in the same moment, split the scene into multiple clips.
-- Prompt text per shot must stay ≤512 characters.
+- Prompt text per shot must stay ≤512 serialized UTF-8 bytes.
 - The physical descriptor immediately before each `<<<voice_N>>>` must match `voice_ids[N-1]`.
 - Any spoken line in a dialogue I2V clip must have `generate_audio: true`, `voice_ids`, and a matching `<<<voice_N>>>` tag. A dialogue clip rendered without voice is a failed request, not an acceptable silent beat.
 - Never pad a clip with a frozen frame; the I2V duration is the duration.

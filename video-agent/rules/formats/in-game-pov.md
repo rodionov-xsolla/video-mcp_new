@@ -352,7 +352,7 @@ Budget ceiling including permitted retries: **$7.00**. Each failed request gets 
 - Every prompt starts with: `"Environmental first-person POV."` (style anchor)
 - Every prompt ends with an explicit endpoint verb: `dissipates`, `settles`, `clears`, `holds`, `pushes forward`
 - No names, no moods, no hands, no weapon barrels, no protagonist body
-- Prompt ≤ 512 chars (count before submitting)
+- Prompt ≤512 serialized UTF-8 bytes (measure before submitting)
 
 **`negative_prompt` on every call** (functional core — always include):
 `voices, speech, dialogue, vocals, singing, music, on-screen text, HUD numbers, percentage counter, captions, watermark, person facing camera, protagonist body, hands, arms, weapon, controls, cockpit controls, talking`
@@ -368,15 +368,15 @@ Clip 0  title-card  /  PNG: scene-0.png  /  5s = $0.63
   prompt: "Slow camera push toward {crisis}, {debris} drifts and settles, distant explosion flares then holds."
 
 Clip 1  pov/hook    /  PNG: scene-1.png  /  5s = $0.63  /  {pct}%
-  prompt: "Environmental first-person POV. {≤512 chars, endpoint verb}"
+  prompt: "Environmental first-person POV. {≤512 UTF-8 bytes, endpoint verb}"
 
 Clip 2  pov/threat  /  PNG: scene-2.png  /  5s = $0.63  /  {pct}%
-  prompt: "Environmental first-person POV. {≤512 chars, endpoint verb}"
+  prompt: "Environmental first-person POV. {≤512 UTF-8 bytes, endpoint verb}"
 
 ...
 
 Clip N  pov/outcome /  PNG: scene-N.png  /  5s = $0.63  /  {pct}%
-  prompt: "Environmental first-person POV. {≤512 chars, endpoint verb}"
+  prompt: "Environmental first-person POV. {≤512 UTF-8 bytes, endpoint verb}"
 
 Total: {N+1} × $0.63 = ${total}  (cap $6.30)
 Proceed? (y/n)
@@ -535,7 +535,7 @@ Generated PNG/MP4/audio receives technical validation only (path, size, hash, di
 - ❌ **multi_prompt / pov_multi_prompt / shot chaining** — this format uses one 5s Kling call per clip; multi_prompt produces uncontrolled transitions and location drift across shots
 - ❌ Bridge frame extraction or start_image_url chaining between clips — each clip uses its own independently generated NB2 PNG as start frame
 - ❌ Missing style anchor `"Environmental first-person POV."` in any clip 1–N prompt — shots drift to Kling's generic realistic prior
-- ❌ Prompt > 512 chars — validated post-submit, costs the round-trip before failing
+- ❌ Prompt >512 serialized UTF-8 bytes — validated post-submit, costs the round-trip before failing
 - ❌ Skipping debug-mode scenario table — launch without it = no user visibility on per-clip timing/cost before spending $4.41+
 - ❌ Music from `Fun/` (wrong mood — use tense/drama)
 - ❌ Burning ASS subtitles with stock ffmpeg (lacks libass — use ffmpeg-full)

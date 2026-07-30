@@ -401,7 +401,7 @@ python tools/overlays.py storyboard.json \
 - fal.media URL — временные, скачивать немедленно
 - Polling base path = первые 2 сегмента endpoint (не полный путь с версией)
 - `generate_audio` выбирается оркестратором по storyboard + format playbook до создания exact payload; native-audio режимы сохраняют оплаченный audio, silent-режимы используют `false`
-- multi_prompt: каждый shot ≤ 512 символов (жёсткий лимит Kling)
+- `multi_prompt[].prompt`: provider hard limit is 512 serialized UTF-8 bytes, not Unicode character count. Measure `len(prompt.encode("utf-8"))`; exact format playbooks may require a lower safety ceiling (`dual-style-v2`: ≤400 bytes).
 - Elements: максимум 3 на запрос
 - Параллельных запросов: не более 3
 

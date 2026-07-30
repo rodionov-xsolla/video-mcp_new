@@ -136,6 +136,8 @@ Without this phrase — work autonomously.
    - `games/{GAME_TAG}/{FORMAT}_special.md` — IF the file exists, read it for format+game overrides.
    - Exact `STORY_BIBLE_PATH` for the current format/series — persistent state. It is mandatory for production. If missing, STOP and ask whether to create it; never auto-create it.
 
+   **Versioned contract gate:** when `FORMAT == "dual-style"`, `rules/formats/dual-style.md` contract `dual-style-v2` is the sole production method. Require Scenarist output `production_contract: "dual-style-v2"` and reject any static/subtle/legacy Pattern A/B branch before Phase 2. Game configs and story bibles provide source facts and rotation, not alternate composition, motion, audio or assembly methods.
+
 6. **Character sheets:** use only refs owned by the exact current format/series. If missing, Storyboarder creates a fresh format/series-bound ref during its existing phase; never use the legacy game-wide batch generator.
 
 7. **Query assets from Supabase, filtered to the current format.** Character/avatar refs are NEVER shared across formats — different formats render the same game in different art styles (e.g. `fun-news`'s talking-head anchor render vs `redcon`'s cinematic 3D vs `what-if-real-life`'s photoreal). Reusing a ref tagged for a different format silently imports its style. Burned 2026-07-09: the redcon Q episode reused a `fun-news`-tagged Q avatar as the "canonical self" ref, producing a visible style mismatch against the freshly generated alternate self.
@@ -149,7 +151,7 @@ Without this phrase — work autonomously.
    # Series-scoped formats: also require series_id in tags, e.g. tags=cs.{serial-drama,star-trek-airlock}
    ```
 
-   **Only rows whose `tags` contain the current `FORMAT` slug (and `series_id`, where applicable) are eligible for reuse.** A row for the same character tagged with a *different* format or series, or with no matching tag at all, is NOT a match. CTA wording and asset are not selected through a broad asset-bank exception: use only the values recorded in the exact `STORY_BIBLE_PATH`. Openers, title cards, character refs, appearance text and voice samples also stay format/series-bound.
+   **Only rows whose `tags` contain the current `FORMAT` slug (and `series_id`, where applicable) are eligible for reuse.** A row for the same character tagged with a *different* format or series, or with no matching tag at all, is NOT a match. **Dual-style-v2 canonical-source exception:** for the left/source figure only, an untagged game-wide `reference_image` is the preferred canonical design source, exactly as declared in `rules/formats/dual-style.md`; it does not authorize reuse of an asset tagged for another format. CTA wording and asset are not selected through a broad asset-bank exception: use only the values recorded in the exact `STORY_BIBLE_PATH`. Openers, title cards, actor headshots, appearance text and voice samples otherwise stay format/series-bound.
 
    **Distribute assets to roles:**
 
@@ -393,6 +395,13 @@ Phase 6  → local final.mp4 shown → user OK → Supabase + scheduled YT + log
 Phase 7  → git push
 ```
 All inline checks are run directly by the manager (jq/ffprobe/stat), not by a script.
+
+For `dual-style-v2`, append these hard gates to the normal phase checks:
+
+- Phase 1: `production_contract == "dual-style-v2"`; every scene has `character_speech:null`, 5s duration, a forward-walk/front-dolly `action_description`, `sfx:false`, `music_required:true`, `generate_audio:true`, and `multi_prompt:true`.
+- Phase 3: every accepted scene has one canonical source ref, a safe unobstructed walking/camera-retreat lane, and one derived frontal actor headshot with permanent URLs.
+- Phase 4: exact one-entry `multi_prompt + elements` payload, exact no-music ending, prompt ≤400 UTF-8 bytes, audio stream present.
+- Phase 5: `bg-music.mp3` present; any flagged contaminated Kling-audio scene muted; clean ambience/music/final loudness measured per the format playbook.
 
 Output structure:
 ```

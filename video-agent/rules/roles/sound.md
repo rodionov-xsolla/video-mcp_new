@@ -337,13 +337,14 @@ fal.ai TTS audio_url expires. Avatar polling takes 1–3 min — during that tim
 
 ## 6. Background music
 
-### Music follows the format; serial-drama music is mandatory
+### Music follows the format; serial-drama and dual-style-v2 music are mandatory
 
-Generate `bg-music.mp3` with MiniMax Music (`fal-ai/minimax-music/v2.6`) whenever the format requires music. **Serial-drama always requires a newly generated background track and may never skip it.** Do not pull tracks from Supabase or the local `video-agent/music/` library.
+Generate `bg-music.mp3` with MiniMax Music (`fal-ai/minimax-music/v2.6`) whenever the format requires music. **Serial-drama and `dual-style-v2` always require a newly generated background track and may never skip it.** Do not pull tracks from Supabase or the local `video-agent/music/` library.
 
 | Format | Volume | Note |
 |---|---|---|
 | **serial-drama** | `0.45` | Was `0.15` until burned in EP13 (2026-07-14): measured near-inaudible against dialogue/SFX in a real mix (probed at ~-33dB in a silent scene, close to the noise floor) — user reported the music as completely missing. Raised to `0.45` and confirmed audible by direct dB probe (`editor.md` §4). If a future mix still reads as too quiet or too loud, re-probe and adjust — don't just retype a remembered number. |
+| **dual-style-v2** | target `-20 LUFS` | Music is the primary continuous bed. Editor measures and normalizes it rather than trusting a fixed scalar; clean Kling ambience sits near `-28 LUFS`. |
 | **gameplay-ai-avatar** | `0.10` | Quieter — avatar voice is primary |
 | **reddit-story** | `0.05` | Even quieter — narration must be clear |
 | **news, others** | `0.10–0.15` | By mood |
@@ -365,6 +366,7 @@ On generation failure, retry the same request once. A second failure stops the w
 ### Mix parameters (passed to Editor)
 
 - **serial-drama:** `volume=0.45` (was `0.15` — burned as near-inaudible, see the table above)
+- **dual-style-v2:** music target approximately `-20 LUFS`; clean Kling ambience approximately `-28 LUFS`; final mix near `-20 LUFS`, true peak no higher than `-2 dBTP`
 - **gameplay-ai-avatar:** `volume=0.10` (if used)
 - Mixing is done by Editor (see `editor.md` section 4). Sound only generates the track and sets the volume.
 
@@ -463,6 +465,7 @@ The MiniMax `style` prompt must match the format's emotional register (this used
 | Mood | Use for | `style`-prompt keywords |
 |---|---|---|
 | fun / light | comedy-sketch, lighthearted reaction | upbeat, playful, comedic, bright, bouncy |
+| attractive / energetic | dual-style-v2 | polished instrumental pulse, energetic, aspirational, modern, no trailer swell |
 | dark / tense | serial-drama (tense beats), horror, somber news | dark, tense, ominous, cinematic, low strings |
 | neutral / drama | news, reddit-story (calm narration) | calm, restrained, ambient underscore, neutral |
 | tense / action | serial-drama (cliffhanger), action recap | driving beat, suspenseful, rising tension |

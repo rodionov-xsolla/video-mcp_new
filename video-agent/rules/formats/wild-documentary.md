@@ -261,7 +261,7 @@ Recommended rhythm for single-creature videos: **wide establishing → extreme c
 - All clips: **Kling v3 Standard I2V, `generate_audio: true`** — let Kling generate ambient nature sounds.
 - Retry one technically failed v3 request once with the same endpoint/settings. If it fails again, STOP and report the error. Do not switch to v2.6 or another provider.
 - **Start frame only.** No `tail_image_url`.
-- **Kling prompt hard limit: 512 characters.** Count before submitting. Truncate by removing secondary details (dragonfly, specific leaf movement etc.) — keep creature motion + camera motion + grain/texture as the core.
+- **Kling prompt hard limit: 512 serialized UTF-8 bytes.** Measure `len(prompt.encode("utf-8"))` before submitting. Trim secondary details first.
 - **Polling URL:** status at `https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}/status` — NOT the model path. Using the model path (`.../v3/standard/image-to-video/requests/...`) returns 405.
 - **multi_prompt via fal.ai wrapper is unreliable.** Do NOT send multi-segment prompts as a combined string like `"multi_prompt[0]: ... multi_prompt[1]: ..."` — Kling ignores the format. Write ONE well-crafted single prompt covering the full 5s arc.
 
@@ -434,7 +434,7 @@ ${OUTPUT_DIR}/
 - ❌ Burning the sign wording as drawtext/subtitles — it must be part of the NB2 start frame and preserved through Kling
 - ❌ Asking Kling to generate or correct readable sign text — Kling animates the existing card; NB2 owns the lettering
 - ❌ Sending multi-prompt as `"multi_prompt[0]: ... multi_prompt[1]: ..."` string to Kling — not parsed; write one unified prompt
-- ❌ Kling prompt over 512 chars — silently truncated or rejected with 422
+- ❌ Kling prompt over 512 serialized UTF-8 bytes — rejected at deferred validation
 - ❌ Polling Kling at `.../v3/standard/image-to-video/requests/{ID}/status` — returns 405; use `.../kling-video/requests/{ID}/status`
 - ❌ Two adjacent clips with same camera distance + same lighting — causes jump cut
 - ❌ All scenes in same micro-environment — visual monotony; vary distance, light, specific location
