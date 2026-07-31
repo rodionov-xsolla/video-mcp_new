@@ -894,7 +894,7 @@ Nano Banana 2 (avatar ref) → ElevenLabs TTS (speech.wav, через fal.ai) �
 ```bash
 cat > /tmp/music-body.json << 'EOF'
 {
-  "style": "energetic upbeat anime action music, driving beat 140bpm, orchestral synth blend, heroic bold melody, suitable for vertical short video, cinematic hype",
+  "prompt": "energetic upbeat anime action music, driving beat 140bpm, orchestral synth blend, heroic bold melody, suitable for vertical short video, cinematic hype",
   "is_instrumental": true,
   "duration": 30
 }
@@ -912,7 +912,7 @@ REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
 
 | Параметр | Тип | Обязательный | Описание |
 |----------|-----|-------------|----------|
-| `style` | string | Да | Описание стиля (до 2000 символов) |
+| `prompt` | string | Да | Текстовое описание музыки (до 2000 символов). Актуальный v2.6 API отклоняет legacy-поле `style`. |
 | `is_instrumental` | boolean | Нет | `true` = без вокала. **Всегда `true` для фоновой музыки** |
 | `duration` | integer | Нет | Длительность в секундах (рекомендуется 30–60) |
 

@@ -72,7 +72,7 @@ def submit_chatterbox(clip):
 
 def submit_music():
     body = {
-        "style": "dark melancholic orchestral with gentle water motifs, emotional and cinematic, instrumental, no vocals, no lyrics, suitable for a vertical short video",
+        "prompt": "dark melancholic orchestral with gentle water motifs, emotional and cinematic, instrumental, no vocals, no lyrics, suitable for a vertical short video",
         "is_instrumental": True,
         "duration": 45,
     }

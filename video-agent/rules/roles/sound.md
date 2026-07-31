@@ -353,13 +353,13 @@ Generate `bg-music.mp3` with MiniMax Music (`fal-ai/minimax-music/v2.6`) wheneve
 
 Full request/polling schema: `tools/fal-ai.md §8`. Essentials:
 - Endpoint: `POST https://queue.fal.run/fal-ai/minimax-music/v2.6`; polling base `fal-ai/minimax-music` (NOT the full path — see the base-path rule in fal-ai.md).
-- Body: `{ "style": "<mood prompt, ≤2000 chars>", "is_instrumental": true, "duration": <30–60> }`.
+- Body: `{ "prompt": "<music prompt, ≤2000 chars>", "is_instrumental": true, "duration": <30–60> }`. The required field is `prompt`; never send the legacy `style` field, which the live v2.6 endpoint rejects.
 - **`is_instrumental: true` ALWAYS** — background music has no vocals/lyrics.
 - `duration` ≈ the video length (30–60s); generating slightly longer and letting Editor trim is fine.
 - Download the result to `${OUTPUT_DIR}/bg-music.mp3` **immediately** (fal.ai URLs expire).
 - Cost ~$0.03/track (see `budgets.md`).
 
-**Build the `style` prompt** from (a) the format's emotional register (§11 mood map) + (b) the game's atmosphere (game config `music.mood` / Tone of Voice). Always instrumental, no vocals, fits a 9:16 short. Example (sitcom serial): `"instrumental low-density comedy underscore, light and playful, no vocals, no lyrics, no dramatic swell, suitable for a vertical short video"`.
+**Build the music `prompt`** from (a) the format's emotional register (§11 mood map) + (b) the game's atmosphere (game config `music.mood` / Tone of Voice). Always instrumental, no vocals, fits a 9:16 short. Example (sitcom serial): `"instrumental low-density comedy underscore, light and playful, no vocals, no lyrics, no dramatic swell, suitable for a vertical short video"`.
 
 On generation failure, retry the same request once. A second failure stops the whole video when music is required; never silently omit required music or switch route/provider/model.
 
