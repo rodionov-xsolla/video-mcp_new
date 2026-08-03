@@ -123,6 +123,42 @@
         "eligible_for": "pixel clips"
       },
       "status": "covered"
+    },
+    {
+      "name": "Stormcaller",
+      "slug": "stormcaller",
+      "role": "an original Growtopia player character built from the Zeus set — a nobody farmer struck by legendary lightning who ascends, lets power go to his head, nearly loses it in a storm backlash, and ends up sharing it as a mentor to newcomers",
+      "costume_stages": {
+        "mortal": "2D pixel-art Growtopian, blocky humanoid, tan/beige blocky skin (~#C9A67C), large square head, two white dot eyes with black pupils, small flat mouth, thick clean black outline, plain brown work shirt, patched grey trousers, dirt-stained tiny blocky hands, no hat, no cosmetic set, humble slim build, holding a wooden hoe, eager but weary expression",
+        "ascended": "2D pixel-art Growtopian in Zeus set, blocky humanoid, tan/beige blocky skin (~#C9A67C), large square head, two white dot eyes with black pupils, golden Greek-style armor plates over torso, laurel crown on head, crackling yellow lightning bolts arcing around the body, glowing storm-blue aura, tiny blocky hands gripping a lightning-wreathed staff, broader confident stance, thick clean black outline"
+      },
+      "refs": {
+        "mortal": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/stormcaller-mortal-2026-08-03/variants/mortal.png",
+          "tags": ["character-story", "stormcaller", "mortal"]
+        },
+        "ascended": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/stormcaller-ascended-2026-08-03/variants/ascended.png",
+          "tags": ["character-story", "stormcaller", "ascended"]
+        }
+      },
+      "voice_style": "Male narrator, mythic and self-aware. Starts wry and a little shaken (post-crisis hook), warms into plain humility during origin, swells with cocky pride during the Zeus ascension and hubris beats, cracks with alarm during the storm backlash, settles into a warm grounded mentor tone for the revelation.",
+      "story_arc": {
+        "hook": "I'm Stormcaller — the Growtopian chosen by Zeus's own lightning. I nearly lost everything it gave me.",
+        "origin": "Before the storm, I was nobody. Just a farmer breaking blocks for gems, world after world.",
+        "turning_point": "Lightning found me and the Zeus set became mine. Power went to my head — I flaunted my crown and mocked players who had nothing. Then the storm turned on me and nearly tore the crown from my hands.",
+        "revelation": "Now I share the storm instead of hoarding it. Every newbie I meet gets a spark of it."
+      },
+      "environments_used": [
+        "Modest dirt-and-wood crop-field world",
+        "Open storm-lashed field with a single dead tree",
+        "Bustling tile-block trade plaza with vending machines and World Lock display cases",
+        "Cracked floating-platform storm world under a jagged lightning sky"
+      ],
+      "items_featured": ["Zeus set", "World Lock", "lightning-wreathed staff"],
+      "status": "covered"
     }
   ],
   "narrator": {
@@ -143,7 +179,8 @@
     "legendary-wizard",
     "tomb-robber",
     "criminal-mastermind",
-    "OldGrower"
+    "OldGrower",
+    "stormcaller"
   ],
   "episodes": [
     {
@@ -180,6 +217,21 @@
       "date": "2026-07-21",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-21/character-story/final.mp4",
       "notes": "Test run approved by user 2026-07-22. Uploaded post-hoc."
+    },
+    {
+      "episode": 5,
+      "character": "Stormcaller",
+      "slug": "stormcaller",
+      "title": "Stormcaller: How I Caught Zeus's Lightning",
+      "date": "2026-08-03",
+      "run_id": "20260803-231040-42395",
+      "output_dir": "output/2026-08-03/growtopia/character-story/20260803-231040-42395",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-03/character-story/20260803-231040-42395/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Determined_Man",
+      "status": "approved_final_saved",
+      "notes": "Original character built from the Zeus set (not a named wiki NPC) — mortal-farmer-to-Zeus-ascension arc with hubris/backlash/mentor revelation. Approved by user."
     }
   ]
 }
