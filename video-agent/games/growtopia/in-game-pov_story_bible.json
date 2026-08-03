@@ -1,0 +1,74 @@
+{
+  "format": "in-game-pov",
+  "game_tag": "growtopia",
+  "last_updated": "2026-07-28",
+  "_note": "Format-bound bible for Growtopia in-game POV. Canonical style is Growtopia 2D pixel-art first-person environmental POV adapted to flat side-view sandbox framing. Episodes are logged only after explicit final approval and publishing.",
+  "style_tags": [
+    "Growtopia 2D pixel-art sprite",
+    "retro flat side-view design",
+    "flat 2D side-scrolling platformer game scene",
+    "blocky pixelated proportions",
+    "thick clean black outlines",
+    "bright saturated candy colors",
+    "simple tile-based sandbox world backdrop",
+    "strictly 2D flat side-view — NOT Minecraft, NOT 3D voxel, NOT isometric, no 3D rendering",
+    "POV adapted for Growtopia: viewer is represented by the screen/player perspective, no protagonist face, no over-the-shoulder hero shot, no hands in frame"
+  ],
+  "characters": [
+    {
+      "name": "growtopian-default-skin",
+      "role": "the nameless default-skin Growtopian — the everyplayer avatar; only implied by POV, not shown as the camera owner",
+      "appearance": "2D pixel-art Growtopian avatar, blocky humanoid, tan/beige blocky skin (~#C9A67C), large square head, two white dot eyes with black pupils and a small flat mouth, thick clean black outline, LOCKED CANONICAL COSTUME: a bright cyan/turquoise short-sleeve t-shirt (~#3FC1D6) and medium-blue pants (~#5B6DC8), tiny blocky hands, no hat, no cosmetic set, canonical unmodified default skin, retro flat sprite look",
+      "canonical_costume": {
+        "skin": "tan/beige blocky (~#C9A67C)",
+        "shirt": "bright cyan/turquoise short-sleeve t-shirt (~#3FC1D6)",
+        "pants": "medium-blue pants (~#5B6DC8)",
+        "face": "two white dot eyes with black pupils, small flat mouth, thick black outline",
+        "accessories": "none — no hat, no cosmetic set, unmodified default skin"
+      },
+      "ref": {
+        "asset_type": "reference_image",
+        "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/growtopian-default-skin/sheet.png",
+        "tags": [
+          "growtopia",
+          "default-skin",
+          "player-avatar",
+          "in-game-pov"
+        ],
+        "eligible_for": "pixel clips only; use as world/other-player reference, not as visible POV protagonist"
+      }
+    }
+  ],
+  "narrator": {
+    "provider": "minimax",
+    "voice_id": "Decent_Boy",
+    "register": "young teen boy, urgent survival-guide delivery, playful but tense, kid-friendly, not adult, English",
+    "language": "en",
+    "note": "No approved Chatterbox sample owned by this bible. Voice identity is not character-critical for second-person survival narration, so MiniMax narration is acceptable."
+  },
+  "cta": {
+    "status": "ready",
+    "standard_asset_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4",
+    "append_standard_asset_after_in_scene": true,
+    "note": "Growtopia CTA registered in game assets; safe cross-format game CTA."
+  },
+  "used_situations": [
+    {
+      "situation": "Trade Scam Survival — high-value DL/WL trade check before accepting",
+      "date": "2026-07-28",
+      "run_id": "20260728-145505-db4eff",
+      "outcome": "survive",
+      "threat_type": "trade scam",
+      "published": false,
+      "status": "approved_final_saved",
+      "final_video_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-28/in-game-pov/20260728-145505-db4eff/final.mp4",
+      "comment": "User approved final for Supabase save only; no YouTube channel mapped / not published. Growtopia in-game POV judged weak-fit after review; avoid repeating this format/premise unless explicitly requested."
+    }
+  ],
+  "anti_repetition": {
+    "threat_types_used": [
+      "trade scam"
+    ],
+    "note": "Trade scam / DL-WL verification has been used once. User noted Growtopia is probably a weak fit for in-game POV; prefer top-list, fun-news, character-story, reddit-story, dual-style unless specifically requested."
+  }
+}
