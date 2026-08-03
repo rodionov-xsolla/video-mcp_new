@@ -401,7 +401,7 @@ python tools/overlays.py storyboard.json \
 - fal.media URL — временные, скачивать немедленно
 - Polling base path = первые 2 сегмента endpoint (не полный путь с версией)
 - `generate_audio` выбирается оркестратором по storyboard + format playbook до создания exact payload; native-audio режимы сохраняют оплаченный audio, silent-режимы используют `false`
-- multi_prompt: каждый shot ≤ 512 символов (жёсткий лимит Kling)
+- `multi_prompt[].prompt`: provider hard limit is 512 serialized UTF-8 bytes, not Unicode character count. Measure `len(prompt.encode("utf-8"))`; exact format playbooks may require a lower safety ceiling (`dual-style-v3`: ≤400 bytes).
 - Elements: максимум 3 на запрос
 - Параллельных запросов: не более 3
 
@@ -466,14 +466,14 @@ Supabase → upload final.mp4
 ```bash
 ./queue/youtube-upload.sh \
     [--channel CHANNEL_NAME] \
-    [--publish-at "2026-06-20T20:59:00Z" | now] \
+    [--publish-date "2026-06-20" | --publish-at "2026-06-20T20:17:00Z" | now] \
     [--thumbnail thumb.png] \
     final.mp4 "Заголовок" "Описание" [private|public] [теги]
 ```
 
 **Что делает:**
 1. Обновляет OAuth2 access token через refresh token
-2. Проверяет занятость слота на канале (чтобы не ставить два видео в один день)
+2. В auto-schedule проверяет занятость даты; для auto и `--publish-date` выбирает случайную минуту в окне 22:00–23:50 МСК
 3. Resumable upload → YouTube
 4. Опционально загружает thumbnail
 5. Возвращает YouTube URL + `SCHEDULED_FOR=ISO8601`
@@ -483,7 +483,8 @@ Supabase → upload final.mp4
 **Пишет:** загружает видео на YouTube
 
 **⚠ Подводные камни:**
-- Без `--publish-at` автоматически находит ближайший свободный слот в 20:59 UTC — неожиданно если хочешь загрузить как черновик
+- `--publish-date YYYY-MM-DD` закрепляет дату, но случайно выбирает время 22:00–23:50 МСК; `SCHEDULED_FOR` возвращает фактический UTC timestamp
+- Без `--publish-date` и `--publish-at` автоматически находит ближайшую свободную дату и случайное время в том же окне
 - Resumable upload не возобновляется при падении — при сетевой ошибке нужно запускать заново
 - Verifies channel ID только если `YOUTUBE_CHANNEL_ID_<CHANNEL>` задан в env
 

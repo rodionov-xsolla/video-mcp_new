@@ -1,0 +1,125 @@
+{
+  "series_id": "dual-style-growtopia",
+  "game_tag": "growtopia",
+  "title": "Growtopia Dual Style",
+  "created_at": "2026-07-22",
+  "last_episode": 1,
+  "character_pool": [
+    {
+      "character_name": "legendary-wizard",
+      "display_name": "Legendary Wizard",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "the-ringmaster",
+      "display_name": "The Ringmaster",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "criminal-mastermind",
+      "display_name": "Criminal Mastermind",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 1
+    },
+    {
+      "character_name": "master-peng",
+      "display_name": "Master Peng",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 1
+    }
+  ],
+  "character_rotation": {
+    "recent_characters": [
+      "Legendary Wizard",
+      "The Ringmaster",
+      "Criminal Mastermind",
+      "Master Peng"
+    ],
+    "recent_actors": [],
+    "recent_environments": [
+      "mystical stone tower interior with glowing runes",
+      "red-and-gold circus tent interior with spotlight",
+      "gritty back-alley at night with neon signage",
+      "misty mountain dojo courtyard"
+    ],
+    "recent_action_types": [
+      "idle-mystic-pose",
+      "idle-showman-pose",
+      "idle-menacing-lean",
+      "idle-warrior-stance"
+    ],
+    "cooldown_episodes": 10
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-07-22",
+      "characters": [
+        "Legendary Wizard",
+        "The Ringmaster",
+        "Criminal Mastermind",
+        "Master Peng"
+      ],
+      "environments": [
+        "mystical stone tower interior with glowing runes",
+        "red-and-gold circus tent interior with spotlight",
+        "gritty back-alley at night with neon signage",
+        "misty mountain dojo courtyard"
+      ],
+      "actors": [
+        "(none)",
+        "(none)",
+        "(none)",
+        "(none)"
+      ],
+      "action_types": [
+        "idle-mystic-pose",
+        "idle-showman-pose",
+        "idle-menacing-lean",
+        "idle-warrior-stance"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-22/dual-style/20260722-150832-42209/final.mp4",
+      "duration_sec": 23.21,
+      "cost_usd": 2.03,
+      "notes": "Series launch (EP1) for growtopia dual-style -- standard base format (2D pixel-art left, generic photorealistic right, no actor counterparts), reusing the game's existing canonical NPC reference sprites as the LEFT chain-ref (no new pixel-ref generation cost). User explicitly requested static standing idle poses only -- no walking/traversal -- to sidestep the game's known Kling I2V 'Minecraft morph' risk (see growtopia.md); camera kept to gentle push-in/near-locked only, no pull-backs or orbits. generate_audio:false on all 4 clips (bg-music.mp3 covers audio, avoids unwanted baked-in score). No YouTube channel mapped yet for this game -- deliverable is Supabase-only; upload scheduling deferred, will add YT fields to this entry once the user schedules a publish date."
+    }
+  ],
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4",
+  "style_tags": "Dual-style split-frame format: LEFT side is the Growtopia in-game render — 2D pixel-art sprite, blocky humanoid, retro flat side-view design, thick clean black outlines, bright saturated candy colors, no 3D rendering (unchanged from the existing canonical reference sprite). RIGHT side is the photorealistic twin — a generic real-world person (not a celebrity look-alike), real skin textures, natural fabric/material textures, cinematic lighting, no cel-shading, no pixelation — wearing the identical costume/props/colors described in characters[]. Both figures stand still in a static idle pose (no walking, no traversal) sharing one continuous environment, no split panel.",
+  "characters": [
+    {
+      "slug": "legendary-wizard",
+      "name": "Legendary Wizard",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian in Legendary Wizard set, long flowing purple robe, tall pointed wizard hat with yellow stars, big white pixel beard, glowing magic staff with sparkling orb, faint arcane glow, side-view idle stance",
+      "realistic_description": "photorealistic elderly man, long flowing white beard, deep purple wizard robe with star embroidery and a tall pointed hat, gripping a wooden staff topped with a glowing crystal orb, faint magical light on his hands, real skin textures and fabric folds, cinematic fantasy lighting, standing still in a confident wizardly idle pose"
+    },
+    {
+      "slug": "the-ringmaster",
+      "name": "The Ringmaster",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian Ringmaster, black top hat with red band, red tailcoat over white waistcoat and black bow tie, groomed moustache and beard, confident showman side-view idle stance",
+      "realistic_description": "photorealistic middle-aged man, groomed moustache and beard, black top hat with a red band, tailored red tailcoat over a white waistcoat and black bow tie, real skin textures and fabric sheen, confident showman posture, cinematic circus spotlight lighting, standing still in an idle presenting pose"
+    },
+    {
+      "slug": "criminal-mastermind",
+      "name": "Criminal Mastermind",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian Criminal Mastermind, dark blue beanie pulled low, rugged unshaven face, gold tooth grin, dark worn jacket, shifty side-view idle stance",
+      "realistic_description": "photorealistic rugged man, dark blue beanie pulled low, unshaven stubble, a glinting gold tooth in a sly grin, worn dark jacket, real skin textures, gritty urban cinematic lighting, standing still in a shifty street-tough idle pose"
+    },
+    {
+      "slug": "master-peng",
+      "name": "Master Peng",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian Master Peng, wide conical straw hat, deep red martial-arts robe, small sword at hip, stoic warrior side-view idle stance",
+      "realistic_description": "photorealistic martial artist, wide conical straw hat, deep red traditional martial-arts robe, a sheathed sword at the hip, real skin textures and fabric weave, stoic composed expression, misty cinematic lighting, standing still in a grounded warrior idle stance"
+    }
+  ]
+}

@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Genshin Impact — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 1,
+  "last_episode": 3,
   "tts_engine": "auto",
   "tts_note": "Speech route for new episodes: intentional native audio → Chatterbox only with a redcon-owned approved sample recorded in this bible → otherwise MiniMax. Retry the same route once, then stop. Second-person monologue throughout. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "format_overrides": {
@@ -18,9 +18,9 @@
     },
     "cta_clip": {
       "type": "asset",
-      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4",
-      "url_note": "If cta.mp4 doesn't exist for genshin-impact, stop and notify manager — do NOT use star-trek-timelines CTA.",
-      "spoken_cta_note": "No spoken CTA in script — the cta.mp4 asset handles CTA at the end."
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.png",
+      "url_note": "Use the universal Genshin CTA PNG as a full-frame 5.041667s end card with a real looped timeline. Do not use the older cta.mp4: it occupied the concat slot in episode 3 but produced no visible CTA in user review. Never use a Star Trek Timelines CTA.",
+      "spoken_cta_note": "No spoken CTA in script — the full-frame CTA PNG end card handles CTA at the end."
     }
   },
   "player_character": {
@@ -40,18 +40,31 @@
         "date": "2026-07-06",
         "pulled_character": "Nahida",
         "note": "Nahida senses Akasha tampering early, alerts Traveler before transformation completes. Gnosis recovered, Scaramouche stopped before ascending."
+      },
+      {
+        "crisis": "Osial breaks free and threatens Liyue Harbor (Chapter I Act III, Farewell, Archaic Lord)",
+        "episode": 2,
+        "date": "2026-07-21",
+        "pulled_character": "Xiao",
+        "note": "Xiao intercepts Osial's rampaging form near Guyun Stone Forest before it reaches the harbor and before Zhongli must fake his death; contract renewed openly, no succession/power-vacuum gap. Zhongli was deliberately NOT the pulled character — pulling him would only replay his own canonical solution (weak-pattern warning in redcon.md)."
+      },
+      {
+        "crisis": "Dvalin's Abyssal corruption — Stormterror attacks Mondstadt (Prologue Act II)",
+        "episode": 3,
+        "date": "2026-07-28",
+        "pulled_character": "Baizhu",
+        "note": "Baizhu and Changsheng identify the poison beneath Dvalin's Abyssal curse early and guide the Traveler's purification before pain becomes rage. Dvalin breaks the Abyss Mage's control, shields Mondstadt, and is never named Stormterror."
       }
     ],
     "do_not_repeat": [
       "Teppei/Baizhu Delusion (refs created 2026-06-30, never released — skip, used as format example in redcon.md)",
-      "Osial/Zhongli Liyue (ref zhongli-seal created, never released — available for future if needed)",
-      "Scaramouche Gnosis / Shouki no Kami"
+      "Scaramouche Gnosis / Shouki no Kami",
+      "Osial/Zhongli Liyue — used episode 2 (2026-07-21), pulled hero was Xiao not Zhongli",
+      "Dvalin/Stormterror Mondstadt — used episode 3 (2026-07-28), pulled hero was Baizhu"
     ],
     "candidates_for_future": [
-      "Osial unleashed — Liyue Harbor threatened (Archon Quest Chapter I Act III)",
       "Raiden Shogun's Vision Hunt Decree — Inazuma civil war (Chapter II)",
       "Fontaine sinking prophecy — The Hydro Archon's trial (Chapter IV)",
-      "Dvalin corruption — Stormterror attacks Mondstadt (Prologue Act II)",
       "Signora's death and Fatui retaliation (Chapter II Act III)",
       "Nahida imprisoned by the Akademiya — Irminsul corrupted (Chapter III Act V)"
     ]
@@ -101,6 +114,30 @@
       "youtube_url": "https://www.youtube.com/watch?v=Kr8q96xPdVo",
       "youtube_scheduled": "2026-07-07T20:59:00Z",
       "notes": "First episode. Player-POV variant. Hook structure (no teaser ASS overlay). Nahida pulls via free Primogems → senses Akasha tampering 3 min early → Gnosis never fuses."
+    },
+    {
+      "episode": 2,
+      "date": "2026-07-21",
+      "crisis": "Osial breaks free and threatens Liyue Harbor (Chapter I Act III, Farewell, Archaic Lord)",
+      "pulled_character": "Xiao",
+      "crew": ["Xiao", "Zhongli"],
+      "tts_voice": "MiniMax Deep_Voice_Man (no Chatterbox sample recorded for the Traveler in this bible)",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-21/redcon/20260721-121028-86031/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=FghEOPg0aqc",
+      "youtube_scheduled": "2026-07-24T20:59:00Z",
+      "notes": "Xiao pulled via free Primogems instead of Zhongli (Zhongli already canonically solves this crisis himself — pulling him would replay his own solution, a weak divergence per redcon.md). Xiao intercepts Osial near Guyun Stone Forest before the harbor is threatened, so Zhongli never fakes his death or vanishes from Liyue politics. Fresh refs generated: xiao-ref (teal-green hair, gaunt features, golden eyes, teal high-collared robe, carved turquoise mask on forehead, black-and-teal polearm) and zhongli-ref civilian-open look (tan double-breasted coat, burgundy vest, amber-streaked hair) — distinct from the older zhongli-seal ref used in the unrelated character-variant branch. Monologue trimmed from an initial 102-word draft to 90 words (Player-POV target 75-95) before TTS render to avoid atempo stretch."
+    },
+    {
+      "episode": 3,
+      "date": "2026-07-28",
+      "crisis": "Dvalin's Abyssal corruption — Stormterror attacks Mondstadt (Prologue Act II)",
+      "pulled_character": "Baizhu",
+      "crew": ["Baizhu", "Lumine", "Dvalin"],
+      "tts_voice": "MiniMax Deep_Voice_Man (no Chatterbox sample recorded for the Traveler in this bible)",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-28/redcon/20260728-142603-55290/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=Xmnzm4JlsqY",
+      "youtube_scheduled": "2026-08-01T20:50:00Z",
+      "notes": "Player-POV offer-driven episode. The free-Primogem pull brings Baizhu before Dvalin attacks Mondstadt; Baizhu and Changsheng identify the poison beneath the Abyssal curse and guide Lumine's purification, after which Dvalin destroys the Abyss Mage's control and protects the city. Per the user's live Genshin override, universal assets were preferred regardless of format tags: existing universal Baizhu and Lumine sheets were reused, while an exact extracted canonical Dvalin model preview was uploaded byte-for-byte as the universal source at assets/genshin-impact/characters/dvalin/variants/canonical-model-source.png; no new generated character refs were created. The 95-word MiniMax narration rendered at 43.909s and required a 1.4515x effective scene-window atempo; target roughly 70-80 words next time for a more relaxed read. The first assembly technically concatenated the legacy cta.mp4 for 5.041667s, but user review found no visible CTA. The approved final replaced it with the universal branding/cta.png rendered as a full-frame 5.041667s end card. Use that PNG end-card by default for future Genshin Redcon episodes."
     }
   ]
 }

@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 2,
+  "last_episode": 4,
   "tts_engine": "minimax",
   "tts_note": "MiniMax Speech 2.8-HD. Voice: Deep_Voice_Man (authoritative, measured). Second-person monologue throughout — NOT first-person alternate-self. Voiceover opens with the CTA hook on the teaser clip, then continues second-person through story clips.",
   "format_overrides": {
@@ -53,17 +53,31 @@
         "date": "2026-07-13",
         "crew_assembled": ["Spock (Ambassador)", "Geordi La Forge", "T'Pol"],
         "note": "Successful-outcome divergence (not a canon-averting rescue of a doomed loss, but a straight-up fix of the original tragedy): in canon Ambassador Spock's red matter ship arrived too late and Romulus was destroyed, which is why Spock ends up flung into the past in the 2009 film. In this timeline the cross-era crew (Geordi rebuilding the deployment rig faster than canon, T'Pol locking the containment math, Spock firing the red matter in time) deployed containment before the shockwave hit — Romulus survived. First bible episode to use the new 8-part player-POV structure (TEASER with TTS starting immediately → 3s silent TITLE CARD → HOOK+CTA → CANON REMINDER → CREW ASSEMBLED → DIVERGENCE → REVELATION → CTA asset)."
+      },
+      {
+        "crisis": "Xindi superweapon — Delphic Expanse (2153)",
+        "episode": 3,
+        "date": "2026-07-21",
+        "crew_assembled": ["Tuvok", "Degra (Xindi councilor, canon character)"],
+        "note": "Prevention, not a last-second stop: canon has Archer's crew barely stopping the finished superweapon after a probe strike already killed 7 million people in Florida. Here Tuvok mind-melds with Xindi engineer Degra BEFORE the Council authorizes the weapon program, shattering the Sphere Builders' implanted visions — the Council never builds it, the probe strike never happens. Deliberately avoided a hero who'd just replay Archer's own last-second rescue (weak-pattern warning in redcon.md)."
+      },
+      {
+        "crisis": "Changeling infiltration of Starfleet Command — Leyton coup attempt (2372)",
+        "episode": 4,
+        "date": "2026-07-28",
+        "crew_assembled": ["Odo", "The Doctor (Voyager EMH)"],
+        "note": "Player prevents the Homefront/Paradise Lost crisis from turning Starfleet against itself. Canon basis: the real Admiral Leyton is human and exploits a genuine Changeling threat, sabotages Earth's power grid, fabricates signs of a Dominion invasion, and attempts a military coup; a real Changeling separately impersonates Leyton and O'Brien. Divergence: Odo supplies a Founder biomorphic baseline and the cross-era Doctor develops a nonlethal quantum scan, exposing the infiltrator before Leyton can consolidate martial law. The baseline/scan are intentional Timelines counterfactual technology, not a claim about established canon."
       }
     ],
     "do_not_repeat": [
       "Borg cube / Wolf 359",
       "Breen weapon / Chin'toka",
-      "Hobus supernova / Romulus"
+      "Hobus supernova / Romulus",
+      "Xindi superweapon / Delphic Expanse — used episode 3 (2026-07-21), pulled hero was Tuvok",
+      "Changeling infiltration / Leyton coup — used episode 4 (2026-07-28), assembled Odo and the Doctor"
     ],
     "candidates_for_future": [
-      "Xindi superweapon — Delphic Expanse (2153)",
       "V'Ger approaching Earth (2273)",
-      "Changeling infiltration of Starfleet Command (2372)",
       "Praxis explosion + Khitomer Accords (2293)"
     ]
   },
@@ -137,6 +151,48 @@
         "total_usd": 6.65
       },
       "notes": "First episode to use the new 8-part player-POV structure end to end (TEASER with TTS starting immediately → 3s silent TITLE CARD → HOOK+CTA → CANON REMINDER → CREW ASSEMBLED → DIVERGENCE → REVELATION → CTA asset). New redcon-tagged character refs generated for Ambassador Spock, Geordi La Forge, T'Pol. Incident: Storyboarder's upload-asset.sh call for T'Pol used --upsert on the shared canonical path characters/tpol/sheet.png (tagged motion-dance in game_assets, no --variant given), overwriting that file's bytes with the redcon-style render — original unrecoverable, no local cache existed. motion-dance is not currently a linked format for star-trek-timelines, so no active run is affected, but the game_assets row was retagged with CORRUPTED-redcon-style-2026-07-13-needs-regen so motion-dance regenerates its own T'Pol ref before next use. Recommend adding a pre-flight tag check to upload-asset.sh (refuse/warn on upsert to a canonical character path if the existing row's tags don't include the current format) to prevent recurrence."
+    },
+    {
+      "episode": 3,
+      "date": "2026-07-21",
+      "crisis": "Xindi superweapon — Delphic Expanse (2153)",
+      "crew": ["Tuvok", "Degra (Xindi councilor)"],
+      "tts_voice": "MiniMax Deep_Voice_Man",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-21/redcon/20260721-132718-32946/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=RwSsrSVyIjo",
+      "yt_publish_at": "2026-07-26T20:59:00Z",
+      "duration_sec": 38.33,
+      "cost_breakdown": {
+        "scenarist_storyboarder": 0.8,
+        "sound": 0.08,
+        "animator": 3.19,
+        "editor": 0.0,
+        "total_usd": 4.07
+      },
+      "notes": "Tuvok mind-melds with Xindi councilor Degra before the Council authorizes the superweapon, so the program is never built and the canon probe strike (7 million dead in Florida) never happens — prevention, not a last-second stop, avoiding a reskin of Archer's own canonical rescue. Two incidents this run, both fixed before publish: (1) Sound initially generated TTS at voice_setting.speed=0.9 (dramatic default), giving 47.2s against a 30s TTS-clip window — 57% mismatch, over sound.md's 40% send-back threshold and the 1.4x atempo cap; regenerated at speed=1.05 (40.9s, 36% mismatch, atempo 1.35x) with no wording changes; also caught the Sound sub-agent falsely claiming it re-uploaded the fixed file to Supabase when the stale 47.2s file was still live there (verified by MD5 mismatch) — re-uploaded manually. (2) User found a ghosting artifact in scene 5 (Player+Tuvok two-shot): the transporter-shimmer effect in the image_prompt bled across both characters, producing a floating/duplicated collar. Storyboarder regenerated scene-5 with an explicit body-gap clause + continuity lock (documented in redcon.md's Storyboarder section); Animator re-rendered the clip from the fixed image. Also found the title card overlapping: title_lines had only 2 long strings, libass auto-wrapped each onto 2 physical lines but the ASS events only reserved 2 y-slots, so the wrapped lines collided. Editor reflowed into 4 short balanced lines and verified actual glyph width before finalizing (documented in redcon.md's Editor section)."
+    },
+    {
+      "episode": 4,
+      "date": "2026-07-28",
+      "crisis": "Changeling infiltration of Starfleet Command — Leyton coup attempt (2372)",
+      "crew": ["Odo", "The Doctor (Voyager EMH)"],
+      "tts_voice": "MiniMax Deep_Voice_Man",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-28/redcon/20260728-160441-7439/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=udFgYXlFKco",
+      "yt_publish_at": "2026-08-01T20:50:00Z",
+      "duration_sec": 39.733,
+      "new_assets": {
+        "odo_redcon_ref": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/odo/variants/redcon.png",
+        "the_doctor_redcon_ref": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/the-doctor/variants/redcon.png"
+      },
+      "cost_breakdown": {
+        "storyboarder": 0.72,
+        "sound": 0.1112,
+        "animator": 2.772,
+        "editor": 0.0,
+        "total_usd": 3.6032
+      },
+      "notes": "Redcon divergence from DS9 'Homefront'/'Paradise Lost': Odo and the cross-era Voyager EMH expose the real Changeling infiltrator and separately prove that the human Admiral Leyton engineered the invasion scare and coup. Lore was checked after the user's review: Leyton is human, although a Changeling briefly impersonated him; the Founder baseline and nonlethal quantum scan are explicitly alternate-timeline inventions. Pacing revision: the original mandatory long hook could not fit a 5s teaser naturally. After user feedback, the approved final uses a shortened 19-word hook at TTS speed 1.15 with no post-atempo and retimes scene 1 to 6.71s; this episode intentionally omits the usual 'from the link in bio' hook phrase as a one-off user-approved pacing override. Title remains 3s silent, subtitles contain 74 words, and the exact CTA asset remains clip 8."
     }
   ]
 }

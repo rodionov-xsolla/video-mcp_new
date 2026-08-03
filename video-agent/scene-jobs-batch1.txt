@@ -1,0 +1,3 @@
+output/2026-07-28/genshin-impact/dual-style/20260728-114313-86787/build/fal/jobs/scene-1.job.json
+output/2026-07-28/genshin-impact/dual-style/20260728-114313-86787/build/fal/jobs/scene-2.job.json
+output/2026-07-28/genshin-impact/dual-style/20260728-114313-86787/build/fal/jobs/scene-3.job.json
