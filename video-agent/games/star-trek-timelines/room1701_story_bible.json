@@ -6,7 +6,7 @@
   "genre": "sitcom",
   "style_tags": "semi-realistic stylized 3D characters, modern nerdy shared bedroom interior, warm casual lighting, practical props (phones, laptops, game controllers, Star Trek posters), intimate close-ups and 3/4 face shots, cozy bedroom aesthetic with sci-fi geeky decor, natural soft lighting from screens and lamps, not Disney, not Pixar, not DreamWorks, not toy-like",
   "created_at": "2026-06-25",
-  "last_episode": 4,
+  "last_episode": 6,
   "show_concept": "Two geeky roommates (Alex and Michael) live in Room 1701 and play Star Trek Timelines all the time. They treat every everyday problem like a Starfleet mission. Emily, their cool neighbor, is sharp, sarcastic, and unexpectedly good at handling people. Anna is the girl Alex is pursuing — warm, playful, and increasingly drawn to Michael's nerd sincerity. The show is a fast sitcom about awkward dating comedy and Star Trek geek humor.",
   "production_rules": [
     "Do NOT rely on readable phone UI — phone can glow in hands but meaning comes from acting/dialogue",
@@ -32,12 +32,20 @@
     "Title card overlay PNG is at games/star-trek-timelines/overlay-series.png. Use this file in every episode — do NOT generate a Pillow text strip.",
     "bg-refs for new locations must be TIGHT MEDIUM SHOTS — not wide establishing shots. Wide refs cause characters to appear tiny and child-proportioned. EP2 burned this twice before fixing.",
     "Max 6 scenes per episode to stay under $7 budget. 8 scenes (EP2) cost $8.42 — too much.",
-    "Every episode needs real romantic-triangle stakes (Alex/Anna/Michael/Emily), not just a game-mechanics teaching scene. EP4 ('Crash Course') was flagged by the user as feeling flat because the whole middle of the episode was Michael explaining game mechanics with no Anna/jealousy beat until the very last shot — Scenarist must weave the core comedy logic into every episode's CLIMAX, not just the cold open/cliffhanger."
+    "Every episode needs real romantic-triangle stakes (Alex/Anna/Michael/Emily), not just a game-mechanics teaching scene. EP4 ('Crash Course') was flagged by the user as feeling flat because the whole middle of the episode was Michael explaining game mechanics with no Anna/jealousy beat until the very last shot — Scenarist must weave the core comedy logic into every episode's CLIMAX, not just the cold open/cliffhanger.",
+    "Do not place two silent action clips back-to-back when a game result changes the romantic stakes. EP6's first cut made scenes 2-3 silent and the user found the story unclear; the approved revision made the wrong choice and lost-date stakes explicit through dialogue.",
+    "A ROOM 1701 cliffhanger must land as an explicit relationship escalation, not only a visual hint. EP6's approved ending has Anna directly ask Michael to choose their next date while he misunderstands it as crew strategy."
   ],
   "characters": [
     {
       "name": "Alex",
       "role": "protagonist",
+      "status": "Failed Anna's mission after choosing a crew member by appearance. His honest admission briefly won her back, but she then asked Michael to choose their next date.",
+      "relationships": {
+        "Anna": "His honesty regained some warmth, but he lost the right to choose the next date and watched her invite Michael instead.",
+        "Michael": "Still his best friend and accidental romantic rival.",
+        "Emily": "Relies on her practical help and sarcastic emotional cover."
+      },
       "character_description": "young man, late 20s, slim build, slightly nervous energy, warm brown eyes, messy chestnut-brown hair visible under a black baseball cap with a Starfleet delta, dark navy Star Trek Timelines hoodie with logo, black cargo pants, blue-and-white sneakers, usually holding a phone with anxious grip, shy worried smile, practical warm bedroom lighting",
       "visual_prompt": "Alex - slim young man in black baseball cap with Starfleet delta, messy chestnut-brown hair, large warm brown eyes, dark navy Star Trek Timelines hoodie, black cargo pants, blue-and-white sneakers, anxious grip on phone, shy worried expression",
       "prompt_descriptor": "slim young man late 20s messy chestnut-brown hair under black baseball cap with gold Starfleet delta badge large warm brown expressive eyes dark navy Star Trek Timelines hoodie with gold Starfleet command delta logo black cargo pants blue-and-white sneakers",
@@ -50,6 +58,12 @@
     {
       "name": "Michael",
       "role": "co-protagonist",
+      "status": "Called out Alex's dating logic, then accepted Anna's invitation to choose their next date while believing she meant crew optimization.",
+      "relationships": {
+        "Alex": "Loyal roommate whose dating mission he keeps disrupting without realizing it.",
+        "Anna": "She now openly frames their connection as a date; he remains oblivious and reads every signal as game strategy.",
+        "Emily": "Accepts her sarcasm as background mission control."
+      },
       "character_description": "young man, late 20s, stocky confident build, intense focused eyes, wild curly bright orange-ginger hair, round black-framed glasses, yellow-gold Star Trek hoodie with black delta insignia, black joggers, gray NCC-1701 slippers, black headphones around neck, badge, holds phone/tablet like a command console, very serious mission-briefing expression",
       "visual_prompt": "Michael - stocky young man with wild curly orange-ginger hair, round black-framed glasses, yellow-gold Star Trek hoodie with black delta, black joggers, gray NCC-1701 slippers, black headphones around neck, badge, intense serious expression",
       "prompt_descriptor": "stocky young man late 20s wild voluminous curly bright orange-ginger hair round thick black-framed glasses large expressive eyes bright YELLOW-GOLD Star Trek Timelines hoodie with black Starfleet command delta logo black headphones hanging around neck clip-on ID badge",
@@ -62,6 +76,12 @@
     {
       "name": "Emily",
       "role": "neighbor",
+      "status": "Coached Alex into an honest admission that briefly repaired his standing with Anna; she remains his sharpest ally while hiding her own feelings.",
+      "relationships": {
+        "Alex": "Quietly protective and emotionally perceptive, disguised as friendly sarcasm.",
+        "Michael": "Treats his mission logic as useful chaos to manage.",
+        "Anna": "Friendly observer of the growing triangle."
+      },
       "character_description": "young woman, late 20s, confident relaxed posture, sharp intelligent eyes, dark wavy hair with vivid purple ombre tips, black off-shoulder top with gold Starfleet delta, purple cargo pants, black Converse sneakers, black choker with Starfleet delta charm, usually holding a black Star Trek coffee mug, slight sarcastic smirk, effortlessly cool",
       "visual_prompt": "Emily - young woman with dark wavy hair and vivid purple ombre tips, sharp eyes, black off-shoulder top with gold Starfleet delta, purple cargo pants, black Converse, black choker with Starfleet delta charm, holding black Star Trek mug, dry sarcastic smirk",
       "prompt_descriptor": "young woman late 20s dark wavy hair with vivid purple ombre tips sharp intelligent eyes black off-shoulder top with gold Starfleet delta logo purple cargo pants black Converse sneakers black choker with Starfleet delta charm holding black Star Trek coffee mug",
@@ -74,6 +94,12 @@
     {
       "name": "Anna",
       "role": "recurring guest / love interest",
+      "status": "Took control of the next date after Alex failed her mission, then directly asked Michael to choose it, escalating her interest beyond game instruction.",
+      "relationships": {
+        "Alex": "Responded warmly to his honesty, but revoked his right to choose the date after his failed strategy.",
+        "Michael": "Directly asked him to choose their next date; his oblivious crew-optimization answer did not discourage her.",
+        "Emily": "Comfortable with her dry, practical presence in the room."
+      },
       "character_description": "young woman, late 20s, warm confident posture, large warm brown eyes, medium-length wavy dark brown hair, friendly open smile, beige ribbed henley top, blue straight-leg jeans with rolled cuffs, beige sneakers, simple gold necklace, often holding a coffee cup, naturally charming and playful energy",
       "visual_prompt": "Anna - young woman with medium wavy dark brown hair, large warm brown eyes, friendly smile, beige ribbed henley top, blue straight-leg jeans rolled at cuffs, beige sneakers, gold necklace, holding a coffee cup, warm natural lighting",
       "prompt_descriptor": "young woman late 20s medium-length wavy dark brown hair large warm brown eyes friendly open smile beige ribbed henley top blue straight-leg jeans with rolled cuffs beige sneakers simple gold necklace holding a coffee cup",
@@ -100,13 +126,74 @@
     }
   ],
   "active_loops": [
-    "Will Alex manage to keep Anna's attention now that Michael accidentally charmed her?",
-    "Will Michael realize he's accidentally becoming a romantic rival?",
+    "Can Alex recover after Anna asked Michael to choose their next date?",
+    "Will Michael realize Anna has now directly invited him into the romantic triangle?",
     "Will Emily ever actually join them?",
-    "Will Michael accept that Anna is texting Alex now, not him?",
-    "Can Alex hide Room 1701's mess (and Michael's shrine of props) before Anna arrives for the tutorial tomorrow?"
+    "Will Anna prefer Alex's authentic nerdy side over Michael's effortless game competence?",
+    "What kind of date will Michael accidentally plan while optimizing Anna's crew?"
   ],
+  "closed_loops": [
+    "Alex got Room 1701 ready before Anna arrived — resolved in EP5 when she rejected the fake-normal version and preferred the authentic nerdy room.",
+    "Could Alex regain control of Anna's tutorial after Michael took over the crew question? Resolved negatively in EP6: Alex failed the mission, and Anna took control of the next date."
+  ],
+  "world_state": {
+    "location": "Room 1701",
+    "important_items": [
+      "Assemble Your Crew poster",
+      "crew board and glowing tablet",
+      "Star Trek collectibles restored by Michael"
+    ],
+    "key_events": [
+      "Anna visited Room 1701 for the promised tutorial.",
+      "Anna preferred the authentic nerdy room over Alex's fake-normal setup.",
+      "Alex guessed a crew member by appearance, and Anna turned to Michael for the real answer.",
+      "Alex failed Anna's mission after choosing by looks instead of strategy.",
+      "Emily's honesty coaching briefly repaired Alex's standing with Anna.",
+      "Anna asked Michael to choose their next date; Michael misunderstood the invitation as a crew-optimization task."
+    ]
+  },
+  "anti_repetition": {
+    "recent_phrases": [
+      "The bridge needs identity.",
+      "The bridge needs plausible deniability.",
+      "Show me your roster.",
+      "That's dating, not strategy.",
+      "Please don't say Michael.",
+      "Maybe you should choose our next date.",
+      "Agreed. I'll optimize the crew."
+    ],
+    "recent_hooks": [
+      "Spoken countdown cleanup hook: Anna arrives in ten minutes.",
+      "Romantic wager hook: beat this mission and choose the next date."
+    ],
+    "recent_cliffhangers": [
+      "Competence-transfer cliffhanger: Anna turns from Alex to Michael for crew-selection help.",
+      "Direct date-invitation cliffhanger: Anna asks Michael to choose their next date, and he misreads it as crew strategy."
+    ]
+  },
   "episode_summaries": [
+    {
+      "episode": 6,
+      "title": "Wrong Crew",
+      "language": "en",
+      "summary": "Anna turns the tutorial into a romantic wager: if Alex beats her mission, he chooses their next date. Alex selects a crew member because he looks powerful, and Michael calls it dating rather than strategy. The mission fails, so Anna takes control of the date. Emily coaches Alex into an honest admission that briefly wins Anna back, but Anna ultimately asks Michael to choose their next date. Michael agrees while obliviously talking about crew optimization.",
+      "cliffhanger": "Anna directly asks Michael to choose their next date. He agrees because he thinks she means optimizing the crew, while her smile makes the romantic meaning unmistakable.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-31/serial-drama/20260731-121642-room1701-ep6/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=hhnslGE2zPo",
+      "yt_publish_at": "2026-08-05T20:50:00Z",
+      "duration_sec": 44.3
+    },
+    {
+      "episode": 5,
+      "title": "Room Inspection",
+      "language": "en",
+      "summary": "Anna comes to Room 1701 for the promised tutorial. Alex and Emily try to make the room look normal, while Michael restores the hidden poster, tablet, and collectibles because 'the bridge needs identity.' Anna prefers the authentic nerdy room and warms to Alex's real side. When she asks which crew member she should use, Alex guesses by appearance; Anna turns to Michael, who immediately takes command of the tutorial.",
+      "cliffhanger": "Anna asks Michael for the real crew-selection answer. Michael says, 'Show me your roster,' and Alex realizes he has lost control of his own tutorial.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-24/serial-drama/20260724-142230-room-inspection/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=AxRAGm6qREc",
+      "yt_publish_at": "2026-07-30T20:50:00Z",
+      "duration_sec": 48.3
+    },
     {
       "episode": 4,
       "title": "Crash Course",
@@ -228,21 +315,31 @@
       {
         "episode": 5,
         "title": "Room Inspection",
-        "status": "planned",
+        "status": "done",
         "location": "room-1701",
         "cast": ["Alex", "Michael", "Emily", "Anna"],
-        "summary": "Anna comes to Room 1701. Alex tries to make the room look normal, hiding posters and props. Michael keeps putting them back because 'the bridge needs identity.' Emily helps clean, but pretends she only came to protect the carpet.",
+        "summary": "Anna comes to Room 1701 for the promised tutorial. Alex and Emily try to make the room look normal, while Michael restores the hidden poster, tablet, and collectibles because 'the bridge needs identity.' Anna prefers the authentic nerdy room and warms to Alex's real side before his weak crew-selection answer sends her back to Michael.",
         "game_cta_point": "Room 1701 becomes a physical extension of the game: posters, crew board, phones, sci-fi props. Anna likes the nerdy version more than Alex's fake 'normal' version.",
-        "cliffhanger": "Anna says the room is weirdly cool — then asks Michael a very specific game question Alex cannot answer."
+        "cliffhanger": "Anna asks Michael for the real crew-selection answer. Michael says, 'Show me your roster,' and Alex realizes he has lost control of his own tutorial.",
+        "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-24/serial-drama/20260724-142230-room-inspection/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=AxRAGm6qREc",
+        "yt_publish_at": "2026-07-30T20:50:00Z",
+        "duration_sec": 48.3
       },
       {
         "episode": 6,
         "title": "Wrong Crew",
-        "status": "planned",
+        "status": "done",
+        "location": "room-1701",
         "cast": ["Alex", "Michael", "Emily", "Anna"],
-        "summary": "Alex tries to help Anna with a mission. He keeps choosing characters because they 'look powerful,' while Michael silently suffers nearby. Emily helps Alex recover by giving him a simple line: 'I'm still learning, but I wanted to help.'",
+        "summary": "Anna makes the tutorial a wager for control of the next date. Alex chooses a powerful-looking crew member, Michael exposes the choice as dating logic, and the mission fails. Emily helps Alex recover through honesty, but Anna then directly asks Michael to choose their next date. Michael agrees while thinking only about crew optimization.",
         "game_cta_point": "The sell is strategic: it is not just about collecting characters, but choosing the right crew. Anna understands the appeal because she downloaded the free game and now wants to get better.",
-        "cliffhanger": "Anna says, 'Maybe Michael should explain the next one.' Alex smiles through pain."
+        "cliffhanger": "Anna asks Michael to choose their next date. Michael says he will optimize the crew, oblivious to the romantic meaning.",
+        "postmortem": "The first cut used silent action clips for scenes 2 and 3 and only a visual hand-touch in scene 6. The user found the middle unclear and wanted more drama. The approved v2 made scenes 2, 3, and 6 dialogue clips, explicitly tied the mission failure to the date wager, and ended on Anna directly inviting Michael to choose the next date.",
+        "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-31/serial-drama/20260731-121642-room1701-ep6/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=hhnslGE2zPo",
+        "yt_publish_at": "2026-08-05T20:50:00Z",
+        "duration_sec": 44.3
       },
       {
         "episode": 7,

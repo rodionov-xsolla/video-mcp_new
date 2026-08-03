@@ -27,7 +27,11 @@
       "ref": {
         "asset_type": "reference_image",
         "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/growtopian-default-skin/sheet.png",
-        "tags": ["growtopia", "default-skin", "player-avatar"],
+        "tags": [
+          "growtopia",
+          "default-skin",
+          "player-avatar"
+        ],
         "eligible_for": "pixel clips only (canonical raw default-skin sprite; not a competing-format stylized render)"
       }
     },
@@ -68,6 +72,57 @@
         "Grand rebuilt world with pixel-art castle, fountains, and Diamond Lock display cases"
       ],
       "items_featured": ["World Lock", "Diamond Lock", "Angel Wings", "Rayman Fist", "Magplant"]
+    },
+    {
+      "name": "Legendary Wizard",
+      "slug": "legendary-wizard",
+      "role": "the ancient all-knowing Legendary Wizard of Growtopia",
+      "appearance": "2D pixel-art Growtopian sprite, blocky humanoid, classic wizard silhouette, long purple robes, tall pointed hat, white beard, staff, thick clean black outlines, bright saturated candy colors, retro flat side-view sprite",
+      "ref": {
+        "asset_type": "reference_image",
+        "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/legendary-wizard/sheet.png",
+        "tags": [
+          "growtopia",
+          "legendary-wizard",
+          "npc"
+        ],
+        "eligible_for": "pixel clips"
+      },
+      "status": "covered"
+    },
+    {
+      "name": "Tomb Robber",
+      "slug": "tomb-robber",
+      "role": "the sneaky Tomb Robber who pillages ancient ruins across Growtopia",
+      "appearance": "2D pixel-art Growtopian sprite, blocky humanoid, dark outfit, explorer/thief gear, thick clean black outlines, retro flat side-view sprite",
+      "ref": {
+        "asset_type": "reference_image",
+        "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/tomb-robber/sheet.png",
+        "tags": [
+          "growtopia",
+          "tomb-robber",
+          "npc"
+        ],
+        "eligible_for": "pixel clips"
+      },
+      "status": "covered"
+    },
+    {
+      "name": "Criminal Mastermind",
+      "slug": "criminal-mastermind",
+      "role": "the calculating criminal architect who engineers every major heist in Growtopia",
+      "appearance": "2D pixel-art Growtopian sprite, blocky humanoid NPC, large square head, tiny dot eyes with black pupils, small flat mouth, thick clean black outlines, dark navy blazer, white shirt, monocle over right eye, slicked-back dark hair, tiny blocky gloved hands, composed criminal-mastermind silhouette",
+      "ref": {
+        "asset_type": "reference_image",
+        "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/criminal-mastermind/sheet.png",
+        "tags": [
+          "growtopia",
+          "criminal-mastermind",
+          "npc"
+        ],
+        "eligible_for": "pixel clips"
+      },
+      "status": "covered"
     }
   ],
   "narrator": {
@@ -83,15 +138,48 @@
     "append_standard_asset_after_in_scene": true,
     "note": "Growtopia CTA (3s idle) registered 2026-07-17 in game_assets (tags cta,branding). Pop-up overlay banner also available at branding/popup.png (tags popup,overlay)."
   },
-  "covered_characters": ["OldGrower"],
+  "covered_characters": [
+    "growtopian-default-skin",
+    "legendary-wizard",
+    "tomb-robber",
+    "criminal-mastermind",
+    "OldGrower"
+  ],
   "episodes": [
     {
-      "ep": 1,
+      "episode": 1,
+      "date": "2026-07-17",
+      "character": "growtopian-default-skin",
+      "title": "I'm the default skin every Growtopia player starts as",
+      "output_dir": "output/2026-07-17/growtopia/character-story/20260717-110657-14100",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-17/character-story/20260717-110657-14100/final.mp4",
+      "notes": "LIVE OVERRIDE run: alternates pixel (clips 1,5,6) and photorealistic (clips 2,3,4) styles as a narrative device — same character before/after entering the game. Not baked into the bible per _note above; per-run override only."
+    },
+    {
+      "episode": 2,
+      "date": "2026-07-20",
+      "character": "tomb-robber / criminal-mastermind",
+      "title": "The Tomb Robber Who Became the Criminal Mastermind",
+      "output_dir": "output/2026-07-20/growtopia/character-story/20260720-185337-61064",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-20/character-story/20260720-185337-61064/final.mp4"
+    },
+    {
+      "date": "2026-07-27",
+      "run_id": "20260727-142624-5453bd",
+      "character": "Criminal Mastermind",
+      "slug": "criminal-mastermind",
+      "language": "en",
+      "status": "approved_final_saved",
+      "final_video_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-27/character-story_final.mp4",
+      "notes": "Final timing-fixed build approved by user; voice-over rebuilt from per-scene MP3s, subtitles regenerated to match scene slots. Do not repeat this character for future Growtopia character-story runs."
+    },
+    {
+      "episode": 4,
       "character": "OldGrower",
       "title": "The Legend of Growtopia: A Veteran's Tale",
       "date": "2026-07-21",
-      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-21/character-story/final.mp4",
-      "note": "Test run approved by user 2026-07-22. Uploaded post-hoc."
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-21/character-story/final.mp4",
+      "notes": "Test run approved by user 2026-07-22. Uploaded post-hoc."
     }
   ]
 }

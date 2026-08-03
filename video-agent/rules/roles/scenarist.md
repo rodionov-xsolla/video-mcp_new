@@ -167,7 +167,7 @@ Serial-drama `multi_prompt` rules:
 - At most 2 speakers / `voice_ids` per Kling request. The series can have 3+ reusable voices; `<<<voice_1>>>` and `<<<voice_2>>>` are local to the current request and must be remapped from the selected `voice_ids` array. Split true 3-speaker exchanges into separate clips.
 - Target dialogue clip length: 6–10s. Shot duration is variable: 2–3s default, 4s only when a phrase/acting beat needs it.
 - Timing formula before generation: `shot_seconds = word_count / pace + pause_padding + acting_padding`, rounded up to whole seconds. Default pace is 2.4 words/sec; use faster pace for tension/Michael mission-rant only when intentional.
-- Each shot prompt ≤512 characters.
+- Each shot prompt ≤512 serialized UTF-8 bytes, measured with `len(prompt.encode("utf-8"))`; exact formats may require a lower safety ceiling.
 - Each shot restates the style anchor and the visible characters by physical description, not just by name.
 - **No bare character names in Kling-facing shot prompts.** The model does not know "Alex", "Michael", or "Emily"; it only sees the start frame and text. Use the story bible `character_description` / `visual_prompt` every time.
 - **The speaker must be physically identified immediately before the voice tag.** Pattern: `[physical descriptor + frame position + action]. <<<voice_1>>> "line"`. Do not write `Alex says <<<voice_1>>>`.

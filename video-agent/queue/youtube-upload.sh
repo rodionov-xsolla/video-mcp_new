@@ -2,16 +2,19 @@
 # Upload a video to YouTube via Data API v3 (resumable upload).
 #
 # Usage:
-#   youtube-upload.sh [--channel NAME] [--publish-at ISO8601] [--thumbnail PATH] <video_path> <title> <description> <privacy> [<tags>]
+#   youtube-upload.sh [--channel NAME] [--publish-date YYYY-MM-DD | --publish-at ISO8601] [--thumbnail PATH] <video_path> <title> <description> <privacy> [<tags>]
 #
 #   --channel:    gamepulse | yellowguy | <name matching .env suffix>.
 #                 Selects YOUTUBE_REFRESH_TOKEN_<NAME> / YOUTUBE_CHANNEL_ID_<NAME>.
 #                 Omit to use the default YOUTUBE_REFRESH_TOKEN / YOUTUBE_CHANNEL_ID.
-#   --publish-at: ISO 8601 UTC datetime, e.g. "2026-06-03T20:59:00Z".
-#                 If omitted, auto-schedules at the nearest free date at 20:59 UTC (23:59 MSK).
+#   --publish-date: Moscow calendar date. Chooses a random minute from 22:00 through
+#                 23:50 MSK and converts it to UTC for YouTube.
+#   --publish-at: Exact ISO 8601 UTC datetime, e.g. "2026-06-03T20:17:00Z".
+#                 If both scheduling options are omitted, auto-schedules on the nearest
+#                 free date at a random minute from 22:00 through 23:50 MSK.
 #                 Pass "now" to publish immediately as public.
 #   --thumbnail:  Path to thumbnail image (JPG/PNG). Uploaded after video.
-#   privacy:      ignored when auto-scheduling (always private+publishAt).
+#   privacy:      ignored whenever publication is scheduled (always private+publishAt).
 #                 Honoured only when --publish-at=now.
 #   tags:         comma-separated, e.g. "roblox,gaming,shorts"
 #
@@ -28,12 +31,15 @@ set -euo pipefail
 # ── args ────────────────────────────────────────────────────────────────────
 CHANNEL=""
 PUBLISH_AT=""
+PUBLISH_DATE=""
 THUMBNAIL=""
 POSITIONAL=()
 while [ $# -gt 0 ]; do
   case "$1" in
     --channel) CHANNEL="$2"; shift 2 ;;
     --channel=*) CHANNEL="${1#*=}"; shift ;;
+    --publish-date) PUBLISH_DATE="$2"; shift 2 ;;
+    --publish-date=*) PUBLISH_DATE="${1#*=}"; shift ;;
     --publish-at) PUBLISH_AT="$2"; shift 2 ;;
     --publish-at=*) PUBLISH_AT="${1#*=}"; shift ;;
     --thumbnail) THUMBNAIL="$2"; shift 2 ;;
@@ -43,7 +49,7 @@ while [ $# -gt 0 ]; do
 done
 set -- "${POSITIONAL[@]}"
 
-VIDEO_PATH="${1:?Usage: youtube-upload.sh [--channel NAME] [--thumbnail PATH] <video_path> <title> <description> <privacy> [<tags>]}"
+VIDEO_PATH="${1:?Usage: youtube-upload.sh [--channel NAME] [--publish-date YYYY-MM-DD | --publish-at ISO8601] [--thumbnail PATH] <video_path> <title> <description> <privacy> [<tags>]}"
 TITLE="${2:?title required}"
 DESCRIPTION="${3:-}"
 PRIVACY="${4:-private}"
@@ -77,11 +83,47 @@ else
   : "${REFRESH_TOKEN:?YOUTUBE_REFRESH_TOKEN not set in .env (and no --channel given)}"
 fi
 
-# ── handle --publish-at=now ───────────────────────────────────────────────────
+# ── resolve scheduling mode ───────────────────────────────────────────────────
+if [ -n "$PUBLISH_DATE" ] && [ -n "$PUBLISH_AT" ]; then
+  echo "[youtube-upload] ERROR: use either --publish-date or --publish-at, not both"
+  exit 1
+fi
+
 PUBLISH_NOW=false
 if [ "$PUBLISH_AT" = "now" ]; then
   PUBLISH_NOW=true
   PUBLISH_AT=""
+fi
+
+if [ -n "$PUBLISH_DATE" ]; then
+  PUBLISH_AT=$(python3 - "$PUBLISH_DATE" <<'PYEOF'
+import datetime, secrets, sys
+
+try:
+    publish_date = datetime.date.fromisoformat(sys.argv[1])
+except ValueError:
+    raise SystemExit("--publish-date must use YYYY-MM-DD")
+
+msk = datetime.timezone(datetime.timedelta(hours=3), "MSK")
+now = datetime.datetime.now(datetime.timezone.utc)
+valid = []
+for minute_offset in range(111):  # 22:00 through 23:50, inclusive
+    local_dt = datetime.datetime.combine(
+        publish_date,
+        datetime.time(22 + minute_offset // 60, minute_offset % 60),
+        tzinfo=msk,
+    )
+    utc_dt = local_dt.astimezone(datetime.timezone.utc)
+    if utc_dt > now:
+        valid.append(utc_dt)
+
+if not valid:
+    raise SystemExit(f"no future posting minute remains on {publish_date} between 22:00 and 23:50 MSK")
+
+print(secrets.choice(valid).strftime("%Y-%m-%dT%H:%M:00Z"))
+PYEOF
+  )
+  echo "[youtube-upload] Randomized ${PUBLISH_DATE} slot: ${PUBLISH_AT} (22:00–23:50 MSK window)"
 fi
 
 # ── get access token ──────────────────────────────────────────────────────────
@@ -99,9 +141,9 @@ if [ -z "$ACCESS_TOKEN" ]; then
   exit 1
 fi
 
-# ── auto-schedule: find nearest free date at 20:59 UTC (23:59 MSK) ───────────
+# ── auto-schedule: nearest free date, random 22:00–23:50 MSK minute ──────────
 if [ "$PUBLISH_NOW" = false ] && [ -z "$PUBLISH_AT" ]; then
-  echo "[youtube-upload] Auto-scheduling: finding nearest free date..."
+  echo "[youtube-upload] Auto-scheduling: finding nearest free date and random MSK time..."
   TAKEN_DATES=$(python3 - "$ACCESS_TOKEN" <<'PYEOF'
 import sys, json, re, subprocess, datetime
 
@@ -138,24 +180,36 @@ print(" ".join(sorted(taken)))
 PYEOF
   )
 
-  # Find nearest free date starting from today
+  # Find nearest free date starting from today, then choose a random future
+  # minute from the inclusive 22:00–23:50 Moscow window.
   PUBLISH_AT=$(python3 - "$TAKEN_DATES" <<'PYEOF'
-import sys, datetime
+import datetime, secrets, sys
 
 taken = set(sys.argv[1].split()) if sys.argv[1] else set()
-today = datetime.date.today()
-candidate = today
+msk = datetime.timezone(datetime.timedelta(hours=3), "MSK")
+now = datetime.datetime.now(datetime.timezone.utc)
+candidate = now.astimezone(msk).date()
 for _ in range(60):
     if candidate.isoformat() not in taken:
-        print(f"{candidate.isoformat()}T20:59:00Z")
-        sys.exit(0)
+        valid = []
+        for minute_offset in range(111):  # 22:00 through 23:50, inclusive
+            local_dt = datetime.datetime.combine(
+                candidate,
+                datetime.time(22 + minute_offset // 60, minute_offset % 60),
+                tzinfo=msk,
+            )
+            utc_dt = local_dt.astimezone(datetime.timezone.utc)
+            if utc_dt > now:
+                valid.append(utc_dt)
+        if valid:
+            print(secrets.choice(valid).strftime("%Y-%m-%dT%H:%M:00Z"))
+            sys.exit(0)
     candidate += datetime.timedelta(days=1)
 
-# Fallback: 60 days out
-print(f"{candidate.isoformat()}T20:59:00Z")
+raise SystemExit("no free future channel date found within 60 days")
 PYEOF
   )
-  echo "[youtube-upload] Auto-scheduled for: ${PUBLISH_AT}"
+  echo "[youtube-upload] Auto-scheduled for: ${PUBLISH_AT} (random 22:00–23:50 MSK)"
 fi
 
 # ── build metadata JSON ───────────────────────────────────────────────────────

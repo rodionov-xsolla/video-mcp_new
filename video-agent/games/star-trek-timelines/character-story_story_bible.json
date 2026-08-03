@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Character Story",
   "created_at": "2026-05-30",
-  "last_episode": 20,
+  "last_episode": 21,
   "tts_engine": "elevenlabs",
   "tts_note": "Legacy default assignments use ElevenLabs voice names, but the active Sound provider may be MiniMax. A character's voice_engine_override and matching engine-specific voice field always win. Never pass an ElevenLabs-only name to MiniMax because the provider may fall back to the wrong gender. Long monologue (>80 words) → mandatory chunking into ≤35-word segments.",
   "format_overrides": {
@@ -47,7 +47,8 @@
       "Spock",
       "Worf",
       "Khan",
-      "Gul Dukat"
+      "Gul Dukat",
+      "Odo"
     ],
     "all_done": [
       "McCoy",
@@ -71,7 +72,8 @@
       "Worf",
       "Khan",
       "Borg Queen",
-      "Gul Dukat"
+      "Gul Dukat",
+      "Odo"
     ],
     "error": [],
     "error_note": "Characters listed in 'error' had a production attempt but the final video was rejected. Do NOT pick them again until manually reviewed and removed from this list.",
@@ -241,6 +243,20 @@
       "youtube_url": "https://www.youtube.com/watch?v=dX9d3w5qNek",
       "yt_publish_at": "2026-07-20T20:59:00Z",
       "notes": "Villain arc — Dukat frames the occupation of Bajor, Ziyal's death, and his Pah-wraith descent as proof that he was the wronged hero. Two persistent age variants: young and mature. Six 5-second Kling v3 clips, 95-word monologue, MiniMax Deep_Voice_Man atempo 1.392×. The first TTS attempt passed the ElevenLabs-only name Liam into MiniMax and fell back to a female voice; final review-approved version uses the explicit male MiniMax voice ID and a cache-safe male-v2 URL."
+    },
+    {
+      "episode": 21,
+      "date": "2026-07-21",
+      "character": "Odo",
+      "character_slug": "odo",
+      "gender": "male",
+      "era": "DS9",
+      "idea": "Odo — Character Story | Star Trek Timelines",
+      "elevenlabs_voice": "Adam",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-21/character-story/20260721-173808-79729/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=FQJKAlP3on4",
+      "yt_publish_at": "2026-07-25T20:59:00Z",
+      "notes": "Shapeshifter constable's search for identity and his own people. Origin as an unnamed specimen in Dr. Mora's lab, life as DS9's security chief, guarded bond with Kira Nerys, discovery of the Great Link, revelation that the Founders (his own people) are the Dominion's tyrannical architects of the war, and the bittersweet cost of leaving Kira to carry the cure home. Two visual variants used in place of an age progression (Changelings do not visibly age): early_lab (formless liquid specimen) and settled (familiar humanoid constable form). Kira reused from episode 17's mature appearance/voice for cross-episode consistency. Budget ~$3.43-3.85 (one Kling I2V submission for scene 5 hit an ambiguous SSL-timeout mid-POST; resolved via a fresh unambiguous job rather than a resubmit of the wedged request, per fallback.md's UNKNOWN-state rule — true total may include one extra $0.42 if the original ambiguous attempt silently landed a charge on fal.ai's side, undiscoverable from this pipeline)."
     }
   ],
   "style_tags": "realistic 3D CGI — cinematic lighting, photorealistic textures, high detail 3D render, game cutscene quality. Do NOT use the game's illustrated/painted art style. All clips must match this style, including child-character scenes. Required prompt keywords: 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI, game cutscene quality'.",
@@ -408,6 +424,29 @@
         "young": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/dukat/variants/young.png",
         "mature": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/dukat/variants/mature.png"
       }
+    },
+    "odo": {
+      "name": "Odo",
+      "gender": "male",
+      "era": "DS9",
+      "elevenlabs_voice": "Adam",
+      "voice_note": "Deep, mature, measured — fits Odo's weary, guarded profile. (Scenarist's original pick 'Fin' does not exist in the ElevenLabs catalog; Adam substituted after live API verification during the Sound phase.)",
+      "character_description": "humanoid male shapeshifter (Changeling), closely cropped neatly combed short auburn-brown hair, smooth faintly waxy/unfinished synthetic-looking skin texture, simplified slightly asymmetric facial features with a flattened nose bridge and minimal nostril definition, deep-set watchful dark eyes, thin downturned mouth, solid stocky build with stiffly upright formal posture, hands often clasped behind his back, dark charcoal-gray DS9 security constable tunic with burgundy/maroon shoulder panels and collar trim, small Bajoran-militia-style rank/security insignia on the collar, no Starfleet delta combadge, no visible facial hair or wrinkles, default stern/unreadable expression",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/odo/variants/settled.png",
+      "variants": {
+        "early_lab": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/odo/variants/early_lab.png",
+        "settled": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/odo/variants/settled.png"
+      },
+      "variants_note": "This character does not visibly age once settled (Changeling), so 'early_lab' vs 'settled' represents his formless-vs-humanoid states, not a child/teen/mature age progression."
+    },
+    "kira": {
+      "name": "Kira Nerys",
+      "gender": "female",
+      "era": "DS9",
+      "elevenlabs_voice": "Charlotte",
+      "voice_note": "Backfilled from episode 17 (2026-07-02) production; this bible's characters{} object was missing a 'kira' entry despite episode 17 having already produced and used this appearance/voice.",
+      "character_description": "Bajoran female in her 30s, orange-red wavy hair medium length falling to her shoulders, warm light brown skin, prominent Bajoran nasal ridges running from brow ridge down the nose bridge, fierce dark brown eyes carrying hard-won depth, strong defined jaw, DS9-era gray-shouldered Bajoran Militia uniform (gray shoulder panels, dark burgundy/dark gray body), Bajoran rank half-moon pip cluster on the collar, Starfleet-style combadge on the left chest, broad athletic shoulders",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/kira/variants/mature.png"
     }
   },
   "characters_note": "Prompt blocks and Supabase refs for canonical Trek characters. Reference sheet goes to storyboarder as chain_ref. Use a character's voice_engine_override and engine-specific voice field when present; otherwise use the legacy ElevenLabs voice assignment."

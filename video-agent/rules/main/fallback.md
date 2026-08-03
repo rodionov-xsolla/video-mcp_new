@@ -32,6 +32,7 @@ All schema-v3 video jobs follow the same transport safety contract. The runner n
 - A definitive remote generation failure becomes `PAID_RETRY_REQUIRED`; one replacement POST requires separate explicit authorization and `--allow-paid-retry`.
 - `VALIDATED` resumes only Supabase upload; `DONE` is idempotent. `FAILED` and `INPUT_REJECTED` are terminal.
 - Do not delete or move the runner's state, request, claim, MP4, or job contract.
+- **A terminal `FAILED` state whose `state.json` still records a `result_url` (remote generation reached `COMPLETED`) is a download/upload failure, not a generation failure — do NOT treat it as requiring `PAID_RETRY_REQUIRED`/a new paid job.** The local download step (curl) can fail transiently (e.g. DNS resolution timeout) even after the remote provider finished successfully and produced a valid, still-live result file. Burned in genshin-dont-save-me-en EP7 (2026-07-21): a scene's Kling generation completed remotely, but two automated download attempts hit `curl: (28) Resolving timed out`, and the runner recorded terminal `FAILED` — the correct recovery (confirmed working) was to re-drive the existing job's own download → validate → Supabase-upload steps directly against the recorded `result_url`, not to submit a replacement generation. Before treating any `FAILED` scene as needing a new paid job, check `state.json` for a recorded `result_url`/`COMPLETED` remote status first.
 
 ### ⚠️ CRITICAL: Base URL for status/result
 

@@ -1,0 +1,44 @@
+{
+  "series_id": "fake-ad-growtopia",
+  "game_tag": "growtopia",
+  "title": "Growtopia Fake Ads",
+  "created_at": "2026-07-23",
+  "last_episode": 0,
+  "style_tags": "Growtopia-inspired crisp 2D pixel-art commercial, pseudo-isometric 2.5D diorama composition, blocky pixelated proportions, thick clean black outlines, bright saturated cyan green and gold palette, front-facing and three-quarter staging, layered foreground midground and background, receding tile platforms, larger foreground blocks, cinematic vertical depth, cheerful native full-frame 9:16, illustrated pixel-art perspective rather than volumetric 3D",
+  "visual_direction": {
+    "projection": "One coherent pseudo-isometric 2.5D projection shared by characters, products, blocks, Gems and shadows",
+    "composition": "Native edge-to-edge 9:16 diorama with a large foreground, readable midground action platform and receding background tiles",
+    "mood": "Bright, positive and playful; use cyan, green and gold accents rather than bleak, ruined or desaturated scenery",
+    "avoid": [
+      "flat side-view gameplay",
+      "Minecraft or voxel 3D",
+      "smooth CGI or photoreal 3D",
+      "flat sprites pasted onto a perspective background",
+      "black bars, panels, borders or letterboxing"
+    ]
+  },
+  "animation_policy": {
+    "use_elements": false,
+    "rule": "Animate the complete approved scene image directly. Do not attach separate Kling Elements for Growtopia unless the user explicitly requests an exception.",
+    "reason": "Separate Elements produced excessive identity and geometry morphing in the approved pseudo-isometric test.",
+    "motion": "Prefer a near-locked camera, restrained character motion, tiny environmental motion and subtle differential parallax. Avoid orbits, large turns, perspective flips and object reconstruction.",
+    "text_lock": "Bake required diegetic numbers into the start frame and keep the shot nearly static; do not rely on Elements to preserve digits."
+  },
+  "characters": {
+    "Growtopian": "blocky humanoid avatar with tan-beige skin, a large square head, two white square eyes with black pupils, a small flat mouth, a bright cyan short-sleeve shirt, medium-blue pants, tiny square hands, and no hat or cosmetic set"
+  },
+  "advertised_products": [],
+  "anti_repetition": {
+    "recent_lines": [],
+    "recent_themes": [],
+    "recent_tones": [],
+    "recent_hooks": [],
+    "recent_twist_types": [],
+    "recent_problem_types": [],
+    "recent_characters": [],
+    "recent_environments": [],
+    "banned_combos": []
+  },
+  "episode_summaries": [],
+  "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4"
+}

@@ -1,7 +1,8 @@
 {
   "format": "in-game-pov",
   "game_tag": "star-trek-timelines",
-  "last_updated": "2026-07-14",
+  "last_updated": "2026-07-30",
+  "style_tags": "Star Trek Timelines style, cinematic sci-fi, 3D cinematic realism, deep space black accents, LCARS orange and Federation blue lighting accents, mobile 9:16 composition, clean cinematic frame, no UI overlay",
   "used_situations": [
     {
       "situation": "Battle of Wolf 359 — Borg cube attack, your Starfleet vessel is crippled",
@@ -65,6 +66,15 @@
       "published": true,
       "status": "completed",
       "comment": "youtube: https://www.youtube.com/watch?v=FZy8b9IUqjY (scheduled 2026-07-21T20:59:00Z). Supabase: https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-14/in-game-pov_final.mp4. Survival arc: 9%→5%→2%→7%→0%. 5 POV scenes: bridge→emergency-lit corridor→engineering deck→Jefferies tube→escape pod bay. Kling v3 native environmental SFX, universal subtitles, and live survival HUD. Final generation cost: $4.323."
+    },
+    {
+      "situation": "Ceti Alpha V - sandstorm and Ceti eel survival trap",
+      "date": "2026-07-30",
+      "outcome": "death",
+      "threat_type": "Ceti Alpha V / Ceti eel / planetary sandstorm / Khan trap",
+      "published": true,
+      "status": "completed",
+      "comment": "youtube: https://www.youtube.com/watch?v=Tqq9YMjHVdg (scheduled 2026-08-02T20:50:00Z). Supabase: https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-28/in-game-pov/20260728-190723-511a23/final.mp4. Survival arc: 12%→9%→6%→14%→3%→0%. Planet-only POV: desert ridge→crashed shuttle area→narrow canyon floor→cave mouth→buried survival hatch→sandstorm basin. No shipboard premise; user requested planetary story."
     }
   ],
   "anti_repetition": {
@@ -75,8 +85,9 @@
       "Dominion",
       "Romulan",
       "Hirogen",
-      "Breen"
+      "Breen",
+      "Ceti Alpha V / Ceti eel / planetary sandstorm / Khan trap"
     ],
-    "note": "Borg used 3 times, plus Dominion, Romulan, Hirogen, and Breen. Never repeat a core premise; at minimum avoid the last three threat types (Romulan, Hirogen, Breen). Fresh candidates: Species 8472 in fluidic space, a Cardassian raid on DS9, a Krenim temporal-weapon strike, or a holodeck malfunction trapping the crew."
+    "note": "Borg used 3 times, plus Dominion, Romulan, Hirogen, Breen, and Ceti Alpha V planetary survival. Never repeat a core premise; avoid all of the above. Fresh candidates: Klingon Bird-of-Prey ground ambush, Species 8472 in fluidic space, a Cardassian raid on DS9, a Krenim temporal-weapon strike, or a holodeck malfunction trapping the crew."
   }
 }
