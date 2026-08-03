@@ -281,8 +281,10 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
 
    ```bash
    CHANNEL="<resolved from game config>"   # gamepulse | yellowguy | genshinsnap
+   PUBLISH_DATE="<nearest eligible YYYY-MM-DD in Moscow>"
    YT_OUTPUT=$(bash queue/youtube-upload.sh \
      --channel "$CHANNEL" \
+     --publish-date "$PUBLISH_DATE" \
      "$OUTPUT_DIR/final.mp4" \
      "$TITLE" \
      "$DESCRIPTION" \
@@ -293,7 +295,7 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
    echo "YouTube: $YOUTUBE_URL (scheduled: $YT_PUBLISH_AT)"
    ```
 
-   **Scheduling rule:** use the nearest future free channel date at `20:50:00Z` (`23:50` Moscow). Reject a candidate if the channel date is occupied or the same format is scheduled on the previous or next calendar date. Do not publish immediately. The current scripts do not yet enforce every part of this rule; do not claim compliance until that separate implementation is approved.
+   **Scheduling rule:** choose the nearest future free channel calendar date, then pass it as `--publish-date YYYY-MM-DD`. The upload script randomizes the actual publication minute across the inclusive `22:00–23:50` Moscow window (`19:00–20:50Z`) and returns the exact UTC value as `SCHEDULED_FOR`. Reject a candidate date if the channel date is occupied or the same format is scheduled on the previous or next calendar date. Do not publish immediately. The Manager enforces the occupied-date and adjacent-format rules before passing `PUBLISH_DATE`; the script owns only the random time selection for an explicit date.
 
    **Before uploading — always verify the current queue on the channel** so you know what's already scheduled:
    ```bash
@@ -305,7 +307,7 @@ No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
    # print items[].status.publishAt for private videos
    EOF
    ```
-   This tells you the next free slot before you commit to an upload.
+   This tells you the next free calendar date before you commit to an upload. Do not choose the minute yourself; `--publish-date` owns the random time selection.
 
    **Channel token lookup:** `star-trek-timelines` → channel key `GAMEPULSE` in .env (= "Starfleet Archives", UCwpoM7-Sr7waXUxLfPRosGA). The .env key name does NOT match the game config channel name — always verify via `channels?part=snippet&mine=true`. If Python `urllib` SSL fails (macOS Python 3.13 cert issue), use `curl` for all HTTP calls.
 

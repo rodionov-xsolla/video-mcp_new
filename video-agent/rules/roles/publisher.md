@@ -155,7 +155,7 @@ Require Manager's explicit confirmation that the user approved this exact local 
 
 ### YT step 2 — calculate publish date
 
-Query the target channel's existing scheduled/public videos and choose the nearest future free calendar date. Publication time is always **23:50 Moscow time (`20:50:00Z`)**. The chosen date must also satisfy: the same format is not scheduled on either adjacent calendar date (`D-1` or `D+1`). If the nearest free date violates that rule, advance one day at a time until both conditions pass. Apply the same calculation independently to every video in a batch.
+Query the target channel's existing scheduled/public videos and choose the nearest future free calendar date. The chosen date must also satisfy: the same format is not scheduled on either adjacent calendar date (`D-1` or `D+1`). If the nearest free date violates that rule, advance one day at a time until both conditions pass. Apply the same calculation independently to every video in a batch. Pass only that Moscow calendar date to `youtube-upload.sh --publish-date`; the script chooses a random publication minute from **22:00 through 23:50 Moscow time, inclusive** and returns the exact UTC timestamp.
 
 ### YT step 3 — fetch videos from queue
 
@@ -181,18 +181,20 @@ LOCAL_PATH="/tmp/yt_upload_${i}.mp4"
 curl -sSL -o "$LOCAL_PATH" "$VIDEO_URL"
 
 # Upload (private + scheduled open date)
-YOUTUBE_URL=$(bash video-agent/queue/youtube-upload.sh \
+YT_OUTPUT=$(bash video-agent/queue/youtube-upload.sh \
   --channel "$CHANNEL" \
-  --publish-at "$PUBLISH_AT" \
+  --publish-date "$PUBLISH_DATE" \
   "$LOCAL_PATH" \
   "$TITLE" \
   "$DESCRIPTION" \
-  "private" | tail -1)
+  "private")
+YOUTUBE_URL=$(echo "$YT_OUTPUT" | grep '^https://' | tail -1)
+YT_PUBLISH_AT=$(echo "$YT_OUTPUT" | grep '^SCHEDULED_FOR=' | cut -d= -f2-)
 ```
 
-- `--publish-at` — date from step 2, **always explicit** (do not omit, do not pass `now`)
+- `--publish-date` — Moscow calendar date from step 2, **always explicit**; the script randomizes the time (do not omit, do not pass `now`)
 - `privacy` = `"private"` always
-- The script returns the YouTube URL as the last line of stdout
+- Capture `SCHEDULED_FOR` from the script output and use that exact randomized UTC timestamp for logging
 
 ### YT step 5 — write to Supabase
 
@@ -200,7 +202,7 @@ YOUTUBE_URL=$(bash video-agent/queue/youtube-upload.sh \
 bash video-agent/queue/log-publish.sh \
   --platform yt \
   --video-url "$SUPABASE_VIDEO_URL" \
-  --publish-at "$PUBLISH_AT" \
+  --publish-at "$YT_PUBLISH_AT" \
   --youtube-url "$YOUTUBE_URL"
 ```
 
@@ -208,8 +210,8 @@ bash video-agent/queue/log-publish.sh \
 
 ```
 Uploaded 2 videos to YouTube:
-- "I Almost Quit Star Trek" → youtube.com/watch?v=xxx — goes public June 13 at 23:50 MSK
-- "My teammate was a surgeon" → youtube.com/watch?v=yyy — goes public June 14 at 23:50 MSK
+- "I Almost Quit Star Trek" → youtube.com/watch?v=xxx — goes public June 13 at 22:37 MSK
+- "My teammate was a surgeon" → youtube.com/watch?v=yyy — goes public June 14 at 23:18 MSK
 
 2 videos still in queue.
 ```
@@ -217,6 +219,6 @@ Uploaded 2 videos to YouTube:
 ### Forbidden (YT)
 
 - ❌ `--publish-at=now` — no immediate publishing
-- ❌ Omitting `--publish-at` (the script will auto-pick a date via YT API — slower and ignores our Supabase queue)
+- ❌ Omitting `--publish-date` (the script will auto-pick a date via YT API — slower and ignores our Supabase queue)
 - ❌ Uploading without explicit user confirmation
 - ❌ Skipping the `yt_published` write to Supabase after a successful upload
