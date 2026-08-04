@@ -5,7 +5,7 @@
   "production_contract": "dual-style-v3",
   "comparison_mode": "canonical-alternate",
   "created_at": "2026-07-22",
-  "last_episode": 2,
+  "last_episode": 3,
   "style_tags": "Photorealistic canonical live-action Star Trek comparison. LEFT is the original/Prime screen persona; RIGHT is the exact canonical Mirror, assimilated, corrupted, possessed or duplicate persona of the same character and same recognizable screen performer. Preserve each persona's canonical face, hair, facial hair, makeup, prosthetics, uniform, insignia, accessories and props. Both figures share one continuous cinematic Star Trek environment with no split panel.",
   "character_rotation": {
     "recent_characters": [
@@ -17,7 +17,11 @@
       "Kira Nerys/Intendant Kira",
       "Philippa Georgiou/Emperor Georgiou",
       "Hoshi Sato/Empress Hoshi",
-      "Jonathan Archer/Mirror Archer"
+      "Jonathan Archer/Mirror Archer",
+      "Sisko/Mirror Sisko",
+      "Bashir/Mirror Bashir",
+      "Quark/Mirror Quark",
+      "Seven of Nine/Borg Seven of Nine"
     ],
     "recent_environments": [
       "TNG Enterprise-D bridge, red alert lighting",
@@ -28,9 +32,17 @@
       "Cardassian-patterned upper Promenade with a broad clear center deck",
       "Sealed mycelial cartography atrium with a blue-guide-strip causeway",
       "Communications archive with a broad graphite concourse under copper conduits",
-      "Captured USS Defiant shuttlebay with a long painted centerline"
+      "Captured USS Defiant shuttlebay with a long painted centerline",
+      "DS9 wardroom viewport gallery",
+      "DS9 infirmary main bay",
+      "DS9 docking ring airlock corridor",
+      "Voyager cargo bay two regeneration alcoves"
     ],
     "recent_action_types": [
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
       "walking-approach",
       "walking-approach",
       "walking-approach",
@@ -84,6 +96,26 @@
       "pair_slug": "archer-mirror-archer",
       "display_name": "Jonathan Archer / Mirror Archer",
       "last_seen_episode": 2
+    },
+    {
+      "pair_slug": "sisko-mirrorsisko",
+      "display_name": "Sisko / Mirror Sisko",
+      "last_seen_episode": 3
+    },
+    {
+      "pair_slug": "bashir-mirrorbashir",
+      "display_name": "Bashir / Mirror Bashir",
+      "last_seen_episode": 3
+    },
+    {
+      "pair_slug": "quark-mirrorquark",
+      "display_name": "Quark / Mirror Quark",
+      "last_seen_episode": 3
+    },
+    {
+      "pair_slug": "seven-borgseven",
+      "display_name": "Seven of Nine / Borg Seven of Nine",
+      "last_seen_episode": 3
     }
   ],
   "characters": [
@@ -212,6 +244,62 @@
         "name": "Mirror Archer",
         "character_description": "canonical live-action Mirror Jonathan Archer, the same recognizable Scott Bakula face and short light-brown hair, exact dark Terran Empire NX-01 uniform with imperial insignia, weapon belt and canonical battle-worn details, ambitious ruthless expression"
       }
+    },
+    {
+      "pair_slug": "sisko-mirrorsisko",
+      "screen_performer": "Avery Brooks",
+      "original": {
+        "slug": "sisko",
+        "name": "Sisko",
+        "character_description": "photorealistic Avery Brooks as Captain Benjamin Sisko, bald head, goatee, warm dark complexion, grey-and-black Starfleet DS9-era captain uniform with maroon undershirt and command pips, calm authoritative posture, real skin textures, cinema-quality lighting"
+      },
+      "alternate": {
+        "slug": "mirror-sisko",
+        "name": "Mirror Sisko",
+        "character_description": "photorealistic Avery Brooks as Mirror Sisko, same bald head and goatee, rugged rebel-leader look, worn brown leather vest over dark henley, tactical harness and strap, holding a modern assault rifle, weathered combat boots, intense hardened expression, matches DS9 mirror-universe rebel design"
+      }
+    },
+    {
+      "pair_slug": "bashir-mirrorbashir",
+      "screen_performer": "Alexander Siddig",
+      "original": {
+        "slug": "bashir",
+        "name": "Bashir",
+        "character_description": "photorealistic Alexander Siddig as Dr. Julian Bashir, short dark hair, warm tan complexion, grey-and-black Starfleet DS9-era uniform with maroon undershirt and medical pips, pleasant confident smile, real skin textures, cinema-quality lighting"
+      },
+      "alternate": {
+        "slug": "mirror-bashir",
+        "name": "Mirror Bashir",
+        "character_description": "photorealistic Alexander Siddig as Mirror Bashir, same face and dark hair styled fuller, dandy tailor persona in an ornate dark green frock coat with gold trim over an embroidered gold-and-cream waistcoat and white cravat, sly charming half-smile, matches DS9 mirror-universe dandy design"
+      }
+    },
+    {
+      "pair_slug": "quark-mirrorquark",
+      "screen_performer": "Armin Shimerman",
+      "original": {
+        "slug": "quark",
+        "display_name": "Quark",
+        "character_description": "photorealistic Armin Shimerman as Quark, Ferengi prosthetic bald head with large ridged ears and sharp teeth, maroon-and-gold ornate Ferengi tunic with wide sash belt, shrewd calculating expression, real skin/prosthetic textures, cinema-quality lighting"
+      },
+      "alternate": {
+        "slug": "mirror-quark",
+        "name": "Mirror Quark",
+        "character_description": "photorealistic Armin Shimerman as Mirror Quark, same Ferengi prosthetic head and ears, grimmer scarred informant look, worn dark leather vest and jacket with chains and pouches at the belt, wary streetwise expression, matches DS9 mirror-universe informant design"
+      }
+    },
+    {
+      "pair_slug": "seven-borgseven",
+      "screen_performer": "Jeri Ryan",
+      "original": {
+        "slug": "seven-of-nine",
+        "name": "Seven of Nine",
+        "character_description": "photorealistic Jeri Ryan as Seven of Nine, blonde hair swept back, fair complexion, dark blue Starfleet Voyager-era bodysuit with gold shoulder piping, composed poised expression, real skin textures, cinema-quality lighting"
+      },
+      "alternate": {
+        "slug": "borg-seven-of-nine",
+        "name": "Borg Seven of Nine",
+        "character_description": "photorealistic Jeri Ryan as original Borg drone Seven of Nine, pale grey-white assimilated skin, ocular implant over one eye, black mechanical Borg exoskeleton plating over torso and one arm with visible cabling, cold emotionless expression, matches the exact Voyager Scorpion/Borg design"
+      }
     }
   ],
   "episode_summaries": [
@@ -284,6 +372,40 @@
       "duration_sec": 30.208005,
       "cost_usd": 4.46,
       "notes": "User-approved canonical-alternate episode produced under the unified dual-style-v3 method: official screen-persona references, same canonical performer within every pair, no fancasting, two scene-derived headshots and two Kling elements per scene, synchronized forward walk with front dolly-back, exact pair-title overlays, clean native ambience plus a new MiniMax music bed. One completed Hoshi image result returned a provider 422 and was replaced by a successful rerun. Spectral audit found no accidental Kling music in any accepted scene."
+    },
+    {
+      "episode": 3,
+      "date": "2026-08-04",
+      "characters": [
+        "Sisko/Mirror Sisko",
+        "Bashir/Mirror Bashir",
+        "Quark/Mirror Quark",
+        "Seven of Nine/Borg Seven of Nine"
+      ],
+      "environments": [
+        "DS9 wardroom viewport gallery",
+        "DS9 infirmary main bay",
+        "DS9 docking ring airlock corridor",
+        "Voyager cargo bay two regeneration alcoves"
+      ],
+      "screen_performers": [
+        "Avery Brooks",
+        "Alexander Siddig",
+        "Armin Shimerman",
+        "Jeri Ryan"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-04/dual-style/20260804-171319-33943/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=w0i6_8_EWt8",
+      "youtube_publish_at": "2026-08-08T20:24:00Z",
+      "duration_sec": 25.2,
+      "cost_usd": 3.83,
+      "notes": "First episode with no pre-existing series-owned dual-style refs for any pair — Storyboarder generated and registered 4 fresh pair-references (sisko-mirrorsisko, bashir-mirrorbashir, quark-mirrorquark, seven-borgseven) from well-documented canonical screen facts, now reusable. Post-approval patch: original amix(normalize=0) had no final limiter/loudnorm pass, causing audible peak spikes — fixed by adding alimiter+loudnorm after the mix; re-encoded with libx264 software encoder instead of h264_videotoolbox to rule out hardware-encoder artifacts. Added an opt-in pop-up promo banner (branding/banner-st1.png) on scene 1 per user request; user noted the banner can be ~2x larger next time."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4"
