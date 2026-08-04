@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 4,
+  "last_episode": 5,
   "tts_engine": "minimax",
   "tts_note": "MiniMax Speech 2.8-HD. Voice: Deep_Voice_Man (authoritative, measured). Second-person monologue throughout — NOT first-person alternate-self. Voiceover opens with the CTA hook on the teaser clip, then continues second-person through story clips.",
   "format_overrides": {
@@ -193,6 +193,30 @@
         "total_usd": 3.6032
       },
       "notes": "Redcon divergence from DS9 'Homefront'/'Paradise Lost': Odo and the cross-era Voyager EMH expose the real Changeling infiltrator and separately prove that the human Admiral Leyton engineered the invasion scare and coup. Lore was checked after the user's review: Leyton is human, although a Changeling briefly impersonated him; the Founder baseline and nonlethal quantum scan are explicitly alternate-timeline inventions. Pacing revision: the original mandatory long hook could not fit a 5s teaser naturally. After user feedback, the approved final uses a shortened 19-word hook at TTS speed 1.15 with no post-atempo and retimes scene 1 to 6.71s; this episode intentionally omits the usual 'from the link in bio' hook phrase as a one-off user-approved pacing override. Title remains 3s silent, subtitles contain 74 words, and the exact CTA asset remains clip 8."
+    },
+    {
+      "episode": 5,
+      "date": "2026-08-04",
+      "crisis": "USS Enterprise-C does not return through the temporal rift — Narendra III / \"Yesterday's Enterprise\" (2366)",
+      "crew": ["Guinan", "Tasha Yar (war-timeline, hardened security chief)"],
+      "tts_voice": "MiniMax Deep_Voice_Man",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-04/redcon/20260804-121122-13937/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=F7HgJrwvhfQ",
+      "yt_publish_at": "2026-08-06T19:16:00Z",
+      "duration_sec": 38.333,
+      "new_assets": {
+        "guinan_redcon_ref": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/guinan/variants/redcon.png",
+        "tasha_yar_redcon_ref": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/tasha-yar/variants/redcon.png",
+        "rachel_garrett_redcon_ref": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/rachel-garrett/variants/redcon.png"
+      },
+      "cost_breakdown": {
+        "sound": 0.091,
+        "storyboarder": 0.80,
+        "animator": 2.772,
+        "editor": 0.0,
+        "total_usd": 3.663
+      },
+      "notes": "User-requested continuous graphic banner overlay (existing branding asset worf-redcon-cta-banner.png, top-center, ~650px/60% of canvas width) spanning clips 4-5 (canon reminder + crew assembled) as one continuous element across the cut — fade-in 0.3s at clip 4 start, fade-out 0.3s at clip 5 end, no fade at the mid-cut. Incident caught before publish: the mandatory title card text (clip 2, ASS-rendered per this format's Editor section, not tools/overlays.py) was skipped on the first assembly pass because the manager's instruction to the Editor to skip reading rules/formats/redcon.md (intended only for universal subtitle/overlay styling) was too broad and also caused it to skip this format's own mandatory title-card convention. Fixed via a second Editor pass: title_lines reflowed from the storyboard's unbalanced 4-entry split into 4 balanced short lines (\"WHAT IF\" / \"THANKS TO YOU\" / \"THE ENTERPRISE-C\" / \"NEVER WENT HOME\"), font size measured against Montserrat-Black.ttf and stepped down from fs104 to fs88 to fit the 1080px frame width (max line 955px) — same reflow failure pattern as episode 3, now happening on a fresh run despite the documented rule, worth flagging in redcon.md's Editor section if it recurs a third time."
     }
   ]
 }
