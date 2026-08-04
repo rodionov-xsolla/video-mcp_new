@@ -1,6 +1,6 @@
 {
   "game_tag": "genshin-impact",
-  "total_stories": 6,
+  "total_stories": 7,
   "stories": [
     {
       "id": 1,
@@ -106,23 +106,45 @@
       "youtube_url": "https://www.youtube.com/watch?v=5C3N8sOxgeA",
       "yt_publish_at": "2026-08-04T20:50:00Z",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-30/reddit-story/20260730-172757-genshin/final.mp4"
+    },
+    {
+      "id": 7,
+      "date": "2026-08-04",
+      "tone": "underdog",
+      "theme": "coworker-mockery-cover-insecurity",
+      "moral_engine": "public workplace mockery conceals the mocker's own attachment to the game",
+      "game_situation": "daily 12:05 lunch-break Genshin ritual with a coworker over Discord, disrupted by a colleague's break-room mockery and boss's comment",
+      "false_verdict": "the narrator's lunch-break Genshin habit is childish and unprofessional",
+      "pressure_source": "coworker Renee's public 'anime waifu' jab, escalating Slack jokes, and the boss's 'focus on real work' comment",
+      "human_action": "helped Renee privately assemble a team to clear Spiral Abyss before the reset so she and her daughter Zoe could play together before summer camp",
+      "reveal": "Renee is a secret 'gamer mom' who mocked the narrator publicly to hide her own attachment to the game",
+      "resolution_type": "positive",
+      "headline": "My coworker called my Genshin lunch break embarrassing, then privately begged me for help.",
+      "offerwall_angle": "free Primogems — link in bio",
+      "gameplay_file": "Cut.mp4",
+      "gameplay_offset_sec": 140,
+      "output_dir": "output/2026-08-04/genshin-impact/reddit-story/20260804-145743-73799-genshin-impact",
+      "youtube_url": "https://www.youtube.com/watch?v=cMvJh2fJ-G8",
+      "yt_publish_at": "2026-08-06T20:01:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-04/reddit-story/20260804-145743-73799-genshin-impact/final.mp4"
     }
   ],
   "anti_repetition": {
-    "recent_themes": ["sibling-reconnection", "f2p-triumph", "parent-judgment-to-connection", "friendship-neglect-vs-overwhelm", "creative-authorship-restored", "tenant-noise-accusation-cleared"],
-    "recent_tones": ["touching", "rage-to-relief", "soft-drama", "bittersweet-to-warm", "humiliation-to-respect", "funny-justice"],
-    "recent_moral_engines": ["f2p-mockery", "judgment for hobby", "feeling replaced/abandoned", "public authorship accusation", "one admitted outburst expanded into a false claim of constant disturbance"],
-    "recent_false_verdicts": ["forever F2P loser who will never pull a 5-star", "immature adult wasting time on a kids' game", "best friend deliberately excluded narrator over her engagement", "narrator used generative AI and lied about painting the Furina portrait", "the narrator's Genshin sessions caused hours of pounding every night"],
-    "recent_pressure_sources": ["toxic co-op friend", "dad's repeated dismissal in front of family", "mutual friend group chat consensus", "professor's public suspicion and classmates whispering about cheating", "neighbors' signed complaint, landlord deadline, and a trusted neighbor's sudden distrust"],
+    "recent_themes": ["f2p-triumph", "parent-judgment-to-connection", "friendship-neglect-vs-overwhelm", "creative-authorship-restored", "tenant-noise-accusation-cleared", "coworker-mockery-cover-insecurity"],
+    "recent_tones": ["rage-to-relief", "soft-drama", "bittersweet-to-warm", "humiliation-to-respect", "funny-justice", "underdog"],
+    "recent_moral_engines": ["judgment for hobby", "feeling replaced/abandoned", "public authorship accusation", "one admitted outburst expanded into a false claim of constant disturbance", "public workplace mockery concealing the mocker's own attachment to the game"],
+    "recent_false_verdicts": ["immature adult wasting time on a kids' game", "best friend deliberately excluded narrator over her engagement", "narrator used generative AI and lied about painting the Furina portrait", "the narrator's Genshin sessions caused hours of pounding every night", "the narrator's lunch-break Genshin habit is childish and unprofessional"],
+    "recent_pressure_sources": ["dad's repeated dismissal in front of family", "mutual friend group chat consensus", "professor's public suspicion and classmates whispering about cheating", "neighbors' signed complaint, landlord deadline, and a trusted neighbor's sudden distrust", "coworker's public mockery, Slack jokes, and boss's comment"],
     "recent_hooks": [
-      "My sister and I used to be close. Then high school hit and we just drifted.",
       "He called me a forever F2P loser. Said Hu Tao would never be mine.",
       "He said it once. Flat. That anime kids stuff. No argument. Just walked away.",
       "The invites stopped after her engagement. No text, just silence.",
       "My professor called my Furina painting AI-generated, until my sketchbook proved him wrong.",
-      "three neighbors sign an eviction complaint; narrator admits one Primogem-pull shout; hallway recordings expose the service elevator"
+      "three neighbors sign an eviction complaint; narrator admits one Primogem-pull shout; hallway recordings expose the service elevator",
+      "coworker mocks lunch-break Genshin publicly, then privately begs for a Spiral Abyss clear before her daughter's summer camp"
     ],
-    "recent_gameplay_offsets_sec": [260, 20, 305],
-    "banned_combos": []
+    "recent_gameplay_offsets_sec": [20, 305, 140],
+    "banned_combos": [],
+    "note": "gameplay_offset_sec 140 on Cut.mp4 (~383s total) is a compromise — the file is too short for full 180-240s separation from all three prior offsets (20/260/305). Consider sourcing a longer or second Genshin gameplay file to restore true offset variety."
   }
 }

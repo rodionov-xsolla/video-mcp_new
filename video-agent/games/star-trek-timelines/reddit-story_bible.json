@@ -1,6 +1,6 @@
 {
   "game_tag": "star-trek-timelines",
-  "total_stories": 10,
+  "total_stories": 11,
   "stories": [
     {
       "id": 1,
@@ -206,74 +206,111 @@
       "youtube_url": "https://www.youtube.com/watch?v=rpeXPmTcaRo",
       "yt_publish_at": "2026-08-04T20:50:00Z",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-30/reddit-story/20260730-172757-star-trek/final.mp4"
+    },
+    {
+      "id": 11,
+      "date": "2026-08-04",
+      "tone": "misunderstood hero",
+      "theme": "cold-standoffish-roommate-becomes-closet-trek-fan-and-best-friend",
+      "moral_engine": "a quiet, withdrawn roommate is silently misread as cold and judgmental",
+      "game_situation": "random college housing lottery pairs two strangers in a small dorm room",
+      "false_verdict": "the narrator privately decided Devon was distant and looked down on him, with no real evidence",
+      "pressure_source": "a looming housing-office room-swap deadline that would make the false verdict permanent",
+      "narrator_flaw": "drafted a room-swap request twice instead of ever actually starting a conversation",
+      "human_action": "left the game running instead of hiding it, then canceled the swap request the moment things changed",
+      "reveal": "Devon correctly criticizes the narrator's away-team lineup and quotes an exact line of dialogue, proving he's a lifelong closet fan",
+      "resolution_type": "positive",
+      "headline": "My roommate wouldn't speak to me for three weeks, until he saw my phone screen.",
+      "offerwall_angle": "downloaded Star Trek Timelines from the link in bio that summer, native early beat, no voiced CTA",
+      "gameplay_segments": [
+        {
+          "file": "Startrek_gameplay_1.mp4",
+          "offset_sec": 8.0,
+          "duration_sec": 24.0
+        },
+        {
+          "file": "Startrek_gameplay_4.mp4",
+          "offset_sec": 15.0,
+          "duration_sec": 24.0
+        },
+        {
+          "file": "Startrek_gameplay_5.mp4",
+          "offset_sec": 10.0,
+          "duration_sec": 18.42
+        }
+      ],
+      "output_dir": "output/2026-08-04/star-trek-timelines/reddit-story/20260804-145743-73799-star-trek-timelines",
+      "youtube_url": "https://www.youtube.com/watch?v=c-HbGRo7xFM",
+      "yt_publish_at": "2026-08-07T20:18:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-04/reddit-story/20260804-145743-73799-star-trek-timelines/final.mp4"
     }
   ],
   "anti_repetition": {
     "recent_themes": [
-      "marriage-reconnection-through-shared-trek-nostalgia",
       "silent-grandfather-known-through-shared-game",
       "offshore-father-nightly-ritual-with-son",
       "sibling-connection-through-shared-interest",
       "roommate-mocks-trek-then-borrows-it-for-a-date",
-      "library-community-night-restored"
+      "library-community-night-restored",
+      "cold-standoffish-roommate-becomes-closet-trek-fan-and-best-friend"
     ],
     "recent_tones": [
       "touching",
       "touching",
-      "touching",
       "quietly-proud",
       "humiliation-to-respect",
-      "quietly-triumphant"
+      "quietly-triumphant",
+      "misunderstood hero"
     ],
     "recent_moral_engines": [
-      "emotional withdrawal mistaken for indifference",
       "n/a \u2014 genuine fan story, no accusation arc",
       "n/a \u2014 genuine fan story, no accusation arc",
       "n/a \u2014 genuine family story, no accusation arc",
       "private expertise mocked publicly, then borrowed for social approval",
-      "small community program dismissed because attendance numbers hide its human value"
+      "small community program dismissed because attendance numbers hide its human value",
+      "a quiet, withdrawn roommate is silently misread as cold and judgmental"
     ],
     "recent_game_situations": [
-      "husband plays nightly while marriage grows silent after second child",
       "grandson spends time with a silent retired-engineer grandfather via the game",
       "offshore father and son share a nightly crew across an 11-year rotation",
       "younger brother with autism explains his crew every Friday",
       "roommates share a Friday-night Star Trek ritual before one seeks dating advice",
-      "four recent arrivals share a recurring Star Trek discussion evening in a small library room"
+      "four recent arrivals share a recurring Star Trek discussion evening in a small library room",
+      "random college housing lottery pairs two strangers in a small dorm room"
     ],
     "recent_false_verdicts": [
-      "narrator was using the game to avoid his wife",
       "null \u2014 no injustice arc",
       "null \u2014 no injustice arc",
       "null \u2014 no injustice arc",
       "the narrator's Star Trek interest is embarrassing and socially useless",
-      "the narrator was using a public room for a personal indulgence with no community value"
+      "the narrator was using a public room for a personal indulgence with no community value",
+      "the narrator privately decided Devon was distant and looked down on him, with no real evidence"
     ],
     "recent_pressure_sources": [
-      "months of mutual silence between spouses",
       "n/a \u2014 no pressure/accusation source, genuine story",
       "n/a \u2014 no pressure/accusation source, genuine story",
       "family pressuring narrator to get brother off the game",
       "roommate's jokes in front of mutual friends and his dating anxiety",
-      "library director cancels the gathering and forces a public-board defense"
+      "library director cancels the gathering and forces a public-board defense",
+      "a looming housing-office room-swap deadline"
     ],
     "recent_resolution_types": [
       "positive",
       "positive",
       "positive",
-      "positive",
       "positive-social-restoration",
-      "positive-community-restoration"
+      "positive-community-restoration",
+      "positive"
     ],
     "recent_hooks": [
-      "bio link download, nightly escape, wife sits down and asks about Spock, late father's TOS connection, Thursday ritual",
       "bio link download, quiet grandfather, deliberately-wrong crew build as excuse to sit near him, Apollo-era antenna-array reveal",
       "bio link download, offshore rotation, son overhears a call and downloads the game too, nightly ritual, surprise in-person reunion on Gauntlet night",
       "bio link download, brother with autism explains his crew every Friday, family pressure to stop, cousin unlocks unprompted connection at dinner",
       "bio link download, six months of space-homework jokes, roommate borrows a Trek cheat sheet for a date, Maya recognizes the narrator's phrasing",
-      "four-person library ritual canceled as indulgent, regulars testify publicly, twenty-seven-newcomer log, all four download through bio link"
+      "four-person library ritual canceled as indulgent, regulars testify publicly, twenty-seven-newcomer log, all four download through bio link",
+      "housing-lottery roommate reads as cold for three weeks, swap deadline looms, he quotes Chekov's exact line and reveals he's a lifelong closet fan"
     ],
-    "note": "story 10 (2026-07-30) uses an institutional community conflict: a library director mistakes small attendance for no human value, while the regulars restore the event through public testimony. The game remains a shared ritual after the human resolution, not the source of conflict. HARD RULE added 2026-07-13 remains active: never build reddit-story conflict on in-game mechanics (fleet/gauntlet/leaderboard/cheat), even when the mechanic is real. Source false verdicts and pressure from real relationships only.",
+    "note": "story 10 (2026-07-30) uses an institutional community conflict: a library director mistakes small attendance for no human value, while the regulars restore the event through public testimony. Story 11 (2026-08-04) inverts the roommate arc from story 9 \u2014 here the narrator, not the roommate, holds the false verdict. HARD RULE added 2026-07-13 remains active: never build reddit-story conflict on in-game mechanics (fleet/gauntlet/leaderboard/cheat), even when the mechanic is real. Source false verdicts and pressure from real relationships only.",
     "banned_combos": []
   }
 }
