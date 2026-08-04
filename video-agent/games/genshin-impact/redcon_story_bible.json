@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Genshin Impact — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 3,
+  "last_episode": 4,
   "tts_engine": "auto",
   "tts_note": "Speech route for new episodes: intentional native audio → Chatterbox only with a redcon-owned approved sample recorded in this bible → otherwise MiniMax. Retry the same route once, then stop. Second-person monologue throughout. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "format_overrides": {
@@ -54,18 +54,25 @@
         "date": "2026-07-28",
         "pulled_character": "Baizhu",
         "note": "Baizhu and Changsheng identify the poison beneath Dvalin's Abyssal curse early and guide the Traveler's purification before pain becomes rage. Dvalin breaks the Abyss Mage's control, shields Mondstadt, and is never named Stormterror."
+      },
+      {
+        "crisis": "Signora's death and Fatui retaliation (Chapter II Act III / Sumeru desert confrontation)",
+        "episode": 4,
+        "date": "2026-08-04",
+        "pulled_character": "Childe (Tartaglia)",
+        "note": "POSITIVE-outcome divergence (genuine rescue, same pattern as episode 2's Osial/Zhongli SAVED — not a tragedy). In canon Signora dies in the Sumeru desert, a death later revealed to have been engineered/exploited by the Doctor and the Fatui hierarchy (Pierro) to extract her power. Here Childe — a fellow Harbinger personally unwilling to watch his own hierarchy spend one of its own — and Cyno (Sumeru's General Mahamatra, present in canon) expose the Doctor's extraction plan before the confrontation turns lethal. Signora breaks from the Fatui hierarchy and survives instead of dying."
       }
     ],
     "do_not_repeat": [
       "Teppei/Baizhu Delusion (refs created 2026-06-30, never released — skip, used as format example in redcon.md)",
       "Scaramouche Gnosis / Shouki no Kami",
       "Osial/Zhongli Liyue — used episode 2 (2026-07-21), pulled hero was Xiao not Zhongli",
-      "Dvalin/Stormterror Mondstadt — used episode 3 (2026-07-28), pulled hero was Baizhu"
+      "Dvalin/Stormterror Mondstadt — used episode 3 (2026-07-28), pulled hero was Baizhu",
+      "Signora's death / Fatui retaliation — used episode 4 (2026-08-04), pulled hero was Childe, Cyno present"
     ],
     "candidates_for_future": [
       "Raiden Shogun's Vision Hunt Decree — Inazuma civil war (Chapter II)",
       "Fontaine sinking prophecy — The Hydro Archon's trial (Chapter IV)",
-      "Signora's death and Fatui retaliation (Chapter II Act III)",
       "Nahida imprisoned by the Akademiya — Irminsul corrupted (Chapter III Act V)"
     ]
   },
@@ -138,6 +145,31 @@
       "youtube_url": "https://www.youtube.com/watch?v=Xmnzm4JlsqY",
       "youtube_scheduled": "2026-08-01T20:50:00Z",
       "notes": "Player-POV offer-driven episode. The free-Primogem pull brings Baizhu before Dvalin attacks Mondstadt; Baizhu and Changsheng identify the poison beneath the Abyssal curse and guide Lumine's purification, after which Dvalin destroys the Abyss Mage's control and protects the city. Per the user's live Genshin override, universal assets were preferred regardless of format tags: existing universal Baizhu and Lumine sheets were reused, while an exact extracted canonical Dvalin model preview was uploaded byte-for-byte as the universal source at assets/genshin-impact/characters/dvalin/variants/canonical-model-source.png; no new generated character refs were created. The 95-word MiniMax narration rendered at 43.909s and required a 1.4515x effective scene-window atempo; target roughly 70-80 words next time for a more relaxed read. The first assembly technically concatenated the legacy cta.mp4 for 5.041667s, but user review found no visible CTA. The approved final replaced it with the universal branding/cta.png rendered as a full-frame 5.041667s end card. Use that PNG end-card by default for future Genshin Redcon episodes."
+    },
+    {
+      "episode": 4,
+      "date": "2026-08-04",
+      "crisis": "Signora's death and Fatui retaliation (Chapter II Act III / Sumeru desert confrontation)",
+      "pulled_character": "Childe (Tartaglia)",
+      "crew": ["Childe (Tartaglia)", "Cyno", "Signora"],
+      "tts_voice": "MiniMax Deep_Voice_Man (no Chatterbox sample recorded for the Traveler in this bible)",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-04/redcon/20260804-135057-45251/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=ooHfrTQJ2JE",
+      "yt_publish_at": "2026-08-05T19:09:00Z",
+      "duration_sec": 38.333,
+      "new_assets": {
+        "childe_redcon_ref": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/variants/redcon-player-pov.png",
+        "cyno_redcon_ref": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/cyno/variants/redcon.png",
+        "signora_redcon_ref": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/signora/variants/redcon.png"
+      },
+      "cost_breakdown": {
+        "sound": 0.079,
+        "storyboarder": 0.80,
+        "animator": 2.772,
+        "editor": 0.0,
+        "total_usd": 3.651
+      },
+      "notes": "First positive-outcome (rescue) divergence in this game's Player-POV series since episode 2. The Traveler's existing redcon-tagged ref (traveller-redcon) was correctly NOT chained since the Traveler never appears on-screen in Player-POV framing — avoided an unneeded $0.08 spend. Two process incidents caught before publish, both fixed same-session: (1) Sound initially generated ONE combined tts-output.mp3 for the full monologue instead of one MP3 per clip with a non-null tts_segment — broke the per-clip atempo model this format relies on (storyboard.json's clips[] already had correct per-clip tts_segment text). Sent back to Sound, regenerated as 6 separate scene-K.mp3 files with per-clip tts_url written into storyboard.json, matching the star-trek-timelines redcon convention. (2) Reinforced upfront in the Editor prompt this run: this format's mandatory title card text (title_lines via ASS, not tools/overlays.py) must be read from rules/formats/redcon.md and rendered — a prior star-trek-timelines redcon run this session skipped it on the first pass by mistake and needed a second Editor pass to fix; naming the requirement explicitly here got it right on the first assembly. Bg-music volume raised from the documented 0.15 to 0.4 after probing showed 0.15 made quiet passages of this track inaudible (-69 to -70dB) — future episodes should verify audibility per-track rather than assuming the documented default fits every generated music file."
     }
   ]
 }
