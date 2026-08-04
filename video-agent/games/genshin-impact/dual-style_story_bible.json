@@ -5,7 +5,7 @@
   "production_contract": "dual-style-v3",
   "comparison_mode": "source-vs-live-action",
   "created_at": "2026-06-09",
-  "last_episode": 7,
+  "last_episode": 8,
   "character_pool": [
     {
       "character_name": "venti",
@@ -209,14 +209,38 @@
       "has_actor_counterpart": true,
       "actor_name": "Jason Momoa",
       "last_seen_episode": 7
+    },
+    {
+      "character_name": "nahida",
+      "display_name": "Nahida",
+      "has_actor_counterpart": true,
+      "actor_name": "Millie Bobby Brown",
+      "last_seen_episode": 8
+    },
+    {
+      "character_name": "yoimiya",
+      "display_name": "Yoimiya",
+      "has_actor_counterpart": true,
+      "actor_name": "Sabrina Carpenter",
+      "last_seen_episode": 8
+    },
+    {
+      "character_name": "mona",
+      "display_name": "Mona",
+      "has_actor_counterpart": true,
+      "actor_name": "Elle Fanning",
+      "last_seen_episode": 8
+    },
+    {
+      "character_name": "jean",
+      "display_name": "Jean",
+      "has_actor_counterpart": true,
+      "actor_name": "Emma Watson",
+      "last_seen_episode": 8
     }
   ],
   "character_rotation": {
     "recent_characters": [
-      "Venti",
-      "Hu Tao",
-      "Zhongli",
-      "Diluc",
       "Raiden Shogun",
       "Tartaglia",
       "Furina",
@@ -241,7 +265,11 @@
       "Alhaitham",
       "Xilonen",
       "Chasca",
-      "Arataki Itto"
+      "Arataki Itto",
+      "Nahida",
+      "Yoimiya",
+      "Mona",
+      "Jean"
     ],
     "recent_actors": [
       "Gal Gadot",
@@ -268,13 +296,13 @@
       "Chris Hemsworth",
       "Megan Fox",
       "Anne Hathaway",
-      "Jason Momoa"
+      "Jason Momoa",
+      "Millie Bobby Brown",
+      "Sabrina Carpenter",
+      "Elle Fanning",
+      "Emma Watson"
     ],
     "recent_environments": [
-      "Inazuma throne room",
-      "Liyue harbor arena at dusk",
-      "Fontaine open theater stage plain wooden floor",
-      "Fatui underground stone chamber",
       "Cryo prison Snezhnaya plain neutral floor",
       "Narukami shrine Inazuma plain neutral floor",
       "plain neutral grey floor simple spotlight",
@@ -295,13 +323,13 @@
       "Sumeru temple-observatory grand central aisle",
       "enclosed Natlan crystal-forge promenade with guarded runway",
       "Natlan sky-cavalry airship broad central deck",
-      "underground Inazuma oni festival arena central runway"
+      "underground Inazuma oni festival arena central runway",
+      "Sumeru rainforest canopy archive terrace",
+      "Inazuma fireworks pier waterfront promenade",
+      "Mondstadt hilltop astronomical observatory terrace",
+      "Mondstadt cathedral grand plaza"
     ],
     "recent_action_types": [
-      "walking-approach",
-      "walking-approach",
-      "walking-approach",
-      "walking-approach",
       "walking-approach",
       "walking-approach",
       "walking-approach",
@@ -318,6 +346,10 @@
       "electro-judgment-stance",
       "twin-dagger-flourish",
       "cryo-frost-veil-stance",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
       "walking-approach",
       "walking-approach",
       "walking-approach",
@@ -524,6 +556,40 @@
       "duration_sec": 25.21,
       "cost_usd": 4.54,
       "notes": "User-approved five-pair override. The realistic side preserves each actor's recognizable identity, natural hair and adult height while translating the Genshin costume almost identically in practical real-world materials. All environments provide a broad safe forward-walking lane for the paired figures and front dolly-back camera. Used frontal headshots, Kling elements face-lock, a one-entry multi_prompt, walking approach and generate_audio:true. Scene 1 accidentally contained Kling-generated music, so its baked audio was muted before the dedicated MiniMax background track was mixed; scenes 2-5 retain quiet diegetic ambience. This episode is the source-vs-live-action mode of the unified dual-style-v3 contract; legacy Pattern A/B labels are non-normative."
+    },
+    {
+      "episode": 8,
+      "date": "2026-08-04",
+      "characters": [
+        "Nahida",
+        "Yoimiya",
+        "Mona",
+        "Jean"
+      ],
+      "environments": [
+        "Sumeru rainforest canopy archive terrace",
+        "Inazuma fireworks pier waterfront promenade",
+        "Mondstadt hilltop astronomical observatory terrace",
+        "Mondstadt cathedral grand plaza"
+      ],
+      "actors": [
+        "Millie Bobby Brown",
+        "Sabrina Carpenter",
+        "Elle Fanning",
+        "Emma Watson"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-04/dual-style/20260804-161958-13060/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=jLIbSpjX7EE",
+      "youtube_publish_at": "2026-08-07T20:26:00Z",
+      "duration_sec": 25.21,
+      "cost_usd": 3.19,
+      "notes": "First episode casting characters with a ready canonical game-wide reference_image already in Supabase for all four (no fresh text-only cartoon-side generation needed). Explicit user requirement: none of the four keep their own canonical in-game height/proportions from the reference sheet, no chibi-fication, no rescaling to match the actor. Scene 2 (Yoimiya) contained accidental Kling-baked music; native audio muted before mixing the dedicated MiniMax bg-music.mp3, per the standing dual-style exception."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4",
@@ -702,6 +768,30 @@
       "name": "Arataki Itto",
       "actor_counterpart": "Jason Momoa",
       "character_description": "very tall muscular male oni Arataki Itto, long white hair, red oni horns and markings, open purple-black coat, gold armored shoulder, heavy braided rope sash, exuberant fearless expression"
+    },
+    {
+      "slug": "nahida",
+      "name": "Nahida",
+      "actor_counterpart": "Millie Bobby Brown",
+      "character_description": "petite young Dendro Archon Nahida, canonical child-height in-game proportions (not rescaled), green and gold flowing robes with leaf and vine motifs, pale mint-green hair with golden ornaments, pale complexion, serene wise-beyond-years expression, dendro catalyst, delicate small build"
+    },
+    {
+      "slug": "yoimiya",
+      "name": "Yoimiya",
+      "actor_counterpart": "Sabrina Carpenter",
+      "character_description": "female pyrotechnician Yoimiya, red and gold festival kimono-inspired outfit with firework motifs, long orange hair in twin ponytails with red ribbons, warm tan complexion, cheerful energetic bright smile, pyro bow, petite lively build"
+    },
+    {
+      "slug": "mona",
+      "name": "Mona",
+      "actor_counterpart": "Elle Fanning",
+      "character_description": "female astrologist Mona Megistus, black and indigo witch-style outfit with star and moon motifs, wide-brimmed star hat, long dark navy hair with prominent ahoge, pale complexion, proud mysterious half-smile, hydro catalyst grimoire, slender elegant build"
+    },
+    {
+      "slug": "jean",
+      "name": "Jean",
+      "actor_counterpart": "Emma Watson",
+      "character_description": "female Acting Grand Master Jean, white and gold knight-commander uniform with cape and dandelion motifs, long blonde hair in a low ponytail, fair complexion, composed dutiful gentle expression, anemo sword, tall athletic elegant build"
     }
   ]
 }
