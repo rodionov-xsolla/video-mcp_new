@@ -1,0 +1,170 @@
+{
+  "series_id": "genshin-item-story-en",
+  "game_tag": "genshin-impact",
+  "format": "item-story",
+  "language": "en",
+  "title": "Genshin Impact — Item Story",
+  "created_at": "2026-08-05",
+  "last_episode": 1,
+  "ready_to_post": true,
+  "style_tags": "premium Genshin-style anime cel-shaded fantasy frame, clean elegant linework, vibrant saturated colors, painterly Inazuma and Snezhnaya environments, cinematic dramatic lighting, restrained magenta Tatarigami energy only where canon requires it, detailed metal and cord materials, edge-to-edge vertical 9:16 composition, no photorealism, no 3D product render, no game UI, no inventory card, no text overlay",
+  "format_overrides": {
+    "narrative_mode": "An external lore narrator tells the canonical item's history in third person. The item never narrates as I, me, or my. Canon establishes that this blade possessed consciousness before its final reforging, but the narration still speaks about it from outside.",
+    "visual_priority": "The sword is the largest, sharpest, and most unobstructed focal subject in every clip. Makers and wielders appear only as hands, torso crops, silhouettes, or secondary figures without identity-critical faces.",
+    "structure": "HOOK (the cursed blade crossed nations by possessing wielders) → FORGING IN SNEZHNAYA → JOURNEY TO INAZUMA → POWER SPENT / ENCOUNTER WITH KAZUHA → FINAL REFORGING → CONSCIOUSNESS LOST / LEGACY → CTA",
+    "state_continuity": "All three states retain the same long, slender, slightly curved single-edged silhouette, angular layered guard, wrapped grip, and flared pommel. Only the blade's energy pattern, surface brightness, wear, and guard finish change at canon-supported cuts.",
+    "owner_visibility": "Kazuha may be named in narration, but without an exact Item Story-owned character ref the image must show only anonymous red-and-black-sleeved hands, a cropped torso, or a backlit silhouette with no recognizable face. Akame Kanenaga is also shown without a recognizable face."
+  },
+  "voice_policy": {
+    "engine": "minimax",
+    "identity_critical": false,
+    "intent": "low controlled masculine lore narrator, somber and intimate, measured dark-fantasy documentary delivery, restrained emotion, never shouting and never imitating a Genshin character",
+    "language_code": "en",
+    "note": "One consistent external narrator speaks about Kagotsurube Isshin in third person. Do not use a character voice clone."
+  },
+  "music_policy": {
+    "mood": "tragic Inazuman dark fantasy crossing into cold Snezhnayan melancholy, restrained shamisen-like plucks, low strings, sparse ceremonial percussion, ominous magenta-energy tension resolving into quiet acceptance, no vocals",
+    "volume": 0.15,
+    "engine": "minimax-music"
+  },
+  "cta": {
+    "text": "FREE PRIMOGEMS · LINK IN BIO",
+    "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4"
+  },
+  "source_references": [
+    {
+      "kind": "canonical_weapon_render",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/8/80/Weapon_Kagotsurube_Isshin_3D.png/revision/latest?cb=20220713213727",
+      "page_url": "https://genshin-impact.fandom.com/wiki/Kagotsurube_Isshin",
+      "use": "Primary appearance source for the final reforged state: silhouette, red-orange blade pattern, layered guard, wrapped grip, and pommel. Research input only; never use as the finished scene image."
+    },
+    {
+      "kind": "canonical_weapon_render_ascended",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/d/d2/Weapon_Kagotsurube_Isshin_3D_2nd.png/revision/latest?cb=20220713213729",
+      "page_url": "https://genshin-impact.fandom.com/wiki/Kagotsurube_Isshin",
+      "use": "Secondary material and brightness check for the final form; the episode uses the base/reward appearance as the locked final state rather than depicting an unexplained ascension."
+    },
+    {
+      "kind": "canonical_quest_weapon_render",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/a/a2/Weapon_Prized_Isshin_Blade_Awakened.png/revision/latest?cb=20231219232935",
+      "page_url": "https://genshin-impact.fandom.com/wiki/Prized_Isshin_Blade_(Awakened)",
+      "use": "Primary appearance source for the awakened cursed state and its magenta luminous pattern. Research input only."
+    },
+    {
+      "kind": "canonical_quest_weapon_render",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/d/d2/Weapon_Prized_Isshin_Blade_Shattered.png/revision/latest?cb=20220713065636",
+      "page_url": "https://genshin-impact.fandom.com/wiki/Prized_Isshin_Blade_(Shattered)",
+      "use": "Primary appearance source for the power-spent battered state. The icon remains full-length, so do not depict a blade snapped into separate halves."
+    },
+    {
+      "kind": "quest_chronology",
+      "url": "https://genshin-impact.fandom.com/wiki/Ere_the_End%2C_a_Glance_Back",
+      "use": "Chronology verification for the blade's arrival in Inazuma, confrontation with Kazuha, final reforging, revealed name, and loss of consciousness. Do not quote quest dialogue verbatim."
+    }
+  ],
+  "items": [
+    {
+      "item_name": "Kagotsurube Isshin",
+      "item_slug": "kagotsurube-isshin",
+      "category": "a cursed Inazuman single-edged sword forged in Snezhnaya and later reforged by Kaedehara Kazuha",
+      "canon_scope": "Genshin Impact game canon from Kaedehara Kazuha's Story Quest, Acer Palmatum Chapter: Act I, plus the in-game weapon and quest-item descriptions. Do not invent later owners or events beyond the released quest endpoint.",
+      "appearance_lock": {
+        "overall_shape": "A long, slender, slightly curved single-edged Inazuman sword with a narrow dark blade and a long pointed, subtly upswept tip. The same elegant silhouette persists in all three states. No scabbard appears in the episode.",
+        "guard": "An unmistakable compact angular guard built from overlapping wing-, leaf-, or feather-like plates rather than a circular tsuba. A small triangular red or magenta insert sits at the blade base. The plates are dark brown-gray in cursed and battered states, becoming brighter silver-gray in the final state.",
+        "grip": "A long dark purple-black handle wrapped with pale silver diagonal cord that creates a repeated diamond pattern. In the awakened state the openings glow magenta; in the battered and final states they read pale silver over a dark core.",
+        "pommel": "A flared silver-gray metal end cap with angular sides and a small red inset or stripe. It is compact and aligned with the grip, never a large ornamental counterweight.",
+        "blade_pattern": "One flowing serpentine energy or hamon-like line sweeps almost the full blade length. It is intense luminous magenta-purple when awakened, pale white-silver and extinguished when power-spent, and vivid red-orange over a dark burgundy-black blade after the final reforging.",
+        "scale_lock": "A full-length one-handed sword: the blade is several times the grip length, and an adult hand wraps naturally around the narrow handle. It must never shrink into a knife or expand into an oversized broad fantasy greatsword.",
+        "negative_lock": "No generic katana, no gold circular tsuba, no blue or green blade, no straight medieval sword, no broad blade, no missing tip, no blade snapped into two pieces, no extra spikes, no readable runes or text, no scabbard, no product packshot, no floating inventory UI, and no generic flame weapon."
+      },
+      "item_states": [
+        {
+          "id": "awakened-cursed",
+          "appearance": "The full-length near-black blade carries an intense luminous magenta-purple serpentine line and restrained violet aura. The angular layered guard is dark brown-gray, the grip is dark with magenta diamond openings, and the silhouette remains slender and intact.",
+          "source_url": "https://static.wikia.nocookie.net/gensin-impact/images/a/a2/Weapon_Prized_Isshin_Blade_Awakened.png/revision/latest?cb=20231219232935",
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/kagotsurube-isshin/variants/item-story-20260805-113350-awakened-cursed.png"
+        },
+        {
+          "id": "power-spent-battered",
+          "appearance": "The same full-length silhouette after its power is exhausted: subdued dark burgundy-black blade, pale white-silver flowing line, gray-brown angular guard, pale handle wrap, scuffed and battered surfaces, no strong aura. It is worn and spiritually spent, not physically snapped in half.",
+          "source_url": "https://static.wikia.nocookie.net/gensin-impact/images/d/d2/Weapon_Prized_Isshin_Blade_Shattered.png/revision/latest?cb=20220713065636",
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/kagotsurube-isshin/variants/item-story-20260805-113350-power-spent-battered.png"
+        },
+        {
+          "id": "reforged-kagotsurube-isshin",
+          "appearance": "The final reward form: a dark burgundy-purple to near-black blade crossed by a vivid red-orange flowing flame- or hamon-like stripe from base toward the pointed tip; bright silver-gray overlapping angular guard plates with a small red triangular insert; long dark grip with pale silver diamond-pattern wrapping; flared silver-gray pommel with a small red inset. No purple aura.",
+          "source_url": "https://static.wikia.nocookie.net/gensin-impact/images/8/80/Weapon_Kagotsurube_Isshin_3D.png/revision/latest?cb=20220713213727",
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/kagotsurube-isshin/variants/item-story-20260805-113350-reforged-kagotsurube-isshin.png"
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact": "Akame Kanenaga, an Inazuman smith living in Snezhnaya, forged the blade from regret, a final wish to restore the Isshin Art's reputation, and Tatarigami malice.",
+          "status": "game canon",
+          "source": "Kagotsurube Isshin and Prized Isshin Blade descriptions; Acer Palmatum Chapter: Act I"
+        },
+        {
+          "fact": "The blade possessed consciousness and used human hosts as tools while traveling toward Inazuma.",
+          "status": "game canon",
+          "source": "Acer Palmatum Chapter: Act I"
+        },
+        {
+          "fact": "Its strength and aura greatly diminished by the time it reached Inazuma and encountered Kaedehara Kazuha.",
+          "status": "game canon",
+          "source": "Prized Isshin Blade (Awakened/Shattered) descriptions; Acer Palmatum Chapter: Act I"
+        },
+        {
+          "fact": "Kazuha agreed to let the blade control his body for one final reforging attempt.",
+          "status": "game canon",
+          "source": "Ere the End, a Glance Back"
+        },
+        {
+          "fact": "The reforging consumed the blade's remaining consciousness, after which it revealed the name Kagotsurube Isshin and remained with Kazuha as the story quest concluded.",
+          "status": "game canon narrative endpoint; the player also receives the weapon as a quest reward",
+          "source": "Ere the End, a Glance Back; Kagotsurube Isshin item acquisition"
+        }
+      ],
+      "forbidden_claims": [
+        "The final Kagotsurube Isshin still speaks, possesses wielders, or retains the cursed blade's consciousness after the reforging.",
+        "The power-spent blade was visibly snapped into two separate pieces.",
+        "Kazuha originally forged the cursed blade in Snezhnaya.",
+        "The blade is a five-star weapon or has a different in-game rarity than its canonical four-star status.",
+        "Its final red-orange pattern is flame magic or a Pyro Vision effect.",
+        "The ascended inventory render is a separate canonical reforging event in the story."
+      ]
+    }
+  ],
+  "supabase_assets": {
+    "item_refs": {
+      "kagotsurube-isshin": {
+        "awakened-cursed": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/kagotsurube-isshin/variants/item-story-20260805-113350-awakened-cursed.png",
+        "power-spent-battered": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/kagotsurube-isshin/variants/item-story-20260805-113350-power-spent-battered.png",
+        "reforged-kagotsurube-isshin": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/kagotsurube-isshin/variants/item-story-20260805-113350-reforged-kagotsurube-isshin.png"
+      }
+    },
+    "character_refs": {},
+    "note": "Contains only permanent refs generated through validated runner jobs for genshin-impact + item-story + genshin-item-story-en."
+  },
+  "anti_repetition": {
+    "recent_items": [
+      "Kagotsurube Isshin"
+    ],
+    "recent_hooks": [
+      "A cursed Inazuman sword crossed nations by possessing successive human hosts."
+    ],
+    "recent_fates": [
+      "Reforged by Kazuha at the cost of its remaining consciousness, leaving the restored sword permanently silent."
+    ],
+    "cooldown_episodes": 20
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "item_name": "Kagotsurube Isshin",
+      "arc": "Forged conscious in Snezhnaya by Akame Kanenaga, carried toward Inazuma through possessed hosts, weakened by the journey, and finally reforged by Kazuha at the cost of its consciousness.",
+      "narrative_mode_used": "External third-person lore narration about the item; the sword never narrates as itself.",
+      "youtube_url": "https://www.youtube.com/watch?v=_vDKtTASMYQ",
+      "scheduled_for": "2026-08-09T20:27:00Z"
+    }
+  ]
+}
