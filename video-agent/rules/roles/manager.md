@@ -246,7 +246,7 @@ Before launching the editor sub-agent:
 3. The editor does NOT read `rules/formats/*.md` for subtitles/overlays — it only has these two booleans + the storyboard.
 
 If a format has **no** front-matter with both keys — **STOP, ask me (the user) to update the format.**
-No silent default to bold. All 16 formats must have `subtitles` + `overlays`.
+No silent default to bold. All 17 formats must have `subtitles` + `overlays`.
 
 **Post-Editor layout check.** After the sub-agent returns, run `ls "$OUTPUT_DIR"` and verify only `final.mp4`, `storyboard.json`, `scenes/`, optional `recap/` / `_archive/` are at the root. Any other file (concat lists, intermediate renders, temp audio, ad-hoc scripts/logs) must live under `OUTPUT_DIR/build/`. If something leaked to root, move it into `build/` yourself before Phase 6 — do not re-invoke the sub-agent for this.
 
@@ -368,6 +368,7 @@ Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
 | "gameplay ai avatar", "ai avatar", "talking head", "offerwall", "offer", "оффер", "бонус" | Gameplay AI Avatar | `rules/formats/gameplay-ai-avatar.md` |
 | "reddit story", "storytime", "история игрока", "narrated gameplay" | Reddit Story | `rules/formats/reddit-story.md` |
 | "character story", "история персонажа", "лор", "lore", "backstory", "origin story", "предыстория" | Character Story | `rules/formats/character-story.md` |
+| "item story", "object story", "weapon story", "artifact story", "история предмета", "история вещи", "история оружия", "история артефакта" | Item Story | `rules/formats/item-story.md` |
 | "motion dance", "motion control", "моушн", "motion transfer", "танцует под видео" | Motion Dance | `rules/formats/motion-dance.md` |
 | "what if", "real life", "real world", "real-world", "что если", "в реальной жизни", "реальная жизнь", "fish out of water", "cameo", "mundane job", "ordinary life" | What If... Real Life | `rules/formats/what-if-real-life.md` |
 | "redcon", "what if lore", "alternate universe", "alternate history", "what if they", "divergence", "alternate fate", "elseworlds", "другая судьба", "альтернативная история" | Redcon | `rules/formats/redcon.md` |

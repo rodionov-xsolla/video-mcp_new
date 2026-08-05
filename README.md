@@ -43,6 +43,7 @@ Then open Claude Code in the `video-agent/` directory and describe the video you
 | `news` | News anchor + reporter, studio format |
 | `fun-news` | Satirical in-universe news with fictional stories |
 | `character-story` | Lore monologue — character narrates their own backstory |
+| `item-story` | Item-centered lore narration — an external narrator traces an in-game object's history |
 | `redcon` | Alternate-universe divergence — "what if" lore told by the alternate self |
 | `what-if-real-life` | Comedy — game character stuck in mundane real-world situations |
 | `dual-style` | Split cartoon vs. realistic visual style |
@@ -89,7 +90,7 @@ bash queue/youtube-upload.sh --channel starfleet --publish-at "2026-06-15T20:59:
 | serial-drama (5 Avatar clips) | ~$2.50–3.50 |
 | gameplay-ai-avatar | ~$1.50–2.50 |
 | reddit-story | ~$1.50–2.50 |
-| character-story / redcon | ~$3.20–3.55 |
+| character-story / item-story / redcon | ~$3.20–4.50 |
 | news / fun-news / streettalk | ~$2.00–3.00 |
 
 Hard stop: $10/video. Warn at $9.

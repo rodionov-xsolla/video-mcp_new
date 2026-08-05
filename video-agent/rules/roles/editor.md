@@ -642,7 +642,7 @@ is why `--offset/--atempo/--verify-audio` no longer exist.
 
 `build/voice-final.wav` = the `[aout]` audio branch of §0 **minus bg-music**, frozen to disk.
 
-**Single-voice** (character-story, reddit-story, redcon — one `tts-output.mp3` over the whole concat):
+**Single-voice** (character-story, item-story, reddit-story, redcon — one `tts-output.mp3` over the whole concat):
 ```bash
 # same atempo->adelay pair that §0 bakes into the video:
 $FFMPEG -y -i build/tts-output.mp3 \

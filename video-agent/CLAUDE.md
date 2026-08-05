@@ -63,7 +63,7 @@ rules/
 ├── formats/                   ← format playbooks (briefs per role)
 │   └── {serial-drama, gameplay-ai-avatar, news,
 │       reddit-story, dual-style,
-│       character-story, motion-dance, what-if-real-life,
+│       character-story, item-story, motion-dance, what-if-real-life,
 │       top-list, fun-news, streettalk, in-game-pov, redcon,
 │       wild-documentary, special-report, fake-ad}.md
 └── main/

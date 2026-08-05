@@ -122,6 +122,7 @@ video-agent/
 │       ├── dual-style.md        # Cartoon + realistic
 │       ├── gameplay-ai-avatar.md # Говорящая голова + геймплей
 │       ├── character-story.md   # Лор-монолог персонажа
+│       ├── item-story.md        # Лор-история внутриигрового предмета от внешнего рассказчика
 │       ├── motion-dance.md     # Motion transfer танец с реф-видео
 │       ├── what-if-real-life.md # «Что если бы персонаж попал в реальную жизнь» (Spock-бариста, Kratos-воспитатель, ...)
 │       ├── top-list.md          # TOP-5 countdown персонажей / локаций / предметов

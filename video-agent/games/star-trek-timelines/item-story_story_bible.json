@@ -1,0 +1,158 @@
+{
+  "series_id": "star-trek-item-story-en",
+  "game_tag": "star-trek-timelines",
+  "format": "item-story",
+  "language": "en",
+  "title": "Star Trek Timelines — Item Story",
+  "created_at": "2026-08-05",
+  "last_episode": 1,
+  "ready_to_post": true,
+  "style_tags": "realistic cinematic 3D CGI, physically based materials, photorealistic metal and fabric textures, dramatic high-contrast science-fiction lighting, deep blacks, restrained Klingon amber and volcanic red highlights, subtle atmospheric haze, premium television-quality frame, shallow depth of field, vertical 9:16 composition, no illustration, no cartoon, no game UI, no text overlay",
+  "format_overrides": {
+    "narrative_mode": "An external lore narrator tells the canonical item's history in third person. The item never speaks as I or me. Do not invent sentience or agency unless canon establishes it.",
+    "visual_priority": "The item is the largest and sharpest focal subject in every clip. Owners appear as hands, torso crops, silhouettes, or secondary figures unless identity is necessary to understand the event.",
+    "structure": "HOOK (the recovered sword corrupts Worf and Kor) → MYTHIC ORIGIN → LEGENDARY PURPOSE → HUR'Q THEFT / LOST MILLENNIUM → RECOVERY → CHOICE / FATE IN SPACE → CTA",
+    "era_prompt_rule": "Do not use TOS, TNG, DS9, or other era abbreviations in image/video prompts. Describe uniform cuts and colors explicitly.",
+    "state_continuity": "The Sword remains physically intact throughout this episode. Age is shown through surface patina and environment, not silhouette redesign. Its dense pale wavy etching and unique four-horn profile must remain unchanged in every post-forging scene."
+  },
+  "voice_policy": {
+    "engine": "minimax",
+    "identity_critical": false,
+    "intent": "low resonant masculine lore narrator, measured and grave, controlled Klingon ceremonial weight, never shouting, never a direct imitation of a canon actor",
+    "language_code": "en",
+    "note": "The narrator speaks about the sword in third person. The sword is not canonically sentient. Do not use a character voice clone."
+  },
+  "music_policy": {
+    "mood": "dark ceremonial Klingon myth, low war drums, deep brass, restrained male-choir texture, ominous rather than triumphant",
+    "volume": 0.15,
+    "engine": "minimax-music"
+  },
+  "cta": {
+    "text": "DOWNLOAD THE GAME · LINK IN BIO",
+    "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4"
+  },
+  "source_references": [
+    {
+      "kind": "official_episode_still",
+      "url": "https://images.prismic.io/star-trek-untold/Zr7dkkaF0TcGI--n_swordkahless_155.jpg?auto=format,compress&width=2240",
+      "page_url": "https://www.startrek.com/en-un/news/ultimate-dax-and-worf-watchlist",
+      "ownership": "StarTrek.com",
+      "use": "Primary canonical appearance source. Research input for generating a new item-story-owned neutral item reference; never use as the finished scene image."
+    },
+    {
+      "kind": "episode_screencap_set",
+      "url": "https://www.letswatchstartrek.com/2015/01/14/ds9-sword-kahless/",
+      "episode": "Star Trek: Deep Space Nine — The Sword of Kahless (Season 4, Episode 9)",
+      "use": "Secondary angle and scale verification only."
+    },
+    {
+      "kind": "official_story_summary",
+      "url": "https://www.startrek.com/en-un/news/ultimate-dax-and-worf-watchlist",
+      "use": "Confirms first bat'leth status, Gamma Quadrant recovery expedition, and corrupting conflict between Worf and Kor."
+    },
+    {
+      "kind": "episode_transcript",
+      "url": "https://www.chakoteya.net/DS9/481.htm",
+      "use": "Dialogue-level chronology verification only; do not quote the transcript verbatim in the narration."
+    }
+  ],
+  "items": [
+    {
+      "item_name": "The Sword of Kahless",
+      "item_slug": "sword-of-kahless",
+      "category": "the first Klingon bat'leth and sacred cultural artifact",
+      "canon_scope": "Prime-timeline television canon only. Do not import Star Trek Online, novels, comics, Memory Beta, or other licensed-game continuation events.",
+      "appearance_lock": {
+        "overall_shape": "Approximately 1.4 meters wide, horizontally symmetrical double-ended bat'leth with a shallow crescent body. Four unmistakable upward/outward horn points define the silhouette: two long spear-like outer tips and two tall inward-curving blade horns rising near the inner thirds. The lower edge forms a broad central downward crescent around the grip area, with three hand positions/openings integrated into the blade.",
+        "material": "Dark charcoal gunmetal steel with slightly brighter sharpened edges; dense pale silver-gray flowing wavy patterning covers almost the entire blade surface like layered Damascus steel. Ancient and subtly weathered but intact, never rusty, chipped, broken, glowing, or magical.",
+        "grips": "Three dark wrapped hand grips integrated along the lower central span; practical two-handed scale. No conventional sword hilt, crossguard, pommel, scabbard, chain, jewels, gold trim, or separate handle.",
+        "surface_details": "The pale pattern is irregular, fine, and organic across every blade section. Do not replace it with large readable Klingon letters, neon runes, engraved text, Celtic knots, flames, or generic fantasy filigree.",
+        "scale_lock": "When held horizontally, the weapon spans roughly from beyond one adult shoulder to beyond the other. Hands occupy the central grips; the blade remains too wide to be mistaken for a knife, sword, mek'leth, or standard smooth bat'leth.",
+        "negative_lock": "No generic smooth bat'leth, no single-edged saber, no katana, no medieval longsword, no axe, no double-headed axe, no fantasy glowing weapon, no gold ornament, no red blade, no blue energy, no readable lettering, no extra spikes, no missing inner horns, no asymmetry."
+      },
+      "item_states": [
+        {
+          "id": "mythic-forging",
+          "appearance": "The recognizable four-horn bat'leth silhouette has just formed from dark incandescent metal-like material; edges retain a restrained orange heat while the pale wavy surface pattern begins to emerge. This is a visualization of Klingon legend, not a scientific reconstruction.",
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/sword-of-kahless/variants/item-story-mythic-forging-20260805-131318.png"
+        },
+        {
+          "id": "canonical-ancient-intact",
+          "appearance": "The exact canonical DS9 artifact: dark charcoal gunmetal, pale dense wavy pattern over the whole blade, brighter edges, three dark grips, four-horn symmetrical silhouette, ancient patina but structurally intact.",
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/sword-of-kahless/variants/item-story-canonical-ancient-intact-20260805-131318.png"
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact": "Klingon tradition identifies it as the first bat'leth, forged by Kahless the Unforgettable.",
+          "status": "canonical belief / legend",
+          "source": "TNG: Rightful Heir; DS9: The Sword of Kahless"
+        },
+        {
+          "fact": "The origin story says Kahless placed a lock of his hair into lava from Kri'stak and cooled it in the Lake of Lusor before shaping the blade.",
+          "status": "Klingon mythology; narration must label it as legend",
+          "source": "TNG: Rightful Heir"
+        },
+        {
+          "fact": "The Hur'q stole the Sword during their invasion and plunder of Qo'noS; it remained missing for roughly a millennium.",
+          "status": "television canon",
+          "source": "DS9: The Sword of Kahless"
+        },
+        {
+          "fact": "Kor, Worf, and Jadzia Dax recovered it from a Hur'q site in the Gamma Quadrant in 2372.",
+          "status": "television canon",
+          "source": "DS9: The Sword of Kahless"
+        },
+        {
+          "fact": "Its symbolic power drove Worf and Kor into a violent struggle over who should wield it and lead the Klingon people.",
+          "status": "television canon; do not claim confirmed supernatural mind control",
+          "source": "DS9: The Sword of Kahless"
+        },
+        {
+          "fact": "They concluded the Sword would divide the Empire and transported it into interstellar space, where television canon leaves it drifting.",
+          "status": "television canon endpoint",
+          "source": "DS9: The Sword of Kahless"
+        }
+      ],
+      "forbidden_claims": [
+        "The Sword is literally sentient or speaks in canon.",
+        "The Sword has confirmed supernatural mind-control powers.",
+        "The Sword was recovered after Worf, Kor, and Dax left it in space in television canon.",
+        "Star Trek Online's later Hur'q, Martok, Kahless II, J'mpok, Aakar, or L'Rell events belong to television canon.",
+        "The blade is made from Hur'q carapace or germanium; that is licensed-game continuity, not the DS9 television story."
+      ]
+    }
+  ],
+  "supabase_assets": {
+    "item_refs": {
+      "sword-of-kahless": {
+        "mythic-forging": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/sword-of-kahless/variants/item-story-mythic-forging-20260805-131318.png",
+        "canonical-ancient-intact": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/sword-of-kahless/variants/item-story-canonical-ancient-intact-20260805-131318.png"
+      }
+    },
+    "character_refs": {},
+    "note": "Populate only with permanent assets tagged for star-trek-timelines + item-story + star-trek-item-story-en after runner-validated generation."
+  },
+  "anti_repetition": {
+    "recent_items": [
+      "The Sword of Kahless"
+    ],
+    "recent_hooks": [
+      "The first Klingon bat'leth turned Worf against Kor."
+    ],
+    "recent_fates": [
+      "Transported into interstellar space after Worf and Kor concluded it would divide the Empire."
+    ],
+    "cooldown_episodes": 20
+  },
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "item_name": "The Sword of Kahless",
+      "arc": "Mythic forging by Kahless, Hur'q theft, millennium-long disappearance, recovery by Worf, Kor, and Jadzia Dax, rivalry, and exile into space.",
+      "narrative_mode_used": "First-person pilot. Per user review, all future Item Story episodes use an external third-person lore narrator.",
+      "youtube_url": "https://www.youtube.com/watch?v=KUNPH4kK5n4",
+      "scheduled_for": "2026-08-10T20:17:00Z"
+    }
+  ]
+}
