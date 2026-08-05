@@ -19,7 +19,8 @@
   },
   "covered_creatures": [
     "Klingon Targ",
-    "Mugato"
+    "Mugato",
+    "Sehlat"
   ],
   "episodes": [
     {
@@ -40,6 +41,16 @@
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-16/wild-documentary/20260716-114432-63775/final.mp4",
       "yt_url": "https://www.youtube.com/watch?v=K3lRigRiuZI",
       "yt_publish_at": "2026-07-23T20:50:00Z",
+      "cta_sign": "Download the game / Link in bio"
+    },
+    {
+      "ep": 3,
+      "creature": "Sehlat",
+      "biome": "Rainforest pocket, Vulcan's southern hemisphere",
+      "date": "2026-08-05",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-05/wild-documentary/20260805-104404-85420/final.mp4",
+      "yt_url": "https://www.youtube.com/watch?v=8f_A9sEK-IY",
+      "yt_publish_at": "2026-08-09T20:15:00Z",
       "cta_sign": "Download the game / Link in bio"
     }
   ]

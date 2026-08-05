@@ -16,7 +16,7 @@ This file is the **playbook**: when to use, concept, budget, role briefs. Craft 
 
 Keywords: "documentary", "wildlife", "дикая природа", "документалка", "натуралист", "naturalist", "nature doc", "hidden camera", "скрытая камера", "wild creatures", "wild pokémon", "wild pokemon", "дикие покемоны", "как выглядели бы в природе", "creatures in the wild".
 
-Best fit for games with iconic, visually-recognizable creatures (Pokémon Go, Genshin monsters, WoW beasts, FF summons). Each video = 3–5 different creatures, each shown doing one characteristic behavior. A resolved format-local story bible is mandatory even though episodes are self-contained. If it is missing, ask the user whether to create it and stop until they confirm. Update its state only after the user explicitly approves the presented final video.
+Best fit for games with iconic, visually-recognizable creatures (Pokémon Go, Genshin monsters, WoW beasts, FF summons). **Each video features exactly ONE creature per episode**, shown across 4–5 clips capturing different characteristic behaviors, camera angles, and moments in its habitat — not a roster of different species. A resolved format-local story bible is mandatory even though episodes are self-contained; its `covered_creatures` list is also the source of truth for which species is not yet used, so a new episode always picks an unused creature. If it is missing, ask the user whether to create it and stop until they confirm. Update its state only after the user explicitly approves the presented final video.
 
 ---
 
@@ -55,9 +55,9 @@ Every clip: Kling generates the visual + ambient sound. MiniMax TTS generates th
 
 ### Variable per video
 
-- Which creatures (3–5), their characteristic behavior, their real-world biome analogue
+- Which single creature (an unused entry not yet in the exact story bible's `covered_creatures`), its real-world biome analogue, and 4–5 distinct characteristic behaviors/camera treatments to film across clips
 - CTA sign text and standard CTA asset: mandatory values from the exact story bible's top-level `cta` object; no global, game-config, special-file, or cross-game fallback
-- Narration lines per creature (12–20 words each, 5s window)
+- Narration lines per clip/behavior (12–20 words each, 5s window)
 
 ---
 
@@ -65,11 +65,11 @@ Every clip: Kling generates the visual + ambient sound. MiniMax TTS generates th
 
 | Component | Per unit | Typical count | Subtotal |
 |---|---|---|---|
-| NB2 creature ref | $0.08 | 1 per creature | $0.32–$0.40 |
+| NB2 creature ref | $0.08 | 1 per episode (one creature, reused across all clips) | $0.08 |
 | NB2 scene image | $0.08 | 1 per clip | $0.32–$0.40 |
 | Kling v3 Standard I2V 5s (with audio) | $0.63 | 4–5 | $2.52–$3.15 |
 | MiniMax TTS narration (~15 words/clip) | ~$0.01 | 4–5 | $0.04–$0.06 |
-| **Typical total** | | | **$3.20–$4.01** |
+| **Typical total** | | | **$2.96–$3.69** |
 
 Max with 1 technical retry per failed request: **$5.00**. Retry once with the same provider/settings; a second failure stops the video with an error. No provider/model/local fallback. Stop at **$4.50**.
 
@@ -79,16 +79,16 @@ Max with 1 technical retry per failed request: **$5.00**. Retry once with the sa
 
 | Slot | Mandatory? | Dur. | Goal |
 |---|---|---|---|
-| Creature clip 1 | yes | 5s | First creature, signature behavior, biome establishing |
-| Creature clip 2 | yes | 5s | Second creature, different biome |
-| Creature clip 3 | yes | 5s | Third creature |
-| Creature clip 4 | optional | 5s | Fourth creature |
-| CTA-in-scene clip | yes | 5s | Last creature approaches with a white handwritten sign; narrator reacts |
+| Creature clip 1 | yes | 5s | Establishing shot — signature behavior, biome establishing |
+| Creature clip 2 | yes | 5s | Different behavior/camera angle, same creature, same biome |
+| Creature clip 3 | yes | 5s | Different behavior/camera angle |
+| Creature clip 4 | optional | 5s | Different behavior/camera angle |
+| CTA-in-scene clip | yes | 5s | Same creature approaches with a white handwritten sign; narrator reacts |
 | Standard CTA | yes | ~5s | Channel CTA from Supabase, appended as-is |
 
 Total pre-speed: 20–30s. No speedup applied. Hard cap 35s.
 
-**Anti-repetition:** no two consecutive clips in the same biome (alternate between jungle, savanna, desert, forest, underwater, tundra, etc.).
+**Anti-repetition (within episode):** the creature and biome stay the same across all clips — vary behavior, camera distance/angle, and lighting instead (see Storyboarder "Scene visual contrast rule"); no two adjacent clips may share the same shot type (camera distance + creature pose). **Anti-repetition (across episodes):** the exact story bible's `covered_creatures` list is mandatory — never re-pick a creature or its exact biome that's already logged there.
 
 ---
 
@@ -150,7 +150,7 @@ Example error (EP1 tribbles): manager described "no visible eyes" from memory �
 ## Role briefs
 
 ### Scenarist
-- Choose 3–5 creatures. Each creature gets: biome analogue, ONE characteristic behavior to film, 1–2 naturalist sentences.
+- Choose ONE creature for the whole episode — a species not yet listed in the exact story bible's `covered_creatures`. Establish its biome analogue once; give it 4–5 distinct characteristic behaviors/camera treatments across clips, each with 1–2 naturalist sentences.
 - All narration is first-person plural ("we observe…", "notice how…") or impersonal ("the creature…"). Never second-person.
 - Last generated creature clip: `cta_in_scene: true`, with `sign_text` copied verbatim from the exact story bible's `cta.sign_text`. Missing value is a blocking configuration error.
 - `clip_type: "action"` for all clips — no dialogue, no Avatar.
@@ -188,8 +188,8 @@ Example error (EP1 tribbles): manager described "no visible eyes" from memory �
     },
     {
       "index": 4,
-      "creature_name": "Pikachu",
-      "biome": "Japanese mountain forest",
+      "creature_name": "Venusaur",
+      "biome": "Amazon rainforest",
       "behavior": "approaching camera, holding sign",
       "clip_type": "action",
       "character_speech": null,
@@ -248,7 +248,7 @@ RAW wildlife photography, Canon 5D Mark IV, [focal length], ISO 3200, heavy film
   - Micro-environment (riverbank vs dense ferns vs rocky clearing vs trail camera position)
   - Creature action type (static rest / moving / dramatic behavior / CTA)
 
-Recommended rhythm for single-creature videos: **wide establishing → extreme close-up detail → dramatic behavior → CTA approach**. Never two consecutive wide shots or two consecutive medium shots. No two scenes with identical shot type in the entire video.
+Recommended rhythm: **wide establishing → extreme close-up detail → dramatic behavior → CTA approach**. Never two consecutive wide shots or two consecutive medium shots. No two scenes with identical shot type in the entire video.
 
 - **Camera style variety:** alternate between handheld telephoto, fixed trail camera, ground-level concealed, elevated wide. Set `camera_style` in each clip.
 - **CTA-in-scene clip:** first verify that storyboard `sign_text` exactly equals `STORY_BIBLE_PATH -> cta.sign_text`. Its `image_prompt` MUST include that exact text, phrased as `"a small white rectangular card with handwritten black marker text reading '{sign_text}'"`. Put the text phrase near the start of the prompt and require the card to face the lens cleanly. NB2 owns readable sign text. If debug review finds the result illegible or misspelled, stop and follow the Storyboarder runner's claimed-output regeneration policy; never resubmit the same job or delete its state/claim. Do not ask Kling to regenerate lettering and do not burn replacement text in Editor.
@@ -368,8 +368,7 @@ ${OUTPUT_DIR}/
 ├── tts_segments.json             # per-clip word counts + estimated timestamps
 ├── scenes/
 │   ├── refs/
-│   │   ├── {creature1}-ref.png
-│   │   └── {creatureN}-ref.png
+│   │   └── {creature}-ref.png    # one creature ref, reused across all clips
 │   ├── scene-1/
 │   │   ├── scene-1.png           # start frame only
 │   │   ├── scene-1.mp4           # Kling output (audio embedded)
@@ -387,6 +386,7 @@ ${OUTPUT_DIR}/
 ## Validation before publishing
 
 - [ ] `format: "wild-documentary"` in storyboard.json
+- [ ] Exactly ONE `creature_name` across all clips (episode is single-species); it is not already in the story bible's `covered_creatures`
 - [ ] Creature anatomy comes from authoritative research; source-image inspection occurred only if genuinely necessary
 - [ ] All scene image_prompts include explicit creature feature description (horns, armor, fur, color)
 - [ ] All scene generations use the same format-bound creature ref; no cross-format image is used
@@ -413,6 +413,7 @@ ${OUTPUT_DIR}/
 
 ## Anti-patterns
 
+- ❌ Multiple different creatures/species in one episode — this format is ONE creature per video across 4–5 clips of different behaviors; do not mix in extra species to "fill" clip slots. Burned 2026-08-04: manager asked Scenarist for 3 different creatures (Horta, Denevan parasite, Sehlat) in a single episode when the story bible's own precedent (EP1 Targ, EP2 Mugato) and this file's structure are single-creature-per-episode.
 - ❌ Game-art style NB2 images (cartoon proportions, smooth skin, bright colors) — requires photorealism
 - ❌ Creature looks like a cartoon/game asset pasted into a background — use film grain (ISO 3200), describe glow casting light on surroundings, "no cartoon shading, no cel shading, no flat colors" in negative prompt; lead prompt with RAW/Canon/ISO specs. A smooth glowing orb or spirit is fine — it just must interact with the environment realistically (cast light, catch in haze, be partially occluded by foreground)
 - ❌ Perfect studio lighting — always "natural ambient light only, no studio lighting, uneven exposure"
