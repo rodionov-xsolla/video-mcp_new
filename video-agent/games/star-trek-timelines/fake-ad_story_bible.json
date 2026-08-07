@@ -3,44 +3,67 @@
   "game_tag": "star-trek-timelines",
   "title": "Star Trek Timelines Fake Ad",
   "created_at": "2026-06-18",
-  "last_episode": 2,
+  "last_episode": 3,
+  "style_tags": "cinematic 3D science-fiction realism with earnest retro-futurist television-commercial art direction, practical starship and alien-world surfaces, clean hero-product photography, subtle film grain, saturated Starfleet red and Federation blue against deep-space black, crisp commercial lighting, no cartoon styling",
+  "characters": {
+    "Redshirt Ensign": "young adult human male Starfleet ensign with a lean average build, warm beige skin, a clean-shaven oval face, short dark-brown side-parted hair, hazel eyes, a red long-sleeved away-team uniform tunic with a black ribbed collar, a small silver delta-shaped insignia on the left chest, black fitted trousers, black ankle boots, a black utility belt, and an alert but slightly anxious posture"
+  },
+  "voices": {
+    "announcer": {
+      "provider": "fal-ai/minimax/speech-2.8-hd",
+      "voice_id": "Deep_Voice_Man",
+      "stability": 0.35,
+      "style": "energetic earnest deadpan retro commercial announcer"
+    }
+  },
   "advertised_products": [
     "Vulcan Brow Design Salon",
-    "Klingon Honor Baldric"
+    "Klingon Honor Baldric",
+    "Away-Team Insurance"
   ],
   "anti_repetition": {
     "recent_lines": [
       "Klingon Honor Baldric. Get your honorous respect.",
-      "And then... the ready-room threshold."
+      "And then... the ready-room threshold.",
+      "Boss fights are excluded.",
+      "Away-Team Insurance. Covers everything except the mission."
     ],
     "recent_themes": [
       "honor-accessory",
-      "eyebrow styling"
+      "eyebrow styling",
+      "away-team-risk-insurance"
     ],
     "recent_tones": [
-      "earnest-swagger"
+      "earnest-swagger",
+      "energetic-deadpan-underwriting"
     ],
     "recent_hooks": [
       "unnamed officer overlooked in corridor, dons chainmail honor baldric, crew parts in awe, chain snags ready-room threshold in front of a superior, packshot slogan confirms the snag",
-      "extreme close-up eyebrow reveal"
+      "extreme close-up eyebrow reveal",
+      "an anxious red-uniform ensign faces a hostile alien survey zone, activates wearable away-team insurance, survives routine hazards, then receives a BOSS FIGHTS EXCLUDED rejection at the final threat"
     ],
     "recent_twist_types": [
       "ceremonial-prop-snags-at-decisive-moment",
-      "product works but misread as emotional response"
+      "product works but misread as emotional response",
+      "policy-exclusion-at-final-boss"
     ],
     "recent_problem_types": [
-      "overlooked-officer"
+      "overlooked-officer",
+      "alien-planet-hazard-exposure"
     ],
     "recent_characters": [
       "generic-officer (unnamed)",
-      "Spock"
+      "Spock",
+      "Redshirt Ensign"
     ],
     "recent_environments": [
       "Starfleet ship corridor junction",
       "ready-room threshold",
       "Vulcan Logic Council",
       "Enterprise corridor",
-      "Vulcan salon"
+      "Vulcan salon",
+      "fractured alien basalt survey plateau",
+      "clean deep-space product studio"
     ],
     "banned_combos": []
   },
@@ -65,6 +88,21 @@
       "youtube_url": "https://www.youtube.com/watch?v=UmqlkN1WrDc",
       "scheduled_for": "2026-07-12T20:59:00Z",
       "date": "2026-07-08"
+    },
+    {
+      "episode": 3,
+      "product": "Away-Team Insurance",
+      "character": "Redshirt Ensign",
+      "theme": "away-team-risk-insurance",
+      "twist": "the wearable shield covers every routine alien-world hazard, then rejects the claim at the final threat because boss fights are excluded",
+      "slogan": "AWAY-TEAM INSURANCE. COVERS EVERYTHING EXCEPT THE MISSION.",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-07/fake-ad/20260807-160400-76537/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=QLzBuQ6WNKg",
+      "scheduled_for": "2026-08-12T19:34:00Z",
+      "duration_sec": 25.208,
+      "cost_usd": 2.7194,
+      "date": "2026-08-07",
+      "notes": "Vertical 9:16 commercial. Packshot subtitles were intentionally omitted because the voiceover duplicates the rendered slogan; the product name, tagline, and disclaimer remain inside the vertical safe area."
     }
   ],
   "cta_url": ""
