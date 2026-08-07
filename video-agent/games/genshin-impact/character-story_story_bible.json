@@ -5,7 +5,7 @@
   "title": "Genshin Impact — Character Story",
   "format": "character-story",
   "created_at": "2026-06-29",
-  "last_episode": 13,
+  "last_episode": 18,
   "tts_engine": "chatterbox",
   "tts_note": "Genshin ALWAYS uses Chatterbox via fal-ai/chatterbox/text-to-speech. Voice refs at assets/genshin-impact/characters/{slug}/voice-1.mp3. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "voice_ref_base": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/{slug}/voice-1.mp3",
@@ -41,13 +41,18 @@
       "Navia",
       "Hu Tao",
       "Raiden Shogun",
-      "Furina"
+      "Furina",
+      "Arlecchino",
+      "Nahida"
     ],
     "done_male": [
       "Xiao",
       "Zhongli",
       "wanderer",
-      "Tartaglia"
+      "Tartaglia",
+      "Diluc",
+      "Kaeya",
+      "Venti"
     ],
     "all_done": [
       "Amber",
@@ -62,7 +67,12 @@
       "Wanderer",
       "Raiden Shogun",
       "Tartaglia",
-      "Furina"
+      "Furina",
+      "Diluc",
+      "Arlecchino",
+      "Kaeya",
+      "Nahida",
+      "Venti"
     ],
     "cooldown_episodes": 20,
     "selection_note": "Pick characters with strong lore arcs and tragic backstories. Prioritize 5-star characters with high popularity. Alternate male/female for variety. Avoid repeating characters used in dual-style within 4 episodes."
@@ -269,6 +279,86 @@
       "yt_publish_at": "2026-07-28T20:59:00Z",
       "tts_engine": "chatterbox",
       "notes": "2 age variants (young_masquerade_start clips 3-4 / present clips 1,2,5-7); new reusable ref furina/variants/young-masquerade-2026-07-21.png. Hook = Focalors execution (Oratrice verdict); promo clip 2 with USER-OVERRIDDEN wording: \"Get free Primogems — link in bio. And now... my story.\" (replaces bible tts_template_en for this ep). Monologue trimmed 99→77 words across 2 scenarist passes: Chatterbox delivery ran +47% vs 35s timeline; final per-clip atempo 1.18-1.30 (cap 1.4). Lesson: draft segments <=12 spoken words for Chatterbox 0.46-0.56 s/word."
+    },
+    {
+      "episode": 14,
+      "date": "2026-08-06",
+      "character": "Diluc",
+      "character_slug": "diluc",
+      "gender": "male",
+      "idea": "Diluc — The Vigilante Who Doesn't Trust the Knights | Character Story EP14 | Genshin Impact",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/diluc/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-06/character-story/20260806-161430-18151-1/final.mp4",
+      "final_sha256": "4e91561a3df3e760294939724610635e6e0c65a6cf5918f79b2b8c576a5fcc68",
+      "duration_sec": 40.33,
+      "youtube_url": "https://www.youtube.com/watch?v=SvXL-itOb3w",
+      "yt_publish_at": "2026-08-07T20:06:00Z",
+      "tts_engine": "chatterbox",
+      "notes": "3 age variants (child ~9-10, young adult ~17, adult present). Ran as part of a 5-video parallel batch (Diluc/Arlecchino/Kaeya/Nahida/Venti) alongside sibling episodes 15-18. New character ref assets/genshin-impact/characters/diluc/variants/character-story.png. A Supabase Storage path collision with the parallel Kaeya (EP16) run overwrote this episode's scene images mid-batch; caught by hash validation before Animator, fixed by re-uploading to a diluc-scoped path, re-verified by hash — no cost incurred, no bad frames reached video."
+    },
+    {
+      "episode": 15,
+      "date": "2026-08-06",
+      "character": "Arlecchino",
+      "character_slug": "arlecchino",
+      "gender": "female",
+      "idea": "Arlecchino — The Knave Who Raised an Orphanage of Killers | Character Story EP15 | Genshin Impact",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/arlecchino/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-06/character-story/20260806-161430-18151-2/final.mp4",
+      "final_sha256": "75ba687984d2c5fc84c8143da74193ebd7f4b8422ab62d9b4904a41079649a61",
+      "duration_sec": 40.33,
+      "youtube_url": "https://www.youtube.com/watch?v=7Cy3fD4dbbk",
+      "yt_publish_at": "2026-08-10T20:19:00Z",
+      "tts_engine": "chatterbox",
+      "notes": "3 age variants (child ~9, adolescent ~15, adult Knave). New character ref assets/genshin-impact/characters/arlecchino/variants/{child,adolescent,adult}.png. Part of the same 5-video parallel batch as EP14/16/17/18."
+    },
+    {
+      "episode": 16,
+      "date": "2026-08-06",
+      "character": "Kaeya Alberich",
+      "character_slug": "kaeya",
+      "gender": "male",
+      "idea": "Kaeya — The Brother Who Hid Khaenri'ah's Secret | Character Story EP16 | Genshin Impact",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/kaeya/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-06/character-story/20260806-161430-18151-3/final.mp4",
+      "final_sha256": "ede48c5b3008ad0dca9638c886f5b872d9db497d48a6f8cc3b5ced1064a6192c",
+      "duration_sec": 40.33,
+      "youtube_url": "https://www.youtube.com/watch?v=mFV4aF1g3SI",
+      "yt_publish_at": "2026-08-13T20:36:00Z",
+      "tts_engine": "chatterbox",
+      "notes": "3 age variants (child_khaenriah ~7, young_kaeya ~16-17, adult_captain present). New character refs assets/genshin-impact/characters/kaeya/variants/{child-khaenriah,young-kaeya,adult-captain}.png plus secondary character refs crepus-ragnvindr/sheet.png and young-diluc/sheet.png (see characters.crepus-ragnvindr / characters.young-diluc). Part of the same 5-video parallel batch as EP14/15/17/18."
+    },
+    {
+      "episode": 17,
+      "date": "2026-08-06",
+      "character": "Nahida",
+      "character_slug": "nahida",
+      "gender": "female",
+      "idea": "Nahida — The God Who Was Locked in Her Own Dream | Character Story EP17 | Genshin Impact",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/nahida/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-06/character-story/20260806-161430-18151-4/final.mp4",
+      "final_sha256": "5e23c398beddef98834f6919b23fade984ba534f6aa984f136f3777527cfb2b2",
+      "duration_sec": 40.27,
+      "youtube_url": "https://www.youtube.com/watch?v=RPi_lh00Yv4",
+      "yt_publish_at": "2026-08-16T19:45:00Z",
+      "tts_engine": "chatterbox",
+      "notes": "Single age variant (no distinct canonical child/adult designs). New character ref assets/genshin-impact/characters/nahida/variants/canonical-2026-08-06.png. Editor's first mix pass raised bg-music volume from the declared 0.15 to 0.45 (out of the format's 0.10-0.20 range) to fix inaudibility; caught in review, redone at the declared 0.15 with a 2-pass loudnorm on the overall mix instead (-14 LUFS), matching how the sibling episodes handled the same issue. Prior 0.45 mix archived at _archive/final-v1-vol045.mp4, not deleted. Part of the same 5-video parallel batch as EP14/15/16/18."
+    },
+    {
+      "episode": 18,
+      "date": "2026-08-06",
+      "character": "Venti",
+      "character_slug": "venti",
+      "gender": "male",
+      "idea": "Venti — The Bard Who Outlived Every Friend He Had | Character Story EP18 | Genshin Impact",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/venti/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-06/character-story/20260806-161430-18151-5/final.mp4",
+      "final_sha256": "7cf7513ea3610a448debd53fa2dd4ecfe141f398a57c6f784b3a5383f4f889a2",
+      "duration_sec": 40.33,
+      "youtube_url": "https://www.youtube.com/watch?v=mFH5-p1sGIE",
+      "yt_publish_at": "2026-08-19T19:26:00Z",
+      "tts_engine": "chatterbox",
+      "notes": "Two visual forms (present-day bard disguise, young Barbatos/wind-spirit Archon War era) plus secondary human character 'the Fifth'. New character refs assets/genshin-impact/characters/venti/variants/{bard-current,young-barbatos-wind-spirit}-2026-08-06.png and characters/the-fifth/variants/rebel-bard-2026-08-06.png (see characters.venti.age_variants / characters.the-fifth). Part of the same 5-video parallel batch as EP14/15/16/17."
     }
   ],
   "next_planned": null,
@@ -315,7 +405,12 @@
     },
     "kaeya": {
       "name": "Kaeya",
-      "character_description": "male cavalry captain Kaeya, dark blue and black military coat with fur collar and eyepatch, dark blue hair slicked back, charming cunning smile, one-handed sword, tall confident build"
+      "character_description": "male cavalry captain Kaeya, dark blue and black military coat with fur collar and eyepatch, dark blue hair slicked back, charming cunning smile, one-handed sword, tall confident build",
+      "age_variants": {
+        "child_khaenriah": "~7 years old, ragged dark travel clothes, both eyes uncovered (no eyepatch), thin frame, wary hunched posture, dark blue hair unkempt and overgrown",
+        "young_kaeya": "~16-17 years old, plain undyed Knights-of-Favonius cadet trainee tunic, no eyepatch, both eyes visible, dark blue hair loosely combed back, leaner build than the adult variant",
+        "adult_captain": "present day Cavalry Captain look: dark navy-and-black military coat with fur-trimmed high collar and gold Knights of Favonius insignia, black eyepatch over one eye, one-handed sword"
+      }
     },
     "kazuha": {
       "name": "Kazuha (Kaedehara Kazuha)",
@@ -375,7 +470,11 @@
     },
     "venti": {
       "name": "Venti",
-      "character_description": "male Anemo Archon Venti, blue and teal bard outfit with wind motifs and laurel crown, short teal hair with braids, playful carefree expression, bow, slender androgynous build"
+      "character_description": "male Anemo Archon Venti, blue and teal bard outfit with wind motifs and laurel crown, short teal hair with braids, playful carefree expression, bow, slender androgynous build",
+      "age_variants": {
+        "young_barbatos_wind_spirit": "Archon War-era pre-ascension form: slender androgynous build, translucent teal-tinted skin with faint glowing wind-currents along arms/throat/collarbone, short tousled wind-blown teal hair (no braids), glowing pale-green eyes, simple frayed grey-brown traveler tunic, no crown/cape/gloves",
+        "bard_current": "present-day disguise: blue and dark-teal bard tunic embroidered with wind-swirl motifs, ivory undershirt, worn brown leather half-cape, thin golden laurel wreath, fingerless brown gloves, recurve bow, small worn wooden flute"
+      }
     },
     "wanderer": {
       "name": "Wanderer (Scaramouche)",
@@ -411,7 +510,12 @@
     },
     "arlecchino": {
       "name": "Arlecchino",
-      "character_description": "female Fatui Harbinger Arlecchino, black and white asymmetric outfit with red-cross markings, pale hair with dark streaks, cold calculating expression, pyro polearm, tall imposing build"
+      "character_description": "female Fatui Harbinger Arlecchino, black and white asymmetric outfit with red-cross markings, pale hair with dark streaks, cold calculating expression, pyro polearm, tall imposing build",
+      "age_variants": {
+        "child": "young orphan girl at about nine years old, plain worn grey tunic, bare feet, short pale hair without a dark streak yet, wide wary eyes, thin malnourished frame",
+        "adolescent": "adolescent at about fifteen years old, simple dark house-servant dress with a plain apron, pale hair just beginning to show one dark streak, guarded weary expression",
+        "adult": "adult Fatui Harbinger Arlecchino, the Knave, black and white asymmetric outfit with red-cross markings, pale hair with a dark streak, sharp red eyes, cold calculating expression"
+      }
     },
     "navia": {
       "name": "Navia",
@@ -424,6 +528,21 @@
     "mavuika": {
       "name": "Mavuika",
       "character_description": "female Pyro Archon Mavuika, red and black Natlan warrior outfit with fire motifs, dark hair with flame ornaments, intense fierce expression, pyro claymore, athletic powerful build"
+    },
+    "crepus-ragnvindr": {
+      "name": "Crepus Ragnvindr",
+      "character_description": "middle-aged male, kind weathered face, warm brown eyes, greying dark red hair, noble but understated Mondstadt attire, gentle fatherly bearing",
+      "secondary_character_note": "Diluc's father; recurs only in Diluc/Kaeya-adjacent episodes covering the tragedy that shaped both brothers. Introduced in character-story EP16 (Kaeya)."
+    },
+    "young-diluc": {
+      "name": "Young Diluc",
+      "character_description": "boy about 9-10 years old, long dark crimson-red hair, red eyes, plain noble-house tunic, grief-stricken guarded expression",
+      "secondary_character_note": "Diluc as a child, distinct from the adult Diluc ref used in his own EP14. Introduced in character-story EP16 (Kaeya) as a secondary character."
+    },
+    "the-fifth": {
+      "name": "the Fifth",
+      "character_description": "human male rebel bard, weathered unshaven face, shoulder-length ash-brown hair tied back loosely, warm tired eyes with deep laugh-lines, patched grey-and-brown traveler's coat frayed at cuffs with a faded rebel-resistance armband, carries a simple carved wooden flute",
+      "secondary_character_note": "Human rebel bard ally from the Archon War era who taught Venti/Barbatos the flute; recurring reference only if future Venti-adjacent episodes revisit the Archon War. Introduced in character-story EP18 (Venti)."
     }
   }
 }
