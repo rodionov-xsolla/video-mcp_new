@@ -5,7 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 14,
+  "last_episode": 15,
   "planned_arc": {
     "note": "Season 1 arc EP9–EP16. Core emotional engine: Kirk saves the monster that tried to kill Chekov — and every time he does 'the right thing', his crew gets more afraid. Mirror Kirk envies Kirk's loyal crew. Admiral pressures Kirk to eject the double or face Enterprise quarantine. Scenarist follows the beats and key_lines below as RAILS: keep cliffhanger spoken lines verbatim, adapt each episode into 3–5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion, protagonist always faces camera, cliffhanger line = Kling native dialogue). Fold an approved episode into characters[], active_loops, episode_summaries only after explicit final user approval. Do NOT invent complex conspiracies or test protocols — the drama is simple: Kirk's mercy costs him his crew's trust.",
     "new_characters": [
@@ -391,7 +391,7 @@
       {
         "episode": 15,
         "title": "The Same Door",
-        "status": "unshipped",
+        "status": "shipped",
         "link": "Chekov is behind the emergency airlock glass, air venting.",
         "emotion": "Chekov's terror + Mirror Kirk's first shame",
         "beats": [
@@ -429,7 +429,10 @@
           "Mirror Kirk trapped in the airlock",
           "Kirk forced to save his own would-be killer",
           "Mirror Kirk broke his cruelty for the first time"
-        ]
+        ],
+        "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-07/serial-drama/20260807-124033-15333/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=ZeNwZNxAM4k",
+        "yt_publish_at": "2026-08-11T20:34:00Z"
       },
       {
         "episode": 16,
@@ -482,15 +485,15 @@
       "role": "protagonist",
       "character_description": "Male Starfleet captain, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
       "voice_route": "kling-native-preset-name-confirmed-working",
-      "status": "EP13: Burst onto the bridge just as Mirror Kirk (disguised in a stolen command jacket) had his hand over the fire button. Confrontation not yet resolved.",
-      "aura_points": 1100,
+      "status": "EP15: Reached the damaged airlock but could not force the jammed inner door. He recognized Mirror Kirk's manual code and watched the double enter the ejection zone in his place. Kirk is now outside the sealed glass and must save the man who once tried to kill Chekov.",
+      "aura_points": 1120,
       "relationships": {
         "Worf": "uneasy alliance — Worf told the truth at great personal cost",
-        "Chekov": "Chekov's trust is badly damaged — Kirk kept the man who tried to kill him alive",
+        "Chekov": "still protecting Chekov despite fractured trust; witnessed Chekov refuse to be used as anyone's price",
         "Scotty": "loyalty confirmed EP6, role in conspiracy unresolved",
         "Fleet Admiral": "confirmed enemy — direct confrontation; now threatening quarantine",
-        "Mirror Kirk": "Kirk refuses to kill him while he is down, which makes Mirror Kirk envy his command",
-        "Mirror_Kirk": "Direct bridge confrontation now underway; Mirror Kirk has proven the disguise can fool the crew, at least briefly."
+        "Mirror Kirk": "forced to save the double who has just chosen Chekov's life over his own",
+        "Mirror_Kirk": "watched his double make the merciful choice first and seal himself inside the damaged airlock"
       },
       "voice_id_kling": "Daniel",
       "voice_stability": 0.6,
@@ -501,7 +504,7 @@
       "role": "ally",
       "character_description": "Klingon-Human Starfleet commander, imposing build, prominent forehead ridges, dark skin, fierce disciplined expression, TNG Starfleet command red uniform with lieutenant commander pips, broad shoulders, intense dark eyes",
       "voice_route": "kling-native-preset-name-confirmed-working",
-      "status": "EP13: Briefly deceived by Mirror Kirk's stolen-jacket disguise on the bridge before catching on. Hand went to his phaser, uncertain.",
+      "status": "EP14: Tackled Mirror Kirk away from the firing control and stopped the immediate shot, but the struggle contributed to the tactical-panel discharge that damaged the airlock sector.",
       "aura_points": 600,
       "relationships": {
         "Kirk": "follows Kirk as captain, not merely the face — loyalty publicly reaffirmed in front of Mirror Kirk"
@@ -514,10 +517,11 @@
       "role": "victim",
       "character_description": "Young male Starfleet ensign, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
       "voice_route": "kling-native-preset-name-confirmed-working",
-      "status": "EP12: Saw Mirror Kirk restrained in sickbay and demanded to know why he was still alive. Chekov's fear has hardened into hatred.",
-      "aura_points": 200,
+      "status": "EP15: Trapped behind the damaged airlock glass as pressure fell. Refused to become the price of either Kirk's mercy or Mirror Kirk's guilt. Mirror Kirk entered the ejection zone beside him and sealed the real Kirk outside.",
+      "aura_points": 230,
       "relationships": {
-        "Kirk": "trust is fractured — Kirk's mercy toward Mirror Kirk feels like betrayal"
+        "Kirk": "trust remains fractured, but Kirk is still fighting to reach him through the jammed door",
+        "Mirror_Kirk": "still fears and hates him, but has now witnessed the double choose to save him and take his place in the ejection zone"
       },
       "voice_id_kling": "Charlie",
       "voice_note": "Confirmed working across EP9-EP14 (14 shipped episodes) as a bare Kling voice_ids preset name — not a Supabase-hosted voice-reference URL. See rules/formats/serial-drama.md nb2.edit/voice-route notes for context on why this differs from the URL-based convention other series (e.g. Genshin) use."
@@ -539,7 +543,7 @@
       "role": "crew",
       "character_description": "Male Starfleet chief engineer, stocky build, round friendly face now tense and alarmed, swept-back dark hair with grey temples and short sideburns, wide desperate eyes, TOS red engineering tunic with black collar and Starfleet delta badge, hands raised in protest",
       "voice_route": "kling-native-preset-name-confirmed-working",
-      "status": "EP13: Passed Mirror Kirk in a corridor without recognizing him (gave him an uneasy nod), then was on the bridge when Mirror Kirk ordered weapons fired.",
+      "status": "EP14: Destroyed the tactical override to abort Mirror Kirk's shot; the panel rupture redirected the discharge into the airlock sector and left no easy control-panel override.",
       "aura_points": 450,
       "relationships": {
         "Kirk": "loyal engineer — will execute Kirk's orders even the ones that scare him"
@@ -553,11 +557,11 @@
       "character_description": "Mirror-universe double of the male Starfleet captain, identical face structure but harder and predatory, cold confident smirk showing teeth with no warmth, thin diagonal scar across left cheek, slicked darker hair pressed flat, dead-calm glacier eyes, black-and-silver Section 31 mirror universe uniform with sharp angular trim and no Starfleet delta, lean forward predatory posture",
       "voice_route": "kling-native-preset-name-confirmed-working",
       "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery. Confirmed working across EP9-EP14 (14 shipped episodes) as a bare Kling voice_ids preset name — not a Supabase-hosted voice-reference URL. See rules/formats/serial-drama.md nb2.edit/voice-route notes for context on why this differs from the URL-based convention other series (e.g. Genshin) use. same voice as Kirk by design, colder/flatter delivery",
-      "status": "EP13: Escaped the depowered brig, stole a command jacket to disguise himself as Kirk, fooled Scotty in a corridor and Worf/Scotty on the bridge for a few seconds, then ordered weapons trained on the Admiral's ship. Real Kirk arrived before the shot fired.",
-      "aura_points": 0,
+      "status": "EP15: Used the manual override code he knew from killing Chekov in his own universe, then made the opposite choice. Entered the damaged airlock beside Chekov, sealed the real Kirk outside, and is now trapped in the ejection zone.",
+      "aura_points": 180,
       "relationships": {
-        "Kirk": "Now in direct bridge confrontation after impersonating him; proved the disguise works, at least briefly, on Kirk's own crew.",
-        "Chekov": "designated target — Chekov fears and hates him"
+        "Kirk": "his rival's mercy has become contagious; he has forced Kirk to attempt saving the double who once chose murder",
+        "Chekov": "broke his original cruelty for the first time and entered the ejection zone to save the person he once chose to kill"
       },
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/mirror-kirk/sheet.png",
       "voice_id_kling": "Daniel",
@@ -577,12 +581,12 @@
     }
   ],
   "active_loops": [
-    "major: Chekov trapped in the airlock sector again, air venting",
-    "major: Tactical panel destroyed — no easy override left for the airlock",
-    "major: Mirror Kirk loose on the ship (shot was stopped, but he was not recaptured)",
-    "major: Chekov's hatred of Mirror Kirk now clashes directly with Kirk's mercy",
-    "major: Admiral escalating quarantine pressure through remote power cuts",
-    "major: Kirk's mercy keeps fracturing crew trust even as Worf reaffirms loyalty",
+    "major: Mirror Kirk and Chekov are inside the damaged airlock while Kirk is sealed outside",
+    "major: Kirk must save the double who once chose to kill Chekov",
+    "major: Mirror Kirk broke his cruelty for the first time and is now in the ejection zone",
+    "major: the destroyed tactical panel leaves no easy airlock override",
+    "major: Chekov's terror and hatred now conflict with Mirror Kirk's act of sacrifice",
+    "major: the Fleet Admiral's quarantine pressure remains active",
     "eternal: Kirk always fights for his crew against the system"
   ],
   "closed_loops": [
@@ -591,17 +595,21 @@
     "minor: Who is the watcher? — RESOLVED EP4: it was Spock, running a Section 31 counter-operation",
     "minor: Kirk reaches the bridge before weapons fire — RESOLVED EP5: yes, but weapons still locked",
     "minor: Will Kirk obey the Admiral's fire order? — RESOLVED EP6: No. Kirk destroyed his own weapons.",
-    "minor: Who is in the pod? — RESOLVED EP7: Mirror Kirk, a mirror-universe double of James T. Kirk"
+    "minor: Who is in the pod? — RESOLVED EP7: Mirror Kirk, a mirror-universe double of James T. Kirk",
+    "EP13-14: Will Mirror Kirk fire on the Admiral's ship? — NO, Worf and Scotty stopped the shot",
+    "EP15: Can Mirror Kirk make the opposite choice from his own universe? — YES, he entered the airlock to save Chekov"
   ],
   "world_state": {
-    "location": "Enterprise Sickbay + Engineering Control Alcove + Brig",
+    "location": "Enterprise damaged airlock sector, immediately after EP15",
     "important_items": [
-      "Mirror Kirk — restrained in sickbay after EP12, but the brig has just lost power",
       "Enterprise phaser array — DESTROYED (weapons offline)",
-      "Chekov — back aboard Enterprise, terrified and angry that Mirror Kirk is still alive",
+      "Tactical override panel — destroyed; its discharge damaged the airlock controls",
+      "Inner airlock door — manually sealed with Mirror Kirk and Chekov inside",
+      "Mirror Kirk — inside the ejection zone after choosing to save Chekov",
+      "Chekov — alive inside the damaged airlock with pressure still unstable",
+      "Kirk — outside the sealed inner glass with no easy override",
       "Enterprise — under quarantine by Fleet Admiral order",
-      "Fleet Admiral — enforcing quarantine by remote power cuts",
-      "Brig power — offline as of EP12 cliffhanger"
+      "Fleet Admiral — still enforcing quarantine remotely"
     ],
     "key_events": [
       "EP1: Worf executed airlock procedure on Chekov on Fleet Admiral's orders",
@@ -653,7 +661,15 @@
       "EP12: Kirk told Chekov, 'Because we don't kill people who are down.'",
       "EP12: Mirror Kirk watched the crew obey Kirk without threats and realized Kirk commands through loyalty, not fear.",
       "EP12: Worf told Mirror Kirk, 'We follow the captain. Not the face.'",
-      "EP12: The Admiral cut partial power to Enterprise. Scotty reported: 'The brig just lost power.'"
+      "EP12: The Admiral cut partial power to Enterprise. Scotty reported: 'The brig just lost power.'",
+      "EP13: Mirror Kirk escaped the depowered brig, stole a gold command jacket, and briefly fooled the bridge crew",
+      "EP13: Mirror Kirk ordered weapons trained on the Admiral's ship before the real Kirk confronted him",
+      "EP14: Worf tackled Mirror Kirk away from the firing control while Scotty destroyed the tactical override to abort the shot",
+      "EP14: The panel discharge hit the airlock sector and trapped Chekov behind emergency glass as air vented",
+      "EP15: Kirk could not force the jammed inner airlock door while Chekov refused to become anyone's price",
+      "EP15: Mirror Kirk entered the manual override code he knew from choosing to kill Chekov in his own universe",
+      "EP15: Mirror Kirk made the opposite choice, stepped into the airlock beside Chekov, and sealed Kirk outside",
+      "EP15: Cliffhanger — Mirror Kirk said: 'Looks like your weakness is contagious.'"
     ]
   },
   "anti_repetition": {
@@ -680,7 +696,12 @@
       "While you wait for a trial, they kill.",
       "Then I'll stop both of you.",
       "Panel's burning! The blast went to the airlock!",
-      "Captain... not again."
+      "Captain... not again.",
+      "I don't want to be your price.",
+      "How do you know that code?",
+      "Because once, I made the other choice.",
+      "Not today.",
+      "Looks like your weakness is contagious."
     ],
     "recent_hooks": [
       "dual-transporter-beam-reveal",
@@ -689,14 +710,16 @@
       "loyalty-without-fear-reveal",
       "remote-power-cut-brig",
       "stolen-uniform-corridor-passby",
-      "confrontation-lunge-interrupt"
+      "confrontation-lunge-interrupt",
+      "victim-refuses-to-be-the-price"
     ],
     "recent_cliffhangers": [
       "shuttle-escape-into-debris",
       "mirror-double-resurface-transporter",
       "remote-power-cut-brig-escape-risk",
       "hand-hovering-over-fire-button",
-      "trapped-behind-sealed-glass-air-venting"
+      "trapped-behind-sealed-glass-air-venting",
+      "mirror-kirk-voluntary-self-lock"
     ]
   },
   "episode_summaries": [
@@ -823,6 +846,17 @@
       "youtube_url": "https://www.youtube.com/watch?v=2Lpz1DiZBhE",
       "yt_publish_at": "2026-07-24T20:59:00Z",
       "duration_sec": 44
+    },
+    {
+      "episode": 15,
+      "language": "en",
+      "summary": "Chekov is trapped behind the damaged emergency airlock glass while Kirk cannot force the jammed door. Mirror Kirk calmly enters the manual override code, revealing that he knows it because in his own universe he chose to kill Chekov. This time he makes the opposite choice: he steps into the airlock beside Chekov and seals the real Kirk outside.",
+      "cliffhanger": "Mirror Kirk is trapped in the ejection zone with Chekov and tells Kirk through the glass: 'Looks like your weakness is contagious.'",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-07/serial-drama/20260807-124033-15333/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=ZeNwZNxAM4k",
+      "yt_publish_at": "2026-08-11T20:34:00Z",
+      "duration_sec": 42.3,
+      "notes": "Six independent start frames, Kling v3 Standard I2V throughout, native preset voices Charlie for Chekov and Daniel for both Kirk identities. Three dialogue clips and three silent action clips; two-second PNG title-card freeze interstitial after scene 1; canonical Star Trek CTA appended. All image and video jobs completed in one generation attempt."
     }
   ]
 }
