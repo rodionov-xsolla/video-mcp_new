@@ -1,0 +1,252 @@
+{
+  "series_id": "top-list-growtopia",
+  "format": "top-list",
+  "game_tag": "growtopia",
+  "language": "en",
+  "title": "Growtopia Top Lists",
+  "created_at": "2026-08-10",
+  "last_updated": "2026-08-10",
+  "last_episode": 3,
+  "style_tags": "Growtopia-inspired crisp 2D pixel art, pseudo-isometric 2.5D diorama, blocky pixelated proportions, thick clean black outlines, bright cheerful cyan green and gold palette, coherent three-quarter projection, layered foreground midground and receding tile platforms, native edge-to-edge vertical 9:16, illustrated perspective rather than volumetric 3D, no Minecraft, no voxel CGI, no realistic rendering, no cel-shaded anime",
+  "visual_identity": {
+    "palette": [
+      "Growtopia green #5FB53C",
+      "sky blue #5BC0EB",
+      "dirt brown #8B5A2B",
+      "World Lock brown #A0682E",
+      "Diamond Lock cyan #3EE0E0",
+      "Blue Gem Lock deep blue #1E4FE0",
+      "sunny gold accent #FFD84D"
+    ],
+    "lighting": "Flat, even pixel-art lighting with no volumetric shadows; soft glow reserved for rare/legendary items, currency locks, and magical character sets (crackling lightning for Zeus, golden halo for Angelic, flame breath for Dragon).",
+    "composition": "Vertical 9:16 pseudo-isometric 2.5D diorama with a clear subject area and clearance for rank overlays. Do not bake rank, name, captions, logos, or other UI into generated item images."
+  },
+  "top_font": "Bebas Neue",
+  "accent_color": "#FFD84D",
+  "voice": {
+    "identity_critical": false,
+    "default_route": "fal-ai/minimax/speech-2.8-hd",
+    "voice_intent": "Energetic countdown host with playful, upbeat retro-arcade energy, building excitement toward number one.",
+    "approved_voice_sample": null
+  },
+  "music": {
+    "required": true,
+    "route": "fal-ai/minimax-music/v2.6",
+    "mood": "Upbeat chiptune / 8-bit retro-arcade countdown, nostalgic and playful, 110-140 BPM feel.",
+    "volume": 0.15
+  },
+  "supabase_assets": {
+    "title_card_ref": null,
+    "char_refs": {},
+    "cta": {
+      "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4",
+      "scope": "Game-wide CTA; the sole automatic cross-format asset exception."
+    }
+  },
+  "appearance_policy": "Store appearance descriptions and generated references only for this exact game, format, and series. Add an appearance entry only after its subject is selected for an approved Top List episode. Never copy appearance text or image references from another format unless the user explicitly instructs it.",
+  "appearance_library": {
+    "Devil Set": {
+      "type": "character",
+      "description": "Growtopian avatar wearing the Devil/Demonic set: deep crimson-red skin-tight suit with jagged black spike shoulder pauldrons, curved obsidian-black horns, a barbed pointed tail curling behind, glowing amber-orange eyes, small bat-like leathery wings folded at the back, clawed black gloves, faint dark-red smoke wisps at the feet, standing in a confident three-quarter pixel-art pose."
+    },
+    "Baby Dragon Set": {
+      "type": "character",
+      "description": "Growtopian avatar in the Baby Dragon set: forest-green scaled dragon hood shaped like a dragon head worn over the face, small folded green wings on the back, a long scaled tail with a spade tip trailing on the ground, tiny pixel flame curling from the hood's open mouth, glossy scale texture with lighter green highlights, cheerful stocky stance, playful pixel-art charm."
+    },
+    "Zeus Set": {
+      "type": "character",
+      "description": "Growtopian avatar in the Zeus set: gleaming golden Greek-style breastplate armor with laurel-leaf shoulder guards, a golden laurel crown resting on the head, crackling yellow-white lightning bolts arcing around the shoulders and fists, a flowing short white toga-cloth beneath the armor, storm-cloud grey aura swirling at the feet, heroic wide-legged stance radiating power."
+    },
+    "Angelic Set": {
+      "type": "character",
+      "description": "Growtopian avatar in the Angelic set: two enormous soft white feathered wings spread from the back, a radiant golden halo glowing above the head, a flowing pure-white robe with gold trim at the hems, warm golden particle sparkles drifting around the shoulders, serene closed-eye expression, gentle floating three-quarter pose with hands clasped."
+    },
+    "Growganoth": {
+      "type": "character",
+      "description": "Growganoth, Growtopia's colossal world-boss creature: a massive dark-purple tentacled mass filling the frame, six glowing sulfur-yellow eyes staring forward, thick dripping tendrils of black shadow-energy oozing from its body, jagged bone-white spikes jutting along its back, a cavernous fanged maw at its core, ominous violet mist pooling around its base, menacing raid-boss presence looming over the scene."
+    },
+    "Harvest Festival Grounds": {
+      "type": "location",
+      "description": "Growtopia's Harvest Festival event grounds: rows of glowing orange jack-o'-lantern blocks lining a dirt pathway, tall dried cornstalk decorations and hanging string-lights, a rustic wooden scarecrow figure at the center, warm amber dusk-lit sky in the background, scattered fallen pixel leaves in red and gold, a cozy autumn-market atmosphere with small stall stands."
+    },
+    "Growmas Village": {
+      "type": "location",
+      "description": "Growtopia's Growmas holiday village: snow-capped block rooftops trimmed with red-and-green string lights, a towering pixel Christmas tree strung with glowing ornaments at the plaza center, soft falling snowflake particles, candy-cane striped lampposts lining the path, warm golden window-light glowing from cottage blocks, a large wrapped-gift block pile in the foreground, festive cheerful winter atmosphere."
+    },
+    "Startopia": {
+      "type": "location",
+      "description": "Startopia, Growtopia's space-themed event world: a starry deep-purple sky filled with distant nebula swirls and twinkling stars, floating asteroid-block platforms connected by glowing energy bridges, a chrome-and-neon space-station structure at the center with pulsing cyan lights, small drifting UFO-block decorations, zero-gravity sparkle particles, a futuristic sci-fi sandbox atmosphere."
+    },
+    "Growganoth's Lair": {
+      "type": "location",
+      "description": "Growganoth's Lair, the raid-boss arena of Growtopia: a cavernous dark-stone dungeon chamber lit by pools of glowing violet lava, jagged obsidian-black rock formations framing the arena, chained ruin-block pillars in the background, ominous purple mist drifting along the ground, scattered bone and treasure-chest props, a foreboding pre-battle atmosphere."
+    },
+    "START": {
+      "type": "location",
+      "description": "START, Growtopia's legendary home world where every player begins: a sprawling sunny block plaza with a giant illuminated 'GROWTOPIA' sign built from glowing block letters, colorful directional arrow-tile paths branching in every direction, cheerful player-built stalls and signposts lining the plaza, a bright cyan sky with soft clouds overhead, warm golden midday light, a nostalgic, welcoming, larger-than-life sense of scale as the true heart of the game."
+    },
+    "World Lock": {
+      "type": "item",
+      "description": "A World Lock item: a chunky brown wooden lock-shaped block with a bold yellow keyhole cut into the front, a dark metal band wrapped around its middle, a faint warm amber glow radiating from the keyhole, subtle wood-grain texture on the surface, floating at a slight three-quarter angle against a soft sandbox-blur backdrop, the humble everyday currency of Growtopia."
+    },
+    "Growmoji": {
+      "type": "item",
+      "description": "A Growmoji: a small round bright-yellow smiley pixel creature, two big simple black-dot eyes, a wide curved grin, two tiny stub arms raised in a cheerful wave, a soft glossy highlight on top of its round body, a faint bouncing motion pose, playful mascot-like charm, floating against a light sandbox backdrop."
+    },
+    "Diamond Lock": {
+      "type": "item",
+      "description": "A Diamond Lock item: a crystalline cyan lock-block with sharp faceted crystal surfaces catching bright highlights, a glowing pale-cyan keyhole at its center, fine sparkle particles drifting around its edges, a premium polished sheen distinct from the duller World Lock, floating at a three-quarter angle with a soft radiant glow, symbol of mid-tier wealth in Growtopia."
+    },
+    "Gems": {
+      "type": "item",
+      "description": "A cluster of Growtopia Gems: several small cyan diamond-shaped currency crystals of varying sizes piled together, each catching a bright sparkle highlight on its faceted top, a soft cheerful cyan glow radiating from the pile, a few loose gems scattered mid-air as if just collected, glossy smooth crystal texture, the universal currency that powers every Growtopia purchase."
+    },
+    "Blue Gem Lock": {
+      "type": "item",
+      "description": "A Blue Gem Lock, Growtopia's rarest treasure: a deep radiant sapphire-blue crystal lock-block with intensely glowing faceted surfaces, an inner core keyhole pulsing with bright blue-white light, a swirling aura of blue energy particles orbiting the block, dramatic rim-light catching every facet edge, floating majestically front-and-center as the single most valuable and coveted item in all of Growtopia."
+    }
+  },
+  "anti_repetition": {
+    "cooldown_episodes": 6,
+    "recent_themes": [
+      "GROWTOPIA LEGENDS",
+      "GROWTOPIA WONDERS",
+      "GROWTOPIA TREASURES"
+    ],
+    "recent_categories": [
+      "characters",
+      "locations",
+      "items"
+    ],
+    "recent_winners": [
+      "Growganoth",
+      "START",
+      "Blue Gem Lock"
+    ],
+    "recent_entries": [
+      "Devil Set",
+      "Baby Dragon Set",
+      "Zeus Set",
+      "Angelic Set",
+      "Growganoth",
+      "Harvest Festival Grounds",
+      "Growmas Village",
+      "Startopia",
+      "Growganoth's Lair",
+      "START",
+      "World Lock",
+      "Growmoji",
+      "Diamond Lock",
+      "Gems",
+      "Blue Gem Lock"
+    ]
+  },
+  "reserved_topics": [],
+  "lists": [
+    {
+      "episode": 1,
+      "date": "2026-08-10",
+      "theme": "GROWTOPIA LEGENDS",
+      "category": "characters",
+      "ranking_basis": "iconic status + visual charisma + variety across cosmetic sets and world-boss lore",
+      "entries": [
+        {
+          "rank": 5,
+          "name": "Devil Set"
+        },
+        {
+          "rank": 4,
+          "name": "Baby Dragon Set"
+        },
+        {
+          "rank": 3,
+          "name": "Zeus Set"
+        },
+        {
+          "rank": 2,
+          "name": "Angelic Set"
+        },
+        {
+          "rank": 1,
+          "name": "Growganoth"
+        }
+      ],
+      "winner": "Growganoth",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-10/top-list/20260810-223550-96159-1/final.mp4",
+      "youtube_url": "",
+      "duration_sec": 38.33,
+      "status": "completed",
+      "notes": "First-ever growtopia top-list batch (3 episodes: characters/locations/items). Supabase-only deliverable \u2014 no youtube_channel mapped for growtopia yet."
+    },
+    {
+      "episode": 2,
+      "date": "2026-08-10",
+      "theme": "GROWTOPIA WONDERS",
+      "category": "locations",
+      "ranking_basis": "iconic status + visual variety + player nostalgia",
+      "entries": [
+        {
+          "rank": 5,
+          "name": "Harvest Festival Grounds"
+        },
+        {
+          "rank": 4,
+          "name": "Growmas Village"
+        },
+        {
+          "rank": 3,
+          "name": "Startopia"
+        },
+        {
+          "rank": 2,
+          "name": "Growganoth's Lair"
+        },
+        {
+          "rank": 1,
+          "name": "START"
+        }
+      ],
+      "winner": "START",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-10/top-list/20260810-223551-96159-2/final.mp4",
+      "youtube_url": "",
+      "duration_sec": 38.33,
+      "status": "completed",
+      "notes": "First-ever growtopia top-list batch (3 episodes: characters/locations/items). Supabase-only deliverable \u2014 no youtube_channel mapped for growtopia yet."
+    },
+    {
+      "episode": 3,
+      "date": "2026-08-10",
+      "theme": "GROWTOPIA TREASURES",
+      "category": "items",
+      "ranking_basis": "rarity + value + player desirability",
+      "entries": [
+        {
+          "rank": 5,
+          "name": "World Lock"
+        },
+        {
+          "rank": 4,
+          "name": "Growmoji"
+        },
+        {
+          "rank": 3,
+          "name": "Diamond Lock"
+        },
+        {
+          "rank": 2,
+          "name": "Gems"
+        },
+        {
+          "rank": 1,
+          "name": "Blue Gem Lock"
+        }
+      ],
+      "winner": "Blue Gem Lock",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-10/top-list/20260810-223552-96159-3/final.mp4",
+      "youtube_url": "",
+      "duration_sec": 38.33,
+      "status": "completed",
+      "notes": "First-ever growtopia top-list batch (3 episodes: characters/locations/items). Supabase-only deliverable \u2014 no youtube_channel mapped for growtopia yet."
+    }
+  ]
+}
