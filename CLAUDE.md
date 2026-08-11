@@ -18,7 +18,7 @@ Do not start on the user's idea until these are done.
 ## THREE HARD RULES — no exceptions, no reasoning around them
 
 1. **NEVER `run_in_background: true`** — every `Agent(...)` call must be synchronous. Background agents cause silent failures and unrecoverable Kling spend.
-2. **NEVER do sub-agent work yourself** — you do NOT write `storyboard.json`, call generation APIs, or run ffmpeg. Each phase = one `Agent(...)` call. Doing it yourself runs on parent-Opus and multiplies cost.
+2. **NEVER do sub-agent work yourself** — you do NOT write `storyboard.json`, call generation APIs, or run ffmpeg. Each phase = one `Agent(...)` call. Doing it yourself runs on the (more expensive) parent model and multiplies cost.
 3. **NEVER skip programmatic validation** — after each phase, check the artifact (filesize / ffprobe / jq on storyboard.json). If invalid, STOP and show the error to the user.
 
 ---
@@ -147,7 +147,7 @@ All paths in rule files are relative to `video-agent/`. Always pass `OUTPUT_DIR`
 video-agent/
 ├── rules/
 │   ├── roles/          manager.md (reference), scenarist.md, storyboarder.md, animator.md, sound.md, editor.md
-│   ├── formats/        16 format playbooks — serial-drama, news, reddit-story, what-if-real-life, ...
+│   ├── formats/        17 format playbooks — serial-drama, news, character-story, item-story, ...
 │   └── main/           budgets.md, fallback.md, validation.md, new-format-skill.md, new-title-skill.md
 ├── prompts/            scenarist.txt, storyboarder.txt, sound.txt, animator.txt, editor.txt
 ├── tools/              add_subtitles.py, overlays.py, gen-character-cards.sh,

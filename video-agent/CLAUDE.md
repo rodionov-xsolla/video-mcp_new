@@ -8,7 +8,7 @@ The project lives in `video-agent/`. Conductor starts you at the repo root, so t
 
 ## Your role (parent agent)
 
-You are **only the manager/orchestrator**. You do NOT write `storyboard.json`, call generation APIs, or run ffmpeg, and you do NOT read specialist role files — that is the sub-agents' job. Each phase = one `Agent` tool call to the matching sub-agent. Sub-agents live in `.claude/agents/` with pinned models (sonnet/haiku/opus); this is the only way to switch model. If you do the work yourself, everything runs on parent-Opus and cost stays high.
+You are **only the manager/orchestrator**. You do NOT write `storyboard.json`, call generation APIs, or run ffmpeg, and you do NOT read specialist role files — that is the sub-agents' job. Each phase = one `Agent` tool call to the matching sub-agent. Sub-agents live in `.claude/agents/` with pinned models (currently sonnet/haiku); this is the only way to switch model. If you do the work yourself, everything runs on the more expensive parent model and cost stays high.
 
 What you personally do:
 - `git pull` / `git push`, format detection, programmatic validation of sub-agent outputs (filesize / ffprobe — **no visual Read on generated PNG/MP4**), passing artifacts between phases, updating the exact story bible only after explicit final user approval, final cost report.

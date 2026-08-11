@@ -64,13 +64,48 @@
 <div class="wrap">
 
 <h1>Video Production Pipeline</h1>
-<p class="lead">AI-конвейер коротких вертикальных роликов (1080×1920) для game-каналов. Сценарий, голос, изображение, видео, монтаж — всё через сабагенты Claude поверх fal.ai, ElevenLabs, FFmpeg и Supabase.</p>
+<p class="lead">AI-конвейер коротких вертикальных роликов (1080×1920) для game-каналов. Сценарий, голос, изображение, видео, монтаж — всё через сабагенты Claude поверх fal.ai, MiniMax, Kling, FFmpeg и Supabase.</p>
 
 <div class="meta-bar">
-  <span><b>Стек:</b> Claude Code (Opus/Sonnet/Haiku) · fal.ai · ElevenLabs · Supabase · FFmpeg</span>
+  <span><b>Стек:</b> Claude Code (Sonnet/Haiku) · fal.ai (MiniMax, Kling, NB2, Chatterbox) · Supabase · FFmpeg</span>
   <span><b>Корень:</b> <code>video-agent/</code></span>
   <span><b>Формат:</b> 1080×1920, 25–60s</span>
   <span><b>Стоимость ролика:</b> $1.5–$6</span>
+</div>
+
+<h2>Как пользоваться</h2>
+<p class="lead">Просто описываешь идею человеческим языком — Manager сам детектит игру и формат и ведёт ролик через все фазы.</p>
+<div class="grid grid-2">
+  <div class="card">
+    <h3>Запуск</h3>
+    <ul class="tight">
+      <li>Пиши идею в свободной форме: игра (при необходимости — <code>game_tag</code>) + формат (или ключевые слова формата) + сама идея/сюжет. Если формат не назван явно, Manager определяет его по таблице ключевых слов из <code>manager.md</code> и переспрашивает при неоднозначности.</li>
+      <li>Пример: <i>«Сделай serial-drama по star-trek-timelines, продолжение Mirror Kirk arc»</i> или <i>«reddit-story про marvel snap — история про неудачный пул карт»</i>.</li>
+      <li>Для новой серии/формата, у которого ещё нет story bible, Manager остановится и спросит подтверждение перед созданием — сам не создаёт молча.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Что происходит дальше</h3>
+    <ul class="tight">
+      <li>Manager последовательно вызывает 5 сабагентов (Scenarist → Sound → Storyboarder → Animator → Editor), после каждой фазы — только программная проверка (filesize/ffprobe/jq), без визуального просмотра PNG/MP4.</li>
+      <li><b>Review gate (обязателен всегда):</b> после Editor тебе показывают локальный <code>final.mp4</code> и ждут явного «ок». Без этого шага ничего не публикуется и не коммитится.</li>
+      <li>После твоего «ок»: загрузка в Supabase → отложенная публикация на YouTube → запись в лог → обновление точной story bible → <code>git push</code>.</li>
+      <li>TikTok/Instagram публикуются только по отдельной явной команде («опубликовать в тик-ток starfleet») — автоматически не постятся.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Debug mode</h3>
+    <ul class="tight">
+      <li>Добавь в запрос фразу <code>Debug mode</code> / «Отладочный режим» — Manager останавливается после каждой фазы (включая Phase 0) и присылает промежуточный результат на подтверждение, не пропуская и не переставляя фазы.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Важно знать</h3>
+    <ul class="tight">
+      <li><b>Твоя живая команда всегда важнее правил формата.</b> Если явно просишь «без спидапа» или «голос X» — применяется без исключений, даже если формат по умолчанию говорит иначе.</li>
+      <li>Средняя стоимость ролика — $1.5–$6, самая дорогая фаза — Kling (Animator).</li>
+    </ul>
+  </div>
 </div>
 
 <h2>Pipeline — последовательность фаз</h2>
@@ -104,7 +139,7 @@
   </div>
   <div class="step" style="background: var(--panel-2);">
     <div class="role" style="color: var(--green);">Manager</div>
-    <div class="model">opus (parent)</div>
+    <div class="model">sonnet (parent)</div>
     <div class="out">git push +<br><span class="muted">cost report</span></div>
   </div>
   <div class="step" style="background: var(--panel-2);">
@@ -118,7 +153,7 @@
 <table>
   <tr><th>Фаза</th><th>API/ресурс</th><th>Цена за единицу</th><th>За ролик</th></tr>
   <tr><td>Scenarist</td><td>Claude Sonnet (генерация storyboard.json)</td><td>~$0.05 токены</td><td>$0.05</td></tr>
-  <tr><td>Sound</td><td>ElevenLabs TTS via fal.ai</td><td>$0.30/1000 chars</td><td>$0.10–0.30</td></tr>
+  <tr><td>Sound</td><td>MiniMax Speech 2.8 HD via fal.ai (TTS) + MiniMax Music (bg)</td><td>~$0.05–0.17/line + ~$0.03/track</td><td>$0.10–0.30</td></tr>
   <tr><td>Storyboarder</td><td>Nano Banana 2 (NB2) + refs</td><td>$0.04/PNG</td><td>$0.30–0.50</td></tr>
   <tr><td>Animator</td><td>Kling v3 Standard I2V / Avatar v2</td><td>$0.084/s I2V, $0.056/s Avatar</td><td>$1.50–4.00</td></tr>
   <tr><td>Editor</td><td>FFmpeg (локально) + Supabase upload</td><td>$0</td><td>$0</td></tr>
@@ -130,7 +165,7 @@
 
 <div class="deps">                          ┌─────────────────────────────────────┐
                           │              Manager                │
-                          │       (Opus, parent agent)          │
+                          │      (Sonnet, parent agent)         │
                           │   читает только manager.md          │
                           └──┬──────┬──────┬──────┬──────┬──────┘
                              │      │      │      │      │
@@ -138,7 +173,7 @@
                              ▼      ▼      ▼      ▼      ▼
                     ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
                     │  Scenarist  │→ │    Sound    │→ │ Storyboarder│
-                    │   Sonnet    │  │   Haiku     │  │    Opus     │
+                    │   Sonnet    │  │   Haiku     │  │   Sonnet    │
                     └──────┬──────┘  └──────┬──────┘  └──────┬──────┘
                            │                │                │
                            ▼                ▼                ▼
@@ -150,7 +185,7 @@
                                             ▼
                                     ┌─────────────┐
                                     │   Animator  │
-                                    │    Opus     │
+                                    │   Sonnet    │
                                     └──────┬──────┘
                                            ▼
                                      scene-K.mp4
@@ -174,7 +209,7 @@
     <th>Агент</th>
     <th>fal.ai NB2</th>
     <th>fal.ai Kling</th>
-    <th>ElevenLabs<br>(via fal.ai)</th>
+    <th>MiniMax /<br>Chatterbox TTS</th>
     <th>Supabase<br>Storage</th>
     <th>Supabase<br>DB</th>
     <th>FFmpeg</th>
@@ -264,14 +299,14 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
 
   <div class="card">
     <h3>Sound <span class="tag">haiku</span></h3>
-    <p class="muted">TTS для каждой диалоговой реплики. Загрузка MP3 в Supabase, URL'ы обратно в storyboard.json. Выбор bg-music.</p>
+    <p class="muted">Routed TTS только там, где нужна внешняя речь. Загрузка MP3 в Supabase, URL'ы обратно в storyboard.json. Генерация bg-music.</p>
     <h4>Что делает</h4>
     <ul class="tight">
-      <li>Для каждого <code>clip_type: dialogue</code> — POST в MiniMax Speech 2.8 HD (все игры) или Chatterbox (Genshin serial-drama)</li>
-      <li>Voice mapping из game config (Kirk, Worf, Narrator, и т.д.)</li>
+      <li>Выбор движка: native audio (Kling I2V <code>voice_ids</code>, напр. serial-drama dialogue) → exact-format approved Chatterbox voice-clone sample → иначе MiniMax Speech 2.8 HD</li>
+      <li>Voice mapping из game config / story bible (один персонаж = один голос на весь сериал)</li>
       <li>Загрузка MP3 в Supabase Storage, public URL</li>
-      <li>Подбор bg-music из <code>music/{Dark|Fun|Neutral}/</code> по format mood</li>
-      <li>Для длинных монологов (>30s в одной сцене) — резка по предложениям (NB: не для Avatar — там hard cap 25s)</li>
+      <li>Генерация bg-music через MiniMax Music (<code>fal-ai/minimax-music/v2.6</code>) — обязательна для serial-drama и dual-style-v3, локальная <code>music/</code>-библиотека больше не используется как источник</li>
+      <li>Для длинных монологов (>80 слов) — обязательная резка на чанки ≤35 слов (Chatterbox тихо ломается на длинном тексте)</li>
     </ul>
     <p><span class="tag">rules/roles/sound.md</span> · <span class="tag">prompts/sound.txt</span></p>
   </div>
@@ -345,7 +380,7 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
 </div>
 
 <h2>Форматы</h2>
-<p class="lead">14 playbook'ов — каждый описывает структуру ролика, целевую длительность, какие Kling-модели и какие role-briefs применяются.</p>
+<p class="lead">17 playbook'ов — каждый описывает структуру ролика, целевую длительность, какие Kling-модели и какие role-briefs применяются.</p>
 
 <table>
   <tr>
@@ -355,6 +390,11 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
     <td><b>character-story</b></td><td>30–40s · 6–8×5s</td>
     <td>Персонаж рассказывает свою лор-историю от первого лица, Kling I2V визуализирует ключевые моменты</td>
     <td>I2V v2.6 Pro</td><td>да (overlay)</td>
+  </tr>
+  <tr>
+    <td><b>item-story</b></td><td>30–40s · 6–8×5s</td>
+    <td>История внутриигрового предмета от внешнего рассказчика: создание → владельцы/формы → легендарный момент → нынешняя судьба</td>
+    <td>I2V v3 (no audio)</td><td>да (VO)</td>
   </tr>
   <tr>
     <td><b>serial-drama</b></td><td>25–40s · 3–5 клипов</td>
@@ -421,6 +461,16 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
     <td>Cartoon + realistic в одном ролике (split / cross-fade)</td>
     <td>I2V</td><td>опционально</td>
   </tr>
+  <tr>
+    <td><b>fake-ad</b></td><td>15–20s · 5×~4s</td>
+    <td>Абсурдная фейковая реклама игрового предмета: problem → product → peak effect → обязательный TWIST → packshot. Deadpan announcer</td>
+    <td>I2V v3 (no audio)</td><td>да (VO)</td>
+  </tr>
+  <tr>
+    <td><b>special-report</b></td><td>35–50s</td>
+    <td>Один репортёр, 3 локации, единая ироничная история из лора. Anchor + reporter locked в story bible, репортёр смещён от центра кадра</td>
+    <td>Avatar v2</td><td>да</td>
+  </tr>
 </table>
 
 <h2>Игры</h2>
@@ -430,31 +480,42 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
     <h3>roblox</h3>
     <p class="muted">Блочный voxel-стиль, Roblox-noob, preppy-girl, builderman.</p>
     <p><span class="tag">games/roblox/roblox.md</span></p>
-    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">character-story</span><span class="tag tag-accent">motion-dance</span><span class="tag tag-accent">news</span><span class="tag tag-accent">streettalk</span></p>
+    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">fun-news</span><span class="tag tag-accent">fake-ad</span><span class="tag tag-accent">streettalk</span><span class="tag tag-accent">special-report</span></p>
   </div>
   <div class="card">
     <h3>star-trek-timelines</h3>
-    <p class="muted">Канон ST, TOS/TNG/DS9/VOY/ENT эры, корабли. Активная серия: Mirror Kirk arc (EP9–15).</p>
+    <p class="muted">Канон ST, TOS/TNG/DS9/VOY/ENT эры, корабли. Serial-drama story bible: «The Airlock», EP14 (last_episode).</p>
     <p><span class="tag">games/star-trek-timelines/star-trek-timelines.md</span></p>
-    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">character-story</span><span class="tag tag-accent">what-if-real-life</span><span class="tag tag-accent">gameplay-ai-avatar</span><span class="tag tag-accent">fun-news</span><span class="tag tag-accent">streettalk</span></p>
+    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">character-story</span><span class="tag tag-accent">dual-style</span><span class="tag tag-accent">fake-ad</span><span class="tag tag-accent">fun-news</span><span class="tag tag-accent">in-game-pov</span><span class="tag tag-accent">redcon</span><span class="tag tag-accent">reddit-story</span><span class="tag tag-accent">streettalk</span><span class="tag tag-accent">top-list</span><span class="tag tag-accent">what-if-real-life</span><span class="tag tag-accent">wild-documentary</span></p>
   </div>
   <div class="card">
-    <h3>genshin impact</h3>
-    <p class="muted">Open-world Action RPG. TTS — Chatterbox (voice-cloned), не ElevenLabs. Активная серия: «Don't Save Me» (EP2 shipped).</p>
-    <p><span class="tag">games/genshin impact/genshin-impact.md</span></p>
-    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">what-if-real-life</span><span class="tag tag-accent">streettalk</span></p>
+    <h3>genshin-impact</h3>
+    <p class="muted">Open-world Action RPG. TTS — Chatterbox (voice-cloned) для serial-drama, MiniMax для остального. Serial-drama story bible: «Don't Save Me», EP8 (last_episode).</p>
+    <p><span class="tag">games/genshin-impact/genshin-impact.md</span></p>
+    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">character-story</span><span class="tag tag-accent">dual-style</span><span class="tag tag-accent">fake-ad</span><span class="tag tag-accent">fun-news</span><span class="tag tag-accent">in-game-pov</span><span class="tag tag-accent">redcon</span><span class="tag tag-accent">reddit-story</span><span class="tag tag-accent">special-report</span><span class="tag tag-accent">streettalk</span><span class="tag tag-accent">top-list</span><span class="tag tag-accent">wild-documentary</span></p>
   </div>
   <div class="card">
-    <h3>marvel snap</h3>
+    <h3>marvel-snap</h3>
     <p class="muted">Карточная игра Marvel, гэймплей-клипы + reddit-story bibles.</p>
-    <p><span class="tag">games/marvel snap/</span></p>
+    <p><span class="tag">games/marvel-snap/</span></p>
     <p><span class="tag tag-accent">reddit-story</span></p>
+  </div>
+  <div class="card">
+    <h3>growtopia</h3>
+    <p class="muted">Sandbox MMO. Полный набор форматов, тайтл готов, ассеты в Supabase.</p>
+    <p><span class="tag">games/growtopia/growtopia.md</span></p>
+    <p><span class="tag tag-accent">serial-drama</span><span class="tag tag-accent">character-story</span><span class="tag tag-accent">dual-style</span><span class="tag tag-accent">fake-ad</span><span class="tag tag-accent">in-game-pov</span><span class="tag tag-accent">reddit-story</span></p>
+  </div>
+  <div class="card">
+    <h3>pubg-mobile</h3>
+    <p class="muted">Battle royale shooter.</p>
+    <p><span class="tag">games/pubg-mobile/pubg-mobile.md</span></p>
   </div>
   <div class="card">
     <h3>got-conquest</h3>
     <p class="muted">Game of Thrones: Conquest — Strategy/MMO.</p>
     <p><span class="tag">games/got-conquest/got-conquest.md</span></p>
-    <p><span class="tag tag-accent">fun-news</span></p>
+    <p><span class="tag tag-accent">fun-news</span><span class="tag tag-accent">fake-ad</span></p>
   </div>
   <div class="card">
     <h3>pokemon-go</h3>
@@ -466,7 +527,7 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
     <h3>wwe-champions</h3>
     <p class="muted">Match-3 Puzzle RPG / Sports Brawler (Gacha).</p>
     <p><span class="tag">games/wwe-champions/wwe-champions.md</span></p>
-    <p><span class="tag tag-accent">fun-news</span></p>
+    <p><span class="tag tag-accent">fun-news</span><span class="tag tag-accent">fake-ad</span></p>
   </div>
   <div class="card">
     <h3>mlbb</h3>
@@ -491,16 +552,19 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
 <div class="grid grid-2">
   <div class="card">
     <h3>fal.ai</h3>
-    <p class="muted">Прокси к моделям. Четыре семейства: NB2 (картинки), Kling (видео), ElevenLabs (голос), Chatterbox (voice-clone TTS).</p>
+    <p class="muted">Прокси к моделям. Пять семейств: NB2 (картинки), Kling (видео + avatar lipsync), MiniMax (TTS + music), Chatterbox (voice-clone TTS), ElevenLabs (только sound-effects).</p>
     <h4>Эндпоинты в работе</h4>
     <ul class="tight">
-      <li><code>fal-ai/nano-banana-2</code> — text-to-image</li>
-      <li><code>fal-ai/nano-banana-2/edit</code> — chain-ref edit</li>
+      <li><code>fal-ai/nano-banana-2/edit</code> — text-to-image + chain-ref edit (primary)</li>
+      <li><code>fal-ai/gpt-image-1/text-to-image</code> — alternate, user-only</li>
       <li><code>fal-ai/kling-video/v3/standard/image-to-video</code> — I2V primary</li>
-      <li><code>fal-ai/kling-video/v2.6/pro/image-to-video</code> — I2V fallback</li>
+      <li><code>fal-ai/kling-video/v2.6/pro/image-to-video</code> — I2V alternate, user-only</li>
       <li><code>fal-ai/kling-video/ai-avatar/v2/standard</code> — Avatar lipsync</li>
-      <li><code>fal-ai/minimax/speech-2.8-hd</code> — TTS (все игры кроме Genshin)</li>
-      <li><code>fal-ai/chatterbox/text-to-speech</code> — voice-clone TTS (Genshin serial-drama)</li>
+      <li><code>fal-ai/kling-video/v3/standard|pro/motion-control</code> — motion transfer (motion-dance)</li>
+      <li><code>fal-ai/minimax/speech-2.8-hd</code> — TTS, default route</li>
+      <li><code>fal-ai/minimax-music/v2.6</code> — bg-music generation</li>
+      <li><code>fal-ai/chatterbox/text-to-speech</code> — voice-clone TTS (only exact-format/series approved sample)</li>
+      <li><code>fal-ai/elevenlabs/sound-effects</code> — SFX only, ElevenLabs TTS itself is forbidden</li>
     </ul>
     <p>Async очередь. fal.ai temp-URLs живут часами — поэтому всё перезаливаем в Supabase до Kling-вызова.</p>
   </div>
@@ -508,12 +572,12 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
   <div class="card">
     <h3>Supabase</h3>
     <p class="muted">Постоянное хранилище всех ассетов + БД с метаданными.</p>
-    <h4>Storage</h4>
+    <h4>Storage (через <code>queue/upload-asset.sh</code>)</h4>
     <ul class="tight">
-      <li><code>assets/{game}/refs/</code> — character sheets, bg-refs (шарятся между эпизодами)</li>
-      <li><code>assets/{game}/scenes/{date}/{format}/</code> — scene PNGs (per-эпизод, чтоб не затирались)</li>
-      <li><code>assets/{game}/tts/</code> — MP3</li>
-      <li><code>assets/{game}/final/</code> — готовые final.mp4</li>
+      <li><code>assets/{game}/characters/{slug}/{sheet,avatar,variants/*}.png</code> — реестровые рефы, шарятся между эпизодами</li>
+      <li><code>assets/{game}/locations/{slug}.png</code>, <code>assets/{game}/branding/{cta,opener,...}</code>, <code>assets/{game}/gameplay/*.mp4</code></li>
+      <li><code>episodes/{game}/{date}-{format}/scenes/{file}</code> — per-episode scene PNG/MP4, не регистрируются в БД</li>
+      <li><code>episodes/{game}/{date}-{format}/tts/{file}</code> — per-episode TTS MP3, не регистрируются в БД</li>
     </ul>
     <h4>DB</h4>
     <ul class="tight">
@@ -524,12 +588,12 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
 
   <div class="card">
     <h3>MiniMax / Chatterbox</h3>
-    <p class="muted">Два TTS-бэкенда через fal.ai. Выбор по game_tag + формату: Chatterbox только для <code>genshin-impact</code> serial-drama (voice-clone из reference MP3). Всё остальное — MiniMax Speech 2.8 HD, включая Star Trek serial-drama.</p>
+    <p class="muted">Два TTS-бэкенда через fal.ai, выбор по приоритету (§1 sound.md): native audio (напр. serial-drama Kling I2V) → Chatterbox, только если у точного формата/серии есть approved voice sample → иначе MiniMax Speech 2.8 HD (default для всего, включая Star Trek serial-drama). Voice sample не переносится между форматами без явного user override.</p>
     <h4>Голоса</h4>
     <ul class="tight">
-      <li>Voice mapping в <code>sound.md</code> + per-game в game config</li>
+      <li>Voice mapping в <code>sound.md</code> + per-game в game config / story bible (locked per character на весь сериал)</li>
       <li>MiniMax: preset voices (Deep_Voice_Man, Determined_Man, Calm_Woman и т.д.), emotion + speed</li>
-      <li>Chatterbox: JSON-тело пишется через Python (не bash heredoc — апострофы убивают аудио)</li>
+      <li>Chatterbox: voice-clone из reference MP3, JSON-тело пишется через Python (не bash heredoc — апострофы убивают аудио)</li>
     </ul>
   </div>
 
@@ -561,11 +625,11 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
 │   │   ├── animator.md    ─ Kling I2V/Avatar
 │   │   ├── editor.md      ─ FFmpeg сборка
 │   │   └── publisher.md   ─ TikTok / Instagram / YouTube через mobile-mcp
-│   ├── formats/           ─ 14 format playbooks
-│   │   └── {character-story, serial-drama, news, fun-news, streettalk,
+│   ├── formats/           ─ 17 format playbooks
+│   │   └── {character-story, item-story, serial-drama, news, fun-news, streettalk,
 │   │       gameplay-ai-avatar, reddit-story, what-if-real-life,
 │   │       redcon, in-game-pov, top-list, wild-documentary,
-│   │       motion-dance, dual-style}.md
+│   │       motion-dance, dual-style, fake-ad, special-report}.md
 │   └── main/
 │       ├── budgets.md     ─ цены моделей
 │       ├── fallback.md    ─ обработка ошибок
@@ -586,20 +650,21 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
 │       ├── gameplay/      ─ background gameplay clips
 │       └── {format}_story_bible.json   ─ для серий
 │
-├── music/                 ─ bg-music library
-│   └── {Dark|Fun|Neutral}/*.mp3
+├── music/                 ─ legacy bg-music samples (reference only — Sound now generates
+│   └── {Dark|Fun|Energetic|Badass|Heroic|...}/*.mp3   fresh tracks via MiniMax Music, not this library)
 │
 ├── output/                ─ артефакты роликов
-│   └── {YYYY-MM-DD}/{game}/{format-slug}/
+│   └── {YYYY-MM-DD}/{game}/{format-slug}/{RUN_ID}/
 │       ├── storyboard.json
 │       ├── scenes/scene-K/scene-K.{png,mp4,mp3}
 │       └── final.mp4
 │
-├── queue/                 ─ worker + публикация
-│   ├── worker.py
-│   ├── upload-asset.sh
+├── queue/                 ─ task queue (Supabase video_tasks) + публикация — worker path, не для interactive run
+│   ├── add-task.sh, check-queue.sh, update-task.sh
+│   ├── upload-asset.sh        ─ единственный путь загрузки ассетов в Supabase Storage
+│   ├── log-publish.sh         ─ запись даты публикации в video_agent_runs
 │   ├── fetch-for-publish.sh   ─ скачать ролик из Supabase → adb → галерея телефона
-│   └── youtube-upload.sh      ─ авто-загрузка на YouTube + thumbnail + расписание
+│   └── youtube-upload.sh, youtube-auth.py, youtube-delete.sh ─ YouTube upload/scheduling
 │
 └── legacy/                ─ архив старых правил (fallback only)
 </code></pre>
@@ -632,6 +697,7 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
     <h3>formats/</h3>
     <ul class="tight">
       <li><a href="video-agent/rules/formats/character-story.md">character-story.md</a></li>
+      <li><a href="video-agent/rules/formats/item-story.md">item-story.md</a></li>
       <li><a href="video-agent/rules/formats/serial-drama.md">serial-drama.md</a></li>
       <li><a href="video-agent/rules/formats/news.md">news.md</a></li>
       <li><a href="video-agent/rules/formats/fun-news.md">fun-news.md</a></li>
@@ -645,12 +711,14 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
       <li><a href="video-agent/rules/formats/wild-documentary.md">wild-documentary.md</a></li>
       <li><a href="video-agent/rules/formats/motion-dance.md">motion-dance.md</a></li>
       <li><a href="video-agent/rules/formats/dual-style.md">dual-style.md</a></li>
+      <li><a href="video-agent/rules/formats/fake-ad.md">fake-ad.md</a></li>
+      <li><a href="video-agent/rules/formats/special-report.md">special-report.md</a></li>
     </ul>
   </div>
   <div class="card">
     <h3>tools/</h3>
     <ul class="tight">
-      <li><a href="video-agent/tools/fal-ai.md">fal-ai.md</a> — Kling, NB2, ElevenLabs API reference</li>
+      <li><a href="video-agent/tools/fal-ai.md">fal-ai.md</a> — Kling, NB2, MiniMax, Chatterbox, ElevenLabs (SFX) API reference</li>
       <li><a href="video-agent/tools/ffmpeg-api.md">ffmpeg-api.md</a> — FFmpeg Cloud (fallback)</li>
     </ul>
   </div>
@@ -658,7 +726,7 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
 
 <h2>Принципы</h2>
 <ul class="tight">
-  <li><b>Manager не делает работу sub-agent'ов.</b> Если делает — всё едет на parent-Opus, стоимость x3.</li>
+  <li><b>Manager не делает работу sub-agent'ов.</b> Если делает — всё едет на дорогую parent-модель, стоимость x3.</li>
   <li><b>Не читай PNG/MP4 визуально.</b> Валидация — только программатическая (filesize + ffprobe). Качество — на уровне промпта, не на инспекции глазами.</li>
   <li><b>Никогда не из памяти — всегда читай rule-файлы.</b> Правила меняются.</li>
   <li><b>Перед дорогим вызовом — Supabase upload.</b> fal.ai temp-URLs протухают, Kling за $1.40 не успеет скачать.</li>
@@ -668,7 +736,7 @@ Editor        →  читает всё, пишет final.mp4 на диск + з�
 
 <hr>
 <p class="muted" style="font-size: 12px; text-align: center;">
-  video-mcp pipeline · обновлено 2026-06-09
+  video-mcp pipeline · обновлено 2026-08-03
 </p>
 
 </div>
