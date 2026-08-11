@@ -7,11 +7,13 @@
   "reporter": {
     "character_name": "jake-sisko-reporter",
     "display_name": "Jake Sisko",
-    "voice": "Imposing_Manner",
+    "engine": "fal-ai/chatterbox/text-to-speech",
+    "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-positive-guy.mp3",
     "stability": 0.55,
     "style": null,
     "tone_signature": "earnest young field reporter, slightly precocious news-anchor confidence, treats absurd DS9 promenade gossip as serious journalism",
-    "supabase_avatar_url": ""
+    "supabase_avatar_url": "",
+    "fallback_voice": "Imposing_Manner"
   },
   "voice_mapping": {
     "reporter": "Imposing_Manner",

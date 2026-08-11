@@ -6,8 +6,9 @@
   "title": "Star Trek Timelines — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
   "last_episode": 5,
-  "tts_engine": "minimax",
-  "tts_note": "MiniMax Speech 2.8-HD. Voice: Deep_Voice_Man (authoritative, measured). Second-person monologue throughout — NOT first-person alternate-self. Voiceover opens with the CTA hook on the teaser clip, then continues second-person through story clips.",
+  "tts_engine": "fal-ai/chatterbox/text-to-speech",
+  "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-calm-mid-man-narrator.mp3",
+  "tts_note": "Chatterbox with voice_ref_url above (authoritative, measured). Second-person monologue throughout — NOT first-person alternate-self. Voiceover opens with the CTA hook on the teaser clip, then continues second-person through story clips. Fallback: MiniMax Speech 2.8-HD, voice Deep_Voice_Man.",
   "format_overrides": {
     "note": "Player-POV variant. Character = the player (Starfleet Timeline Commander). Each episode: one canonical crisis, one cross-era crew assembled in-game, one divergence outcome.",
     "structure": "TEASER (clip 1, TTS starts) → TITLE CARD (clip 2, silent) → HOOK+CTA (clip 3) → CANON REMINDER (clip 4) → CREW ASSEMBLED (clip 5) → DIVERGENCE (clip 6) → REVELATION (clip 7) → CTA asset",

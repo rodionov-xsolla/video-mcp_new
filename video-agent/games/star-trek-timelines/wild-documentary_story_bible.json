@@ -2,10 +2,12 @@
   "format": "wild-documentary",
   "game_tag": "star-trek-timelines",
   "narrator": {
-    "provider": "minimax",
-    "voice_id": "Deep_Voice_Man",
+    "provider": "fal-ai/chatterbox/text-to-speech",
+    "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-old-man.mp3",
     "register": "elderly naturalist, hushed awe-filled VO, David Attenborough register",
-    "language": "en"
+    "language": "en",
+    "fallback_provider": "minimax",
+    "fallback_voice_id": "Deep_Voice_Man"
   },
   "branding": {
     "overlay_local": "games/star-trek-timelines/Wildlife_overlay.png",

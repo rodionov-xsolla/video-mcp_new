@@ -3,6 +3,13 @@
   "game_tag": "star-trek-timelines",
   "last_updated": "2026-07-30",
   "style_tags": "Star Trek Timelines style, cinematic sci-fi, 3D cinematic realism, deep space black accents, LCARS orange and Federation blue lighting accents, mobile 9:16 composition, clean cinematic frame, no UI overlay",
+  "voice_policy": {
+    "engine": "fal-ai/chatterbox/text-to-speech",
+    "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-common-man.mp3",
+    "identity_critical": false,
+    "intent": "tense second-person tactical instructor walking the viewer through a survival manual",
+    "fallback_engine": "fal-ai/minimax/speech-2.8-hd"
+  },
   "used_situations": [
     {
       "situation": "Battle of Wolf 359 — Borg cube attack, your Starfleet vessel is crippled",

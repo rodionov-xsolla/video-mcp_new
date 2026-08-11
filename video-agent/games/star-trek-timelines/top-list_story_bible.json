@@ -21,9 +21,10 @@
   },
   "voice": {
     "identity_critical": false,
-    "default_route": "fal-ai/minimax/speech-2.8-hd",
+    "default_route": "fal-ai/chatterbox/text-to-speech",
     "voice_intent": "Energetic countdown host who builds excitement toward number one.",
-    "approved_voice_sample": null
+    "approved_voice_sample": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-positive-guy.mp3",
+    "fallback_route": "fal-ai/minimax/speech-2.8-hd"
   },
   "music": {
     "required": true,

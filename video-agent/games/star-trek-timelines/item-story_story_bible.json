@@ -16,11 +16,13 @@
     "state_continuity": "The Sword remains physically intact throughout this episode. Age is shown through surface patina and environment, not silhouette redesign. Its dense pale wavy etching and unique four-horn profile must remain unchanged in every post-forging scene."
   },
   "voice_policy": {
-    "engine": "minimax",
+    "engine": "fal-ai/chatterbox/text-to-speech",
+    "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-deep-voice-man.mp3",
     "identity_critical": false,
     "intent": "low resonant masculine lore narrator, measured and grave, controlled Klingon ceremonial weight, never shouting, never a direct imitation of a canon actor",
     "language_code": "en",
-    "note": "The narrator speaks about the sword in third person. The sword is not canonically sentient. Do not use a character voice clone."
+    "note": "The narrator speaks about the sword in third person. The sword is not canonically sentient. Do not use a character voice clone.",
+    "fallback_engine": "minimax"
   },
   "music_policy": {
     "mood": "dark ceremonial Klingon myth, low war drums, deep brass, restrained male-choir texture, ominous rather than triumphant",

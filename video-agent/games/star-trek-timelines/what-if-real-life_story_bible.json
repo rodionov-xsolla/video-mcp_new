@@ -8,31 +8,41 @@
       "minimax_voice": "Deep_Voice_Man",
       "voice_note": "Deep, gravelly, intense — Klingon honor in Starfleet uniform",
       "character_description": "male Klingon Starfleet officer, prominent triangular cranial ridges on forehead, dark brown skin, long dark hair in warrior ponytail, groomed goatee, gold-and-black operations uniform, diagonal metal baldric sash, fierce honorable expression, broad muscular build",
-      "source": "authored independently for what-if-real-life"
+      "source": "authored independently for what-if-real-life",
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-deep-voice-man.mp3"
     },
     "kirk": {
       "minimax_voice": "Determined_Man",
       "voice_note": "Charismatic, bold, emotionally direct — Kirk's confident swagger",
       "character_description": "male Starfleet captain, athletic build, light brown hair swept to the side, confident charming smirk, gold-yellow command tunic with Starfleet delta badge, black trousers, upright commanding posture",
-      "source": "authored independently for what-if-real-life"
+      "source": "authored independently for what-if-real-life",
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-positive-guy.mp3"
     },
     "data": {
       "minimax_voice": "Imposing_Manner",
       "voice_note": "Flat, over-enunciated, precise — android speech pattern, no contractions",
       "character_description": "android male Starfleet officer, pale yellowish skin, slicked black hair, yellow-gold eyes, gold-and-black operations uniform, emotionless face, slight head tilt of curiosity, perfectly still posture",
-      "source": "authored independently for what-if-real-life; generate a fresh format-bound photorealistic ref"
+      "source": "authored independently for what-if-real-life; generate a fresh format-bound photorealistic ref",
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-common-man.mp3"
     },
     "picard": {
       "minimax_voice": "Elegant_Man",
       "voice_note": "Measured, dignified, authoritative — fits Picard's philosophical command style",
       "character_description": "bald male Starfleet captain, red and black TNG uniform with red shoulders black body, gold combadge, 4 rank pips, dignified expression, measured upright bearing, faint amused smile",
-      "source": "authored independently for what-if-real-life"
+      "source": "authored independently for what-if-real-life",
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-calm-mid-man-narrator.mp3"
     },
     "scotty": {
       "minimax_voice": "Deep_Voice_Man",
       "voice_note": "Gravelly, exasperated, wounded professional pride — distinct register from Worf's combat-formal George voice",
       "character_description": "male Starfleet chief engineer, early-to-mid-40s, stocky solid build, weathered practical face, short reddish-brown hair combed back, thick sideburns, red engineering uniform with black shoulders, sleeves pushed up over forearms, multitool clipped to belt, grease-smudged fingers, exasperated squint, jaw clenched with wounded pride",
-      "source": "authored independently for what-if-real-life EP (2026-07-09); no cross-format lookup or conflict check"
+      "source": "authored independently for what-if-real-life EP (2026-07-09); no cross-format lookup or conflict check",
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-old-man.mp3"
     }
   }
 }

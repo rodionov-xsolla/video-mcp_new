@@ -10,10 +10,12 @@
   },
   "voices": {
     "announcer": {
-      "provider": "fal-ai/minimax/speech-2.8-hd",
-      "voice_id": "Deep_Voice_Man",
+      "provider": "fal-ai/chatterbox/text-to-speech",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-radio-commercial-guy.mp3",
       "stability": 0.35,
-      "style": "energetic earnest deadpan retro commercial announcer"
+      "style": "energetic earnest deadpan retro commercial announcer",
+      "fallback_provider": "fal-ai/minimax/speech-2.8-hd",
+      "fallback_voice_id": "Deep_Voice_Man"
     }
   },
   "advertised_products": [

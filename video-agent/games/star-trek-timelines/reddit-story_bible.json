@@ -1,5 +1,13 @@
 {
   "game_tag": "star-trek-timelines",
+  "voice_policy": {
+    "engine": "fal-ai/chatterbox/text-to-speech",
+    "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-friendly-mid-young-man.mp3",
+    "identity_critical": false,
+    "intent": "first-person casual narrator telling their own justice story",
+    "fallback_engine": "fal-ai/minimax/speech-2.8-hd",
+    "fallback_voice_id": "Determined_Man"
+  },
   "total_stories": 11,
   "stories": [
     {

@@ -268,7 +268,9 @@
       "elevenlabs_voice": "Brian",
       "voice_note": "Measured, dignified, authoritative — fits Picard's philosophical command style",
       "character_description": "bald male Starfleet captain, red and black TNG uniform with red shoulders black body, gold combadge, 4 rank pips, dignified expression",
-      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/picard/sheet.png"
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/picard/sheet.png",
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-calm-mid-man-narrator.mp3"
     },
     "uhura": {
       "name": "Nyota Uhura",
@@ -277,7 +279,9 @@
       "elevenlabs_voice": "Aria",
       "voice_note": "Warm, expressive, strong — fits Uhura's confidence and emotional depth",
       "character_description": "Black female Starfleet communications officer, red short-sleeve command dress uniform with Starfleet delta badge, elegant upswept hair, warm expressive eyes, Enterprise bridge background",
-      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/uhura/sheet.png"
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/uhura/sheet.png",
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-expressive-woman.mp3"
     },
     "janeway": {
       "name": "Captain Janeway",
@@ -286,7 +290,9 @@
       "elevenlabs_voice": "Sarah",
       "voice_note": "Sharp, determined, slight gravitas — Janeway's no-nonsense command presence",
       "character_description": "female Starfleet captain, reddish-brown hair in tight bun, red-and-black command uniform, decisive expression, Voyager bridge background",
-      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/janeway/variants/captain.png"
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/janeway/variants/captain.png",
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-mid-young-woman-voice.mp3"
     },
     "kirk": {
       "name": "Captain Kirk",
@@ -295,7 +301,9 @@
       "elevenlabs_voice": "Daniel",
       "voice_note": "Charismatic, bold, emotionally direct — Kirk's confident swagger",
       "character_description": "male Starfleet captain, athletic build, light brown hair swept to the side, confident charming smirk, gold-yellow command tunic with Starfleet delta badge, black trousers, heroic pose, dramatic bridge lighting",
-      "ref_url": null
+      "ref_url": null,
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-positive-guy.mp3"
     },
     "spock": {
       "name": "Mr. Spock",
@@ -304,7 +312,9 @@
       "elevenlabs_voice": "Brian",
       "voice_note": "Flat, precise, no emotional coloring — Vulcan logic pattern",
       "character_description": "male Vulcan Starfleet officer, pointed ears, sharply arched eyebrows, straight black bowl-cut hair, olive-tinted skin, calm emotionless expression, blue-and-black science tunic with Starfleet delta badge",
-      "ref_url": null
+      "ref_url": null,
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-common-man.mp3"
     },
     "mccoy": {
       "name": "Dr. Leonard McCoy",
@@ -313,7 +323,9 @@
       "elevenlabs_voice": "Daniel",
       "voice_note": "Warm Southern drawl, impassioned, occasionally grumpy — Bones' emotional core. Lower stability than Kirk's Daniel to differentiate",
       "character_description": "male Starfleet doctor, medium build, hazel eyes, short dark hair with silver temples, blue-and-black science/medical tunic, Starfleet delta badge, slightly furrowed brow — perpetually worried expression, sickbay background with medical panels",
-      "ref_url": null
+      "ref_url": null,
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-old-man.mp3"
     },
     "worf": {
       "name": "Commander Worf",
@@ -322,7 +334,9 @@
       "elevenlabs_voice": "George",
       "voice_note": "Deep, gravelly, intense — Klingon honor in Starfleet uniform",
       "character_description": "male Klingon Starfleet officer, prominent triangular cranial ridges on forehead, dark brown skin, long dark hair in warrior ponytail, groomed goatee, gold-and-black operations uniform, diagonal metal baldric sash, fierce honorable expression",
-      "ref_url": null
+      "ref_url": null,
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-deep-voice-man.mp3"
     },
     "data": {
       "name": "Commander Data",
@@ -331,7 +345,9 @@
       "elevenlabs_voice": "Charlie",
       "voice_note": "Flat, over-enunciated, precise — android speech pattern, no contractions",
       "character_description": "android male Starfleet officer, pale yellowish skin, slicked black hair, yellow-gold eyes, gold-and-black operations uniform, emotionless face, slight head tilt of curiosity",
-      "ref_url": null
+      "ref_url": null,
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-common-man.mp3"
     },
     "seven": {
       "name": "Seven of Nine",
@@ -340,7 +356,9 @@
       "elevenlabs_voice": "Aria",
       "voice_note": "Cold, clinical, detached — former Borg learning humanity. High stability, flat affect",
       "character_description": "blonde female, hair pulled back tightly, metallic starburst Borg implant above left eye, small metallic implant on left hand, silver-and-blue form-fitting catsuit, intense blue eyes, arms crossed, Voyager astrometrics lab background",
-      "ref_url": null
+      "ref_url": null,
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-mid-young-woman-voice.mp3"
     },
     "lorca": {
       "name": "Captain Gabriel Lorca",
@@ -349,7 +367,9 @@
       "elevenlabs_voice": "Liam",
       "voice_note": "Dark, charismatic, with hidden menace — mirror-universe predator behind a Starfleet mask",
       "character_description": "male Starfleet captain, lean angular face, short dark hair, cold calculating eyes, black-and-metallic Discovery-era command uniform, tense predatory posture, dim Discovery bridge background with dark tones",
-      "ref_url": null
+      "ref_url": null,
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-deep-voice-man.mp3"
     },
     "belanna": {
       "name": "B'Elanna Torres",
@@ -358,7 +378,9 @@
       "elevenlabs_voice": "Matilda",
       "voice_note": "Fierce, passionate, quick-tempered — half-Klingon warrior fighting her own nature",
       "character_description": "half-Klingon female Starfleet engineer, subtle cranial ridges on forehead (less prominent than full Klingon), dark brown wavy hair, intense brown eyes, gold-and-black engineering uniform, strong jaw, defiant expression, engineering section background",
-      "ref_url": null
+      "ref_url": null,
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-expressive-woman.mp3"
     },
     "carol_marcus": {
       "name": "Dr. Carol Marcus",
@@ -367,7 +389,9 @@
       "elevenlabs_voice": "Sarah",
       "voice_note": "Intelligent, composed, with underlying grief — scientist's resolve",
       "character_description": "blonde female scientist, pale blue civilian science uniform, Starfleet delta on breast pocket, clear blue eyes, hair pulled back, intelligent focused expression, science lab background with Genesis device",
-      "ref_url": null
+      "ref_url": null,
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-warm-woman-voice.mp3"
     },
     "archer": {
       "name": "Captain Jonathan Archer",
@@ -376,7 +400,9 @@
       "elevenlabs_voice": "George",
       "voice_note": "Earnest, adventurous, slightly rougher than later Starfleet captains — the first great explorer",
       "character_description": "male Starfleet captain, dark hair, brown eyes, blue-gray Enterprise-era Starfleet jumpsuit with vertical gold shoulder stripe, combadge, determined optimistic expression, early NX-01 bridge background",
-      "ref_url": null
+      "ref_url": null,
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-friendly-mid-young-man.mp3"
     },
     "khan": {
       "name": "Khan Noonien Singh",
@@ -390,7 +416,9 @@
         "young": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/khan/variants/young.png",
         "exile": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/khan/variants/exile.png",
         "mature": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/khan/variants/mature.png"
-      }
+      },
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-radio-commercial-guy.mp3"
     },
     "q": {
       "name": "Q",
@@ -399,7 +427,9 @@
       "elevenlabs_voice": "Daniel",
       "voice_note": "Sardonic, theatrical, omniscient amusement — the trickster god who takes nothing seriously except his own entertainment",
       "character_description": "middle-aged male in red-and-black TNG Starfleet captain uniform, smug knowing grin, theatrical raised hand, mischievous gleaming eyes, Enterprise bridge background with golden omnipotent glow distortion",
-      "ref_url": null
+      "ref_url": null,
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-radio-commercial-guy.mp3"
     },
     "borg_queen": {
       "name": "Borg Queen",
@@ -408,14 +438,16 @@
       "elevenlabs_voice": "Aria",
       "voice_note": "Silky-smooth, seductive, utterly cold — the Collective speaking through one voice. High stability, zero warmth",
       "character_description": "female Borg Queen, pale grayish skin, bald head with dark biomechanical skull cap, exposed mechanical spine, black bodysuit with grey bio-tubing, dark hollow eyes, sinister knowing half-smile, Borg alcove background with green ambient glow",
-      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/borg-queen/sheet.png"
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/borg-queen/sheet.png",
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-mid-young-woman-voice.mp3"
     },
     "dukat": {
       "name": "Gul Dukat",
       "gender": "male",
       "era": "DS9",
       "elevenlabs_voice": "Liam",
-      "voice_engine_override": "minimax",
+      "voice_engine_override": "chatterbox",
       "minimax_voice": "Deep_Voice_Man",
       "voice_note": "Charming, self-righteous, delusional — villain who genuinely believes he's the hero. Active MiniMax override: always pass Deep_Voice_Man explicitly; Liam is ElevenLabs-only and must never be sent to MiniMax because the provider falls back to Wise_Woman.",
       "character_description": "male Cardassian, gray scaly textured skin, prominent spoon-shaped cranial ridge on forehead, raised neck ridges, slicked-back dark hair, gray-brown Cardassian military uniform with armored shoulders, charming manipulative smile",
@@ -423,7 +455,8 @@
       "variants": {
         "young": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/dukat/variants/young.png",
         "mature": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/dukat/variants/mature.png"
-      }
+      },
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-deep-voice-man.mp3"
     },
     "odo": {
       "name": "Odo",
@@ -437,7 +470,9 @@
         "early_lab": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/odo/variants/early_lab.png",
         "settled": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/odo/variants/settled.png"
       },
-      "variants_note": "This character does not visibly age once settled (Changeling), so 'early_lab' vs 'settled' represents his formless-vs-humanoid states, not a child/teen/mature age progression."
+      "variants_note": "This character does not visibly age once settled (Changeling), so 'early_lab' vs 'settled' represents his formless-vs-humanoid states, not a child/teen/mature age progression.",
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-calm-mid-man-narrator.mp3"
     },
     "kira": {
       "name": "Kira Nerys",
@@ -446,7 +481,9 @@
       "elevenlabs_voice": "Charlotte",
       "voice_note": "Backfilled from episode 17 (2026-07-02) production; this bible's characters{} object was missing a 'kira' entry despite episode 17 having already produced and used this appearance/voice.",
       "character_description": "Bajoran female in her 30s, orange-red wavy hair medium length falling to her shoulders, warm light brown skin, prominent Bajoran nasal ridges running from brow ridge down the nose bridge, fierce dark brown eyes carrying hard-won depth, strong defined jaw, DS9-era gray-shouldered Bajoran Militia uniform (gray shoulder panels, dark burgundy/dark gray body), Bajoran rank half-moon pip cluster on the collar, Starfleet-style combadge on the left chest, broad athletic shoulders",
-      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/kira/variants/mature.png"
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/kira/variants/mature.png",
+      "voice_engine_override": "chatterbox",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-warm-woman-voice.mp3"
     }
   },
   "characters_note": "Prompt blocks and Supabase refs for canonical Trek characters. Reference sheet goes to storyboarder as chain_ref. Use a character's voice_engine_override and engine-specific voice field when present; otherwise use the legacy ElevenLabs voice assignment."
