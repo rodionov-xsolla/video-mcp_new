@@ -123,6 +123,164 @@
         "eligible_for": "pixel clips"
       },
       "status": "covered"
+    },
+    {
+      "name": "Stormcaller",
+      "slug": "stormcaller",
+      "role": "an original Growtopia player character built from the Zeus set — a nobody farmer struck by legendary lightning who ascends, lets power go to his head, nearly loses it in a storm backlash, and ends up sharing it as a mentor to newcomers",
+      "costume_stages": {
+        "mortal": "2D pixel-art Growtopian, blocky humanoid, tan/beige blocky skin (~#C9A67C), large square head, two white dot eyes with black pupils, small flat mouth, thick clean black outline, plain brown work shirt, patched grey trousers, dirt-stained tiny blocky hands, no hat, no cosmetic set, humble slim build, holding a wooden hoe, eager but weary expression",
+        "ascended": "2D pixel-art Growtopian in Zeus set, blocky humanoid, tan/beige blocky skin (~#C9A67C), large square head, two white dot eyes with black pupils, golden Greek-style armor plates over torso, laurel crown on head, crackling yellow lightning bolts arcing around the body, glowing storm-blue aura, tiny blocky hands gripping a lightning-wreathed staff, broader confident stance, thick clean black outline"
+      },
+      "refs": {
+        "mortal": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/stormcaller-mortal-2026-08-03/variants/mortal.png",
+          "tags": ["character-story", "stormcaller", "mortal"]
+        },
+        "ascended": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/stormcaller-ascended-2026-08-03/variants/ascended.png",
+          "tags": ["character-story", "stormcaller", "ascended"]
+        }
+      },
+      "voice_style": "Male narrator, mythic and self-aware. Starts wry and a little shaken (post-crisis hook), warms into plain humility during origin, swells with cocky pride during the Zeus ascension and hubris beats, cracks with alarm during the storm backlash, settles into a warm grounded mentor tone for the revelation.",
+      "story_arc": {
+        "hook": "I'm Stormcaller — the Growtopian chosen by Zeus's own lightning. I nearly lost everything it gave me.",
+        "origin": "Before the storm, I was nobody. Just a farmer breaking blocks for gems, world after world.",
+        "turning_point": "Lightning found me and the Zeus set became mine. Power went to my head — I flaunted my crown and mocked players who had nothing. Then the storm turned on me and nearly tore the crown from my hands.",
+        "revelation": "Now I share the storm instead of hoarding it. Every newbie I meet gets a spark of it."
+      },
+      "environments_used": [
+        "Modest dirt-and-wood crop-field world",
+        "Open storm-lashed field with a single dead tree",
+        "Bustling tile-block trade plaza with vending machines and World Lock display cases",
+        "Cracked floating-platform storm world under a jagged lightning sky"
+      ],
+      "items_featured": ["Zeus set", "World Lock", "lightning-wreathed staff"],
+      "status": "covered"
+    },
+    {
+      "name": "Seraph",
+      "slug": "seraph",
+      "role": "an original Growtopia player character built from the Angelic set — a trader scammed out of everything who earns the Angelic set by choosing to help a stranger instead of despairing, becoming a guardian who protects newcomers from scammers",
+      "costume_stages": {
+        "unmarked": "2D pixel-art Growtopian, blocky humanoid, tan/beige blocky skin (~#C9A67C), large square head, two white dot eyes with black pupils, small flat mouth, thick clean black outline, bright cyan/turquoise short-sleeve t-shirt (~#3FC1D6), medium-blue pants (~#5B6DC8), tiny blocky hands, no hat, no cosmetic set, open trusting expression",
+        "angelic": "2D pixel-art Growtopian in Angelic set, blocky humanoid, tan/beige blocky skin (~#C9A67C), large square head, two white dot eyes with black pupils, large white feathered wings spread on the back, glowing golden halo floating above the head, flowing white robe with soft gold trim at the hem, soft heavenly golden glow enveloping the body, serene composed stance, tiny blocky hands, thick clean black outline"
+      },
+      "refs": {
+        "unmarked": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/seraph-unmarked-2026-08-04/variants/unmarked.png",
+          "tags": ["character-story", "seraph", "unmarked"]
+        },
+        "angelic": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/seraph-angelic-2026-08-04/variants/angelic.png",
+          "tags": ["character-story", "seraph", "angelic"]
+        }
+      },
+      "voice_style": "Male narrator, warm and steady with a current of quiet hurt underneath. Starts serene and knowing in the hook, turns open and naive during origin, cracks with disbelief through the scam, softens into trembling resolve at the moment of giving, settles into a calm protective guardian-mentor tone for the revelation.",
+      "story_arc": {
+        "hook": "I'm Seraph — once Growtopia's easiest mark, now its self-appointed Guardian of every newcomer.",
+        "origin": "Back then I was just a trader, trusting and open.",
+        "turning_point": "A smooth-talking conman promised riches and took everything I had. Broke and alone, I gave my last coin away to someone even poorer than me — and that selfless act triggered the Angelic transformation.",
+        "revelation": "Now I walk the plazas as a guardian, so no newbie ever loses what I lost."
+      },
+      "environments_used": [
+        "Modest starter world with a wooden vending booth and a dirt path to the fence gate",
+        "The same booth left cracked and emptied after the scam",
+        "The fence gate at golden dusk where the selfless trade is made",
+        "Bustling tile-block trade plaza with vending machines and World Lock display cases"
+      ],
+      "items_featured": ["Angelic set", "World Lock"],
+      "status": "covered"
+    },
+    {
+      "name": "Dragonkin",
+      "slug": "dragonkin",
+      "role": "an original Growtopia player character built from the Dragon set (Baby Dragon) — a bonding/patience story about raising a baby dragon from a cracked egg into a fully bonded partner, told through three costume stages instead of a power arc",
+      "costume_stages": {
+        "unbonded": "plain worn brown work vest and patched grey trousers, no dragon features, cradling a fist-sized cracked orb-egg with faint warm cracks of orange light",
+        "half-bonded": "same base body with one small patchy green scale-patch sprouting unevenly on the scalp, a short stub tail poking from the waistband, no wings yet, a thin sputtering flame flickering at the mouth corner, uncertain wide-eyed expression",
+        "fully-bonded": "complete Dragon set (verbatim game canon): green scaled dragon hood and tail, small folded wings, tiny pixel flame breath from mouth, spiky scaled details, fierce playful side-view pose"
+      },
+      "refs": {
+        "unbonded": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/dragonkin-unbonded-2026-08-04/variants/unbonded.png",
+          "tags": ["character-story", "dragonkin", "unbonded"]
+        },
+        "half-bonded": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/dragonkin-halfbonded-2026-08-04/variants/half-bonded.png",
+          "tags": ["character-story", "dragonkin", "half-bonded"]
+        },
+        "fully-bonded": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/dragonkin-fullybonded-2026-08-04/variants/fully-bonded.png",
+          "tags": ["character-story", "dragonkin", "fully-bonded"]
+        }
+      },
+      "voice_style": "Young adult narrator, gentle and patient rather than boastful. Hook opens warm and a little wondrous. Origin is plain and humble. The storm turning-point cracks with worry but never panics — delivery slows and softens rather than escalating, to sell 'patience over force'. Revelation settles into quiet, contented warmth.",
+      "story_arc": {
+        "hook": "Found a cracked egg no one else wanted in a forgotten mining tunnel.",
+        "origin": "Kept it warm by the campfire, fed it, waited without knowing if it would ever hatch.",
+        "turning_point": "A storm hit while the hatchling was still fragile — panic would have scared it off, so I waited instead, and it chose to trust me.",
+        "revelation": "Now fully bonded, we stand together in the plaza — proof patience raises what force never could."
+      },
+      "environments_used": [
+        "Forgotten mining tunnel of cracked dark stone blocks with one glowing warm orb wedged in rubble",
+        "Humble starter world with a small campfire, wooden crate, and a planted torch",
+        "Open storm-lashed hilltop world under a jagged lightning-lit sky",
+        "Sunrise-lit garden world with fresh tilled soil blocks and a small hay nest",
+        "Bright grand plaza world with a tile-block fountain and a Growtopia banner"
+      ],
+      "items_featured": ["Dragon set (Baby Dragon)"],
+      "status": "covered"
+    },
+    {
+      "name": "Grinshade",
+      "slug": "grinshade",
+      "role": "an original Growtopia player character built from the Devil/Demonic set — a temptation/corruption story about a scammed player who bargains away his humble start for demonic power and never looks back, an unrepentant villain turn with no redemption",
+      "costume_stages": {
+        "innocent": "2D pixel-art Growtopian, blocky humanoid, tan/beige blocky skin (~#C9A67C), large square head, two white dot eyes with black pupils, small flat mouth, thick clean black outline, patched grey work vest, faded green trousers, worn blocky hands, no hat, no cosmetic set, humble slim build, hopeful uncertain half-smile, holding a cracked wooden mining pick",
+        "tempted": "2D pixel-art Growtopian mid-transformation, tan/beige blocky skin visibly darkening toward dark red at the edges, large square head, one curved horn budding through the hairline while the other side stays bare, one eye glowing ember-red while the other remains a plain white dot, a faint dark smoky wisp curling from one shoulder blade where a wing is just forming, patched grey vest cracking open at the seam, thick clean black outline, uneasy half-eager grin",
+        "corrupted": "2D pixel-art Growtopian in Demonic set, dark red skin, black bat wings, curved horns, glowing red eyes, mischievous sharp-toothed grin, dark smoky aura, tiny clawed blocky hands, large square head, thick clean black outline, menacing side-view stance"
+      },
+      "refs": {
+        "innocent": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/grinshade-innocent-2026-08-04/variants/innocent.png",
+          "tags": ["character-story", "grinshade", "innocent"]
+        },
+        "tempted": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/grinshade-tempted-2026-08-04/variants/tempted.png",
+          "tags": ["character-story", "grinshade", "tempted"]
+        },
+        "corrupted": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/grinshade-corrupted-2026-08-04/variants/corrupted.png",
+          "tags": ["character-story", "grinshade", "corrupted"]
+        }
+      },
+      "voice_style": "Male narrator, sly and seductive with dark charisma. Starts cocky and gleeful in the corrupted hook, drops to plain weary resentment during origin, turns sly and hungrily tempted during the shadow-merchant bargain, swells with dark theatrical triumph as the transformation completes, finishes in gleeful unrepentant mocking delight — no remorse, no redemption note anywhere.",
+      "story_arc": {
+        "hook": "I am Grinshade — and I'd make the devil's bargain again in a heartbeat.",
+        "origin": "I started with nothing. Every trade I made got robbed.",
+        "turning_point": "A shadow merchant offered me power instead of pity. The horns grew first, then the wings, then I stopped caring what I used to be.",
+        "revelation": "They call it a curse. I call it the best deal I ever made."
+      },
+      "environments_used": [
+        "Humble dirt-block starter world beside a cracked stone block and a wooden fence post",
+        "Wrecked trade world with an overturned vending machine and a smashed display box",
+        "Smoky shadow bazaar stall lit by a hanging ember-lantern, hooded shadow merchant's counter of cursed items",
+        "Grinshade's own world curdling into cracked obsidian tiles around a blackened tree stump",
+        "Grand dark citadel throne room of black tile blocks with floating embers and a pile of surrendered World Locks and Diamond Locks as trophies"
+      ],
+      "items_featured": ["Devil / Demonic set", "World Lock", "Diamond Lock"],
+      "status": "covered"
     }
   ],
   "narrator": {
@@ -143,7 +301,11 @@
     "legendary-wizard",
     "tomb-robber",
     "criminal-mastermind",
-    "OldGrower"
+    "OldGrower",
+    "stormcaller",
+    "seraph",
+    "dragonkin",
+    "grinshade"
   ],
   "episodes": [
     {
@@ -180,6 +342,67 @@
       "date": "2026-07-21",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-21/character-story/final.mp4",
       "notes": "Test run approved by user 2026-07-22. Uploaded post-hoc."
+    },
+    {
+      "episode": 5,
+      "character": "Stormcaller",
+      "slug": "stormcaller",
+      "title": "Stormcaller: How I Caught Zeus's Lightning",
+      "date": "2026-08-03",
+      "run_id": "20260803-231040-42395",
+      "output_dir": "output/2026-08-03/growtopia/character-story/20260803-231040-42395",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-03/character-story/20260803-231040-42395/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Determined_Man",
+      "status": "approved_final_saved",
+      "notes": "Original character built from the Zeus set (not a named wiki NPC) — mortal-farmer-to-Zeus-ascension arc with hubris/backlash/mentor revelation. Approved by user."
+    },
+    {
+      "episode": 6,
+      "character": "Seraph",
+      "slug": "seraph",
+      "title": "Seraph: The Guardian I Became",
+      "date": "2026-08-04",
+      "run_id": "20260804-002922-a-88337",
+      "output_dir": "output/2026-08-04/growtopia/character-story/20260804-002922-a-88337",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-04/character-story/20260804-002922-a-88337/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Determined_Man",
+      "status": "approved_final_saved",
+      "notes": "Original character built from the Angelic set — scammed trader gives away his last coin, transformation triggered by the selfless act, becomes plaza guardian against scammers. One of 3 parallel character-story episodes produced in the same run (with Dragonkin and Grinshade). Approved by user."
+    },
+    {
+      "episode": 7,
+      "character": "Dragonkin",
+      "slug": "dragonkin",
+      "title": "Dragonkin: The Bond No One Else Would Raise",
+      "date": "2026-08-04",
+      "run_id": "20260804-002922-b-88337",
+      "output_dir": "output/2026-08-04/growtopia/character-story/20260804-002922-b-88337",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-04/character-story/20260804-002922-b-88337/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Patient_Man",
+      "status": "approved_final_saved",
+      "notes": "Original character built from the Dragon set (Baby Dragon) — bonding/patience arc raising a hatchling from a cracked egg to full partnership, three costume stages instead of a power arc. TTS was regenerated at a faster speech rate mid-run (first pass came out 1.55x the video timeline, exceeding the 1.4x atempo cap; refixed to 1.24x). One of 3 parallel character-story episodes produced in the same run (with Seraph and Grinshade). Approved by user.",
+      "lesson": "MiniMax 'Patient_Man' voice can read markedly slower than other MiniMax voices at the same nominal speed setting for the same word count — check actual per-clip TTS duration against MAIN_DUR right after Sound, not just word count, before proceeding to Storyboarder."
+    },
+    {
+      "episode": 8,
+      "character": "Grinshade",
+      "slug": "grinshade",
+      "title": "Grinshade: The Devil's Bargain I'd Make Again",
+      "date": "2026-08-04",
+      "run_id": "20260804-002922-c-88337",
+      "output_dir": "output/2026-08-04/growtopia/character-story/20260804-002922-c-88337",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-04/character-story/20260804-002922-c-88337/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Deep_Voice_Man",
+      "status": "approved_final_saved",
+      "notes": "Original character built from the Devil/Demonic set — scammed player bargains with a shadow merchant for demonic power, unrepentant villain turn with no redemption. One of 3 parallel character-story episodes produced in the same run (with Seraph and Dragonkin). Approved by user."
     }
   ]
 }

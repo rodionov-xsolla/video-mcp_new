@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Character Story",
   "created_at": "2026-05-30",
-  "last_episode": 21,
+  "last_episode": 26,
   "tts_engine": "elevenlabs",
   "tts_note": "Legacy default assignments use ElevenLabs voice names, but the active Sound provider may be MiniMax. A character's voice_engine_override and matching engine-specific voice field always win. Never pass an ElevenLabs-only name to MiniMax because the provider may fall back to the wrong gender. Long monologue (>80 words) → mandatory chunking into ≤35-word segments.",
   "format_overrides": {
@@ -33,7 +33,10 @@
       "Michael Burnham",
       "T'Pol",
       "Kira Nerys",
-      "Borg Queen"
+      "Borg Queen",
+      "Troi",
+      "Guinan",
+      "Hoshi Sato"
     ],
     "done_male": [
       "McCoy",
@@ -48,7 +51,9 @@
       "Worf",
       "Khan",
       "Gul Dukat",
-      "Odo"
+      "Odo",
+      "Garak",
+      "Chakotay"
     ],
     "all_done": [
       "McCoy",
@@ -73,7 +78,12 @@
       "Khan",
       "Borg Queen",
       "Gul Dukat",
-      "Odo"
+      "Odo",
+      "Troi",
+      "Guinan",
+      "Garak",
+      "Chakotay",
+      "Hoshi Sato"
     ],
     "error": [],
     "error_note": "Characters listed in 'error' had a production attempt but the final video was rejected. Do NOT pick them again until manually reviewed and removed from this list.",
@@ -257,6 +267,81 @@
       "youtube_url": "https://www.youtube.com/watch?v=FQJKAlP3on4",
       "yt_publish_at": "2026-07-25T20:59:00Z",
       "notes": "Shapeshifter constable's search for identity and his own people. Origin as an unnamed specimen in Dr. Mora's lab, life as DS9's security chief, guarded bond with Kira Nerys, discovery of the Great Link, revelation that the Founders (his own people) are the Dominion's tyrannical architects of the war, and the bittersweet cost of leaving Kira to carry the cure home. Two visual variants used in place of an age progression (Changelings do not visibly age): early_lab (formless liquid specimen) and settled (familiar humanoid constable form). Kira reused from episode 17's mature appearance/voice for cross-episode consistency. Budget ~$3.43-3.85 (one Kling I2V submission for scene 5 hit an ambiguous SSL-timeout mid-POST; resolved via a fresh unambiguous job rather than a resubmit of the wedged request, per fallback.md's UNKNOWN-state rule — true total may include one extra $0.42 if the original ambiguous attempt silently landed a charge on fal.ai's side, undiscoverable from this pipeline)."
+    },
+    {
+      "episode": 22,
+      "date": "2026-08-07",
+      "character": "Deanna Troi",
+      "character_slug": "troi",
+      "gender": "female",
+      "era": "TNG",
+      "idea": "Deanna Troi — Character Story | Star Trek Timelines",
+      "tts_engine": "minimax",
+      "minimax_voice": "Calm_Woman",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-07/character-story/20260807-125423-34277-troi/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=BZj6zrgfxdY",
+      "yt_publish_at": "2026-08-13T19:18:00Z",
+      "notes": "Empathic Betazoid counselor arc: father's early death, alien possession/assault, loss of unborn son Ian, and identity built around emotional vulnerability rather than despite it. Two visual variants: mature and child_7. 8 clips/40s. Scene 3 (child_7, father's-death beat) was twice rejected by NB2 content filter for funeral/mourning framing; resolved with a neutral single-figure composition (young Troi alone at a viewport)."
+    },
+    {
+      "episode": 23,
+      "date": "2026-08-07",
+      "character": "Guinan",
+      "character_slug": "guinan",
+      "gender": "female",
+      "era": "El-Aurian / TNG",
+      "idea": "Guinan — Character Story | Star Trek Timelines",
+      "tts_engine": "minimax",
+      "minimax_voice": "Calm_Woman",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-07/character-story/20260807-125423-34277-guinan/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=rZCHTnV8i3Y",
+      "yt_publish_at": "2026-08-15T20:28:00Z",
+      "notes": "Ageless El-Aurian listener: peaceful wandering civilization, Borg destruction of her homeworld, centuries-long unspoken bond with Picard, vocation of carrying others' grief. Two visual variants (homeworld/listener) substitute for age progression, mirroring the Odo early_lab/settled precedent. 6 clips/30s. Initial TTS render at slow 0.85x MiniMax speed overran the picture by 65%% (over the format's 40%% mismatch gate); fixed by regenerating the same script at 1.08x — no video regeneration needed."
+    },
+    {
+      "episode": 24,
+      "date": "2026-08-07",
+      "character": "Elim Garak",
+      "character_slug": "garak",
+      "gender": "male",
+      "era": "DS9",
+      "idea": "Elim Garak — Character Story | Star Trek Timelines",
+      "tts_engine": "minimax",
+      "minimax_voice": "Elegant_Man",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-07/character-story/20260807-125423-34277-garak/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=ekXCjkrp51A",
+      "yt_publish_at": "2026-08-17T20:16:00Z",
+      "notes": "Exiled Cardassian tailor/former Obsidian Order operative: training to become 'no one,' exile by adoptive father-figure Enabran Tain, layered lies about his own past, guarded friendship with Bashir, and the Vreenak assassination reframed as loyalty rather than guilt. Two visual variants (operative/tailor). 6 clips/30s. Flagged but did not reuse a pre-existing unlogged Supabase asset from 2026-07-23 with no bible/episode history — generated fresh."
+    },
+    {
+      "episode": 25,
+      "date": "2026-08-07",
+      "character": "Commander Chakotay",
+      "character_slug": "chakotay",
+      "gender": "male",
+      "era": "VOY",
+      "idea": "Commander Chakotay — Character Story | Star Trek Timelines",
+      "tts_engine": "minimax",
+      "minimax_voice": "Determined_Man",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-07/character-story/20260807-125423-34277-chakotay/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=9HkJ2nidV00",
+      "yt_publish_at": "2026-08-19T19:03:00Z",
+      "notes": "Former Maquis rebel turned Voyager's first officer: colony ceded to Cardassians, father killed in a raid, insurgency against the government he once served, forced alliance and growth into Janeway's most trusted officer 70,000 light-years from home. Two visual variants (colonist_maquis/starfleet_voyager). 7 clips/35s. One character-ref job's remote generation completed but local download failed twice; recovered via manual download/upload from the recorded result_url rather than paying for a duplicate generation. One scene hit a genuine no_media_generated provider rejection, resolved with one clarified-prompt retry."
+    },
+    {
+      "episode": 26,
+      "date": "2026-08-07",
+      "character": "Hoshi Sato",
+      "character_slug": "hoshi-sato",
+      "gender": "female",
+      "era": "ENT",
+      "idea": "Ensign Hoshi Sato — Character Story | Star Trek Timelines",
+      "tts_engine": "minimax",
+      "minimax_voice": "Calm_Woman",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-07/character-story/20260807-125423-34277-hoshi-sato/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=ov9AUkNZsqE",
+      "yt_publish_at": "2026-08-21T19:20:00Z",
+      "notes": "Starfleet's first linguist aboard the NX-01: near-refusal of the mission out of fear of deep space, real-time first-contact translation under pressure, foundational work toward the universal translator, and the recurring choice to stay despite the fear. Single visual variant (no canon age-progression in the ENT timeframe). 6 clips/30s. Two issues fixed before approval: (1) initial TTS at slow 0.80-0.85x MiniMax speed overran the picture by 45%% (over the 40%% gate), fixed by regenerating at 1.05-1.1x; (2) user caught on human review that scene 3's image had rendered as a split/diptych composition (character not whole in frame) — Storyboarder regenerated as a single coherent frame (dropped the ambiguous second prev-scene chain-ref), Animator re-animated just that scene, Editor rebuilt final.mp4. This is exactly why the Phase 6 human review gate exists — programmatic validation cannot catch this class of defect."
     }
   ],
   "style_tags": "realistic 3D CGI — cinematic lighting, photorealistic textures, high detail 3D render, game cutscene quality. Do NOT use the game's illustrated/painted art style. All clips must match this style, including child-character scenes. Required prompt keywords: 'realistic 3D render, cinematic lighting, photorealistic textures, high detail 3D CGI, game cutscene quality'.",
@@ -268,9 +353,7 @@
       "elevenlabs_voice": "Brian",
       "voice_note": "Measured, dignified, authoritative — fits Picard's philosophical command style",
       "character_description": "bald male Starfleet captain, red and black TNG uniform with red shoulders black body, gold combadge, 4 rank pips, dignified expression",
-      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/picard/sheet.png",
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-calm-mid-man-narrator.mp3"
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/picard/sheet.png"
     },
     "uhura": {
       "name": "Nyota Uhura",
@@ -279,9 +362,7 @@
       "elevenlabs_voice": "Aria",
       "voice_note": "Warm, expressive, strong — fits Uhura's confidence and emotional depth",
       "character_description": "Black female Starfleet communications officer, red short-sleeve command dress uniform with Starfleet delta badge, elegant upswept hair, warm expressive eyes, Enterprise bridge background",
-      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/uhura/sheet.png",
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-expressive-woman.mp3"
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/uhura/sheet.png"
     },
     "janeway": {
       "name": "Captain Janeway",
@@ -290,9 +371,7 @@
       "elevenlabs_voice": "Sarah",
       "voice_note": "Sharp, determined, slight gravitas — Janeway's no-nonsense command presence",
       "character_description": "female Starfleet captain, reddish-brown hair in tight bun, red-and-black command uniform, decisive expression, Voyager bridge background",
-      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/janeway/variants/captain.png",
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-mid-young-woman-voice.mp3"
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/janeway/variants/captain.png"
     },
     "kirk": {
       "name": "Captain Kirk",
@@ -301,9 +380,7 @@
       "elevenlabs_voice": "Daniel",
       "voice_note": "Charismatic, bold, emotionally direct — Kirk's confident swagger",
       "character_description": "male Starfleet captain, athletic build, light brown hair swept to the side, confident charming smirk, gold-yellow command tunic with Starfleet delta badge, black trousers, heroic pose, dramatic bridge lighting",
-      "ref_url": null,
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-positive-guy.mp3"
+      "ref_url": null
     },
     "spock": {
       "name": "Mr. Spock",
@@ -312,9 +389,7 @@
       "elevenlabs_voice": "Brian",
       "voice_note": "Flat, precise, no emotional coloring — Vulcan logic pattern",
       "character_description": "male Vulcan Starfleet officer, pointed ears, sharply arched eyebrows, straight black bowl-cut hair, olive-tinted skin, calm emotionless expression, blue-and-black science tunic with Starfleet delta badge",
-      "ref_url": null,
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-common-man.mp3"
+      "ref_url": null
     },
     "mccoy": {
       "name": "Dr. Leonard McCoy",
@@ -323,9 +398,7 @@
       "elevenlabs_voice": "Daniel",
       "voice_note": "Warm Southern drawl, impassioned, occasionally grumpy — Bones' emotional core. Lower stability than Kirk's Daniel to differentiate",
       "character_description": "male Starfleet doctor, medium build, hazel eyes, short dark hair with silver temples, blue-and-black science/medical tunic, Starfleet delta badge, slightly furrowed brow — perpetually worried expression, sickbay background with medical panels",
-      "ref_url": null,
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-old-man.mp3"
+      "ref_url": null
     },
     "worf": {
       "name": "Commander Worf",
@@ -334,9 +407,7 @@
       "elevenlabs_voice": "George",
       "voice_note": "Deep, gravelly, intense — Klingon honor in Starfleet uniform",
       "character_description": "male Klingon Starfleet officer, prominent triangular cranial ridges on forehead, dark brown skin, long dark hair in warrior ponytail, groomed goatee, gold-and-black operations uniform, diagonal metal baldric sash, fierce honorable expression",
-      "ref_url": null,
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-deep-voice-man.mp3"
+      "ref_url": null
     },
     "data": {
       "name": "Commander Data",
@@ -345,9 +416,7 @@
       "elevenlabs_voice": "Charlie",
       "voice_note": "Flat, over-enunciated, precise — android speech pattern, no contractions",
       "character_description": "android male Starfleet officer, pale yellowish skin, slicked black hair, yellow-gold eyes, gold-and-black operations uniform, emotionless face, slight head tilt of curiosity",
-      "ref_url": null,
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-common-man.mp3"
+      "ref_url": null
     },
     "seven": {
       "name": "Seven of Nine",
@@ -356,9 +425,7 @@
       "elevenlabs_voice": "Aria",
       "voice_note": "Cold, clinical, detached — former Borg learning humanity. High stability, flat affect",
       "character_description": "blonde female, hair pulled back tightly, metallic starburst Borg implant above left eye, small metallic implant on left hand, silver-and-blue form-fitting catsuit, intense blue eyes, arms crossed, Voyager astrometrics lab background",
-      "ref_url": null,
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-mid-young-woman-voice.mp3"
+      "ref_url": null
     },
     "lorca": {
       "name": "Captain Gabriel Lorca",
@@ -367,9 +434,7 @@
       "elevenlabs_voice": "Liam",
       "voice_note": "Dark, charismatic, with hidden menace — mirror-universe predator behind a Starfleet mask",
       "character_description": "male Starfleet captain, lean angular face, short dark hair, cold calculating eyes, black-and-metallic Discovery-era command uniform, tense predatory posture, dim Discovery bridge background with dark tones",
-      "ref_url": null,
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-deep-voice-man.mp3"
+      "ref_url": null
     },
     "belanna": {
       "name": "B'Elanna Torres",
@@ -378,9 +443,7 @@
       "elevenlabs_voice": "Matilda",
       "voice_note": "Fierce, passionate, quick-tempered — half-Klingon warrior fighting her own nature",
       "character_description": "half-Klingon female Starfleet engineer, subtle cranial ridges on forehead (less prominent than full Klingon), dark brown wavy hair, intense brown eyes, gold-and-black engineering uniform, strong jaw, defiant expression, engineering section background",
-      "ref_url": null,
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-expressive-woman.mp3"
+      "ref_url": null
     },
     "carol_marcus": {
       "name": "Dr. Carol Marcus",
@@ -389,9 +452,7 @@
       "elevenlabs_voice": "Sarah",
       "voice_note": "Intelligent, composed, with underlying grief — scientist's resolve",
       "character_description": "blonde female scientist, pale blue civilian science uniform, Starfleet delta on breast pocket, clear blue eyes, hair pulled back, intelligent focused expression, science lab background with Genesis device",
-      "ref_url": null,
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-warm-woman-voice.mp3"
+      "ref_url": null
     },
     "archer": {
       "name": "Captain Jonathan Archer",
@@ -400,9 +461,7 @@
       "elevenlabs_voice": "George",
       "voice_note": "Earnest, adventurous, slightly rougher than later Starfleet captains — the first great explorer",
       "character_description": "male Starfleet captain, dark hair, brown eyes, blue-gray Enterprise-era Starfleet jumpsuit with vertical gold shoulder stripe, combadge, determined optimistic expression, early NX-01 bridge background",
-      "ref_url": null,
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-friendly-mid-young-man.mp3"
+      "ref_url": null
     },
     "khan": {
       "name": "Khan Noonien Singh",
@@ -416,9 +475,7 @@
         "young": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/khan/variants/young.png",
         "exile": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/khan/variants/exile.png",
         "mature": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/khan/variants/mature.png"
-      },
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-radio-commercial-guy.mp3"
+      }
     },
     "q": {
       "name": "Q",
@@ -427,9 +484,7 @@
       "elevenlabs_voice": "Daniel",
       "voice_note": "Sardonic, theatrical, omniscient amusement — the trickster god who takes nothing seriously except his own entertainment",
       "character_description": "middle-aged male in red-and-black TNG Starfleet captain uniform, smug knowing grin, theatrical raised hand, mischievous gleaming eyes, Enterprise bridge background with golden omnipotent glow distortion",
-      "ref_url": null,
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-radio-commercial-guy.mp3"
+      "ref_url": null
     },
     "borg_queen": {
       "name": "Borg Queen",
@@ -438,16 +493,14 @@
       "elevenlabs_voice": "Aria",
       "voice_note": "Silky-smooth, seductive, utterly cold — the Collective speaking through one voice. High stability, zero warmth",
       "character_description": "female Borg Queen, pale grayish skin, bald head with dark biomechanical skull cap, exposed mechanical spine, black bodysuit with grey bio-tubing, dark hollow eyes, sinister knowing half-smile, Borg alcove background with green ambient glow",
-      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/borg-queen/sheet.png",
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-mid-young-woman-voice.mp3"
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/borg-queen/sheet.png"
     },
     "dukat": {
       "name": "Gul Dukat",
       "gender": "male",
       "era": "DS9",
       "elevenlabs_voice": "Liam",
-      "voice_engine_override": "chatterbox",
+      "voice_engine_override": "minimax",
       "minimax_voice": "Deep_Voice_Man",
       "voice_note": "Charming, self-righteous, delusional — villain who genuinely believes he's the hero. Active MiniMax override: always pass Deep_Voice_Man explicitly; Liam is ElevenLabs-only and must never be sent to MiniMax because the provider falls back to Wise_Woman.",
       "character_description": "male Cardassian, gray scaly textured skin, prominent spoon-shaped cranial ridge on forehead, raised neck ridges, slicked-back dark hair, gray-brown Cardassian military uniform with armored shoulders, charming manipulative smile",
@@ -455,8 +508,7 @@
       "variants": {
         "young": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/dukat/variants/young.png",
         "mature": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/dukat/variants/mature.png"
-      },
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-deep-voice-man.mp3"
+      }
     },
     "odo": {
       "name": "Odo",
@@ -470,9 +522,7 @@
         "early_lab": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/odo/variants/early_lab.png",
         "settled": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/odo/variants/settled.png"
       },
-      "variants_note": "This character does not visibly age once settled (Changeling), so 'early_lab' vs 'settled' represents his formless-vs-humanoid states, not a child/teen/mature age progression.",
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-calm-mid-man-narrator.mp3"
+      "variants_note": "This character does not visibly age once settled (Changeling), so 'early_lab' vs 'settled' represents his formless-vs-humanoid states, not a child/teen/mature age progression."
     },
     "kira": {
       "name": "Kira Nerys",
@@ -481,9 +531,79 @@
       "elevenlabs_voice": "Charlotte",
       "voice_note": "Backfilled from episode 17 (2026-07-02) production; this bible's characters{} object was missing a 'kira' entry despite episode 17 having already produced and used this appearance/voice.",
       "character_description": "Bajoran female in her 30s, orange-red wavy hair medium length falling to her shoulders, warm light brown skin, prominent Bajoran nasal ridges running from brow ridge down the nose bridge, fierce dark brown eyes carrying hard-won depth, strong defined jaw, DS9-era gray-shouldered Bajoran Militia uniform (gray shoulder panels, dark burgundy/dark gray body), Bajoran rank half-moon pip cluster on the collar, Starfleet-style combadge on the left chest, broad athletic shoulders",
-      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/kira/variants/mature.png",
-      "voice_engine_override": "chatterbox",
-      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-warm-woman-voice.mp3"
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/kira/variants/mature.png"
+    },
+    "troi": {
+      "name": "Deanna Troi",
+      "gender": "female",
+      "era": "TNG",
+      "tts_engine": "minimax",
+      "minimax_voice": "Calm_Woman",
+      "voice_note": "Warm, husky alto, empathic — restrained emotional vulnerability breaking through a composed narrating tone.",
+      "character_description": "Deanna Troi, adult half-Betazoid Starfleet officer in her thirties, olive-toned skin, large dark brown almond-shaped eyes, long dark brown wavy hair past the shoulders, soft rounded facial features, medium-height slender build, upright posture, standard blue-and-black Starfleet uniform with Lieutenant Commander collar pips, gold delta combadge on the left chest, calm composed expression that shifts with the room's emotional temperature",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/troi/variants/mature-2026-08-07.png",
+      "variants": {
+        "mature": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/troi/variants/mature-2026-08-07.png",
+        "child_7": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/troi/variants/child_7-2026-08-07.png"
+      },
+      "variants_note": "Two variants: 'mature' (adult Starfleet counselor) and 'child_7' (age seven, Betazed childhood flashback for her father's death). No third variant — canon does not support a distinct young-adult/cadet look beyond normal adult aging."
+    },
+    "guinan": {
+      "name": "Guinan",
+      "gender": "female",
+      "era": "El-Aurian origin (pre-Federation) / TNG (Ten Forward, USS Enterprise-D)",
+      "tts_engine": "minimax",
+      "minimax_voice": "Calm_Woman",
+      "voice_note": "Measured, warm, unhurried contralto with quiet gravity; centuries-old civilian cadence, patient and deliberate, grief and wisdom underneath composed warmth.",
+      "character_description": "ageless female El-Aurian civilian (fully humanoid, no cranial ridges), dark warm-brown skin with no visible signs of aging, smooth unlined face, deep-set warm brown eyes with an ancient calm, high softly rounded cheekbones, composed closed-mouth resting expression, straight dignified posture, hands often loosely clasped or still, unhurried economical gestures",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/guinan/variants/listener.png",
+      "variants": {
+        "homeworld": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/guinan/variants/homeworld.png",
+        "listener": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/guinan/variants/listener.png"
+      },
+      "variants_note": "Guinan does not visibly age (El-Aurian, ageless in canon); 'homeworld' vs 'listener' represent before/after-Borg-destruction attire/context states, not an age progression — mirrors the Odo early_lab/settled precedent."
+    },
+    "garak": {
+      "name": "Elim Garak",
+      "gender": "male",
+      "era": "DS9",
+      "tts_engine": "minimax",
+      "minimax_voice": "Elegant_Man",
+      "voice_note": "Measured, urbane, faintly sardonic Cardassian intelligence-officer cadence — silky, precise diction, dry wit, danger wrapped in charm, never raises his voice even at the most damning line.",
+      "character_description": "adult male Cardassian in his mid-40s, gray-green reptilian-textured skin, prominent ridged crest running from the center of the forehead down the bridge of the nose, ridged scaled neck plates, dark deep-set eyes with a watchful glint, short dark hair combed neatly back, medium build with upright controlled posture, hands often clasped or gesturing precisely, a thin knowing smile that rarely reaches his eyes",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/garak-2026-08-07/variants/tailor.png",
+      "variants": {
+        "operative": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/garak-2026-08-07/variants/operative.png",
+        "tailor": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/garak-2026-08-07/variants/tailor.png"
+      },
+      "variants_note": "Same non-age costume/role workaround as Odo's early_lab/settled entry: 'operative' = Obsidian Order past, 'tailor' = DS9 shop present. No canon age-progression exists for this character.",
+      "orphaned_asset_note": "A pre-existing unlogged Supabase asset 'elim-garak-character-story' (dated 2026-07-23) exists with no matching bible/episode_summaries entry from before this episode. It was NOT reused for this production; treat as unverified until manually reviewed."
+    },
+    "chakotay": {
+      "name": "Commander Chakotay",
+      "gender": "male",
+      "era": "VOY",
+      "tts_engine": "minimax",
+      "minimax_voice": "Determined_Man",
+      "voice_note": "Grounded, quiet controlled intensity giving way to composed authority.",
+      "character_description": "human male in his late 30s, Native American features (fictional Rubber Tree People colonial heritage), warm russet-brown skin, dark deep-set brown eyes with a steady watchful gaze, short black hair cropped close at the sides, prominent angular jaw with faint weathered stubble shadow, a distinctive black tribal sun-and-hooked-line tattoo above and curving around the left eyebrow onto the temple, solidly built athletic frame with broad shoulders, calm composed upright posture, small braided medicine-pouch cord occasionally visible at the collar",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/chakotay-starfleet-voyager-2026-08-07/sheet.png",
+      "variants": {
+        "colonist_maquis": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/chakotay-colonist-maquis-2026-08-07/sheet.png",
+        "starfleet_voyager": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/chakotay-starfleet-voyager-2026-08-07/sheet.png"
+      },
+      "variants_note": "Two persistent visual states rather than a literal age progression: 'colonist_maquis' (faded leather jacket, no insignia, phaser rifle strap) and 'starfleet_voyager' (red-and-black VOY-era command uniform, two commander's pips). Both share the same facial tattoo and build."
+    },
+    "hoshi": {
+      "name": "Hoshi Sato",
+      "gender": "female",
+      "era": "ENT",
+      "tts_engine": "minimax",
+      "minimax_voice": "Calm_Woman",
+      "voice_note": "Precise, articulate, controlled linguist's voice with a restrained undertone of fear beneath professional discipline; young-adult female timbre.",
+      "character_description": "Japanese-American Starfleet officer in her early thirties, petite slender build, straight black hair cut to shoulder length and tucked behind one ear, dark brown eyes, calm alert expression with a faint furrow of concentration between the brows, blue-gray Enterprise-era Starfleet jumpsuit with a vertical blue shoulder stripe (communications/science division), silver Starfleet delta insignia badge on the left chest, small in-ear universal-translator earpiece, practiced upright seated posture for console work",
+      "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/hoshi-sato-2026-08-07/variants/character-story.png",
+      "variants_note": "Single age variant only — canon does not support a distinct child/young/mature progression for this character within the ENT-era timeframe covered."
     }
   },
   "characters_note": "Prompt blocks and Supabase refs for canonical Trek characters. Reference sheet goes to storyboarder as chain_ref. Use a character's voice_engine_override and engine-specific voice field when present; otherwise use the legacy ElevenLabs voice assignment."
