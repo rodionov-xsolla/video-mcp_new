@@ -4,8 +4,16 @@
   "language": "en",
   "title": "Genshin Impact — Character Story",
   "format": "character-story",
+  "style_tags": [
+    "Genshin Impact anime cel-shaded character art",
+    "vibrant fantasy colors",
+    "soft outline anime aesthetic",
+    "clean detailed character illustration",
+    "Teyvat world environment",
+    "NOT realistic, NOT Pixar 3D"
+  ],
   "created_at": "2026-06-29",
-  "last_episode": 18,
+  "last_episode": 19,
   "tts_engine": "chatterbox",
   "tts_note": "Genshin ALWAYS uses Chatterbox via fal-ai/chatterbox/text-to-speech. Voice refs at assets/genshin-impact/characters/{slug}/voice-1.mp3. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "voice_ref_base": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/{slug}/voice-1.mp3",
@@ -43,7 +51,8 @@
       "Raiden Shogun",
       "Furina",
       "Arlecchino",
-      "Nahida"
+      "Nahida",
+      "Ganyu"
     ],
     "done_male": [
       "Xiao",
@@ -72,7 +81,8 @@
       "Arlecchino",
       "Kaeya",
       "Nahida",
-      "Venti"
+      "Venti",
+      "Ganyu"
     ],
     "cooldown_episodes": 20,
     "selection_note": "Pick characters with strong lore arcs and tragic backstories. Prioritize 5-star characters with high popularity. Alternate male/female for variety. Avoid repeating characters used in dual-style within 4 episodes."
@@ -359,6 +369,22 @@
       "yt_publish_at": "2026-08-19T19:26:00Z",
       "tts_engine": "chatterbox",
       "notes": "Two visual forms (present-day bard disguise, young Barbatos/wind-spirit Archon War era) plus secondary human character 'the Fifth'. New character refs assets/genshin-impact/characters/venti/variants/{bard-current,young-barbatos-wind-spirit}-2026-08-06.png and characters/the-fifth/variants/rebel-bard-2026-08-06.png (see characters.venti.age_variants / characters.the-fifth). Part of the same 5-video parallel batch as EP14/15/16/17."
+    },
+    {
+      "episode": 19,
+      "date": "2026-08-11",
+      "character": "Ganyu",
+      "character_slug": "ganyu",
+      "gender": "female",
+      "idea": "Ganyu — Secretary of the Liyue Qixing | Character Story",
+      "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/ganyu/voice-1.mp3",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-11/character-story/20260811-141658-53450/final.mp4",
+      "final_sha256": "f0b6240cb5707bba0e2a52d0365cf785de8aa293c25e677dbde5bd55cf72fdfb",
+      "duration_sec": 40.28,
+      "youtube_url": "https://www.youtube.com/watch?v=vDgOFqUNiAU",
+      "yt_publish_at": "2026-08-21T19:30:00Z",
+      "tts_engine": "chatterbox",
+      "notes": "Single age variant (no distinct canonical child/adult design for Ganyu). New character ref assets/genshin-impact/characters/ganyu/variants/canonical-2026-08-11.png. Originally storyboarded/animated as 8 clips to absorb an oversized TTS (49.88s vs 35s, 42.5% mismatch); post-review the user flagged a 4-arm anatomy artifact on clip 6 (the insomnia/guilt beat) and asked for a more compact cut. Clip 6 was dropped entirely (its tts_segment removed, not replaced), the trailing two clips renumbered 6-7 reusing their original images/video unchanged, and TTS regenerated for the trimmed 79-word monologue (42.36s vs new 35s, 21% mismatch) — reassembled at the format's standard 7-clip/35s structure. Flawed scene-6 assets archived at build/_archive/scene-6-flawed-4arms, not deleted."
     }
   ],
   "next_planned": null,
