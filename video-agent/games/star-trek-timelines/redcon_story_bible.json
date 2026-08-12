@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 5,
+  "last_episode": 6,
   "tts_engine": "fal-ai/chatterbox/text-to-speech",
   "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-calm-mid-man-narrator.mp3",
   "tts_note": "Chatterbox with voice_ref_url above (authoritative, measured). Second-person monologue throughout — NOT first-person alternate-self. Voiceover opens with the CTA hook on the teaser clip, then continues second-person through story clips. Fallback: MiniMax Speech 2.8-HD, voice Deep_Voice_Man.",
@@ -68,6 +68,13 @@
         "date": "2026-07-28",
         "crew_assembled": ["Odo", "The Doctor (Voyager EMH)"],
         "note": "Player prevents the Homefront/Paradise Lost crisis from turning Starfleet against itself. Canon basis: the real Admiral Leyton is human and exploits a genuine Changeling threat, sabotages Earth's power grid, fabricates signs of a Dominion invasion, and attempts a military coup; a real Changeling separately impersonates Leyton and O'Brien. Divergence: Odo supplies a Founder biomorphic baseline and the cross-era Doctor develops a nonlethal quantum scan, exposing the infiltrator before Leyton can consolidate martial law. The baseline/scan are intentional Timelines counterfactual technology, not a claim about established canon."
+      },
+      {
+        "crisis": "V'Ger approaching Earth (2273)",
+        "episode": 6,
+        "date": "2026-08-12",
+        "crew_assembled": ["Data", "Hoshi Sato"],
+        "note": "Whole-planet stakes (most dramatic unused candidate in the rotation). In canon, Decker physically merges with the Ilia probe/V'Ger, sacrificing his body so V'Ger can 'touch the Creator.' Here Data interfaces directly with V'Ger's machine core (android-to-machine, no organic sacrifice needed) while Hoshi Sato decodes V'Ger's actual signal — a corrupted fragment of Voyager 6's original 'return the information to the Creator' directive, buried under centuries of accumulated alien data. Decker and Ilia both survive; V'Ger leaves a knowledge-core data gift (multi-decade Starfleet tech uplift) and withdraws intact rather than vanishing. New character refs generated for Hoshi Sato and Willard Decker (both new to this format's redcon tag). Lesson applied from the same-session Genshin EP5 run: redcon.md's title-card ASS timing example ('0:00:00.30-0:00:02.70') is clip-relative — added clip 1's cumulative duration (+5.041667s) before writing subs.ass this time, so the title card landed correctly on clip 2 on the first assembly pass. User separately flagged visible style drift between clips (again) after review — root cause: this format's 'no bg-reference generation' rule (environments are text-only per clip, no shared visual anchor) plus each new character ref (Hoshi Sato, Decker) being generated independently, so NB2 has no common visual grounding beyond the shared style_tags text between non-chained clips. Consider for a future format revision: allow one shared environment/establishing-shot reference per episode (e.g. the V'Ger cloud or the bridge) to chain against, rather than pure text-only backgrounds every clip."
       }
     ],
     "do_not_repeat": [
@@ -75,10 +82,10 @@
       "Breen weapon / Chin'toka",
       "Hobus supernova / Romulus",
       "Xindi superweapon / Delphic Expanse — used episode 3 (2026-07-21), pulled hero was Tuvok",
-      "Changeling infiltration / Leyton coup — used episode 4 (2026-07-28), assembled Odo and the Doctor"
+      "Changeling infiltration / Leyton coup — used episode 4 (2026-07-28), assembled Odo and the Doctor",
+      "V'Ger / Earth approach — used episode 6 (2026-08-12), crew was Data and Hoshi Sato"
     ],
     "candidates_for_future": [
-      "V'Ger approaching Earth (2273)",
       "Praxis explosion + Khitomer Accords (2293)"
     ]
   },
