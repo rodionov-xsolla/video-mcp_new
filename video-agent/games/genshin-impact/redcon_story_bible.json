@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Genshin Impact — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 4,
+  "last_episode": 5,
   "tts_engine": "auto",
   "tts_note": "Speech route for new episodes: intentional native audio → Chatterbox only with a redcon-owned approved sample recorded in this bible → otherwise MiniMax. Retry the same route once, then stop. Second-person monologue throughout. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "format_overrides": {
@@ -61,6 +61,16 @@
         "date": "2026-08-04",
         "pulled_character": "Childe (Tartaglia)",
         "note": "POSITIVE-outcome divergence (genuine rescue, same pattern as episode 2's Osial/Zhongli SAVED — not a tragedy). In canon Signora dies in the Sumeru desert, a death later revealed to have been engineered/exploited by the Doctor and the Fatui hierarchy (Pierro) to extract her power. Here Childe — a fellow Harbinger personally unwilling to watch his own hierarchy spend one of its own — and Cyno (Sumeru's General Mahamatra, present in canon) expose the Doctor's extraction plan before the confrontation turns lethal. Signora breaks from the Fatui hierarchy and survives instead of dying."
+      },
+      {
+        "crisis": "Fontaine sinking prophecy — the Oratrice mecanique d'analyse cardinale's guilty verdict on the Second Fatal Rain (Archon Quest Chapter IV)",
+        "episode": 5,
+        "date": "2026-08-12",
+        "pulled_character": "Sigewinne",
+        "note": "POSITIVE-outcome divergence, whole-nation stakes (most dramatic candidate in the rotation — an entire nation's survival, not one character's). Sigewinne's House of the Hearth plague ledgers reframe the Second Fatal Rain as natural corruption sickness rather than collective moral guilt, stalling the Oratrice's verdict before Neuvillette must absorb the sentence himself. Trial reopens as an inquest instead of an execution. Downstream consequence: Fontaine's legal code is rewritten so every future water-based judgment must hear a healer's testimony first — a structural reform, not just a rescue. Fresh character refs generated for Sigewinne, Neuvillette, Furina (none existed under the redcon tag); Traveler ref intentionally not chained since the Traveler never appears on-screen in Player-POV framing. Bug caught pre-approval: title-card ASS Dialogue events were timed clip-relative (0:00:00.30-0:00:02.70) instead of offset by clip 1's 5.041667s duration, so the title text rendered during the hook (scene 1) instead of the title card (scene 2). Fixed by adding the clip 1 offset to the ASS timestamps and re-running only the final encode (no new API spend). Lesson: Editor must always add the preceding clips' cumulative duration to any per-clip ASS timing example from redcon.md — those examples are clip-relative, the ASS file is timed on the global concatenated timeline.",
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-12/redcon/20260812-111619-7013/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=ztoNYGSutSU",
+        "yt_publish_at": "2026-08-14T19:22:00Z"
       }
     ],
     "do_not_repeat": [
@@ -68,11 +78,11 @@
       "Scaramouche Gnosis / Shouki no Kami",
       "Osial/Zhongli Liyue — used episode 2 (2026-07-21), pulled hero was Xiao not Zhongli",
       "Dvalin/Stormterror Mondstadt — used episode 3 (2026-07-28), pulled hero was Baizhu",
-      "Signora's death / Fatui retaliation — used episode 4 (2026-08-04), pulled hero was Childe, Cyno present"
+      "Signora's death / Fatui retaliation — used episode 4 (2026-08-04), pulled hero was Childe, Cyno present",
+      "Fontaine sinking prophecy / Oratrice verdict — used episode 5 (2026-08-12), pulled hero was Sigewinne"
     ],
     "candidates_for_future": [
       "Raiden Shogun's Vision Hunt Decree — Inazuma civil war (Chapter II)",
-      "Fontaine sinking prophecy — The Hydro Archon's trial (Chapter IV)",
       "Nahida imprisoned by the Akademiya — Irminsul corrupted (Chapter III Act V)"
     ]
   },
