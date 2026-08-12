@@ -1,7 +1,7 @@
 {
   "game_tag": "growtopia",
   "format": "reddit-story",
-  "total_stories": 1,
+  "total_stories": 2,
   "stories": [
     {
       "id": 1,
@@ -32,6 +32,36 @@
       ],
       "output_dir": "output/2026-07-22/growtopia/reddit-story/20260722-173047-reddit-cousin-world",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-07-22/reddit-story/20260722-173047-reddit-cousin-world/final.mp4"
+    },
+    {
+      "id": 2,
+      "date": "2026-08-12",
+      "tone": "misunderstood hero",
+      "theme": "long-distance-friendship-mistaken-for-screen-addiction",
+      "moral_engine": "a real friendship is mistaken for a screen addiction",
+      "game_situation": "weekly Growtopia building sessions between grandma and her long-distance best friend of forty years",
+      "false_verdict": "the narrator is enabling grandma's phone addiction instead of supporting real friendship",
+      "pressure_source": "aunt threatening to limit grandma's screen time and take the game away",
+      "narrator_flaw": "brushed off his aunt's early concerns instead of explaining, letting tension build into an ultimatum",
+      "human_action": "instead of arguing, invited the aunt to sit through one real Sunday session",
+      "reveal": "the aunt saw grandma and Dot video-calling while building side by side, trading recipes and grandkid stories",
+      "resolution_type": "positive-social-restoration",
+      "headline": "My aunt called it enabling grandma's phone addiction — until she saw who was really on the other end of that screen.",
+      "offerwall_angle": "Gems from the link in bio are used to unlock a porch swing block for the shared world; silent CTA only; no game-download mention",
+      "gameplay_segments": [
+        {
+          "file": "Growtopia 1.mp4",
+          "offset_sec": 200.0,
+          "duration_sec": 35.5
+        },
+        {
+          "file": "growtopia 2.mp4",
+          "offset_sec": 20.0,
+          "duration_sec": 35.5
+        }
+      ],
+      "output_dir": "output/2026-08-12/growtopia/reddit-story/20260812-143341-86608-gro",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-12/reddit-story/20260812-143341-86608-gro/final.mp4"
     }
   ],
   "style_tags": "not applicable - reddit-story uses ready-made gameplay and no generated images or AI video",
@@ -46,33 +76,42 @@
   },
   "anti_repetition": {
     "recent_themes": [
-      "cousin-childhood-world-restoration"
+      "cousin-childhood-world-restoration",
+      "long-distance-friendship-mistaken-for-screen-addiction"
     ],
     "recent_tones": [
-      "touching"
+      "touching",
+      "misunderstood hero"
     ],
     "recent_moral_engines": [
-      "a secret act of care is mistaken for abandonment"
+      "a secret act of care is mistaken for abandonment",
+      "a real friendship is mistaken for a screen addiction"
     ],
     "recent_game_situations": [
-      "rebuilding a younger cousin's first Growtopia world from childhood screenshots"
+      "rebuilding a younger cousin's first Growtopia world from childhood screenshots",
+      "weekly Growtopia building sessions between grandma and her long-distance best friend of forty years"
     ],
     "recent_false_verdicts": [
-      "the narrator had outgrown and forgotten his younger cousin"
+      "the narrator had outgrown and forgotten his younger cousin",
+      "the narrator is enabling grandma's phone addiction instead of supporting real friendship"
     ],
     "recent_pressure_sources": [
-      "three weeks of unanswered messages before the cousin's birthday"
+      "three weeks of unanswered messages before the cousin's birthday",
+      "aunt threatening to limit grandma's screen time and take the game away"
     ],
     "recent_resolution_types": [
-      "social-restoration"
+      "social-restoration",
+      "positive-social-restoration"
     ],
     "recent_hooks": [
-      "cousin stops answering before his birthday after three weeks of silence; restored typo sign reveals the surprise"
+      "cousin stops answering before his birthday after three weeks of silence; restored typo sign reveals the surprise",
+      "aunt accuses grandson of enabling grandma's screen addiction; reveal shows grandma and her 40-year friend video-calling while building together"
     ],
     "recent_gameplay_sources": [
       "Growtopia 1.mp4@84.9",
       "growtopia 2.mp4@154.2"
     ],
-    "banned_combos": []
+    "banned_combos": [],
+    "note": "Story 2 (2026-08-12) moves past the cousin-childhood theme into a grandma/long-distance-friend setup, avoiding any death/war content per explicit user constraint. Editor also flagged that the two gameplay clips (241.7s each) cannot give the full 180-240s offset separation while fitting a ~35.5s segment; max practical separation (115-134s) was used instead — track this limitation for future runs."
   }
 }
