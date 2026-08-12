@@ -30,7 +30,7 @@
     "description": "Generic adult human player-captain. Black-and-red Starfleet command uniform, gold combadge, four rank pips. No celebrity likeness.",
     "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/starfleet-timeline-commander/sheet.png",
     "voice": "Deep_Voice_Man",
-    "note": "Same character ref every episode. Visual consistency is required — always chain from this sheet."
+    "note": "Same character ref every episode. Visual consistency is required — always chain from this sheet. Refreshed 2026-08-12: the original sheet.png (generated episode 1, 2026-07-06, before this bible's photoreal style_tags were locked in) was a flat illustrated/cel-shaded comic style that clashed against every other character ref in this format (all photoreal/semi-realistic 3D). Regenerated in place (same Storage path, same game_assets row/tags — no chain breakage) to match style_tags/color_palette. Root-cause lesson: a character ref that's chained every episode without ever being revisited can silently drift out of sync as the format's style solidifies over later episodes — worth spot-checking long-lived refs against current style_tags periodically, not just newly-generated ones."
   },
   "crisis_rotation": {
     "done": [
