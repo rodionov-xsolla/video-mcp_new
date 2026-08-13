@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Item Story",
   "created_at": "2026-08-05",
-  "last_episode": 1,
+  "last_episode": 2,
   "ready_to_post": true,
   "style_tags": "realistic cinematic 3D CGI, physically based materials, photorealistic metal and fabric textures, dramatic high-contrast science-fiction lighting, deep blacks, restrained Klingon amber and volcanic red highlights, subtle atmospheric haze, premium television-quality frame, shallow depth of field, vertical 9:16 composition, no illustration, no cartoon, no game UI, no text overlay",
   "format_overrides": {
@@ -123,6 +123,76 @@
         "Star Trek Online's later Hur'q, Martok, Kahless II, J'mpok, Aakar, or L'Rell events belong to television canon.",
         "The blade is made from Hur'q carapace or germanium; that is licensed-game continuity, not the DS9 television story."
       ]
+    },
+    {
+      "item_name": "The Ressikan Flute",
+      "item_slug": "ressikan-flute",
+      "category": "a hand-carved wooden flute from a dead civilization, kept by Picard as the only physical trace of a lifetime he never actually lived",
+      "canon_scope": "Prime-timeline television canon only (TNG: The Inner Light). Do not import novels, comics, Memory Beta, or other licensed continuation events.",
+      "appearance_lock": {
+        "overall_shape": "A slender straight wooden flute, roughly 35-40cm long, simple cylindrical body of consistent diameter along its length, tapering slightly at the mouth end. Six evenly-spaced round finger holes along the top, one embouchure hole near one end, open bore visible at both ends. No bell, no keys, no valves, no metal mechanism of any kind.",
+        "material": "Warm honey-brown natural wood with visible fine grain lines running lengthwise, hand-sanded matte-satin surface. No lacquer shine, no metal bands, no inlay, no paint.",
+        "grips": "No separate grip or handle; the player's fingers rest directly over the finger holes along the plain cylindrical body.",
+        "surface_details": "A few faint hand-worn polish marks near the finger holes from decades of playing. No carvings, no engraved script, no painted decoration, no attached cord or strap, no gemstones or metal fittings.",
+        "scale_lock": "Length spans from an adult's wrist to just past the elbow when held; diameter is thin enough to be fully encircled by one hand. Never longer than a forearm-and-a-half, never a thick recorder-sized bore.",
+        "negative_lock": "No metal Irish tin-whistle sheen, no recorder mouthpiece block/fipple, no panpipe cluster of tubes, no bone or bamboo segmented look, no modern keyed woodwind mechanism, no bright lacquer, no ornate carving or runes, no case or strap attached in shot, no glowing or energy effects."
+      },
+      "item_states": [
+        {
+          "id": "kamin-workshop-flute",
+          "appearance": "The plain honey-brown wooden flute as it exists throughout Kamin's lifetime on Kataan: unadorned, progressively hand-worn at the finger holes, held in a Kataanian villager's calloused hands. Silhouette and material never change across this state.",
+          "ref_url": null
+        },
+        {
+          "id": "probe-artifact-transferred",
+          "appearance": "The identical flute, unchanged in design, now physically present in Picard's hands on the Enterprise bridge at the instant he wakes from the probe's neural link — the impossible object that crossed from the mental experience into physical reality.",
+          "ref_url": null
+        },
+        {
+          "id": "picard-quarters-keepsake",
+          "appearance": "The same unchanged flute kept afterward by Picard as a personal memento, seen resting on a small stand or being played alone in his quarters aboard the Enterprise-D.",
+          "ref_url": null
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact": "A probe from the Kataan star system linked directly with Jean-Luc Picard's mind, causing him to experience an entire lifetime as a man named Kamin over roughly twenty-five minutes of real elapsed time.",
+          "status": "television canon",
+          "source": "TNG: The Inner Light"
+        },
+        {
+          "fact": "Kataan's sun was dying and its people, unable to save their world or physically escape it, built and launched the probe generations earlier as their only means of being remembered.",
+          "status": "television canon",
+          "source": "TNG: The Inner Light"
+        },
+        {
+          "fact": "As Kamin, Picard was taught to play the Ressikan flute by his friend and mentor Batai; it became Kamin's own instrument, played throughout his simulated life on Kataan.",
+          "status": "television canon",
+          "source": "TNG: The Inner Light"
+        },
+        {
+          "fact": "Kamin married Eline, raised two children, and grew old across the simulated decades, continuing to play the flute through the years of worsening drought as Kataan's sun failed.",
+          "status": "television canon",
+          "source": "TNG: The Inner Light"
+        },
+        {
+          "fact": "When Picard woke on the Enterprise bridge, no real time had passed except that he was inexplicably holding the actual wooden flute in his hands — an object the narrative does not fully explain crossing from the probe-induced experience into physical reality.",
+          "status": "television canon; the mechanism of the physical transfer is left unexplained in the episode",
+          "source": "TNG: The Inner Light"
+        },
+        {
+          "fact": "Picard kept the flute afterward as a personal keepsake and was later shown playing it alone, established across subsequent episodes as the only physical remnant of Kamin's entire lived life and the memory of the extinct Kataan civilization.",
+          "status": "television canon (established in The Inner Light; referenced again in later episodes such as TNG: Lessons)",
+          "source": "TNG: The Inner Light; TNG: Lessons"
+        }
+      ],
+      "forbidden_claims": [
+        "The flute is magical, glowing, or has any power beyond being a physical wooden object.",
+        "Picard's experience on Kataan was a shared telepathic illusion witnessed by the bridge crew; it was a private neural experience induced by the probe's beam.",
+        "The flute plays itself, moves on its own, or exhibits any sentience.",
+        "Any Kataan or Ressikan lore beyond what the episode itself establishes (no invented expanded-universe names, dates, or events).",
+        "Batai and Eline appear in any later live-action continuity beyond Picard's memory of them or verbal references."
+      ]
     }
   ],
   "supabase_assets": {
@@ -137,13 +207,16 @@
   },
   "anti_repetition": {
     "recent_items": [
-      "The Sword of Kahless"
+      "The Sword of Kahless",
+      "The Ressikan Flute"
     ],
     "recent_hooks": [
-      "The first Klingon bat'leth turned Worf against Kor."
+      "The first Klingon bat'leth turned Worf against Kor.",
+      "This is the Ressikan flute — proof Picard lived a stranger's entire lifetime in twenty-five real minutes."
     ],
     "recent_fates": [
-      "Transported into interstellar space after Worf and Kor concluded it would divide the Empire."
+      "Transported into interstellar space after Worf and Kor concluded it would divide the Empire.",
+      "Kept by Picard as a private keepsake, the only physical trace of Kamin's lived life and the extinct Kataan civilization."
     ],
     "cooldown_episodes": 20
   },
@@ -155,6 +228,15 @@
       "narrative_mode_used": "First-person pilot. Per user review, all future Item Story episodes use an external third-person lore narrator.",
       "youtube_url": "https://www.youtube.com/watch?v=KUNPH4kK5n4",
       "scheduled_for": "2026-08-10T20:17:00Z"
+    },
+    {
+      "episode": 2,
+      "item_name": "The Ressikan Flute",
+      "arc": "TNG 'The Inner Light': Kamin learns the flute from his mentor Batai, lives a full lifetime with Eline as Kataan's sun dies, watches the memory probe launch, and Picard wakes on the bridge with the flute already, impossibly, in his hands.",
+      "narrative_mode_used": "External third-person lore narration about the item, per the episode 1 correction — never first-person.",
+      "youtube_url": "https://www.youtube.com/watch?v=vbaD3orsHYQ",
+      "scheduled_for": "2026-08-18T19:35:00Z",
+      "notes": "Lesson (shared with the same-session Genshin item-story episode): Scenarist's first monologue draft was 108 words for 6x5s=30s of picture, which would have rendered to roughly 55s at this bible's measured MiniMax rate — an ~83% overrun against the 40% masking cap in sound.md. Trimmed to 71 words before Sound ran (never generated at the bloated length), keeping the hook and all six canonical beats. Final TTS came in at 26.2s, an undershoot handled by Editor without leading silence. Also: this bible's series-level voice_policy/music_policy (dark ceremonial Klingon myth, war drums) is tonally wrong for a quiet Picard-memory item — Sound applied a one-off override (Elegant_Man voice, melancholy solo-flute music) for this episode. Worth revisiting whether voice_policy/music_policy should become per-item rather than series-wide before episode 3."
     }
   ]
 }

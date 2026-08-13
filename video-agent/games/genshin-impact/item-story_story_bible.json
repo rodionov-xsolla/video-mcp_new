@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Genshin Impact — Item Story",
   "created_at": "2026-08-05",
-  "last_episode": 1,
+  "last_episode": 2,
   "ready_to_post": true,
   "style_tags": "premium Genshin-style anime cel-shaded fantasy frame, clean elegant linework, vibrant saturated colors, painterly Inazuma and Snezhnaya environments, cinematic dramatic lighting, restrained magenta Tatarigami energy only where canon requires it, detailed metal and cord materials, edge-to-edge vertical 9:16 composition, no photorealism, no 3D product render, no game UI, no inventory card, no text overlay",
   "format_overrides": {
@@ -132,6 +132,76 @@
         "Its final red-orange pattern is flame magic or a Pyro Vision effect.",
         "The ascended inventory render is a separate canonical reforging event in the story."
       ]
+    },
+    {
+      "item_name": "Wolf's Gravestone",
+      "item_slug": "wolfs-gravestone",
+      "category": "a five-star claymore whose name and iconography reference Andrius, the Wolf of the North, guardian spirit of Mondstadt's Wolvendom wolves",
+      "canon_scope": "Genshin Impact game canon from the in-game weapon description and passive ability text, Wolvendom location content, and Razor's official character story and Story Quest 'Kindred by Blood'. Do not invent later owners or events beyond released content, and do not claim Andrius has died.",
+      "appearance_lock": {
+        "overall_shape": "A massive two-handed claymore with a broad, slightly asymmetrical double-tapered blade that widens toward the tip before narrowing to a blunt point; blade length roughly equal to an adult's torso plus outstretched arm. The same silhouette persists across all states.",
+        "guard": "A stylized wolf-fang guard: two curved, fang-like metal prongs flare outward from the blade base like a wolf's open jaw, flanking a small notched ridge. Dulled and corroded in the monument state, brighter silver-black in the current battle-ready state.",
+        "grip": "A long leather-wrapped hilt bound with iron chain links wound in a spiral, sized for a two-handed grip. Frayed in the monument state, freshly re-bound in the reclaimed and current states.",
+        "surface_details": "Shallow claw-mark grooves scored lengthwise down both faces of the blade, and a faint pale frost-blue rime or glow near the fuller that intensifies only when the weapon's passive is active.",
+        "scale_lock": "Full two-handed greatsword: blade length approximately matches an adult wielder's torso-to-fingertip reach; planted upright it stands roughly chest-to-shoulder height on an adult human. Never shrinks to one-handed size and never grows beyond one and a half times human height.",
+        "negative_lock": "No gold filigree, no curved katana or scimitar profile, no glowing color other than pale frost-blue or dull rust, no scabbard, no readable runic text, not a spear or polearm, no oversized fantasy proportions beyond the scale lock, no cartoon cracked-in-half blade."
+      },
+      "item_states": [
+        {
+          "id": "monument-origin",
+          "appearance": "A dulled grey grave-marker blade, wolf-fang guard pitted and green with corrosion, frayed chain-wrapped grip, no shine, faint claw-mark grooves filled with dried lichen, planted upright in frost-hardened Wolvendom earth like a headstone.",
+          "ref_url": null
+        },
+        {
+          "id": "reclaimed-battleworn",
+          "appearance": "The same locked silhouette freshly pulled from the ground: blade scoured clean in patches but still rust-freckled near the guard, chain re-wound tighter, leather grip freshly re-bound over the old cord, frost-rime clinging near the fuller, carried loose in a gloved grip rather than planted.",
+          "ref_url": null
+        },
+        {
+          "id": "current-battle-ready",
+          "appearance": "The maintained present-day form: honed dark blued-grey steel catching cold light, wolf-fang guard polished silver-black, chain links tight and oiled, grip freshly leather-wrapped, pale frost-blue sheen pulsing along the etched claw-mark grooves when its passive triggers, held two-handed and battle-ready.",
+          "ref_url": null
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact": "Wolf's Gravestone is a five-star claymore whose passive increases the wielder's ATK and, when a nearby enemy's HP falls below 30%, unleashes a shockwave dealing AoE physical DMG and granting the whole party a temporary ATK bonus.",
+          "status": "game mechanic (official weapon passive)",
+          "source": "in-game weapon description and passive ability text"
+        },
+        {
+          "fact": "The weapon's name and wolf-fang iconography reference Andrius, the Wolf of the North King, the guardian spirit of the wild wolves living in Mondstadt's Wolvendom forest.",
+          "status": "game lore (naming and iconography association)",
+          "source": "in-game weapon flavor association; Wolvendom location lore"
+        },
+        {
+          "fact": "Wolvendom was the site of a prolonged conflict between Mondstadt's people and the wolves under Andrius's protection, as human settlement and hunting pushed into the wolves' territory.",
+          "status": "game canon (environmental storytelling and NPC dialogue in Wolvendom)",
+          "source": "Wolvendom location content; Razor character story"
+        },
+        {
+          "fact": "Razor, orphaned as a small child, was found and raised by Andrius's wolf pack in Wolvendom, and Andrius treats him as one of his own.",
+          "status": "game canon",
+          "source": "Razor official character story text"
+        },
+        {
+          "fact": "Razor's Story Quest, 'Kindred by Blood,' centers on the tension between his wolf family in Wolvendom and Mondstadt's Knights of Favonius.",
+          "status": "game canon",
+          "source": "Razor Story Quest, Kindred by Blood chapter"
+        },
+        {
+          "fact": "Andrius remains an active, summonable boss encounter within Wolvendom in the current game; he is not depicted as a slain historical figure.",
+          "status": "game mechanic / current live canon",
+          "source": "Wolvendom boss encounter"
+        }
+      ],
+      "forbidden_claims": [
+        "Wolf's Gravestone is confirmed in canon as the literal weapon that killed Andrius.",
+        "Andrius has died or been permanently defeated in the story.",
+        "Razor forged, named, or exclusively owns Wolf's Gravestone as a signature weapon.",
+        "Wolf's Gravestone is a unique quest reward rather than a generally obtainable five-star claymore.",
+        "Wolf's Gravestone possesses sentience, memory, or intent."
+      ]
     }
   ],
   "supabase_assets": {
@@ -147,13 +217,16 @@
   },
   "anti_repetition": {
     "recent_items": [
-      "Kagotsurube Isshin"
+      "Kagotsurube Isshin",
+      "Wolf's Gravestone"
     ],
     "recent_hooks": [
-      "A cursed Inazuman sword crossed nations by possessing successive human hosts."
+      "A cursed Inazuman sword crossed nations by possessing successive human hosts.",
+      "This claymore is named Wolf's Gravestone — yet the wolf king it mourns has never died."
     ],
     "recent_fates": [
-      "Reforged by Kazuha at the cost of its remaining consciousness, leaving the restored sword permanently silent."
+      "Reforged by Kazuha at the cost of its remaining consciousness, leaving the restored sword permanently silent.",
+      "Restored and carried into a Knights of Favonius armory, still bearing its grim name while Andrius and his forest endure."
     ],
     "cooldown_episodes": 20
   },
@@ -165,6 +238,15 @@
       "narrative_mode_used": "External third-person lore narration about the item; the sword never narrates as itself.",
       "youtube_url": "https://www.youtube.com/watch?v=_vDKtTASMYQ",
       "scheduled_for": "2026-08-09T20:27:00Z"
+    },
+    {
+      "episode": 2,
+      "item_name": "Wolf's Gravestone",
+      "arc": "Named for the human-wolf conflict in Mondstadt's Wolvendom and Andrius, the Wolf of the North; planted as a grave marker at the old battle site, later exhumed and restored by adventurers, its shockwave passive echoing the wolf pack's hunting instinct, ending in a Knights of Favonius armory while Andrius and his forest remain unresolved and very much alive.",
+      "narrative_mode_used": "External third-person lore narration about the item; the claymore never narrates as itself; no sentience implied.",
+      "youtube_url": "https://www.youtube.com/watch?v=Zx3-wVQuvmw",
+      "scheduled_for": "2026-08-15T19:47:00Z",
+      "notes": "Lesson: Scenarist's first monologue draft was 101 words for 7x5s=35s of picture; MiniMax rendered it at 60.6s (speed=0.85), a 73% overrun against the 40% masking cap in sound.md. Fixed two ways: trimmed narration to 83 words (dropping only secondary descriptive clauses, no canonical facts), and dropped MiniMax voice_setting.speed from 0.85 to 1.0 (the slowdown was itself inflating duration on top of the word count). Final TTS 44.42s against 35s picture = 1.26x atempo, within the 1.4x cap. Catch TTS/picture-duration mismatches at the Sound handoff, before Storyboarder/Animator spend."
     }
   ]
 }
