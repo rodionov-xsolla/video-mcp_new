@@ -3,7 +3,7 @@
   "game_tag": "growtopia",
   "title": "Growtopia Dual Style",
   "created_at": "2026-07-22",
-  "last_episode": 1,
+  "last_episode": 3,
   "character_pool": [
     {
       "character_name": "legendary-wizard",
@@ -32,6 +32,48 @@
       "has_actor_counterpart": false,
       "actor_name": null,
       "last_seen_episode": 1
+    },
+    {
+      "character_name": "alan-the-alien",
+      "display_name": "Alan, The Alien",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 2
+    },
+    {
+      "character_name": "robert-the-robot",
+      "display_name": "Robert, The Robot",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 2
+    },
+    {
+      "character_name": "boss-ghost",
+      "display_name": "Boss Ghost",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 2
+    },
+    {
+      "character_name": "tomb-robber",
+      "display_name": "Tomb Robber",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 3
+    },
+    {
+      "character_name": "lincoln-the-leprechaun",
+      "display_name": "Lincoln, The Leprechaun",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 3
+    },
+    {
+      "character_name": "the-bartender",
+      "display_name": "The Bartender",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 3
     }
   ],
   "character_rotation": {
@@ -39,20 +81,38 @@
       "Legendary Wizard",
       "The Ringmaster",
       "Criminal Mastermind",
-      "Master Peng"
+      "Master Peng",
+      "Alan, The Alien",
+      "Robert, The Robot",
+      "Boss Ghost",
+      "Tomb Robber",
+      "Lincoln, The Leprechaun",
+      "The Bartender"
     ],
     "recent_actors": [],
     "recent_environments": [
       "mystical stone tower interior with glowing runes",
       "red-and-gold circus tent interior with spotlight",
       "gritty back-alley at night with neon signage",
-      "misty mountain dojo courtyard"
+      "misty mountain dojo courtyard",
+      "alien spaceship interior corridor",
+      "robot workshop/factory floor",
+      "spooky stone crypt/graveyard",
+      "ancient sunlit tomb/pyramid interior",
+      "lucky rainbow grotto with pot-of-gold spring",
+      "rustic wooden saloon/tavern interior"
     ],
     "recent_action_types": [
       "idle-mystic-pose",
       "idle-showman-pose",
       "idle-menacing-lean",
-      "idle-warrior-stance"
+      "idle-warrior-stance",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach"
     ],
     "cooldown_episodes": 10
   },
@@ -88,10 +148,66 @@
       "duration_sec": 23.21,
       "cost_usd": 2.03,
       "notes": "Series launch (EP1) for growtopia dual-style -- standard base format (2D pixel-art left, generic photorealistic right, no actor counterparts), reusing the game's existing canonical NPC reference sprites as the LEFT chain-ref (no new pixel-ref generation cost). User explicitly requested static standing idle poses only -- no walking/traversal -- to sidestep the game's known Kling I2V 'Minecraft morph' risk (see growtopia.md); camera kept to gentle push-in/near-locked only, no pull-backs or orbits. generate_audio:false on all 4 clips (bg-music.mp3 covers audio, avoids unwanted baked-in score). No YouTube channel mapped yet for this game -- deliverable is Supabase-only; upload scheduling deferred, will add YT fields to this entry once the user schedules a publish date."
+    },
+    {
+      "episode": 2,
+      "date": "2026-08-14",
+      "characters": [
+        "Alan, The Alien",
+        "Robert, The Robot",
+        "Boss Ghost"
+      ],
+      "environments": [
+        "alien spaceship interior corridor",
+        "robot workshop/factory floor",
+        "spooky stone crypt/graveyard"
+      ],
+      "actors": [
+        "(none)",
+        "(none)",
+        "(none)"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-14/dual-style/20260814-172429-60042/final.mp4",
+      "duration_sec": 18.17,
+      "cost_usd": 3.03,
+      "notes": "First run under the dual-style-v3 contract (production_contract/comparison_mode source-vs-live-action, mandatory synchronized walking-approach + front dolly-back on every clip -- supersedes EP1's static-idle convention, which predates v3). RIGHT side stays a generic non-celebrity photorealistic person per this bible's established EP1 convention (user did not request actor casting). Mandatory user-requested pop-up promo CTA banner (existing branding/popup.png asset) added to scene 3 (climax) only. Animator hit a self-inflicted expect.min_width/min_height validation defect on scene 1 (too strict for Kling v3 Standard's real 716x1284 9:16 output) that discarded one completed paid generation ($0.63 sunk) before a corrected retry succeeded -- flagging so future runs default expect to ~600x1000 for this route. No YouTube channel mapped yet for growtopia -- Supabase-only deliverable."
+    },
+    {
+      "episode": 3,
+      "date": "2026-08-14",
+      "characters": [
+        "Tomb Robber",
+        "Lincoln, The Leprechaun",
+        "The Bartender"
+      ],
+      "environments": [
+        "ancient sunlit tomb/pyramid interior",
+        "lucky rainbow grotto with pot-of-gold spring",
+        "rustic wooden saloon/tavern interior"
+      ],
+      "actors": [
+        "(none)",
+        "(none)",
+        "(none)"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-14/dual-style/20260814-172430-60042/final.mp4",
+      "duration_sec": 18.16,
+      "cost_usd": 2.40,
+      "notes": "Companion run to EP2, produced in parallel same day under the dual-style-v3 contract (comparison_mode source-vs-live-action, mandatory walking-approach + front dolly-back). Cast and environments deliberately kept disjoint from EP2's cast/environments in addition to clearing the bible's cooldown. RIGHT side stays a generic non-celebrity photorealistic person per this bible's established EP1 convention. Mandatory user-requested pop-up promo CTA banner (existing branding/popup.png asset) added to scene 3 (climax) only. Animator hit the same expect.min_width/min_height validation defect as EP2 on scene 1 (corrected to ~600x1000 for this route, one extra paid generation). No YouTube channel mapped yet for growtopia -- Supabase-only deliverable."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4",
-  "style_tags": "Dual-style split-frame format: LEFT side is the Growtopia in-game render — 2D pixel-art sprite, blocky humanoid, retro flat side-view design, thick clean black outlines, bright saturated candy colors, no 3D rendering (unchanged from the existing canonical reference sprite). RIGHT side is the photorealistic twin — a generic real-world person (not a celebrity look-alike), real skin textures, natural fabric/material textures, cinematic lighting, no cel-shading, no pixelation — wearing the identical costume/props/colors described in characters[]. Both figures stand still in a static idle pose (no walking, no traversal) sharing one continuous environment, no split panel.",
+  "style_tags": "Dual-style split-frame format: LEFT side is the Growtopia in-game render — 2D pixel-art sprite, blocky humanoid, retro flat side-view design, thick clean black outlines, bright saturated candy colors, no 3D rendering (unchanged from the existing canonical reference sprite). RIGHT side is the photorealistic twin — a generic real-world person (not a celebrity look-alike), real skin textures, natural fabric/material textures, cinematic lighting, no cel-shading, no pixelation — wearing the identical costume/props/colors described in characters[]. Both figures share one continuous environment, no split panel. Note: EP1 used a static idle pose per an explicit one-off user request; motion (idle vs. walking-approach) is governed exclusively by rules/formats/dual-style.md's production_contract, not by this style_tags field — since EP2/EP3 (dual-style-v3), every clip is a mandatory synchronized walking-approach + front dolly-back.",
   "characters": [
     {
       "slug": "legendary-wizard",
@@ -120,6 +236,48 @@
       "actor_counterpart": null,
       "character_description": "2D pixel-art Growtopian Master Peng, wide conical straw hat, deep red martial-arts robe, small sword at hip, stoic warrior side-view idle stance",
       "realistic_description": "photorealistic martial artist, wide conical straw hat, deep red traditional martial-arts robe, a sheathed sword at the hip, real skin textures and fabric weave, stoic composed expression, misty cinematic lighting, standing still in a grounded warrior idle stance"
+    },
+    {
+      "slug": "alan-the-alien",
+      "name": "Alan, The Alien",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian Alan, The Alien, green-grey blocky alien skin, oversized smooth round head, large black almond-shaped eyes, two thin antennae, form-fitting silver-grey spacesuit with chest control panel, calm alien stare, slender build",
+      "realistic_description": "photorealistic generic adult performer as a live-action adaptation, natural tan skin beneath practical green-grey alien prosthetic makeup, natural dark brown eyes through practical oversized eye prosthetic work, fitted antenna headpiece, molded silicone prosthetic head accents, brushed metal-look chest control panel, tailored silver-grey fabric suit, real skin texture and cinema-quality lighting"
+    },
+    {
+      "slug": "robert-the-robot",
+      "name": "Robert, The Robot",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian Robert, The Robot, boxy metallic blue-grey body, square head with a single glowing cyan visor-eye strip, antenna stub, riveted chest panel with a small dial, blocky segmented limbs, stoic mechanical expression, sturdy compact build",
+      "realistic_description": "photorealistic generic adult performer as a live-action adaptation, natural skin at jaw/hands beneath a practical robot helmet and armor build, natural eye color through a semi-transparent cyan visor panel, fitted metallic helmet shell, brushed metal-look armor plating, LED-lit visor strip, riveted panel details, real skin texture and cinema-quality lighting"
+    },
+    {
+      "slug": "boss-ghost",
+      "name": "Boss Ghost",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian Boss Ghost, pale translucent white-blue blocky body, tattered flowing shroud with jagged hem, two glowing hollow dark eye sockets, faint wisping trail instead of legs, eerie hollow stare, slight build",
+      "realistic_description": "photorealistic generic adult performer as a live-action adaptation, natural pale skin accented with subtle grey-blue practical ghost makeup, natural eye color within darkened practical eye makeup, flowing tattered pale shroud/veil, layered sheer and matte pale fabric, subtle LED-lit hem accents, real skin texture and cinema-quality lighting"
+    },
+    {
+      "slug": "tomb-robber",
+      "name": "Tomb Robber",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian Tomb Robber, red-and-white checkered keffiyeh headwrap, weathered tan explorer vest over rugged tunic, leather satchel across the back, curved dagger at the hip, wrapped desert boots, coil of rope at belt, sly confident smirk, wiry agile build",
+      "realistic_description": "photorealistic generic adult male performer as a live-action adaptation, warm tan sun-weathered skin, dark brown eyes, thin scar across one eyebrow, lean athletic build, natural short dark hair beneath the same red-and-white keffiyeh, same tan explorer vest, leather satchel, curved dagger and wrapped boots, real skin texture and cinema-quality lighting"
+    },
+    {
+      "slug": "lincoln-the-leprechaun",
+      "name": "Lincoln, The Leprechaun",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian Lincoln, The Leprechaun, tall black top hat with wide green band and gold buckle, kelly-green tailcoat over mustard-yellow waistcoat, bushy orange sideburns, four-leaf clover pinned to lapel, drawstring pot-of-gold sack, cheeky mischievous grin, short stocky build",
+      "realistic_description": "photorealistic generic adult male performer as a live-action adaptation, fair freckled skin, bright green eyes, bushy orange sideburns and beard, compact stocky build, natural short reddish hair beneath the same green top hat with gold buckle, same kelly-green tailcoat, mustard waistcoat, clover pin and pot-of-gold sack, real skin texture and cinema-quality lighting"
+    },
+    {
+      "slug": "the-bartender",
+      "name": "The Bartender",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian The Bartender, crisp white dress shirt with rolled sleeves, black waistcoat and matching bow tie, white cloth draped over one forearm, waxed handlebar moustache, polished glass in hand, welcoming easy smile, sturdy broad-shouldered build",
+      "realistic_description": "photorealistic generic adult male performer as a live-action adaptation, olive-toned skin, warm brown eyes, waxed handlebar moustache, sturdy broad-shouldered build, natural slicked-back dark hair, same white dress shirt, black waistcoat, bow tie, forearm cloth and polished glass, real skin texture and cinema-quality lighting"
     }
   ]
 }
