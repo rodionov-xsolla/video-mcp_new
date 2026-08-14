@@ -1,6 +1,6 @@
 {
   "game_tag": "genshin-impact",
-  "total_stories": 7,
+  "total_stories": 8,
   "stories": [
     {
       "id": 1,
@@ -127,24 +127,48 @@
       "youtube_url": "https://www.youtube.com/watch?v=cMvJh2fJ-G8",
       "yt_publish_at": "2026-08-06T20:01:00Z",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-04/reddit-story/20260804-145743-73799-genshin-impact/final.mp4"
+    },
+    {
+      "id": 8,
+      "date": "2026-08-12",
+      "tone": "touching",
+      "theme": "co-parenting-custody-vindication",
+      "moral_engine": "a parent's real attention is falsely reframed as a purchased substitute for it",
+      "game_situation": "biweekly Friday-night custody visits where a divorced dad and his nine-year-old daughter open the free Primogems link, pull together, then discuss Teyvat lore",
+      "false_verdict": "the narrator only buys his daughter's affection with Primogems instead of giving her real attention",
+      "pressure_source": "the ex-wife's accusation escalating into a threat to cut weekend custody time",
+      "narrator_flaw": "let the accusation sit unanswered for weeks instead of defending himself directly to Denise",
+      "human_action": "didn't argue with his ex-wife and instead asked his daughter to explain their Fridays in her own words",
+      "reveal": "the daughter reveals the Primogems never mattered — her dad is the only one who actually listens to her theories about the game's story",
+      "justice_resolution": "the ex-wife apologizes and the custody arrangement stays exactly the same",
+      "resolution_type": "positive",
+      "headline": "My ex-wife told our daughter I only buy her love with Primogems. Our daughter proved her wrong.",
+      "offerwall_angle": "free Primogems — link in bio",
+      "offerwall_note": "woven into the setup beat as the recurring Friday ritual (open the bio link, claim free Primogems, pull together) rather than the injustice/pressure beats, per bible precedent (ids 4-7)",
+      "gameplay_file": "Cut.mp4",
+      "gameplay_offset_sec": 222,
+      "output_dir": "output/2026-08-12/genshin-impact/reddit-story/20260812-143341-86608-gen",
+      "youtube_url": "https://www.youtube.com/watch?v=ZtXOX4qaf6U",
+      "yt_publish_at": "2026-08-15T19:01:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-12/reddit-story/20260812-143341-86608-gen/final.mp4"
     }
   ],
   "anti_repetition": {
-    "recent_themes": ["f2p-triumph", "parent-judgment-to-connection", "friendship-neglect-vs-overwhelm", "creative-authorship-restored", "tenant-noise-accusation-cleared", "coworker-mockery-cover-insecurity"],
-    "recent_tones": ["rage-to-relief", "soft-drama", "bittersweet-to-warm", "humiliation-to-respect", "funny-justice", "underdog"],
-    "recent_moral_engines": ["judgment for hobby", "feeling replaced/abandoned", "public authorship accusation", "one admitted outburst expanded into a false claim of constant disturbance", "public workplace mockery concealing the mocker's own attachment to the game"],
-    "recent_false_verdicts": ["immature adult wasting time on a kids' game", "best friend deliberately excluded narrator over her engagement", "narrator used generative AI and lied about painting the Furina portrait", "the narrator's Genshin sessions caused hours of pounding every night", "the narrator's lunch-break Genshin habit is childish and unprofessional"],
-    "recent_pressure_sources": ["dad's repeated dismissal in front of family", "mutual friend group chat consensus", "professor's public suspicion and classmates whispering about cheating", "neighbors' signed complaint, landlord deadline, and a trusted neighbor's sudden distrust", "coworker's public mockery, Slack jokes, and boss's comment"],
+    "recent_themes": ["parent-judgment-to-connection", "friendship-neglect-vs-overwhelm", "creative-authorship-restored", "tenant-noise-accusation-cleared", "coworker-mockery-cover-insecurity", "co-parenting-custody-vindication"],
+    "recent_tones": ["soft-drama", "bittersweet-to-warm", "humiliation-to-respect", "funny-justice", "underdog", "touching"],
+    "recent_moral_engines": ["feeling replaced/abandoned", "public authorship accusation", "one admitted outburst expanded into a false claim of constant disturbance", "public workplace mockery concealing the mocker's own attachment to the game", "a parent's real attention falsely reframed as a purchased substitute for it"],
+    "recent_false_verdicts": ["best friend deliberately excluded narrator over her engagement", "narrator used generative AI and lied about painting the Furina portrait", "the narrator's Genshin sessions caused hours of pounding every night", "the narrator's lunch-break Genshin habit is childish and unprofessional", "the narrator only buys his daughter's affection with Primogems instead of giving her real attention"],
+    "recent_pressure_sources": ["mutual friend group chat consensus", "professor's public suspicion and classmates whispering about cheating", "neighbors' signed complaint, landlord deadline, and a trusted neighbor's sudden distrust", "coworker's public mockery, Slack jokes, and boss's comment", "ex-wife's accusation escalating into a threat to cut weekend custody time"],
     "recent_hooks": [
-      "He called me a forever F2P loser. Said Hu Tao would never be mine.",
       "He said it once. Flat. That anime kids stuff. No argument. Just walked away.",
       "The invites stopped after her engagement. No text, just silence.",
       "My professor called my Furina painting AI-generated, until my sketchbook proved him wrong.",
       "three neighbors sign an eviction complaint; narrator admits one Primogem-pull shout; hallway recordings expose the service elevator",
-      "coworker mocks lunch-break Genshin publicly, then privately begs for a Spiral Abyss clear before her daughter's summer camp"
+      "coworker mocks lunch-break Genshin publicly, then privately begs for a Spiral Abyss clear before her daughter's summer camp",
+      "ex-wife accuses divorced dad of buying his daughter's love with Primogems instead of real attention; his nine-year-old sets her straight"
     ],
-    "recent_gameplay_offsets_sec": [20, 305, 140],
+    "recent_gameplay_offsets_sec": [305, 140, 222],
     "banned_combos": [],
-    "note": "gameplay_offset_sec 140 on Cut.mp4 (~383s total) is a compromise — the file is too short for full 180-240s separation from all three prior offsets (20/260/305). Consider sourcing a longer or second Genshin gameplay file to restore true offset variety."
+    "note": "gameplay_offset_sec 222 on Cut.mp4 (~383s total) maximizes minimum separation from prior tracked offsets (140/305) but true 180-240s separation from all recents is still not achievable on this single ~383s file. Cut.mp4 still needs more footage or a second Genshin gameplay source to restore full offset variety."
   }
 }
