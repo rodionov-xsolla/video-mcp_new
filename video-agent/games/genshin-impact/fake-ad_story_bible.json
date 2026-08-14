@@ -3,11 +3,12 @@
   "game_tag": "genshin-impact",
   "title": "Genshin Impact Fake Ad",
   "created_at": "2026-06-18",
-  "last_episode": 2,
+  "last_episode": 3,
   "style_tags": "premium modern Genshin-style vertical short, anime cel-shaded fantasy art, vibrant clean character shapes, painterly Teyvat environment, cinematic full-frame composition, magical star, Primogem and gacha energy, luminous elemental particles, edge-to-edge 9:16 image",
   "characters": {
     "Lumine": "young adult woman with a slim athletic build, fair skin, amber-gold eyes, long pale-blonde hair with two face-framing locks, a white star-shaped flower ornament above her left temple, a sleeveless white traveler dress with gold filigree, a short dark bodice panel, detached white sleeves, black fingerless gloves, a flowing split white sash, and gold-accented knee-high boots",
-    "Mona": "young adult woman with a slender build, fair skin, teal-green eyes, long dark-violet hair tied into high twin tails with red ribbons, a wide-brimmed purple astrologer hat with a red underside and gold eight-point star, a fitted purple astrologer bodysuit with gold star ornaments, a short red-lined cape, patterned dark tights, purple high-heeled boots, white gloves, and a blue Hydro Vision at her hip"
+    "Mona": "young adult woman with a slender build, fair skin, teal-green eyes, long dark-violet hair tied into high twin tails with red ribbons, a wide-brimmed purple astrologer hat with a red underside and gold eight-point star, a fitted purple astrologer bodysuit with gold star ornaments, a short red-lined cape, patterned dark tights, purple high-heeled boots, white gloves, and a blue Hydro Vision at her hip",
+    "Paimon": "small floating fairy companion with a child-like build, fair skin, large navy-blue eyes, short white hair with two side locks, a dark navy star-shaped hair ornament, a tiny rose-gold floating crown above her head, a white puffy cape-dress with peach-gold trim, dark navy inner sleeves, pale pink boots, and a deep blue starry scarf trailing behind her"
   },
   "product_design": "an ornate palm-sized celestial compass with a polished brass body, four concentric rotating rings, a midnight-blue enamel face, one long gold needle, a central eight-point star, crescent and constellation engravings, a luminous turquoise Primogem-shaped crystal at the crown, pink-and-blue Intertwined Fate inlays around the rim, three small articulated feet, and no lettering or logo on the physical prop",
   "advertised_products": [
@@ -33,23 +34,32 @@
       "Doesn't restore resin. Helps you outlive the wait.",
       "The stars are on your side.",
       "Follow the needle. Claim your Primogems. Watch the sky turn gold.",
-      "A five-star Mona! Clearly, the stars have excellent taste."
+      "A five-star Mona! Clearly, the stars have excellent taste.",
+      "One wish left. My Primogems? Tragic.",
+      "Need a refill? Claim free Primogems—link in our bio.",
+      "Five-star secured. Paimon, all crimes officially forgiven."
     ],
-    "recent_themes": ["resin-economy", "primogem-fortune"],
-    "recent_tones": ["zen-deadpan", "celebratory-celestial-deadpan"],
+    "recent_themes": ["resin-economy", "primogem-fortune", "free-primogems-native-conversion"],
+    "recent_tones": ["zen-deadpan", "celebratory-celestial-deadpan", "playful-first-person-conversion"],
     "recent_hooks": [
       "Lumine exhausted at resin cap, Resin Energy drink appears, runs through domain effortlessly, sits meditating — enlightenment achieved, walks away from game, Paimon holds sign: she's fine",
-      "Free Primogem stars gather around Lumine at a Starfell Valley wish observatory, Mona reveals a celestial prediction compass, the needle locks and a golden wish launches, the five-star resolves to a Mona portrait token, Lumine laughs, Mona gives a proud flourish, the packshot promises that the stars are on the Traveler's side"
+      "Free Primogem stars gather around Lumine at a Starfell Valley wish observatory, Mona reveals a celestial prediction compass, the needle locks and a golden wish launches, the five-star resolves to a Mona portrait token, Lumine laughs, Mona gives a proud flourish, the packshot promises that the stars are on the Traveler's side",
+      "Lumine reaches a wish altar with one wish left and no Primogems, Paimon opens an emergency stash, points viewers to free Primogems through the link in bio, and a ten-wish launch turns gold before their five-star celebration"
     ],
-    "recent_twist_types": ["enlightenment-walk-away", "proud-mona-self-selection"],
-    "recent_problem_types": ["resin-anxiety", "primogem-giveaway-opportunity"],
-    "recent_characters": ["Lumine", "Mona"],
+    "recent_twist_types": ["enlightenment-walk-away", "proud-mona-self-selection", "none-positive-conversion-payoff"],
+    "recent_problem_types": ["resin-anxiety", "primogem-giveaway-opportunity", "zero-primogems-before-final-wish"],
+    "recent_characters": ["Lumine", "Mona", "Paimon"],
     "recent_environments": [
       "Mondstadt city plaza cobblestone medieval fantasy windmill golden afternoon light",
       "Mondstadt hillside meadow green rolling hills wildflowers pastoral serenity",
       "Starfell Valley cliffside wish altar under constellation night sky",
       "astrologer's brass instrument table at open-air observatory",
-      "armillary platform glowing with golden wish light"
+      "armillary platform glowing with golden wish light",
+      "Inazuma cliffside wish altar under cold moonlight and violet sakura motes",
+      "Mondstadt traveler camp in a bright dandelion meadow",
+      "Adventurers' Guild plaza with a blank noticeboard and title-safe lower frame",
+      "spiraling cobalt wish tunnel with ten comet trails",
+      "aetheric five-star result platform above pearl clouds"
     ],
     "banned_combos": []
   },
@@ -94,6 +104,37 @@
       "duration_sec": 30.040998,
       "cost_usd": 2.8006,
       "notes": "Full-frame 9:16 fan-made parody ad with English voice-over, baked subtitles, scene CTA, and branded end CTA. Scheduled on Genshin Snap for 2026-07-29T20:50:00Z."
+    },
+    {
+      "episode": 3,
+      "date": "2026-08-14",
+      "campaign_type": "native-conversion",
+      "concept_name": "Paimon's Emergency Primogem Stash",
+      "characters": ["Lumine", "Paimon"],
+      "theme": "free-primogems-native-conversion",
+      "twist_type": "none-positive-conversion-payoff",
+      "problem_type": "zero-primogems-before-final-wish",
+      "environments": [
+        "Inazuma cliffside wish altar under cold moonlight and violet sakura motes",
+        "Mondstadt traveler camp in a bright dandelion meadow",
+        "Adventurers' Guild plaza with a blank noticeboard and title-safe lower frame",
+        "spiraling cobalt wish tunnel with ten comet trails",
+        "aetheric five-star result platform above pearl clouds"
+      ],
+      "tone": "playful-first-person-conversion",
+      "hook": "Lumine reaches a wish altar with one wish left and no Primogems, Paimon opens an emergency stash, points viewers to free Primogems through the link in bio, and a ten-wish launch turns gold before their five-star celebration",
+      "cta_copy": "GET FREE PRIMOGEMS / LINK IN BIO",
+      "voice": {
+        "character": "Lumine (Traveler)",
+        "engine": "fal-ai/chatterbox/text-to-speech",
+        "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/voice-ref.mp3"
+      },
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-14/fake-ad/20260814-151622-21367/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=Mmm-JWAttuU",
+      "yt_publish_at": "2026-08-17T20:31:00Z",
+      "duration_sec": 30.040998,
+      "cost_usd": 3.11,
+      "notes": "Approved native conversion override with no fake product, negative twist, or packshot. Offer overlays appear only on generated scenes 2 and 4; the appended prebuilt CTA is used as-is with no added text, arrow, subtitle, or speech. Final revision uses a first-person Lumine Chatterbox voice. Estimated total cost range: $2.90–$3.11."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4"
