@@ -45,7 +45,12 @@
           "ref": {
             "asset_type": "reference_image",
             "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/oldgrower-young/variants/young.png",
-            "tags": ["growtopia", "character-story", "OldGrower", "young"]
+            "tags": [
+              "growtopia",
+              "character-story",
+              "OldGrower",
+              "young"
+            ]
           }
         },
         "mature": {
@@ -54,7 +59,12 @@
           "ref": {
             "asset_type": "reference_image",
             "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/oldgrower-mature/variants/mature.png",
-            "tags": ["growtopia", "character-story", "OldGrower", "mature"]
+            "tags": [
+              "growtopia",
+              "character-story",
+              "OldGrower",
+              "mature"
+            ]
           }
         }
       },
@@ -71,7 +81,13 @@
         "Empty devastated world with broken blocks and cracked ground",
         "Grand rebuilt world with pixel-art castle, fountains, and Diamond Lock display cases"
       ],
-      "items_featured": ["World Lock", "Diamond Lock", "Angel Wings", "Rayman Fist", "Magplant"]
+      "items_featured": [
+        "World Lock",
+        "Diamond Lock",
+        "Angel Wings",
+        "Rayman Fist",
+        "Magplant"
+      ]
     },
     {
       "name": "Legendary Wizard",
@@ -136,12 +152,20 @@
         "mortal": {
           "asset_type": "reference_image",
           "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/stormcaller-mortal-2026-08-03/variants/mortal.png",
-          "tags": ["character-story", "stormcaller", "mortal"]
+          "tags": [
+            "character-story",
+            "stormcaller",
+            "mortal"
+          ]
         },
         "ascended": {
           "asset_type": "reference_image",
           "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/stormcaller-ascended-2026-08-03/variants/ascended.png",
-          "tags": ["character-story", "stormcaller", "ascended"]
+          "tags": [
+            "character-story",
+            "stormcaller",
+            "ascended"
+          ]
         }
       },
       "voice_style": "Male narrator, mythic and self-aware. Starts wry and a little shaken (post-crisis hook), warms into plain humility during origin, swells with cocky pride during the Zeus ascension and hubris beats, cracks with alarm during the storm backlash, settles into a warm grounded mentor tone for the revelation.",
@@ -157,7 +181,11 @@
         "Bustling tile-block trade plaza with vending machines and World Lock display cases",
         "Cracked floating-platform storm world under a jagged lightning sky"
       ],
-      "items_featured": ["Zeus set", "World Lock", "lightning-wreathed staff"],
+      "items_featured": [
+        "Zeus set",
+        "World Lock",
+        "lightning-wreathed staff"
+      ],
       "status": "covered"
     },
     {
@@ -172,12 +200,20 @@
         "unmarked": {
           "asset_type": "reference_image",
           "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/seraph-unmarked-2026-08-04/variants/unmarked.png",
-          "tags": ["character-story", "seraph", "unmarked"]
+          "tags": [
+            "character-story",
+            "seraph",
+            "unmarked"
+          ]
         },
         "angelic": {
           "asset_type": "reference_image",
           "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/seraph-angelic-2026-08-04/variants/angelic.png",
-          "tags": ["character-story", "seraph", "angelic"]
+          "tags": [
+            "character-story",
+            "seraph",
+            "angelic"
+          ]
         }
       },
       "voice_style": "Male narrator, warm and steady with a current of quiet hurt underneath. Starts serene and knowing in the hook, turns open and naive during origin, cracks with disbelief through the scam, softens into trembling resolve at the moment of giving, settles into a calm protective guardian-mentor tone for the revelation.",
@@ -193,7 +229,10 @@
         "The fence gate at golden dusk where the selfless trade is made",
         "Bustling tile-block trade plaza with vending machines and World Lock display cases"
       ],
-      "items_featured": ["Angelic set", "World Lock"],
+      "items_featured": [
+        "Angelic set",
+        "World Lock"
+      ],
       "status": "covered"
     },
     {
@@ -209,17 +248,29 @@
         "unbonded": {
           "asset_type": "reference_image",
           "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/dragonkin-unbonded-2026-08-04/variants/unbonded.png",
-          "tags": ["character-story", "dragonkin", "unbonded"]
+          "tags": [
+            "character-story",
+            "dragonkin",
+            "unbonded"
+          ]
         },
         "half-bonded": {
           "asset_type": "reference_image",
           "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/dragonkin-halfbonded-2026-08-04/variants/half-bonded.png",
-          "tags": ["character-story", "dragonkin", "half-bonded"]
+          "tags": [
+            "character-story",
+            "dragonkin",
+            "half-bonded"
+          ]
         },
         "fully-bonded": {
           "asset_type": "reference_image",
           "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/dragonkin-fullybonded-2026-08-04/variants/fully-bonded.png",
-          "tags": ["character-story", "dragonkin", "fully-bonded"]
+          "tags": [
+            "character-story",
+            "dragonkin",
+            "fully-bonded"
+          ]
         }
       },
       "voice_style": "Young adult narrator, gentle and patient rather than boastful. Hook opens warm and a little wondrous. Origin is plain and humble. The storm turning-point cracks with worry but never panics — delivery slows and softens rather than escalating, to sell 'patience over force'. Revelation settles into quiet, contented warmth.",
@@ -236,7 +287,9 @@
         "Sunrise-lit garden world with fresh tilled soil blocks and a small hay nest",
         "Bright grand plaza world with a tile-block fountain and a Growtopia banner"
       ],
-      "items_featured": ["Dragon set (Baby Dragon)"],
+      "items_featured": [
+        "Dragon set (Baby Dragon)"
+      ],
       "status": "covered"
     },
     {
@@ -252,17 +305,29 @@
         "innocent": {
           "asset_type": "reference_image",
           "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/grinshade-innocent-2026-08-04/variants/innocent.png",
-          "tags": ["character-story", "grinshade", "innocent"]
+          "tags": [
+            "character-story",
+            "grinshade",
+            "innocent"
+          ]
         },
         "tempted": {
           "asset_type": "reference_image",
           "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/grinshade-tempted-2026-08-04/variants/tempted.png",
-          "tags": ["character-story", "grinshade", "tempted"]
+          "tags": [
+            "character-story",
+            "grinshade",
+            "tempted"
+          ]
         },
         "corrupted": {
           "asset_type": "reference_image",
           "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/grinshade-corrupted-2026-08-04/variants/corrupted.png",
-          "tags": ["character-story", "grinshade", "corrupted"]
+          "tags": [
+            "character-story",
+            "grinshade",
+            "corrupted"
+          ]
         }
       },
       "voice_style": "Male narrator, sly and seductive with dark charisma. Starts cocky and gleeful in the corrupted hook, drops to plain weary resentment during origin, turns sly and hungrily tempted during the shadow-merchant bargain, swells with dark theatrical triumph as the transformation completes, finishes in gleeful unrepentant mocking delight — no remorse, no redemption note anywhere.",
@@ -279,7 +344,228 @@
         "Grinshade's own world curdling into cracked obsidian tiles around a blackened tree stump",
         "Grand dark citadel throne room of black tile blocks with floating embers and a pile of surrendered World Locks and Diamond Locks as trophies"
       ],
-      "items_featured": ["Devil / Demonic set", "World Lock", "Diamond Lock"],
+      "items_featured": [
+        "Devil / Demonic set",
+        "World Lock",
+        "Diamond Lock"
+      ],
+      "status": "covered"
+    },
+    {
+      "name": "Master Peng",
+      "slug": "master-peng",
+      "role": "Growtopia's martial-arts grandmaster NPC (wiki: Master Peng) — an elderly Iron Fist master who trained alone before founding his hillside dojo, humbled by defeat, rebuilt on patience instead of pure strength",
+      "costume_stages": {
+        "default": "2D pixel-art Growtopian elder martial-arts grandmaster, tan/beige blocky skin, large square head, one subtly narrowed eye, stern flat mouth, long white pixel beard, bald crown with grey topknot, red-and-gold gi crossed with a black sash, faded wrist/knuckle wraps, straw sandals, a bamboo training staff taller than himself, calloused tiny hands, upright disciplined posture, thick clean black outline"
+      },
+      "refs": {
+        "default": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/master-peng-2026-08-14/sheet.png",
+          "tags": [
+            "character-story",
+            "master-peng"
+          ]
+        }
+      },
+      "voice_style": "Elderly wise martial-arts grandmaster — deep, measured, gravelly timbre; unhurried, deliberate cadence. Serene/knowing hook, humble reflective origin, quiet shame at the ring defeat, thoughtful resolve rebuilding, warm authoritative teaching register for the revelation. MiniMax voice_id used: Deep_Voice_Man.",
+      "story_arc": {
+        "hook": "I am Master Peng, grandmaster of the Iron Fist and keeper of this hillside dojo.",
+        "origin": "Before the dojo existed, I trained here completely alone — one staff, one dummy, no students.",
+        "turning_point": "I fought on pure strength, until a boy half my size shattered my staff in a single move. Kneeling in that dirt taught me more humility than any victory ever had.",
+        "revelation": "So I rebuilt my style on patience, and rebuilt this dojo one student at a time. Now every fist that trains here learns stillness long before it ever learns to strike."
+      },
+      "age_progression": "None — no canonical age variants; single mature appearance throughout, story progression carried by environment/props (unfinished platform to thriving dojo; whole staff to shattered to rebound staff).",
+      "environments_used": [
+        "Hillside dojo courtyard with paper lanterns and training banners",
+        "Unfinished solitary training platform at dawn",
+        "Sparring ring in front of a blurred spectator crowd",
+        "Fireside training yard at night",
+        "Finished dojo courtyard filled with students",
+        "Valley overlook at sunset"
+      ],
+      "items_featured": [
+        "bamboo training staff",
+        "Iron Fist gi"
+      ],
+      "status": "covered"
+    },
+    {
+      "name": "Robert, The Robot",
+      "slug": "robert-the-robot",
+      "role": "Growtopia's mechanical vault-guard NPC (wiki: Robert, The Robot) — built, not born; a 'built, not born' transformation substitutes for the format's age-progression requirement (rough prototype assembly vs. rebuilt polished form)",
+      "costume_stages": {
+        "prototype": "2D pixel-art Growtopian-built robot, blocky mechanical humanoid welded from mismatched rusty-brown/grey scrap-metal plates, one arm longer than the other with exposed coiled copper wiring at the shoulder, single flickering yellow LED eye in a dented square head, cracked sparking chest panel, thin wobbly rod legs, bent drooping antenna, crude bolts and patchy scrap strips, raw unpainted unfinished look, thick clean black outline",
+        "finished": "2D pixel-art Growtopian-built robot, sleek boxy mechanical humanoid in brushed silver-grey plating with cyan-blue trim, square head with two symmetrical glowing cyan optic lenses, small speaker-grille mouth, matched-length block arms with rounded three-fingered hands, piston-jointed legs on wide stable feet, glowing cyan power-core in the chest, upright satellite-dish antenna, fully polished plating, thick clean black outline"
+      },
+      "refs": {
+        "prototype": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/robert-the-robot-prototype-2026-08-14/variants/prototype.png",
+          "tags": [
+            "character-story",
+            "robert-the-robot",
+            "prototype"
+          ]
+        },
+        "finished": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/robert-the-robot-finished-2026-08-14/variants/finished.png",
+          "tags": [
+            "character-story",
+            "robert-the-robot",
+            "finished"
+          ]
+        }
+      },
+      "voice_style": "Synthetic-tinged but earnest young-machine register — plainspoken/matter-of-fact in workshop beats, light distortion/alarm during the storm malfunction, warm and proud for the revelation. MiniMax voice_id used: Casual_Guy.",
+      "story_arc": {
+        "hook": "I am Robert, The Robot — built to guard every World Lock in Growtopia.",
+        "origin": "Before I was Robert, I was scrap — mismatched bolts and wire on a workshop bench. Then my creator threw the switch, and my eye flickered awake for the first time.",
+        "turning_point": "A storm hit the vault — sparks tore through my circuits and I nearly shut down.",
+        "revelation": "My creator rebuilt me stronger, plated me in polished steel, and gave me real purpose. Now I stand watch over every locked vault in Growtopia — and I never sleep."
+      },
+      "age_progression": "Built-not-born equivalent: prototype (rough first assembly) vs. finished (rebuilt/polished) — both visualized across the arc, counts as the age-progression requirement for a machine character.",
+      "environments_used": [
+        "Vault storage chamber with World Lock and Diamond Lock display cases",
+        "Cluttered backstreet robotics workshop",
+        "The vault chamber mid power-surge storm",
+        "Creator's repair table"
+      ],
+      "items_featured": [
+        "World Lock",
+        "Diamond Lock"
+      ],
+      "status": "covered"
+    },
+    {
+      "name": "The Ringmaster",
+      "slug": "the-ringmaster",
+      "role": "Growtopia's circus impresario NPC (wiki: The Ringmaster) — a nobody juggler who built his own stage and crossed a wire over a lava pit to earn the crowd",
+      "costume_stages": {
+        "default": "2D pixel-art Growtopian circus showman, top hat with crimson band, black tailcoat with crimson lapels and gold buttons, gold epaulettes, cravat, pocket watch, gold-topped cane, waxed pixel mustache, confident theatrical stance, thick clean black outline, bright saturated colors"
+      },
+      "refs": {
+        "default": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/the-ringmaster-2026-08-14/variants/character-story.png",
+          "tags": [
+            "character-story",
+            "the-ringmaster"
+          ]
+        }
+      },
+      "voice_style": "Male showman narrator, theatrical carnival-barker energy with real vulnerability underneath — controlled bravado at the hook, wearier confiding origin, gritted-then-explosive turning point, booming warm revelation. MiniMax voice_id used: Deep_Voice_Man.",
+      "story_arc": {
+        "hook": "I am the Ringmaster, master of ceremonies of Growtopia's Grand Circus, and the crowd's last hope tonight.",
+        "origin": "Before the applause, I was a nobody juggler, tossed off every corner stage in Growtopia. No one clapped, so I built my own stage — a tent stitched from scraps and dares.",
+        "turning_point": "I strung a wire across a pit of lava and bet my life on one impossible walk. The wire held. The flames roared beneath me.",
+        "revelation": "And Growtopia finally learned my name. Now I run the greatest show under any tent — because the show must always go on."
+      },
+      "age_progression": "None — no canonical age/costume variants; single regalia throughout, rise-and-reveal arc delivered via staging (empty practice tent to packed spotlight center ring) instead of costume change.",
+      "environments_used": [
+        "Spotlight center ring beneath the big top",
+        "Quiet dawn practice corner backstage",
+        "Half-finished tent frame",
+        "Tightrope over a lava-block pit",
+        "Post-triumph confetti-filled ring",
+        "Packed stands at the finale"
+      ],
+      "items_featured": [
+        "circus tent",
+        "lava pit wire-walk rig"
+      ],
+      "status": "covered"
+    },
+    {
+      "name": "Locke The Salesman",
+      "slug": "locke-the-salesman",
+      "role": "Growtopia's traveling vendor NPC (wiki: Locke The Salesman) — played as an ambiguous/redeemed trader (differentiated from the earlier Tomb Robber/Criminal Mastermind villain arc): ran a rigged 'lucky lock' con, confronted with the human cost, pivots to becoming Growtopia's fair dealer",
+      "costume_stages": {
+        "default": "2D pixel-art Growtopian traveling salesman, forest-green vest, bandolier of lock/key trinkets, brass-topped cane, cart of hanging locks, wry knowing expression, thick clean black outline, bright saturated colors"
+      },
+      "refs": {
+        "default": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/locke-the-salesman-2026-08-14/sheet.png",
+          "tags": [
+            "character-story",
+            "locke-the-salesman"
+          ]
+        },
+        "newbie_customer_secondary": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/newbie-customer-locke-the-salesman-2026-08-14/sheet.png",
+          "tags": [
+            "character-story",
+            "locke-the-salesman",
+            "secondary-character"
+          ]
+        }
+      },
+      "voice_style": "Smooth-talking, wry vendor's patter — warm charm and nasal quick cadence in sales-pitch beats, guilt-rasp at the turning point, calm plain sincerity for the revelation. MiniMax voice_id used: Casual_Guy.",
+      "story_arc": {
+        "hook": "I'm Locke the Salesman — Growtopia's wandering trader, and not every deal I've made was clean.",
+        "origin": "I started with an empty cart and a busted wheel, hawking scraps nobody wanted. Fast talk turns junk into gold — soon my cart rattled with locks from every world.",
+        "turning_point": "Then I sold a rigged lucky lock to a kid with nothing left. Watching him walk away broke made my own tricks taste like ash in my mouth.",
+        "revelation": "Now every lock I sell holds true — Locke's word never breaks."
+      },
+      "age_progression": "None — no canonical age variants; cart/prop state (battered/empty to full-and-thriving to guarantee-stamped) carries the transformation instead.",
+      "environments_used": [
+        "Dusty crossroads trade path at dusk",
+        "Empty dirt-tile crossroads world",
+        "Livelier trade path stretch",
+        "Crowded market corner at midday",
+        "Same market corner, half-empty after the rigged sale",
+        "Grand plaza with fountain and Lock display cases"
+      ],
+      "items_featured": [
+        "World Lock",
+        "Diamond Lock",
+        "vendor cart"
+      ],
+      "anti_repetition_note": "Differentiated from EP2/EP3 (Tomb Robber / Criminal Mastermind, unrepentant villain arc) by playing Locke as an ambiguous/redeemed trader rather than repeating the villain beat.",
+      "status": "covered"
+    },
+    {
+      "name": "Geoff, The Guard",
+      "slug": "geoff-the-guard",
+      "role": "Growtopia's bank vault sentinel NPC (wiki: Geoff, The Guard) — duty and protecting others' property, deliberately distinct from the OldGrower personal rags-to-riches legend",
+      "costume_stages": {
+        "default": "2D pixel-art Growtopian guard, navy-blue uniform with brass buttons/collar, World-Lock-crested brass badge, peaked guard cap, leather belt with vault keys, small pixel mustache, baton and lantern props, thick clean black outline, bright saturated colors"
+      },
+      "refs": {
+        "default": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/geoff-the-guard/variants/character-story-2026-08-14.png",
+          "tags": [
+            "character-story",
+            "geoff-the-guard"
+          ]
+        }
+      },
+      "voice_style": "Mature adult male, steady low register, dutiful and reserved — firm/clipped hook, plain wistful origin, quiet shame at the mistake, hardened resolve, gritted siege, calm understated pride for the revelation (no triumphant swell). MiniMax voice_id used: Determined_Man.",
+      "story_arc": {
+        "hook": "I'm Geoff, the Guard of the Growtopia Bank vault — no one gets past me.",
+        "origin": "I signed up for the dullest post in Growtopia — nobody else wanted the night shift.",
+        "turning_point": "One night I dozed off, and a thief slipped past me into the vault. I never forgave myself. I swore I'd never leave that gate unwatched again.",
+        "revelation": "Years later, a whole gang tried to break the vault. I held the gate alone. Now every player in Growtopia knows: Geoff's gate has never once fallen since."
+      },
+      "age_progression": "None — no canonical age variants; one constant guard-uniform design throughout.",
+      "environments_used": [
+        "Bank vault gate at night under moonlight",
+        "Sunlit bank district colonnade",
+        "Gate at night, lantern-lit, thief slipping past",
+        "Courtyard at dawn after the theft",
+        "Night siege at the reinforced gate",
+        "Bright plaza with vending machines and Diamond Lock cases"
+      ],
+      "items_featured": [
+        "World Lock",
+        "Diamond Lock",
+        "vault gate"
+      ],
+      "anti_repetition_note": "Differentiated from EP4 (OldGrower, personal rags-to-riches legend) — Geoff's arc is duty/protecting others, not personal wealth or status.",
       "status": "covered"
     }
   ],
@@ -305,7 +591,12 @@
     "stormcaller",
     "seraph",
     "dragonkin",
-    "grinshade"
+    "grinshade",
+    "master-peng",
+    "robert-the-robot",
+    "the-ringmaster",
+    "locke-the-salesman",
+    "geoff-the-guard"
   ],
   "episodes": [
     {
@@ -403,6 +694,82 @@
       "minimax_voice": "Deep_Voice_Man",
       "status": "approved_final_saved",
       "notes": "Original character built from the Devil/Demonic set — scammed player bargains with a shadow merchant for demonic power, unrepentant villain turn with no redemption. One of 3 parallel character-story episodes produced in the same run (with Seraph and Dragonkin). Approved by user."
+    },
+    {
+      "episode": 9,
+      "date": "2026-08-14",
+      "character": "Master Peng",
+      "slug": "master-peng",
+      "title": "Master Peng: The Staff I Rebuilt",
+      "run_id": "20260814-195604-11445-a",
+      "output_dir": "output/2026-08-14/growtopia/character-story/20260814-195604-11445-a",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-14/character-story/20260814-195604-11445-a/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Deep_Voice_Man",
+      "status": "approved_final_saved",
+      "notes": "One of 5 parallel character-story episodes produced in the same run (with Robert The Robot, The Ringmaster, Locke The Salesman, Geoff The Guard) — picked from existing wiki NPCs with prior Supabase reference sprites (not format-owned, so a fresh character-story-bound anchor was generated). No canonical age variants; single-age story per format exception. Approved by user."
+    },
+    {
+      "episode": 10,
+      "date": "2026-08-14",
+      "character": "Robert, The Robot",
+      "slug": "robert-the-robot",
+      "title": "Robert, The Robot: Built to Never Sleep",
+      "run_id": "20260814-195604-11445-b",
+      "output_dir": "output/2026-08-14/growtopia/character-story/20260814-195604-11445-b",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-14/character-story/20260814-195604-11445-b/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Casual_Guy",
+      "status": "approved_final_saved",
+      "notes": "One of 5 parallel character-story episodes produced in the same run. Used a 'built, not born' two-costume-stage arc (prototype/finished) as the age-progression equivalent, per format exception for machine characters. Approved by user."
+    },
+    {
+      "episode": 11,
+      "date": "2026-08-14",
+      "character": "The Ringmaster",
+      "slug": "the-ringmaster",
+      "title": "The Ringmaster: The Wire Over the Lava Pit",
+      "run_id": "20260814-195604-11445-c",
+      "output_dir": "output/2026-08-14/growtopia/character-story/20260814-195604-11445-c",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-14/character-story/20260814-195604-11445-c/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Deep_Voice_Man",
+      "status": "approved_final_saved",
+      "notes": "One of 5 parallel character-story episodes produced in the same run. Scene 5's NB2 generation hit a terminal HTTP 422 on result-fetch (remote reported COMPLETED but no result_url captured) — recovered via one authorized brand-new job (distinct job_id/output_path), not a resubmission of the terminal job. Approved by user.",
+      "lesson": "NB2 result-fetch can return a terminal HTTP 422 even after the remote generation reaches COMPLETED, with no result_url ever captured — this is a distinct failure mode from the previously-documented 'FAILED with a recorded result_url' download-failure case. The runner correctly refuses to resubmit the same job_id; recovery requires the Manager to authorize exactly one brand-new job (fresh job_id, same prompt/refs/route) rather than a wrapped retry."
+    },
+    {
+      "episode": 12,
+      "date": "2026-08-14",
+      "character": "Locke The Salesman",
+      "slug": "locke-the-salesman",
+      "title": "Locke The Salesman: The Deal I Can't Take Back",
+      "run_id": "20260814-195604-11445-d",
+      "output_dir": "output/2026-08-14/growtopia/character-story/20260814-195604-11445-d",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-14/character-story/20260814-195604-11445-d/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Casual_Guy",
+      "status": "approved_final_saved",
+      "notes": "One of 5 parallel character-story episodes produced in the same run. Second character (unnamed newbie customer) appears in clips 4-5, own generated ref. Deliberately differentiated from EP2/EP3 (Tomb Robber/Criminal Mastermind villain arc) by an ambiguous/redeemed trader angle. Approved by user."
+    },
+    {
+      "episode": 13,
+      "date": "2026-08-14",
+      "character": "Geoff, The Guard",
+      "slug": "geoff-the-guard",
+      "title": "Geoff, The Guard: The Gate That Never Fell",
+      "run_id": "20260814-195604-11445-e",
+      "output_dir": "output/2026-08-14/growtopia/character-story/20260814-195604-11445-e",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-14/character-story/20260814-195604-11445-e/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Determined_Man",
+      "status": "approved_final_saved",
+      "notes": "One of 5 parallel character-story episodes produced in the same run. Scene 4's NB2 generation hit the same terminal HTTP 422 result-fetch failure as The Ringmaster's scene 5 in this same batch — recovered the same way (one authorized brand-new job, distinct output_path scene-4-v2.png). Deliberately differentiated from EP4 (OldGrower) via a duty/protection theme instead of a personal-legend theme. Approved by user."
     }
   ]
 }
