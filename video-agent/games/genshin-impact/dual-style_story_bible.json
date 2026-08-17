@@ -5,7 +5,7 @@
   "production_contract": "dual-style-v3",
   "comparison_mode": "source-vs-live-action",
   "created_at": "2026-06-09",
-  "last_episode": 8,
+  "last_episode": 9,
   "character_pool": [
     {
       "character_name": "venti",
@@ -237,14 +237,38 @@
       "has_actor_counterpart": true,
       "actor_name": "Emma Watson",
       "last_seen_episode": 8
+    },
+    {
+      "character_name": "kokomi",
+      "display_name": "Kokomi",
+      "has_actor_counterpart": true,
+      "actor_name": "Angelina Jolie",
+      "last_seen_episode": 9
+    },
+    {
+      "character_name": "beidou",
+      "display_name": "Beidou",
+      "has_actor_counterpart": true,
+      "actor_name": "Charlize Theron",
+      "last_seen_episode": 9
+    },
+    {
+      "character_name": "wanderer",
+      "display_name": "Wanderer (Scaramouche)",
+      "has_actor_counterpart": true,
+      "actor_name": "Harry Styles",
+      "last_seen_episode": 9
+    },
+    {
+      "character_name": "klee",
+      "display_name": "Klee",
+      "has_actor_counterpart": true,
+      "actor_name": "Sadie Sink",
+      "last_seen_episode": 9
     }
   ],
   "character_rotation": {
     "recent_characters": [
-      "Raiden Shogun",
-      "Tartaglia",
-      "Furina",
-      "Arlecchino",
       "Wriothesley",
       "Yae Miko",
       "Neuvillette",
@@ -269,13 +293,13 @@
       "Nahida",
       "Yoimiya",
       "Mona",
-      "Jean"
+      "Jean",
+      "Kokomi",
+      "Beidou",
+      "Wanderer (Scaramouche)",
+      "Klee"
     ],
     "recent_actors": [
-      "Gal Gadot",
-      "Tom Holland",
-      "Florence Pugh",
-      "Eva Green",
       "Henry Cavill",
       "Margot Robbie",
       "Timothée Chalamet",
@@ -300,13 +324,13 @@
       "Millie Bobby Brown",
       "Sabrina Carpenter",
       "Elle Fanning",
-      "Emma Watson"
+      "Emma Watson",
+      "Angelina Jolie",
+      "Charlize Theron",
+      "Harry Styles",
+      "Sadie Sink"
     ],
     "recent_environments": [
-      "Cryo prison Snezhnaya plain neutral floor",
-      "Narukami shrine Inazuma plain neutral floor",
-      "plain neutral grey floor simple spotlight",
-      "plain warm ivory floor simple spotlight",
       "plain soft violet-tinted seamless studio floor",
       "plain dark charcoal seamless studio floor with gold undertone",
       "plain icy blue seamless studio floor",
@@ -327,13 +351,13 @@
       "Sumeru rainforest canopy archive terrace",
       "Inazuma fireworks pier waterfront promenade",
       "Mondstadt hilltop astronomical observatory terrace",
-      "Mondstadt cathedral grand plaza"
+      "Mondstadt cathedral grand plaza",
+      "Watatsumi Island shrine dock",
+      "Crux ship deck at open sea",
+      "Sumeru desert ruins courtyard",
+      "Mondstadt Sunset Canyon meadow"
     ],
     "recent_action_types": [
-      "walking-approach",
-      "walking-approach",
-      "walking-approach",
-      "walking-approach",
       "walking-approach",
       "walking-approach",
       "walking-approach",
@@ -346,6 +370,10 @@
       "electro-judgment-stance",
       "twin-dagger-flourish",
       "cryo-frost-veil-stance",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
       "walking-approach",
       "walking-approach",
       "walking-approach",
@@ -590,6 +618,40 @@
       "duration_sec": 25.21,
       "cost_usd": 3.19,
       "notes": "First episode casting characters with a ready canonical game-wide reference_image already in Supabase for all four (no fresh text-only cartoon-side generation needed). Explicit user requirement: none of the four keep their own canonical in-game height/proportions from the reference sheet, no chibi-fication, no rescaling to match the actor. Scene 2 (Yoimiya) contained accidental Kling-baked music; native audio muted before mixing the dedicated MiniMax bg-music.mp3, per the standing dual-style exception."
+    },
+    {
+      "episode": 9,
+      "date": "2026-08-17",
+      "characters": [
+        "Kokomi",
+        "Beidou",
+        "Wanderer (Scaramouche)",
+        "Klee"
+      ],
+      "environments": [
+        "Watatsumi Island shrine dock",
+        "Crux ship deck at open sea",
+        "Sumeru desert ruins courtyard",
+        "Mondstadt Sunset Canyon meadow"
+      ],
+      "actors": [
+        "Angelina Jolie",
+        "Charlize Theron",
+        "Harry Styles",
+        "Sadie Sink"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-17/dual-style/20260817-165955-86040/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=6ND3ohD4DQo",
+      "youtube_publish_at": "2026-08-20T19:45:00Z",
+      "duration_sec": 25.22,
+      "cost_usd": 5.41,
+      "notes": "First episode featuring these 4 characters in dual-style (all were already in character-story's roster but new to this bible's character_pool); actors chosen deliberately more globally recognizable (A-list) per user request. Klee's actor (Sadie Sink) explicitly kept at her own natural adult height/build per this bible's established Nahida precedent, never shrunk/aged to match Klee's canonical child-coded proportions. User visual review caught two real defects requiring re-generation: scene 1 (Kokomi/Jolie) initially had a style-isolation failure (photorealistic side rendered as a plastic/CGI-looking 3D hybrid with anime-style headpiece bleed) — fixed with stronger explicit LEFT-only/RIGHT-only style-binding language. Scene 2 (Beidou/Theron) went through two more defects before acceptance: first a depth-staggering/occlusion bug (actor placed behind the cartoon figure instead of side by side — fixed with mechanical same-depth/same-ground-line staging language), then a likeness regression introduced by that same fix (wrong brunette hair and an invented eye patch — fixed by re-asserting the actor's real blonde hair and zero added accessories while keeping the now-correct staging). Total cost includes the original run ($3.83) plus the scene 1-2 fix iterations ($1.58)."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4",
@@ -792,6 +854,30 @@
       "name": "Jean",
       "actor_counterpart": "Emma Watson",
       "character_description": "female Acting Grand Master Jean, white and gold knight-commander uniform with cape and dandelion motifs, long blonde hair in a low ponytail, fair complexion, composed dutiful gentle expression, anemo sword, tall athletic elegant build"
+    },
+    {
+      "slug": "kokomi",
+      "name": "Kokomi",
+      "actor_counterpart": "Angelina Jolie",
+      "character_description": "female Divine Priestess Kokomi, flowing white and pink shrine-maiden robes, coral-shaped hair accessories and jellyfish-motif fin ornaments trailing from her sash, pink hair with a flower ornament, fair complexion, serene graceful expression, hydro catalyst, petite ethereal build"
+    },
+    {
+      "slug": "beidou",
+      "name": "Beidou",
+      "actor_counterpart": "Charlize Theron",
+      "character_description": "female pirate captain Beidou, dark navy and gold pirate captain's coat with wide lapels, gold epaulettes and chain trim, black hair pulled into a high bun, fair complexion, confident fierce expression, large ornate claymore carried over one shoulder, tall muscular build"
+    },
+    {
+      "slug": "wanderer",
+      "name": "Wanderer (Scaramouche)",
+      "actor_counterpart": "Harry Styles",
+      "character_description": "male traveler Wanderer, dark navy and white traveling coat with star-shaped ornaments, a wide-brim white hat shadowing his eyes, dark blue hair, fair complexion, aloof arrogant expression, anemo catalyst, lean compact build"
+    },
+    {
+      "slug": "klee",
+      "name": "Klee",
+      "actor_counterpart": "Sadie Sink",
+      "character_description": "petite young pyro user Klee, canonical child-height in-game proportions (not rescaled), oversized red and white knight uniform with an exaggerated large collar, ginger hair in two side pigtails, fair complexion, bright joyful childlike expression, stuffed bomb bag slung across her back, tiny child build"
     }
   ]
 }
