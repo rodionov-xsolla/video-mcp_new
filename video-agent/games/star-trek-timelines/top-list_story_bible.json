@@ -5,8 +5,8 @@
   "language": "en",
   "title": "Star Trek Timelines Top Lists",
   "created_at": "2026-07-15",
-  "last_updated": "2026-07-15",
-  "last_episode": 1,
+  "last_updated": "2026-08-17",
+  "last_episode": 4,
   "style_tags": "Star Trek Timelines cinematic sci-fi 3D, realistic adult proportions, detailed Starfleet uniforms and materials, cinematic Federation lighting, deep-space environments, high-detail game cutscene render, clean vertical composition, no UI overlay, no cartoon, no chibi, no toy-like rendering",
   "visual_identity": {
     "palette": [
@@ -58,11 +58,142 @@
   "appearance_library": {},
   "anti_repetition": {
     "cooldown_episodes": 6,
-    "recent_themes": [],
-    "recent_categories": [],
-    "recent_winners": [],
-    "recent_entries": []
+    "recent_themes": [
+      "STARFLEET SHIPS",
+      "ICONIC VILLAINS",
+      "GREATEST CAPTAINS"
+    ],
+    "recent_categories": [
+      "ships",
+      "villains",
+      "captains"
+    ],
+    "recent_winners": [
+      "USS Enterprise NCC-1701",
+      "Borg Queen",
+      "Picard"
+    ],
+    "recent_entries": [
+      "USS Enterprise-D",
+      "USS Enterprise NCC-1701",
+      "Q",
+      "General Chang",
+      "Khan Noonien Singh",
+      "Dukat",
+      "Borg Queen",
+      "Sulu",
+      "Sisko",
+      "Janeway",
+      "Kirk",
+      "Picard"
+    ]
   },
   "reserved_topics": [],
-  "lists": []
+  "lists": [
+    {
+      "episode": 2,
+      "date": "2026-08-17",
+      "theme": "STARFLEET SHIPS",
+      "category": "ships",
+      "ranking_basis": "lore impact + recognizability + visual variety",
+      "entries": [
+        {
+          "rank": 5,
+          "name": "USS Defiant"
+        },
+        {
+          "rank": 4,
+          "name": "USS Enterprise NX-01"
+        },
+        {
+          "rank": 3,
+          "name": "USS Voyager"
+        },
+        {
+          "rank": 2,
+          "name": "USS Enterprise-D"
+        },
+        {
+          "rank": 1,
+          "name": "USS Enterprise NCC-1701"
+        }
+      ],
+      "winner": "USS Enterprise NCC-1701",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-17/top-list/sh-20260817-202153-39967/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=C-RvZSCTR44",
+      "duration_sec": 40,
+      "status": "scheduled",
+      "notes": "TVE ip __batch ships run sh-20260817"
+    },
+    {
+      "episode": 3,
+      "date": "2026-08-17",
+      "theme": "ICONIC VILLAINS",
+      "category": "villains",
+      "ranking_basis": "lore impact + recognizable menace + visual variety",
+      "entries": [
+        {
+          "rank": 5,
+          "name": "Q"
+        },
+        {
+          "rank": 4,
+          "name": "General Chang"
+        },
+        {
+          "rank": 3,
+          "name": "Khan Noonien Singh"
+        },
+        {
+          "rank": 2,
+          "name": "Dukat"
+        },
+        {
+          "rank": 1,
+          "name": "Borg Queen"
+        }
+      ],
+      "winner": "Borg Queen",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-17/top-list/vl-20260817-202154-39967/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=-CUQfUKIsSQ",
+      "duration_sec": 40,
+      "status": "scheduled",
+      "notes": "batch villains run vl-20260817"
+    },
+    {
+      "episode": 4,
+      "date": "2026-08-17",
+      "theme": "GREATEST CAPTAINS",
+      "category": "captains",
+      "ranking_basis": "lore impact + recognizability + leadership legacy",
+      "entries": [
+        {
+          "rank": 5,
+          "name": "Sulu"
+        },
+        {
+          "rank": 4,
+          "name": "Sisko"
+        },
+        {
+          "rank": 3,
+          "name": "Janeway"
+        },
+        {
+          "rank": 2,
+          "name": "Kirk"
+        },
+        {
+          "rank": 1,
+          "name": "Picard"
+        }
+      ],
+      "winner": "Picard",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-17/top-list/cp-20260817-202155-39967/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=Zj-mfelzrJo",
+      "duration_sec": 40,
+      "status": "scheduled",
+      "notes": "batch captains run cp-20260817"
+    }
+  ]
 }
