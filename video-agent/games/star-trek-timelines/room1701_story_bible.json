@@ -6,7 +6,7 @@
   "genre": "sitcom",
   "style_tags": "semi-realistic stylized 3D characters, modern nerdy shared bedroom interior, warm casual lighting, practical props (phones, laptops, game controllers, Star Trek posters), intimate close-ups and 3/4 face shots, cozy bedroom aesthetic with sci-fi geeky decor, natural soft lighting from screens and lamps, not Disney, not Pixar, not DreamWorks, not toy-like",
   "created_at": "2026-06-25",
-  "last_episode": 6,
+  "last_episode": 7,
   "show_concept": "Two geeky roommates (Alex and Michael) live in Room 1701 and play Star Trek Timelines all the time. They treat every everyday problem like a Starfleet mission. Emily, their cool neighbor, is sharp, sarcastic, and unexpectedly good at handling people. Anna is the girl Alex is pursuing — warm, playful, and increasingly drawn to Michael's nerd sincerity. The show is a fast sitcom about awkward dating comedy and Star Trek geek humor.",
   "production_rules": [
     "Do NOT rely on readable phone UI — phone can glow in hands but meaning comes from acting/dialogue",
@@ -40,7 +40,7 @@
     {
       "name": "Alex",
       "role": "protagonist",
-      "status": "Failed Anna's mission after choosing a crew member by appearance. His honest admission briefly won her back, but she then asked Michael to choose their next date.",
+      "status": "Confronted Michael directly over never noticing Anna's feelings, then finally told Anna himself that he should have asked weeks ago. Anna's response leaves the door open but unresolved.",
       "relationships": {
         "Anna": "His honesty regained some warmth, but he lost the right to choose the next date and watched her invite Michael instead.",
         "Michael": "Still his best friend and accidental romantic rival.",
@@ -58,7 +58,7 @@
     {
       "name": "Michael",
       "role": "co-protagonist",
-      "status": "Called out Alex's dating logic, then accepted Anna's invitation to choose their next date while believing she meant crew optimization.",
+      "status": "Scheduled Anna's 'date' as a literal crew-optimization session, genuinely hurting her without realizing it; still reads the entire romantic triangle as game strategy even after Alex's direct confrontation.",
       "relationships": {
         "Alex": "Loyal roommate whose dating mission he keeps disrupting without realizing it.",
         "Anna": "She now openly frames their connection as a date; he remains oblivious and reads every signal as game strategy.",
@@ -76,7 +76,7 @@
     {
       "name": "Emily",
       "role": "neighbor",
-      "status": "Coached Alex into an honest admission that briefly repaired his standing with Anna; she remains his sharpest ally while hiding her own feelings.",
+      "status": "Forced into referee role between Alex and Michael's confrontation; explicitly refused to keep fixing things for both of them, drawing her own boundary for the first time.",
       "relationships": {
         "Alex": "Quietly protective and emotionally perceptive, disguised as friendly sarcasm.",
         "Michael": "Treats his mission logic as useful chaos to manage.",
@@ -94,7 +94,7 @@
     {
       "name": "Anna",
       "role": "recurring guest / love interest",
-      "status": "Took control of the next date after Alex failed her mission, then directly asked Michael to choose it, escalating her interest beyond game instruction.",
+      "status": "Visibly hurt by Michael's tone-deaf 'date' plan; received Alex's unprompted honest confession and responded with a real, unresolved dare rather than forgiveness or rejection.",
       "relationships": {
         "Alex": "Responded warmly to his honesty, but revoked his right to choose the date after his failed strategy.",
         "Michael": "Directly asked him to choose their next date; his oblivious crew-optimization answer did not discourage her.",
@@ -126,15 +126,16 @@
     }
   ],
   "active_loops": [
-    "Can Alex recover after Anna asked Michael to choose their next date?",
-    "Will Michael realize Anna has now directly invited him into the romantic triangle?",
-    "Will Emily ever actually join them?",
-    "Will Anna prefer Alex's authentic nerdy side over Michael's effortless game competence?",
-    "What kind of date will Michael accidentally plan while optimizing Anna's crew?"
+    "Will Alex actually ask Anna out 'properly' after his honest confession, and will Anna say yes?",
+    "Will Michael ever realize he has been in a romantic triangle the whole time, not a strategy session?",
+    "Will Emily keep refusing to referee, and does she have her own unspoken feelings in this?",
+    "Will Anna prefer Alex's authentic nerdy side over Michael's effortless game competence now that the misunderstanding has real costs?"
   ],
   "closed_loops": [
     "Alex got Room 1701 ready before Anna arrived — resolved in EP5 when she rejected the fake-normal version and preferred the authentic nerdy room.",
-    "Could Alex regain control of Anna's tutorial after Michael took over the crew question? Resolved negatively in EP6: Alex failed the mission, and Anna took control of the next date."
+    "Could Alex regain control of Anna's tutorial after Michael took over the crew question? Resolved negatively in EP6: Alex failed the mission, and Anna took control of the next date.",
+    "Can Alex recover after Anna asked Michael to choose their next date? Resolved in EP7: Michael's tone-deaf plan became a real slight, prompting Alex to finally confront Michael and confess to Anna directly.",
+    "Will Michael realize Anna has now directly invited him into the romantic triangle? Resolved negatively in EP7: he still reads the entire episode through game-strategy logic."
   ],
   "world_state": {
     "location": "Room 1701",
@@ -149,7 +150,12 @@
       "Alex guessed a crew member by appearance, and Anna turned to Michael for the real answer.",
       "Alex failed Anna's mission after choosing by looks instead of strategy.",
       "Emily's honesty coaching briefly repaired Alex's standing with Anna.",
-      "Anna asked Michael to choose their next date; Michael misunderstood the invitation as a crew-optimization task."
+      "Anna asked Michael to choose their next date; Michael misunderstood the invitation as a crew-optimization task.",
+      "Michael scheduled their 'date' as a literal crew-optimization session, hurting Anna for real.",
+      "Alex directly confronted Michael over never noticing Anna's feelings.",
+      "Emily refereed between Alex and Michael and refused to keep fixing things for both of them.",
+      "Anna had a private hurt moment alone at the window before any resolution.",
+      "Alex told Anna, unprompted, that he should have asked her himself weeks ago; Anna dared him to ask her out 'properly, and mean it this time.'"
     ]
   },
   "anti_repetition": {
@@ -160,15 +166,23 @@
       "That's dating, not strategy.",
       "Please don't say Michael.",
       "Maybe you should choose our next date.",
-      "Agreed. I'll optimize the crew."
+      "Agreed. I'll optimize the crew.",
+      "Tomorrow at six. Full crew optimization session.",
+      "...That's your version of a date?",
+      "You never notice. You just... win.",
+      "I'm done fixing this for both of you.",
+      "Anna... I should've asked you myself. Weeks ago.",
+      "Then ask now. Properly. And mean it this time."
     ],
     "recent_hooks": [
       "Spoken countdown cleanup hook: Anna arrives in ten minutes.",
-      "Romantic wager hook: beat this mission and choose the next date."
+      "Romantic wager hook: beat this mission and choose the next date.",
+      "Oblivious-reveal hook: Michael states his tone-deaf 'date' plan as a literal mission schedule in the cold open."
     ],
     "recent_cliffhangers": [
       "Competence-transfer cliffhanger: Anna turns from Alex to Michael for crew-selection help.",
-      "Direct date-invitation cliffhanger: Anna asks Michael to choose their next date, and he misreads it as crew strategy."
+      "Direct date-invitation cliffhanger: Anna asks Michael to choose their next date, and he misreads it as crew strategy.",
+      "Direct-challenge cliffhanger: Alex speaks an unfiltered honest line and Anna answers with a real, unresolved dare."
     ]
   },
   "episode_summaries": [
@@ -237,6 +251,17 @@
       "youtube_url": "https://www.youtube.com/watch?v=V1x0sm3Lg5U",
       "yt_publish_at": "2026-06-28T20:59:00Z",
       "duration_sec": 60
+    },
+    {
+      "episode": 7,
+      "title": "Say It Yourself",
+      "language": "en",
+      "summary": "Michael literally schedules their 'date' as a crew-optimization session, landing as a genuine slight rather than a cute mix-up. Alex confronts Michael directly over never noticing Anna's feelings; Michael stays sincerely oblivious. Emily is forced to referee and refuses to keep fixing things for both men. Anna gets a real, private hurt beat alone at the window. Alex finally tells Anna, unprompted, that he should have asked her himself weeks ago.",
+      "cliffhanger": "Anna does not forgive Alex outright — she dares him to ask her out 'properly, and mean it this time,' leaving open whether he follows through and whether her feelings are still available after Michael's real slight.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-17/serial-drama/20260817-150331-23254/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=1PPKD2aDqIk",
+      "yt_publish_at": "2026-08-20T20:44:00Z",
+      "duration_sec": 49.57
     }
   ],
   "planned_arc": {
@@ -304,7 +329,11 @@
         "title": "Crash Course",
         "status": "done",
         "location": "room-1701",
-        "cast": ["Alex", "Michael", "Emily"],
+        "cast": [
+          "Alex",
+          "Michael",
+          "Emily"
+        ],
         "summary": "Michael tries to teach Alex the basics of Star Trek Timelines. Alex wants only 'the parts that make me look attractive.' Michael refuses to simplify strategy. Emily quietly helps Alex translate Michael's nerd explanations into normal human sentences.",
         "game_cta_point": "The game is explained through Alex's panic: crew, missions, skills, strategy. Michael keeps saying, 'This is why people should download the free game from the link in bio before dating.'",
         "cliffhanger": "Anna texts that she wants the tutorial in Room 1701. Alex looks around at the messy room and panics.",
@@ -317,7 +346,12 @@
         "title": "Room Inspection",
         "status": "done",
         "location": "room-1701",
-        "cast": ["Alex", "Michael", "Emily", "Anna"],
+        "cast": [
+          "Alex",
+          "Michael",
+          "Emily",
+          "Anna"
+        ],
         "summary": "Anna comes to Room 1701 for the promised tutorial. Alex and Emily try to make the room look normal, while Michael restores the hidden poster, tablet, and collectibles because 'the bridge needs identity.' Anna prefers the authentic nerdy room and warms to Alex's real side before his weak crew-selection answer sends her back to Michael.",
         "game_cta_point": "Room 1701 becomes a physical extension of the game: posters, crew board, phones, sci-fi props. Anna likes the nerdy version more than Alex's fake 'normal' version.",
         "cliffhanger": "Anna asks Michael for the real crew-selection answer. Michael says, 'Show me your roster,' and Alex realizes he has lost control of his own tutorial.",
@@ -331,7 +365,12 @@
         "title": "Wrong Crew",
         "status": "done",
         "location": "room-1701",
-        "cast": ["Alex", "Michael", "Emily", "Anna"],
+        "cast": [
+          "Alex",
+          "Michael",
+          "Emily",
+          "Anna"
+        ],
         "summary": "Anna makes the tutorial a wager for control of the next date. Alex chooses a powerful-looking crew member, Michael exposes the choice as dating logic, and the mission fails. Emily helps Alex recover through honesty, but Anna then directly asks Michael to choose their next date. Michael agrees while thinking only about crew optimization.",
         "game_cta_point": "The sell is strategic: it is not just about collecting characters, but choosing the right crew. Anna understands the appeal because she downloaded the free game and now wants to get better.",
         "cliffhanger": "Anna asks Michael to choose their next date. Michael says he will optimize the crew, oblivious to the romantic meaning.",
@@ -345,7 +384,12 @@
         "episode": 7,
         "title": "Double Tutorial",
         "status": "planned",
-        "cast": ["Alex", "Michael", "Emily", "Anna"],
+        "cast": [
+          "Alex",
+          "Michael",
+          "Emily",
+          "Anna"
+        ],
         "summary": "Anna gets a real tutorial from Michael. Alex insists on being present, pretending he is 'co-hosting.' Michael explains the game clearly and confidently. Anna is impressed. Michael thinks he is just building a better player. Emily later tells Alex that trying to beat Michael at being Michael is a terrible strategy.",
         "game_cta_point": "Michael naturally sells the core loop: download the free game, build your crew, send them on missions, improve your strategy.",
         "cliffhanger": "Anna asks Michael if they can play again tomorrow. Michael says yes, thinking it is purely educational."
@@ -354,7 +398,12 @@
         "episode": 8,
         "title": "Not a Date",
         "status": "planned",
-        "cast": ["Alex", "Michael", "Emily", "Anna"],
+        "cast": [
+          "Alex",
+          "Michael",
+          "Emily",
+          "Anna"
+        ],
         "summary": "Michael and Anna meet to play. Alex keeps insisting it is not a date, which makes it feel more like one. Emily helps Alex calm down and points out that Anna likes Michael's confidence because he is not performing. Alex realizes he is always trying to act like someone else.",
         "game_cta_point": "Anna is now genuinely playing the free game from the link in bio. She is not just a promo device; she is part of the comedy engine.",
         "cliffhanger": "Anna texts Alex: 'Michael is fun. But you're harder to understand.' Alex has no idea if that is good."
@@ -363,7 +412,12 @@
         "episode": 9,
         "title": "Patch Notes",
         "status": "planned",
-        "cast": ["Alex", "Michael", "Emily", "Anna"],
+        "cast": [
+          "Alex",
+          "Michael",
+          "Emily",
+          "Anna"
+        ],
         "summary": "Alex decides to stop pretending. He admits to Anna that he only started learning Star Trek Timelines properly to impress her. Anna finds that sweet, but also says Michael helped her enjoy the game for real. Emily quietly helps Alex not ruin the conversation by over-explaining.",
         "game_cta_point": "The phrase 'download the free game — link in bio' becomes a joke about honesty: Alex downloaded the game for romance, Anna downloaded it out of curiosity, Michael downloaded it like a sacred duty.",
         "cliffhanger": "Anna says, 'I like you, Alex. I just don't know if this is a date… or a crew.'"
@@ -372,7 +426,12 @@
         "episode": 10,
         "title": "Assemble Your Crew",
         "status": "planned",
-        "cast": ["Alex", "Michael", "Emily", "Anna"],
+        "cast": [
+          "Alex",
+          "Michael",
+          "Emily",
+          "Anna"
+        ],
         "summary": "Anna invites Alex and Michael to play one mission together. Alex wants it to be romantic. Michael wants it to be strategic. Emily ends up helping Alex from the side, as always. For once, Alex stops competing with Michael and just plays as himself.",
         "game_cta_point": "The season lands on the emotional meaning of the CTA: 'assemble your crew' is not just a game mechanic. Alex already has a crew — Michael and Emily.",
         "cliffhanger": "After the mission works, Anna says they make a good team. Emily watches Alex celebrate and says, 'Wow. You almost looked confident.' Alex smiles at her a little too long.",
