@@ -5,7 +5,7 @@
   "production_contract": "dual-style-v3",
   "comparison_mode": "canonical-alternate",
   "created_at": "2026-07-22",
-  "last_episode": 3,
+  "last_episode": 4,
   "style_tags": "Photorealistic canonical live-action Star Trek comparison. LEFT is the original/Prime screen persona; RIGHT is the exact canonical Mirror, assimilated, corrupted, possessed or duplicate persona of the same character and same recognizable screen performer. Preserve each persona's canonical face, hair, facial hair, makeup, prosthetics, uniform, insignia, accessories and props. Both figures share one continuous cinematic Star Trek environment with no split panel.",
   "character_rotation": {
     "recent_characters": [
@@ -21,7 +21,11 @@
       "Sisko/Mirror Sisko",
       "Bashir/Mirror Bashir",
       "Quark/Mirror Quark",
-      "Seven of Nine/Borg Seven of Nine"
+      "Seven of Nine/Borg Seven of Nine",
+      "T'Pol/Mirror T'Pol",
+      "Chekov/Mirror Chekov",
+      "Trip Tucker/Mirror Tucker",
+      "Miles O'Brien/\"Smiley\" O'Brien"
     ],
     "recent_environments": [
       "TNG Enterprise-D bridge, red alert lighting",
@@ -36,9 +40,17 @@
       "DS9 wardroom viewport gallery",
       "DS9 infirmary main bay",
       "DS9 docking ring airlock corridor",
-      "Voyager cargo bay two regeneration alcoves"
+      "Voyager cargo bay two regeneration alcoves",
+      "Enterprise NX-01 bridge, cool tactical viewscreen lighting",
+      "TOS Enterprise briefing/rec room, retro amber control-panel lighting",
+      "Enterprise NX-01 engine room with warp core, industrial blue-green lighting",
+      "DS9 transporter room, industrial pad lighting"
     ],
     "recent_action_types": [
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
       "walking-approach",
       "walking-approach",
       "walking-approach",
@@ -116,6 +128,26 @@
       "pair_slug": "seven-borgseven",
       "display_name": "Seven of Nine / Borg Seven of Nine",
       "last_seen_episode": 3
+    },
+    {
+      "pair_slug": "tpol-mirrortpol",
+      "display_name": "T'Pol / Mirror T'Pol",
+      "last_seen_episode": 4
+    },
+    {
+      "pair_slug": "chekov-mirrorchekov",
+      "display_name": "Chekov / Mirror Chekov",
+      "last_seen_episode": 4
+    },
+    {
+      "pair_slug": "tucker-mirrortucker",
+      "display_name": "Trip Tucker / Mirror Tucker",
+      "last_seen_episode": 4
+    },
+    {
+      "pair_slug": "obrien-smileyobrien",
+      "display_name": "Miles O'Brien / \"Smiley\" O'Brien",
+      "last_seen_episode": 4
     }
   ],
   "characters": [
@@ -300,6 +332,62 @@
         "name": "Borg Seven of Nine",
         "character_description": "photorealistic Jeri Ryan as original Borg drone Seven of Nine, pale grey-white assimilated skin, ocular implant over one eye, black mechanical Borg exoskeleton plating over torso and one arm with visible cabling, cold emotionless expression, matches the exact Voyager Scorpion/Borg design"
       }
+    },
+    {
+      "pair_slug": "tpol-mirrortpol",
+      "screen_performer": "Jolene Blalock",
+      "original": {
+        "slug": "tpol",
+        "name": "T'Pol",
+        "character_description": "photorealistic Jolene Blalock as canonical T'Pol, sleek dark bob haircut with blunt-cut bangs, pointed Vulcan ears, sharply arched angular eyebrows, calm composed Vulcan expression, blue Enterprise NX-01 Vulcan science-officer duty uniform with rank pip on the collar, slender upright posture, real skin textures, cinema-quality lighting"
+      },
+      "alternate": {
+        "slug": "mirror-tpol",
+        "name": "Mirror T'Pol",
+        "character_description": "photorealistic Jolene Blalock as canonical Mirror T'Pol, same underlying face and dark bob haircut, fitted black Terran Empire Starfleet duty uniform with metallic imperial insignia, sidearm holstered at the hip, imperious calculating expression, matches Enterprise's In a Mirror, Darkly design"
+      }
+    },
+    {
+      "pair_slug": "chekov-mirrorchekov",
+      "screen_performer": "Walter Koenig",
+      "original": {
+        "slug": "chekov",
+        "name": "Chekov",
+        "character_description": "photorealistic Walter Koenig as canonical Pavel Chekov, mop-top curly brown hair, youthful clean-shaven face, gold TOS command-division tunic with black trim, Starfleet delta insignia on the chest, alert eager expression, real skin textures, cinema-quality lighting"
+      },
+      "alternate": {
+        "slug": "mirror-chekov",
+        "name": "Mirror Chekov",
+        "character_description": "photorealistic Walter Koenig as canonical Mirror Chekov, same underlying face and mop-top curly brown hair, a scar along one cheek marking Terran Empire rank, dark Terran Empire tunic with ceremonial sash, belt dagger and agonizer, predatory ambitious expression, matches TOS Mirror, Mirror design"
+      }
+    },
+    {
+      "pair_slug": "tucker-mirrortucker",
+      "screen_performer": "Connor Trinneer",
+      "original": {
+        "slug": "trip-tucker",
+        "name": "Trip Tucker",
+        "character_description": "photorealistic Connor Trinneer as canonical Charles \"Trip\" Tucker III, short cropped brown hair, easygoing clean-shaven face, teal Enterprise NX-01 engineering duty uniform with rank pip on the collar, relaxed confident expression, real skin textures, cinema-quality lighting"
+      },
+      "alternate": {
+        "slug": "mirror-tucker",
+        "name": "Mirror Tucker",
+        "character_description": "photorealistic Connor Trinneer as canonical Mirror Tucker, same underlying face and short cropped brown hair, dark Terran Empire tactical vest with imperial insignia patch, weapon holster at the hip, hardened ambitious expression, matches Enterprise's In a Mirror, Darkly design"
+      }
+    },
+    {
+      "pair_slug": "obrien-smileyobrien",
+      "screen_performer": "Colm Meaney",
+      "original": {
+        "slug": "miles-obrien",
+        "name": "Miles O'Brien",
+        "character_description": "photorealistic Colm Meaney as canonical Miles O'Brien, receding hairline, trimmed mustache, gold-and-black DS9-era operations uniform with maroon undershirt and collar pip, engineer's tricorder in hand, steady dependable expression, real skin textures, cinema-quality lighting"
+      },
+      "alternate": {
+        "slug": "smiley-obrien",
+        "name": "\"Smiley\" O'Brien",
+        "character_description": "photorealistic Colm Meaney as canonical \"Smiley\" O'Brien, same underlying face, receding hairline and mustache, rougher worn leather resistance-fighter vest over a dark henley, tactical strap harness, improvised weapon slung at the shoulder, weary hardened expression, matches DS9 mirror-universe resistance design"
+      }
     }
   ],
   "episode_summaries": [
@@ -406,6 +494,40 @@
       "duration_sec": 25.2,
       "cost_usd": 3.83,
       "notes": "First episode with no pre-existing series-owned dual-style refs for any pair — Storyboarder generated and registered 4 fresh pair-references (sisko-mirrorsisko, bashir-mirrorbashir, quark-mirrorquark, seven-borgseven) from well-documented canonical screen facts, now reusable. Post-approval patch: original amix(normalize=0) had no final limiter/loudnorm pass, causing audible peak spikes — fixed by adding alimiter+loudnorm after the mix; re-encoded with libx264 software encoder instead of h264_videotoolbox to rule out hardware-encoder artifacts. Added an opt-in pop-up promo banner (branding/banner-st1.png) on scene 1 per user request; user noted the banner can be ~2x larger next time."
+    },
+    {
+      "episode": 4,
+      "date": "2026-08-17",
+      "characters": [
+        "T'Pol/Mirror T'Pol",
+        "Chekov/Mirror Chekov",
+        "Trip Tucker/Mirror Tucker",
+        "Miles O'Brien/\"Smiley\" O'Brien"
+      ],
+      "environments": [
+        "Enterprise NX-01 bridge, cool tactical viewscreen lighting",
+        "TOS Enterprise briefing/rec room, retro amber control-panel lighting",
+        "Enterprise NX-01 engine room with warp core, industrial blue-green lighting",
+        "DS9 transporter room, industrial pad lighting"
+      ],
+      "screen_performers": [
+        "Jolene Blalock",
+        "Walter Koenig",
+        "Connor Trinneer",
+        "Colm Meaney"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-17/dual-style/20260817-165956-86040/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=s-1nUAlf6qw",
+      "youtube_publish_at": "2026-08-20T20:08:00Z",
+      "duration_sec": 25.2,
+      "cost_usd": 3.83,
+      "notes": "Second consecutive episode with no pre-existing series-owned dual-style refs for any pair (all 4 pairs newly generated from well-documented canonical screen facts: TOS Mirror Universe for T'Pol/Chekov, Enterprise's In a Mirror, Darkly for Tucker, DS9's mirror-universe resistance episodes for O'Brien), now reusable pending manual visual approval per the new asset-approval migration. Produced same day as the Genshin Impact dual-style episode with the same overall request. A final alimiter+loudnorm pass was applied after the mix (per the EP3 peak-spike lesson) — measured -19.2 LUFS integrated, -3.1 dBTP true peak."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4"
