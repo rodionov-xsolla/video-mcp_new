@@ -5,7 +5,7 @@
   "title": "Don't Save Me",
   "style_tags": "Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, soft outline anime aesthetic, magical elemental effects, Teyvat world environment, clean detailed character illustration, Liyue Harbor setting, cinematic 9:16 vertical composition",
   "created_at": "2026-06-04",
-  "last_episode": 9,
+  "last_episode": 10,
   "planned_arc": {
     "note": "Pre-locked season-1 arc EP1-EP10. Scenarist follows this as RAILS: keep the locked key_lines and cliffhanger lines verbatim, adapt each episode's beats into 3-6 clips under serial-drama constraints (max 2 chars per frame; see production_rules for the EP4+ Kling I2V voice_ids pipeline — Avatar is retired, macro movement/combat IS allowed in I2V for this series, cliffhanger spoken line is Kling I2V dialogue not Avatar TTS). Childe is the reluctant protector — his every action should read as either threat or sacrifice until the last episode. No on-screen text. Fold an episode's loops/status into characters[], active_loops, and episode_summaries only after the user explicitly approves the presented final video. Do NOT re-invent episodes while this arc has unshipped entries.",
     "episodes": [
@@ -440,7 +440,11 @@
           "CLOSE: Fatui threat to Lumine in Liyue — RESOLVED",
           "OPEN for season 2: what Childe does now that he is Fatui-branded traitor",
           "OPEN for season 2: whether Lumine waits for him"
-        ]
+        ],
+        "status": "done",
+        "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-17/serial-drama/20260817-105529-14474/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=3GqO0pP2s6E",
+        "yt_publish_at": "2026-08-18T20:08:00Z"
       }
     ]
   },
@@ -452,12 +456,12 @@
       "voice": null,
       "voice_ref": "games/genshin-impact/Childe.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/voice-ref.mp3",
-      "status": "EP9: Gave Lumine a direct route toward the ships, stayed behind alone to slow the Fatui, and was overwhelmed inside the warehouse. He is now on his knees within an implied ring of Fatui weapons after Lumine returned despite his warning.",
+      "status": "EP10 SEASON FINALE: Lumine shielded him from the Fatui ring; the Agent withdrew his soldiers rather than act in front of witnesses at the open port. Childe returned Lumine's dropped travel pouch and walked away first, vowing to come back without orders. Season 1 closed — he remains a Fatui-branded traitor at large.",
       "aura_points": 100,
       "relationships": {
-        "Lumine": "tried to secure her escape by staying behind alone; she rejected his sacrificial decision and returned for him",
-        "Agent": "remains the unseen coordinator of the sealed port and the Fatui force that overwhelmed him",
-        "Fatui": "publicly defected and has now been captured or cornered by their surrounding force"
+        "Lumine": "she refused to leave him and shielded him herself; he chose her openly and walked away only to protect her from what comes next, not to abandon her",
+        "Agent": "backed down at the open port rather than escalate in front of witnesses — the confrontation is over for now, not resolved",
+        "Fatui": "openly defected; remains a wanted Fatui-branded traitor as season 1 ends"
       },
       "prompt_descriptor": "male Fatui Harbinger Tartaglia, short bright orange hair, sharp teal-blue eyes, dark blue and red Fatui uniform with hydro-red accents, hydro blades manifested at his sides, sharp confident grin, athletic lean build",
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/tartaglia/sheet.png",
@@ -471,11 +475,11 @@
       "voice": null,
       "voice_ref": "games/genshin-impact/Traveller.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/voice-ref.mp3",
-      "status": "EP9: Followed Childe's route to the quay and reached the ships, then chose to turn back rather than leave him behind. She has returned to the warehouse doorway and found him already kneeling inside a Fatui ring.",
-      "aura_points": 82,
+      "status": "EP10 SEASON FINALE: Charged into the Fatui ring and shielded Childe herself, forcing the Agent to withdraw. Stood with Childe alone on the empty docks, exchanged final words, and watched him walk away first with a promise to return.",
+      "aura_points": 90,
       "relationships": {
-        "Childe": "refuses to accept his unilateral sacrifice; abandoned the clear ship route and returned for him",
-        "Agent": "continues to resist his sealed-port operation and has now entered the warehouse aftermath created by his Fatui force"
+        "Childe": "shielded him at the cost of her own safety and refuses to let him carry the sacrifice alone; parted on his promise to return without orders — season 1 ends on that open question",
+        "Agent": "forced his withdrawal by refusing to leave; the sealed-port threat is over for now but he remains unresolved as a threat"
       },
       "prompt_descriptor": "female Traveler Lumine, long blonde hair with silver star-shaped hair clip, white and gold traveler outfit with star constellation motifs and flowing white sash, one-handed sword at her side, graceful athletic build",
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/lumine/sheet.png",
@@ -489,11 +493,11 @@
       "voice": null,
       "voice_ref": "games/genshin-impact/Fatui_dottore.mp3",
       "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fatui-agent/voice-ref.mp3",
-      "status": "EP9: Remains off-screen after sealing the port; his Fatui operation has blocked the ships and left Childe kneeling inside an implied warehouse encirclement.",
+      "status": "EP10 SEASON FINALE: Arrived at the warehouse, surveyed the open port full of witnesses, and ordered his Fatui to fall back rather than force a confrontation in public. Season 1 ends with him unresolved as a threat.",
       "aura_points": 0,
       "relationships": {
-        "Childe": "treats him as an open traitor and has deployed enough Fatui force to overwhelm or capture him",
-        "Lumine": "failed to make her take the ship route permanently; she has returned to oppose the encirclement"
+        "Childe": "let him go rather than escalate publicly — the Snezhnaya reckoning for his defection is deferred, not cancelled",
+        "Lumine": "withdrew his soldiers rather than act against her directly at the open port"
       },
       "prompt_descriptor": "male Fatui Agent, silver Fatui half-mask obscuring the upper face, dark charcoal and black Fatui operative coat with deep crimson Fatui insignia, hands clasped behind his back, compact build radiating controlled menace",
       "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/fatui-agent/sheet.png",
@@ -502,13 +506,15 @@
     }
   ],
   "active_loops": [
-    "major: Childe is on his knees inside an implied Fatui ring and may no longer be able to fight",
-    "major: Lumine has abandoned the clear ship route and returned to the warehouse aftermath",
-    "major: the port remains sealed and the number of Fatui soldiers surrounding them is unknown",
-    "eternal: Snezhnaya's response to Childe's open defection is still unknown",
+    "SEASON 2 OPEN: what Childe does now that he is an at-large Fatui-branded traitor",
+    "SEASON 2 OPEN: whether Lumine waits for him or goes looking for him",
+    "SEASON 2 OPEN: whether the Agent/Snezhnaya still comes for Childe despite backing down at the port",
     "eternal: Lumine refuses to let Childe make sacrificial decisions for both of them"
   ],
   "closed_loops": [
+    "EP10 SEASON FINALE: whether Childe survives the Fatui ring — YES, Lumine shielded him and the Agent withdrew",
+    "EP10 SEASON FINALE: whether the port confrontation ends in a fight — NO, the Agent fell back rather than act in front of witnesses",
+    "EP10 SEASON FINALE: whether Childe returns Lumine's dropped travel pouch — YES",
     "minor: will Childe acknowledge Lumine in public — YES, violently and apologetically",
     "EP2: whether Childe's blade-draw fooled the Fatui watcher — YES, staged; watcher stayed in position until EP3 shot",
     "EP2: whether Childe will choose Lumine over orders — answered implicitly: stepped into bullet",
@@ -521,13 +527,12 @@
     "EP9: whether Lumine would follow Childe's escape route and leave him behind — NO, she reached the quay and returned"
   ],
   "world_state": {
-    "location": "Liyue Harbor warehouse doorway near the sealed quay, immediately after EP9",
+    "location": "Liyue Harbor empty docks, immediately after EP10 — SEASON 1 CLOSED",
     "important_items": [
       "Burned Fatui order — ash on Northland Bank desk; Lumine witnessed it being read and destroyed",
       "Childe's discarded Fatui insignia lies inside the Golden House",
-      "The port remains sealed under the Agent's orders despite the visible ship route",
-      "Childe is kneeling inside the warehouse within an implied ring of Fatui weapons",
-      "Lumine stands at the warehouse doorway after turning back from the quay",
+      "The port is no longer sealed — the Agent withdrew the Fatui ring rather than act in front of witnesses",
+      "Lumine's travel pouch, dropped during the warehouse fight, was returned to her by Childe",
       "Childe's gunshot wound remains on his left shoulder"
     ],
     "key_events": [
@@ -572,7 +577,12 @@
       "EP9: Childe showed Lumine the route to the ships and stayed behind to slow the Fatui",
       "EP9: Lumine reached the quay, stopped, and chose to return",
       "EP9: Lumine found Childe already kneeling inside an implied ring of Fatui soldiers",
-      "EP9: Cliffhanger — Childe raised his eyes and said: 'I said don't follow.'"
+      "EP9: Cliffhanger — Childe raised his eyes and said: 'I said don't follow.'",
+      "EP10: Lumine charged into the Fatui ring and shielded kneeling Childe",
+      "EP10: The Agent arrived, surveyed the open port full of witnesses, and ordered the Fatui to fall back",
+      "EP10: The soldiers withdrew; the port fell silent",
+      "EP10: Childe returned Lumine's dropped travel pouch",
+      "EP10: SEASON CLIFF — Childe walked away first, looked back, and said: 'Next time I'll come back without orders.'"
     ]
   },
   "anti_repetition": {

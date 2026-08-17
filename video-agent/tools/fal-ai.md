@@ -331,6 +331,51 @@ curl -s -o scene-1.mp4 "$VIDEO_URL"
 
 ---
 
+## 2z. Seedance 2.0 Mini (reference-to-video) — DEBUG TEST I2V alternative, not default
+
+**Status: test route for a single debug run (genshin-dont-save-me-en EP10), added 2026-08-17. Not the default serial-drama I2V model — `serial-drama.md` still mandates Kling v3 Standard for normal runs. Use this route ONLY when the orchestrator explicitly says so for the current run.**
+
+**⚠️ Burned 2026-08-17 (genshin-dont-save-me-en EP10, scene 1 test): Seedance rejects licensed-game-character output with `content_policy_violation` / `cause: copyright`.** A real, full-length generation (`inference_time` ~127s, i.e. actually billed, not an instant validation reject) of Lumine/Childe (Genshin Impact) was rejected post-generation at result-fetch with HTTP 422 and `"Output video has sensitive content. Potential copyright violation."` (`reason: partner_validation_failed`). This is a post-generation content filter, not a prompt-text issue — it appears to trigger on recognizable licensed-game character likeness rendered in the reference image, independent of prompt wording. Do not retry this route for Genshin Impact (or presumably other licensed-game) character content without a materially different approach (e.g. a licensing/whitelist arrangement with fal.ai, or genuinely original characters) — a second identical-style attempt is likely to burn the same ~$0.15/s (720p) generation cost again for the same rejection. Separately, note the **minimum 2.0s `audio_urls` duration** — a 1.88s TTS line was rejected instantly (free, ~2s inference) with `audio_duration_too_short`; pad short dialogue lines with trailing silence before submitting.
+
+**Endpoint:** `https://queue.fal.run/bytedance/seedance-2.0/mini/reference-to-video`
+**Route in `tools/video_routes.json`:** `seedance2.mini.reference_to_video`
+**Метод:** POST через `tools/kling_runner.py` (format-agnostic transport, `route: "seedance2.mini.reference_to_video"`) — не raw curl.
+**Стоимость:** ~$0.0721/сек @480p, ~$0.1547/сек @720p (5s @720p ≈ $0.77, 10s @720p ≈ $1.55). Audio generation included, no extra charge.
+
+### Параметры (payload)
+
+| Параметр | Тип | Обяз. | Описание |
+|---|---|---|---|
+| `prompt` | string | Да | Текстовое описание сцены/движения |
+| `image_urls` | array of strings | Нет (по факту нужен минимум 1 стартовый кадр) | До 9 изображений, JPEG/PNG/WebP, ≤30MB каждое. Ссылаться в prompt как `@Image1`, `@Image2` |
+| `video_urls` | array of strings | Нет | До 3 видео, суммарно 2–15s |
+| `audio_urls` | array of strings | Нет | До 3 файлов MP3/WAV, суммарно ≤15s, ≤15MB каждый. **Это способ подать TTS-реплику для липсинка** — требует хотя бы один `image_urls`/`video_urls`. Нет отдельного `voice_ids`/`multi_prompt`, как у Kling — весь диалог подаётся уже сгенерированным Sound-фазой аудио-файлом |
+| `resolution` | enum | Нет | `"480p"`, `"720p"` (default `"720p"`) |
+| `duration` | enum | Нет | `"auto"` или `"4"`–`"15"` (секунды) |
+| `aspect_ratio` | enum | Нет | `"9:16"` для вертикального (default `"auto"` — всегда указывать явно) |
+| `generate_audio` | boolean | Нет | default `true` — генерирует synced ambience/SFX/lip-sync поверх поданного `audio_urls`. Для action-клипов без реплики можно оставить true для ambience |
+| `seed` | integer | Нет | воспроизводимость |
+
+### Ключевые отличия от Kling v3 Standard для serial-drama
+
+- Нет `voice_ids` / `multi_prompt` / `elements` / `shot_type: "customize"` — каждый scene submit одиночный `prompt` + один стартовый кадр (`image_urls[0]`).
+- Диалоговый клип = сгенерированный Sound-фазой TTS mp3/wav передаётся как `audio_urls[0]`; модель делает lip-sync сама (нет отдельного Avatar-эндпоинта).
+- Идентичность персонажей — только через физические дескрипторы в `prompt` (та же rule, что и для Kling, см. `rules/formats/serial-drama.md`), имена по-прежнему запрещены в визуальном тексте.
+- Не смешивать в одном эпизоде Kling и Seedance клипы — один motion-модель = один визуальный стиль движения, как и для Kling vs HeyGen (см. `rules/roles/animator.md` §"Do not mix").
+
+### Ответ
+
+```json
+{
+  "video": { "url": "https://fal.media/files/.../output.mp4", "content_type": "video/mp4" },
+  "seed": 12345
+}
+```
+
+Polling — тот же generic fal-queue паттерн (`requests/{id}/status` → `COMPLETED`/`FAILED`), см. общий раздел ниже.
+
+---
+
 ## 2a. Kling Motion Control — motion transfer с реф-видео
 
 Переносит движения из референсного видео на статичное изображение персонажа.

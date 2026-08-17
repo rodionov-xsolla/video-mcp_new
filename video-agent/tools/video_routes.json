@@ -6,6 +6,12 @@
       "submit_url": "https://queue.fal.run/fal-ai/kling-video/v3/standard/image-to-video",
       "poll_base": "https://queue.fal.run/fal-ai/kling-video",
       "result_url_path": ["video", "url"]
+    },
+    "seedance2.mini.reference_to_video": {
+      "protocol": "fal_queue",
+      "submit_url": "https://queue.fal.run/bytedance/seedance-2.0/mini/reference-to-video",
+      "poll_base": "https://queue.fal.run/bytedance/seedance-2.0",
+      "result_url_path": ["video", "url"]
     }
   }
 }
