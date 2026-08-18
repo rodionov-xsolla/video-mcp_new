@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Item Story",
   "created_at": "2026-08-05",
-  "last_episode": 2,
+  "last_episode": 3,
   "ready_to_post": true,
   "style_tags": "realistic cinematic 3D CGI, physically based materials, photorealistic metal and fabric textures, dramatic high-contrast science-fiction lighting, deep blacks, restrained Klingon amber and volcanic red highlights, subtle atmospheric haze, premium television-quality frame, shallow depth of field, vertical 9:16 composition, no illustration, no cartoon, no game UI, no text overlay",
   "format_overrides": {
@@ -193,6 +193,25 @@
         "Any Kataan or Ressikan lore beyond what the episode itself establishes (no invented expanded-universe names, dates, or events).",
         "Batai and Eline appear in any later live-action continuity beyond Picard's memory of them or verbal references."
       ]
+    },
+    {
+      "item_name": "The Genesis Device",
+      "item_slug": "genesis-device",
+      "category": "device",
+      "canon_scope": "Star Trek II: The Wrath of Khan and Star Trek III: The Search for Spock canon — Project Genesis, Carol Marcus's team, Khan's seizure of Regula I, detonation in the Mutara Nebula, the Genesis Planet's formation and Spock's restoration, and the planet's later self-destruction / the Federation's ban on the technology.",
+      "appearance_lock": {
+        "overall_shape": "A titanium-gray briefcase-style housing with a carrying handle, side latch/dial, ventilation slots, and a circular viewport into the device's crystalline energy matrix. Starfleet delta insignia and a 'GENESIS' nameplate on the front panel.",
+        "state_inert_device_matrix": "Sealed, latch closed, control panel dim/steady amber, viewport showing a calm blue-green internal glow. Undamaged, no visible energy discharge.",
+        "state_genesis_wave_detonation": "Casing cracked with golden-white energy racing across it before being engulfed in an expanding detonation wave that reshapes the surrounding nebula into a new world. The device itself is destroyed/consumed in this state — only its effect (the forming/decaying planet, and a debris fragment) remains visible in later beats; the intact device box is never shown again after detonation."
+      },
+      "ref_urls": {
+        "inert-device-matrix": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/genesis-device/variants/inert-device-matrix.png",
+        "genesis-wave-detonation": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/genesis-device/variants/genesis-wave-detonation.png"
+      },
+      "voice_intent": "measured Starfleet documentary lore narrator; calm scientific wonder for the origin beats shifting into grave restrained dread as the weapon's danger is revealed — one-off override of the series' default Klingon ceremonial war-narrator voice_policy, same precedent as the Ressikan Flute episode",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-18/item-story/20260818-112506-99323-startrek-genesis-device/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=DkVouAT9c1M",
+      "yt_publish_at": "2026-09-02T20:33:00Z"
     }
   ],
   "supabase_assets": {
@@ -208,15 +227,18 @@
   "anti_repetition": {
     "recent_items": [
       "The Sword of Kahless",
-      "The Ressikan Flute"
+      "The Ressikan Flute",
+      "The Genesis Device"
     ],
     "recent_hooks": [
       "The first Klingon bat'leth turned Worf against Kor.",
-      "This is the Ressikan flute — proof Picard lived a stranger's entire lifetime in twenty-five real minutes."
+      "This is the Ressikan flute — proof Picard lived a stranger's entire lifetime in twenty-five real minutes.",
+      "A Federation science project built to create life, capable of ending it instead."
     ],
     "recent_fates": [
       "Transported into interstellar space after Worf and Kor concluded it would divide the Empire.",
-      "Kept by Picard as a private keepsake, the only physical trace of Kamin's lived life and the extinct Kataan civilization."
+      "Kept by Picard as a private keepsake, the only physical trace of Kamin's lived life and the extinct Kataan civilization.",
+      "The Genesis Planet tore itself apart, and the Federation banned the technology as a doomsday weapon."
     ],
     "cooldown_episodes": 20
   },
@@ -237,6 +259,15 @@
       "youtube_url": "https://www.youtube.com/watch?v=vbaD3orsHYQ",
       "scheduled_for": "2026-08-18T19:35:00Z",
       "notes": "Lesson (shared with the same-session Genshin item-story episode): Scenarist's first monologue draft was 108 words for 6x5s=30s of picture, which would have rendered to roughly 55s at this bible's measured MiniMax rate — an ~83% overrun against the 40% masking cap in sound.md. Trimmed to 71 words before Sound ran (never generated at the bloated length), keeping the hook and all six canonical beats. Final TTS came in at 26.2s, an undershoot handled by Editor without leading silence. Also: this bible's series-level voice_policy/music_policy (dark ceremonial Klingon myth, war drums) is tonally wrong for a quiet Picard-memory item — Sound applied a one-off override (Elegant_Man voice, melancholy solo-flute music) for this episode. Worth revisiting whether voice_policy/music_policy should become per-item rather than series-wide before episode 3."
+    },
+    {
+      "episode": 3,
+      "date": "2026-08-18",
+      "item_name": "The Genesis Device",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-18/item-story/20260818-112506-99323-startrek-genesis-device/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=DkVouAT9c1M",
+      "yt_publish_at": "2026-09-02T20:33:00Z",
+      "notes": "User personally reviewed all 7 generated scene PNGs for artifacts/extra limbs/composition logic before animating (per explicit request). Caught one real issue: scene 7 (fate/legacy) was supposed to show a Starfleet archive terminal per its own image_prompt, but NB2 rendered the intact glowing device instead (chain-ref bias from the detonation-state ref) - contradicted the item being consumed in its own detonation (clip 5). Fixed by regenerating scene-7 as a sealed archival records case (same Starfleet delta/GENESIS nameplate design lineage, no crystalline core, no energy cracks) rather than the active device. TTS also needed one re-render: first pass at speed 0.85 came back at 51.9s against a 35s window (48% mismatch, over item-story.md's 40% reject threshold) - re-rendered at speed 0.95 to reach 46.26s / 30% mismatch. Cost: Storyboarder ~$0.80 (2 refs + 7 scenes + 1 scene-7 regen), Sound ~$0.10, Animator $2.94 (7 clips, zero retries, zero content-policy hits)."
     }
   ]
 }

@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Genshin Impact — Item Story",
   "created_at": "2026-08-05",
-  "last_episode": 2,
+  "last_episode": 3,
   "ready_to_post": true,
   "style_tags": "premium Genshin-style anime cel-shaded fantasy frame, clean elegant linework, vibrant saturated colors, painterly Inazuma and Snezhnaya environments, cinematic dramatic lighting, restrained magenta Tatarigami energy only where canon requires it, detailed metal and cord materials, edge-to-edge vertical 9:16 composition, no photorealism, no 3D product render, no game UI, no inventory card, no text overlay",
   "format_overrides": {
@@ -202,6 +202,27 @@
         "Wolf's Gravestone is a unique quest reward rather than a generally obtainable five-star claymore.",
         "Wolf's Gravestone possesses sentience, memory, or intent."
       ]
+    },
+    {
+      "item_name": "Freedom-Sworn",
+      "item_slug": "freedom-sworn",
+      "category": "a rebel-forged blade, one of five weapons carried by revolutionaries who rose against an empire's army",
+      "canon_scope": "Genshin Impact weapon lore/passive description (Sōkaku Kō — Freedom-Sworn's grief-manifestation passive) and weapon backstory text. No specific named wielder or nation is established in released canon; the episode intentionally keeps the wielder and empire generic per the source material's own ambiguity.",
+      "appearance_lock": {
+        "overall_shape": "A slim, curved single-edged blade with a simple crossguard and wrapped grip. Identical silhouette across all three states.",
+        "state_freshly_forged": "Pale-steel finish, plain dark leather grip, unmarked crossguard, no engravings, no feathers, faint forge mist.",
+        "state_dormant_calm": "Matte gray steel with a hairline nick near the tip, worn dark leather grip, a small carved rebel sigil on the crossguard, no feathers present.",
+        "state_grief_manifestation": "Identical blade and grip, wreathed in ~12 spectral black feathers spiraling around the steel, faint cold violet-black edge glow, feather tips trailing to smoke."
+      },
+      "ref_urls": {
+        "freshly-forged": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/freedom-sworn/variants/item-story-freshly-forged.png",
+        "dormant-calm": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/freedom-sworn/variants/item-story-dormant-calm.png",
+        "grief-manifestation": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/freedom-sworn/variants/item-story-grief-manifestation.png"
+      },
+      "voice_intent": "low controlled masculine lore narrator, somber and intimate, measured dark-fantasy documentary delivery, restrained emotion",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-18/item-story/20260818-112506-99323-genshin-freedom-sworn/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=b56qNEclG8w",
+      "yt_publish_at": "2026-08-31T19:55:00Z"
     }
   ],
   "supabase_assets": {
@@ -218,15 +239,18 @@
   "anti_repetition": {
     "recent_items": [
       "Kagotsurube Isshin",
-      "Wolf's Gravestone"
+      "Wolf's Gravestone",
+      "Freedom-Sworn"
     ],
     "recent_hooks": [
       "A cursed Inazuman sword crossed nations by possessing successive human hosts.",
-      "This claymore is named Wolf's Gravestone — yet the wolf king it mourns has never died."
+      "This claymore is named Wolf's Gravestone — yet the wolf king it mourns has never died.",
+      "A rebel blade forged for five revolutionaries who dared defy an empire."
     ],
     "recent_fates": [
       "Reforged by Kazuha at the cost of its remaining consciousness, leaving the restored sword permanently silent.",
-      "Restored and carried into a Knights of Favonius armory, still bearing its grim name while Andrius and his forest endure."
+      "Restored and carried into a Knights of Favonius armory, still bearing its grim name while Andrius and his forest endure.",
+      "Rests in careful hands, edge scarred, feathers dormant — until grief calls again."
     ],
     "cooldown_episodes": 20
   },
@@ -247,6 +271,15 @@
       "youtube_url": "https://www.youtube.com/watch?v=Zx3-wVQuvmw",
       "scheduled_for": "2026-08-15T19:47:00Z",
       "notes": "Lesson: Scenarist's first monologue draft was 101 words for 7x5s=35s of picture; MiniMax rendered it at 60.6s (speed=0.85), a 73% overrun against the 40% masking cap in sound.md. Fixed two ways: trimmed narration to 83 words (dropping only secondary descriptive clauses, no canonical facts), and dropped MiniMax voice_setting.speed from 0.85 to 1.0 (the slowdown was itself inflating duration on top of the word count). Final TTS 44.42s against 35s picture = 1.26x atempo, within the 1.4x cap. Catch TTS/picture-duration mismatches at the Sound handoff, before Storyboarder/Animator spend."
+    },
+    {
+      "episode": 3,
+      "date": "2026-08-18",
+      "item_name": "Freedom-Sworn",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-18/item-story/20260818-112506-99323-genshin-freedom-sworn/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=b56qNEclG8w",
+      "yt_publish_at": "2026-08-31T19:55:00Z",
+      "notes": "First item-story episode with no existing bible-owned refs — all 3 item states (freshly-forged, dormant-calm, grief-manifestation) generated fresh this run. User personally reviewed all 7 generated scene PNGs for artifacts/extra limbs/composition logic before animating (per explicit request) — no issues found, all clips proceeded to Animator as-is. Cost: Storyboarder ~$0.80 (3 refs + 7 scenes), Sound ~$0.10, Animator $2.94 (7 clips, zero retries)."
     }
   ]
 }
