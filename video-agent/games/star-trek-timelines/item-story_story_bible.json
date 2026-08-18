@@ -211,7 +211,7 @@
       "voice_intent": "measured Starfleet documentary lore narrator; calm scientific wonder for the origin beats shifting into grave restrained dread as the weapon's danger is revealed — one-off override of the series' default Klingon ceremonial war-narrator voice_policy, same precedent as the Ressikan Flute episode",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-18/item-story/20260818-112506-99323-startrek-genesis-device/final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=DkVouAT9c1M",
-      "yt_publish_at": "2026-09-02T20:33:00Z"
+      "yt_publish_at": "2026-08-25T20:22:00Z"
     }
   ],
   "supabase_assets": {
@@ -266,8 +266,8 @@
       "item_name": "The Genesis Device",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-18/item-story/20260818-112506-99323-startrek-genesis-device/final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=DkVouAT9c1M",
-      "yt_publish_at": "2026-09-02T20:33:00Z",
-      "notes": "User personally reviewed all 7 generated scene PNGs for artifacts/extra limbs/composition logic before animating (per explicit request). Caught one real issue: scene 7 (fate/legacy) was supposed to show a Starfleet archive terminal per its own image_prompt, but NB2 rendered the intact glowing device instead (chain-ref bias from the detonation-state ref) - contradicted the item being consumed in its own detonation (clip 5). Fixed by regenerating scene-7 as a sealed archival records case (same Starfleet delta/GENESIS nameplate design lineage, no crystalline core, no energy cracks) rather than the active device. TTS also needed one re-render: first pass at speed 0.85 came back at 51.9s against a 35s window (48% mismatch, over item-story.md's 40% reject threshold) - re-rendered at speed 0.95 to reach 46.26s / 30% mismatch. Cost: Storyboarder ~$0.80 (2 refs + 7 scenes + 1 scene-7 regen), Sound ~$0.10, Animator $2.94 (7 clips, zero retries, zero content-policy hits)."
+      "yt_publish_at": "2026-08-25T20:22:00Z",
+      "notes": "User personally reviewed all 7 generated scene PNGs for artifacts/extra limbs/composition logic before animating (per explicit request). Caught one real issue: scene 7 (fate/legacy) was supposed to show a Starfleet archive terminal per its own image_prompt, but NB2 rendered the intact glowing device instead (chain-ref bias from the detonation-state ref) - contradicted the item being consumed in its own detonation (clip 5). Fixed by regenerating scene-7 as a sealed archival records case (same Starfleet delta/GENESIS nameplate design lineage, no crystalline core, no energy cracks) rather than the active device. TTS also needed one re-render: first pass at speed 0.85 came back at 51.9s against a 35s window (48% mismatch, over item-story.md's 40% reject threshold) - re-rendered at speed 0.95 to reach 46.26s / 30% mismatch. Cost: Storyboarder ~$0.80 (2 refs + 7 scenes + 1 scene-7 regen), Sound ~$0.10, Animator $2.94 (7 clips, zero retries, zero content-policy hits). Rescheduled 2026-08-18 from 2026-09-02 to 2026-08-25 per explicit user instruction to fill the nearest free channel slot."
     }
   ]
 }
