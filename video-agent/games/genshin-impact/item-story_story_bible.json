@@ -222,7 +222,7 @@
       "voice_intent": "low controlled masculine lore narrator, somber and intimate, measured dark-fantasy documentary delivery, restrained emotion",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-18/item-story/20260818-112506-99323-genshin-freedom-sworn/final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=b56qNEclG8w",
-      "yt_publish_at": "2026-08-31T19:55:00Z"
+      "yt_publish_at": "2026-08-23T19:13:00Z"
     }
   ],
   "supabase_assets": {
@@ -278,8 +278,8 @@
       "item_name": "Freedom-Sworn",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-18/item-story/20260818-112506-99323-genshin-freedom-sworn/final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=b56qNEclG8w",
-      "yt_publish_at": "2026-08-31T19:55:00Z",
-      "notes": "First item-story episode with no existing bible-owned refs — all 3 item states (freshly-forged, dormant-calm, grief-manifestation) generated fresh this run. User personally reviewed all 7 generated scene PNGs for artifacts/extra limbs/composition logic before animating (per explicit request) — no issues found, all clips proceeded to Animator as-is. Cost: Storyboarder ~$0.80 (3 refs + 7 scenes), Sound ~$0.10, Animator $2.94 (7 clips, zero retries)."
+      "yt_publish_at": "2026-08-23T19:13:00Z",
+      "notes": "First item-story episode with no existing bible-owned refs — all 3 item states (freshly-forged, dormant-calm, grief-manifestation) generated fresh this run. User personally reviewed all 7 generated scene PNGs for artifacts/extra limbs/composition logic before animating (per explicit request) — no issues found, all clips proceeded to Animator as-is. Cost: Storyboarder ~$0.80 (3 refs + 7 scenes), Sound ~$0.10, Animator $2.94 (7 clips, zero retries). Rescheduled 2026-08-18 from 2026-08-31 to 2026-08-23 per explicit user instruction to fill the nearest free channel slot — note this sits only 1 day after the 2026-08-22 reddit-story upload on the same channel, tighter than this project's usual 2-3 day same-format-adjacency guideline; accepted as a live user override."
     }
   ]
 }
