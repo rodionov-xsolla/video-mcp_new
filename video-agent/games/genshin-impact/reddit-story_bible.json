@@ -1,6 +1,6 @@
 {
   "game_tag": "genshin-impact",
-  "total_stories": 8,
+  "total_stories": 9,
   "stories": [
     {
       "id": 1,
@@ -151,24 +151,91 @@
       "youtube_url": "https://www.youtube.com/watch?v=ZtXOX4qaf6U",
       "yt_publish_at": "2026-08-15T19:01:00Z",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-12/reddit-story/20260812-143341-86608-gen/final.mp4"
+    },
+    {
+      "id": 9,
+      "date": "2026-08-17",
+      "tone": "touching",
+      "theme": "exchange-student-language-defense",
+      "moral_engine": "an exchange student's real coping/learning tool is falsely reframed by his parents as avoiding his studies",
+      "game_situation": "college roommates, one an exchange student from Seoul, play Genshin together every night at 9pm, always at the Wangshu Inn balcony, debating that day's Archon Quest in English",
+      "false_verdict": "the roommate's parents believe he is skipping his studies to play a video game",
+      "pressure_source": "the parents' video-call ultimatum: quit the game or come home within two weeks",
+      "narrator_flaw": "let the ultimatum sit for days assuming it would blow over instead of stepping in early",
+      "human_action": "compiled months of their chat logs and got the roommate's composition professor to independently confirm his rapid English improvement",
+      "reveal": "the professor's unprompted confirmation shows the nightly Genshin sessions were the reason the roommate's English improved so fast",
+      "justice_resolution": "the parents apologize and the exchange program continues",
+      "resolution_type": "positive",
+      "headline": "My roommate's parents said Genshin was ruining his English, then his professor proved them wrong.",
+      "offerwall_angle": "free Primogems — link in bio",
+      "offerwall_note": "kept as a silent CTA overlay only, not woven into the plot, per explicit user instruction for this episode (a deliberate deviation from ids 4-8's woven-into-setup precedent)",
+      "output_dir": "output/2026-08-17/genshin-impact/reddit-story/20260817-173746-6509-genshin-impact",
+      "youtube_url": "https://www.youtube.com/watch?v=s4PayH4yL1A",
+      "yt_publish_at": "2026-08-22T19:49:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-17/reddit-story/20260817-173746-6509-genshin-impact/final.mp4",
+      "gameplay_file": "Cut.mp4",
+      "gameplay_offset_sec": 80
     }
   ],
   "anti_repetition": {
-    "recent_themes": ["parent-judgment-to-connection", "friendship-neglect-vs-overwhelm", "creative-authorship-restored", "tenant-noise-accusation-cleared", "coworker-mockery-cover-insecurity", "co-parenting-custody-vindication"],
-    "recent_tones": ["soft-drama", "bittersweet-to-warm", "humiliation-to-respect", "funny-justice", "underdog", "touching"],
-    "recent_moral_engines": ["feeling replaced/abandoned", "public authorship accusation", "one admitted outburst expanded into a false claim of constant disturbance", "public workplace mockery concealing the mocker's own attachment to the game", "a parent's real attention falsely reframed as a purchased substitute for it"],
-    "recent_false_verdicts": ["best friend deliberately excluded narrator over her engagement", "narrator used generative AI and lied about painting the Furina portrait", "the narrator's Genshin sessions caused hours of pounding every night", "the narrator's lunch-break Genshin habit is childish and unprofessional", "the narrator only buys his daughter's affection with Primogems instead of giving her real attention"],
-    "recent_pressure_sources": ["mutual friend group chat consensus", "professor's public suspicion and classmates whispering about cheating", "neighbors' signed complaint, landlord deadline, and a trusted neighbor's sudden distrust", "coworker's public mockery, Slack jokes, and boss's comment", "ex-wife's accusation escalating into a threat to cut weekend custody time"],
+    "recent_themes": [
+      "parent-judgment-to-connection",
+      "friendship-neglect-vs-overwhelm",
+      "creative-authorship-restored",
+      "tenant-noise-accusation-cleared",
+      "coworker-mockery-cover-insecurity",
+      "co-parenting-custody-vindication",
+      "exchange-student-language-defense"
+    ],
+    "recent_tones": [
+      "soft-drama",
+      "bittersweet-to-warm",
+      "humiliation-to-respect",
+      "funny-justice",
+      "underdog",
+      "touching",
+      "touching"
+    ],
+    "recent_moral_engines": [
+      "feeling replaced/abandoned",
+      "public authorship accusation",
+      "one admitted outburst expanded into a false claim of constant disturbance",
+      "public workplace mockery concealing the mocker's own attachment to the game",
+      "a parent's real attention falsely reframed as a purchased substitute for it",
+      "an exchange student's real coping/learning tool is falsely reframed by his parents as avoiding his studies"
+    ],
+    "recent_false_verdicts": [
+      "best friend deliberately excluded narrator over her engagement",
+      "narrator used generative AI and lied about painting the Furina portrait",
+      "the narrator's Genshin sessions caused hours of pounding every night",
+      "the narrator's lunch-break Genshin habit is childish and unprofessional",
+      "the narrator only buys his daughter's affection with Primogems instead of giving her real attention",
+      "the roommate's parents believe he is skipping his studies to play a video game"
+    ],
+    "recent_pressure_sources": [
+      "mutual friend group chat consensus",
+      "professor's public suspicion and classmates whispering about cheating",
+      "neighbors' signed complaint, landlord deadline, and a trusted neighbor's sudden distrust",
+      "coworker's public mockery, Slack jokes, and boss's comment",
+      "ex-wife's accusation escalating into a threat to cut weekend custody time",
+      "the parents' video-call ultimatum: quit the game or come home within two weeks"
+    ],
     "recent_hooks": [
       "He said it once. Flat. That anime kids stuff. No argument. Just walked away.",
       "The invites stopped after her engagement. No text, just silence.",
       "My professor called my Furina painting AI-generated, until my sketchbook proved him wrong.",
       "three neighbors sign an eviction complaint; narrator admits one Primogem-pull shout; hallway recordings expose the service elevator",
       "coworker mocks lunch-break Genshin publicly, then privately begs for a Spiral Abyss clear before her daughter's summer camp",
-      "ex-wife accuses divorced dad of buying his daughter's love with Primogems instead of real attention; his nine-year-old sets her straight"
+      "ex-wife accuses divorced dad of buying his daughter's love with Primogems instead of real attention; his nine-year-old sets her straight",
+      "roommate's parents see the game on a video call and issue a quit-or-come-home ultimatum; his composition professor's unprompted confirmation of his English improvement clears it"
     ],
-    "recent_gameplay_offsets_sec": [305, 140, 222],
+    "recent_gameplay_offsets_sec": [
+      305,
+      140,
+      222,
+      80
+    ],
     "banned_combos": [],
-    "note": "gameplay_offset_sec 222 on Cut.mp4 (~383s total) maximizes minimum separation from prior tracked offsets (140/305) but true 180-240s separation from all recents is still not achievable on this single ~383s file. Cut.mp4 still needs more footage or a second Genshin gameplay source to restore full offset variety."
+    "note": "gameplay_offset_sec 222 on Cut.mp4 (~383s total) maximizes minimum separation from prior tracked offsets (140/305) but true 180-240s separation from all recents is still not achievable on this single ~383s file. Cut.mp4 still needs more footage or a second Genshin gameplay source to restore full offset variety. Story 9 (2026-08-17) uses offset 80 on Cut.mp4 — sits in the largest available gap between prior tracked offsets (20 and 140), giving ~60s minimum separation; true 180-240s separation remains unachievable on this ~383s file (still needs a second gameplay source). This episode also moves to a language-learning/exchange-student theme, first use of this angle in the bible."
   }
 }

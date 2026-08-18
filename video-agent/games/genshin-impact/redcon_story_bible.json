@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Genshin Impact — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 5,
+  "last_episode": 6,
   "tts_engine": "auto",
   "tts_note": "Speech route for new episodes: intentional native audio → Chatterbox only with a redcon-owned approved sample recorded in this bible → otherwise MiniMax. Retry the same route once, then stop. Second-person monologue throughout. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "format_overrides": {
@@ -71,6 +71,16 @@
         "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-12/redcon/20260812-111619-7013/final.mp4",
         "youtube_url": "https://www.youtube.com/watch?v=ztoNYGSutSU",
         "yt_publish_at": "2026-08-14T19:22:00Z"
+      },
+      {
+        "crisis": "Raiden Shogun's Vision Hunt Decree — Inazuma civil war (Chapter II)",
+        "episode": 6,
+        "date": "2026-08-17",
+        "pulled_character": "Yae Miko",
+        "note": "Yae Miko's private, centuries-long trust with Ei lets her talk the Shogun down BEFORE the Decree escalates to open violence — exposing that the puppet/shell mechanism enforcing 'eternity' is causing Ei's own suffering, before any Vision-bearer is hunted or sealed. Positive-outcome divergence (prevention, not last-second rescue), matching episodes 2/4/5's pattern. Consequence: Yae Miko's shrine becomes a recognized mediating institution between the Shogunate and its people going forward — a structural change, not just an averted crisis.",
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-17/redcon/20260817-203507-6563-genshin-player-yaemiko/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=ZcXV-gqxM8M",
+        "yt_publish_at": "2026-08-28T20:17:00Z"
       }
     ],
     "do_not_repeat": [
@@ -79,10 +89,10 @@
       "Osial/Zhongli Liyue — used episode 2 (2026-07-21), pulled hero was Xiao not Zhongli",
       "Dvalin/Stormterror Mondstadt — used episode 3 (2026-07-28), pulled hero was Baizhu",
       "Signora's death / Fatui retaliation — used episode 4 (2026-08-04), pulled hero was Childe, Cyno present",
-      "Fontaine sinking prophecy / Oratrice verdict — used episode 5 (2026-08-12), pulled hero was Sigewinne"
+      "Fontaine sinking prophecy / Oratrice verdict — used episode 5 (2026-08-12), pulled hero was Sigewinne",
+      "Raiden Shogun's Vision Hunt Decree / Inazuma civil war — used episode 6 (2026-08-17), pulled hero was Yae Miko"
     ],
     "candidates_for_future": [
-      "Raiden Shogun's Vision Hunt Decree — Inazuma civil war (Chapter II)",
       "Nahida imprisoned by the Akademiya — Irminsul corrupted (Chapter III Act V)"
     ]
   },
@@ -116,6 +126,19 @@
         "youtube_url": "https://www.youtube.com/watch?v=XeeWPHBzk_A",
         "yt_publish_at": "2026-07-14T20:59:00Z",
         "notes": "User pitch was 'Childe joins the villains', which doesn't work as a clean divergence since he's already a Fatui Harbinger — pivoted to a real canon inflection point (Narukami duel) with an actual named-character death instead. Used the genshin-only CTA banner (branding/banner-genshin.png, 'GAIN FREE PRIMOGEMS / LINK IN BIO') as a fade-in/fade-out image overlay on clip 3 only — top-anchored, y=80, width~1010 — applying the exact placement/scope + eof_action=pass freeze-fix already learned from the star-trek-timelines Worf episode, so it worked clean on the first assembly pass this time. Animator was also briefed hard on dynamic camera work (push/pull/orbit + action + atmosphere, multi_prompt on clips 4-5) per repeated user feedback that prior redcon episodes read as static."
+      },
+      {
+        "date": "2026-08-17",
+        "character_name": "Diluc Ragnvindr",
+        "alternate_designation": "The Unforgiven Flame",
+        "divergence_point": "The Night of Crimson Fire (Dawn Winery fire that killed Crepus) — in this timeline, young Diluc learns of Kaeya's Khaenri'ah connection in the raw immediate aftermath of his father's death, and in a moment of ungoverned grief and rage nearly kills Kaeya on the spot (I2V cuts before contact per Kling content-policy constraints; the strike itself is implied, not shown).",
+        "named_casualty": "Kaeya — the act of violence, shown only as implication (windup, never contact) rather than an on-screen kill, per this format's no-contact I2V rule and two rounds of Kling content-policy rejections that forced the composition away from any weapon-toward-person framing.",
+        "downstream_consequence": "Unlike canon's restrained Darknight Hero (who protects Mondstadt from the shadows while still welcomed back into society), this Diluc is hunted by the Knights of Favonius and trusted by no one — a solitary, feared vigilante who burns first and asks nothing after.",
+        "tts_voice": "MiniMax Deep_Voice_Man, degraded stability 0.05 / style 0.9 (no redcon-owned Diluc sample existed; not borrowed cross-format)",
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-17/redcon/20260817-203507-6563-genshin-universe-diluc/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=9PYfSfiXmDk",
+        "yt_publish_at": "2026-08-25T19:42:00Z",
+        "notes": "Clip 4 (divergence) was rejected TWICE by Kling's content-policy checker — first for an overhead-claymore-swing-toward-Kaeya composition (even after removing hit/contact wording from the prompt), then again on a v2 rephrase of the SAME composition. Root cause was the composition itself (weapon aimed at a person + alarmed reaction), not the wording. Fixed by reframing the shot around Diluc alone (claymore held low/vertical at his side, never raised or aimed, Kaeya reduced to an out-of-focus background silhouette, violence implied entirely through Diluc's expression/grip) — required a full Storyboarder re-generation (new start frame) plus a third Animator submission. Total clip-4 cost across all attempts: $1.26 (2 rejected + 1 successful, all billed by Kling despite rejection). Lesson for future redcon episodes with a violent divergence beat: never frame a weapon pointed/swung toward another character, even implied/windup-only — reframe around the perpetrator's expression/grip instead, with the second party as an out-of-focus background element."
       }
     ]
   },
@@ -125,7 +148,11 @@
       "date": "2026-07-06",
       "crisis": "Scaramouche installs Electro Gnosis — transforms into Shouki no Kami (Chapter III Act V)",
       "pulled_character": "Nahida",
-      "crew": ["Nahida", "Cyno", "Alhaitham"],
+      "crew": [
+        "Nahida",
+        "Cyno",
+        "Alhaitham"
+      ],
       "tts_voice": "Traveller (Chatterbox)",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/genshin-impact/2026-07-06-redcon/final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=Kr8q96xPdVo",
@@ -137,7 +164,10 @@
       "date": "2026-07-21",
       "crisis": "Osial breaks free and threatens Liyue Harbor (Chapter I Act III, Farewell, Archaic Lord)",
       "pulled_character": "Xiao",
-      "crew": ["Xiao", "Zhongli"],
+      "crew": [
+        "Xiao",
+        "Zhongli"
+      ],
       "tts_voice": "MiniMax Deep_Voice_Man (no Chatterbox sample recorded for the Traveler in this bible)",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-21/redcon/20260721-121028-86031/final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=FghEOPg0aqc",
@@ -149,7 +179,11 @@
       "date": "2026-07-28",
       "crisis": "Dvalin's Abyssal corruption — Stormterror attacks Mondstadt (Prologue Act II)",
       "pulled_character": "Baizhu",
-      "crew": ["Baizhu", "Lumine", "Dvalin"],
+      "crew": [
+        "Baizhu",
+        "Lumine",
+        "Dvalin"
+      ],
       "tts_voice": "MiniMax Deep_Voice_Man (no Chatterbox sample recorded for the Traveler in this bible)",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-07-28/redcon/20260728-142603-55290/final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=Xmnzm4JlsqY",
@@ -161,7 +195,11 @@
       "date": "2026-08-04",
       "crisis": "Signora's death and Fatui retaliation (Chapter II Act III / Sumeru desert confrontation)",
       "pulled_character": "Childe (Tartaglia)",
-      "crew": ["Childe (Tartaglia)", "Cyno", "Signora"],
+      "crew": [
+        "Childe (Tartaglia)",
+        "Cyno",
+        "Signora"
+      ],
       "tts_voice": "MiniMax Deep_Voice_Man (no Chatterbox sample recorded for the Traveler in this bible)",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-04/redcon/20260804-135057-45251/final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=ooHfrTQJ2JE",
@@ -174,12 +212,27 @@
       },
       "cost_breakdown": {
         "sound": 0.079,
-        "storyboarder": 0.80,
+        "storyboarder": 0.8,
         "animator": 2.772,
         "editor": 0.0,
         "total_usd": 3.651
       },
       "notes": "First positive-outcome (rescue) divergence in this game's Player-POV series since episode 2. The Traveler's existing redcon-tagged ref (traveller-redcon) was correctly NOT chained since the Traveler never appears on-screen in Player-POV framing — avoided an unneeded $0.08 spend. Two process incidents caught before publish, both fixed same-session: (1) Sound initially generated ONE combined tts-output.mp3 for the full monologue instead of one MP3 per clip with a non-null tts_segment — broke the per-clip atempo model this format relies on (storyboard.json's clips[] already had correct per-clip tts_segment text). Sent back to Sound, regenerated as 6 separate scene-K.mp3 files with per-clip tts_url written into storyboard.json, matching the star-trek-timelines redcon convention. (2) Reinforced upfront in the Editor prompt this run: this format's mandatory title card text (title_lines via ASS, not tools/overlays.py) must be read from rules/formats/redcon.md and rendered — a prior star-trek-timelines redcon run this session skipped it on the first pass by mistake and needed a second Editor pass to fix; naming the requirement explicitly here got it right on the first assembly. Bg-music volume raised from the documented 0.15 to 0.4 after probing showed 0.15 made quiet passages of this track inaudible (-69 to -70dB) — future episodes should verify audibility per-track rather than assuming the documented default fits every generated music file."
+    },
+    {
+      "episode": 6,
+      "date": "2026-08-17",
+      "crisis": "Raiden Shogun's Vision Hunt Decree — Inazuma civil war (Chapter II)",
+      "pulled_character": "Yae Miko",
+      "crew": [
+        "Yae Miko",
+        "Raiden Shogun (Ei)"
+      ],
+      "tts_voice": "MiniMax Deep_Voice_Man (no Chatterbox sample recorded for the Traveler)",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-17/redcon/20260817-203507-6563-genshin-player-yaemiko/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=ZcXV-gqxM8M",
+      "yt_publish_at": "2026-08-28T20:17:00Z",
+      "notes": "Clip 4 (Yae Miko intro) was rejected TWICE by Kling's content-policy checker even after the motion prompt was rephrased to remove all gesture language — the trigger was the START FRAME's pose/fan/talisman composition, not the text. Fixed by having Storyboarder regenerate scene-4 with a calmer, unambiguous pose (fan closed at hip, talismans at rest) before a third Animator submission succeeded. Total clip-4 cost: $1.26 (2 rejected + 1 successful)."
     }
   ]
 }

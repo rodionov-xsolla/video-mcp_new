@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 6,
+  "last_episode": 7,
   "tts_engine": "fal-ai/chatterbox/text-to-speech",
   "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-calm-mid-man-narrator.mp3",
   "tts_note": "Chatterbox with voice_ref_url above (authoritative, measured). Second-person monologue throughout — NOT first-person alternate-self. Voiceover opens with the CTA hook on the teaser clip, then continues second-person through story clips. Fallback: MiniMax Speech 2.8-HD, voice Deep_Voice_Man.",
@@ -38,43 +38,77 @@
         "crisis": "Battle of Wolf 359 — Borg cube (2367)",
         "episode": 0,
         "date": "2026-06-29",
-        "crew_assembled": ["Data", "Seven of Nine", "Worf"],
+        "crew_assembled": [
+          "Data",
+          "Seven of Nine",
+          "Worf"
+        ],
         "note": "Pre-bible run. Pilot episode. Locutus signal isolation."
       },
       {
         "crisis": "Breen energy-dampening weapon — Battle of Chin'toka (2375)",
         "episode": 1,
         "date": "2026-07-06",
-        "crew_assembled": ["Data", "Scotty", "Julian Bashir", "Ro Laren"],
+        "crew_assembled": [
+          "Data",
+          "Scotty",
+          "Julian Bashir",
+          "Ro Laren"
+        ],
         "note": "Frequency modulation cracked before Allied fleet annihilated. Dominion War ended 6 months early."
       },
       {
         "crisis": "Hobus supernova — destruction of Romulus (2387), SAVED",
         "episode": 2,
         "date": "2026-07-13",
-        "crew_assembled": ["Spock (Ambassador)", "Geordi La Forge", "T'Pol"],
+        "crew_assembled": [
+          "Spock (Ambassador)",
+          "Geordi La Forge",
+          "T'Pol"
+        ],
         "note": "Successful-outcome divergence (not a canon-averting rescue of a doomed loss, but a straight-up fix of the original tragedy): in canon Ambassador Spock's red matter ship arrived too late and Romulus was destroyed, which is why Spock ends up flung into the past in the 2009 film. In this timeline the cross-era crew (Geordi rebuilding the deployment rig faster than canon, T'Pol locking the containment math, Spock firing the red matter in time) deployed containment before the shockwave hit — Romulus survived. First bible episode to use the new 8-part player-POV structure (TEASER with TTS starting immediately → 3s silent TITLE CARD → HOOK+CTA → CANON REMINDER → CREW ASSEMBLED → DIVERGENCE → REVELATION → CTA asset)."
       },
       {
         "crisis": "Xindi superweapon — Delphic Expanse (2153)",
         "episode": 3,
         "date": "2026-07-21",
-        "crew_assembled": ["Tuvok", "Degra (Xindi councilor, canon character)"],
+        "crew_assembled": [
+          "Tuvok",
+          "Degra (Xindi councilor, canon character)"
+        ],
         "note": "Prevention, not a last-second stop: canon has Archer's crew barely stopping the finished superweapon after a probe strike already killed 7 million people in Florida. Here Tuvok mind-melds with Xindi engineer Degra BEFORE the Council authorizes the weapon program, shattering the Sphere Builders' implanted visions — the Council never builds it, the probe strike never happens. Deliberately avoided a hero who'd just replay Archer's own last-second rescue (weak-pattern warning in redcon.md)."
       },
       {
         "crisis": "Changeling infiltration of Starfleet Command — Leyton coup attempt (2372)",
         "episode": 4,
         "date": "2026-07-28",
-        "crew_assembled": ["Odo", "The Doctor (Voyager EMH)"],
+        "crew_assembled": [
+          "Odo",
+          "The Doctor (Voyager EMH)"
+        ],
         "note": "Player prevents the Homefront/Paradise Lost crisis from turning Starfleet against itself. Canon basis: the real Admiral Leyton is human and exploits a genuine Changeling threat, sabotages Earth's power grid, fabricates signs of a Dominion invasion, and attempts a military coup; a real Changeling separately impersonates Leyton and O'Brien. Divergence: Odo supplies a Founder biomorphic baseline and the cross-era Doctor develops a nonlethal quantum scan, exposing the infiltrator before Leyton can consolidate martial law. The baseline/scan are intentional Timelines counterfactual technology, not a claim about established canon."
       },
       {
         "crisis": "V'Ger approaching Earth (2273)",
         "episode": 6,
         "date": "2026-08-12",
-        "crew_assembled": ["Data", "Hoshi Sato"],
+        "crew_assembled": [
+          "Data",
+          "Hoshi Sato"
+        ],
         "note": "Whole-planet stakes (most dramatic unused candidate in the rotation). In canon, Decker physically merges with the Ilia probe/V'Ger, sacrificing his body so V'Ger can 'touch the Creator.' Here Data interfaces directly with V'Ger's machine core (android-to-machine, no organic sacrifice needed) while Hoshi Sato decodes V'Ger's actual signal — a corrupted fragment of Voyager 6's original 'return the information to the Creator' directive, buried under centuries of accumulated alien data. Decker and Ilia both survive; V'Ger leaves a knowledge-core data gift (multi-decade Starfleet tech uplift) and withdraws intact rather than vanishing. New character refs generated for Hoshi Sato and Willard Decker (both new to this format's redcon tag). Lesson applied from the same-session Genshin EP5 run: redcon.md's title-card ASS timing example ('0:00:00.30-0:00:02.70') is clip-relative — added clip 1's cumulative duration (+5.041667s) before writing subs.ass this time, so the title card landed correctly on clip 2 on the first assembly pass. User separately flagged visible style drift between clips (again) after review — root cause: this format's 'no bg-reference generation' rule (environments are text-only per clip, no shared visual anchor) plus each new character ref (Hoshi Sato, Decker) being generated independently, so NB2 has no common visual grounding beyond the shared style_tags text between non-chained clips. Consider for a future format revision: allow one shared environment/establishing-shot reference per episode (e.g. the V'Ger cloud or the bridge) to chain against, rather than pure text-only backgrounds every clip."
+      },
+      {
+        "crisis": "Praxis explosion and the road to the Khitomer Accords (2293, Star Trek VI)",
+        "episode": 7,
+        "date": "2026-08-17",
+        "crew_assembled": [
+          "Deanna Troi"
+        ],
+        "note": "Troi's empathic sense detects Valeris' concealed anxiety and the conspiracy's nervousness BEFORE Chancellor Gorkon's assassination, exposing the Cartwright/Chang/Valeris plot outright. Gorkon lives, Kirk and McCoy are never framed, and the Khitomer peace accords are signed years ahead of canon schedule with the conspiracy publicly exposed rather than covered up.",
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-17/redcon/20260817-203507-6563-startrek-player-troi/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=xb1sVoiIvkk",
+        "yt_publish_at": "2026-08-30T19:34:00Z"
       }
     ],
     "do_not_repeat": [
@@ -83,11 +117,10 @@
       "Hobus supernova / Romulus",
       "Xindi superweapon / Delphic Expanse — used episode 3 (2026-07-21), pulled hero was Tuvok",
       "Changeling infiltration / Leyton coup — used episode 4 (2026-07-28), assembled Odo and the Doctor",
-      "V'Ger / Earth approach — used episode 6 (2026-08-12), crew was Data and Hoshi Sato"
+      "V'Ger / Earth approach — used episode 6 (2026-08-12), crew was Data and Hoshi Sato",
+      "Praxis explosion / Khitomer Accords — used episode 7 (2026-08-17), crew was Deanna Troi"
     ],
-    "candidates_for_future": [
-      "Praxis explosion + Khitomer Accords (2293)"
-    ]
+    "candidates_for_future": []
   },
   "style_tags": "Star Trek Timelines style, semi-realistic Pixar-quality 3D, cinematic Federation lighting, deep space environment, Starfleet uniform details, clean cinematic frame, no cartoon, no chibi",
   "color_palette": "deep space black #0a0a12, LCARS orange #ff9900, Federation blue #3366cc, LCARS purple #9966cc, rarity gold #ffd700, warp blue #00ccff",
@@ -117,6 +150,19 @@
         "youtube_url": "https://www.youtube.com/watch?v=m9tCCBoivuc",
         "yt_publish_at": "2026-07-14T20:59:00Z",
         "notes": "User-requested one-off ('what if Q became evil'), same character-variant branch as the Worf episode. Total pipeline cost ~$3.67 (Sound $0.09, Storyboarder $0.64, Animator $2.94, Editor $0.00). Applied the Worf postmortem note proactively this run — Storyboarder used wide framing and Animator used harder camera pushes/orbits from the start, no retro-fix needed."
+      },
+      {
+        "date": "2026-08-17",
+        "character_name": "Jean-Luc Picard",
+        "alternate_designation": "Locutus, Voice of the Many",
+        "divergence_point": "2367, Battle of Wolf 359 / 'The Best of Both Worlds' — the cortical-node separation surgery fails, and Picard remains Locutus permanently instead of being restored.",
+        "named_casualty": "William Riker — leads a desperate, unauthorized rescue attempt to reclaim Picard and dies in the attempt, cementing that Locutus cannot be recovered.",
+        "downstream_consequence": "Starfleet permanently abandons rescue doctrine in favor of pure containment/defense against him; Locutus becomes the reason resistance became doctrine rather than an isolated tragedy.",
+        "tts_voice": "MiniMax Deep_Voice_Man, degraded stability 0.05 / style 0.9, speed 1.15 (no existing Locutus/Borg voice ref found; first render at speed 0.9 came back at 63.9s for a 30s window — 2.13x atempo, had to trim to 90 words AND re-render at speed 1.15 to reach a usable 35.3s / 1.18x atempo)",
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-17/redcon/20260817-203507-6563-startrek-universe-picard/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=ch_1FKesHtE",
+        "yt_publish_at": "2026-08-27T20:22:00Z",
+        "notes": "This is a distinct personal-fate divergence on Picard himself, not a duplicate of episode 0's Wolf 359 pilot (which was about the crew stopping the Borg cube, not Picard's fate). Lesson: MiniMax speed=0.9 with degraded stability (0.05) rendered at an abnormally slow 0.56s/word — always test-render and check duration before assuming a fixed word count fits the target window; speed 1.15 fixed it without losing the cold/collective register."
       }
     ]
   },
@@ -125,7 +171,11 @@
       "episode": 0,
       "date": "2026-06-29",
       "crisis": "Battle of Wolf 359 — Borg cube",
-      "crew": ["Data", "Seven of Nine", "Worf"],
+      "crew": [
+        "Data",
+        "Seven of Nine",
+        "Worf"
+      ],
       "tts_voice": "Deep_Voice_Man",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/star-trek-timelines/2026-06-29-redcon/final.mp4",
       "youtube_url": null,
@@ -135,7 +185,12 @@
       "episode": 1,
       "date": "2026-07-06",
       "crisis": "Breen energy-dampening weapon — Battle of Chin'toka (2375)",
-      "crew": ["Data", "Scotty", "Julian Bashir", "Ro Laren"],
+      "crew": [
+        "Data",
+        "Scotty",
+        "Julian Bashir",
+        "Ro Laren"
+      ],
       "tts_voice": "Deep_Voice_Man",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/videos/star-trek-timelines/2026-07-06/redcon_final.mp4",
       "youtube_url": null,
@@ -145,7 +200,11 @@
       "episode": 2,
       "date": "2026-07-13",
       "crisis": "Hobus supernova — destruction of Romulus (2387), SAVED",
-      "crew": ["Spock (Ambassador)", "Geordi La Forge", "T'Pol"],
+      "crew": [
+        "Spock (Ambassador)",
+        "Geordi La Forge",
+        "T'Pol"
+      ],
       "tts_voice": "Deep_Voice_Man",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-13/redcon_final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=42mWhkvaTZE",
@@ -164,7 +223,10 @@
       "episode": 3,
       "date": "2026-07-21",
       "crisis": "Xindi superweapon — Delphic Expanse (2153)",
-      "crew": ["Tuvok", "Degra (Xindi councilor)"],
+      "crew": [
+        "Tuvok",
+        "Degra (Xindi councilor)"
+      ],
       "tts_voice": "MiniMax Deep_Voice_Man",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-21/redcon/20260721-132718-32946/final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=RwSsrSVyIjo",
@@ -183,7 +245,10 @@
       "episode": 4,
       "date": "2026-07-28",
       "crisis": "Changeling infiltration of Starfleet Command — Leyton coup attempt (2372)",
-      "crew": ["Odo", "The Doctor (Voyager EMH)"],
+      "crew": [
+        "Odo",
+        "The Doctor (Voyager EMH)"
+      ],
       "tts_voice": "MiniMax Deep_Voice_Man",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-07-28/redcon/20260728-160441-7439/final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=udFgYXlFKco",
@@ -206,7 +271,10 @@
       "episode": 5,
       "date": "2026-08-04",
       "crisis": "USS Enterprise-C does not return through the temporal rift — Narendra III / \"Yesterday's Enterprise\" (2366)",
-      "crew": ["Guinan", "Tasha Yar (war-timeline, hardened security chief)"],
+      "crew": [
+        "Guinan",
+        "Tasha Yar (war-timeline, hardened security chief)"
+      ],
       "tts_voice": "MiniMax Deep_Voice_Man",
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-04/redcon/20260804-121122-13937/final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=F7HgJrwvhfQ",
@@ -219,12 +287,25 @@
       },
       "cost_breakdown": {
         "sound": 0.091,
-        "storyboarder": 0.80,
+        "storyboarder": 0.8,
         "animator": 2.772,
         "editor": 0.0,
         "total_usd": 3.663
       },
       "notes": "User-requested continuous graphic banner overlay (existing branding asset worf-redcon-cta-banner.png, top-center, ~650px/60% of canvas width) spanning clips 4-5 (canon reminder + crew assembled) as one continuous element across the cut — fade-in 0.3s at clip 4 start, fade-out 0.3s at clip 5 end, no fade at the mid-cut. Incident caught before publish: the mandatory title card text (clip 2, ASS-rendered per this format's Editor section, not tools/overlays.py) was skipped on the first assembly pass because the manager's instruction to the Editor to skip reading rules/formats/redcon.md (intended only for universal subtitle/overlay styling) was too broad and also caused it to skip this format's own mandatory title-card convention. Fixed via a second Editor pass: title_lines reflowed from the storyboard's unbalanced 4-entry split into 4 balanced short lines (\"WHAT IF\" / \"THANKS TO YOU\" / \"THE ENTERPRISE-C\" / \"NEVER WENT HOME\"), font size measured against Montserrat-Black.ttf and stepped down from fs104 to fs88 to fit the 1080px frame width (max line 955px) — same reflow failure pattern as episode 3, now happening on a fresh run despite the documented rule, worth flagging in redcon.md's Editor section if it recurs a third time."
+    },
+    {
+      "episode": 7,
+      "date": "2026-08-17",
+      "crisis": "Praxis explosion and the road to the Khitomer Accords (2293)",
+      "crew": [
+        "Deanna Troi"
+      ],
+      "tts_voice": "MiniMax Deep_Voice_Man, speed 1.15 (Chatterbox auth failed, fallback used; per-clip render at speed 0.9 totaled 52.1s speech against a 30s window post-silence — 1.67x atempo — re-rendered all 6 clips at speed 1.15 to reach 41.7s / 1.36x atempo)",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-17/redcon/20260817-203507-6563-startrek-player-troi/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=xb1sVoiIvkk",
+      "yt_publish_at": "2026-08-30T19:34:00Z",
+      "notes": "First use of Deanna Troi in this bible (checked against both crisis_rotation and character_variant_episodes — unused). Title card reflow needed again (3rd time this bible has hit the issue) — fs104 overflowed 1080px on 'AND THE PLOT FELL', stepped to fs88."
     }
   ]
 }
