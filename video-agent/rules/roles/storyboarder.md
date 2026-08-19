@@ -227,20 +227,28 @@ new correctly framed location ref when the format requires one.
 NB2 is unreliable for characters on opposite sides of a barrier. Prefer a side view,
 silhouette, clear physical gap, or a split scene rather than ambiguous depth prose.
 
-Any scene whose background names more than one distant landmark (e.g. two facing sofas, a
-rug, and a shelf all at once) requires two explicit closing elements or NB2 will render a
-second disconnected copy of the background as a separate layer behind the characters: (1) a
-scale-anchor sentence tying character scale to one specific named object at that camera
-distance, and (2) a geometry-preservation clause naming the specific background objects to
-preserve plus an explicit "no second copy of the room" / "no duplicated bodies" exclusion.
-Omitting either produces a stacked-room artifact even when the location ref itself is a
-valid, previously-approved canonical asset.
+Scenarist's `environment_state` describes narrative context, not a ready-to-use background
+clause — it is written per scene without knowing what camera distance Storyboarder will
+choose. Never copy `environment_state`'s background landmarks into `image_prompt` verbatim.
+Reconcile them against your own chosen `camera_angle`/distance first, and name only the
+landmarks plausible at that distance (e.g. one shelf, or one sofa) — drop any landmark
+`environment_state` lists as "visible" that would not actually read as visible in a
+close/medium frame. If `environment_state` itself does not scope the background down for a
+tight shot (compare against scenes in the same episode where it does, e.g. "stays off-frame"
+or a singular object instead of a plural establishing list), you must do that scoping
+yourself; do not pass the mismatch through to NB2. Naming more than one distant landmark at
+once (e.g. two facing sofas plus a rug) inside a close/medium frame is the concrete failure
+signature: NB2 resolves the incompatible scope by rendering a second, disconnected copy of
+the wide background as a separate layer behind the characters, even when the location ref
+itself is a valid, previously-approved canonical asset. The fix is subtractive (name fewer,
+closer landmarks), not additive — a longer prompt does not compensate for an unscoped one.
 
-For an ongoing series with prior approved episodes, read the prior episode's own
-`storyboard.json` `image_prompt` fields before writing the first prompt of a new episode.
-Match their structural template (scale anchor + closing preservation/exclusion clause) rather
-than reconstructing prompt structure from the general rules alone — a prior episode's working
-prompts are the concrete proof of what NB2 needs for that exact location ref.
+When a scene both chains from a same-run continuation ref (section 10) and needs two
+character refs, the job reaches four `image_urls`: the wide canonical location ref, the
+narrower continuation frame, and two identity refs — two different camera framings of the
+same room anchoring the same job at once. This is a second, independent way to trigger the
+same stacked-room failure. Prefer dropping the wide canonical location ref when the
+continuation frame already supplies enough of the room for this shot.
 
 ## 9. Avatar start images
 

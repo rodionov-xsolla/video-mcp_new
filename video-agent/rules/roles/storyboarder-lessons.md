@@ -35,14 +35,24 @@ contract. It is not loaded during normal production. The normative rules are onl
 - Genshin Don't Save Me EP10: an old warehouse location ref contained a duplicate doorway
   that propagated into dependent scenes. Distilled rule: only manually approved reusable refs
   may cross runs.
-- Star Trek ROOM 1701 EP7: prompts for 3 of 6 scenes named both facing sofas and the rug but
-  omitted the scale-anchor and geometry-preservation/no-duplicate-room sentences that every
-  prior EP1-6 prompt for the same canonical location ref always included. NB2 rendered a
-  second full-room copy stacked behind the characters in all three scenes. The location ref
-  itself was valid (confirmed by direct inspection); the regression was purely in prompt
-  completeness versus the series' own established template. Distilled rule: see the new
-  section 8 requirement to mine a running series' own prior prompts before writing a new
-  episode's first prompt.
+- Star Trek ROOM 1701 EP7: 3 of 6 scenes rendered with a second, disconnected full-room copy
+  stacked behind the characters. First-pass diagnosis (comparing against a different prior
+  episode's prompts) was wrong and had to be corrected. Direct comparison of all 6 of this
+  episode's own scenes showed prompt length did not correlate with the failure (the longest
+  v1 prompt was one of the broken scenes; a clean scene's prompt was longer than two broken
+  ones). The actual cause, confirmed against Scenarist's own `environment_state` field: for
+  the 3 clean scenes, Scenarist had already scoped `environment_state` down to the shot
+  distance ("sofas and window stay off-frame", a singular sofa instead of a plural
+  establishing list); for the 3 broken scenes, `environment_state` listed the full wide-room
+  landmark set ("facing blue sofas, delta rug, collectible shelves... remain visible")
+  unscoped, and Storyboarder copied it into `image_prompt` verbatim without reconciling it
+  against its own close/medium `camera_angle` choice. Two of the three broken scenes also
+  combined the wide canonical location ref with a same-run continuation frame plus two
+  identity refs (4 total `image_urls`) — two different camera framings of the same room
+  anchoring one job at once, a compounding second cause. The location ref itself was valid.
+  Distilled rule: see the revised section 8 — reconcile `environment_state` landmarks against
+  your own chosen camera distance before writing `image_prompt`; do not pass through an
+  unscoped background list, and do not assume a longer/more-qualified prompt is the fix.
 
 ## Prompt refinement
 
