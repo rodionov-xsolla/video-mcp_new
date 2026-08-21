@@ -19,7 +19,8 @@
   },
   "covered_creatures": [
     "Cryo Slime",
-    "Tepetlisaurus"
+    "Tepetlisaurus",
+    "Electro Slime"
   ],
   "episodes": [
     {
@@ -40,6 +41,16 @@
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-05/wild-documentary/20260805-115438-21107/final.mp4",
       "yt_url": "https://www.youtube.com/watch?v=hyUsoH55E6c",
       "yt_publish_at": "2026-08-08T20:15:00Z",
+      "cta_sign": "Free primogems link in bio"
+    },
+    {
+      "ep": 3,
+      "creature": "Electro Slime",
+      "biome": "Storm-lashed coastal cliffside archipelago",
+      "date": "2026-08-21",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-21/wild-documentary/20260821-171741-67244/final.mp4",
+      "yt_url": "https://www.youtube.com/watch?v=04gHX67p-Dg",
+      "yt_publish_at": "2026-08-24T19:53:00Z",
       "cta_sign": "Free primogems link in bio"
     }
   ]
