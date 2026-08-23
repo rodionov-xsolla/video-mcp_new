@@ -3,20 +3,25 @@
   "game_tag": "genshin-impact",
   "title": "Genshin Impact Top Lists",
   "created_at": "2026-06-19",
-  "last_episode": 2,
+  "last_episode": 5,
   "anti_repetition": {
     "cooldown_episodes": 6,
     "recent_themes": [
-      "GENSHIN WOMEN",
-      "GENSHIN MEN"
+      "GENSHIN VILLAINS",
+      "TEYVAT REGIONS",
+      "GENSHIN WEAPONS"
     ],
     "recent_categories": [
-      "female-characters",
-      "male-characters"
+      "villains",
+      "locations",
+      "weapons"
     ],
     "recent_winners": [
       "Furina",
-      "Zhongli"
+      "Zhongli",
+      "The Unknown God",
+      "Fontaine",
+      "Engulfing Lightning"
     ],
     "recent_entries": [
       "Ganyu",
@@ -28,7 +33,22 @@
       "Xiao",
       "Tartaglia",
       "Neuvillette",
-      "Zhongli"
+      "Zhongli",
+      "Il Dottore",
+      "La Signora",
+      "Osial",
+      "Azhdaha",
+      "The Unknown God",
+      "Mondstadt",
+      "Inazuma",
+      "Sumeru City",
+      "Liyue Harbor",
+      "Fontaine",
+      "Amos' Bow",
+      "Wolf's Gravestone",
+      "Staff of Homa",
+      "Mistsplitter Reforged",
+      "Engulfing Lightning"
     ]
   },
   "reserved_topics": [],
@@ -103,6 +123,69 @@
       "status": "scheduled_private",
       "notes": "Assembled in debug mode with rank-only overlays, spoken names in TTS, and Supabase CTA pack-shot appended after scene 6.",
       "youtube_publish_at": "2026-06-24T20:59:00Z"
+    },
+    {
+      "episode": 3,
+      "date": "2026-08-21",
+      "theme": "GENSHIN VILLAINS",
+      "category": "villains",
+      "ranking_basis": "lore impact + menace + recognizability",
+      "entries": [
+        { "rank": 5, "name": "Il Dottore" },
+        { "rank": 4, "name": "La Signora" },
+        { "rank": 3, "name": "Osial" },
+        { "rank": 2, "name": "Azhdaha" },
+        { "rank": 1, "name": "The Unknown God" }
+      ],
+      "winner": "The Unknown God",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-21/top-list/20260821-150741-villains/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=PaunKO3IRic",
+      "duration_sec": 40.33,
+      "status": "scheduled_private",
+      "notes": "Rank-only overlays, spoken names in TTS, Supabase CTA pack-shot appended after scene 6.",
+      "youtube_publish_at": "2026-08-26T20:29:00Z"
+    },
+    {
+      "episode": 4,
+      "date": "2026-08-21",
+      "theme": "TEYVAT REGIONS",
+      "category": "locations",
+      "ranking_basis": "visual spectacle + lore significance + player love",
+      "entries": [
+        { "rank": 5, "name": "Mondstadt" },
+        { "rank": 4, "name": "Inazuma" },
+        { "rank": 3, "name": "Sumeru City" },
+        { "rank": 2, "name": "Liyue Harbor" },
+        { "rank": 1, "name": "Fontaine" }
+      ],
+      "winner": "Fontaine",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-21/top-list/20260821-150741-regions/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=KftopJDCTrY",
+      "duration_sec": 40.33,
+      "status": "scheduled_private",
+      "notes": "Supabase CTA pack-shot appended after scene 6.",
+      "youtube_publish_at": "2026-08-29T19:59:00Z"
+    },
+    {
+      "episode": 5,
+      "date": "2026-08-21",
+      "theme": "GENSHIN WEAPONS",
+      "category": "weapons",
+      "ranking_basis": "lore significance + iconic status + visual design, not meta tier lists",
+      "entries": [
+        { "rank": 5, "name": "Amos' Bow" },
+        { "rank": 4, "name": "Wolf's Gravestone" },
+        { "rank": 3, "name": "Staff of Homa" },
+        { "rank": 2, "name": "Mistsplitter Reforged" },
+        { "rank": 1, "name": "Engulfing Lightning" }
+      ],
+      "winner": "Engulfing Lightning",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-21/top-list/20260821-150741-weapons/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=vidD952isBA",
+      "duration_sec": 40.33,
+      "status": "scheduled_private",
+      "notes": "Supabase CTA pack-shot appended after scene 6.",
+      "youtube_publish_at": "2026-08-31T20:49:00Z"
     }
   ]
 }
