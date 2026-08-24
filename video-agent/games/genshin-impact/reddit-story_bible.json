@@ -1,6 +1,6 @@
 {
   "game_tag": "genshin-impact",
-  "total_stories": 9,
+  "total_stories": 11,
   "stories": [
     {
       "id": 1,
@@ -175,6 +175,42 @@
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-17/reddit-story/20260817-173746-6509-genshin-impact/final.mp4",
       "gameplay_file": "Cut.mp4",
       "gameplay_offset_sec": 80
+    },
+    {
+      "id": 10,
+      "date": "2026-08-24",
+      "tone": "misunderstood hero",
+      "theme": "summer-camp-counselor-homesick-camper",
+      "moral_engine": "a counselor's genuine bonding method with a homesick, withdrawn camper is falsely reframed as shirking supervisory duty",
+      "game_situation": "a summer camp cabin's daily 1pm rest hour, spent hunting hidden chests in Sumeru's forest with a quiet camper",
+      "false_verdict": "the narrator is ignoring his counselor duties by gaming instead of supervising rest hour",
+      "pressure_source": "co-counselor Kyle's write-up and the camp director's written warning with a threat of early dismissal",
+      "resolution_type": "positive",
+      "headline": "My co-counselor reported me for playing games during rest hour, until a ten-year-old proved him wrong.",
+      "output_dir": "output/2026-08-24/genshin-impact/reddit-story/20260824-154210-40131-2004",
+      "youtube_url": "https://www.youtube.com/watch?v=5V1qLQ5TH3I",
+      "yt_publish_at": "2026-08-27T20:04:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-24/reddit-story/20260824-154210-40131-2004/final.mp4",
+      "gameplay_file": "Cut.mp4",
+      "gameplay_offset_sec": 260
+    },
+    {
+      "id": 11,
+      "date": "2026-08-24",
+      "tone": "betrayal resolved",
+      "theme": "senior-center-volunteer-vindicated",
+      "moral_engine": "an elderly friend's private generosity toward his own family is mistaken for a volunteer exploiting him for cash",
+      "game_situation": "weekly Thursday-afternoon Genshin Impact sessions with an elderly resident during the volunteer tech program at Riverside Senior Center",
+      "false_verdict": "the narrator pressured Mr. Okafor into buying gift cards to fund the narrator's own game purchases",
+      "pressure_source": "the center director's on-the-spot suspension of the volunteer badge and coworkers' whispered accusations of elder exploitation",
+      "resolution_type": "positive",
+      "headline": "The center accused me of scamming my elderly gaming buddy, until his granddaughter cleared me.",
+      "output_dir": "output/2026-08-24/genshin-impact/reddit-story/20260824-154211-40131-2004",
+      "youtube_url": "https://www.youtube.com/watch?v=QTDJDlUF6e8",
+      "yt_publish_at": "2026-08-30T19:37:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-24/reddit-story/20260824-154211-40131-2004/final.mp4",
+      "gameplay_file": "Cut.mp4",
+      "gameplay_offset_sec": 50
     }
   ],
   "anti_repetition": {
@@ -194,7 +230,9 @@
       "funny-justice",
       "underdog",
       "touching",
-      "touching"
+      "touching",
+      "misunderstood hero",
+      "betrayal resolved"
     ],
     "recent_moral_engines": [
       "feeling replaced/abandoned",
@@ -202,7 +240,9 @@
       "one admitted outburst expanded into a false claim of constant disturbance",
       "public workplace mockery concealing the mocker's own attachment to the game",
       "a parent's real attention falsely reframed as a purchased substitute for it",
-      "an exchange student's real coping/learning tool is falsely reframed by his parents as avoiding his studies"
+      "an exchange student's real coping/learning tool is falsely reframed by his parents as avoiding his studies",
+      "a counselor's genuine bonding method with a homesick, withdrawn camper is falsely reframed as shirking supervisory duty",
+      "an elderly friend's private generosity toward his own family is mistaken for a volunteer exploiting him for cash"
     ],
     "recent_false_verdicts": [
       "best friend deliberately excluded narrator over her engagement",
@@ -210,7 +250,9 @@
       "the narrator's Genshin sessions caused hours of pounding every night",
       "the narrator's lunch-break Genshin habit is childish and unprofessional",
       "the narrator only buys his daughter's affection with Primogems instead of giving her real attention",
-      "the roommate's parents believe he is skipping his studies to play a video game"
+      "the roommate's parents believe he is skipping his studies to play a video game",
+      "the narrator is ignoring his counselor duties by gaming instead of supervising rest hour",
+      "the narrator pressured Mr. Okafor into buying gift cards to fund the narrator's own game purchases"
     ],
     "recent_pressure_sources": [
       "mutual friend group chat consensus",
@@ -218,7 +260,9 @@
       "neighbors' signed complaint, landlord deadline, and a trusted neighbor's sudden distrust",
       "coworker's public mockery, Slack jokes, and boss's comment",
       "ex-wife's accusation escalating into a threat to cut weekend custody time",
-      "the parents' video-call ultimatum: quit the game or come home within two weeks"
+      "the parents' video-call ultimatum: quit the game or come home within two weeks",
+      "co-counselor Kyle's write-up and the camp director's written warning with a threat of early dismissal",
+      "the center director's on-the-spot suspension of the volunteer badge and coworkers' whispered accusations of elder exploitation"
     ],
     "recent_hooks": [
       "He said it once. Flat. That anime kids stuff. No argument. Just walked away.",
@@ -227,7 +271,9 @@
       "three neighbors sign an eviction complaint; narrator admits one Primogem-pull shout; hallway recordings expose the service elevator",
       "coworker mocks lunch-break Genshin publicly, then privately begs for a Spiral Abyss clear before her daughter's summer camp",
       "ex-wife accuses divorced dad of buying his daughter's love with Primogems instead of real attention; his nine-year-old sets her straight",
-      "roommate's parents see the game on a video call and issue a quit-or-come-home ultimatum; his composition professor's unprompted confirmation of his English improvement clears it"
+      "roommate's parents see the game on a video call and issue a quit-or-come-home ultimatum; his composition professor's unprompted confirmation of his English improvement clears it",
+      "My co-counselor reported me for playing games during rest hour, until a ten-year-old proved him wrong.",
+      "The center accused me of scamming my elderly gaming buddy, until his granddaughter cleared me."
     ],
     "recent_gameplay_offsets_sec": [
       305,
@@ -236,6 +282,14 @@
       80
     ],
     "banned_combos": [],
-    "note": "gameplay_offset_sec 222 on Cut.mp4 (~383s total) maximizes minimum separation from prior tracked offsets (140/305) but true 180-240s separation from all recents is still not achievable on this single ~383s file. Cut.mp4 still needs more footage or a second Genshin gameplay source to restore full offset variety. Story 9 (2026-08-17) uses offset 80 on Cut.mp4 — sits in the largest available gap between prior tracked offsets (20 and 140), giving ~60s minimum separation; true 180-240s separation remains unachievable on this ~383s file (still needs a second gameplay source). This episode also moves to a language-learning/exchange-student theme, first use of this angle in the bible."
+    "note": "gameplay_offset_sec 222 on Cut.mp4 (~383s total) maximizes minimum separation from prior tracked offsets (140/305) but true 180-240s separation from all recents is still not achievable on this single ~383s file. Cut.mp4 still needs more footage or a second Genshin gameplay source to restore full offset variety. Story 9 (2026-08-17) uses offset 80 on Cut.mp4 — sits in the largest available gap between prior tracked offsets (20 and 140), giving ~60s minimum separation; true 180-240s separation remains unachievable on this ~383s file (still needs a second gameplay source). This episode also moves to a language-learning/exchange-student theme, first use of this angle in the bible.",
+    "recent_game_situations": [
+      "a summer camp cabin's daily 1pm rest hour, spent hunting hidden chests in Sumeru's forest with a quiet camper",
+      "weekly Thursday-afternoon Genshin Impact sessions with an elderly resident during the volunteer tech program at Riverside Senior Center"
+    ],
+    "recent_resolution_types": [
+      "positive",
+      "positive"
+    ]
   }
 }

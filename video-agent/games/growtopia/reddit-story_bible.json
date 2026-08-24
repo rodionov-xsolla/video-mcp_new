@@ -1,7 +1,7 @@
 {
   "game_tag": "growtopia",
   "format": "reddit-story",
-  "total_stories": 3,
+  "total_stories": 5,
   "stories": [
     {
       "id": 1,
@@ -92,6 +92,70 @@
       ],
       "output_dir": "output/2026-08-17/growtopia/reddit-story/20260817-173746-6509-growtopia",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-17/reddit-story/20260817-173746-6509-growtopia/final.mp4"
+    },
+    {
+      "id": 4,
+      "date": "2026-08-24",
+      "tone": "underdog",
+      "theme": "night-shift-father-daughter-building-ritual",
+      "moral_engine": "genuine quality time with his daughter is mistaken for a father hiding from real parenting behind a phone game",
+      "game_situation": "nightly Growtopia building sessions between a night-shift father and his teenage daughter, right before her bedtime",
+      "false_verdict": "the narrator is checked-out and avoiding real parenting by disappearing into a game instead of being present",
+      "pressure_source": "his grandmother threatening to tell his ex-wife he isn't present enough, putting his custody time at risk",
+      "narrator_flaw": "panicked and gave a defensive non-answer instead of calmly explaining the ritual",
+      "human_action": "let Mia invite her grandmother to actually sit through one midnight session instead of arguing back",
+      "reveal": "the grandmother watches Mia openly share her day and a chemistry test with her father while they plant flowers together",
+      "resolution_type": "positive-family-recognition",
+      "headline": "My grandmother said I was hiding from real parenting behind a game, until she saw why Mia never misses it.",
+      "offerwall_angle": "Gems from the link in bio used to buy a rare seed for their garden; silent CTA only; no game-download mention",
+      "gameplay_segments": [
+        {
+          "file": "Growtopia 1.mp4",
+          "offset_sec": 145.0,
+          "duration_sec": 32.31
+        },
+        {
+          "file": "growtopia 2.mp4",
+          "offset_sec": 65.0,
+          "duration_sec": 32.31
+        }
+      ],
+      "output_dir": "output/2026-08-24/growtopia/reddit-story/20260824-160316-49000-31101",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-24/reddit-story/20260824-160316-49000-31101/final.mp4",
+      "youtube_url": null,
+      "youtube_note": "youtube_channel is not mapped yet for growtopia (games/growtopia/growtopia.md); Supabase is the only deliverable until a channel is mapped."
+    },
+    {
+      "id": 5,
+      "date": "2026-08-24",
+      "tone": "humiliation-to-respect",
+      "theme": "office-lunch-break-coworker-defense",
+      "moral_engine": "a shy coworker's game-chat coaching for a real conversation is mistaken for childish escapism",
+      "game_situation": "office lunch-break sessions on Growtopia between a mocked new hire and a senior coworker secretly hiding her own account",
+      "false_verdict": "the new coworker was too immature and antisocial to fit in, hiding in a kids' game",
+      "pressure_source": "the whole office team openly mocking him at every single lunch break",
+      "narrator_flaw": "stayed silent about playing too and let him get mocked alone instead of admitting it",
+      "human_action": "let him coach her through the exact words for her overdue raise conversation, then spoke up publicly to defend him",
+      "reveal": "her GrowID matched his contact list, and the in-game chat logs proved what he'd actually been helping her with",
+      "resolution_type": "public-vindication",
+      "headline": "Our office mocked the new guy's 'kids' game' until it helped me win the hardest conversation of my career.",
+      "offerwall_angle": "Gems from the link in bio used to gift him a rare lock as thanks; silent CTA only; no game-download mention",
+      "gameplay_segments": [
+        {
+          "file": "growtopia 2.mp4",
+          "offset_sec": 182.0,
+          "duration_sec": 32.33
+        },
+        {
+          "file": "Growtopia 1.mp4",
+          "offset_sec": 115.0,
+          "duration_sec": 32.33
+        }
+      ],
+      "output_dir": "output/2026-08-24/growtopia/reddit-story/20260824-160317-49000-31101",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-24/reddit-story/20260824-160317-49000-31101/final.mp4",
+      "youtube_url": null,
+      "youtube_note": "youtube_channel is not mapped yet for growtopia (games/growtopia/growtopia.md); Supabase is the only deliverable until a channel is mapped."
     }
   ],
   "style_tags": "not applicable - reddit-story uses ready-made gameplay and no generated images or AI video",
@@ -113,37 +177,51 @@
     "recent_tones": [
       "touching",
       "misunderstood hero",
-      "comeback"
+      "comeback",
+      "underdog",
+      "humiliation-to-respect"
     ],
     "recent_moral_engines": [
       "a secret act of care is mistaken for abandonment",
       "a real friendship is mistaken for a screen addiction",
-      "quiet mentorship between coworkers is mistaken for wasted work time"
+      "quiet mentorship between coworkers is mistaken for wasted work time",
+      "genuine quality time with his daughter is mistaken for a father hiding from real parenting behind a phone game",
+      "a shy coworker's game-chat coaching for a real conversation is mistaken for childish escapism"
     ],
     "recent_game_situations": [
       "rebuilding a younger cousin's first Growtopia world from childhood screenshots",
       "weekly Growtopia building sessions between grandma and her long-distance best friend of forty years",
-      "two night-shift warehouse coworkers building together in Growtopia on every break for eight months"
+      "two night-shift warehouse coworkers building together in Growtopia on every break for eight months",
+      "nightly Growtopia building sessions between a night-shift father and his teenage daughter, right before her bedtime",
+      "office lunch-break sessions on Growtopia between a mocked new hire and a senior coworker secretly hiding her own account"
     ],
     "recent_false_verdicts": [
       "the narrator had outgrown and forgotten his younger cousin",
       "the narrator is enabling grandma's phone addiction instead of supporting real friendship",
-      "the narrator and his coworker were slacking off on their phones instead of working"
+      "the narrator and his coworker were slacking off on their phones instead of working",
+      "the narrator is checked-out and avoiding real parenting by disappearing into a game instead of being present",
+      "the new coworker was too immature and antisocial to fit in, hiding in a kids' game"
     ],
     "recent_pressure_sources": [
       "three weeks of unanswered messages before the cousin's birthday",
       "aunt threatening to limit grandma's screen time and take the game away",
-      "a new supervisor threatening to write both coworkers up for wasting company time"
+      "a new supervisor threatening to write both coworkers up for wasting company time",
+      "his grandmother threatening to tell his ex-wife he isn't present enough, putting his custody time at risk",
+      "the whole office team openly mocking him at every single lunch break"
     ],
     "recent_resolution_types": [
       "social-restoration",
       "positive-social-restoration",
-      "positive-professional-recognition"
+      "positive-professional-recognition",
+      "positive-family-recognition",
+      "public-vindication"
     ],
     "recent_hooks": [
       "cousin stops answering before his birthday after three weeks of silence; restored typo sign reveals the surprise",
       "aunt accuses grandson of enabling grandma's screen addiction; reveal shows grandma and her 40-year friend video-calling while building together",
-      "supervisor calls eight months of coworker breaks wasting company time; the quiet coworker defends the narrator himself, revealing the Lucky Lock ritual built his confidence"
+      "supervisor calls eight months of coworker breaks wasting company time; the quiet coworker defends the narrator himself, revealing the Lucky Lock ritual built his confidence",
+      "My grandmother said I was hiding from real parenting behind a game, until she saw why Mia never misses it.",
+      "Our office mocked the new guy's 'kids' game' until it helped me win the hardest conversation of my career."
     ],
     "recent_gameplay_sources": [
       "Growtopia 1.mp4@84.9",

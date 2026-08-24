@@ -8,7 +8,7 @@
     "fallback_engine": "fal-ai/minimax/speech-2.8-hd",
     "fallback_voice_id": "Determined_Man"
   },
-  "total_stories": 13,
+  "total_stories": 15,
   "stories": [
     {
       "id": 1,
@@ -308,6 +308,72 @@
       "youtube_url": "https://www.youtube.com/watch?v=U6F-yJTOP74",
       "yt_publish_at": "2026-08-23T19:07:00Z",
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-17/reddit-story/20260817-173746-6509-star-trek-timelines/final.mp4"
+    },
+    {
+      "id": 14,
+      "date": "2026-08-24",
+      "tone": "touching",
+      "theme": "divorced-father-son-custody-mediation-shared-crew-ritual",
+      "moral_engine": "a private father-son ritual is mistaken for screen-time neglect during a custody dispute",
+      "game_situation": "a divorced father runs a shared Star Trek Timelines crew with his son every Friday during his every-other-weekend custody time",
+      "false_verdict": "the narrator hides behind the game instead of actually parenting his son during his limited custody time",
+      "pressure_source": "a formal custody mediation review threatening to cut his weekend hours",
+      "resolution_type": "positive",
+      "headline": "My ex called our Star Trek nights neglectful in mediation, until my son proved her wrong himself.",
+      "output_dir": "output/2026-08-24/star-trek-timelines/reddit-story/20260824-154212-40131-2004",
+      "youtube_url": "https://www.youtube.com/watch?v=Y_XTJuW0_4k",
+      "yt_publish_at": "2026-08-29T20:04:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-24/reddit-story/20260824-154212-40131-2004/final.mp4",
+      "gameplay_clips": [
+        {
+          "file": "Startrek_gameplay_5.mp4",
+          "offset_sec": 2.0,
+          "duration_sec": 24.0
+        },
+        {
+          "file": "Startrek_gameplay_6.mp4",
+          "offset_sec": 1.0,
+          "duration_sec": 20.0
+        },
+        {
+          "file": "Startrek_gameplay_2.mp4",
+          "offset_sec": 2.0,
+          "duration_sec": 20.0
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "date": "2026-08-24",
+      "tone": "rage-to-relief",
+      "theme": "neighbor-noise-complaint-apartment-crew-ritual",
+      "moral_engine": "a quiet weekly ritual between neighbors is mistaken for a disruptive illegal gathering based on an anonymous complaint",
+      "game_situation": "two apartment neighbors run the same crew together every Tuesday night over headsets",
+      "false_verdict": "the property manager believed the Tuesday sessions were loud parties or illegal subletting",
+      "pressure_source": "a formal lease-termination warning from the property manager",
+      "resolution_type": "positive",
+      "headline": "My landlord accused me of throwing illegal parties. The real noise came from the apartment above mine.",
+      "output_dir": "output/2026-08-24/star-trek-timelines/reddit-story/20260824-154213-40131-2004",
+      "youtube_url": "https://www.youtube.com/watch?v=L57dRJH6tBQ",
+      "yt_publish_at": "2026-08-31T19:22:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-24/reddit-story/20260824-154213-40131-2004/final.mp4",
+      "gameplay_clips": [
+        {
+          "file": "Startrek_gameplay_4.mp4",
+          "offset_sec": 8.0,
+          "duration_sec": 22.0
+        },
+        {
+          "file": "Startrek_gameplay_3.mp4",
+          "offset_sec": 15.0,
+          "duration_sec": 24.0
+        },
+        {
+          "file": "Startrek_gameplay_1.mp4",
+          "offset_sec": 5.0,
+          "duration_sec": 20.0
+        }
+      ]
     }
   ],
   "anti_repetition": {
@@ -329,7 +395,9 @@
       "quietly-triumphant",
       "misunderstood hero",
       "comeback",
-      "misunderstood hero"
+      "misunderstood hero",
+      "touching",
+      "rage-to-relief"
     ],
     "recent_moral_engines": [
       "n/a — genuine fan story, no accusation arc",
@@ -339,7 +407,9 @@
       "small community program dismissed because attendance numbers hide its human value",
       "a quiet, withdrawn roommate is silently misread as cold and judgmental",
       "private mentorship built through a shared game is mistaken for unprofessional favoritism",
-      "a deaf coworker's real channel of connection is misread as the narrator excluding him from real conversation"
+      "a deaf coworker's real channel of connection is misread as the narrator excluding him from real conversation",
+      "a private father-son ritual is mistaken for screen-time neglect during a custody dispute",
+      "a quiet weekly ritual between neighbors is mistaken for a disruptive illegal gathering based on an anonymous complaint"
     ],
     "recent_game_situations": [
       "grandson spends time with a silent retired-engineer grandfather via the game",
@@ -349,7 +419,9 @@
       "four recent arrivals share a recurring Star Trek discussion evening in a small library room",
       "random college housing lottery pairs two strangers in a small dorm room",
       "a substitute teacher spends lunch periods playing Star Trek Timelines with a withdrawn student at a corner classroom table",
-      "two factory-line coworkers, one deaf/hard of hearing, run a shared crew on breaks since the floor is too loud for real conversation"
+      "two factory-line coworkers, one deaf/hard of hearing, run a shared crew on breaks since the floor is too loud for real conversation",
+      "a divorced father runs a shared Star Trek Timelines crew with his son every Friday during his every-other-weekend custody time",
+      "two apartment neighbors run the same crew together every Tuesday night over headsets"
     ],
     "recent_false_verdicts": [
       "null — no injustice arc",
@@ -359,7 +431,9 @@
       "the narrator was using a public room for a personal indulgence with no community value",
       "the narrator privately decided Devon was distant and looked down on him, with no real evidence",
       "the principal believes the lunch sessions are inappropriate favoritism that crosses teacher-student boundaries",
-      "the new floor manager believes the narrator is ignoring/excluding his deaf coworker instead of really talking to him"
+      "the new floor manager believes the narrator is ignoring/excluding his deaf coworker instead of really talking to him",
+      "the narrator hides behind the game instead of actually parenting his son during his limited custody time",
+      "the property manager believed the Tuesday sessions were loud parties or illegal subletting"
     ],
     "recent_pressure_sources": [
       "n/a — no pressure/accusation source, genuine story",
@@ -369,7 +443,9 @@
       "library director cancels the gathering and forces a public-board defense",
       "a looming housing-office room-swap deadline",
       "a parent complaint that escalates into a formal meeting with the principal, threatening the narrator's job and certification",
-      "the floor manager threatening to split their shared breaks"
+      "the floor manager threatening to split their shared breaks",
+      "a formal custody mediation review threatening to cut his weekend hours",
+      "a formal lease-termination warning from the property manager"
     ],
     "recent_resolution_types": [
       "positive",
@@ -377,6 +453,8 @@
       "positive",
       "positive-social-restoration",
       "positive-community-restoration",
+      "positive",
+      "positive",
       "positive",
       "positive",
       "positive"
@@ -389,7 +467,9 @@
       "four-person library ritual canceled as indulgent, regulars testify publicly, twenty-seven-newcomer log, all four download through bio link",
       "housing-lottery roommate reads as cold for three weeks, swap deadline looms, he quotes Chekov's exact line and reveals he's a lifelong closet fan",
       "substitute teacher's lunch-period gaming ritual with a withdrawn student is called favoritism by the principal; the student's unannounced defense at the meeting clears the teacher",
-      "new floor manager accuses narrator of excluding his deaf coworker; Theo signs through an interpreter and shows eight months of crew-planning texts, clearing the narrator himself"
+      "new floor manager accuses narrator of excluding his deaf coworker; Theo signs through an interpreter and shows eight months of crew-planning texts, clearing the narrator himself",
+      "My ex called our Star Trek nights neglectful in mediation, until my son proved her wrong himself.",
+      "My landlord accused me of throwing illegal parties. The real noise came from the apartment above mine."
     ],
     "note": "story 10 (2026-07-30) uses an institutional community conflict: a library director mistakes small attendance for no human value, while the regulars restore the event through public testimony. Story 11 (2026-08-04) inverts the roommate arc from story 9 — here the narrator, not the roommate, holds the false verdict. HARD RULE added 2026-07-13 remains active: never build reddit-story conflict on in-game mechanics (fleet/gauntlet/leaderboard/cheat), even when the mechanic is real. Source false verdicts and pressure from real relationships only. Story 12 (2026-08-12) moves the setting to a school/mentorship context (substitute teacher + student), first use of this setting in the bible. Also confirmed: this game's Chatterbox TTS route (voice_ref_url zero-shot clone) silently truncates any input over ~80 words with no error — Sound fell back to MiniMax/Determined_Man successfully; flag this as a known Chatterbox limitation for future long-form reddit-story scripts on this game. Story 13 (2026-08-17) moves to a factory/disability-inclusion setting (deaf coworker) - first use of this angle in the bible; named the coworker Theo rather than reusing Marcus from story 12. total_stories was previously out of sync with stories.length (said 11, array had 12) - corrected to match actual array length (13) on this update.",
     "banned_combos": []
