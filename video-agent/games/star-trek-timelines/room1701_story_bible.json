@@ -6,7 +6,7 @@
   "genre": "sitcom",
   "style_tags": "semi-realistic stylized 3D characters, modern nerdy shared bedroom interior, warm casual lighting, practical props (phones, laptops, game controllers, Star Trek posters), intimate close-ups and 3/4 face shots, cozy bedroom aesthetic with sci-fi geeky decor, natural soft lighting from screens and lamps, not Disney, not Pixar, not DreamWorks, not toy-like",
   "created_at": "2026-06-25",
-  "last_episode": 7,
+  "last_episode": 8,
   "show_concept": "Two geeky roommates (Alex and Michael) live in Room 1701 and play Star Trek Timelines all the time. They treat every everyday problem like a Starfleet mission. Emily, their cool neighbor, is sharp, sarcastic, and unexpectedly good at handling people. Anna is the girl Alex is pursuing — warm, playful, and increasingly drawn to Michael's nerd sincerity. The show is a fast sitcom about awkward dating comedy and Star Trek geek humor.",
   "production_rules": [
     "Do NOT rely on readable phone UI — phone can glow in hands but meaning comes from acting/dialogue",
@@ -40,11 +40,11 @@
     {
       "name": "Alex",
       "role": "protagonist",
-      "status": "Confronted Michael directly over never noticing Anna's feelings, then finally told Anna himself that he should have asked weeks ago. Anna's response leaves the door open but unresolved.",
+      "status": "Stated the stakes out loud to Emily (lose Anna for good), then crashed Michael and Anna's meetup insisting it wasn't a date, fumbled visibly in front of both of them, watched Michael accidentally win ground with total sincerity, and admitted to Emily he doesn't know who he is when he stops performing. Ends holding Anna's ambiguous verdict text with no idea how to read it.",
       "relationships": {
-        "Anna": "His honesty regained some warmth, but he lost the right to choose the next date and watched her invite Michael instead.",
-        "Michael": "Still his best friend and accidental romantic rival.",
-        "Emily": "Relies on her practical help and sarcastic emotional cover."
+        "Anna": "She directly named his jealousy at the coffee spot, then sent him an unfiltered comparison to Michael that could be a compliment or a warning.",
+        "Michael": "Still his best friend and accidental romantic rival, now openly losing ground to him without Michael trying.",
+        "Emily": "Relies on her practical help and sarcastic emotional cover; she's now the one forcing him to name his own performing/masking pattern."
       },
       "character_description": "young man, late 20s, slim build, slightly nervous energy, warm brown eyes, messy chestnut-brown hair visible under a black baseball cap with a Starfleet delta, dark navy Star Trek Timelines hoodie with logo, black cargo pants, blue-and-white sneakers, usually holding a phone with anxious grip, shy worried smile, practical warm bedroom lighting",
       "visual_prompt": "Alex - slim young man in black baseball cap with Starfleet delta, messy chestnut-brown hair, large warm brown eyes, dark navy Star Trek Timelines hoodie, black cargo pants, blue-and-white sneakers, anxious grip on phone, shy worried expression",
@@ -58,10 +58,10 @@
     {
       "name": "Michael",
       "role": "co-protagonist",
-      "status": "Scheduled Anna's 'date' as a literal crew-optimization session, genuinely hurting her without realizing it; still reads the entire romantic triangle as game strategy even after Alex's direct confrontation.",
+      "status": "Met Anna at the coffee spot and, without trying or noticing, said the one sincere thing Alex could never manage — that he doesn't perform, he just says what's true — and visibly struck her. Still has no idea he's competing for anything.",
       "relationships": {
-        "Alex": "Loyal roommate whose dating mission he keeps disrupting without realizing it.",
-        "Anna": "She now openly frames their connection as a date; he remains oblivious and reads every signal as game strategy.",
+        "Alex": "Loyal roommate whose dating mission he keeps disrupting without realizing it, now more than ever.",
+        "Anna": "Genuinely moved her with an unintentional line about sincerity; still completely unaware it registered as romantic.",
         "Emily": "Accepts her sarcasm as background mission control."
       },
       "character_description": "young man, late 20s, stocky confident build, intense focused eyes, wild curly bright orange-ginger hair, round black-framed glasses, yellow-gold Star Trek hoodie with black delta insignia, black joggers, gray NCC-1701 slippers, black headphones around neck, badge, holds phone/tablet like a command console, very serious mission-briefing expression",
@@ -76,9 +76,9 @@
     {
       "name": "Emily",
       "role": "neighbor",
-      "status": "Forced into referee role between Alex and Michael's confrontation; explicitly refused to keep fixing things for both of them, drawing her own boundary for the first time.",
+      "status": "Pushed Alex to stop rehearsing and go say something before the day was over, then named the real reason Anna is drifting toward Michael (honesty over performance), which forced Alex to admit he doesn't know who he is without a mask.",
       "relationships": {
-        "Alex": "Quietly protective and emotionally perceptive, disguised as friendly sarcasm.",
+        "Alex": "Quietly protective and emotionally perceptive, disguised as friendly sarcasm; now directly confronting him with the truth instead of just covering for him.",
         "Michael": "Treats his mission logic as useful chaos to manage.",
         "Anna": "Friendly observer of the growing triangle."
       },
@@ -94,10 +94,10 @@
     {
       "name": "Anna",
       "role": "recurring guest / love interest",
-      "status": "Visibly hurt by Michael's tone-deaf 'date' plan; received Alex's unprompted honest confession and responded with a real, unresolved dare rather than forgiveness or rejection.",
+      "status": "Called out Alex's jealousy directly at the coffee spot, then was genuinely struck by Michael's unintentionally sincere line about not performing. Sent Alex an unfiltered, unresolved comparison between the two of them with no romantic framing attached.",
       "relationships": {
-        "Alex": "Responded warmly to his honesty, but revoked his right to choose the date after his failed strategy.",
-        "Michael": "Directly asked him to choose their next date; his oblivious crew-optimization answer did not discourage her.",
+        "Alex": "Sees through his deflection immediately; her closing text is a real, ambiguous verdict on him, not comfort or rejection.",
+        "Michael": "Genuinely moved by his sincerity, though he has no idea it landed as anything but a plain statement.",
         "Emily": "Comfortable with her dry, practical presence in the room."
       },
       "character_description": "young woman, late 20s, warm confident posture, large warm brown eyes, medium-length wavy dark brown hair, friendly open smile, beige ribbed henley top, blue straight-leg jeans with rolled cuffs, beige sneakers, simple gold necklace, often holding a coffee cup, naturally charming and playful energy",
@@ -126,16 +126,17 @@
     }
   ],
   "active_loops": [
-    "Will Alex actually ask Anna out 'properly' after his honest confession, and will Anna say yes?",
+    "Will Alex actually ask Anna out 'properly' the way he told her he would in EP7, or will he keep circling the moment?",
     "Will Michael ever realize he has been in a romantic triangle the whole time, not a strategy session?",
-    "Will Emily keep refusing to referee, and does she have her own unspoken feelings in this?",
-    "Will Anna prefer Alex's authentic nerdy side over Michael's effortless game competence now that the misunderstanding has real costs?"
+    "Does Anna genuinely prefer Alex's authentic (if harder to read) side, now that she's directly compared him to Michael's ease?",
+    "Will Emily's own quiet feelings for Alex surface now that she keeps being the one who tells him the truth?"
   ],
   "closed_loops": [
     "Alex got Room 1701 ready before Anna arrived — resolved in EP5 when she rejected the fake-normal version and preferred the authentic nerdy room.",
     "Could Alex regain control of Anna's tutorial after Michael took over the crew question? Resolved negatively in EP6: Alex failed the mission, and Anna took control of the next date.",
     "Can Alex recover after Anna asked Michael to choose their next date? Resolved in EP7: Michael's tone-deaf plan became a real slight, prompting Alex to finally confront Michael and confess to Anna directly.",
-    "Will Michael realize Anna has now directly invited him into the romantic triangle? Resolved negatively in EP7: he still reads the entire episode through game-strategy logic."
+    "Will Michael realize Anna has now directly invited him into the romantic triangle? Resolved negatively in EP7: he still reads the entire episode through game-strategy logic.",
+    "Will Alex follow through on EP7's promise to ask Anna out properly? Resolved negatively in EP8: he instead crashed Michael and Anna's meetup insisting it wasn't a date, which Anna called out directly."
   ],
   "world_state": {
     "location": "Room 1701",
@@ -155,7 +156,13 @@
       "Alex directly confronted Michael over never noticing Anna's feelings.",
       "Emily refereed between Alex and Michael and refused to keep fixing things for both of them.",
       "Anna had a private hurt moment alone at the window before any resolution.",
-      "Alex told Anna, unprompted, that he should have asked her himself weeks ago; Anna dared him to ask her out 'properly, and mean it this time.'"
+      "Alex told Anna, unprompted, that he should have asked her himself weeks ago; Anna dared him to ask her out 'properly, and mean it this time.'",
+      "Alex told Emily he'd lose Anna for good if he didn't act, then crashed Michael and Anna's meetup at the coffee spot insisting it wasn't a date.",
+      "Anna called out Alex's jealousy directly instead of playing along with the deflection.",
+      "Alex fumbled a coffee cup in front of both Michael and Anna, splashing his own hand.",
+      "Michael, without meaning to, told Anna he never performs and just says what's true, and visibly struck her.",
+      "Emily told Alex plainly that Anna is choosing honesty over performance, not Michael over him; Alex admitted he doesn't know who he is when he isn't performing.",
+      "Anna texted Alex an unfiltered comparison to Michael — 'Michael is fun. But you're harder to understand' — with no romantic framing attached, leaving Alex unsure how to read it."
     ]
   },
   "anti_repetition": {
@@ -172,20 +179,41 @@
       "You never notice. You just... win.",
       "I'm done fixing this for both of you.",
       "Anna... I should've asked you myself. Weeks ago.",
-      "Then ask now. Properly. And mean it this time."
+      "Then ask now. Properly. And mean it this time.",
+      "If I don't say something today, I lose her to him.",
+      "This isn't a date. I just want it explained right.",
+      "He's doing fine. You don't have to guard the door.",
+      "I never perform. I just say what's true.",
+      "That's rare. Most people perform for me.",
+      "She's not choosing him. She's choosing honesty over performance.",
+      "I don't know who I am when I'm not performing.",
+      "Michael is fun. But you're harder to understand."
     ],
     "recent_hooks": [
       "Spoken countdown cleanup hook: Anna arrives in ten minutes.",
       "Romantic wager hook: beat this mission and choose the next date.",
-      "Oblivious-reveal hook: Michael states his tone-deaf 'date' plan as a literal mission schedule in the cold open."
+      "Oblivious-reveal hook: Michael states his tone-deaf 'date' plan as a literal mission schedule in the cold open.",
+      "Stakes-confession hook: Alex states the real romantic stakes bluntly to Emily before anything happens."
     ],
     "recent_cliffhangers": [
       "Competence-transfer cliffhanger: Anna turns from Alex to Michael for crew-selection help.",
       "Direct date-invitation cliffhanger: Anna asks Michael to choose their next date, and he misreads it as crew strategy.",
-      "Direct-challenge cliffhanger: Alex speaks an unfiltered honest line and Anna answers with a real, unresolved dare."
+      "Direct-challenge cliffhanger: Alex speaks an unfiltered honest line and Anna answers with a real, unresolved dare.",
+      "Ambiguous-verdict text cliffhanger: Anna's own unfiltered comparison of Alex to Michael, delivered with no romantic framing attached by anyone else in the scene."
     ]
   },
   "episode_summaries": [
+    {
+      "episode": 8,
+      "title": "Not a Date",
+      "language": "en",
+      "summary": "Alex tells Emily that if he doesn't say something today, he loses Anna to Michael for real. He crashes Michael and Anna's meetup at the coffee spot insisting it isn't a date, which only proves to Anna that he thinks it is one; she calls out his jealousy directly. A nervous fumble (spilling coffee on himself) lands worse than any line could. Then Michael, without trying, tells Anna he never performs and just says what's true — and she's genuinely struck. Back in Room 1701, Emily tells Alex plainly that Anna isn't choosing competence over him, she's choosing honesty over performance, forcing Alex to admit he doesn't know who he is when he stops performing.",
+      "cliffhanger": "Anna texts Alex, unprompted: 'Michael is fun. But you're harder to understand.' Alex has no idea whether that's a compliment or a warning.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-25/serial-drama/20260825-144306-11373/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=48nYUq1OflY",
+      "yt_publish_at": "2026-09-02T19:31:00Z",
+      "duration_sec": 51.27
+    },
     {
       "episode": 6,
       "title": "Wrong Crew",
@@ -397,16 +425,21 @@
       {
         "episode": 8,
         "title": "Not a Date",
-        "status": "planned",
+        "status": "done",
         "cast": [
           "Alex",
           "Michael",
           "Emily",
           "Anna"
         ],
-        "summary": "Michael and Anna meet to play. Alex keeps insisting it is not a date, which makes it feel more like one. Emily helps Alex calm down and points out that Anna likes Michael's confidence because he is not performing. Alex realizes he is always trying to act like someone else.",
-        "game_cta_point": "Anna is now genuinely playing the free game from the link in bio. She is not just a promo device; she is part of the comedy engine.",
-        "cliffhanger": "Anna texts Alex: 'Michael is fun. But you're harder to understand.' Alex has no idea if that is good."
+        "summary": "Michael and Anna meet at the coffee spot; Alex crashes it insisting it isn't a date, which only proves to Anna that he thinks it is one, and she calls out his jealousy directly. Emily pushes Alex to act instead of rehearsing, then names the real reason Anna is drifting toward Michael (honesty over performance), forcing Alex to admit he doesn't know who he is without a mask.",
+        "game_cta_point": "Michael's tablet/tutorial presence at the coffee spot keeps the game as background lifestyle rather than a pitch; no explicit CTA line was needed mid-episode since the locked CTA runs after the cliffhanger.",
+        "cliffhanger": "Anna texts Alex: 'Michael is fun. But you're harder to understand.' Alex has no idea if that is good.",
+        "postmortem": "User asked for 'more drama' and for no purely silent/mute scenes — every beat carrying relationship information had to be spoken dialogue, with silence reserved only for a genuine physical/kinetic beat (the coffee-cup fumble, scene 3). Escalated the hook into an explicit stated fear of losing Anna, made Anna call out Alex's jealousy in text rather than a light tease, and wove the triangle stakes directly into Michael's climax line rather than leaving it to a mechanics lesson.",
+        "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-25/serial-drama/20260825-144306-11373/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=48nYUq1OflY",
+        "yt_publish_at": "2026-09-02T19:31:00Z",
+        "duration_sec": 51.27
       },
       {
         "episode": 9,
