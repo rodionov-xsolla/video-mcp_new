@@ -5,7 +5,7 @@
   "title": "The Airlock",
   "style_tags": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters, detailed Starfleet uniforms with fabric texture, glowing LCARS console panels, dramatic sci-fi lighting with lens flares, deep space backgrounds with nebulae and stars, cinematic depth of field, volumetric light from viewscreens",
   "created_at": "2026-04-14",
-  "last_episode": 15,
+  "last_episode": 16,
   "planned_arc": {
     "note": "Season 1 arc EP9–EP16. Core emotional engine: Kirk saves the monster that tried to kill Chekov — and every time he does 'the right thing', his crew gets more afraid. Mirror Kirk envies Kirk's loyal crew. Admiral pressures Kirk to eject the double or face Enterprise quarantine. Scenarist follows the beats and key_lines below as RAILS: keep cliffhanger spoken lines verbatim, adapt each episode into 3–5 clips under serial-drama constraints (max 2 chars per frame, I2V = micro-motion, protagonist always faces camera, cliffhanger line = Kling native dialogue). Fold an approved episode into characters[], active_loops, episode_summaries only after explicit final user approval. Do NOT invent complex conspiracies or test protocols — the drama is simple: Kirk's mercy costs him his crew's trust.",
     "new_characters": [
@@ -437,7 +437,7 @@
       {
         "episode": 16,
         "title": "Weakness",
-        "status": "unshipped",
+        "status": "shipped",
         "link": "Mirror Kirk closed himself inside the airlock. Kirk is outside.",
         "emotion": "Sympathy for Mirror Kirk + bitter victory",
         "beats": [
@@ -485,7 +485,7 @@
       "role": "protagonist",
       "character_description": "Male Starfleet captain, athletic build, light brown hair swept to side, strong jaw, confident commanding expression, gold-yellow TOS Starfleet command tunic with delta badge, upper body portrait",
       "voice_route": "kling-native-preset-name-confirmed-working",
-      "status": "EP15: Reached the damaged airlock but could not force the jammed inner door. He recognized Mirror Kirk's manual code and watched the double enter the ejection zone in his place. Kirk is now outside the sealed glass and must save the man who once tried to kill Chekov.",
+      "status": "EP16: Could not force the jammed door open himself; caught Chekov as he tumbled free when Mirror Kirk equalized the pressure from inside. Watched the viewport flash and fade — Mirror Kirk is gone. Season 1 ends with the Fleet Admiral naming him the sole target now that his double is no longer available as leverage.",
       "aura_points": 1120,
       "relationships": {
         "Worf": "uneasy alliance — Worf told the truth at great personal cost",
@@ -517,7 +517,7 @@
       "role": "victim",
       "character_description": "Young male Starfleet ensign, young face, distinctive bowl-cut dark hair, wide fearful eyes, pale skin, TOS gold Starfleet uniform, panicked desperate expression",
       "voice_route": "kling-native-preset-name-confirmed-working",
-      "status": "EP15: Trapped behind the damaged airlock glass as pressure fell. Refused to become the price of either Kirk's mercy or Mirror Kirk's guilt. Mirror Kirk entered the ejection zone beside him and sealed the real Kirk outside.",
+      "status": "EP16: Saved by the man who once chose to kill him — Mirror Kirk pushed him clear and took his place in the ejection zone. Now safe in the corridor with Kirk, having just watched his would-be killer sacrifice himself for real.",
       "aura_points": 230,
       "relationships": {
         "Kirk": "trust remains fractured, but Kirk is still fighting to reach him through the jammed door",
@@ -557,7 +557,7 @@
       "character_description": "Mirror-universe double of the male Starfleet captain, identical face structure but harder and predatory, cold confident smirk showing teeth with no warmth, thin diagonal scar across left cheek, slicked darker hair pressed flat, dead-calm glacier eyes, black-and-silver Section 31 mirror universe uniform with sharp angular trim and no Starfleet delta, lean forward predatory posture",
       "voice_route": "kling-native-preset-name-confirmed-working",
       "voice_note": "Same voice as Kirk BY DESIGN — differentiate via lower stability (0.25) for colder, flatter delivery. Confirmed working across EP9-EP14 (14 shipped episodes) as a bare Kling voice_ids preset name — not a Supabase-hosted voice-reference URL. See rules/formats/serial-drama.md nb2.edit/voice-route notes for context on why this differs from the URL-based convention other series (e.g. Genshin) use. same voice as Kirk by design, colder/flatter delivery",
-      "status": "EP15: Used the manual override code he knew from killing Chekov in his own universe, then made the opposite choice. Entered the damaged airlock beside Chekov, sealed the real Kirk outside, and is now trapped in the ejection zone.",
+      "status": "EP16 (ARC CLOSED — deceased): Equalized the outer door's pressure to push Chekov free, bracing his own body against the pull. Ejected into space when the door fully opened. Confirmed gone via the sealed door's viewport flash. His arc as a character is closed; do not write him into future episodes except as a referenced memory/legacy.",
       "aura_points": 180,
       "relationships": {
         "Kirk": "his rival's mercy has become contagious; he has forced Kirk to attempt saving the double who once chose murder",
@@ -571,22 +571,20 @@
       "name": "Fleet_Admiral",
       "role": "antagonist",
       "character_description": "Starfleet Fleet Admiral, older distinguished male, silver-grey hair combed straight back, sharp strong cheekbones, four gold admiral pips on collar, dark navy Starfleet admiral uniform with gold trim, cold calculating expression, slight controlled cold smile",
-      "voice_route": "unresolved-no-confirmed-voice-id",
-      "status": "EP12: Escalated quarantine pressure by cutting partial power to Enterprise, causing the brig to lose power.",
+      "voice_route": "kling-native-preset-name-confirmed-working",
+      "voice_id_kling": "Arnold",
+      "status": "EP16: Watched a live feed of the now-empty airlock and delivered the season-close threat directly to Kirk: 'Now you have no double. Only consequences.' Opens Season 2 as Kirk's sole, now-unleveraged antagonist.",
       "aura_points": 0,
       "relationships": {
         "Kirk": "confirmed enemy — pressuring Kirk to abandon his principles"
       },
-      "voice_note": "Has spoken lines in the planned_arc script, but no confirmed working voice_id_kling was found in any checked prior episode storyboard.json (checked all local runs under output/*/star-trek-timelines/serial-drama/). Resolve a real voice_id_kling from an actual future render before assuming one — do not guess/invent a preset name in advance."
+      "voice_note": "voice_id_kling 'Arnold' confirmed working as of EP16 (2026-08-25) — rendered successfully with audio (h264/aac, phase DONE) in the final approved EP16 render. Prior note about no confirmed preset is now resolved; do not revert to 'unresolved' without a real reason."
     }
   ],
   "active_loops": [
-    "major: Mirror Kirk and Chekov are inside the damaged airlock while Kirk is sealed outside",
-    "major: Kirk must save the double who once chose to kill Chekov",
-    "major: Mirror Kirk broke his cruelty for the first time and is now in the ejection zone",
-    "major: the destroyed tactical panel leaves no easy airlock override",
-    "major: Chekov's terror and hatred now conflict with Mirror Kirk's act of sacrifice",
-    "major: the Fleet Admiral's quarantine pressure remains active",
+    "SEASON 2 OPEN: the Fleet Admiral's 'consequences' threat — what does it mean for Kirk now that his double/leverage is gone?",
+    "Chekov's trust in Kirk, now complicated by having witnessed Mirror Kirk's real sacrifice",
+    "the Fleet Admiral's quarantine pressure remains active with no double left to use against Kirk",
     "eternal: Kirk always fights for his crew against the system"
   ],
   "closed_loops": [
@@ -597,19 +595,21 @@
     "minor: Will Kirk obey the Admiral's fire order? — RESOLVED EP6: No. Kirk destroyed his own weapons.",
     "minor: Who is in the pod? — RESOLVED EP7: Mirror Kirk, a mirror-universe double of James T. Kirk",
     "EP13-14: Will Mirror Kirk fire on the Admiral's ship? — NO, Worf and Scotty stopped the shot",
-    "EP15: Can Mirror Kirk make the opposite choice from his own universe? — YES, he entered the airlock to save Chekov"
+    "EP15: Can Mirror Kirk make the opposite choice from his own universe? — YES, he entered the airlock to save Chekov",
+    "major: SEASON 1 CLOSED — Mirror Kirk sacrificed himself ejecting into space to save Chekov; his arc as a character is closed",
+    "major: Chekov is safely out of the airlock and back in the corridor with Kirk"
   ],
   "world_state": {
-    "location": "Enterprise damaged airlock sector, immediately after EP15",
+    "location": "Enterprise corridor outside the damaged airlock sector, immediately after EP16",
     "important_items": [
       "Enterprise phaser array — DESTROYED (weapons offline)",
       "Tactical override panel — destroyed; its discharge damaged the airlock controls",
-      "Inner airlock door — manually sealed with Mirror Kirk and Chekov inside",
-      "Mirror Kirk — inside the ejection zone after choosing to save Chekov",
-      "Chekov — alive inside the damaged airlock with pressure still unstable",
-      "Kirk — outside the sealed inner glass with no easy override",
-      "Enterprise — under quarantine by Fleet Admiral order",
-      "Fleet Admiral — still enforcing quarantine remotely"
+      "Inner airlock door — resealed after Chekov's escape, small viewport now built into its surface",
+      "Mirror Kirk — GONE, ejected into space; arc closed",
+      "Chekov — safe in the corridor with Kirk",
+      "Kirk — safe in the corridor with Chekov, having witnessed Mirror Kirk's sacrifice through the viewport flash",
+      "Enterprise — under quarantine by Fleet Admiral order, now with no double left as leverage",
+      "Fleet Admiral — has just delivered the season-close threat directly to Kirk"
     ],
     "key_events": [
       "EP1: Worf executed airlock procedure on Chekov on Fleet Admiral's orders",
@@ -669,7 +669,12 @@
       "EP15: Kirk could not force the jammed inner airlock door while Chekov refused to become anyone's price",
       "EP15: Mirror Kirk entered the manual override code he knew from choosing to kill Chekov in his own universe",
       "EP15: Mirror Kirk made the opposite choice, stepped into the airlock beside Chekov, and sealed Kirk outside",
-      "EP15: Cliffhanger — Mirror Kirk said: 'Looks like your weakness is contagious.'"
+      "EP15: Cliffhanger — Mirror Kirk said: 'Looks like your weakness is contagious.'",
+      "EP16: Kirk pounded on the jammed inner door while Mirror Kirk, holding the unconscious Chekov, said: 'Because he was right. I hate that.'",
+      "EP16: Mirror Kirk braced against the outer door's manual pressure release, shielding Chekov from the pull as it ground open.",
+      "EP16: Chekov tumbled out into the corridor into Kirk's arms; the inner door resealed.",
+      "EP16: The small viewport on the resealed door flooded white, then faded to dark — Mirror Kirk was gone.",
+      "EP16: SEASON 1 FINALE — the Fleet Admiral, watching the empty airlock, told Kirk: 'Now you have no double. Only consequences.'"
     ]
   },
   "anti_repetition": {
@@ -701,7 +706,12 @@
       "How do you know that code?",
       "Because once, I made the other choice.",
       "Not today.",
-      "Looks like your weakness is contagious."
+      "Looks like your weakness is contagious.",
+      "I'll pull you both out!",
+      "You'd try. That's why I'm faster.",
+      "Why are you saving me?",
+      "Because he was right. I hate that.",
+      "Now you have no double. Only consequences."
     ],
     "recent_hooks": [
       "dual-transporter-beam-reveal",
@@ -711,7 +721,8 @@
       "remote-power-cut-brig",
       "stolen-uniform-corridor-passby",
       "confrontation-lunge-interrupt",
-      "victim-refuses-to-be-the-price"
+      "victim-refuses-to-be-the-price",
+      "pounding-on-a-jammed-door-plea"
     ],
     "recent_cliffhangers": [
       "shuttle-escape-into-debris",
@@ -719,7 +730,8 @@
       "remote-power-cut-brig-escape-risk",
       "hand-hovering-over-fire-button",
       "trapped-behind-sealed-glass-air-venting",
-      "mirror-kirk-voluntary-self-lock"
+      "mirror-kirk-voluntary-self-lock",
+      "season-close-antagonist-viewscreen-verdict-over-empty-set"
     ]
   },
   "episode_summaries": [
@@ -857,6 +869,19 @@
       "yt_publish_at": "2026-08-11T20:34:00Z",
       "duration_sec": 42.3,
       "notes": "Six independent start frames, Kling v3 Standard I2V throughout, native preset voices Charlie for Chekov and Daniel for both Kirk identities. Three dialogue clips and three silent action clips; two-second PNG title-card freeze interstitial after scene 1; canonical Star Trek CTA appended. All image and video jobs completed in one generation attempt."
+    },
+    {
+      "episode": 16,
+      "title": "Weakness",
+      "language": "en",
+      "summary": "Kirk pounds uselessly on the jammed inner airlock door while Mirror Kirk, holding the unconscious Chekov inside the damaged chamber, admits he is saving him because 'he was right, I hate that.' Mirror Kirk braces against the outer door's manual pressure release, shielding Chekov from the pull as the door grinds open. Chekov tumbles out into the corridor into Kirk's arms; the inner door reseals. A small viewport on the now-sealed door floods white, then fades to dark — Mirror Kirk is gone. On his own viewscreen, the Fleet Admiral studies the empty airlock and delivers the season-close verdict.",
+      "cliffhanger": "The Fleet Admiral, watching the now-empty airlock, tells Kirk: 'Now you have no double. Only consequences.' SEASON 1 FINALE.",
+      "output_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-25/serial-drama/20260825-171552-77377/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=wu4IPOvvcxg",
+      "yt_publish_at": "2026-09-04T20:19:00Z",
+      "duration_sec": 40.29,
+      "notes": "Season 1 finale, closes Mirror Kirk's and Chekov's arcs, opens Season 2 on the Admiral's 'consequences' threat. Produced twice: a first full render was rejected by the user for bad shot composition (Scenarist wrote a 3-character split-depth-plane shot, and Storyboarder chained continues_from_scene off generated frames for 2 consecutive hops with no location re-anchoring, compounding visual drift — see postmortem). Rebuilt from scratch in Debug mode: simplified to single-plane/max-2-character shots, and every location-continuity fix was anchored directly on the real approved scene-1 pixel frame via nb2.edit rather than re-deriving from an abstract location-only reference (which drifted repeatedly — invented door design, then space visible through a supposedly-interior door, then an unclosed door). Fleet_Admiral's voice preset 'Arnold' was confirmed working via a real prior rendered artifact (not guessed) and is now locked below.",
+      "postmortem": "Root cause was NOT a Kling rendering glitch — it was upstream scenario/storyboard design: (1) Scenarist wrote a shot spanning two depth planes (character in a corridor + two more characters visible through glass behind him) with 3 characters at once, which this format's own rules forbid; (2) Storyboarder chained 2 consecutive continues_from_scene hops off self-generated frames with no real location anchor, compounding drift; (3) after abandoning the abstract location-only ref in favor of editing the real scene-1 frame directly, results became reliably consistent. Lesson for future episodes: enforce single-spatial-plane/max-2-character shots at Scenarist time, and prefer editing a locked approved concrete frame over re-deriving from a standalone location reference when fixing continuity."
     }
   ]
 }
