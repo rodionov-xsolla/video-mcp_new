@@ -981,34 +981,80 @@
       "notes": "One of 5 parallel character-story episodes produced in the same run. Scene 4's NB2 generation hit the same terminal HTTP 422 result-fetch failure as The Ringmaster's scene 5 in this same batch — recovered the same way (one authorized brand-new job, distinct output_path scene-4-v2.png). Deliberately differentiated from EP4 (OldGrower) via a duty/protection theme instead of a personal-legend theme. Approved by user."
     },
     {
-      "ep": 14,
+      "episode": 14,
+      "date": "2026-08-27",
       "character": "Alan, The Alien",
+      "slug": "alan-the-alien",
       "title": "Alan, The Alien: The Visitor They Almost Chased Away",
-      "published": null
+      "run_id": "20260827-173703-55132-alan-the-alien",
+      "output_dir": "output/2026-08-27/growtopia/character-story/20260827-173703-55132-alan-the-alien",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-27/character-story/20260827-173703-55132-alan-the-alien/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Decent_Boy",
+      "status": "approved_final_saved",
+      "notes": "One of 5 parallel character-story episodes produced in the same run (with Lincoln The Leprechaun, Mark The Mechanic, Walter The Manager, Crazy Jim), each on a new NPC not yet in this bible, picked from the 39-NPC Supabase reference manifest. Two costume stages (crashed/repaired) used as the age-progression equivalent, per format exception for non-humanoid characters. Approved by user."
     },
     {
-      "ep": 15,
+      "episode": 15,
+      "date": "2026-08-27",
       "character": "Lincoln, The Leprechaun",
+      "slug": "lincoln-the-leprechaun",
       "title": "Lincoln, The Leprechaun: The Luck I Stole Came Back",
-      "published": null
+      "run_id": "20260827-173704-55132-lincoln-the-leprechaun",
+      "output_dir": "output/2026-08-27/growtopia/character-story/20260827-173704-55132-lincoln-the-leprechaun",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-27/character-story/20260827-173704-55132-lincoln-the-leprechaun/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Decent_Boy",
+      "status": "approved_final_saved",
+      "notes": "One of 5 parallel character-story episodes produced in the same run. Single-age mythic trickster spirit (no canonical age variants). Deliberately differentiated from Locke The Salesman (deal/trade theme) via a luck/mischief-with-karmic-backlash theme. Approved by user."
     },
     {
-      "ep": 16,
+      "episode": 16,
+      "date": "2026-08-27",
       "character": "Mark, The Mechanic",
+      "slug": "mark-the-mechanic",
       "title": "Mark, The Mechanic: The Machine I Built Alone",
-      "published": null
+      "run_id": "20260827-173705-55132-mark-the-mechanic",
+      "output_dir": "output/2026-08-27/growtopia/character-story/20260827-173705-55132-mark-the-mechanic",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-27/character-story/20260827-173705-55132-mark-the-mechanic/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Decent_Boy",
+      "status": "approved_final_saved",
+      "notes": "One of 5 parallel character-story episodes produced in the same run. Hit the same terminal-NB2/Kling-recovery pattern documented for The Ringmaster (EP11) and Geoff (EP13) twice in this single episode: scene 4's NB2 image generation and scene 2's Kling I2V video generation both reached remote COMPLETED with an unretrievable result — each recovered via exactly one authorized brand-new job (fresh job_id/output_path), never a resubmission of the terminal job. Deliberately differentiated from Robert, The Robot (external storm malfunction) via a human tinkerer's self-inflicted obsession/overload arc. Approved by user.",
+      "lesson": "The terminal-COMPLETED-but-unretrievable failure mode (documented for NB2 in EP11/EP13) also occurs on the Kling v3 Standard I2V video runner: a download can fail twice after remote generation truly completes, and kling_runner.py's run() unconditionally refuses to resume from phase FAILED (even with a live result_url) — there is no download-only resume path in the current runner code. Recovery requires the Manager to authorize one brand-new job with an identical payload/route, exactly as for the NB2 case; do not attempt a manual out-of-band download/upload that bypasses the runner's state machine."
     },
     {
-      "ep": 17,
+      "episode": 17,
+      "date": "2026-08-27",
       "character": "Walter, The Manager",
+      "slug": "walter-the-manager",
       "title": "Walter, The Manager: The Vault I Locked Myself",
-      "published": null
+      "run_id": "20260827-173706-55132-walter-the-manager",
+      "output_dir": "output/2026-08-27/growtopia/character-story/20260827-173706-55132-walter-the-manager",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-27/character-story/20260827-173706-55132-walter-the-manager/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Deep_Voice_Man",
+      "status": "approved_final_saved",
+      "notes": "One of 5 parallel character-story episodes produced in the same run. Kept the strict flat-2D side-view treatment (not the game's newer pseudo-isometric default) per the exact bible style_tags. Used Deep_Voice_Man instead of the bible's default Decent_Boy narrator since Walter is a mature adult authority figure, not the young-teen everyplayer register. Deliberately differentiated from Geoff, The Guard (duty/loyalty-at-a-post) via a business/management/authority-rise theme. Approved by user."
     },
     {
-      "ep": 18,
+      "episode": 18,
+      "date": "2026-08-27",
       "character": "Crazy Jim",
+      "slug": "crazy-jim",
       "title": "Crazy Jim: The Drop That Broke My Brain",
-      "published": null
+      "run_id": "20260827-173707-55132-crazy-jim",
+      "output_dir": "output/2026-08-27/growtopia/character-story/20260827-173707-55132-crazy-jim",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-27/character-story/20260827-173707-55132-crazy-jim/final.mp4",
+      "language": "en",
+      "tts_engine": "minimax",
+      "minimax_voice": "Casual_Guy",
+      "status": "approved_final_saved",
+      "notes": "One of 5 parallel character-story episodes produced in the same run. Sound's first pass produced only a single concatenated narration track with no per-clip scene-K.mp3/tts_url (required for this TTS-overlay format per rules/roles/sound.md) — caught by Manager validation and corrected before Storyboarder started. Used Casual_Guy instead of the bible's default Decent_Boy for a manic adult-miner register. Deliberately differentiated from Grinshade (devil's-bargain) via a psychological-obsession arc with no external bargain. Approved by user."
     }
   ]
 }
