@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Item Story",
   "created_at": "2026-08-05",
-  "last_episode": 4,
+  "last_episode": 5,
   "ready_to_post": true,
   "style_tags": "realistic cinematic 3D CGI, physically based materials, photorealistic metal and fabric textures, dramatic high-contrast science-fiction lighting, deep blacks, restrained Klingon amber and volcanic red highlights, subtle atmospheric haze, premium television-quality frame, shallow depth of field, vertical 9:16 composition, no illustration, no cartoon, no game UI, no text overlay",
   "format_overrides": {
@@ -299,17 +299,17 @@
         {
           "id": "silent-ring-on-a-dead-world",
           "appearance": "Standing alone amid the eroded ruins of an ancient dead civilization on an otherwise desolate planet, its opening dark and still, no visitors present, the harsh empty landscape emphasizing its unexplained age.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/guardian-of-forever/variants/silent-ring-on-a-dead-world.png"
         },
         {
           "id": "vortex-of-history",
           "appearance": "The same ring now active, its center swirling with blue-white temporal haze, fragmented scenes of Earth's past flickering across the opening as visiting Starfleet officers stand before it.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/guardian-of-forever/variants/vortex-of-history.png"
         },
         {
           "id": "gateway-of-consequence",
           "appearance": "The ring mid-use as a figure steps through the swirling opening into the past, the moment charged with the knowledge that whatever happens beyond the threshold can unmake the present.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/guardian-of-forever/variants/gateway-of-consequence.png"
         }
       ],
       "canonical_facts": [
@@ -349,7 +349,10 @@
         "The Guardian is depicted as a smooth futuristic machine with visible technology or controls — canon describes it as ancient, worn, and mysterious.",
         "Kirk and Edith Keeler's romance ends any way other than her death being allowed to occur as history originally recorded.",
         "Events from Star Trek Online, novels, or other licensed non-television material involving the Guardian are treated as canon."
-      ]
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-27/item-story/20260827-171530-93897/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=3l0iHfp-2RI",
+      "yt_publish_at": "2026-09-07T19:36:00Z"
     }
   ],
   "supabase_assets": {
@@ -367,19 +370,22 @@
       "The Sword of Kahless",
       "The Ressikan Flute",
       "The Genesis Device",
-      "Data's Emotion Chip"
+      "Data's Emotion Chip",
+      "The Guardian of Forever"
     ],
     "recent_hooks": [
       "The first Klingon bat'leth turned Worf against Kor.",
       "This is the Ressikan flute — proof Picard lived a stranger's entire lifetime in twenty-five real minutes.",
       "A Federation science project built to create life, capable of ending it instead.",
-      "A positronic microchip built to let an android finally feel."
+      "A positronic microchip built to let an android finally feel.",
+      "An ancient ring on a dead world that can rewrite history itself."
     ],
     "recent_fates": [
       "Transported into interstellar space after Worf and Kor concluded it would divide the Empire.",
       "Kept by Picard as a private keepsake, the only physical trace of Kamin's lived life and the extinct Kataan civilization.",
       "The Genesis Planet tore itself apart, and the Federation banned the technology as a doomsday weapon.",
-      "Mastered at last — Data can now switch his own emotions on and off at will aboard the Enterprise-E."
+      "Mastered at last — Data can now switch his own emotions on and off at will aboard the Enterprise-E.",
+      "Left standing silent on its dead world, having already reshaped history once and sent a young Spock into his own past since."
     ],
     "cooldown_episodes": 20
   },
@@ -418,6 +424,15 @@
       "youtube_url": "https://www.youtube.com/watch?v=QXSqCDF5Ilg",
       "yt_publish_at": "2026-09-05T20:14:00Z",
       "notes": "Manager researched and wrote the item's appearance_lock/canonical_facts/forbidden_claims into the bible before Scenarist ran (TNG Brothers/Descent, Generations, First Contact chronology). Applied a deliberate one-off voice/music tone override (measured Starfleet-engineering/character-study instead of the series' Klingon-ceremonial default), same precedent as the Ressikan Flute episode. TTS ran 44.6s against the 35s picture (27.4% mismatch, under the 40% cap), handled by Editor with atempo=1.264, no re-render needed this time. Cost: Storyboarder $0.80 (3 refs + 7 scenes), Sound $0.13, Animator $2.94 (7 clips, one poll-window resume on scene 6 at zero extra cost), Editor $0.00. Scheduled 2026-09-05 on gamepulse/Starfleet Archives (2026-08-27 through 2026-09-04 all already occupied by other formats/series)."
+    },
+    {
+      "episode": 5,
+      "date": "2026-08-27",
+      "item_name": "The Guardian of Forever",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-27/item-story/20260827-171530-93897/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=3l0iHfp-2RI",
+      "yt_publish_at": "2026-09-07T19:36:00Z",
+      "notes": "8 clips (40s picture) instead of the usual 7, to fit the City on the Edge of Forever arc plus the Yesteryear legacy beat without cutting a canonical fact. Another one-off voice/music tone override (grave, awe-struck, tragic-romance documentary instead of the series' Klingon-ceremonial default) — third consecutive item-story episode to need this override (Ressikan Flute, Data's Emotion Chip, now this), suggesting voice_policy/music_policy should move to per-item rather than series-wide, as already flagged in episode 2's notes. TTS 47.77s against 40s picture (19.4% mismatch, well under 40% cap), no re-render needed. Cost: Storyboarder $0.88 (3 refs + 8 scenes), Sound ~$0.08, Animator $3.36 (8 clips, four zero-cost poll-window resumes), Editor $0.00. Scheduled 2026-09-07 on gamepulse/Starfleet Archives (2026-09-05 was EP4's own item-story slot; 2026-09-06 skipped to avoid same-format adjacency)."
     }
   ]
 }
