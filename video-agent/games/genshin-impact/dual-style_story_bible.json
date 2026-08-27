@@ -5,35 +5,35 @@
   "production_contract": "dual-style-v3",
   "comparison_mode": "source-vs-live-action",
   "created_at": "2026-06-09",
-  "last_episode": 9,
+  "last_episode": 10,
   "character_pool": [
     {
       "character_name": "venti",
       "display_name": "Venti",
-      "has_actor_counterpart": false,
-      "actor_name": null,
-      "last_seen_episode": 1
+      "has_actor_counterpart": true,
+      "actor_name": "Austin Butler",
+      "last_seen_episode": 10
     },
     {
       "character_name": "hu-tao",
       "display_name": "Hu Tao",
-      "has_actor_counterpart": false,
-      "actor_name": null,
-      "last_seen_episode": 1
+      "has_actor_counterpart": true,
+      "actor_name": "Awkwafina",
+      "last_seen_episode": 10
     },
     {
       "character_name": "zhongli",
       "display_name": "Zhongli",
-      "has_actor_counterpart": false,
-      "actor_name": null,
-      "last_seen_episode": 1
+      "has_actor_counterpart": true,
+      "actor_name": "Chow Yun-fat",
+      "last_seen_episode": 10
     },
     {
       "character_name": "diluc",
       "display_name": "Diluc",
-      "has_actor_counterpart": false,
-      "actor_name": null,
-      "last_seen_episode": 1
+      "has_actor_counterpart": true,
+      "actor_name": "Chris Evans",
+      "last_seen_episode": 10
     },
     {
       "character_name": "raiden-shogun",
@@ -269,10 +269,6 @@
   ],
   "character_rotation": {
     "recent_characters": [
-      "Wriothesley",
-      "Yae Miko",
-      "Neuvillette",
-      "Navia",
       "Keqing",
       "Fischl",
       "Shenhe",
@@ -297,13 +293,13 @@
       "Kokomi",
       "Beidou",
       "Wanderer (Scaramouche)",
-      "Klee"
+      "Klee",
+      "Venti",
+      "Hu Tao",
+      "Zhongli",
+      "Diluc"
     ],
     "recent_actors": [
-      "Henry Cavill",
-      "Margot Robbie",
-      "Timothée Chalamet",
-      "Sydney Sweeney",
       "Zendaya",
       "Anya Taylor-Joy",
       "Emily Blunt",
@@ -328,13 +324,13 @@
       "Angelina Jolie",
       "Charlize Theron",
       "Harry Styles",
-      "Sadie Sink"
+      "Sadie Sink",
+      "Austin Butler",
+      "Awkwafina",
+      "Chow Yun-fat",
+      "Chris Evans"
     ],
     "recent_environments": [
-      "plain soft violet-tinted seamless studio floor",
-      "plain dark charcoal seamless studio floor with gold undertone",
-      "plain icy blue seamless studio floor",
-      "plain silver-blue seamless studio floor",
       "plain deep-navy studio floor",
       "plain wind-swept beige studio floor",
       "plain teal-tinted studio floor",
@@ -355,7 +351,11 @@
       "Watatsumi Island shrine dock",
       "Crux ship deck at open sea",
       "Sumeru desert ruins courtyard",
-      "Mondstadt Sunset Canyon meadow"
+      "Mondstadt Sunset Canyon meadow",
+      "Mondstadt Windrise hillside near the Statue of the Seven",
+      "Liyue Wangshu Inn rooftop terrace at dusk",
+      "Liyue Harbor Yujing Terrace / Yuehai Pavilion plaza",
+      "Dawn Winery vineyard courtyard"
     ],
     "recent_action_types": [
       "walking-approach",
@@ -382,75 +382,15 @@
       "walking-approach",
       "walking-approach",
       "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
       "walking-approach"
     ],
     "cooldown_episodes": 7
   },
   "episode_summaries": [
-    {
-      "episode": 2,
-      "date": "2026-06-09",
-      "characters": [
-        "Raiden Shogun",
-        "Tartaglia",
-        "Furina",
-        "Arlecchino"
-      ],
-      "environments": [
-        "Inazuma throne room",
-        "Liyue harbor arena at dusk",
-        "Fontaine open theater stage plain wooden floor",
-        "Fatui underground stone chamber"
-      ],
-      "actors": [
-        "Gal Gadot",
-        "Tom Holland",
-        "Florence Pugh",
-        "Eva Green"
-      ],
-      "action_types": [
-        "walking-approach",
-        "walking-approach",
-        "walking-approach",
-        "walking-approach"
-      ],
-      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-06-09/dual-style-ep2_final.mp4",
-      "duration_sec": 25.21,
-      "cost_usd": 2.68,
-      "notes": "Actor-as-realistic debut. Walk-toward-camera format established after face-distortion iterations."
-    },
-    {
-      "episode": 3,
-      "date": "2026-06-10",
-      "characters": [
-        "Wriothesley",
-        "Yae Miko",
-        "Neuvillette",
-        "Navia"
-      ],
-      "environments": [
-        "Cryo prison Snezhnaya plain neutral floor",
-        "Narukami shrine Inazuma plain neutral floor",
-        "plain neutral grey floor simple spotlight",
-        "plain warm ivory floor simple spotlight"
-      ],
-      "actors": [
-        "Henry Cavill",
-        "Margot Robbie",
-        "Timothée Chalamet",
-        "Sydney Sweeney"
-      ],
-      "action_types": [
-        "walking-approach",
-        "walking-approach",
-        "walking-approach",
-        "walking-approach"
-      ],
-      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/episodes/genshin-impact/2026-06-10-dual-style-ep3/final.mp4",
-      "duration_sec": 25.21,
-      "cost_usd": 3.2,
-      "notes": "NO HEAD/FACE MOVEMENT rule added. Simple backgrounds used after Neuvillette/Chalamet face distortion."
-    },
     {
       "episode": 4,
       "date": "2026-06-15",
@@ -652,6 +592,40 @@
       "duration_sec": 25.22,
       "cost_usd": 5.41,
       "notes": "First episode featuring these 4 characters in dual-style (all were already in character-story's roster but new to this bible's character_pool); actors chosen deliberately more globally recognizable (A-list) per user request. Klee's actor (Sadie Sink) explicitly kept at her own natural adult height/build per this bible's established Nahida precedent, never shrunk/aged to match Klee's canonical child-coded proportions. User visual review caught two real defects requiring re-generation: scene 1 (Kokomi/Jolie) initially had a style-isolation failure (photorealistic side rendered as a plastic/CGI-looking 3D hybrid with anime-style headpiece bleed) — fixed with stronger explicit LEFT-only/RIGHT-only style-binding language. Scene 2 (Beidou/Theron) went through two more defects before acceptance: first a depth-staggering/occlusion bug (actor placed behind the cartoon figure instead of side by side — fixed with mechanical same-depth/same-ground-line staging language), then a likeness regression introduced by that same fix (wrong brunette hair and an invented eye patch — fixed by re-asserting the actor's real blonde hair and zero added accessories while keeping the now-correct staging). Total cost includes the original run ($3.83) plus the scene 1-2 fix iterations ($1.58)."
+    },
+    {
+      "episode": 10,
+      "date": "2026-08-27",
+      "characters": [
+        "Venti",
+        "Hu Tao",
+        "Zhongli",
+        "Diluc"
+      ],
+      "environments": [
+        "Mondstadt Windrise hillside near the Statue of the Seven",
+        "Liyue Wangshu Inn rooftop terrace at dusk",
+        "Liyue Harbor Yujing Terrace / Yuehai Pavilion plaza",
+        "Dawn Winery vineyard courtyard"
+      ],
+      "actors": [
+        "Austin Butler",
+        "Awkwafina",
+        "Chow Yun-fat",
+        "Chris Evans"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-27/dual-style/20260827-113214-84327/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=aHvquDejy4U",
+      "youtube_publish_at": "2026-09-01T19:48:00Z",
+      "duration_sec": 25.196,
+      "cost_usd": 3.19,
+      "notes": "User-requested 4-pair episode casting the series' earliest-launch characters (Venti, Hu Tao, Zhongli, Diluc, all last seen episode 1) with brand-new actors never used in this bible (Austin Butler, Awkwafina, Chow Yun-fat, Chris Evans). All 4 characters already had a canonical untagged reference_image in game_assets, reused directly as the LEFT chain-ref per the standing dual-style exception; note these 4 rows still lack metadata.visually_approved=true, flagged for the asset owner to close. No accidental Kling music detected in any scene; alimiter's default level=true was silently undoing peak limiting and required an explicit level=false fix during Editor's loudness pass."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4",
@@ -660,25 +634,25 @@
     {
       "slug": "venti",
       "name": "Venti",
-      "actor_counterpart": null,
+      "actor_counterpart": "Austin Butler",
       "character_description": "young androgynous male bard Venti, teal and blue bard outfit with wind motifs and laurel wreath crown, short teal hair with two small braids, playful carefree expression, bow, slender lean androgynous build"
     },
     {
       "slug": "hu-tao",
       "name": "Hu Tao",
-      "actor_counterpart": null,
+      "actor_counterpart": "Awkwafina",
       "character_description": "young East Asian woman, funeral director Hu Tao, dark red and black traditional Chinese outfit with golden talisman ornaments, brown hair in twin tails with red flower pins, warm tan complexion, mischievous grinning expression, ornate polearm with ghost flame motifs, petite energetic build"
     },
     {
       "slug": "zhongli",
       "name": "Zhongli",
-      "actor_counterpart": null,
+      "actor_counterpart": "Chow Yun-fat",
       "character_description": "tall East Asian man, Geo Archon Zhongli, dark brown and gold traditional Chinese scholar coat with ornate geo motifs, dark brown hair with gold ornamental accents, olive complexion, composed dignified sophisticated expression, ornate geo polearm, tall imposing dignified build"
     },
     {
       "slug": "diluc",
       "name": "Diluc",
-      "actor_counterpart": null,
+      "actor_counterpart": "Chris Evans",
       "character_description": "tall European man, knight Diluc, dark red and black noble overcoat with silver buttons and dark cape, long dark red hair tied back with ribbon, pale complexion, serious brooding expression, large greatsword claymore, tall imposing muscular build"
     },
     {
