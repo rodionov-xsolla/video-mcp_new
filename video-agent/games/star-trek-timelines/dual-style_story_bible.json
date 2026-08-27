@@ -5,7 +5,7 @@
   "production_contract": "dual-style-v3",
   "comparison_mode": "canonical-alternate",
   "created_at": "2026-07-22",
-  "last_episode": 4,
+  "last_episode": 5,
   "style_tags": "Photorealistic canonical live-action Star Trek comparison. LEFT is the original/Prime screen persona; RIGHT is the exact canonical Mirror, assimilated, corrupted, possessed or duplicate persona of the same character and same recognizable screen performer. Preserve each persona's canonical face, hair, facial hair, makeup, prosthetics, uniform, insignia, accessories and props. Both figures share one continuous cinematic Star Trek environment with no split panel.",
   "character_rotation": {
     "recent_characters": [
@@ -25,7 +25,11 @@
       "T'Pol/Mirror T'Pol",
       "Chekov/Mirror Chekov",
       "Trip Tucker/Mirror Tucker",
-      "Miles O'Brien/\"Smiley\" O'Brien"
+      "Miles O'Brien/\"Smiley\" O'Brien",
+      "Uhura / Mirror Uhura",
+      "Sulu / Mirror Sulu",
+      "Scotty / Mirror Scotty",
+      "Phlox / Mirror Phlox"
     ],
     "recent_environments": [
       "TNG Enterprise-D bridge, red alert lighting",
@@ -44,9 +48,17 @@
       "Enterprise NX-01 bridge, cool tactical viewscreen lighting",
       "TOS Enterprise briefing/rec room, retro amber control-panel lighting",
       "Enterprise NX-01 engine room with warp core, industrial blue-green lighting",
-      "DS9 transporter room, industrial pad lighting"
+      "DS9 transporter room, industrial pad lighting",
+      "TOS Enterprise transporter room, ambush lighting",
+      "TOS Enterprise bridge helm station, red-alert lighting",
+      "TOS Enterprise main engineering, warp-core glow",
+      "NX-01 sickbay, cool clinical lighting"
     ],
     "recent_action_types": [
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
       "walking-approach",
       "walking-approach",
       "walking-approach",
@@ -148,6 +160,26 @@
       "pair_slug": "obrien-smileyobrien",
       "display_name": "Miles O'Brien / \"Smiley\" O'Brien",
       "last_seen_episode": 4
+    },
+    {
+      "pair_slug": "uhura-mirroruhura",
+      "display_name": "Uhura / Mirror Uhura",
+      "last_seen_episode": 5
+    },
+    {
+      "pair_slug": "sulu-mirrorsulu",
+      "display_name": "Sulu / Mirror Sulu",
+      "last_seen_episode": 5
+    },
+    {
+      "pair_slug": "scotty-mirrorscotty",
+      "display_name": "Scotty / Mirror Scotty",
+      "last_seen_episode": 5
+    },
+    {
+      "pair_slug": "phlox-mirrorphlox",
+      "display_name": "Phlox / Mirror Phlox",
+      "last_seen_episode": 5
     }
   ],
   "characters": [
@@ -388,6 +420,62 @@
         "name": "\"Smiley\" O'Brien",
         "character_description": "photorealistic Colm Meaney as canonical \"Smiley\" O'Brien, same underlying face, receding hairline and mustache, rougher worn leather resistance-fighter vest over a dark henley, tactical strap harness, improvised weapon slung at the shoulder, weary hardened expression, matches DS9 mirror-universe resistance design"
       }
+    },
+    {
+      "pair_slug": "uhura-mirroruhura",
+      "screen_performer": "Nichelle Nichols",
+      "original": {
+        "slug": "uhura",
+        "name": "Uhura",
+        "character_description": "photorealistic Nichelle Nichols as canonical Lieutenant Uhura, classic TOS gold-trimmed red communications-division mini-dress uniform, updo hairstyle, calm professional expression, real skin textures, cinema-quality lighting"
+      },
+      "alternate": {
+        "slug": "mirror-uhura",
+        "name": "Mirror Uhura",
+        "character_description": "photorealistic Nichelle Nichols as canonical Mirror Uhura, same underlying face and updo hairstyle, dark Terran Empire uniform styling with sash and ornamentation matching the other Mirror TOS officers, harsher commanding expression, matches TOS Mirror, Mirror design"
+      }
+    },
+    {
+      "pair_slug": "sulu-mirrorsulu",
+      "screen_performer": "George Takei",
+      "original": {
+        "slug": "sulu",
+        "name": "Sulu",
+        "character_description": "photorealistic George Takei as canonical Lieutenant Sulu, gold TOS command-division tunic with black trim, clean-shaven, calm attentive expression, real skin textures, cinema-quality lighting"
+      },
+      "alternate": {
+        "slug": "mirror-sulu",
+        "name": "Mirror Sulu",
+        "character_description": "photorealistic George Takei as canonical Mirror Sulu, same underlying face, a facial scar, dark Terran Empire tunic with ceremonial sash and belt dagger, ruthless ambitious expression, matches TOS Mirror, Mirror design"
+      }
+    },
+    {
+      "pair_slug": "scotty-mirrorscotty",
+      "screen_performer": "James Doohan",
+      "original": {
+        "slug": "scotty",
+        "name": "Scotty",
+        "character_description": "photorealistic James Doohan as canonical Montgomery Scott, red TOS engineering-division tunic with black trim, practical dependable expression, real skin textures, cinema-quality lighting"
+      },
+      "alternate": {
+        "slug": "mirror-scotty",
+        "name": "Mirror Scotty",
+        "character_description": "photorealistic James Doohan as canonical Mirror Scotty, same underlying face, dark Terran Empire engineering officer tunic with agonizer and belt dagger, harder ambitious expression, matches TOS Mirror, Mirror design"
+      }
+    },
+    {
+      "pair_slug": "phlox-mirrorphlox",
+      "screen_performer": "John Billingsley",
+      "original": {
+        "slug": "phlox",
+        "name": "Phlox",
+        "character_description": "photorealistic John Billingsley as canonical Doctor Phlox, Denobulan facial prosthetics and features, blue NX-01 medical uniform, warm curious expression, real skin/prosthetic textures, cinema-quality lighting"
+      },
+      "alternate": {
+        "slug": "mirror-phlox",
+        "name": "Mirror Phlox",
+        "character_description": "photorealistic John Billingsley as canonical Mirror Phlox, same Denobulan facial prosthetics and features, dark ISS Enterprise imperial medical officer uniform variant, cold clinical menacing expression, matches Enterprise's In a Mirror, Darkly design"
+      }
     }
   ],
   "episode_summaries": [
@@ -528,6 +616,40 @@
       "duration_sec": 25.2,
       "cost_usd": 3.83,
       "notes": "Second consecutive episode with no pre-existing series-owned dual-style refs for any pair (all 4 pairs newly generated from well-documented canonical screen facts: TOS Mirror Universe for T'Pol/Chekov, Enterprise's In a Mirror, Darkly for Tucker, DS9's mirror-universe resistance episodes for O'Brien), now reusable pending manual visual approval per the new asset-approval migration. Produced same day as the Genshin Impact dual-style episode with the same overall request. A final alimiter+loudnorm pass was applied after the mix (per the EP3 peak-spike lesson) — measured -19.2 LUFS integrated, -3.1 dBTP true peak."
+    },
+    {
+      "episode": 5,
+      "date": "2026-08-27",
+      "characters": [
+        "Uhura / Mirror Uhura",
+        "Sulu / Mirror Sulu",
+        "Scotty / Mirror Scotty",
+        "Phlox / Mirror Phlox"
+      ],
+      "environments": [
+        "TOS Enterprise transporter room, ambush lighting",
+        "TOS Enterprise bridge helm station, red-alert lighting",
+        "TOS Enterprise main engineering, warp-core glow",
+        "NX-01 sickbay, cool clinical lighting"
+      ],
+      "screen_performers": [
+        "Nichelle Nichols",
+        "George Takei",
+        "James Doohan",
+        "John Billingsley"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-27/dual-style/20260827-123957-28438/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=b7lKJOvNsNg",
+      "youtube_publish_at": "2026-09-03T20:43:00Z",
+      "duration_sec": 25.208,
+      "cost_usd": 5.75,
+      "notes": "Third consecutive episode with no pre-existing series-owned dual-style refs for any pair -- all 4 pairs (Uhura, Sulu, Scotty from TOS 'Mirror, Mirror'; Phlox from Enterprise 'In a Mirror, Darkly') newly generated from well-documented canonical screen facts and registered as reusable dual-style refs, pending manual visual approval. Animator authored an incorrect expect.min_width/min_height (assumed full-HD) on scene 1, causing a successfully completed and already-paid Kling generation to fail local validation only -- Manager recovered the still-live result_url directly and uploaded it manually rather than paying for a second generation; lesson recorded in rules/roles/animator.md (correct default is 600x1000 for this route's real 716x1284 output). Pair-title overlays rendered as single-color white/black-stroke text with fade-in only (tools/overlays.py does not support the spec's three-color segmented text or fade-out) -- a tooling gap, not a storyboard deviation."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4"

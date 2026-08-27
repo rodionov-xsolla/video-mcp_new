@@ -3,7 +3,7 @@
   "game_tag": "growtopia",
   "title": "Growtopia Dual Style",
   "created_at": "2026-07-22",
-  "last_episode": 3,
+  "last_episode": 4,
   "character_pool": [
     {
       "character_name": "legendary-wizard",
@@ -74,6 +74,27 @@
       "has_actor_counterpart": false,
       "actor_name": null,
       "last_seen_episode": 3
+    },
+    {
+      "character_name": "zeus",
+      "display_name": "Zeus set",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 4
+    },
+    {
+      "character_name": "angelic",
+      "display_name": "Angelic set",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 4
+    },
+    {
+      "character_name": "devil-demonic",
+      "display_name": "Devil/Demonic set",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 4
     }
   ],
   "character_rotation": {
@@ -87,7 +108,10 @@
       "Boss Ghost",
       "Tomb Robber",
       "Lincoln, The Leprechaun",
-      "The Bartender"
+      "The Bartender",
+      "Zeus set",
+      "Angelic set",
+      "Devil/Demonic set"
     ],
     "recent_actors": [],
     "recent_environments": [
@@ -100,13 +124,19 @@
       "spooky stone crypt/graveyard",
       "ancient sunlit tomb/pyramid interior",
       "lucky rainbow grotto with pot-of-gold spring",
-      "rustic wooden saloon/tavern interior"
+      "rustic wooden saloon/tavern interior",
+      "stormy mountaintop temple ruin",
+      "cloud-top heavenly sanctuary plaza",
+      "lava-lit underworld cavern/throne chamber"
     ],
     "recent_action_types": [
       "idle-mystic-pose",
       "idle-showman-pose",
       "idle-menacing-lean",
       "idle-warrior-stance",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
       "walking-approach",
       "walking-approach",
       "walking-approach",
@@ -202,8 +232,36 @@
       ],
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-14/dual-style/20260814-172430-60042/final.mp4",
       "duration_sec": 18.16,
-      "cost_usd": 2.40,
+      "cost_usd": 2.4,
       "notes": "Companion run to EP2, produced in parallel same day under the dual-style-v3 contract (comparison_mode source-vs-live-action, mandatory walking-approach + front dolly-back). Cast and environments deliberately kept disjoint from EP2's cast/environments in addition to clearing the bible's cooldown. RIGHT side stays a generic non-celebrity photorealistic person per this bible's established EP1 convention. Mandatory user-requested pop-up promo CTA banner (existing branding/popup.png asset) added to scene 3 (climax) only. Animator hit the same expect.min_width/min_height validation defect as EP2 on scene 1 (corrected to ~600x1000 for this route, one extra paid generation). No YouTube channel mapped yet for growtopia -- Supabase-only deliverable."
+    },
+    {
+      "episode": 4,
+      "date": "2026-08-27",
+      "characters": [
+        "Zeus set",
+        "Angelic set",
+        "Devil/Demonic set"
+      ],
+      "environments": [
+        "stormy mountaintop temple ruin",
+        "cloud-top heavenly sanctuary plaza",
+        "lava-lit underworld cavern/throne chamber"
+      ],
+      "actors": [
+        "(none)",
+        "(none)",
+        "(none)"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-27/dual-style/20260827-121112-9863/final.mp4",
+      "duration_sec": 18.158,
+      "cost_usd": 2.64,
+      "notes": "First dual-style episode introducing new Growtopia character sets beyond the original 10-NPC launch pool (all 10 still in the 10-episode cooldown). Cast Zeus/Angelic/Devil-Demonic sets, sourced verbatim from growtopia.md's Character Prompt Blocks (no invented design detail) since no dual-style-tagged or canonical untagged ref existed for these sets; fresh cartoon-side refs generated and registered as reusable game_assets for future reuse. RIGHT side stays generic non-celebrity photorealistic performers with practical costume/prosthetics, per this bible's established convention. No YouTube channel mapped yet for growtopia -- Supabase-only deliverable."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4",
@@ -278,6 +336,27 @@
       "actor_counterpart": null,
       "character_description": "2D pixel-art Growtopian The Bartender, crisp white dress shirt with rolled sleeves, black waistcoat and matching bow tie, white cloth draped over one forearm, waxed handlebar moustache, polished glass in hand, welcoming easy smile, sturdy broad-shouldered build",
       "realistic_description": "photorealistic generic adult male performer as a live-action adaptation, olive-toned skin, warm brown eyes, waxed handlebar moustache, sturdy broad-shouldered build, natural slicked-back dark hair, same white dress shirt, black waistcoat, bow tie, forearm cloth and polished glass, real skin texture and cinema-quality lighting"
+    },
+    {
+      "slug": "zeus",
+      "name": "Zeus set",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian in Zeus set, golden greek-style armor, laurel crown, crackling yellow lightning bolts around the body, glowing storm aura, powerful side-view stance, electric sparks",
+      "realistic_description": "photorealistic generic adult performer as a live-action adaptation, natural skin visible at neck/hands beneath practical golden Greek-style armor build, laurel crown headpiece, LED-rigged practical lightning effects around the body, brushed gold metal-look plating, real skin texture and cinema-quality lighting"
+    },
+    {
+      "slug": "angelic",
+      "name": "Angelic set",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian in Angelic set, large white feathered wings, glowing golden halo above head, flowing white robe, soft heavenly golden glow, serene floating side-view pose",
+      "realistic_description": "photorealistic generic adult performer as a live-action adaptation, natural skin and real hair beneath a practical large white feathered wing harness, halo rig above the head, flowing white fabric robe, soft warm practical lighting, real skin texture and cinema-quality lighting"
+    },
+    {
+      "slug": "devil-demonic",
+      "name": "Devil/Demonic set",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian in Demonic set, dark red skin, black bat wings, curved horns, glowing red eyes, mischievous sharp-toothed grin, dark smoky aura, menacing side-view stance",
+      "realistic_description": "photorealistic generic adult performer as a live-action adaptation, natural build beneath practical dark red skin-tone body makeup, curved horn prosthetics, black bat-wing harness, subtle red contact lenses, sharp dental prosthetic, real skin texture and cinema-quality lighting"
     }
   ]
 }

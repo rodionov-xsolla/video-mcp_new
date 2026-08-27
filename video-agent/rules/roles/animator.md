@@ -111,6 +111,8 @@ Required:
 - `duration` — `"5"` or `"10"` (string, not number). Per `storyboard.json`.
 - `negative_prompt` tail `banding in blacks, posterization, harsh color shift, overexposed clipping` — color-fidelity guards. Kling drifts color/tone across a clip (lifts blacks, pushes green/magenta, clips bright FX); these cut the most common grading artifacts, especially on dark/space scenes and clips with bright light bursts. Borrowed from production T2V negative_prompt arrays.
 
+**`expect.min_width`/`min_height` for `kling_runner.py` jobs — use `600`/`1000`, not full-HD guesses.** Kling v3 Standard's real 9:16 output for this route is natively **716×1284**, not 1080×1920. An `expect` written against an assumed full-HD size (e.g. `min_width: 1000, min_height: 1700`) rejects a successfully completed, already-paid generation at local MP4 validation — the remote job shows `COMPLETED` but the runner state goes `FAILED` with `"MP4 dimensions do not meet expectation"`. This has burned real spend more than once (growtopia EP2/EP3, star-trek dual-style). Always default to the canonical example in `tools/SCRIPTS.md` (`min_width: 600, min_height: 1000`) for this route unless the format explicitly requires a different resolution. If it happens anyway: the paid `result_url` in the failed job's `state.json` is usually still fetchable (fal URLs are typically immutable/long-cached) — download and upload it manually rather than paying for a second generation, since the runner has no safe reset for a claimed `output_path`.
+
 ### Polling — base path
 
 **CRITICAL:** status URL = first 2 segments of the endpoint, not the full path.
