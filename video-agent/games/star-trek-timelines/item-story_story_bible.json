@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Item Story",
   "created_at": "2026-08-05",
-  "last_episode": 3,
+  "last_episode": 4,
   "ready_to_post": true,
   "style_tags": "realistic cinematic 3D CGI, physically based materials, photorealistic metal and fabric textures, dramatic high-contrast science-fiction lighting, deep blacks, restrained Klingon amber and volcanic red highlights, subtle atmospheric haze, premium television-quality frame, shallow depth of field, vertical 9:16 composition, no illustration, no cartoon, no game UI, no text overlay",
   "format_overrides": {
@@ -228,17 +228,17 @@
         {
           "id": "soong-workshop-completed",
           "appearance": "Freshly completed on Dr. Soong's workbench in his hidden lab on Terlina III after two decades of work, resting in an open tool tray beside diagnostic instruments, fine gold circuitry catching warm workshop light.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/datas-emotion-chip/variants/soong-workshop-completed.png"
         },
         {
           "id": "lore-corrupted",
           "appearance": "The same chip now held in Lore's synthetic hand in a moment of theft and betrayal, dim red-tinged workshop lighting implying menace without any glow on the chip itself.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/datas-emotion-chip/variants/lore-corrupted.png"
         },
         {
           "id": "installed-stabilized",
           "appearance": "The chip finally seated inside an open panel at the base of Data's neck aboard the Enterprise, calm engineering lighting, a tool or tricorder nearby, the installation complete and steady.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/datas-emotion-chip/variants/installed-stabilized.png"
         }
       ],
       "canonical_facts": [
@@ -278,7 +278,10 @@
         "Data experienced emotion prior to 2371 through this specific chip; earlier emotional moments came from other means.",
         "The chip is depicted as glowing, crystalline, or magical rather than an ordinary microchip.",
         "Soong survived Lore's attack — canon establishes he died of his injuries."
-      ]
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-27/item-story/20260827-161459-53042/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=QXSqCDF5Ilg",
+      "yt_publish_at": "2026-09-05T20:14:00Z"
     },
     {
       "item_name": "The Guardian of Forever",
@@ -363,17 +366,20 @@
     "recent_items": [
       "The Sword of Kahless",
       "The Ressikan Flute",
-      "The Genesis Device"
+      "The Genesis Device",
+      "Data's Emotion Chip"
     ],
     "recent_hooks": [
       "The first Klingon bat'leth turned Worf against Kor.",
       "This is the Ressikan flute — proof Picard lived a stranger's entire lifetime in twenty-five real minutes.",
-      "A Federation science project built to create life, capable of ending it instead."
+      "A Federation science project built to create life, capable of ending it instead.",
+      "A positronic microchip built to let an android finally feel."
     ],
     "recent_fates": [
       "Transported into interstellar space after Worf and Kor concluded it would divide the Empire.",
       "Kept by Picard as a private keepsake, the only physical trace of Kamin's lived life and the extinct Kataan civilization.",
-      "The Genesis Planet tore itself apart, and the Federation banned the technology as a doomsday weapon."
+      "The Genesis Planet tore itself apart, and the Federation banned the technology as a doomsday weapon.",
+      "Mastered at last — Data can now switch his own emotions on and off at will aboard the Enterprise-E."
     ],
     "cooldown_episodes": 20
   },
@@ -403,6 +409,15 @@
       "youtube_url": "https://www.youtube.com/watch?v=DkVouAT9c1M",
       "yt_publish_at": "2026-08-25T20:22:00Z",
       "notes": "User personally reviewed all 7 generated scene PNGs for artifacts/extra limbs/composition logic before animating (per explicit request). Caught one real issue: scene 7 (fate/legacy) was supposed to show a Starfleet archive terminal per its own image_prompt, but NB2 rendered the intact glowing device instead (chain-ref bias from the detonation-state ref) - contradicted the item being consumed in its own detonation (clip 5). Fixed by regenerating scene-7 as a sealed archival records case (same Starfleet delta/GENESIS nameplate design lineage, no crystalline core, no energy cracks) rather than the active device. TTS also needed one re-render: first pass at speed 0.85 came back at 51.9s against a 35s window (48% mismatch, over item-story.md's 40% reject threshold) - re-rendered at speed 0.95 to reach 46.26s / 30% mismatch. Cost: Storyboarder ~$0.80 (2 refs + 7 scenes + 1 scene-7 regen), Sound ~$0.10, Animator $2.94 (7 clips, zero retries, zero content-policy hits). Rescheduled 2026-08-18 from 2026-09-02 to 2026-08-25 per explicit user instruction to fill the nearest free channel slot."
+    },
+    {
+      "episode": 4,
+      "date": "2026-08-27",
+      "item_name": "Data's Emotion Chip",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-27/item-story/20260827-161459-53042/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=QXSqCDF5Ilg",
+      "yt_publish_at": "2026-09-05T20:14:00Z",
+      "notes": "Manager researched and wrote the item's appearance_lock/canonical_facts/forbidden_claims into the bible before Scenarist ran (TNG Brothers/Descent, Generations, First Contact chronology). Applied a deliberate one-off voice/music tone override (measured Starfleet-engineering/character-study instead of the series' Klingon-ceremonial default), same precedent as the Ressikan Flute episode. TTS ran 44.6s against the 35s picture (27.4% mismatch, under the 40% cap), handled by Editor with atempo=1.264, no re-render needed this time. Cost: Storyboarder $0.80 (3 refs + 7 scenes), Sound $0.13, Animator $2.94 (7 clips, one poll-window resume on scene 6 at zero extra cost), Editor $0.00. Scheduled 2026-09-05 on gamepulse/Starfleet Archives (2026-08-27 through 2026-09-04 all already occupied by other formats/series)."
     }
   ]
 }
