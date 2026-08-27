@@ -567,6 +567,210 @@
       ],
       "anti_repetition_note": "Differentiated from EP4 (OldGrower, personal rags-to-riches legend) — Geoff's arc is duty/protecting others, not personal wealth or status.",
       "status": "covered"
+    },
+    {
+      "name": "Alan, The Alien",
+      "slug": "alan-the-alien",
+      "role": "a peaceful stranded alien scout, crash-landed in Growtopia and mistaken for the hostile Alien Menace, who chooses to stay after earning the villagers' trust",
+      "costume_stages": {
+        "crashed": "2D pixel-art blocky alien humanoid, oversized round head, smooth green-grey blocky skin (~#8FBF9C), two huge solid-black almond eyes, tiny lipless mouth, thin elongated three-fingered arms, fitted silver-white spacesuit with cyan piping (~#3FC1D6), round glass dome helmet with a jagged crack, small backpack thruster sparking orange, chest panel blinking red, thick clean black outline",
+        "repaired": "same alien anatomy and spacesuit, helmet patched with a visible silver panel, backpack thruster steady and unlit-safe, chest panel glowing steady calm cyan, thick clean black outline"
+      },
+      "refs": {
+        "crashed": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/alan-the-alien/variants/crashed.png",
+          "tags": [
+            "character-story",
+            "alan-the-alien",
+            "crashed"
+          ]
+        },
+        "repaired": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/alan-the-alien/variants/repaired.png",
+          "tags": [
+            "character-story",
+            "alan-the-alien",
+            "repaired"
+          ]
+        }
+      },
+      "voice_style": "Young, curious, slightly wide-eyed sci-fi visitor voice, light youthful register. Startled/placating in the hook, wondering during the crash flashback, earnest/pleading during the standoff and trade, warm and content in the revelation. MiniMax voice_id used: Decent_Boy.",
+      "story_arc": {
+        "hook": "I'm Alan, The Alien — a stranded traveler from beyond the stars, mistaken for Growtopia's worst nightmare.",
+        "origin": "My scout ship's engine failed crossing Growtopia's sky, and I crashed into a quiet farm field. I only wanted to study this strange blocky world.",
+        "turning_point": "Torches found me before any words could. They swore I was the Menace itself. So I traded my ship's cracked parts for World Locks, proving I only meant peace.",
+        "revelation": "Slowly the torches lowered. Farmers became friends. My battered ship began to glow again — but I choose to stay in Growtopia instead."
+      },
+      "age_progression": "None — no canonical age variants; two costume stages (crashed / repaired) carry the arc instead of age.",
+      "environments_used": [
+        "Smoking forest clearing scarred by the crash, dented UFO wedged among splintered tile-block trees",
+        "Torch-lit village clearing at dusk with villagers closing in",
+        "Rough wooden village trade counter stacked with World Locks",
+        "Lantern-lit village trade plaza at night with the repaired UFO parked beside a campfire"
+      ],
+      "items_featured": [
+        "World Locks",
+        "scout ship parts"
+      ],
+      "status": "covered"
+    },
+    {
+      "name": "Lincoln, The Leprechaun",
+      "slug": "lincoln-the-leprechaun",
+      "role": "Growtopia's mischievous luck-mythos trickster spirit — steals luck as pranks until his own gold turns to dust, then redeems himself as a fair-mischief spirit who pays the unlucky back double",
+      "costume_stages": {
+        "default": "2D pixel-art Growtopian, tan/beige blocky skin, large square head, sly crinkled-squint dot eyes, bright kelly-green tailcoat (~#2FA84F) with gold buttons and black lapels, tall black top hat banded in kelly-green, bushy orange-red beard, black buckled shoes, a drawstring pouch of gold coins, four-leaf clover on the lapel, wide gap-toothed grin, short stocky build, thick clean black outline"
+      },
+      "refs": {
+        "default": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/lincoln-the-leprechaun-2026-08-27/variants/character-story.png",
+          "tags": [
+            "character-story",
+            "lincoln-the-leprechaun"
+          ]
+        }
+      },
+      "voice_style": "Young, cheeky, sing-song trickster delivery — gleeful and wondrous early, shocked/worried at the backlash, warm mischief in the revelation. MiniMax voice_id used: Decent_Boy.",
+      "story_arc": {
+        "hook": "I'm Lincoln, the Leprechaun — Growtopia's luckiest, and most mischievous, spirit.",
+        "origin": "Born the storm that cracked open the very first rainbow, I learned to swap luck as mischief.",
+        "turning_point": "A newbie lost everything to one of my pranks. Karmic backlash turned my own gold to dust.",
+        "revelation": "Now I'm a fair-mischief luck spirit — I pay the unlucky back double."
+      },
+      "age_progression": "None — mythic trickster spirit, single-age exception (same precedent as Master Peng / Ringmaster / Locke / Geoff).",
+      "environments_used": [
+        "Storm-lashed clover meadow where the first rainbow cracks the sky",
+        "Sunlit market-stall trade path lined with lock displays",
+        "Stripped-bare starter world with a wilted sapling and emptied vending box",
+        "Rain-soaked grey rainbow clearing during the backlash",
+        "Bright double-rainbow festival plaza"
+      ],
+      "items_featured": [
+        "gold coins",
+        "four-leaf clover",
+        "World Lock",
+        "Diamond Lock"
+      ],
+      "status": "covered"
+    },
+    {
+      "name": "Mark, The Mechanic",
+      "slug": "mark-the-mechanic",
+      "role": "Growtopia's youngest self-taught tinkerer — an obsessive solo inventor whose overloaded machine destroys his own workshop, who rebuilds it open to the whole community",
+      "costume_stages": {
+        "default": "2D pixel-art Growtopian, tan/beige blocky skin, large square head, eager grin, tousled brown hair under flipped-up welding goggles, rust-orange oil-stained coveralls over a grey undershirt, brown tool belt with wrench and screwdriver, canvas work gloves, grease-smudged cheeks, gripping an oversized pixel wrench, lean youthful build, thick clean black outline"
+      },
+      "refs": {
+        "default": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/mark-the-mechanic-2026-08-27/variants/character-story.png",
+          "tags": [
+            "character-story",
+            "mark-the-mechanic"
+          ]
+        }
+      },
+      "voice_style": "Young/teen mechanic register — curious workshop energy building into tense obsession, a dissonant shock at the overload, warm resolve in the revelation. MiniMax voice_id used: Decent_Boy.",
+      "story_arc": {
+        "hook": "I'm Mark, The Mechanic — Growtopia's youngest tinkerer, and I fix every busted machine in this world.",
+        "origin": "I started with a dented workbench and no teacher — just curiosity and scrap parts.",
+        "turning_point": "Obsessed with one build, working alone through the night, I overloaded the core and blew my own workshop apart.",
+        "revelation": "I rebuilt it — this time open to everyone. Now the machine I built alone belongs to the whole community."
+      },
+      "age_progression": "None — no canonical age variants; arc carried by workshop/environment state (modest stall → cluttered night workshop → wrecked → rebuilt open community workshop).",
+      "environments_used": [
+        "Modest roadside machine-shop stall with a single dented workbench",
+        "Cluttered nighttime workshop with blueprints and a half-built covered machine",
+        "The same shop blown open and smoking, scattered gears and a cracked core casing",
+        "Rebuilt bright tile-floored community workshop with extra workbenches"
+      ],
+      "items_featured": [
+        "wrench",
+        "welding goggles",
+        "machine core"
+      ],
+      "status": "covered"
+    },
+    {
+      "name": "Walter, The Manager",
+      "slug": "walter-the-manager",
+      "role": "a Growtopia trading-post NPC who rose from the lowest stock clerk to Manager the night he locked down the vault during a break-in",
+      "costume_stages": {
+        "default": "2D pixel-art Growtopian NPC, tan/beige blocky skin, large square head, faint stern smile, neatly parted dark-brown hair, wire-rim spectacles, crisp white collared shirt under a charcoal-grey waistcoat with a brass pocket-watch chain, maroon necktie, dark-grey trousers, polished black shoes, brass 'MANAGER' name badge, upright composed posture, thick clean black outline"
+      },
+      "refs": {
+        "default": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/walter-the-manager/variants/character-story.png",
+          "tags": [
+            "character-story",
+            "walter-the-manager"
+          ]
+        }
+      },
+      "voice_style": "Mature adult authority register — quiet businesslike tone building to rising pride. MiniMax voice_id used: Deep_Voice_Man (the bible's default Decent_Boy young-teen register does not fit this mature character).",
+      "story_arc": {
+        "hook": "I am Walter, The Manager — I run the busiest trading post in Growtopia.",
+        "origin": "I started as the lowest stock clerk. Nobody trusted a rookie with the ledger.",
+        "turning_point": "The night our old Manager vanished, I locked the vault myself and calmed the crowd.",
+        "revelation": "Now every ledger, every lock, every deal in this store answers to me."
+      },
+      "age_progression": "None — no canonical age variants; arc carried by environment/props (stockroom → quiet counter → night vault crisis → bustling counter).",
+      "environments_used": [
+        "Two-story trading post with front sales counter and brass cash register",
+        "Cramped backroom stockroom of crated World Locks",
+        "Rear vault room behind a heavy lock-door at night",
+        "Bustling front counter"
+      ],
+      "items_featured": [
+        "World Lock",
+        "Diamond Lock",
+        "ledger",
+        "vault"
+      ],
+      "status": "covered"
+    },
+    {
+      "name": "Crazy Jim",
+      "slug": "crazy-jim",
+      "role": "an obsessive Growtopia tunnel-digger driven half-mad chasing one legendary drop, whose mining accident breaks something loose in his head and turns obsession into a badge of pride",
+      "costume_stages": {
+        "default": "2D pixel-art Growtopian, tan/beige blocky skin, large square head, asymmetric manic eyes (one wide bloodshot swirl, one pinched squint), lopsided gap-toothed grin, unruly soot-black spiked hair under a cracked crooked mining helmet, grimy mustard-yellow miner's shirt with one sleeve torn off, patched dark-brown overalls on a single frayed strap, mismatched boots, bent rusted pickaxe wrapped in patch-tape, hunched twitchy posture, thick clean black outline"
+      },
+      "refs": {
+        "default": {
+          "asset_type": "reference_image",
+          "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/crazy-jim/variants/character-story-2026-08-27.png",
+          "tags": [
+            "character-story",
+            "crazy-jim"
+          ]
+        }
+      },
+      "voice_style": "Manic, rapid-fire male voice with an obsessive rambling edge — cocky/unhinged hook, calmer wistful origin, increasingly frantic turning point, stunned quiet-whisper at the cave-in, gleeful cackling triumph in the revelation. MiniMax voice_id used: Casual_Guy.",
+      "story_arc": {
+        "hook": "I'm Crazy Jim — the tunnel digger who broke twelve thousand blocks chasing one lucky drop.",
+        "origin": "Back then I was just another farmer, breaking blocks for gems like everyone else.",
+        "turning_point": "I heard whispers of a drop so rare no one had ever pulled it. I dug for years, stopped talking to people, just kept swinging. One day the tunnel caved in on me — something in my head had changed.",
+        "revelation": "Now I don't stop, I don't sleep. I just dig — because somewhere down there, it's still waiting. They call me crazy. Maybe I am. But every legendary drop starts with someone who refuses to quit."
+      },
+      "age_progression": "None — no canonical age variants; single mature appearance throughout.",
+      "environments_used": [
+        "Sunlit surface farm plot near a mine entrance",
+        "Narrow shaft mouth dropping into shadow",
+        "Scarred mid-tunnel section littered with dropped junk",
+        "Caved-in tunnel section with rubble and dust",
+        "Jim's cluttered hoarder's camp lit by a single lantern"
+      ],
+      "items_featured": [
+        "pickaxe",
+        "gems",
+        "legendary drop"
+      ],
+      "status": "covered"
     }
   ],
   "narrator": {
@@ -596,7 +800,12 @@
     "robert-the-robot",
     "the-ringmaster",
     "locke-the-salesman",
-    "geoff-the-guard"
+    "geoff-the-guard",
+    "alan-the-alien",
+    "lincoln-the-leprechaun",
+    "mark-the-mechanic",
+    "walter-the-manager",
+    "crazy-jim"
   ],
   "episodes": [
     {
@@ -770,6 +979,36 @@
       "minimax_voice": "Determined_Man",
       "status": "approved_final_saved",
       "notes": "One of 5 parallel character-story episodes produced in the same run. Scene 4's NB2 generation hit the same terminal HTTP 422 result-fetch failure as The Ringmaster's scene 5 in this same batch — recovered the same way (one authorized brand-new job, distinct output_path scene-4-v2.png). Deliberately differentiated from EP4 (OldGrower) via a duty/protection theme instead of a personal-legend theme. Approved by user."
+    },
+    {
+      "ep": 14,
+      "character": "Alan, The Alien",
+      "title": "Alan, The Alien: The Visitor They Almost Chased Away",
+      "published": null
+    },
+    {
+      "ep": 15,
+      "character": "Lincoln, The Leprechaun",
+      "title": "Lincoln, The Leprechaun: The Luck I Stole Came Back",
+      "published": null
+    },
+    {
+      "ep": 16,
+      "character": "Mark, The Mechanic",
+      "title": "Mark, The Mechanic: The Machine I Built Alone",
+      "published": null
+    },
+    {
+      "ep": 17,
+      "character": "Walter, The Manager",
+      "title": "Walter, The Manager: The Vault I Locked Myself",
+      "published": null
+    },
+    {
+      "ep": 18,
+      "character": "Crazy Jim",
+      "title": "Crazy Jim: The Drop That Broke My Brain",
+      "published": null
     }
   ]
 }
