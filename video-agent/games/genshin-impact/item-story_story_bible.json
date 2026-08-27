@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Genshin Impact — Item Story",
   "created_at": "2026-08-05",
-  "last_episode": 4,
+  "last_episode": 5,
   "ready_to_post": true,
   "style_tags": "premium Genshin-style anime cel-shaded fantasy frame, clean elegant linework, vibrant saturated colors, painterly environments matching each item's own canonical setting/region, cinematic dramatic lighting, item-specific energy/aura colors drawn only from that item's appearance_lock, detailed metal and cord materials, edge-to-edge vertical 9:16 composition, no photorealism, no 3D product render, no game UI, no inventory card, no text overlay",
   "style_tags_note": "This top-level field is a series-wide baseline only (cel-shaded anime, no photorealism, no UI). Region/environment/energy-color specifics are per-item and per-episode — resolve those from the current episode's storyboard.json visual_identity.style_tags, not by reusing a previous episode's region/color details verbatim. Bug found 2026-08-27: this field had drifted to literally describe episode 1's Inazuma/Snezhnaya/magenta setting, which would have visually contaminated unrelated items if applied as-is.",
@@ -310,17 +310,17 @@
         {
           "id": "archon-forged-jade",
           "appearance": "Freshly forged in Liyue's founding era: pristine glowing green jade, held in silhouette by an anonymous ancient forebear defending a primordial coastline against the ruling sea. No identity-critical face shown.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/primordial-jade-winged-spear/variants/archon-forged-jade.png"
         },
         {
           "id": "behemoth-war-relic",
           "appearance": "The same locked silhouette, scarred and weathered from the era's long war against the dominant sea behemoth: dulled jade, faint hairline cracks, carried mid-battle against roiling dark water.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/primordial-jade-winged-spear/variants/behemoth-war-relic.png"
         },
         {
           "id": "xiaos-present-spear",
           "appearance": "The modern, fully restored and radiant form wielded today by Xiao, the Vigilant Yaksha: bright polished jade, vivid green energy glow along the blade in combat, held ready above Liyue's cliffs.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/primordial-jade-winged-spear/variants/xiaos-present-spear.png"
         }
       ],
       "canonical_facts": [
@@ -355,7 +355,10 @@
         "The sea behemoth is given a specific name or identity beyond the weapon's own unspecific story text.",
         "Guizhong or any other specific named Liyue Adeptus is confirmed as the weapon's crafter or first wielder — canon does not establish this.",
         "The weapon's combat glow is depicted as any color other than green."
-      ]
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-27/item-story/20260827-152402-17866/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=v_PiGpk39WE",
+      "yt_publish_at": "2026-09-04T20:21:00Z"
     }
   ],
   "supabase_assets": {
@@ -374,19 +377,22 @@
       "Kagotsurube Isshin",
       "Wolf's Gravestone",
       "Freedom-Sworn",
-      "Aquila Favonia"
+      "Aquila Favonia",
+      "Primordial Jade Winged-Spear"
     ],
     "recent_hooks": [
       "A cursed Inazuman sword crossed nations by possessing successive human hosts.",
       "This claymore is named Wolf's Gravestone — yet the wolf king it mourns has never died.",
       "A rebel blade forged for five revolutionaries who dared defy an empire.",
-      "This is the founding blade of the Knights of Favonius — carried by an exiled fighter who refused to kneel."
+      "This is the founding blade of the Knights of Favonius — carried by an exiled fighter who refused to kneel.",
+      "A jade weapon made by the archons to fight the sea itself."
     ],
     "recent_fates": [
       "Reforged by Kazuha at the cost of its remaining consciousness, leaving the restored sword permanently silent.",
       "Restored and carried into a Knights of Favonius armory, still bearing its grim name while Andrius and his forest endure.",
       "Rests in careful hands, edge scarred, feathers dormant — until grief calls again.",
-      "Carried into battle today by Jean, Acting Grand Master of the order its first wielder founded."
+      "Carried into battle today by Jean, Acting Grand Master of the order its first wielder founded.",
+      "Carried today by Xiao, the last Vigilant Yaksha, still standing guard above Liyue."
     ],
     "cooldown_episodes": 20
   },
@@ -425,6 +431,15 @@
       "youtube_url": "https://www.youtube.com/watch?v=uh1Gl1gJXfY",
       "yt_publish_at": "2026-09-02T19:11:00Z",
       "notes": "Manager researched and wrote the item's appearance_lock/canonical_facts/forbidden_claims into the bible before Scenarist ran (Vennessa's founding of the Knights of Favonius, Decarabian-linked ascension materials, Jean's present-day ownership) — no user-visible research gap. Cost: Storyboarder $0.80 (3 refs + 7 scenes), Sound $0.21, Animator $2.94 (7 clips, zero paid retries), Editor $0.00 (local ffmpeg only). Storyboarder flagged that the bible's top-level style_tags field is stale (still describes episode 1's Inazuma/Snezhnaya setting) and used storyboard.json's per-episode style_tags instead — worth fixing so top-level style_tags doesn't silently mismatch future items. Scheduled 2026-09-02 (nearest free genshinsnap slot; 2026-08-27 through 2026-09-01 were all already occupied by other formats)."
+    },
+    {
+      "episode": 5,
+      "date": "2026-08-27",
+      "item_name": "Primordial Jade Winged-Spear",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-27/item-story/20260827-152402-17866/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=v_PiGpk39WE",
+      "yt_publish_at": "2026-09-04T20:21:00Z",
+      "notes": "Fixed the top-level style_tags field this episode to a generic series baseline (with a style_tags_note pointing to per-episode storyboard.json values) after episode 4 flagged it as stale — Scenarist/Storyboarder wrote a fresh Liyue jade/teal-sea palette for this episode without contamination. TTS ran long (103 words -> 62.86s at first pass) and needed trimming to 97 words + speed 1.1 to land at 47.23s against the 35s picture (33.8% mismatch, under the 40% cap) — same TTS-overrun pattern seen in episodes 1-3, worth a standing reminder to draft narration closer to ~85-90 words for 7x5s runtimes. Cost: Storyboarder $0.80 (3 refs + 7 scenes), Sound ~$0.13, Animator $2.94 (7 clips, zero paid retries — runner poll-window resumes on scenes 1/3/5/7 cost nothing extra), Editor $0.00. Scheduled 2026-09-04 (2026-09-02 already taken by EP4's own item-story upload; 2026-09-03 skipped to avoid same-format adjacency)."
     }
   ]
 }
