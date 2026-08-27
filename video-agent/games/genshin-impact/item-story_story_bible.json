@@ -5,9 +5,10 @@
   "language": "en",
   "title": "Genshin Impact — Item Story",
   "created_at": "2026-08-05",
-  "last_episode": 3,
+  "last_episode": 4,
   "ready_to_post": true,
-  "style_tags": "premium Genshin-style anime cel-shaded fantasy frame, clean elegant linework, vibrant saturated colors, painterly Inazuma and Snezhnaya environments, cinematic dramatic lighting, restrained magenta Tatarigami energy only where canon requires it, detailed metal and cord materials, edge-to-edge vertical 9:16 composition, no photorealism, no 3D product render, no game UI, no inventory card, no text overlay",
+  "style_tags": "premium Genshin-style anime cel-shaded fantasy frame, clean elegant linework, vibrant saturated colors, painterly environments matching each item's own canonical setting/region, cinematic dramatic lighting, item-specific energy/aura colors drawn only from that item's appearance_lock, detailed metal and cord materials, edge-to-edge vertical 9:16 composition, no photorealism, no 3D product render, no game UI, no inventory card, no text overlay",
+  "style_tags_note": "This top-level field is a series-wide baseline only (cel-shaded anime, no photorealism, no UI). Region/environment/energy-color specifics are per-item and per-episode — resolve those from the current episode's storyboard.json visual_identity.style_tags, not by reusing a previous episode's region/color details verbatim. Bug found 2026-08-27: this field had drifted to literally describe episode 1's Inazuma/Snezhnaya/magenta setting, which would have visually contaminated unrelated items if applied as-is.",
   "format_overrides": {
     "narrative_mode": "An external lore narrator tells the canonical item's history in third person. The item never narrates as I, me, or my. Canon establishes that this blade possessed consciousness before its final reforging, but the narration still speaks about it from outside.",
     "visual_priority": "The sword is the largest, sharpest, and most unobstructed focal subject in every clip. Makers and wielders appear only as hands, torso crops, silhouettes, or secondary figures without identity-critical faces.",
@@ -223,6 +224,138 @@
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-18/item-story/20260818-112506-99323-genshin-freedom-sworn/final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=b56qNEclG8w",
       "yt_publish_at": "2026-08-23T19:13:00Z"
+    },
+    {
+      "item_name": "Aquila Favonia",
+      "item_slug": "aquila-favonia",
+      "category": "a five-star longsword, the founding blade of the Knights of Favonius, carried by the exiled fighter who overthrew Mondstadt's tyrant nobles",
+      "canon_scope": "Genshin Impact game canon from the in-game weapon description/passive text, weapon story/flavor text, ascension material flavor text, and Jean's signature-weapon association. Do not invent named events beyond the weapon's own flavor text.",
+      "appearance_lock": {
+        "overall_shape": "An elegant single-handed European-style longsword with a straight, moderately long blade. Identical silhouette across all three states.",
+        "guard": "A golden crossguard shaped like a pair of spread falcon/eagle wings, symbolizing Favonius (the wind) and the Knights' falcon emblem.",
+        "grip": "A slender hilt wrapped in white and gold, sized for one hand.",
+        "pommel": "A small golden pommel cap shaped like a stylized feather or eagle-head detail, compact and aligned with the grip.",
+        "blade_pattern": "A pale sky-blue-white blade with a faint windswept sheen; a soft golden light glows down the fuller only when the sword's passive (Falcon's Defiance) is actively triggered in combat.",
+        "scale_lock": "A standard one-handed sword: blade length roughly forearm-to-full-arm. Never a two-handed greatsword and never a short dagger.",
+        "negative_lock": "No curved katana, no double-handed greatsword, no red or black blade, no bat-wing or demonic imagery, no readable runes or text, no scabbard, no product packshot, no floating inventory UI."
+      },
+      "item_states": [
+        {
+          "id": "vennessas-blade",
+          "appearance": "The same locked silhouette, plainer and battle-worn, carried in the anonymous hands of an exiled fighter during Mondstadt's uprising against its old nobles. Golden wing-guard scuffed and duller, pale blade catching harsh wind. No identity-critical face shown.",
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/aquila-favonia/variants/item-story-vennessas-blade.png"
+        },
+        {
+          "id": "chivalric-relic",
+          "appearance": "The same silhouette enshrined as a founding relic after the Knights of Favonius and the Church of Favonius were established: guard polished bright gold, blade clean, presented ceremonially rather than mid-battle.",
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/aquila-favonia/variants/item-story-chivalric-relic.png"
+        },
+        {
+          "id": "jeans-signature-blade",
+          "appearance": "The modern present-day form wielded by Jean, Acting Grand Master of the Knights of Favonius: bright polished golden wing-guard, pale blue-white blade glowing with soft wind energy in combat, pristine and battle-ready.",
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/characters/aquila-favonia/variants/item-story-jeans-signature-blade.png"
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact": "Aquila Favonia's official description names it 'the soul of the Knights of Favonius' and says it 'still calls on the winds of swift justice to vanquish all evil, just like the last heroine who wielded it.'",
+          "status": "game canon",
+          "source": "in-game weapon description"
+        },
+        {
+          "fact": "The weapon's story text describes an exiled foreign fighter who lived under the tyranny of Mondstadt's old nobles, refused to kneel, overthrew the barbaric nobility, and established a chivalric order and a Church before eventually 'walking with the gods.'",
+          "status": "game canon",
+          "source": "in-game weapon lore/story text"
+        },
+        {
+          "fact": "Community reference material identifies this founding heroine as Vennessa, credited with founding the Knights of Favonius.",
+          "status": "game canon (referenced across companion materials)",
+          "source": "Genshin Impact Wiki — Aquila Favonia"
+        },
+        {
+          "fact": "The weapon's ascension materials are explicitly tied to Decarabian (Tile of Decarabian's Tower, Debris of Decarabian's City, Fragment of Decarabian's Epic, Scattered Piece of Decarabian's Dream), linking the blade's history to the era of Decarabian's tyrannical rule over Mondstadt's wind.",
+          "status": "game mechanic / material flavor text",
+          "source": "in-game weapon ascension material descriptions"
+        },
+        {
+          "fact": "Today Aquila Favonia is Jean's signature weapon; Jean serves as the Acting Grand Master of the Knights of Favonius, the order the blade's original wielder founded.",
+          "status": "game canon",
+          "source": "in-game character/weapon association"
+        }
+      ],
+      "forbidden_claims": [
+        "The name 'Vennessa' appears verbatim inside the weapon's own official in-game description text.",
+        "The passive Falcon's Defiance is depicted as literal supernatural resurrection magic rather than a gameplay heal-on-low-HP effect.",
+        "Decarabian is shown or claimed to have been personally defeated by this specific sword.",
+        "The founding heroine is depicted as still alive in the present day — canon states she 'walked with the gods.'"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-27/item-story/20260827-140707-81578/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=uh1Gl1gJXfY",
+      "yt_publish_at": "2026-09-02T19:11:00Z"
+    },
+    {
+      "item_name": "Primordial Jade Winged-Spear",
+      "item_slug": "primordial-jade-winged-spear",
+      "category": "a five-star jade polearm forged by the archons during Liyue's founding era to slay ancient sea beasts, now carried by Xiao, the Vigilant Yaksha",
+      "canon_scope": "Genshin Impact game canon from the in-game weapon description/story text (Primordial Jade Series) and Xiao's signature-weapon association. Do not invent named archon-crafters, named beasts, or a specific Adeptus creator beyond the weapon's own flavor text.",
+      "appearance_lock": {
+        "overall_shape": "A long two-handed polearm with a slender jade shaft and a bladed spearhead flanked by wing-like ornamental jade fins near the blade's base. Identical silhouette across all three states.",
+        "material": "Rich green translucent jade with a faint internal glow, gold trim accents at the joints between shaft segments.",
+        "grip": "A dark wrapped binding partway down the jade shaft for a two-handed hold.",
+        "blade_pattern": "A vivid green energy glow flows along the blade and wing-fins when the weapon's passive (Eagle Spear of Justice) is actively stacking in combat.",
+        "scale_lock": "A full-length two-handed polearm, roughly head-height to just above when planted upright.",
+        "negative_lock": "No metal or steel shaft, no red or blue coloring, no curved scythe blade, no readable runes or text, no scabbard, no product packshot, no floating inventory UI."
+      },
+      "item_states": [
+        {
+          "id": "archon-forged-jade",
+          "appearance": "Freshly forged in Liyue's founding era: pristine glowing green jade, held in silhouette by an anonymous ancient forebear defending a primordial coastline against the ruling sea. No identity-critical face shown.",
+          "ref_url": null
+        },
+        {
+          "id": "behemoth-war-relic",
+          "appearance": "The same locked silhouette, scarred and weathered from the era's long war against the dominant sea behemoth: dulled jade, faint hairline cracks, carried mid-battle against roiling dark water.",
+          "ref_url": null
+        },
+        {
+          "id": "xiaos-present-spear",
+          "appearance": "The modern, fully restored and radiant form wielded today by Xiao, the Vigilant Yaksha: bright polished jade, vivid green energy glow along the blade in combat, held ready above Liyue's cliffs.",
+          "ref_url": null
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact": "The in-game description calls it 'a jade polearm made by the archons, capable of slaying ancient beasts.'",
+          "status": "game canon",
+          "source": "in-game weapon description"
+        },
+        {
+          "fact": "The weapon's story text recalls that at Liyue's founding, monsters and gods still ruled the seas, and the forebears lived in fear, fighting the sea with all they could muster, until a behemoth arose over the eons that came to dominate the seas.",
+          "status": "game canon",
+          "source": "in-game weapon lore/story text"
+        },
+        {
+          "fact": "The Primordial Jade Series weapons take their names from a passage in the Strategies of the Warring States, which assigns a fine named jade to each dynasty of that era — the naming convention is borrowed, not an invented new mythology.",
+          "status": "game lore (naming convention)",
+          "source": "Genshin Impact Wiki — Primordial Jade Series"
+        },
+        {
+          "fact": "The weapon's passive, Eagle Spear of Justice, stacks an ATK buff on hit and grants bonus damage at maximum stacks, visualized in-game as a green glow flowing along the blade and around the wielder.",
+          "status": "game mechanic",
+          "source": "in-game weapon passive description"
+        },
+        {
+          "fact": "Today Primordial Jade Winged-Spear is Xiao's signature weapon; Xiao is the last of the adepti Yakshas, sworn to guard Liyue against evil.",
+          "status": "game canon",
+          "source": "in-game character/weapon association"
+        }
+      ],
+      "forbidden_claims": [
+        "The archons who forged it are named or shown with identifiable faces in canon.",
+        "The sea behemoth is given a specific name or identity beyond the weapon's own unspecific story text.",
+        "Guizhong or any other specific named Liyue Adeptus is confirmed as the weapon's crafter or first wielder — canon does not establish this.",
+        "The weapon's combat glow is depicted as any color other than green."
+      ]
     }
   ],
   "supabase_assets": {
@@ -240,17 +373,20 @@
     "recent_items": [
       "Kagotsurube Isshin",
       "Wolf's Gravestone",
-      "Freedom-Sworn"
+      "Freedom-Sworn",
+      "Aquila Favonia"
     ],
     "recent_hooks": [
       "A cursed Inazuman sword crossed nations by possessing successive human hosts.",
       "This claymore is named Wolf's Gravestone — yet the wolf king it mourns has never died.",
-      "A rebel blade forged for five revolutionaries who dared defy an empire."
+      "A rebel blade forged for five revolutionaries who dared defy an empire.",
+      "This is the founding blade of the Knights of Favonius — carried by an exiled fighter who refused to kneel."
     ],
     "recent_fates": [
       "Reforged by Kazuha at the cost of its remaining consciousness, leaving the restored sword permanently silent.",
       "Restored and carried into a Knights of Favonius armory, still bearing its grim name while Andrius and his forest endure.",
-      "Rests in careful hands, edge scarred, feathers dormant — until grief calls again."
+      "Rests in careful hands, edge scarred, feathers dormant — until grief calls again.",
+      "Carried into battle today by Jean, Acting Grand Master of the order its first wielder founded."
     ],
     "cooldown_episodes": 20
   },
@@ -280,6 +416,15 @@
       "youtube_url": "https://www.youtube.com/watch?v=b56qNEclG8w",
       "yt_publish_at": "2026-08-23T19:13:00Z",
       "notes": "First item-story episode with no existing bible-owned refs — all 3 item states (freshly-forged, dormant-calm, grief-manifestation) generated fresh this run. User personally reviewed all 7 generated scene PNGs for artifacts/extra limbs/composition logic before animating (per explicit request) — no issues found, all clips proceeded to Animator as-is. Cost: Storyboarder ~$0.80 (3 refs + 7 scenes), Sound ~$0.10, Animator $2.94 (7 clips, zero retries). Rescheduled 2026-08-18 from 2026-08-31 to 2026-08-23 per explicit user instruction to fill the nearest free channel slot — note this sits only 1 day after the 2026-08-22 reddit-story upload on the same channel, tighter than this project's usual 2-3 day same-format-adjacency guideline; accepted as a live user override."
+    },
+    {
+      "episode": 4,
+      "date": "2026-08-27",
+      "item_name": "Aquila Favonia",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-27/item-story/20260827-140707-81578/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=uh1Gl1gJXfY",
+      "yt_publish_at": "2026-09-02T19:11:00Z",
+      "notes": "Manager researched and wrote the item's appearance_lock/canonical_facts/forbidden_claims into the bible before Scenarist ran (Vennessa's founding of the Knights of Favonius, Decarabian-linked ascension materials, Jean's present-day ownership) — no user-visible research gap. Cost: Storyboarder $0.80 (3 refs + 7 scenes), Sound $0.21, Animator $2.94 (7 clips, zero paid retries), Editor $0.00 (local ffmpeg only). Storyboarder flagged that the bible's top-level style_tags field is stale (still describes episode 1's Inazuma/Snezhnaya setting) and used storyboard.json's per-episode style_tags instead — worth fixing so top-level style_tags doesn't silently mismatch future items. Scheduled 2026-09-02 (nearest free genshinsnap slot; 2026-08-27 through 2026-09-01 were all already occupied by other formats)."
     }
   ]
 }

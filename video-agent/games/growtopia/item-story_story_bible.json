@@ -1,0 +1,201 @@
+{
+  "series_id": "growtopia-item-story-en",
+  "game_tag": "growtopia",
+  "format": "item-story",
+  "language": "en",
+  "title": "Growtopia — Item Story",
+  "created_at": "2026-08-27",
+  "last_episode": 0,
+  "ready_to_post": true,
+  "style_tags": "Growtopia-inspired crisp 2D pixel art, pseudo-isometric 2.5D diorama, blocky pixelated proportions, thick clean black outlines, bright cheerful cyan green and gold palette, coherent three-quarter projection, layered foreground midground and receding tile platforms, native edge-to-edge vertical 9:16, illustrated perspective rather than volumetric 3D, no Minecraft, no voxel CGI, no photorealism, no game UI, no inventory card, no text overlay",
+  "format_overrides": {
+    "narrative_mode": "An external lore narrator tells the canonical item's mechanical history and role in the Growtopia economy/quest system in third person. The item never narrates as I, me, or my.",
+    "visual_priority": "The item (lock block or weapon) is the largest, sharpest, and most unobstructed focal subject in every clip. Growtopian players/NPCs appear only as blocky pixel-art hands, torso crops, or secondary background figures without identity-critical detail.",
+    "canon_basis": "Growtopia has no scripted narrative canon comparable to Genshin/Star Trek — its item 'lore' is the official mechanical behavior (splicing recipes, growth timers, quest triggers, conversion ratios, item flavor text) documented on the Growtopia Wiki. Treat these mechanical facts as the canonical_facts source, exactly as this format already treats weapon-passive text as canon for other games. Do not invent character names, dialogue, or events beyond documented mechanics and flavor text.",
+    "tone": "Playful, nostalgic, ladenly community vibe per games/growtopia/growtopia.md Tone of Voice — lighter and warmer than the somber dark-fantasy/ceremonial tone used in this format's Genshin and Star Trek series."
+  },
+  "voice_policy": {
+    "engine": "minimax",
+    "identity_critical": false,
+    "intent": "warm, playful, nostalgic male or female narrator with a light storyteller cadence, upbeat but grounded documentary delivery, never shouting, never a Growtopia character voice clone",
+    "language_code": "en",
+    "note": "One consistent external narrator speaks about the item in third person."
+  },
+  "music_policy": {
+    "mood": "nostalgic upbeat 8-bit/chiptune adventure theme, playful sandbox energy, light percussion, no vocals",
+    "volume": 0.15,
+    "engine": "minimax-music"
+  },
+  "cta": {
+    "text": "GET FREE GEMS · LINK IN BIO",
+    "url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4"
+  },
+  "source_references": [
+    {
+      "kind": "wiki_item_page",
+      "url": "https://growtopia.fandom.com/wiki/World_Lock",
+      "use": "World Lock mechanics: unsplicable solid lock block, main tradable currency, locks an entire world for its owner, combines 100:1 into a Diamond Lock."
+    },
+    {
+      "kind": "wiki_item_page",
+      "url": "https://growtopia.fandom.com/wiki/Diamond_Lock",
+      "use": "Diamond Lock mechanics: formed by tapping 100 World Locks together in inventory; can be shattered back into 100 World Locks; visually the same lock design, shinier/brighter."
+    },
+    {
+      "kind": "wiki_item_page",
+      "url": "https://growtopia.fandom.com/wiki/Blue_Gem_Lock",
+      "use": "Blue Gem Lock mechanics: purchased from the in-game Sales-Man NPC for 100 Diamond Locks; can be shattered back into 100 Diamond Locks; used to store/trade large Diamond Lock sums compactly."
+    },
+    {
+      "kind": "wiki_item_page",
+      "url": "https://growtopia.fandom.com/wiki/Legendary_Wizard",
+      "use": "Legendary Wizard NPC: untradable splicable NPC block added in the Legendary update (Aug 22, 2014); created by splicing the Legen seed and Dary seed, ~13-week grow time; grants a Legendary Quest to level-40+ players, then disappears once the quest is completed."
+    },
+    {
+      "kind": "wiki_item_page",
+      "url": "https://growtopia.fandom.com/wiki/Legendary_Katana",
+      "use": "Legendary Katana appearance/flavor text and mechanics: a large golden-bladed katana quest reward, grants the Legendary Swordmaster mod (faster block breaking, longer punch reach, stronger knockback), replaces the punch animation with giant golden slash effects."
+    },
+    {
+      "kind": "wiki_item_page",
+      "url": "https://growtopia.fandom.com/wiki/Legendary_Quest",
+      "use": "General Legendary Quest structure: level-40+ trial given by the Legendary Wizard NPC; reward pool includes the Legendary Katana, Legendary Dragon Knight's Wings, and the Dragon of Legend."
+    }
+  ],
+  "items": [
+    {
+      "item_name": "The World Lock",
+      "item_slug": "world-lock",
+      "category": "a currency/utility block — the foundation of Growtopia's entire player-driven economy, capable of fusing into higher denominations",
+      "canon_scope": "Growtopia official game mechanics as documented on the Growtopia Wiki (World Lock, Diamond Lock, Blue Gem Lock pages). Growtopia has no scripted narrative canon for this item; the episode narrates its documented mechanical behavior and economic role, not invented characters or dialogue.",
+      "appearance_lock": {
+        "overall_shape": "A small cubic wooden lock block with a prominent brass/metal band across the front and a keyhole at its center. Thick clean black pixel-art outline, side-view/three-quarter blocky proportions consistent with Growtopia's item icon scale — never larger than a player's blocky hand.",
+        "material": "Warm brown wood grain with a darker metal band and keyhole plate. A subtle warm glow marks it as a valuable/iconic item, not an ordinary building block.",
+        "negative_lock": "No 3D realistic rendering, no Minecraft-style voxel look, no readable text or numbers baked into the block, no scabbard/weapon shape (this is a lock block, not a weapon), no melting or liquid distortion of the block itself."
+      },
+      "item_states": [
+        {
+          "id": "world-lock-single",
+          "appearance": "A single brown wooden World Lock block with a brass band and keyhole, faint warm glow, held or displayed alone as Growtopia's base unit of trade.",
+          "ref_url": null
+        },
+        {
+          "id": "diamond-lock-fused",
+          "appearance": "The same lock silhouette and keyhole design, now cast in bright cyan crystalline material with sparkling faceted surfaces — the fused result of 100 World Locks tapped together, visibly shinier and more valuable than the wooden original.",
+          "ref_url": null
+        },
+        {
+          "id": "blue-gem-lock-compact",
+          "appearance": "The same lock silhouette again, now a deep radiant blue crystal block with intense glowing facets — a compact store of 100 Diamond Locks, the rarest and most valuable of the three states, radiating a strong blue aura.",
+          "ref_url": null
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact": "The World Lock is an unsplicable solid lock block and Growtopia's main tradable currency, since the game's other currency (Gems) cannot be traded between players.",
+          "status": "game mechanic",
+          "source": "Growtopia Wiki — World Lock"
+        },
+        {
+          "fact": "Placing a World Lock in an unlocked world gives its owner full building/breaking control over that world and a distinct green name color while inside it.",
+          "status": "game mechanic",
+          "source": "Growtopia Wiki — World Lock"
+        },
+        {
+          "fact": "Tapping 100 World Locks together in a player's inventory fuses them into a single Diamond Lock; a Diamond Lock can be shattered back into exactly 100 World Locks.",
+          "status": "game mechanic",
+          "source": "Growtopia Wiki — World Lock; Diamond Lock"
+        },
+        {
+          "fact": "A Blue Gem Lock is purchased from the in-game Sales-Man NPC for 100 Diamond Locks, and can be shattered back into 100 Diamond Locks by double-tapping its inventory icon.",
+          "status": "game mechanic",
+          "source": "Growtopia Wiki — Blue Gem Lock"
+        },
+        {
+          "fact": "All three locks share the same underlying design lineage — the Diamond Lock and Blue Gem Lock are explicitly described as shinier, more valuable versions of the same lock, not different objects.",
+          "status": "game mechanic / documented visual design",
+          "source": "Growtopia Wiki — Diamond Lock"
+        }
+      ],
+      "forbidden_claims": [
+        "The World Lock has any scripted narrative backstory, creator character, or in-universe origin event — none is documented in canon.",
+        "Gems (the untradable currency) are interchangeable with World Locks.",
+        "The conversion ratios are anything other than 100 World Locks : 1 Diamond Lock : 1 Blue Gem Lock (=100 Diamond Locks).",
+        "A Blue Gem Lock can be crafted directly from World Locks without passing through Diamond Locks."
+      ]
+    },
+    {
+      "item_name": "The Legendary Katana",
+      "item_slug": "legendary-katana",
+      "category": "a legendary quest-reward weapon and status symbol, born from a spliced tree and granted only through the endgame Legendary Quest",
+      "canon_scope": "Growtopia official game mechanics and item flavor text as documented on the Growtopia Wiki (Legendary Wizard, Legendary Katana, Legendary Quest pages). No scripted narrative dialogue beyond the item's own flavor text is invented.",
+      "appearance_lock": {
+        "overall_shape": "A single oversized katana blade — no separate scabbard — with a long, slightly curved single edge and a simple wrapped hilt, rendered noticeably larger and more golden than an ordinary Growtopia sword icon. Slashing motion leaves bright golden streak effects.",
+        "material": "Bright golden-yellow blade with a warm metallic sheen, dark-wrapped hilt, faint golden glow along the edge to signal its legendary rarity.",
+        "negative_lock": "No 3D realistic rendering, no Minecraft-style voxel look, no readable text baked into the blade, no additional ornamentation beyond the golden blade and slash effects, no scabbard."
+      },
+      "item_states": [
+        {
+          "id": "legen-dary-sapling",
+          "appearance": "A small spliced sapling growing from combined Legen and Dary seeds inside a Growtopia world plot, faint golden sparkle around its leaves hinting at the legendary reward waiting inside, ordinary blocky dirt and grass tiles around it.",
+          "ref_url": null
+        },
+        {
+          "id": "legendary-wizard-manifestation",
+          "appearance": "The fully grown tree has become the Legendary Wizard NPC block — a tall robed pixel-art wizard figure with a pointed hat and glowing staff, standing where the sapling once was, ready to hand a level-40+ player their Legendary Quest.",
+          "ref_url": null
+        },
+        {
+          "id": "legendary-katana-reward",
+          "appearance": "The final reward in a player's blocky hand: an oversized golden katana blade catching the light, bright slash-effect streaks trailing from a demonstration swing, held aloft as a status symbol after the Legendary Wizard has vanished.",
+          "ref_url": null
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact": "The Legendary Wizard is created by splicing the Legen seed and the Dary seed together; the resulting tree takes roughly 13 weeks to fully grow.",
+          "status": "game mechanic",
+          "source": "Growtopia Wiki — Legendary Wizard"
+        },
+        {
+          "fact": "Once grown, the Legendary Wizard NPC offers a Legendary Quest to players who have reached level 40; completing the quest makes the Legendary Wizard disappear and grants the player one of its legendary rewards.",
+          "status": "game mechanic",
+          "source": "Growtopia Wiki — Legendary Wizard; Legendary Quest"
+        },
+        {
+          "fact": "The Legendary Katana is one of the possible Legendary Quest rewards: an oversized golden-bladed katana, larger than a standard Golden Sword.",
+          "status": "game mechanic / item flavor text",
+          "source": "Growtopia Wiki — Legendary Katana"
+        },
+        {
+          "fact": "Its official flavor text jokes that the blade 'sliced through 3 tomatoes AND a tin can during the course of a single informercial,' though nobody can confirm it's true — it is still, undeniably, a very big sword.",
+          "status": "item flavor text (in-game joke description, narrate as an in-universe rumor, not verified fact)",
+          "source": "Growtopia Wiki — Legendary Katana item description"
+        },
+        {
+          "fact": "Equipping the Legendary Katana grants the Legendary Swordmaster mod: faster block-breaking, one extra tile of punch reach, stronger knockback, and giant golden slash effects replacing the normal punch animation.",
+          "status": "game mechanic",
+          "source": "Growtopia Wiki — Legendary Katana"
+        }
+      ],
+      "forbidden_claims": [
+        "The Legendary Katana's tomato-and-tin-can infomercial claim is confirmed true in canon — the wiki explicitly frames it as an unverified rumor.",
+        "The Legendary Wizard is a permanent NPC — it vanishes once its quest is completed.",
+        "The Legendary Katana is the only possible Legendary Quest reward (other rewards include the Legendary Dragon Knight's Wings and the Dragon of Legend).",
+        "The Legendary Katana has a scabbard or any ornamentation beyond the golden blade and its slash effects."
+      ]
+    }
+  ],
+  "supabase_assets": {
+    "item_refs": {},
+    "character_refs": {},
+    "note": "Populate only with permanent assets tagged for growtopia + item-story + growtopia-item-story-en after runner-validated generation."
+  },
+  "anti_repetition": {
+    "recent_items": [],
+    "recent_hooks": [],
+    "recent_fates": [],
+    "cooldown_episodes": 20
+  },
+  "episode_summaries": []
+}

@@ -212,6 +212,141 @@
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-18/item-story/20260818-112506-99323-startrek-genesis-device/final.mp4",
       "youtube_url": "https://www.youtube.com/watch?v=DkVouAT9c1M",
       "yt_publish_at": "2026-08-25T20:22:00Z"
+    },
+    {
+      "item_name": "Data's Emotion Chip",
+      "item_slug": "datas-emotion-chip",
+      "category": "a positronic emotion-simulation microchip built by Dr. Noonian Soong, stolen and weaponized by Lore before Data claimed and finally installed it",
+      "canon_scope": "Prime-timeline television and film canon only (TNG: Brothers; TNG: Descent Parts I-II; Star Trek Generations; Star Trek: First Contact). Do not import novels, comics, Memory Beta, or other licensed continuation events.",
+      "appearance_lock": {
+        "overall_shape": "A small flat rectangular microchip a few centimeters across, with fine gold circuit traces visible on a dark ceramic-like substrate, sized to be held between two fingers or inserted into a small panel.",
+        "material": "Dark matte chip body with etched gold-toned circuitry. No casing, no wires, no glowing elements except a faint activation light once powered and seated.",
+        "scale_lock": "A palm-sized microchip, never larger than a human hand.",
+        "negative_lock": "No glowing crystal, no jewel, no visible wiring harness, no large device housing, no readable Starfleet insignia, no organic tissue, no product packshot, no floating inventory UI."
+      },
+      "item_states": [
+        {
+          "id": "soong-workshop-completed",
+          "appearance": "Freshly completed on Dr. Soong's workbench in his hidden lab on Terlina III after two decades of work, resting in an open tool tray beside diagnostic instruments, fine gold circuitry catching warm workshop light.",
+          "ref_url": null
+        },
+        {
+          "id": "lore-corrupted",
+          "appearance": "The same chip now held in Lore's synthetic hand in a moment of theft and betrayal, dim red-tinged workshop lighting implying menace without any glow on the chip itself.",
+          "ref_url": null
+        },
+        {
+          "id": "installed-stabilized",
+          "appearance": "The chip finally seated inside an open panel at the base of Data's neck aboard the Enterprise, calm engineering lighting, a tool or tricorder nearby, the installation complete and steady.",
+          "ref_url": null
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact": "Dr. Noonian Soong spent about twenty years perfecting the emotion chip and summoned Data to his hidden lab on Terlina III to install it once finished, in 2366.",
+          "status": "television canon",
+          "source": "TNG: Brothers"
+        },
+        {
+          "fact": "Soong had given a similar, unstable emotion-simulation component to his earlier android, Lore, and refused to give the finished, stable chip to Lore, mistrusting him after past behavior.",
+          "status": "television canon",
+          "source": "TNG: Brothers"
+        },
+        {
+          "fact": "Lore arrived at the lab, impersonated Data, and stole the finished emotion chip; Soong was fatally injured confronting him.",
+          "status": "television canon",
+          "source": "TNG: Brothers"
+        },
+        {
+          "fact": "In 2369, Lore used the stolen chip to transmit emotions to Data over a carrier wave, manipulating him in an attempt to turn him against the crew and lead a rogue Borg faction.",
+          "status": "television canon",
+          "source": "TNG: Descent, Parts I & II"
+        },
+        {
+          "fact": "Data recovered the chip and, in 2371, installed it himself so he could continue growing as an artificial life form; the chip initially overloaded his positronic relays, producing erratic, hard-to-control emotional responses.",
+          "status": "film canon",
+          "source": "Star Trek Generations"
+        },
+        {
+          "fact": "By the time of the Enterprise-E's encounter with the Borg, Data had gained full voluntary control, able to activate and deactivate the emotion chip at will.",
+          "status": "film canon",
+          "source": "Star Trek: First Contact"
+        }
+      ],
+      "forbidden_claims": [
+        "The emotion chip ever functioned correctly inside Lore — canon establishes it was not designed for his systems and Soong warned against installing it in him.",
+        "Data experienced emotion prior to 2371 through this specific chip; earlier emotional moments came from other means.",
+        "The chip is depicted as glowing, crystalline, or magical rather than an ordinary microchip.",
+        "Soong survived Lore's attack — canon establishes he died of his injuries."
+      ]
+    },
+    {
+      "item_name": "The Guardian of Forever",
+      "item_slug": "guardian-of-forever",
+      "category": "an ancient sentient time portal of unknown origin, standing alone on a dead world, capable of showing and sending travelers into any point in a planet's past",
+      "canon_scope": "Prime-timeline television canon only (TOS: The City on the Edge of Forever; TAS: Yesteryear). Do not import Star Trek Online, novels, comics, Memory Beta, or other licensed continuation events.",
+      "appearance_lock": {
+        "overall_shape": "A massive freestanding, roughly ring-shaped structure taller than a person, with an irregular, asymmetrical, rough-hewn silhouette rather than a smooth geometric ring. It stands upright unsupported on bare rocky ground, with no visible mechanism or base.",
+        "material": "A dark, weathered, rock-like or ancient-metal-like surface, pitted and eroded as if impossibly old.",
+        "surface_details": "The portal's open center is normally a dark, still opening; when active it fills with a shifting swirling blue-white haze that displays moving scenes from history.",
+        "scale_lock": "Large enough for an adult person to walk through the central opening.",
+        "negative_lock": "No smooth futuristic technology, no visible control panel, no glowing neon circuitry, no humanoid statue design, no readable text or runes on the surface, no crystal material, no small portable size."
+      },
+      "item_states": [
+        {
+          "id": "silent-ring-on-a-dead-world",
+          "appearance": "Standing alone amid the eroded ruins of an ancient dead civilization on an otherwise desolate planet, its opening dark and still, no visitors present, the harsh empty landscape emphasizing its unexplained age.",
+          "ref_url": null
+        },
+        {
+          "id": "vortex-of-history",
+          "appearance": "The same ring now active, its center swirling with blue-white temporal haze, fragmented scenes of Earth's past flickering across the opening as visiting Starfleet officers stand before it.",
+          "ref_url": null
+        },
+        {
+          "id": "gateway-of-consequence",
+          "appearance": "The ring mid-use as a figure steps through the swirling opening into the past, the moment charged with the knowledge that whatever happens beyond the threshold can unmake the present.",
+          "ref_url": null
+        }
+      ],
+      "canonical_facts": [
+        {
+          "fact": "The Guardian of Forever appears as a large, irregular ring-shaped structure standing alone amid the ruins of a long-dead civilization on an otherwise desolate planet.",
+          "status": "television canon",
+          "source": "TOS: The City on the Edge of Forever"
+        },
+        {
+          "fact": "The Guardian identifies itself as its own beginning and end, describes itself as a doorway to yesterday, and can both display and physically send visitors into any point in a planet's history.",
+          "status": "television canon",
+          "source": "TOS: The City on the Edge of Forever"
+        },
+        {
+          "fact": "Dr. Leonard McCoy, disoriented by an accidental drug overdose, leapt through the Guardian into 1930s Earth and changed history so severely that the Enterprise and Starfleet itself vanished from existence.",
+          "status": "television canon",
+          "source": "TOS: The City on the Edge of Forever"
+        },
+        {
+          "fact": "Kirk and Spock followed McCoy into the same past, where Kirk fell in love with social worker Edith Keeler; Spock's research confirmed that Keeler's survival past a certain date, prevented by Kirk, would fatally delay the Allies' World War II war effort.",
+          "status": "television canon",
+          "source": "TOS: The City on the Edge of Forever"
+        },
+        {
+          "fact": "Kirk chose to let Edith Keeler die as originally fated, restoring the correct timeline, after which McCoy, Kirk, and Spock returned through the Guardian to their own present.",
+          "status": "television canon",
+          "source": "TOS: The City on the Edge of Forever"
+        },
+        {
+          "fact": "The Guardian of Forever also appears later, sending a young Spock into his own past to relive a childhood crisis, in the animated episode 'Yesteryear.'",
+          "status": "television canon (animated series)",
+          "source": "TAS: Yesteryear"
+        }
+      ],
+      "forbidden_claims": [
+        "The Guardian's creators or precise origin are ever named or explained — canon deliberately leaves its builders unknown.",
+        "The Guardian is depicted as a smooth futuristic machine with visible technology or controls — canon describes it as ancient, worn, and mysterious.",
+        "Kirk and Edith Keeler's romance ends any way other than her death being allowed to occur as history originally recorded.",
+        "Events from Star Trek Online, novels, or other licensed non-television material involving the Guardian are treated as canon."
+      ]
     }
   ],
   "supabase_assets": {
