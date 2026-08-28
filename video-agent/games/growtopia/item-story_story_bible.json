@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Growtopia — Item Story",
   "created_at": "2026-08-27",
-  "last_episode": 0,
+  "last_episode": 1,
   "ready_to_post": true,
   "style_tags": "Growtopia-inspired crisp 2D pixel art, pseudo-isometric 2.5D diorama, blocky pixelated proportions, thick clean black outlines, bright cheerful cyan green and gold palette, coherent three-quarter projection, layered foreground midground and receding tile platforms, native edge-to-edge vertical 9:16, illustrated perspective rather than volumetric 3D, no Minecraft, no voxel CGI, no photorealism, no game UI, no inventory card, no text overlay",
   "format_overrides": {
@@ -77,17 +77,17 @@
         {
           "id": "world-lock-single",
           "appearance": "A single brown wooden World Lock block with a brass band and keyhole, faint warm glow, held or displayed alone as Growtopia's base unit of trade.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/world-lock/variants/world-lock-single.png"
         },
         {
           "id": "diamond-lock-fused",
           "appearance": "The same lock silhouette and keyhole design, now cast in bright cyan crystalline material with sparkling faceted surfaces — the fused result of 100 World Locks tapped together, visibly shinier and more valuable than the wooden original.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/world-lock/variants/diamond-lock-fused.png"
         },
         {
           "id": "blue-gem-lock-compact",
           "appearance": "The same lock silhouette again, now a deep radiant blue crystal block with intense glowing facets — a compact store of 100 Diamond Locks, the rarest and most valuable of the three states, radiating a strong blue aura.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/world-lock/variants/blue-gem-lock-compact.png"
         }
       ],
       "canonical_facts": [
@@ -122,7 +122,10 @@
         "Gems (the untradable currency) are interchangeable with World Locks.",
         "The conversion ratios are anything other than 100 World Locks : 1 Diamond Lock : 1 Blue Gem Lock (=100 Diamond Locks).",
         "A Blue Gem Lock can be crafted directly from World Locks without passing through Diamond Locks."
-      ]
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-27/item-story/20260827-183601-51099/final.mp4",
+      "youtube_url": null,
+      "notes_publication": "No youtube_channel mapped for growtopia yet (per games/growtopia/growtopia.md) — Supabase-only deliverable, YouTube step skipped per manager.md Phase 6 routing rule."
     },
     {
       "item_name": "The Legendary Katana",
@@ -192,10 +195,25 @@
     "note": "Populate only with permanent assets tagged for growtopia + item-story + growtopia-item-story-en after runner-validated generation."
   },
   "anti_repetition": {
-    "recent_items": [],
-    "recent_hooks": [],
-    "recent_fates": [],
+    "recent_items": [
+      "The World Lock"
+    ],
+    "recent_hooks": [
+      "A small wooden block holds Growtopia's whole economy together."
+    ],
+    "recent_fates": [
+      "Remains the backbone every player depends on, fusible up through Diamond Lock into the rare Blue Gem Lock and back again."
+    ],
     "cooldown_episodes": 20
   },
-  "episode_summaries": []
+  "episode_summaries": [
+    {
+      "episode": 1,
+      "date": "2026-08-27",
+      "item_name": "The World Lock",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-27/item-story/20260827-183601-51099/final.mp4",
+      "youtube_url": null,
+      "notes": "First item-story episode for growtopia — bible created fresh this session (no scripted narrative canon exists for this game; canon_basis is documented mechanics/flavor text from the Growtopia Wiki, same approach used for game-mechanic facts elsewhere in this format). Used the game's approved pseudo-isometric 2.5D pixel-art diorama style, not the legacy flat side-view treatment. Animator applied growtopia.md's 'Minecraft morph' mitigation: no Kling Elements, near-locked/gentle-push-in camera only, replacing the storyboard's original orbit/crane camera directions. Editor bug caught and fixed by Manager before Phase 6: first mix had bg-music at volume=0.45 instead of the bible's 0.15 (measured -16.4dB in a music-only window, way too loud); Editor re-rendered the audio-mix step only (reusing all video/TTS/subtitle intermediates) and landed at -24.2dB, correct background level. Cost: Storyboarder $0.80 (3 refs + 7 scenes), Sound ~$0.08, Animator $2.94 (7 clips, two zero-cost poll-window resumes), Editor $0.00 (two local ffmpeg passes). No YouTube channel mapped for growtopia — Supabase-only deliverable."
+    }
+  ]
 }
