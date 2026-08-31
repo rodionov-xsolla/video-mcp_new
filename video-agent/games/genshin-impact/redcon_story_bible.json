@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Genshin Impact — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 6,
+  "last_episode": 7,
   "tts_engine": "auto",
   "tts_note": "Speech route for new episodes: intentional native audio → Chatterbox only with a redcon-owned approved sample recorded in this bible → otherwise MiniMax. Retry the same route once, then stop. Second-person monologue throughout. Long monologue (>80 words) → mandatory chunking into ≤35-word segments (see sound.md §1b).",
   "format_overrides": {
@@ -81,6 +81,16 @@
         "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-17/redcon/20260817-203507-6563-genshin-player-yaemiko/final.mp4",
         "youtube_url": "https://www.youtube.com/watch?v=ZcXV-gqxM8M",
         "yt_publish_at": "2026-08-28T20:17:00Z"
+      },
+      {
+        "crisis": "Nahida imprisoned by the Akademiya — Irminsul corrupted (Chapter III Act V, 'Inversion of Genesis')",
+        "episode": 7,
+        "date": "2026-08-31",
+        "pulled_character": "Alhaitham",
+        "note": "Alhaitham, pulled early via free Primogems and acting as Acting Grand Sage, uses procedural authority to halt the Sages' tribunal before it deepens Nahida's seal, forcing a re-investigation that traces the Irminsul corruption to Scaramouche instead of blaming Nahida. Positive-outcome/structural-reform divergence (Akademiya rewrites its charter to require investigation before judgment), matching episodes 2/4/5/6's pattern. Phase 3 prompt-hygiene gate flagged all 7 scenes over the negation/length thresholds (driven by mandatory per-character identity-lock + duplication-guard clauses) — PNGs were already generated and technically valid, so kept per manager.md (the cap applies to future generations, not retroactive regen); worth tightening Storyboarder's identity-lock phrasing for this bible going forward.",
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-31/redcon/20260831-133720-14668/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=Xhw277YkYvU",
+        "yt_publish_at": "2026-09-03T20:45:00Z"
       }
     ],
     "do_not_repeat": [
@@ -90,11 +100,10 @@
       "Dvalin/Stormterror Mondstadt — used episode 3 (2026-07-28), pulled hero was Baizhu",
       "Signora's death / Fatui retaliation — used episode 4 (2026-08-04), pulled hero was Childe, Cyno present",
       "Fontaine sinking prophecy / Oratrice verdict — used episode 5 (2026-08-12), pulled hero was Sigewinne",
-      "Raiden Shogun's Vision Hunt Decree / Inazuma civil war — used episode 6 (2026-08-17), pulled hero was Yae Miko"
+      "Raiden Shogun's Vision Hunt Decree / Inazuma civil war — used episode 6 (2026-08-17), pulled hero was Yae Miko",
+      "Nahida imprisoned by the Akademiya / Irminsul corrupted — used episode 7 (2026-08-31), pulled hero was Alhaitham"
     ],
-    "candidates_for_future": [
-      "Nahida imprisoned by the Akademiya — Irminsul corrupted (Chapter III Act V)"
-    ]
+    "candidates_for_future": []
   },
   "style_tags": "Genshin Impact anime style, cel-shaded character art, vibrant fantasy colors, soft outline anime aesthetic, magical elemental effects, Teyvat world environment, clean detailed character illustration",
   "color_palette": "sky blue #87ceeb, fantasy gold #f5d060, emerald green #50c878, primogem violet #a855f7, electro purple #7c3aed, pyro orange #f97316",
@@ -233,6 +242,21 @@
       "youtube_url": "https://www.youtube.com/watch?v=ZcXV-gqxM8M",
       "yt_publish_at": "2026-08-28T20:17:00Z",
       "notes": "Clip 4 (Yae Miko intro) was rejected TWICE by Kling's content-policy checker even after the motion prompt was rephrased to remove all gesture language — the trigger was the START FRAME's pose/fan/talisman composition, not the text. Fixed by having Storyboarder regenerate scene-4 with a calmer, unambiguous pose (fan closed at hip, talismans at rest) before a third Animator submission succeeded. Total clip-4 cost: $1.26 (2 rejected + 1 successful)."
+    },
+    {
+      "episode": 7,
+      "date": "2026-08-31",
+      "crisis": "Nahida imprisoned by the Akademiya — Irminsul corrupted (Chapter III Act V, 'Inversion of Genesis')",
+      "pulled_character": "Alhaitham",
+      "crew": [
+        "Nahida",
+        "Alhaitham"
+      ],
+      "tts_voice": "MiniMax Deep_Voice_Man (no Chatterbox sample recorded for the Traveler)",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-31/redcon/20260831-133720-14668/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=Xhw277YkYvU",
+      "yt_publish_at": "2026-09-03T20:45:00Z",
+      "notes": "Sound correctly generated 6 per-clip MP3s (not one combined file, avoiding the EP4 mistake). Storyboarder's clip-1/clip-6 first drafts (corrupted root-vines coiled around Nahida's wrists) were rejected by NB2 content policy for restraint-adjacent imagery on a child-like figure; fixed by moving the corrupted-vine imagery to the floor/tendrils near her feet, both hands clasped, no body restraint — regenerated cleanly (v2) on both. Clip 5's tribunal confrontation (Alhaitham vs. the Sage) was deliberately framed non-aggressively (finger points at floating evidence, not at the Sage; explicit body-gap) per this bible's prior violent-framing content-policy lessons, and passed on the first attempt. Phase 3 prompt-hygiene gate: all 7 scene prompts came in well over the negation/length soft thresholds due to mandatory identity-lock/duplication-guard clauses; PNGs were already technically valid so kept as-is per manager.md (cap applies going forward, not retroactively). Editor found bg-music at documented volume=0.15 inaudible in the silent title-card window (same pattern as this bible's EP4 lesson) and raised it to 0.4 before finalizing. Cost: Storyboarder $0.80 (2 refs + 8 scene attempts incl. 1 rejected), Sound ~$0.23, Animator $2.77 (7 clips, two zero-cost poll-window resumes), Editor $0.00."
     }
   ]
 }
