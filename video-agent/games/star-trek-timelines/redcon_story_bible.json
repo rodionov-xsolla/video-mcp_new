@@ -177,6 +177,31 @@
         "youtube_url": "https://www.youtube.com/watch?v=ch_1FKesHtE",
         "yt_publish_at": "2026-08-27T20:22:00Z",
         "notes": "This is a distinct personal-fate divergence on Picard himself, not a duplicate of episode 0's Wolf 359 pilot (which was about the crew stopping the Borg cube, not Picard's fate). Lesson: MiniMax speed=0.9 with degraded stability (0.05) rendered at an abnormally slow 0.56s/word — always test-render and check duration before assuming a fixed word count fits the target window; speed 1.15 fixed it without losing the cold/collective register."
+      },
+      {
+        "date": "2026-08-31",
+        "character_name": "Benjamin Sisko",
+        "alternate_designation": "Sisko, Emissary of Fire",
+        "divergence_point": "2374, DS9 'The Reckoning' — when Kai Winn's chroniton pulse interrupts the battle between the Pah-wraith-possessed Jake and Prophet-possessed Kira, Sisko steps between them and willingly draws the Pah-wraith into himself to save Jake.",
+        "named_casualty": "Kira Nerys — dies with the Prophet still inside her when the transformed Sisko's Pah-wraith fire overwhelms the interrupted Reckoning.",
+        "downstream_consequence": "Jake survives, but the Pah-wraiths seize the Celestial Temple, Bajor loses its Prophets, and Sisko becomes the living Emissary of Fire over a world that kneels beneath the burning wormhole.",
+        "tts_voice": "MiniMax Deep_Voice_Man, speed 1.15, neutral alternate-identity delivery; six per-clip renders totaling 34.27s and shaped into the 30.25s story window without exceeding the 1.4x atempo cap.",
+        "new_assets": {
+          "sisko_redcon_canonical": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/benjamin-sisko/variants/redcon-canonical.png",
+          "sisko_emissary_of_fire": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/benjamin-sisko/variants/emissary-of-fire.png"
+        },
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-31/redcon/20260831-171054-15868/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=T0bqxUE043g",
+        "yt_publish_at": "2026-09-08T20:10:00Z",
+        "duration_sec": 40.267,
+        "cost_breakdown_estimate": {
+          "sound": 0.11,
+          "storyboarder": 0.72,
+          "animator": 2.94,
+          "editor": 0.0,
+          "total_usd": 3.77
+        },
+        "notes": "Character-variant branch, separate from the numbered Player-POV crisis rotation. Canon basis was checked against StarTrek.com's Winn Adami recap: in 'The Reckoning' a Pah-wraith possesses Jake, a Prophet possesses Kira, Sisko is willing to sacrifice both, and Winn disrupts their battle. Prompt construction used explicit energy-scope and physical-gap constraints to avoid the format's known multi-character ghosting failure. Final verification: full decode clean, 1080x1920 H.264 at 30 fps, AAC stereo, -14.22 LUFS / -2.32 dBTP, 31 dialogue subtitle events and four title events with no overlap into the silent title card or CTA."
       }
     ]
   },
