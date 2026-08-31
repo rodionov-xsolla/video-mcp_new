@@ -148,6 +148,19 @@
         "youtube_url": "https://www.youtube.com/watch?v=9PYfSfiXmDk",
         "yt_publish_at": "2026-08-25T19:42:00Z",
         "notes": "Clip 4 (divergence) was rejected TWICE by Kling's content-policy checker — first for an overhead-claymore-swing-toward-Kaeya composition (even after removing hit/contact wording from the prompt), then again on a v2 rephrase of the SAME composition. Root cause was the composition itself (weapon aimed at a person + alarmed reaction), not the wording. Fixed by reframing the shot around Diluc alone (claymore held low/vertical at his side, never raised or aimed, Kaeya reduced to an out-of-focus background silhouette, violence implied entirely through Diluc's expression/grip) — required a full Storyboarder re-generation (new start frame) plus a third Animator submission. Total clip-4 cost across all attempts: $1.26 (2 rejected + 1 successful, all billed by Kling despite rejection). Lesson for future redcon episodes with a violent divergence beat: never frame a weapon pointed/swung toward another character, even implied/windup-only — reframe around the perpetrator's expression/grip instead, with the second party as an out-of-focus background element."
+      },
+      {
+        "date": "2026-08-31",
+        "character_name": "Zhongli",
+        "alternate_designation": "Zhongli, the Last Archon — a memory instead of a god",
+        "divergence_point": "Chapter I Act III, 'A New Star Approaches' — in canon the Traveler, the Liyue Qixing, and the adepti defeat Osial while Zhongli remains hidden, ready to intervene if Liyue fails his test; afterward he retires and surrenders his Gnosis under his final contract as Geo Archon. In this alternate timeline Liyue's defense fails, Zhongli reveals himself to stop Osial, and the battle truly kills him.",
+        "named_casualty": "Zhongli / Morax — the staged death he planned becomes real when he intervenes against Osial.",
+        "downstream_consequence": "Liyue survives but permanently loses its former Geo Archon; its people must govern themselves immediately while the adepti mourn the contract they could not keep.",
+        "tts_voice": "MiniMax Deep_Voice_Man (no redcon-owned approved Zhongli sample; 74-word monologue at speed 1.0)",
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-31/redcon/20260831-151006-57931/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=uY4mRrDvGH0",
+        "yt_publish_at": "2026-09-05T19:14:00Z",
+        "notes": "Character-variant branch. The initial storyboard incorrectly claimed Zhongli canonically returned as Morax under a renewed Archon contract; corrected before paid visual generation to the actual canon (Liyue defeats Osial while Zhongli remains ready to intervene, then he retires under his final Geo-Archon contract). Reused two existing exact-format refs: zhongli-seal and zhongli-civilian-open. NB2 scene 2 returned no_media_generated for the first spectral-body prompt; after explicit user authorization, one replacement job reframed the same visual as an amber memory projection and succeeded. The initial 96-word sad/0.9-speed TTS rendered at 47.3s for a 30.25s speech window; archived it, trimmed to 74 words, and regenerated at neutral/1.0 for 30.08s (atempo 0.9944). The required Genshin banner appears on clip 2 only. Final audio measured -14.40 LUFS / -2.01 dBTP. Cost: Storyboarder $0.64 (7 successful scenes + 1 rejected attempt, both refs reused), Sound ~$0.12 including the archived first TTS pass and music, Animator $2.94, Editor $0.00; total approximately $3.70."
       }
     ]
   },
