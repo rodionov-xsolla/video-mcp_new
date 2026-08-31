@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Growtopia — Item Story",
   "created_at": "2026-08-27",
-  "last_episode": 1,
+  "last_episode": 2,
   "ready_to_post": true,
   "style_tags": "Growtopia-inspired crisp 2D pixel art, pseudo-isometric 2.5D diorama, blocky pixelated proportions, thick clean black outlines, bright cheerful cyan green and gold palette, coherent three-quarter projection, layered foreground midground and receding tile platforms, native edge-to-edge vertical 9:16, illustrated perspective rather than volumetric 3D, no Minecraft, no voxel CGI, no photorealism, no game UI, no inventory card, no text overlay",
   "format_overrides": {
@@ -141,17 +141,17 @@
         {
           "id": "legen-dary-sapling",
           "appearance": "A small spliced sapling growing from combined Legen and Dary seeds inside a Growtopia world plot, faint golden sparkle around its leaves hinting at the legendary reward waiting inside, ordinary blocky dirt and grass tiles around it.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/legendary-katana/variants/legen-dary-sapling.png"
         },
         {
           "id": "legendary-wizard-manifestation",
           "appearance": "The fully grown tree has become the Legendary Wizard NPC block — a tall robed pixel-art wizard figure with a pointed hat and glowing staff, standing where the sapling once was, ready to hand a level-40+ player their Legendary Quest.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/legendary-katana/variants/legendary-wizard-manifestation.png"
         },
         {
           "id": "legendary-katana-reward",
           "appearance": "The final reward in a player's blocky hand: an oversized golden katana blade catching the light, bright slash-effect streaks trailing from a demonstration swing, held aloft as a status symbol after the Legendary Wizard has vanished.",
-          "ref_url": null
+          "ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/characters/legendary-katana/variants/legendary-katana-reward.png"
         }
       ],
       "canonical_facts": [
@@ -186,7 +186,10 @@
         "The Legendary Wizard is a permanent NPC — it vanishes once its quest is completed.",
         "The Legendary Katana is the only possible Legendary Quest reward (other rewards include the Legendary Dragon Knight's Wings and the Dragon of Legend).",
         "The Legendary Katana has a scabbard or any ornamentation beyond the golden blade and its slash effects."
-      ]
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-28/item-story/20260828-104615-52910/final.mp4",
+      "youtube_url": null,
+      "notes_publication": "No youtube_channel mapped for growtopia yet — Supabase-only deliverable, YouTube step skipped per manager.md Phase 6 routing rule."
     }
   ],
   "supabase_assets": {
@@ -196,13 +199,16 @@
   },
   "anti_repetition": {
     "recent_items": [
-      "The World Lock"
+      "The World Lock",
+      "The Legendary Katana"
     ],
     "recent_hooks": [
-      "A small wooden block holds Growtopia's whole economy together."
+      "A small wooden block holds Growtopia's whole economy together.",
+      "A giant golden blade born from a splice joke became one of Growtopia's most coveted weapons."
     ],
     "recent_fates": [
-      "Remains the backbone every player depends on, fusible up through Diamond Lock into the rare Blue Gem Lock and back again."
+      "Remains the backbone every player depends on, fusible up through Diamond Lock into the rare Blue Gem Lock and back again.",
+      "Carried today as a status symbol, its golden slash effects a reminder of the vanished wizard who granted it."
     ],
     "cooldown_episodes": 20
   },
@@ -214,6 +220,14 @@
       "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-27/item-story/20260827-183601-51099/final.mp4",
       "youtube_url": null,
       "notes": "First item-story episode for growtopia — bible created fresh this session (no scripted narrative canon exists for this game; canon_basis is documented mechanics/flavor text from the Growtopia Wiki, same approach used for game-mechanic facts elsewhere in this format). Used the game's approved pseudo-isometric 2.5D pixel-art diorama style, not the legacy flat side-view treatment. Animator applied growtopia.md's 'Minecraft morph' mitigation: no Kling Elements, near-locked/gentle-push-in camera only, replacing the storyboard's original orbit/crane camera directions. Editor bug caught and fixed by Manager before Phase 6: first mix had bg-music at volume=0.45 instead of the bible's 0.15 (measured -16.4dB in a music-only window, way too loud); Editor re-rendered the audio-mix step only (reusing all video/TTS/subtitle intermediates) and landed at -24.2dB, correct background level. Cost: Storyboarder $0.80 (3 refs + 7 scenes), Sound ~$0.08, Animator $2.94 (7 clips, two zero-cost poll-window resumes), Editor $0.00 (two local ffmpeg passes). No YouTube channel mapped for growtopia — Supabase-only deliverable."
+    },
+    {
+      "episode": 2,
+      "date": "2026-08-28",
+      "item_name": "The Legendary Katana",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-28/item-story/20260828-104615-52910/final.mp4",
+      "youtube_url": null,
+      "notes": "8 clips (40s picture) to cover the full splice->wizard->quest->reward arc. Explicitly flagged the infomercial 'sliced 3 tomatoes and a tin can' flavor text as an unverified in-universe rumor, never confirmed fact, per forbidden_claims. Applied the same growtopia.md Kling-morph mitigation as EP1 (no Elements, near-locked/gentle-push-in camera only) — worked cleanly again, no voxel/3D drift reported. Explicitly re-verified music volume=0.15 end-to-end this run (Sound double-checked the storyboard value, Editor was told about EP1's 0.45 bug and confirmed the literal filter value before rendering) — measured -24.5dB in a music-only window, correct on the first pass this time. Cost: Storyboarder $0.88 (3 refs + 8 scenes), Sound $0.12, Animator $3.36 (8 clips; scene-8 needed 9 zero-cost poll-window resumes due to an unusually long remote queue), Editor $0.00. No YouTube channel mapped for growtopia — Supabase-only deliverable."
     }
   ]
 }
