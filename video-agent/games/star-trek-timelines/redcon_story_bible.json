@@ -5,7 +5,7 @@
   "language": "en",
   "title": "Star Trek Timelines — Redcon (Player-POV What If?)",
   "created_at": "2026-07-06",
-  "last_episode": 7,
+  "last_episode": 8,
   "tts_engine": "fal-ai/chatterbox/text-to-speech",
   "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-calm-mid-man-narrator.mp3",
   "tts_note": "Chatterbox with voice_ref_url above (authoritative, measured). Second-person monologue throughout — NOT first-person alternate-self. Voiceover opens with the CTA hook on the teaser clip, then continues second-person through story clips. Fallback: MiniMax Speech 2.8-HD, voice Deep_Voice_Man.",
@@ -109,6 +109,19 @@
         "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-17/redcon/20260817-203507-6563-startrek-player-troi/final.mp4",
         "youtube_url": "https://www.youtube.com/watch?v=xb1sVoiIvkk",
         "yt_publish_at": "2026-08-30T19:34:00Z"
+      },
+      {
+        "crisis": "Attack on Mars — Utopia Planitia synth sabotage (2385)",
+        "episode": 8,
+        "date": "2026-08-31",
+        "crew_assembled": [
+          "Data",
+          "Raffi Musiker"
+        ],
+        "note": "The player assembles Data and Raffi before the compromised A500 synth network activates. Data isolates the external command code, Raffi traces it to Commodore Oh, and Starfleet cuts the signal: Mars survives, the Romulan rescue armada launches, and the Federation never bans synthetic life.",
+        "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-31/redcon/20260831-161241-96324/final.mp4",
+        "youtube_url": "https://www.youtube.com/watch?v=XPaN9oTiH64",
+        "yt_publish_at": "2026-09-06T20:34:00Z"
       }
     ],
     "do_not_repeat": [
@@ -118,7 +131,8 @@
       "Xindi superweapon / Delphic Expanse — used episode 3 (2026-07-21), pulled hero was Tuvok",
       "Changeling infiltration / Leyton coup — used episode 4 (2026-07-28), assembled Odo and the Doctor",
       "V'Ger / Earth approach — used episode 6 (2026-08-12), crew was Data and Hoshi Sato",
-      "Praxis explosion / Khitomer Accords — used episode 7 (2026-08-17), crew was Deanna Troi"
+      "Praxis explosion / Khitomer Accords — used episode 7 (2026-08-17), crew was Deanna Troi",
+      "Attack on Mars / Utopia Planitia synth sabotage — used episode 8 (2026-08-31), crew was Data and Raffi Musiker"
     ],
     "candidates_for_future": []
   },
@@ -306,6 +320,31 @@
       "youtube_url": "https://www.youtube.com/watch?v=xb1sVoiIvkk",
       "yt_publish_at": "2026-08-30T19:34:00Z",
       "notes": "First use of Deanna Troi in this bible (checked against both crisis_rotation and character_variant_episodes — unused). Title card reflow needed again (3rd time this bible has hit the issue) — fs104 overflowed 1080px on 'AND THE PLOT FELL', stepped to fs88."
+    },
+    {
+      "episode": 8,
+      "date": "2026-08-31",
+      "crisis": "Attack on Mars — Utopia Planitia synth sabotage (2385)",
+      "crew": [
+        "Data",
+        "Raffi Musiker"
+      ],
+      "tts_voice": "Chatterbox exact-format calm male narrator reference, six per-clip renders",
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-31/redcon/20260831-161241-96324/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=XPaN9oTiH64",
+      "yt_publish_at": "2026-09-06T20:34:00Z",
+      "duration_sec": 38.267,
+      "new_assets": {
+        "raffi_musiker_redcon_ref": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/characters/raffi-musiker/variants/redcon.png"
+      },
+      "cost_breakdown": {
+        "sound_estimate": 0.39,
+        "storyboarder": 0.64,
+        "animator": 2.772,
+        "editor": 0.0,
+        "total_estimate_usd": 3.802
+      },
+      "notes": "Canon reminder uses the established 92,143 casualty count and the destruction of the Romulan rescue armada. Divergence explicitly treats Data's command-code isolation and Raffi's pre-activation trace to Oh as a Timelines counterfactual. The first subtitle alignment stretched the final teaser phrase across the silent title card; the mandatory post-editor timing check caught it, and the event was clamped to 5.00s before the approved final encode. Final technical verification: full decode clean, 1080x1920 H.264 at 30 fps, AAC stereo, -14.79 LUFS / -2.23 dBTP."
     }
   ]
 }
