@@ -1,6 +1,6 @@
 {
   "game_tag": "genshin-impact",
-  "total_stories": 11,
+  "total_stories": 13,
   "stories": [
     {
       "id": 1,
@@ -211,6 +211,54 @@
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-24/reddit-story/20260824-154211-40131-2004/final.mp4",
       "gameplay_file": "Cut.mp4",
       "gameplay_offset_sec": 50
+    },
+    {
+      "id": 12,
+      "date": "2026-08-31",
+      "tone": "justice",
+      "theme": "rent-accusation-surprise-family-visit",
+      "moral_engine": "financial secrecy for a loving surprise is mistaken for spending shared rent money on a game",
+      "game_situation": "a three-year couple's Sunday bill ritual collides with a misunderstood Primogem claim and secret travel savings",
+      "false_verdict": "the narrator spent the couple's rent money on Primogems",
+      "pressure_source": "Maya's fear before Tuesday's rent payment and her decision to pack a bag",
+      "narrator_flaw": "hid the savings transfer and answered defensively instead of explaining the bank movement",
+      "human_action": "opened the Primogem claim history, bank statement, bills account, and airline confirmation",
+      "reveal": "the Primogems cost zero, rent remained untouched, and the moved savings bought Maya's mother a flight",
+      "resolution_type": "positive",
+      "headline": "My girlfriend thought I spent our rent money on Primogems. The bank statement made her cry.",
+      "youtube_title": "She Thought I Spent Our Rent on Primogems. The Bank Statement Made Her Cry",
+      "offerwall_angle": "free Primogems from the link in bio provide the zero-charge claim history that clears the narrator",
+      "gameplay_file": "Cut.mp4",
+      "gameplay_offset_sec": 110,
+      "gameplay_duration_sec": 64.484688,
+      "output_dir": "output/2026-08-31/genshin-impact/reddit-story/20260831-150300-genshin-rent-statement",
+      "youtube_url": "https://www.youtube.com/watch?v=OG6EI6s6tww",
+      "yt_publish_at": "2026-09-06T19:31:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-31/reddit-story/20260831-150300-genshin-rent-statement/final.mp4"
+    },
+    {
+      "id": 13,
+      "date": "2026-08-31",
+      "tone": "comeback",
+      "theme": "newcomer-scapegoating-leader-sabotage-exposed",
+      "moral_engine": "a leader manufactures mistakes and scapegoats the least established teammate to preserve control",
+      "game_situation": "a six-month after-work co-op ritual where a controlling leader scapegoats a three-week newcomer",
+      "false_verdict": "Nico is too weak and incompetent to belong on the co-op team",
+      "pressure_source": "Grant's repeated insults, two teammates echoing them, and Nico withdrawing from voice chat",
+      "narrator_flaw": "wanted the leader's approval, stayed silent, and once laughed nervously at Nico",
+      "human_action": "recorded three complete runs, reviewed them, posted the uncut evidence, and admitted his own failure",
+      "reveal": "Grant repeatedly started early and changed Nico's instructions before blaming him for obeying",
+      "resolution_type": "social-restoration",
+      "headline": "My co-op team blamed the weakest player for ruining every run—until I recorded what our leader was doing.",
+      "youtube_title": "My Team Blamed the Weakest Player—Until I Recorded Our Leader",
+      "offerwall_angle": "free Primogems from the link in bio help Nico build a character he likes without the toxic leader controlling him",
+      "gameplay_file": "Cut.mp4",
+      "gameplay_offset_sec": 181,
+      "gameplay_duration_sec": 64.493292,
+      "output_dir": "output/2026-08-31/genshin-impact/reddit-story/20260831-150301-genshin-coop-recording",
+      "youtube_url": "https://www.youtube.com/watch?v=6ahKQFeDJaI",
+      "yt_publish_at": "2026-09-08T20:49:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-08-31/reddit-story/20260831-150301-genshin-coop-recording/final.mp4"
     }
   ],
   "anti_repetition": {
@@ -221,7 +269,9 @@
       "tenant-noise-accusation-cleared",
       "coworker-mockery-cover-insecurity",
       "co-parenting-custody-vindication",
-      "exchange-student-language-defense"
+      "exchange-student-language-defense",
+      "rent-accusation-surprise-family-visit",
+      "newcomer-scapegoating-leader-sabotage-exposed"
     ],
     "recent_tones": [
       "soft-drama",
@@ -232,7 +282,9 @@
       "touching",
       "touching",
       "misunderstood hero",
-      "betrayal resolved"
+      "betrayal resolved",
+      "justice",
+      "comeback"
     ],
     "recent_moral_engines": [
       "feeling replaced/abandoned",
@@ -242,7 +294,9 @@
       "a parent's real attention falsely reframed as a purchased substitute for it",
       "an exchange student's real coping/learning tool is falsely reframed by his parents as avoiding his studies",
       "a counselor's genuine bonding method with a homesick, withdrawn camper is falsely reframed as shirking supervisory duty",
-      "an elderly friend's private generosity toward his own family is mistaken for a volunteer exploiting him for cash"
+      "an elderly friend's private generosity toward his own family is mistaken for a volunteer exploiting him for cash",
+      "financial secrecy for a loving surprise is mistaken for spending shared rent money on a game",
+      "a leader manufactures mistakes and scapegoats the least established teammate to preserve control"
     ],
     "recent_false_verdicts": [
       "best friend deliberately excluded narrator over her engagement",
@@ -252,7 +306,9 @@
       "the narrator only buys his daughter's affection with Primogems instead of giving her real attention",
       "the roommate's parents believe he is skipping his studies to play a video game",
       "the narrator is ignoring his counselor duties by gaming instead of supervising rest hour",
-      "the narrator pressured Mr. Okafor into buying gift cards to fund the narrator's own game purchases"
+      "the narrator pressured Mr. Okafor into buying gift cards to fund the narrator's own game purchases",
+      "the narrator spent the couple's rent money on Primogems",
+      "Nico is too weak and incompetent to belong on the co-op team"
     ],
     "recent_pressure_sources": [
       "mutual friend group chat consensus",
@@ -262,7 +318,9 @@
       "ex-wife's accusation escalating into a threat to cut weekend custody time",
       "the parents' video-call ultimatum: quit the game or come home within two weeks",
       "co-counselor Kyle's write-up and the camp director's written warning with a threat of early dismissal",
-      "the center director's on-the-spot suspension of the volunteer badge and coworkers' whispered accusations of elder exploitation"
+      "the center director's on-the-spot suspension of the volunteer badge and coworkers' whispered accusations of elder exploitation",
+      "Maya's fear before Tuesday's rent payment and her decision to pack a bag",
+      "Grant's repeated insults, two teammates echoing them, and Nico withdrawing from voice chat"
     ],
     "recent_hooks": [
       "He said it once. Flat. That anime kids stuff. No argument. Just walked away.",
@@ -273,23 +331,31 @@
       "ex-wife accuses divorced dad of buying his daughter's love with Primogems instead of real attention; his nine-year-old sets her straight",
       "roommate's parents see the game on a video call and issue a quit-or-come-home ultimatum; his composition professor's unprompted confirmation of his English improvement clears it",
       "My co-counselor reported me for playing games during rest hour, until a ten-year-old proved him wrong.",
-      "The center accused me of scamming my elderly gaming buddy, until his granddaughter cleared me."
+      "The center accused me of scamming my elderly gaming buddy, until his granddaughter cleared me.",
+      "My girlfriend thought I spent our rent money on Primogems. The bank statement made her cry.",
+      "My co-op team blamed the weakest player for ruining every run—until I recorded what our leader was doing."
     ],
     "recent_gameplay_offsets_sec": [
       305,
       140,
       222,
-      80
+      80,
+      110,
+      181
     ],
     "banned_combos": [],
     "note": "gameplay_offset_sec 222 on Cut.mp4 (~383s total) maximizes minimum separation from prior tracked offsets (140/305) but true 180-240s separation from all recents is still not achievable on this single ~383s file. Cut.mp4 still needs more footage or a second Genshin gameplay source to restore full offset variety. Story 9 (2026-08-17) uses offset 80 on Cut.mp4 — sits in the largest available gap between prior tracked offsets (20 and 140), giving ~60s minimum separation; true 180-240s separation remains unachievable on this ~383s file (still needs a second gameplay source). This episode also moves to a language-learning/exchange-student theme, first use of this angle in the bible.",
     "recent_game_situations": [
       "a summer camp cabin's daily 1pm rest hour, spent hunting hidden chests in Sumeru's forest with a quiet camper",
-      "weekly Thursday-afternoon Genshin Impact sessions with an elderly resident during the volunteer tech program at Riverside Senior Center"
+      "weekly Thursday-afternoon Genshin Impact sessions with an elderly resident during the volunteer tech program at Riverside Senior Center",
+      "a three-year couple's Sunday bill ritual collides with a misunderstood Primogem claim and secret travel savings",
+      "a six-month after-work co-op ritual where a controlling leader scapegoats a three-week newcomer"
     ],
     "recent_resolution_types": [
       "positive",
-      "positive"
+      "positive",
+      "positive",
+      "social-restoration"
     ]
   }
 }

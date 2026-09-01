@@ -1,7 +1,7 @@
 {
   "game_tag": "growtopia",
   "format": "reddit-story",
-  "total_stories": 5,
+  "total_stories": 7,
   "stories": [
     {
       "id": 1,
@@ -156,6 +156,70 @@
       "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-24/reddit-story/20260824-160317-49000-31101/final.mp4",
       "youtube_url": null,
       "youtube_note": "youtube_channel is not mapped yet for growtopia (games/growtopia/growtopia.md); Supabase is the only deliverable until a channel is mapped."
+    },
+    {
+      "id": 6,
+      "date": "2026-08-31",
+      "tone": "betrayal-resolved",
+      "theme": "sister-wedding-accessibility-layout-mistaken-for-neglect",
+      "moral_engine": "secret accessibility planning is mistaken for indifference toward a sister's wedding",
+      "game_situation": "a brother secretly rebuilding his sister's reception room in Growtopia to test wheelchair access for their grandmother",
+      "false_verdict": "the narrator cares more about Growtopia than helping with his sister's real wedding",
+      "pressure_source": "his sister stops answering him and tells their parents he is ignoring every wedding responsibility",
+      "narrator_flaw": "kept the redesign secret and offered no reassurance while his sister's anxiety grew",
+      "human_action": "measured their grandmother's wheelchair, built a full reception model, tested routes, and invited his sister inside",
+      "reveal": "their grandmother navigates every digital table, and the planner approves the model's accessible measurements",
+      "resolution_type": "positive-family-restoration",
+      "headline": "My sister accused me of ignoring her wedding—until she saw the world I had built.",
+      "offerwall_angle": "Gems from the link in bio purchase the final decorative blocks for the accessibility model; no service or download mention",
+      "gameplay_segments": [
+        {
+          "file": "Growtopia 1.mp4",
+          "offset_sec": 2.0,
+          "duration_sec": 31.356
+        },
+        {
+          "file": "growtopia 2.mp4",
+          "offset_sec": 208.0,
+          "duration_sec": 31.356
+        }
+      ],
+      "output_dir": "output/2026-08-31/growtopia/reddit-story/20260831-growtopia-wedding-accessible-reception",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-31/reddit-story/20260831-growtopia-wedding-accessible-reception/final.mp4",
+      "youtube_url": null,
+      "youtube_note": "youtube_channel is not mapped yet for growtopia (games/growtopia/growtopia.md); Supabase is the only deliverable until a channel is mapped."
+    },
+    {
+      "id": 7,
+      "date": "2026-08-31",
+      "tone": "rage-to-relief",
+      "theme": "best-friend-lock-theft-frame-up-exposed-by-trade-history",
+      "moral_engine": "a moderator's staged theft frames the narrator and breaks a six-year friendship",
+      "game_situation": "a six-year pair of friends confronting a missing Blue Gem Lock and damage inside their shared Growtopia world",
+      "false_verdict": "the narrator stole the friends' rarest lock and damaged their shared world",
+      "pressure_source": "the moderator posts misleading screenshots while the best friend removes the narrator's access publicly",
+      "narrator_flaw": "panicked, flooded chat defensively, and had reused an old vault code",
+      "human_action": "saved the screenshots, admitted the weak code, and requested the complete trade history",
+      "reveal": "the trade history shows moderator Vex moved the lock to his alternate account before staging the damage",
+      "resolution_type": "positive-friendship-vindication",
+      "headline": "My best friend accused me of stealing our rarest lock. The trade history exposed who actually took it.",
+      "offerwall_angle": "Gems from the link in bio restore the damaged shared world after the moderator is exposed; no service or download mention",
+      "gameplay_segments": [
+        {
+          "file": "growtopia 2.mp4",
+          "offset_sec": 35.0,
+          "duration_sec": 31.68
+        },
+        {
+          "file": "Growtopia 1.mp4",
+          "offset_sec": 165.0,
+          "duration_sec": 31.68
+        }
+      ],
+      "output_dir": "output/2026-08-31/growtopia/reddit-story/20260831-growtopia-stolen-lock-trade-history",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-08-31/reddit-story/20260831-growtopia-stolen-lock-trade-history/final.mp4",
+      "youtube_url": null,
+      "youtube_note": "youtube_channel is not mapped yet for growtopia (games/growtopia/growtopia.md); Supabase is the only deliverable until a channel is mapped."
     }
   ],
   "style_tags": "not applicable - reddit-story uses ready-made gameplay and no generated images or AI video",
@@ -172,62 +236,82 @@
     "recent_themes": [
       "cousin-childhood-world-restoration",
       "long-distance-friendship-mistaken-for-screen-addiction",
-      "coworker-mentorship-mistaken-for-slacking"
+      "coworker-mentorship-mistaken-for-slacking",
+      "sister-wedding-accessibility-layout-mistaken-for-neglect",
+      "best-friend-lock-theft-frame-up-exposed-by-trade-history"
     ],
     "recent_tones": [
       "touching",
       "misunderstood hero",
       "comeback",
       "underdog",
-      "humiliation-to-respect"
+      "humiliation-to-respect",
+      "betrayal-resolved",
+      "rage-to-relief"
     ],
     "recent_moral_engines": [
       "a secret act of care is mistaken for abandonment",
       "a real friendship is mistaken for a screen addiction",
       "quiet mentorship between coworkers is mistaken for wasted work time",
       "genuine quality time with his daughter is mistaken for a father hiding from real parenting behind a phone game",
-      "a shy coworker's game-chat coaching for a real conversation is mistaken for childish escapism"
+      "a shy coworker's game-chat coaching for a real conversation is mistaken for childish escapism",
+      "secret accessibility planning is mistaken for indifference toward a sister's wedding",
+      "a moderator's staged theft frames the narrator and breaks a six-year friendship"
     ],
     "recent_game_situations": [
       "rebuilding a younger cousin's first Growtopia world from childhood screenshots",
       "weekly Growtopia building sessions between grandma and her long-distance best friend of forty years",
       "two night-shift warehouse coworkers building together in Growtopia on every break for eight months",
       "nightly Growtopia building sessions between a night-shift father and his teenage daughter, right before her bedtime",
-      "office lunch-break sessions on Growtopia between a mocked new hire and a senior coworker secretly hiding her own account"
+      "office lunch-break sessions on Growtopia between a mocked new hire and a senior coworker secretly hiding her own account",
+      "a brother secretly rebuilding his sister's reception room in Growtopia to test wheelchair access for their grandmother",
+      "a six-year pair of friends confronting a missing Blue Gem Lock and damage inside their shared Growtopia world"
     ],
     "recent_false_verdicts": [
       "the narrator had outgrown and forgotten his younger cousin",
       "the narrator is enabling grandma's phone addiction instead of supporting real friendship",
       "the narrator and his coworker were slacking off on their phones instead of working",
       "the narrator is checked-out and avoiding real parenting by disappearing into a game instead of being present",
-      "the new coworker was too immature and antisocial to fit in, hiding in a kids' game"
+      "the new coworker was too immature and antisocial to fit in, hiding in a kids' game",
+      "the narrator cares more about Growtopia than helping with his sister's real wedding",
+      "the narrator stole the friends' rarest lock and damaged their shared world"
     ],
     "recent_pressure_sources": [
       "three weeks of unanswered messages before the cousin's birthday",
       "aunt threatening to limit grandma's screen time and take the game away",
       "a new supervisor threatening to write both coworkers up for wasting company time",
       "his grandmother threatening to tell his ex-wife he isn't present enough, putting his custody time at risk",
-      "the whole office team openly mocking him at every single lunch break"
+      "the whole office team openly mocking him at every single lunch break",
+      "his sister stops answering him and tells their parents he is ignoring every wedding responsibility",
+      "the moderator posts misleading screenshots while the best friend removes the narrator's access publicly"
     ],
     "recent_resolution_types": [
       "social-restoration",
       "positive-social-restoration",
       "positive-professional-recognition",
       "positive-family-recognition",
-      "public-vindication"
+      "public-vindication",
+      "positive-family-restoration",
+      "positive-friendship-vindication"
     ],
     "recent_hooks": [
       "cousin stops answering before his birthday after three weeks of silence; restored typo sign reveals the surprise",
       "aunt accuses grandson of enabling grandma's screen addiction; reveal shows grandma and her 40-year friend video-calling while building together",
       "supervisor calls eight months of coworker breaks wasting company time; the quiet coworker defends the narrator himself, revealing the Lucky Lock ritual built his confidence",
       "My grandmother said I was hiding from real parenting behind a game, until she saw why Mia never misses it.",
-      "Our office mocked the new guy's 'kids' game' until it helped me win the hardest conversation of my career."
+      "Our office mocked the new guy's 'kids' game' until it helped me win the hardest conversation of my career.",
+      "My sister accused me of ignoring her wedding—until she saw the world I had built.",
+      "My best friend accused me of stealing our rarest lock. The trade history exposed who actually took it."
     ],
     "recent_gameplay_sources": [
       "Growtopia 1.mp4@84.9",
       "growtopia 2.mp4@154.2",
       "Growtopia 1.mp4@40.0",
-      "growtopia 2.mp4@110.0"
+      "growtopia 2.mp4@110.0",
+      "Growtopia 1.mp4@2.0",
+      "growtopia 2.mp4@208.0",
+      "growtopia 2.mp4@35.0",
+      "Growtopia 1.mp4@165.0"
     ],
     "banned_combos": [],
     "note": "Story 2 (2026-08-12) moves past the cousin-childhood theme into a grandma/long-distance-friend setup, avoiding any death/war content per explicit user constraint. Editor also flagged that the two gameplay clips (241.7s each) cannot give the full 180-240s offset separation while fitting a ~35.5s segment; max practical separation (115-134s) was used instead — track this limitation for future runs. Story 3 (2026-08-17) moves into a workplace setting (night-shift coworkers) — first non-family relationship in this bible. TTS render came back at 70.4s on first pass (over the 68s cap); text was trimmed twice (182→167→157 words) before a 67.0s render passed. No YouTube channel is mapped for growtopia — this episode is Supabase-only, no yt_publish_at."

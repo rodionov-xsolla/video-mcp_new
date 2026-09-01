@@ -8,7 +8,7 @@
     "fallback_engine": "fal-ai/minimax/speech-2.8-hd",
     "fallback_voice_id": "Determined_Man"
   },
-  "total_stories": 15,
+  "total_stories": 17,
   "stories": [
     {
       "id": 1,
@@ -374,6 +374,84 @@
           "duration_sec": 20.0
         }
       ]
+    },
+    {
+      "id": 16,
+      "date": "2026-08-31",
+      "tone": "misunderstood-hero",
+      "theme": "airport-shutdown-international-fleet-contact-desk",
+      "moral_engine": "a familiar phone habit is mistaken for negligence during a crisis before its human network proves useful",
+      "game_situation": "an airport customer-service worker keeps in touch with eight international Star Trek Timelines fleet members every night",
+      "false_verdict": "the narrator is irresponsibly playing on his phone while stranded passengers need help",
+      "pressure_source": "the narrator's manager ordering the phone away while families cannot contact relatives",
+      "narrator_flaw": "became defensive instead of explaining the international friendships behind the game",
+      "human_action": "asked the fleet for limited translation and contact help, then worked through the manager's desk",
+      "reveal": "three fleet friends quickly provide Turkish translation, an Italian hotel call, and a Korean airline number",
+      "resolution_type": "positive-professional-restoration",
+      "headline": "My manager caught me playing Star Trek during an airport shutdown. Then my fleet saved the terminal.",
+      "youtube_title": "My Manager Caught Me Gaming During an Airport Shutdown. Then My Fleet Saved Us",
+      "offerwall_angle": "the narrator met the international fleet after downloading Star Trek Timelines through the link in bio",
+      "gameplay_segments": [
+        {
+          "file": "Startrek_gameplay_2.mp4",
+          "offset_sec": 10.0
+        },
+        {
+          "file": "Startrek_gameplay_5.mp4",
+          "offset_sec": 18.0
+        },
+        {
+          "file": "Startrek_gameplay_1.mp4",
+          "offset_sec": 14.0
+        },
+        {
+          "file": "Startrek_gameplay_4.mp4",
+          "offset_sec": 26.0
+        }
+      ],
+      "output_dir": "output/2026-08-31/star-trek-timelines/reddit-story/20260831-airport-fleet",
+      "youtube_url": "https://www.youtube.com/watch?v=Tl_7kG4g_9A",
+      "yt_publish_at": "2026-09-09T20:15:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-31/reddit-story/20260831-airport-fleet/final.mp4"
+    },
+    {
+      "id": 17,
+      "date": "2026-08-31",
+      "tone": "touching-family-restoration",
+      "theme": "late-mother-crew-initials-audio-message-family-restoration",
+      "moral_engine": "patiently following a deceased parent's clue is mistaken for unhealthy withdrawal before it reunites the family",
+      "game_situation": "a family reconstructs five Star Trek Timelines crew members from their late mother's screenshots",
+      "false_verdict": "the narrator is using the game account to avoid grieving and withdraw from the family",
+      "pressure_source": "the narrator's brother schedules the account for deletion before the clue is solved",
+      "narrator_flaw": "ignored the family while searching, making the accusation look more plausible",
+      "human_action": "invited the whole family to solve the clue together before the deletion deadline",
+      "reveal": "the five crew initials spell AUDIO and lead to five personal recordings from their mother",
+      "resolution_type": "positive-family-restoration",
+      "headline": "My family said I was hiding inside my late mother's game account. Then they heard what she left there.",
+      "youtube_title": "My Family Wanted Mom's Game Deleted. Then We Heard What She Left Behind",
+      "offerwall_angle": "the narrator downloads Star Trek Timelines through the link in bio to understand the final crew clue",
+      "gameplay_segments": [
+        {
+          "file": "Startrek_gameplay_5.mp4",
+          "offset_sec": 22.0
+        },
+        {
+          "file": "Startrek_gameplay_3.mp4",
+          "offset_sec": 26.0
+        },
+        {
+          "file": "Startrek_gameplay_1.mp4",
+          "offset_sec": 18.0
+        },
+        {
+          "file": "Startrek_gameplay_4.mp4",
+          "offset_sec": 28.0
+        }
+      ],
+      "output_dir": "output/2026-08-31/star-trek-timelines/reddit-story/20260831-mothers-clue",
+      "youtube_url": "https://www.youtube.com/watch?v=oHqrF24dMzA",
+      "yt_publish_at": "2026-09-11T20:02:00Z",
+      "supabase_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-08-31/reddit-story/20260831-mothers-clue/final.mp4"
     }
   ],
   "anti_repetition": {
@@ -385,7 +463,9 @@
       "library-community-night-restored",
       "cold-standoffish-roommate-becomes-closet-trek-fan-and-best-friend",
       "substitute-teacher-mentorship-mistaken-for-favoritism",
-      "deaf-coworker-connection-mistaken-for-exclusion"
+      "deaf-coworker-connection-mistaken-for-exclusion",
+      "airport-shutdown-international-fleet-contact-desk",
+      "late-mother-crew-initials-audio-message-family-restoration"
     ],
     "recent_tones": [
       "touching",
@@ -397,7 +477,9 @@
       "comeback",
       "misunderstood hero",
       "touching",
-      "rage-to-relief"
+      "rage-to-relief",
+      "misunderstood-hero",
+      "touching-family-restoration"
     ],
     "recent_moral_engines": [
       "n/a — genuine fan story, no accusation arc",
@@ -409,7 +491,9 @@
       "private mentorship built through a shared game is mistaken for unprofessional favoritism",
       "a deaf coworker's real channel of connection is misread as the narrator excluding him from real conversation",
       "a private father-son ritual is mistaken for screen-time neglect during a custody dispute",
-      "a quiet weekly ritual between neighbors is mistaken for a disruptive illegal gathering based on an anonymous complaint"
+      "a quiet weekly ritual between neighbors is mistaken for a disruptive illegal gathering based on an anonymous complaint",
+      "a familiar phone habit is mistaken for negligence during a crisis before its human network proves useful",
+      "patiently following a deceased parent's clue is mistaken for unhealthy withdrawal before it reunites the family"
     ],
     "recent_game_situations": [
       "grandson spends time with a silent retired-engineer grandfather via the game",
@@ -421,7 +505,9 @@
       "a substitute teacher spends lunch periods playing Star Trek Timelines with a withdrawn student at a corner classroom table",
       "two factory-line coworkers, one deaf/hard of hearing, run a shared crew on breaks since the floor is too loud for real conversation",
       "a divorced father runs a shared Star Trek Timelines crew with his son every Friday during his every-other-weekend custody time",
-      "two apartment neighbors run the same crew together every Tuesday night over headsets"
+      "two apartment neighbors run the same crew together every Tuesday night over headsets",
+      "an airport customer-service worker keeps in touch with eight international Star Trek Timelines fleet members every night",
+      "a family reconstructs five Star Trek Timelines crew members from their late mother's screenshots"
     ],
     "recent_false_verdicts": [
       "null — no injustice arc",
@@ -433,7 +519,9 @@
       "the principal believes the lunch sessions are inappropriate favoritism that crosses teacher-student boundaries",
       "the new floor manager believes the narrator is ignoring/excluding his deaf coworker instead of really talking to him",
       "the narrator hides behind the game instead of actually parenting his son during his limited custody time",
-      "the property manager believed the Tuesday sessions were loud parties or illegal subletting"
+      "the property manager believed the Tuesday sessions were loud parties or illegal subletting",
+      "the narrator is irresponsibly playing on his phone while stranded passengers need help",
+      "the narrator is using the game account to avoid grieving and withdraw from the family"
     ],
     "recent_pressure_sources": [
       "n/a — no pressure/accusation source, genuine story",
@@ -445,7 +533,9 @@
       "a parent complaint that escalates into a formal meeting with the principal, threatening the narrator's job and certification",
       "the floor manager threatening to split their shared breaks",
       "a formal custody mediation review threatening to cut his weekend hours",
-      "a formal lease-termination warning from the property manager"
+      "a formal lease-termination warning from the property manager",
+      "the narrator's manager ordering the phone away while families cannot contact relatives",
+      "the narrator's brother schedules the account for deletion before the clue is solved"
     ],
     "recent_resolution_types": [
       "positive",
@@ -457,7 +547,9 @@
       "positive",
       "positive",
       "positive",
-      "positive"
+      "positive",
+      "positive-professional-restoration",
+      "positive-family-restoration"
     ],
     "recent_hooks": [
       "bio link download, quiet grandfather, deliberately-wrong crew build as excuse to sit near him, Apollo-era antenna-array reveal",
@@ -469,9 +561,11 @@
       "substitute teacher's lunch-period gaming ritual with a withdrawn student is called favoritism by the principal; the student's unannounced defense at the meeting clears the teacher",
       "new floor manager accuses narrator of excluding his deaf coworker; Theo signs through an interpreter and shows eight months of crew-planning texts, clearing the narrator himself",
       "My ex called our Star Trek nights neglectful in mediation, until my son proved her wrong himself.",
-      "My landlord accused me of throwing illegal parties. The real noise came from the apartment above mine."
+      "My landlord accused me of throwing illegal parties. The real noise came from the apartment above mine.",
+      "My manager caught me playing Star Trek during an airport shutdown. Then my fleet saved the terminal.",
+      "My family said I was hiding inside my late mother's game account. Then they heard what she left there."
     ],
-    "note": "story 10 (2026-07-30) uses an institutional community conflict: a library director mistakes small attendance for no human value, while the regulars restore the event through public testimony. Story 11 (2026-08-04) inverts the roommate arc from story 9 — here the narrator, not the roommate, holds the false verdict. HARD RULE added 2026-07-13 remains active: never build reddit-story conflict on in-game mechanics (fleet/gauntlet/leaderboard/cheat), even when the mechanic is real. Source false verdicts and pressure from real relationships only. Story 12 (2026-08-12) moves the setting to a school/mentorship context (substitute teacher + student), first use of this setting in the bible. Also confirmed: this game's Chatterbox TTS route (voice_ref_url zero-shot clone) silently truncates any input over ~80 words with no error — Sound fell back to MiniMax/Determined_Man successfully; flag this as a known Chatterbox limitation for future long-form reddit-story scripts on this game. Story 13 (2026-08-17) moves to a factory/disability-inclusion setting (deaf coworker) - first use of this angle in the bible; named the coworker Theo rather than reusing Marcus from story 12. total_stories was previously out of sync with stories.length (said 11, array had 12) - corrected to match actual array length (13) on this update.",
+    "note": "story 10 (2026-07-30) uses an institutional community conflict: a library director mistakes small attendance for no human value, while the regulars restore the event through public testimony. Story 11 (2026-08-04) inverts the roommate arc from story 9 — here the narrator, not the roommate, holds the false verdict. HARD RULE added 2026-07-13 remains active: never build reddit-story conflict on in-game mechanics (fleet/gauntlet/leaderboard/cheat), even when the mechanic is real. Source false verdicts and pressure from real relationships only. Story 12 (2026-08-12) moves the setting to a school/mentorship context (substitute teacher + student), first use of this setting in the bible. Also confirmed: this game's Chatterbox TTS route (voice_ref_url zero-shot clone) silently truncates any input over ~80 words with no error — preserve chunked Chatterbox generation or use the configured MiniMax fallback for future long-form reddit-story scripts. Story 13 (2026-08-17) moves to a factory/disability-inclusion setting (deaf coworker), the first use of this angle in the bible; the earlier story-count mismatch was corrected at that time. Stories 16–17 bring the current total to 17 with airport-community and family-grief settings.",
     "banned_combos": []
   }
 }
