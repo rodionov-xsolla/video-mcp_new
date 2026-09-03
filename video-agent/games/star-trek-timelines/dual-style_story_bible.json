@@ -5,7 +5,7 @@
   "production_contract": "dual-style-v3",
   "comparison_mode": "canonical-alternate",
   "created_at": "2026-07-22",
-  "last_episode": 5,
+  "last_episode": 7,
   "style_tags": "Photorealistic canonical live-action Star Trek comparison. LEFT is the original/Prime screen persona; RIGHT is the exact canonical Mirror, assimilated, corrupted, possessed or duplicate persona of the same character and same recognizable screen performer. Preserve each persona's canonical face, hair, facial hair, makeup, prosthetics, uniform, insignia, accessories and props. Both figures share one continuous cinematic Star Trek environment with no split panel.",
   "character_rotation": {
     "recent_characters": [
@@ -29,7 +29,15 @@
       "Uhura / Mirror Uhura",
       "Sulu / Mirror Sulu",
       "Scotty / Mirror Scotty",
-      "Phlox / Mirror Phlox"
+      "Phlox / Mirror Phlox",
+      "Riker/Thomas Riker",
+      "The Doctor/Warship Doctor",
+      "Kes/Warlord Kes",
+      "Odo/Mirror Odo",
+      "Dukat/Pah-wraith Dukat",
+      "Garak/Mirror Garak",
+      "Jadzia Dax/Mirror Jadzia",
+      "Bareil/Mirror Bareil"
     ],
     "recent_environments": [
       "TNG Enterprise-D bridge, red alert lighting",
@@ -52,9 +60,25 @@
       "TOS Enterprise transporter room, ambush lighting",
       "TOS Enterprise bridge helm station, red-alert lighting",
       "TOS Enterprise main engineering, warp-core glow",
-      "NX-01 sickbay, cool clinical lighting"
+      "NX-01 sickbay, cool clinical lighting",
+      "Enterprise-D command corridor",
+      "Museum of Kyrian Heritage gallery aisle",
+      "Voyager sickbay corridor",
+      "Terok Nor ore-processing center",
+      "Empok Nor abandoned Promenade",
+      "mirror-universe cargo bay center aisle",
+      "Deep Space 9 docking-portal corridor",
+      "Bajoran temple antechamber"
     ],
     "recent_action_types": [
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
       "walking-approach",
       "walking-approach",
       "walking-approach",
@@ -180,6 +204,46 @@
       "pair_slug": "phlox-mirrorphlox",
       "display_name": "Phlox / Mirror Phlox",
       "last_seen_episode": 5
+    },
+    {
+      "pair_slug": "riker-thomasriker",
+      "display_name": "Riker / Thomas Riker",
+      "last_seen_episode": 6
+    },
+    {
+      "pair_slug": "doctor-warshipdoctor",
+      "display_name": "The Doctor / Warship Doctor",
+      "last_seen_episode": 6
+    },
+    {
+      "pair_slug": "kes-warlordkes",
+      "display_name": "Kes / Warlord Kes",
+      "last_seen_episode": 6
+    },
+    {
+      "pair_slug": "odo-mirrorodo",
+      "display_name": "Odo / Mirror Odo",
+      "last_seen_episode": 6
+    },
+    {
+      "pair_slug": "dukat-pahwraithdukat",
+      "display_name": "Dukat / Pah-wraith Dukat",
+      "last_seen_episode": 7
+    },
+    {
+      "pair_slug": "garak-mirrorgarak",
+      "display_name": "Garak / Mirror Garak",
+      "last_seen_episode": 7
+    },
+    {
+      "pair_slug": "jadzia-mirrorjadzia",
+      "display_name": "Jadzia Dax / Mirror Jadzia",
+      "last_seen_episode": 7
+    },
+    {
+      "pair_slug": "bareil-mirrorbareil",
+      "display_name": "Bareil / Mirror Bareil",
+      "last_seen_episode": 7
     }
   ],
   "characters": [
@@ -476,6 +540,257 @@
         "name": "Mirror Phlox",
         "character_description": "photorealistic John Billingsley as canonical Mirror Phlox, same Denobulan facial prosthetics and features, dark ISS Enterprise imperial medical officer uniform variant, cold clinical menacing expression, matches Enterprise's In a Mirror, Darkly design"
       }
+    },
+    {
+      "pair_slug": "riker-thomasriker",
+      "screen_performer": "Jonathan Frakes",
+      "original": {
+        "slug": "riker",
+        "name": "Riker",
+        "character_description": "Jonathan Frakes as original William T. Riker: same mature face, short brown hair, beard, broad adult build, and late-TNG Starfleet command uniform as verified by canonical source still."
+      },
+      "alternate": {
+        "slug": "thomas-riker",
+        "name": "Thomas Riker",
+        "character_description": "The same Jonathan Frakes as Thomas Riker: same face, brown hair, adult build, and DS9 Defiant-impersonation-era command uniform; preserve false sideburns only if visible in the exact selected source still."
+      },
+      "canonical_evidence": [
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Second_Chances_(episode)",
+          "anchors": [
+            "transporter-created duplicate of William Riker",
+            "both lives diverged after the duplicate event"
+          ]
+        },
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Defiant_(episode)",
+          "anchors": [
+            "Thomas Riker removes false sideburns",
+            "Thomas commandeers the Defiant"
+          ]
+        },
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Thomas_Riker",
+          "anchors": [
+            "Thomas Riker canonical persona reference"
+          ]
+        }
+      ]
+    },
+    {
+      "pair_slug": "doctor-warshipdoctor",
+      "screen_performer": "Robert Picardo",
+      "original": {
+        "slug": "the-doctor",
+        "name": "The Doctor",
+        "character_description": "Robert Picardo as The Doctor: same mature facial likeness, receding dark hair, clean-shaven face, holographic emergency-medical-officer presentation, and source-verified Voyager medical uniform."
+      },
+      "alternate": {
+        "slug": "warship-doctor",
+        "name": "Warship Doctor",
+        "character_description": "The same Robert Picardo as the Warship Doctor: same face, hair, adult proportions, and the Kyrian historical-reconstruction presentation from Living Witness, including only its source-verified warship-era uniform treatment."
+      },
+      "canonical_evidence": [
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Living_Witness_(episode)",
+          "anchors": [
+            "EMH backup corrects the Kyrian historical distortion",
+            "Warship Voyager is a reconstruction",
+            "The Doctor appears android-like in the reconstruction"
+          ]
+        },
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/The_Doctor",
+          "anchors": [
+            "The Doctor canonical persona reference"
+          ]
+        }
+      ]
+    },
+    {
+      "pair_slug": "kes-warlordkes",
+      "screen_performer": "Jennifer Lien",
+      "original": {
+        "slug": "kes",
+        "name": "Kes",
+        "character_description": "Jennifer Lien as Kes: same youthful adult face, short light hair, slight adult build, Ocampa ears, and Voyager-era Kes screen appearance from the source-verified Warlord reference."
+      },
+      "alternate": {
+        "slug": "warlord-kes",
+        "name": "Warlord Kes",
+        "character_description": "The same Jennifer Lien as Warlord Kes: same face, short light hair, Ocampa ears, and adult proportions, with Tieran's possession expressed only through the exact Jennifer Lien Tieran costume and screen appearance from Warlord."
+      },
+      "canonical_evidence": [
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Warlord_(episode)",
+          "anchors": [
+            "Kes is possessed by Tieran",
+            "Jennifer Lien's Tieran costume is documented as an episode costume"
+          ]
+        },
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Kes",
+          "anchors": [
+            "Kes canonical persona reference"
+          ]
+        }
+      ]
+    },
+    {
+      "pair_slug": "odo-mirrorodo",
+      "screen_performer": "René Auberjonois",
+      "original": {
+        "slug": "odo",
+        "name": "Odo",
+        "character_description": "René Auberjonois as Odo: canonical Changeling facial prosthetics, swept-back hairless head, textured pale complexion, deep-set eyes, adult build, and source-verified DS9 security-officer presentation."
+      },
+      "alternate": {
+        "slug": "mirror-odo",
+        "name": "Mirror Odo",
+        "character_description": "The same René Auberjonois as Mirror Odo: same Changeling prosthetics, hairless head, textured pale complexion, deep-set eyes, adult build, and only the source-verified Alliance supervisor costume from Crossover."
+      },
+      "canonical_evidence": [
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Crossover_(episode)",
+          "anchors": [
+            "Mirror Odo is Alliance supervisor of Terok Nor's ore-processing center"
+          ]
+        },
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Odo_(mirror)",
+          "anchors": [
+            "Mirror Odo is a Changeling",
+            "Klingon-Cardassian Alliance supervisor",
+            "played by René Auberjonois",
+            "Alliance supervisor uniform is documented"
+          ]
+        }
+      ]
+    },
+    {
+      "pair_slug": "dukat-pahwraithdukat",
+      "screen_performer": "Marc Alaimo",
+      "original": {
+        "slug": "dukat",
+        "name": "Dukat",
+        "character_description": "Marc Alaimo as canonical Gul Dukat: same underlying adult face and build, with original screen appearance anchored only to the exact selected canonical reference."
+      },
+      "alternate": {
+        "slug": "pah-wraith-dukat",
+        "name": "Pah-wraith Dukat",
+        "character_description": "The same Marc Alaimo as Pah-wraith Dukat: source-verified Bajoran-farmer disguise, red Bajoran earring, armband, and Pah-wraith cult-leader presentation from Covenant; no added distinction."
+      },
+      "canonical_evidence": [
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Covenant_(episode)",
+          "anchors": [
+            "Marc Alaimo as Gul Dukat",
+            "Bajoran-farmer disguise",
+            "red Bajoran earring",
+            "armband",
+            "Pah-wraith cult-leader presentation"
+          ]
+        },
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Pah-wraith",
+          "anchors": [
+            "Dukat becomes a Pah-wraith vessel/emissary",
+            "final possession arc"
+          ]
+        }
+      ]
+    },
+    {
+      "pair_slug": "garak-mirrorgarak",
+      "screen_performer": "Andrew Robinson",
+      "original": {
+        "slug": "garak",
+        "name": "Garak",
+        "character_description": "Andrew J. Robinson as canonical Elim Garak: same underlying adult face and build, with original screen appearance anchored only to the exact selected canonical reference."
+      },
+      "alternate": {
+        "slug": "mirror-garak",
+        "name": "Mirror Garak",
+        "character_description": "The same Andrew J. Robinson as canonical Mirror Garak: same underlying adult face and build, with mirror appearance anchored only to the exact selected The Emperor's New Cloak reference."
+      },
+      "canonical_evidence": [
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Andrew_J._Robinson",
+          "anchors": [
+            "Andrew J. Robinson plays original Elim Garak",
+            "Andrew J. Robinson plays mirror Garak"
+          ]
+        },
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/The_Emperor%27s_New_Cloak_(episode)",
+          "anchors": [
+            "Mirror Garak appears on screen",
+            "Mirror Garak is an opportunistic mirror persona"
+          ]
+        }
+      ]
+    },
+    {
+      "pair_slug": "jadzia-mirrorjadzia",
+      "screen_performer": "Terry Farrell",
+      "original": {
+        "slug": "jadzia-dax",
+        "name": "Jadzia Dax",
+        "character_description": "Terry Farrell as canonical Jadzia Dax: same underlying adult face and build, source-verified Trill spots, and original screen appearance anchored only to the exact selected canonical reference."
+      },
+      "alternate": {
+        "slug": "mirror-jadzia",
+        "name": "Mirror Jadzia",
+        "character_description": "The same Terry Farrell as canonical Mirror Jadzia: same underlying adult face, build, and Trill spots, with mirror appearance anchored only to the exact selected canonical reference."
+      },
+      "canonical_evidence": [
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Jadzia_Dax",
+          "anchors": [
+            "Terry Farrell plays Jadzia Dax",
+            "Jadzia is a Trill",
+            "Trill spots are source-verified makeup"
+          ]
+        },
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Jadzia_Dax_(mirror)",
+          "anchors": [
+            "Mirror Jadzia is the canonical mirror counterpart",
+            "same performer Terry Farrell"
+          ]
+        }
+      ]
+    },
+    {
+      "pair_slug": "bareil-mirrorbareil",
+      "screen_performer": "Philip Anglim",
+      "original": {
+        "slug": "bareil-antos",
+        "name": "Bareil",
+        "character_description": "Philip Anglim as canonical Vedek Bareil Antos: same underlying adult face and build, with original Bajoran vedek screen appearance anchored only to the exact selected canonical reference."
+      },
+      "alternate": {
+        "slug": "mirror-bareil",
+        "name": "Mirror Bareil",
+        "character_description": "The same Philip Anglim as canonical Mirror Bareil Antos: same underlying adult face and build, and only the source-verified mirror thief's cracked-power-cell disruptor and selected screen appearance from Resurrection."
+      },
+      "canonical_evidence": [
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Bareil_Antos",
+          "anchors": [
+            "Philip Anglim plays Bareil Antos",
+            "Bareil is a Vedek"
+          ]
+        },
+        {
+          "url": "https://memory-alpha.fandom.com/wiki/Resurrection_(episode)",
+          "anchors": [
+            "Mirror Bareil Antos is played by Philip Anglim",
+            "mirror Bareil is a thief",
+            "disruptor has a cracked power cell"
+          ]
+        }
+      ]
     }
   ],
   "episode_summaries": [
@@ -650,6 +965,74 @@
       "duration_sec": 25.208,
       "cost_usd": 5.75,
       "notes": "Third consecutive episode with no pre-existing series-owned dual-style refs for any pair -- all 4 pairs (Uhura, Sulu, Scotty from TOS 'Mirror, Mirror'; Phlox from Enterprise 'In a Mirror, Darkly') newly generated from well-documented canonical screen facts and registered as reusable dual-style refs, pending manual visual approval. Animator authored an incorrect expect.min_width/min_height (assumed full-HD) on scene 1, causing a successfully completed and already-paid Kling generation to fail local validation only -- Manager recovered the still-live result_url directly and uploaded it manually rather than paying for a second generation; lesson recorded in rules/roles/animator.md (correct default is 600x1000 for this route's real 716x1284 output). Pair-title overlays rendered as single-color white/black-stroke text with fade-in only (tools/overlays.py does not support the spec's three-color segmented text or fade-out) -- a tooling gap, not a storyboard deviation."
+    },
+    {
+      "episode": 6,
+      "date": "2026-09-01",
+      "characters": [
+        "Riker/Thomas Riker",
+        "The Doctor/Warship Doctor",
+        "Kes/Warlord Kes",
+        "Odo/Mirror Odo"
+      ],
+      "environments": [
+        "Enterprise-D command corridor",
+        "Museum of Kyrian Heritage gallery aisle",
+        "Voyager sickbay corridor",
+        "Terok Nor ore-processing center"
+      ],
+      "screen_performers": [
+        "Jonathan Frakes",
+        "Robert Picardo",
+        "Jennifer Lien",
+        "René Auberjonois"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-09-01/dual-style/20260901-160223-star-trek-same-face-98029/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=QyHyR59E_cI",
+      "youtube_publish_at": "2026-09-10T19:11:00Z",
+      "duration_sec": 25.208005,
+      "cost_usd": 3.99,
+      "notes": "Approved canonical-alternate episode with exact pair-title overlays, no subtitles or promo popup, and the exact Star Trek CTA. Two NB2 scene jobs reached remote COMPLETED but returned terminal result-fetch HTTP 422; one same-route replacement per failed scene succeeded, and all failed runner states were preserved."
+    },
+    {
+      "episode": 7,
+      "date": "2026-09-01",
+      "characters": [
+        "Dukat/Pah-wraith Dukat",
+        "Garak/Mirror Garak",
+        "Jadzia Dax/Mirror Jadzia",
+        "Bareil/Mirror Bareil"
+      ],
+      "environments": [
+        "Empok Nor abandoned Promenade",
+        "mirror-universe cargo bay center aisle",
+        "Deep Space 9 docking-portal corridor",
+        "Bajoran temple antechamber"
+      ],
+      "screen_performers": [
+        "Marc Alaimo",
+        "Andrew Robinson",
+        "Terry Farrell",
+        "Philip Anglim"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/star-trek-timelines/2026-09-01/dual-style/20260901-160223-star-trek-ds9-dark-98029/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=x6hawC9AdqY",
+      "youtube_publish_at": "2026-09-12T20:20:00Z",
+      "duration_sec": 25.208005,
+      "cost_usd": 3.83,
+      "notes": "Approved DS9 canonical-alternate episode with source-verified pair cards, exact pair-title overlays, no subtitles or promo popup, exact Star Trek CTA, and dedicated MiniMax music through the CTA tail."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/cta.mp4"

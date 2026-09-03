@@ -5,7 +5,7 @@
   "production_contract": "dual-style-v3",
   "comparison_mode": "source-vs-live-action",
   "created_at": "2026-06-09",
-  "last_episode": 10,
+  "last_episode": 12,
   "character_pool": [
     {
       "character_name": "venti",
@@ -40,56 +40,56 @@
       "display_name": "Raiden Shogun",
       "has_actor_counterpart": true,
       "actor_name": "Gal Gadot",
-      "last_seen_episode": 2
+      "last_seen_episode": 11
     },
     {
       "character_name": "tartaglia",
       "display_name": "Tartaglia",
       "has_actor_counterpart": true,
       "actor_name": "Tom Holland",
-      "last_seen_episode": 2
+      "last_seen_episode": 11
     },
     {
       "character_name": "furina",
       "display_name": "Furina",
       "has_actor_counterpart": true,
       "actor_name": "Florence Pugh",
-      "last_seen_episode": 2
+      "last_seen_episode": 11
     },
     {
       "character_name": "arlecchino",
       "display_name": "Arlecchino",
       "has_actor_counterpart": true,
       "actor_name": "Eva Green",
-      "last_seen_episode": 2
+      "last_seen_episode": 11
     },
     {
       "character_name": "wriothesley",
       "display_name": "Wriothesley",
       "has_actor_counterpart": true,
       "actor_name": "Henry Cavill",
-      "last_seen_episode": 3
+      "last_seen_episode": 12
     },
     {
       "character_name": "yae-miko",
       "display_name": "Yae Miko",
       "has_actor_counterpart": true,
       "actor_name": "Margot Robbie",
-      "last_seen_episode": 3
+      "last_seen_episode": 12
     },
     {
       "character_name": "neuvillette",
       "display_name": "Neuvillette",
       "has_actor_counterpart": true,
       "actor_name": "Timothée Chalamet",
-      "last_seen_episode": 3
+      "last_seen_episode": 12
     },
     {
       "character_name": "navia",
       "display_name": "Navia",
       "has_actor_counterpart": true,
       "actor_name": "Sydney Sweeney",
-      "last_seen_episode": 3
+      "last_seen_episode": 12
     },
     {
       "character_name": "keqing",
@@ -297,7 +297,15 @@
       "Venti",
       "Hu Tao",
       "Zhongli",
-      "Diluc"
+      "Diluc",
+      "Raiden Shogun",
+      "Tartaglia",
+      "Furina",
+      "Arlecchino",
+      "Wriothesley",
+      "Yae Miko",
+      "Neuvillette",
+      "Navia"
     ],
     "recent_actors": [
       "Zendaya",
@@ -328,7 +336,15 @@
       "Austin Butler",
       "Awkwafina",
       "Chow Yun-fat",
-      "Chris Evans"
+      "Chris Evans",
+      "Gal Gadot",
+      "Tom Holland",
+      "Florence Pugh",
+      "Eva Green",
+      "Henry Cavill",
+      "Margot Robbie",
+      "Timothée Chalamet",
+      "Sydney Sweeney"
     ],
     "recent_environments": [
       "plain deep-navy studio floor",
@@ -355,7 +371,15 @@
       "Mondstadt Windrise hillside near the Statue of the Seven",
       "Liyue Wangshu Inn rooftop terrace at dusk",
       "Liyue Harbor Yujing Terrace / Yuehai Pavilion plaza",
-      "Dawn Winery vineyard courtyard"
+      "Dawn Winery vineyard courtyard",
+      "Tenshukaku forecourt broad flagstone lane",
+      "Northland Bank broad marble arcade",
+      "Opera Epiclese broad central promenade",
+      "Hotel Bouffes d'ete garden courtyard",
+      "Fortress of Meropide broad steel walkway",
+      "Grand Narukami Shrine broad processional court",
+      "Opera Epiclese broad marble forecourt",
+      "Poisson broad rose-stone promenade"
     ],
     "recent_action_types": [
       "walking-approach",
@@ -370,6 +394,14 @@
       "electro-judgment-stance",
       "twin-dagger-flourish",
       "cryo-frost-veil-stance",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
       "walking-approach",
       "walking-approach",
       "walking-approach",
@@ -626,6 +658,74 @@
       "duration_sec": 25.196,
       "cost_usd": 3.19,
       "notes": "User-requested 4-pair episode casting the series' earliest-launch characters (Venti, Hu Tao, Zhongli, Diluc, all last seen episode 1) with brand-new actors never used in this bible (Austin Butler, Awkwafina, Chow Yun-fat, Chris Evans). All 4 characters already had a canonical untagged reference_image in game_assets, reused directly as the LEFT chain-ref per the standing dual-style exception; note these 4 rows still lack metadata.visually_approved=true, flagged for the asset owner to close. No accidental Kling music detected in any scene; alimiter's default level=true was silently undoing peak limiting and required an explicit level=false fix during Editor's loudness pass."
+    },
+    {
+      "episode": 11,
+      "date": "2026-09-01",
+      "characters": [
+        "Raiden Shogun",
+        "Tartaglia",
+        "Furina",
+        "Arlecchino"
+      ],
+      "environments": [
+        "Tenshukaku forecourt broad flagstone lane",
+        "Northland Bank broad marble arcade",
+        "Opera Epiclese broad central promenade",
+        "Hotel Bouffes d'ete garden courtyard"
+      ],
+      "actors": [
+        "Gal Gadot",
+        "Tom Holland",
+        "Florence Pugh",
+        "Eva Green"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-09-01/dual-style/20260901-archons-fatui-60734/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=EQzgCN8plqw",
+      "youtube_publish_at": "2026-09-07T20:41:00Z",
+      "duration_sec": 25.208,
+      "cost_usd": 3.19,
+      "notes": "Approved four-pair dual-style-v3 source-vs-live-action episode. No subtitles, promo popup, or pair-title overlays. Exact Genshin CTA appended with dedicated MiniMax music continuing through the tail; all four native ambience tracks passed the contamination gate."
+    },
+    {
+      "episode": 12,
+      "date": "2026-09-01",
+      "characters": [
+        "Wriothesley",
+        "Yae Miko",
+        "Neuvillette",
+        "Navia"
+      ],
+      "environments": [
+        "Fortress of Meropide broad steel walkway",
+        "Grand Narukami Shrine broad processional court",
+        "Opera Epiclese broad marble forecourt",
+        "Poisson broad rose-stone promenade"
+      ],
+      "actors": [
+        "Henry Cavill",
+        "Margot Robbie",
+        "Timothée Chalamet",
+        "Sydney Sweeney"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/genshin-impact/2026-09-01/dual-style/20260901-teyvats-elite-60734/final.mp4",
+      "youtube_url": "https://www.youtube.com/watch?v=LluT2Ut2y_Q",
+      "youtube_publish_at": "2026-09-09T19:11:00Z",
+      "duration_sec": 25.208005,
+      "cost_usd": 3.19,
+      "notes": "Approved four-pair dual-style-v3 source-vs-live-action episode. The user's explicit cast approval authorized the four canonical source refs whose metadata lacked visually_approved; shared asset metadata was not changed. Exact Genshin CTA and dedicated music are present."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4",

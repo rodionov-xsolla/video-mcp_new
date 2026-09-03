@@ -3,7 +3,7 @@
   "game_tag": "growtopia",
   "title": "Growtopia Dual Style",
   "created_at": "2026-07-22",
-  "last_episode": 4,
+  "last_episode": 6,
   "character_pool": [
     {
       "character_name": "legendary-wizard",
@@ -95,6 +95,48 @@
       "has_actor_counterpart": false,
       "actor_name": null,
       "last_seen_episode": 4
+    },
+    {
+      "character_name": "dragon-set",
+      "display_name": "Dragon Set",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 5
+    },
+    {
+      "character_name": "chef-set",
+      "display_name": "Chef Set",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 5
+    },
+    {
+      "character_name": "adventurer-explorer-set",
+      "display_name": "Adventurer/Explorer Set",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 5
+    },
+    {
+      "character_name": "a-burglar",
+      "display_name": "A Burglar",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 6
+    },
+    {
+      "character_name": "locke-the-salesman",
+      "display_name": "Locke The Salesman",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 6
+    },
+    {
+      "character_name": "mark-the-mechanic",
+      "display_name": "Mark, The Mechanic",
+      "has_actor_counterpart": false,
+      "actor_name": null,
+      "last_seen_episode": 6
     }
   ],
   "character_rotation": {
@@ -111,7 +153,13 @@
       "The Bartender",
       "Zeus set",
       "Angelic set",
-      "Devil/Demonic set"
+      "Devil/Demonic set",
+      "Dragon Set",
+      "Chef Set",
+      "Adventurer/Explorer Set",
+      "A Burglar",
+      "Locke The Salesman",
+      "Mark, The Mechanic"
     ],
     "recent_actors": [],
     "recent_environments": [
@@ -127,13 +175,25 @@
       "rustic wooden saloon/tavern interior",
       "stormy mountaintop temple ruin",
       "cloud-top heavenly sanctuary plaza",
-      "lava-lit underworld cavern/throne chamber"
+      "lava-lit underworld cavern/throne chamber",
+      "dragon-training courtyard broad level lane",
+      "market-kitchen arcade broad level lane",
+      "ancient-ruin forecourt broad level lane",
+      "vault-district broad cobbled lane",
+      "covered trading-bazaar broad aisle",
+      "brick-lined service-street broad lane"
     ],
     "recent_action_types": [
       "idle-mystic-pose",
       "idle-showman-pose",
       "idle-menacing-lean",
       "idle-warrior-stance",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
+      "walking-approach",
       "walking-approach",
       "walking-approach",
       "walking-approach",
@@ -262,6 +322,62 @@
       "duration_sec": 18.158,
       "cost_usd": 2.64,
       "notes": "First dual-style episode introducing new Growtopia character sets beyond the original 10-NPC launch pool (all 10 still in the 10-episode cooldown). Cast Zeus/Angelic/Devil-Demonic sets, sourced verbatim from growtopia.md's Character Prompt Blocks (no invented design detail) since no dual-style-tagged or canonical untagged ref existed for these sets; fresh cartoon-side refs generated and registered as reusable game_assets for future reuse. RIGHT side stays generic non-celebrity photorealistic performers with practical costume/prosthetics, per this bible's established convention. No YouTube channel mapped yet for growtopia -- Supabase-only deliverable."
+    },
+    {
+      "episode": 5,
+      "date": "2026-09-01",
+      "characters": [
+        "Dragon Set",
+        "Chef Set",
+        "Adventurer/Explorer Set"
+      ],
+      "environments": [
+        "dragon-training courtyard broad level lane",
+        "market-kitchen arcade broad level lane",
+        "ancient-ruin forecourt broad level lane"
+      ],
+      "actors": [
+        "(none)",
+        "(none)",
+        "(none)"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-09-01/dual-style/20260901-120001-growtopia-jobs/final.mp4",
+      "duration_sec": 18.180998,
+      "cost_usd": 2.4,
+      "notes": "Approved dual-style-v3 episode with generic non-celebrity photorealistic adult performers on the right. No subtitles, promo popup, or pair-title overlays. Exact Growtopia CTA and dedicated music are present. Supabase-only because no Growtopia YouTube channel is mapped."
+    },
+    {
+      "episode": 6,
+      "date": "2026-09-01",
+      "characters": [
+        "A Burglar",
+        "Locke The Salesman",
+        "Mark, The Mechanic"
+      ],
+      "environments": [
+        "vault-district broad cobbled lane",
+        "covered trading-bazaar broad aisle",
+        "brick-lined service-street broad lane"
+      ],
+      "actors": [
+        "(none)",
+        "(none)",
+        "(none)"
+      ],
+      "action_types": [
+        "walking-approach",
+        "walking-approach",
+        "walking-approach"
+      ],
+      "final_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/videos/growtopia/2026-09-01/dual-style/20260901-120002-growtopia-street-legends/final.mp4",
+      "duration_sec": 18.158,
+      "cost_usd": 2.4,
+      "notes": "Approved street-legends dual-style-v3 episode with generic non-celebrity photorealistic adult performers on the right. Exact Growtopia CTA and dedicated music are present. Supabase-only because no Growtopia YouTube channel is mapped."
     }
   ],
   "cta_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/growtopia/branding/cta.mp4",
@@ -357,6 +473,48 @@
       "actor_counterpart": null,
       "character_description": "2D pixel-art Growtopian in Demonic set, dark red skin, black bat wings, curved horns, glowing red eyes, mischievous sharp-toothed grin, dark smoky aura, menacing side-view stance",
       "realistic_description": "photorealistic generic adult performer as a live-action adaptation, natural build beneath practical dark red skin-tone body makeup, curved horn prosthetics, black bat-wing harness, subtle red contact lenses, sharp dental prosthetic, real skin texture and cinema-quality lighting"
+    },
+    {
+      "slug": "dragon-set",
+      "name": "Dragon Set",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian in Dragon set, green scaled dragon hood and tail, small folded wings, tiny pixel flame breath from mouth, spiky scaled details, fierce playful side-view pose. Canonical Growtopia source-game height and blocky proportions, not rescaled; thick clean black outlines and bright saturated flat pixel colors on the LEFT figure only.",
+      "realistic_description": "Photorealistic generic adult dragon tamer as a live-action adaptation of Dragon Set: natural adult features and hair, natural adult height and build, real skin textures and natural fabric/material textures. Preserve the source costume almost identically as a practical green scaled dragon hood and tail, small folded wings, restrained flame-safe prop, and spiky scaled details. Keep a real adult face, natural hair, natural adult height and build; no celebrity likeness, character-colored wig, copied pixel hairstyle, shrinking, or age change. Cinema-quality lighting; not anime, cartoon, or illustration."
+    },
+    {
+      "slug": "chef-set",
+      "name": "Chef Set",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian in Chef set, tall white chef hat, white apron over striped shirt, holding a frying pan, cheerful expression, cooking pose, side-view. Canonical Growtopia source-game height and blocky proportions, not rescaled; thick clean black outlines and bright saturated flat pixel colors on the LEFT figure only.",
+      "realistic_description": "Photorealistic generic adult chef as a live-action adaptation of Chef Set: natural adult features and hair, natural adult height and build, real skin textures and natural fabric/material textures. Preserve the source costume almost identically as a tall white chef hat, white apron over striped shirt, and a practical frying pan. Keep a real adult face, natural hair, natural adult height and build; no celebrity likeness, character-colored wig, copied pixel hairstyle, shrinking, or age change. Cinema-quality lighting; not anime, cartoon, or illustration."
+    },
+    {
+      "slug": "adventurer-explorer-set",
+      "name": "Adventurer/Explorer Set",
+      "actor_counterpart": null,
+      "character_description": "2D pixel-art Growtopian in Adventurer set, brown explorer fedora, leather satchel across chest, coiled whip on belt, rugged khaki outfit, confident treasure-hunter side-view pose. Canonical Growtopia source-game height and blocky proportions, not rescaled; thick clean black outlines and bright saturated flat pixel colors on the LEFT figure only.",
+      "realistic_description": "Photorealistic generic adult ruin explorer as a live-action adaptation of Adventurer/Explorer Set: natural adult features and hair, natural adult height and build, real skin textures and natural fabric/material textures. Preserve the source costume almost identically as a brown explorer fedora, leather satchel, coiled whip on belt, and rugged khaki outfit. Keep a real adult face, natural hair, natural adult height and build; no celebrity likeness, character-colored wig, copied pixel hairstyle, shrinking, or age change. Cinema-quality lighting; not anime, cartoon, or illustration."
+    },
+    {
+      "slug": "a-burglar",
+      "name": "A Burglar",
+      "actor_counterpart": null,
+      "character_description": "A Burglar in the canonical Growtopia source-game rendering and canonical in-game height and proportions, not rescaled. Preserve the permanent source sheet's exact overall silhouette, garment panels, color blocking, signature accessories, carried burglary props, and facial design; guarded narrowed-eyed expression; blocky humanoid build.",
+      "realistic_description": "Generic non-celebrity photorealistic adult master thief with natural adult features and natural hair, practical adaptation of the exact A Burglar source costume and props. Preserve the source sheet's silhouette, garment panels, color blocking, signature accessories, and burglary props almost identically in believable fabric, leather, and metal materials. Keep a real adult face, natural hair, natural adult height and build; no public-actor likeness, copied character hairstyle, shrinking, or age change."
+    },
+    {
+      "slug": "locke-the-salesman",
+      "name": "Locke The Salesman",
+      "actor_counterpart": null,
+      "character_description": "Locke The Salesman in the canonical Growtopia source-game rendering and canonical in-game height and proportions, not rescaled. Preserve the permanent source sheet's exact overall silhouette, garment panels, color blocking, signature accessories, carried sales props, and facial design; knowing raised-brow expression; blocky humanoid build.",
+      "realistic_description": "Generic non-celebrity photorealistic adult eccentric merchant with natural adult features and natural hair, practical adaptation of the exact Locke The Salesman source costume and sales props. Preserve the source sheet's silhouette, garment panels, color blocking, signature accessories, and sales props almost identically in believable fabric, leather, and metal materials. Keep a real adult face, natural hair, natural adult height and build; no public-actor likeness, copied character hairstyle, shrinking, or age change."
+    },
+    {
+      "slug": "mark-the-mechanic",
+      "name": "Mark, The Mechanic",
+      "actor_counterpart": null,
+      "character_description": "Mark, The Mechanic in the canonical Growtopia source-game rendering and canonical in-game height and proportions, not rescaled. Preserve the permanent source sheet's exact overall silhouette, workwear panels, color blocking, signature accessories, carried mechanic props, and facial design; focused tight-lipped expression; blocky humanoid build.",
+      "realistic_description": "Generic non-celebrity photorealistic adult underground mechanic with natural adult features and natural hair, practical adaptation of the exact Mark, The Mechanic source workwear and mechanic props. Preserve the source sheet's silhouette, workwear panels, color blocking, signature accessories, and mechanic props almost identically in believable fabric, leather, and metal materials. Keep a real adult face, natural hair, natural adult height and build; no public-actor likeness, copied character hairstyle, shrinking, or age change."
     }
   ]
 }
