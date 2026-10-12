@@ -45,6 +45,14 @@ An external narrator speaks about the item in third person. Use concrete transit
 
 The item remains the main focal point in every clip. Owners and makers provide scale and causality, but the scene fails if a human face becomes more important than the object.
 
+### Still shots: allowed
+
+The scenarist may plan still shots (`motion: "still"`) under the rule, cap and fields in `rules/roles/scenarist.md` "Still shots" (§8). A still scene gets its start PNG as usual and is rendered free by the Animator (`tools/still_shot.py`, no paid clip), saving that scene's Kling clip ($0.42 per 5s scene); narration plays over it as normal.
+
+- **Best candidates:** the item at rest (on a pedestal or altar, in a vault or display case, buried or abandoned in FATE/LEGACY), a macro of engravings or wear where only glow, dust or light moves, an establishing shot of the forge or location with no person in focus.
+- **Never a still:** the HOOK, the DEFINING MOMENT, or any clip whose point is a state change or a hand moving the item. Zero stills is a normal result.
+- A still scene's camera move is its `still_effect`, and its `item_interaction` says the item is at rest. The three-motion-layer and banned-phrase rules apply to animated clips.
+
 ---
 
 ## Budget (rough estimates)
@@ -54,6 +62,7 @@ The item remains the main focal point in every clip. Owners and makers provide s
 | Image (NB2, start frame only — no end frame, no bg ref) | $0.08 |
 | Kling v3 Standard I2V 5s (`generate_audio: false`) | $0.42 |
 | **Per clip** | **~$0.50** |
+| Still-shot scene (NB2 image only; `tools/still_shot.py` render is free) | $0.08 |
 
 | Component | Cost |
 |---|---|
@@ -66,7 +75,7 @@ The item remains the main focal point in every clip. Owners and makers provide s
 | Base (recommended) | 6 × 5s = 30s + 1–2 item refs | ~$3.20–3.40 |
 | Extended | 8 × 5s = 40s + 1–3 item refs | ~$4.20–4.50 |
 
-Typical cost remains below the $6.00 hard limit and the $5.40 stop threshold.
+Typical cost remains below the $6.00 hard limit and the $5.40 stop threshold. A still scene saves its Kling clip ($0.42 per 5s, no audio).
 
 ---
 
@@ -134,11 +143,12 @@ The scenarist adapts the arc to the item's canon, but preserves the item's causa
 - The item must be the primary subject of every `action_description`. Characters are supporting actors and may not block, hide, or visually replace it.
 - Show at least two item states when canon supports a visible transformation. Otherwise show at least three distinct owner/location/purpose beats with the same locked design.
 - `action_description` describes visual evidence, not a literal restatement of `tts_segment`.
-- Every clip specifies three continuous motion layers for the full five seconds:
+- Every animated clip specifies three continuous motion layers for the full five seconds:
   1. active camera move,
   2. environment or lighting motion,
   3. item motion or interaction (turning in a hand, energy pulsing, cloth sliding off, dust falling, mechanism moving).
-- Camera angle and move differ between adjacent clips. Favor macro push-ins, low lateral dollies, controlled orbits, crane reveals, and parallax handheld drift.
+- Camera angle and move differ between adjacent clips. Favor macro push-ins, low lateral dollies, controlled orbits, crane reveals, and parallax handheld drift. A still scene's move is its `still_effect`.
+- Still shots: optional, per "Still shots: allowed" above and `rules/roles/scenarist.md` "Still shots"; zero is a normal result.
 - No background-reference generation; locations are described in `image_prompt`.
 - Maximum two people in frame. Named, identity-critical people require refs owned by the exact Item Story bible; anonymous hands or silhouettes should not expose a recognizable face.
 - Voice intent belongs to the external narrator and exact Item Story bible. Record an intent, not a provider voice ID.
@@ -209,10 +219,11 @@ The scenarist adapts the arc to the item's canon, but preserves the item's causa
 
 ### Animator
 
-- Animate every clip with Kling v3 Standard I2V and `generate_audio: false`. Retry the same immutable request once on the same route, then stop; no automatic model switch.
+- Animate every non-still clip with Kling v3 Standard I2V and `generate_audio: false` (still scenes are rendered locally, no paid clip). Retry the same immutable request once on the same route, then stop; no automatic model switch, and never replace a failed clip with a still.
+- Still scenes (`motion: "still"`): no Kling call; render with `tools/still_shot.py` as `rules/roles/animator.md` §2b describes.
 - Use the start frame only. Never pass `tail_image_url`.
 - Keep the item visible and recognizable for the full shot. Do not transform it into another state inside a single clip; state changes happen at cuts unless a validated `multi_prompt` is explicitly designed for that transition.
-- Each `motion_prompt` includes three concurrent layers:
+- Each animated clip's `motion_prompt` includes three concurrent layers:
   1. camera motion throughout the shot,
   2. environment or lighting motion throughout the shot,
   3. item motion or physical interaction throughout the shot.
@@ -235,7 +246,7 @@ The scenarist adapts the arc to the item's canon, but preserves the item's causa
 ### Editor
 
 - Treat Item Story as a single-voice format: one narration track over the full silent picture concat.
-- Normalize every I2V clip to 1080×1920, 30fps, H.264 before concat; use hard cuts.
+- Normalize every I2V clip to 1080×1920, 30fps, H.264 before concat (still clips are already 1080×1920, 30fps and exact; never trim them); use hard cuts.
 - Keep intermediates under `build/`: `concat-noaudio.mp4`, `tts-output.mp3`, `voice-final.wav`, `subs.ass`, `concat-subbed.mp4`, normalized scenes, logs, and concat lists.
 - If narration exceeds the main picture duration, apply `atempo` up to 1.4× before whisper alignment. If mismatch exceeds 40%, reject and return to Scenarist.
 - Burn `ass=build/subs.ass` as the last video filter. Mix narration and music in the final assembly, loudnorm to the universal target, fade music before CTA, and use `apad` rather than `-shortest`.
@@ -290,8 +301,9 @@ Generated media receives technical validation only; item dominance, state fideli
 - [ ] Item is the declared hero and primary focal subject of every clip
 - [ ] Images are 608×1080; one start-frame PNG per scene; no end frames or bg refs
 - [ ] Every scene/ref has a runner `DONE` state and permanent Supabase URL owned by `item-story`
-- [ ] Every motion prompt contains camera + environment + item/interaction motion and no banned freeze phrase
+- [ ] Every animated clip's motion prompt contains camera + environment + item/interaction motion and no banned freeze phrase
 - [ ] Kling v3 Standard I2V uses `generate_audio: false` and no `tail_image_url`
+- [ ] Still scenes (if any) were planned in Phase 1, have `scene_video_kind: "still"` and stay within the `rules/roles/scenarist.md` "Still shots" cap; every other scene is a Kling v3 Standard clip
 - [ ] TTS uses MiniMax, or exact-item-story approved Chatterbox for a canonical voiced item; never cross-format or ElevenLabs TTS
 - [ ] Universal whisper subtitles are built from final `build/voice-final.wav`
 - [ ] fps normalized to 30, music fades before CTA, loudnorm passes, CTA appended, and `-shortest` absent
@@ -322,6 +334,6 @@ If NB2 rejects a prompt, rewrite risky language neutrally without dropping the a
 - ❌ Kling Avatar or lipsync
 - ❌ ElevenLabs TTS, cross-format samples, or changing voice intent between chunks
 - ❌ Narration that literally describes the visible action
-- ❌ Static or freeze-oriented motion prompts
+- ❌ Static or freeze-oriented motion prompts (a planned still shot is not a frozen motion prompt: it is a rendered camera move chosen in Phase 1 under "Still shots: allowed")
 - ❌ Layered assembly or `-shortest` in FFmpeg; use one controlled mix and `apad`
 - ❌ Bare `scene-K.png` Supabase destinations that can overwrite another run; include date, item slug, and run ownership

@@ -22,7 +22,7 @@ From Manager:
 
 ## Outputs
 
-`output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/storyboard.json` — narrative fields filled. Storyboarder will add `image_prompt`, `image_urls`, `scene_image`. Animator will add `motion_prompt`, `scene_video`.
+`output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/storyboard.json` — narrative fields filled. Storyboarder will add `image_prompt`, `image_urls`, `scene_image`. Animator will add `motion_prompt`, `scene_video` (for a `motion: "still"` scene: a free local still-shot clip instead of a paid one, see §8).
 
 ---
 
@@ -131,7 +131,9 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
 - ✅ "Captain stands at the viewscreen, arms crossed, studying the fleet. He notices movement and his expression shifts from calm to alarmed." — two beats + emotion
 - ✅ "Kirk leans over the console, jabbing at controls. Worf looks up from his station, eyebrow raised, not convinced." — two characters, each acting
 
-**For I2V clips — micro motion only.** Don't describe walking, hits, running — Kling I2V does not animate that. Movement = montage transition between clips, not animation inside one clip.
+**Exception — still scenes (§8):** a `motion: "still"` scene describes one frame and its camera move ("The camera slowly pushes in on the empty shrine at dusk, lanterns glowing"); it needs no second action beat.
+
+**For I2V clips — micro motion only.** Don't describe walking, hits, running — image-to-video does not animate that. Movement = montage transition between clips, not animation inside one clip.
 
 **For dialogue clips — obey the format's animation mode.** Serial-drama dialogue is I2V and may stage two-shots / over-shoulders / group reactions if the start frame supports them. Avatar-based formats should not introduce background characters into a solo Avatar frame unless the format says so.
 
@@ -154,9 +156,16 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
   "subtitle_emphasis": ["word or phrase to emphasize"],
   "environment_state": "what is happening in the environment",
   "action_description": "what happens in the scene — description for Storyboarder and Animator",
-  "continues_from_scene": "N or null — set when this clip is a direct spatial continuation of clip N (same location, same continuous moment, characters mid-repositioning from where clip N left off). See serial-drama.md 'blocking continuity' exception — Storyboarder chains clip N's PNG as an extra ref to prevent characters visually teleporting between clips."
+  "continues_from_scene": "N or null — set when this clip is a direct spatial continuation of clip N (same location, same continuous moment, characters mid-repositioning from where clip N left off). See serial-drama.md 'blocking continuity' exception — Storyboarder chains clip N's PNG as an extra ref to prevent characters visually teleporting between clips.",
+  "motion": "\"still\" for a still shot (only when the format playbook says \"Still shots: allowed\", see §8); omit or \"animated\" otherwise",
+  "still_effect": "push-in | pull-out | pan-right | pan-left | tilt-up | tilt-down (still scenes only)",
+  "still_depth": "flat | some | deep (still scenes only; some/deep allow only push-in / pull-out)",
+  "still_impact": "0 | 1 as a JSON number (still scenes only; the impact score in §8)",
+  "still_reason": "one short sentence: why freezing this scene costs the viewer nothing (still scenes only)"
 }
 ```
+
+Write the four `still_*` fields only on scenes with `motion: "still"`; animated scenes carry none of them.
 
 ### `character_speech` / `tts`
 - **Serial-drama dialogue (I2V):** `character_speech` contains the spoken lines; `tts` is null; include `generate_audio: true`, `shot_type: "customize"`, `voice_ids`, and `multi_prompt` with `<<<voice_1>>>` / `<<<voice_2>>>`.
@@ -213,6 +222,7 @@ Formats with `overlays: false` need no array.
 ### `clip_type`
 - `action` — I2V clip (no dialogue, micro motion)
 - `dialogue` — format-specific dialogue clip. For serial-drama this is I2V `multi_prompt + voice_ids`; for Avatar-based formats this may be a lipsync Avatar clip.
+- A still shot (`motion: "still"`, §8) always has `character_speech: null` and is never a `dialogue` or Avatar clip. It is usually an `action` clip; a format-specific type such as `title_card` or `pov` may be a still when the playbook allows stills.
 
 ---
 
@@ -263,7 +273,59 @@ If two dialogue clips run back-to-back — they cannot both be the same angle. S
 
 ---
 
-## 8. Anti-patterns
+## 8. Still shots
+
+**Only when the format playbook says "Still shots: allowed".** In every other format never set `motion: "still"`; every scene stays animated.
+
+A still shot replaces a scene's paid animation with a slow eased camera move over that scene's own start PNG, rendered free by the Animator (`tools/still_shot.py`). It saves that scene's entire animation cost. Use it wherever it does not hurt the video, never at the cost of quality. Stills are decided here, in Phase 1, before any image or clip exists; no later phase turns a failed paid clip into a still.
+
+**Savings are not available in every video.** Many videos have no eligible scene: fast action, first-person footage, and dialogue- or character-driven stories must stay fully animated. **Zero stills is a normal, correct result.** Never lower the quality bar to find a saving.
+
+**Narration over a still is fine.** External narration/TTS plays over the picture. On-screen speech is not: a scene with a visible speaker, an Avatar clip, `clip_type: "dialogue"` or `character_speech` is never a still.
+
+### Impact score (`still_impact`)
+
+What freezing the scene would cost the viewer. Judge what a viewer would notice and lose, not how much changes on screen. A flickering fire changes many pixels but tells nothing; a camera rising to reveal a second object changes fewer pixels but is the point of the shot.
+
+- **0**: nothing is lost. Nothing in the frame moves, or the only motion is a camera move a still effect reproduces. Empty locations, landscapes, establishing shots, objects at rest, maps, documents.
+- **1**: only atmosphere is lost. Decorative motion that adds life but no information: fire and flame flicker, embers, an aura or glow, mist, smoke, rain, drifting particles, light flicker, or anonymous hands simply holding or adjusting a grip with no face shown. The still's camera move keeps it alive.
+- **2**: a noticeable but secondary loss. A dominant moving element that will clearly read as frozen (a crashing wave, a crowd, a flag filling the frame), or a small action beat that is not the scene's point. **Never a still.** A visible character who moves at all (shoulders sink, a head turns, a hand reacts) scores at least 2, even when small in the frame.
+- **3**: information or performance is lost. The motion tells the story: a reveal or transition (the camera travels to show a new subject or place), an action that changes the situation, a character's face or performance, dialogue or on-screen speech. Never a still.
+
+### Camera-move match
+
+If a scene's intended motion is mainly a camera move that a still effect can reproduce (a push-in, pull-out, pan, tilt or slow drift over the same subject), it is a strong candidate: score its impact by what moves *inside* the frame, not by the camera move. "The camera slowly pushes in on the empty shrine" is impact 0, even though it is written as animation. A camera move that travels to reveal a new subject or place is different: it carries information, so it is impact 3.
+
+### Depth check (parallax) (`still_depth`)
+
+A still effect is a flat 2D move. It imitates a camera that turns or zooms in place, but not a camera that travels past things at different distances, where near objects slide past faster than far ones.
+
+- **Good fit:** compositions with little depth, or where everything is far away: landscapes, skylines, wide establishing shots, flat subjects (walls, maps, documents, screens, paintings), and objects in close-up against a plain or blurred background.
+- **Depth is a risk flag, not a disqualifier:** the camera travels past things (a crane, a dolly, moving past pillars, trees or railings), or a strong foreground object sits close to the camera in front of a distant background. Such a scene can still be a candidate with medium risk; the choice step decides. Exclude only a true fly-through, where moving through the space is the entire point of the shot.
+- **Rate every scene's depth:** `flat`, `some` or `deep`. A scene rated `some` or `deep` must use `push-in` or `pull-out`, never a pan or tilt: a zoom is where a flat image differs least from a real camera. The tool renders it with a gentler 7% zoom, so the missing parallax shows less.
+
+### Effect (`still_effect`)
+
+Chosen to match the scene's camera move, or the shot if none is described:
+
+- **push-in**: moving toward a single subject or detail; building tension; focusing attention.
+- **pull-out**: revealing scale; endings and aftermath; leaving a place.
+- **pan-right** / **pan-left**: wide or horizontal compositions; sweeping across a location.
+- **tilt-up** / **tilt-down**: tall compositions; rising up to or down from a subject (a crane move).
+
+Never use the same effect on two stills in a row.
+
+### Process (while writing the script)
+
+1. **Score** every scene's impact (0–3) and rate its depth.
+2. **Mark candidates:** impact 0–1 only; never impact 2 or 3, the climax, or any scene with on-screen speech, `clip_type: "dialogue"` or `character_speech`. (Tested: an impact-2 still of a small, moving character read as wrong in review.)
+3. **Choose** under the cap: at most `round(N/3)` stills and never more than 3, where N is the number of scenes (3–4 scenes → 1, 5–7 → 2, 8 or more → 3). Prefer impact 0, then 1; drop a candidate if freezing it would be noticed; never the climax; prefer spreading the stills through the video. Two stills in a row only when they use different effects.
+4. **If nothing qualifies,** you may design **at most one** scene as a camera-only shot from the start: decorative motion only, never a character in focus, dialogue or the climax, little depth (passes the depth check, nothing travelling past the camera). Write its `action_description` as that calm camera-only shot so the start PNG is generated for it. The cap and adjacency rules still apply. When in doubt, none.
+5. **Write** on each chosen scene: `motion: "still"`, `still_effect`, `still_depth`, `still_impact`, `still_reason`. Keep its normal `duration_sec` (the duration rules in §3 are unchanged). Every other scene stays animated, with no `motion` field (or `"animated"`) and no `still_*` fields.
+
+---
+
+## 9. Anti-patterns
 
 - ❌ Vague descriptions: "beautiful", "amazing", "epic" — concrete only
 - ❌ 3+ characters in one scene — split into 2 clips
@@ -273,26 +335,30 @@ If two dialogue clips run back-to-back — they cannot both be the same angle. S
 - ❌ Avatar fields in serial-drama (`clip_type: "avatar"`, `tts` as primary dialogue, Avatar endpoint) — serial-drama dialogue is I2V
 - ❌ Dialogue clip > 5s without justification in `duration_reason`
 - ❌ Title/brainrot text overlays in storyboard — only dialogue subs + TBC + CTA
+- ❌ `motion: "still"` in a format whose playbook does not say "Still shots: allowed"
+- ❌ A still on a dialogue / `character_speech` / Avatar scene, an impact-3 scene, or the climax
+- ❌ Forcing a still to save money — zero stills is a normal, correct result
 
 ---
 
-## 9. Validation checklist (before sending to Manager)
+## 10. Validation checklist (before sending to Manager)
 
 - [ ] `visual_identity.character_description` — minimum 8 details
 - [ ] `visual_identity.environment_description` — concrete location, not abstract
 - [ ] Each clip has `beats`, `clip_type`, `action_description`
 - [ ] Narrative arc complete (hook → ... → climax/cliffhanger/CTA)
-- [ ] Each `action_description` contains at least 2 distinct beats
+- [ ] Each `action_description` contains at least 2 distinct beats (still scenes: one frame + its camera move, §8)
 - [ ] Default 3 clips (~15–30s); 4+ only if each is necessary
 - [ ] Duration 5s by default; for 10s `duration_reason` is filled
 - [ ] `character_speech` / `tts` filled according to format mode; serial-drama dialogue uses `character_speech` + `multi_prompt`, not `tts`
 - [ ] Serial-drama `multi_prompt`: every `<<<voice_N>>>` is preceded by the correct physical character descriptor; no bare names as the only identifier
-- [ ] Every requested/key beat is present. If Kling limits force a split, insert an extra clip instead of removing the story beat
+- [ ] Every requested/key beat is present. If video-model limits force a split, insert an extra clip instead of removing the story beat
 - [ ] `facial_expression` — concrete expression (not "sad"/"happy")
 - [ ] I2V clips: `action_description` does not contain walking/running/hits
 - [ ] Multi-char: max 2 in frame; third = "distant figure in background"
 - [ ] Consecutive dialogue clips: different composition specified in `action_description`
 - [ ] No title/brainrot overlays in storyboard
-- [ ] Budget not exceeded (N images × $0.04 + animation per format rates)
+- [ ] Still shots (§8): none unless the playbook says "Still shots: allowed"; each still has `still_effect`, `still_depth`, `still_impact` (0 or 1) and `still_reason`; `some`/`deep` only with `push-in`/`pull-out`; no `clip_type: "dialogue"`, no `character_speech`, not the climax; count ≤ `min(3, round(N/3))`; adjacent stills use different effects; at most one designed camera-only scene
+- [ ] Budget not exceeded (N images × $0.08 + animation per format rates for animated scenes; still scenes add $0)
 
 After passing the checklist — save `storyboard.json` and return to Manager. In debug mode — send for approval with explanation (what was done / why / alternatives).

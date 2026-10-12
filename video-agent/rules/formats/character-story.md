@@ -39,6 +39,14 @@ Before generation, resolve the exact `games/{GAME_TAG}/character-story_story_bib
 
 The character does NOT speak on camera (no lipsync). Video = visualization of what the voice tells. I2V shows actions, locations, key moments. TTS is overlaid as off-screen narration.
 
+### Still shots: allowed
+
+The scenarist may plan still shots (`motion: "still"`) under the rule, cap and fields in `rules/roles/scenarist.md` "Still shots" (§8). A still scene gets its start PNG as usual and is rendered free by the Animator (`tools/still_shot.py`, no paid clip), saving that scene's Kling clip ($0.42 per 5s scene); narration plays over it as normal.
+
+- **Best candidates:** a wide establishing or location shot with no character in focus (homeworld skyline, ship exterior, an empty room after a loss), a close-up of a meaningful object at rest (a medal, a letter, a memento), a quiet aftermath pause.
+- **Never a still:** the HOOK, the TURNING POINT climax, or any clip whose point is the character's face, gesture or age-variant performance. Zero stills is a normal result.
+- A still scene's camera move is its `still_effect`; the three-motion-layer and banned-phrase rules below apply to animated clips.
+
 ---
 
 ## Budget (rough estimates)
@@ -48,6 +56,7 @@ The character does NOT speak on camera (no lipsync). Video = visualization of wh
 | Image (NB2, start frame only — no end frame, no bg-ref) | $0.08 |
 | Kling v3 Standard I2V 5s (generate_audio=false) | $0.42 |
 | **Per clip** | **~$0.50** |
+| Still-shot scene (NB2 image only; `tools/still_shot.py` render is free) | $0.08 |
 
 | Component | Cost |
 |---|---|
@@ -59,6 +68,8 @@ The character does NOT speak on camera (no lipsync). Video = visualization of wh
 |---|---|---|
 | Base (recommended) | 6 × 5s = 30s + 1–2 char-refs (NO separate bg-refs) | ~$2.80 |
 | Extended | 8 × 5s = 40s + 1–2 char-refs (NO separate bg-refs) | ~$3.60 |
+
+A still scene saves its Kling clip ($0.42 per 5s, no audio).
 
 ---
 
@@ -113,8 +124,9 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - `action_description` — what happens visually, NOT a repeat of the monologue text
 - **HOOK self-introduction is MANDATORY.** The first clip's `tts_segment` must name the character with their full canonical designation so unfamiliar viewers (most of the audience) immediately know who they're watching. Include four elements when applicable: **rank + full name + role + ship/affiliation**. Examples: "I am Captain Benjamin Lafayette Sisko", "I am Seven of Nine, Tertiary Adjunct of Unimatrix Zero One", "I am Lieutenant Nyota Uhura, Communications Officer, Starship Enterprise". One line, ≤18 words, hard requirement. Without this the video reads as art-piece monologue rather than a character story.
 - **Show visual age progression where canon supports it.** If the character has clearly distinct age variants in their canon (child / young adult / cadet / mature), the arc MUST visualize AT LEAST 2 of them across the clips — ideally 3 (child → young → mature). ORIGIN clips usually carry the youngest variant; HOOK and REVELATION the most mature. Mark each clip's image_prompt with the specific age variant ("child X at ~8 years old", "young cadet X at ~20", "Captain X at ~50"). A flat single-age character story loses the "growing-up arc" that defines the format.
-- **Three motion layers per clip** (mandatory): camera move + environment motion + character action. Each layer continues throughout the full 5s — do NOT write "then settles / then steady / then dissipates" (Kling reads those as freeze cues).
-- camera_angle differs between adjacent clips, AND every clip specifies an active camera move (push-in / pull-back / lateral dolly / low boom / crane up / handheld drift). No "camera holds steady" clips.
+- **Three motion layers per animated clip** (mandatory): camera move + environment motion + character action. Each layer continues throughout the full 5s — do NOT write "then settles / then steady / then dissipates" (Kling reads those as freeze cues).
+- camera_angle differs between adjacent clips, AND every clip specifies an active camera move (push-in / pull-back / lateral dolly / low boom / crane up / handheld drift; for a still scene, its `still_effect`). No "camera holds steady" clips.
+- Still shots: optional, per "Still shots: allowed" above and `rules/roles/scenarist.md` "Still shots"; zero is a normal result.
 - Number of characters in frame — per plot (1–2, max 2 in frame)
 - **No bg-reference generation** — environment goes into `image_prompt` as text only
 - Voice intent comes from the character and exact Character Story bible. Record intent, not an ElevenLabs voice name; Sound resolves the permitted Chatterbox/MiniMax route.
@@ -169,9 +181,10 @@ The structure is flexible — the scenarist adapts it to the specific character'
 
 ### Animator
 
-- All clips via **Kling v3 Standard I2V** (`generate_audio: false`). Retry the same serialized request once on the same route, then stop the whole video; Kling 2.6 requires separate explicit authorization after the stopped run.
+- All animated clips via **Kling v3 Standard I2V** (`generate_audio: false`; still scenes are rendered locally, no paid clip). Retry the same serialized request once on the same route, then stop the whole video; Kling 2.6 requires separate explicit authorization after the stopped run. Never replace a failed clip with a still.
+- **Still scenes** (`motion: "still"`): no Kling call; render with `tools/still_shot.py` as `rules/roles/animator.md` §2b describes.
 - **Start frame only.** Do NOT pass `tail_image_url` / end frame. Identity is held by `image_url` (start frame, chain-ref'd by Storyboarder) + the chain consistency Kling already enforces between adjacent frames. End frames make Kling interpolate-then-freeze and produce static clips.
-- **Motion is mandatory, not optional.** Every clip must specify three concurrent layers:
+- **Motion is mandatory, not optional.** Every animated clip must specify three concurrent layers:
   1. **Camera move** — pick one per clip: slow push-in, slow pull-back, lateral dolly, low boom up, crane up, parallax handheld drift. Distribute variety across the 6–8 clips. NEVER "camera holds steady".
   2. **Environment motion** — wind, smoke, sparks, particles, light flicker, distant figures, water/dust, holographic UI motion. Continuous throughout the 5s.
   3. **Character action** — one gesture or expression beat sustained through the clip (a slow head turn, a hand rising to the brow, a sip, a jaw clenching, a half-smile forming). Sustained, NOT completed mid-clip.
@@ -276,8 +289,9 @@ Generated PNG/MP4/audio receives technical validation only (path, size, hash, di
 - [ ] No bg-reference files (environment in image_prompt only)
 - [ ] One PNG per scene (start frame only) — NO end-frame PNGs generated (§14.8)
 - [ ] All Supabase uploads use date-suffix paths (`<slug>-<YYYY-MM-DD>.png` for refs, `scene-K-<slug>-<YYYY-MM-DD>.png` for scenes) — no bare `scene-K.png` paths that would collide with prior episodes
-- [ ] camera_angle differs between adjacent clips, and every clip has an active camera move (no "holds steady")
-- [ ] motion_prompt has three concurrent layers (camera + environment + character) and uses continuous-tense verbs
+- [ ] camera_angle differs between adjacent clips, and every clip has an active camera move (no "holds steady"; a still scene's `still_effect` counts)
+- [ ] Every animated clip's motion_prompt has three concurrent layers (camera + environment + character) and uses continuous-tense verbs
+- [ ] Still scenes (if any) were planned in Phase 1, have `scene_video_kind: "still"` and stay within the `rules/roles/scenarist.md` "Still shots" cap; every other scene is a Kling v3 Standard clip
 - [ ] motion_prompt contains NONE of the banned freeze phrases (then settles / then steady / then holds / hold position / no morphing / camera holds steady)
 - [ ] TTS uses approved exact-character-story Chatterbox, or user-authorized MiniMax; no ElevenLabs TTS or cross-format sample
 - [ ] Subtitles use the universal `add_subtitles.py` contract from `rules/roles/editor.md` — no format-local chunk/font/margin overrides and no PIL PNG by `tts_segment`

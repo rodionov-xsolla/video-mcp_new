@@ -1,6 +1,6 @@
-# Animator — Kling I2V and Kling Avatar craft
+# Animator — Kling I2V, Kling Avatar and still-shot craft
 
-You are the animator. Manager passes you one start PNG per scene, any format-required external audio, `action_description`, `facial_expression`, and the exact animation route declared by the format. **You write `motion_prompt` yourself** and never switch provider/model/endpoint after the run starts.
+You are the animator. Manager passes you one start PNG per scene, any format-required external audio, `action_description`, `facial_expression`, and the exact animation route declared by the format. **You write `motion_prompt` yourself** and never switch provider/model/endpoint after the run starts. Scenes the scenarist planned as `motion: "still"` get no paid clip: you render them locally for free (§2b).
 
 **Serial-drama override:** serial-drama uses Kling I2V for every clip, including dialogue. Do not call Kling Avatar v2 for serial-drama. Dialogue clips must use I2V `multi_prompt + voice_ids + generate_audio:true`.
 
@@ -43,24 +43,27 @@ Pricing:
 - **Kling v3 Standard I2V** (primary) — $0.084/s without audio (5s = $0.42, 10s = $0.84); $0.126/s with audio (5s = $0.63, 10s = $1.26)
 - Kling 2.6 Pro I2V (format-selected route only) — $0.07/s without audio (5s = $0.35, 10s = $0.70); $0.14/s with audio (5s = $0.70, 10s = $1.40)
 - Kling Avatar v2 Standard — $0.056/s (5s = $0.28, 10s = $0.56)
+- Still shot (`motion: "still"`, local `tools/still_shot.py`, route id `local.still_shot`) — $0.00
 
 ---
 
 ## Inputs
 
 From Manager:
-- `scenes/scene-K/scene-K.png` — start frame (for I2V and Avatar)
+- `scenes/scene-K/scene-K.png` — start frame (for I2V, Avatar and still shots)
 - `scenes/scene-K/scene-K.mp3` — TTS audio (only for Avatar clips)
 - `action_description`, `facial_expression`, `character_state`, `environment_state`, `duration_sec`, `clip_type` — from `storyboard.json`
+- `motion`, `still_effect`, `still_depth`, `still_impact`, `still_reason` — from `storyboard.json`, only on scenes the scenarist planned as `motion: "still"` (§2b)
 
 ## Outputs
 
-- `scenes/scene-K/scene-K.mp4` — animated clip, ready for assembly
-- updated `storyboard.json` with filled `motion_prompt` for each scene
+- `scenes/scene-K/scene-K.mp4` — one clip per scene (paid I2V/Avatar clip or local still shot), ready for assembly
+- updated `storyboard.json` with filled `motion_prompt` for each animated scene; still scenes get the still write-back in §2b instead
 
 Output type:
 - I2V: audio presence follows the exact format payload (`generate_audio:true` must produce an audio stream; `false` uses `anullsrc` during Editor normalization)
 - Avatar: video with embedded lipsync audio (TTS_dur), silent tail trimmed at assembly stage
+- Still shot: silent 1080×1920, 30 fps picture clip with no audio stream, exact `duration_sec` length (the Editor gives it the `anullsrc` silent track)
 
 ---
 
@@ -72,7 +75,9 @@ Output type:
 
 Do not mix Kling Avatar v2 and HeyGen IV in the same episode. Do not mix Kling I2V v3 Standard and v2.6 Pro in the same episode. One model = one face/motion style. Mixing → visible jumps between scenes.
 
-**I2V model selection:** use the one route already selected by the format/Manager. A failure never authorizes switching to another model.
+Still scenes (§2b) are not a model: a planned still next to Kling clips is not a mix.
+
+**I2V model selection:** use the one route already selected by the format/Manager. A failure never authorizes switching to another model, and never turns the scene into a still.
 
 **Serial-drama:** one model means I2V only. If `format == "serial-drama"` and any clip points to `fal-ai/kling-video/ai-avatar/*`, stop and return to Manager.
 
@@ -135,6 +140,60 @@ GET https://queue.fal.run/fal-ai/kling-video/requests/{REQUEST_ID}
 Polling every 15s, timeout 10 min.
 
 For other models — see `tools/fal-ai.md` for base paths.
+
+---
+
+## 2b. Still shots (`motion: "still"`)
+
+A still shot replaces a scene's paid clip with a slow eased camera move (push-in, pull-out, pan or tilt) over that scene's start PNG, rendered free and deterministically by `tools/still_shot.py` (local ffmpeg, no network). Only the scenarist plans stills, in Phase 1, and only in formats whose playbook says **"Still shots: allowed"**. The storyboard carries `motion: "still"`, `still_effect`, `still_depth`, `still_impact` and `still_reason`. You never decide a still yourself, and you never turn a still scene into a paid clip or a paid scene into a still (a user override reaches you through Manager).
+
+**For every `motion: "still"` scene: no Kling call, no runner job, no `motion_prompt`, no upload.** Run it with absolute paths (the scene's `scenes/scene-K/` files inside the absolute `OUTPUT_DIR`):
+
+```bash
+K=3
+OUT="$OUTPUT_DIR/scenes/scene-$K/scene-$K.mp4"
+# One jq call per field: a tab-separated read would shift fields if one were empty.
+field() { jq -r --argjson k "$K" --arg f "$1" '(.clips // .scenes)[] | select(.index == $k) | .[$f] // empty' "$OUTPUT_DIR/storyboard.json"; }
+STILL_EFFECT="$(field still_effect)"; STILL_DEPTH="$(field still_depth)"; DURATION_SEC="$(field duration_sec)"
+[ -n "$STILL_EFFECT" ] && [ -n "$STILL_DEPTH" ] && [ -n "$DURATION_SEC" ] \
+  || { echo "scene $K: still_effect, still_depth or duration_sec missing: return to Manager"; exit 1; }
+SUMMARY="$(python3 tools/still_shot.py --image "$OUTPUT_DIR/scenes/scene-$K/scene-$K.png" \
+  --out "$OUT" --effect "$STILL_EFFECT" --depth "$STILL_DEPTH" --duration "$DURATION_SEC")" \
+  || { echo "still_shot.py failed for scene $K: see the failure rule below"; exit 1; }
+```
+
+Keep the tool's defaults (1080×1920, 30 fps, no audio). Do not pass `--fps`, `--width`, `--height` or `--audio silent`: the clip has no audio stream and the Editor gives it the silent `anullsrc` track.
+
+Then write the still scene's fields. `scene_video` is the absolute `$OUT`, the same style as the runner paths of the other scenes; `scene_video_url` stays `null` (no upload); `still_render` comes from the tool's JSON:
+
+```bash
+jq --argjson k "$K" --arg path "$OUT" --argjson r "$SUMMARY" '
+  (if has("clips") then "clips" else "scenes" end) as $arr
+  | .[$arr] |= map(if .index == $k then . + {
+      scene_video: $path, scene_video_kind: "still", scene_video_route: "local.still_shot",
+      scene_video_url: null,
+      still_render: {sha256: $r.sha256, image_sha256: $r.image_sha256, frames: $r.frames}
+    } else . end)' "$OUTPUT_DIR/storyboard.json" > "$OUTPUT_DIR/storyboard.json.tmp" \
+  && mv "$OUTPUT_DIR/storyboard.json.tmp" "$OUTPUT_DIR/storyboard.json"
+```
+
+These fields are written on still scenes only; Kling scenes keep their usual `motion_prompt` / `scene_video` / `scene_video_url` write-back.
+
+Rules:
+- **Never pass `--force` over a path that a runner job claimed.** The tool refuses to overwrite an existing MP4. `--force` is allowed only to re-render your own still (for example after Storyboarder replaced the PNG, §12). Before every still render, and always before `--force`, confirm that no runner claim names that path:
+  ```bash
+  ABS_OUT="$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$OUT")"
+  if find "$OUTPUT_DIR/build/video/_claims" -name '*.json' -exec jq -r '.output_path' {} + 2>/dev/null | grep -qxF "$ABS_OUT"; then
+    echo "scene $K output is claimed by a runner job: stop and report"; exit 1
+  fi
+  ```
+  A runner claim on a still scene's path means a paid clip was already attempted there: stop and report, render nothing.
+- **Never use a still as a fallback.** Stills are planned in Phase 1 only. After a failed, refused, `UNKNOWN` or user-rejected paid clip, follow runner state and `rules/main/fallback.md`; never render a still for that scene.
+- **If the tool fails** (exit 1, JSON error on stderr: `{"ok": false, "error": ...}`), follow `rules/main/fallback.md`: correct only a command/input defect (for example a wrong path) and retry once; if it fails again, stop and report scene K and the tool's stderr JSON. Never change the planned `still_effect`, `still_depth` or `duration_sec` to make it pass (a storyboard defect stops the run and goes back to Manager), never pass `--force` over a runner-claimed path, never hand-write ffmpeg, and never replace a failed still with a paid clip without the user's instruction.
+- **Guard:** a `motion: "still"` scene with `clip_type: "dialogue"` or `"avatar"`, a non-empty `character_speech`, or in a format whose playbook does not say "Still shots: allowed" is a Phase 1 error: return it to Manager and render nothing for it.
+- **Validation:** the tool checks size, frame count, duration and audio itself and prints one JSON line with `"ok": true`. Also confirm Manager's Phase 4 gate: MP4 ≥ 100 KB, 1080×1920, duration within ±0.05 s of `duration_sec`, no audio stream. No runner state is required.
+- A still effect is a camera move, so a still scene satisfies "camera moves in every clip" (§4).
+- Cost: list every still scene at `$0.00` (`local.still_shot`) in the cost summary.
 
 ---
 
@@ -297,7 +356,7 @@ Pick motion_prompt tempo to match the scene mood. Not "always slow" and not "alw
 - ❌ One micro gesture across a whole 5s clip — boring, need at least 2-3 actions
 - ❌ `camera holds` without a second action — static
 
-**Rule:** Each 5s clip contains at least 2-3 separate actions (camera + character + environment). Camera moves in every clip (push in, track, drift, pan — not holds steady).
+**Rule:** Each 5s clip contains at least 2-3 separate actions (camera + character + environment). Camera moves in every clip (push in, track, drift, pan — not holds steady). A still shot (§2b) satisfies this: its effect is a camera move.
 
 ### State-change / transformation clips — LOCK the camera, sell the transition
 
@@ -694,6 +753,8 @@ Avatar v2 = $0.28 per 5s, I2V = $0.70 per 5s. If generation fails with "invalid 
 
 **Do not pass fal.ai URLs directly** — they are temporary (hours to days), Kling may not download in time.
 
+Still shots (§2b) need no upload: they render locally from the scene PNG and keep `scene_video_url: null`.
+
 ### 8.1 Approve the still frame BEFORE launching Avatar
 
 **Never launch Kling Avatar on an unapproved still frame.** Show the image to the user → get explicit approval → only then launch Avatar. Avatar costs $0.22+ and cannot be canceled after submit.
@@ -714,12 +775,13 @@ Universal rule for fal.ai calls: pass the request body via a JSON file (`curl -d
 
 ## 9. Mapping table before launch
 
-Before a batch of Avatar/I2V calls, print a mapping table — image / audio / clip text:
+Before a batch of Avatar/I2V calls, print a mapping table — image / audio / clip text — covering every scene, still scenes included:
 
 ```
 Clip 1 (Avatar): image=kirk-shocked.png | audio=supabase.co/.../tts-1.mp3 | text="Captain's log..."
 Clip 2 (I2V):    image=corridor-start.png + corridor-end.png | motion="slow push-in, figure turns head"
 Clip 3 (Avatar): image=worf-stern.png | audio=supabase.co/.../tts-3.mp3 | text="This is..."
+Clip 4 (still local.still_shot): image=scenes/scene-4/scene-4.png | effect=pull-out | depth=some | duration=5 | $0.00
 ```
 
 Verify:
@@ -767,7 +829,7 @@ Speedup by format:
 
 ## 12. Validation after each clip
 
-**"Already valid, skip re-render" must check the file matches the CURRENT start frame, not just its own filesize/duration.** Burned in genshin-impact "Don't Save Me" EP6 (2026-07-14): a scene's PNG was corrected/regenerated (Storyboarder fixed its background) after that scene's MP4 had already been rendered once. On a later full-episode Animator pass, the existing MP4 passed the filesize/ffprobe checks below and was reused as "already valid" — but it was rendered from the OLD, now-superseded start frame, so the video didn't match the current (corrected, user-approved) image at all. Filesize and duration checks say nothing about which start frame a clip was actually rendered from. **Before skipping a re-render because a valid MP4 already exists, confirm the scene's `scene_image`/`scene_image_url` hasn't changed since that MP4 was produced** (compare timestamps, or just re-render whenever you're not certain — a wasted $0.42-1.26 re-render is far cheaper than shipping a clip that visually contradicts the approved storyboard).
+**"Already valid, skip re-render" must check the file matches the CURRENT start frame, not just its own filesize/duration.** Burned in genshin-impact "Don't Save Me" EP6 (2026-07-14): a scene's PNG was corrected/regenerated (Storyboarder fixed its background) after that scene's MP4 had already been rendered once. On a later full-episode Animator pass, the existing MP4 passed the filesize/ffprobe checks below and was reused as "already valid" — but it was rendered from the OLD, now-superseded start frame, so the video didn't match the current (corrected, user-approved) image at all. Filesize and duration checks say nothing about which start frame a clip was actually rendered from. **Before skipping a re-render because a valid MP4 already exists, confirm the scene's `scene_image`/`scene_image_url` hasn't changed since that MP4 was produced** (compare timestamps, or just re-render whenever you're not certain — a wasted $0.42-1.26 re-render is far cheaper than shipping a clip that visually contradicts the approved storyboard). For a still scene, compare the PNG's current sha256 with `still_render.image_sha256` (re-render when they differ); a re-render is free but still obeys the `--force` rule in §2b.
 
 **Technical validation only. Do not inspect generated frames or clips.** The only source-material exceptions are Wild Documentary research/source images and Motion Dance source frames when necessary; neither exception applies to generated output.
 
@@ -790,6 +852,8 @@ After each Kling generation:
    ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of csv=p=0 scene-1.mp4
    ```
 
+   **Still shots** (§2b) have no runner state: require the tool's `"ok": true` JSON, MP4 ≥ 100 KB, 1080×1920, duration within ±0.05 s of `duration_sec`, and no audio stream.
+
 4. **If ffprobe shows problems — diagnose the cause before regenerating:**
    - File < 100KB → generation error in JSON, read Kling response
    - Wrong duration → request body incorrect, check it
@@ -803,6 +867,7 @@ After each Kling generation:
 ## Checklist before handing off to Editor
 
 - [ ] All scene-K.mp4 generated (one per clip)
+- [ ] Still scenes (only those planned `motion: "still"` in Phase 1): rendered by `tools/still_shot.py` with no Kling call or runner job, not runner-claimed, tool JSON `"ok": true`, 1080×1920, within ±0.05 s of `duration_sec`, no audio stream; write-back `scene_video` (absolute path), `scene_video_kind: "still"`, `scene_video_route: "local.still_shot"`, `scene_video_url: null`, `still_render`; listed at $0.00
 - [ ] All files > 100 KB, ffprobe shows correct duration
 - [ ] All clips passed programmatic validation (filesize > 100KB, ffprobe duration correct, video stream present)
 - [ ] Serial-drama: all clips are I2V; dialogue I2V clips have embedded audio stream from Kling `generate_audio:true`
@@ -810,6 +875,6 @@ After each Kling generation:
 - [ ] Avatar-based formats: Avatar clips have embedded audio stream (lipsync); silent I2V clips may have no audio (`anullsrc` added by Editor)
 - [ ] For gameplay-ai-avatar: avatar-fast.mp4 sped up 1.3x (setpts+atempo)
 - [ ] All inputs (image, audio) were Supabase URLs, not fal.ai temp
-- [ ] Same format-selected model family everywhere; no automatic fallback or model switch
+- [ ] Same format-selected model family everywhere (stills are not a model); no automatic fallback, model switch, or still substitution after a failure
 
 In debug mode — send Manager an explanation (what was generated, fps/dur of each clip, any regenerations and why).

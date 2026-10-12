@@ -53,12 +53,21 @@ Update `games/{GAME_TAG}/in-game-pov_story_bible.json` — add the new situation
 
 ### Key mechanics
 
-1. **Title card first and voiced.** Scene 0 is a game-styled title card (not POV) that names the situation and shows the starting survival %. Its `tts_segment` is mandatory: voice the displayed situation title, then the starting survival % (e.g. "Attack on the Akademiya. Survival chance — eight percent."). TTS starts at 0; `TTS_OFFSET = 0` in the Editor. The title card plays 3–5s with Kling ambient SFX underneath.
+1. **Title card first and voiced.** Scene 0 is a game-styled title card (not POV) that names the situation and shows the starting survival %. Its `tts_segment` is mandatory: voice the displayed situation title, then the starting survival % (e.g. "Attack on the Akademiya. Survival chance — eight percent."). TTS starts at 0; `TTS_OFFSET = 0` in the Editor. The title card plays 3–5s with Kling ambient SFX underneath (none when the title card is a still shot; narration and music still play from t=0).
 2. **POV = environmental, never hands.** From clip 1 onward: pure look-around / walk-through / reaction POV. No hands gripping controls. No weapon barrels. Camera sees the world — corridors, consoles, windows, other crew, debris — as the viewer walks and breathes.
 3. **Location variety mandatory.** Each POV clip is a different space aboard the ship (or outside it): bridge, corridor, engineering, escape pod bay, airlock, porthole exterior view. Never two consecutive clips in the same location.
 4. **Each shot is a CUT, not a camera pan.** Shots do not flow into each other — there is a hard cut between them, and the viewer is instantly dropped into a new location. The cut IS the movement between places; it is invisible. Within a shot, only the environment moves (alarms strobe, doors slam, crew runs past). `tts_segment` opens by placing the viewer IN the new situation: `"Вы на мостике — объявлена эвакуация."` NOT: `"Вы поворачиваете голову к мостику."` — head-turn narration implies one continuous camera; here every shot is a fresh location drop.
 5. **Live survival-% HUD.** A small persistent `SURVIVAL: X%` counter sits in the top-right corner and changes value per clip. It is a **programmatic drawtext overlay**, not an AI-rendered element.
 6. **Predetermined outcome.** `survive` or `death`, decided by the Manager's question. Arc written backwards from it.
+
+### Still shots: allowed
+
+The scenarist may plan still shots (`motion: "still"`) under the rule, cap and fields in `rules/roles/scenarist.md` "Still shots" (§8). A still scene gets its start PNG as usual and is rendered free by the Animator (`tools/still_shot.py`, no paid clip), saving that scene's Kling clip ($0.63 per 5s scene with `generate_audio: true`).
+
+- **Best candidate:** the title card (scene 0) — a wide cinematic establishing shot under a very slow push-in, with title and survival % drawn on top by `tools/overlays.py`. A still has no clip sound, so the title card then plays narration and music without its Kling SFX bed.
+- **POV clips (1–N) stay animated as a rule:** the moving first-person camera is the format. A POV clip qualifies only if nothing in it moves and it is not the outcome clip — rare. Zero stills is a normal result.
+- A still scene also carries `duration_sec: 5` (a number) next to `duration: "5"`: the Phase 1 still gate and `tools/still_shot.py` read `duration_sec`.
+- A still's `still_effect` counts as its camera move. HUD overlays, narration timing and `MAIN_DUR` are unchanged for a still scene.
 
 ---
 
@@ -90,6 +99,7 @@ from `games/{tag}/{tag}.md` → `## Overlay brand` (font role → brand font).**
 | Image (NB2, start frame only) | $0.08 |
 | Kling v3 I2V 5s (`generate_audio: true`) | $0.63 |
 | **Per clip** | **~$0.71** |
+| Still-shot scene (NB2 image only; `tools/still_shot.py` render is free) | $0.08 |
 
 | Component | Cost |
 |---|---|
@@ -99,8 +109,10 @@ from `games/{tag}/{tag}.md` → `## Overlay brand` (font role → brand font).**
 
 | Variant | Clips | Cost |
 |---|---|---|
-| Base (recommended) | title card + 5 POV × 5s + CTA | ~$4.44 |
-| Extended | title card + 6 POV × 5s + CTA | ~$5.15 |
+| Base (recommended) | title card + 5 POV × 5s + CTA | ~$4.44 (~$3.80 with a still title card) |
+| Extended | title card + 6 POV × 5s + CTA | ~$5.15 (~$4.50 with a still title card) |
+
+A still scene saves its Kling clip ($0.63 per 5s with audio).
 
 Budget ceiling including permitted retries: **$7.00**. Each failed request gets at most one retry; stop spending at **$6.30**.
 
@@ -196,12 +208,12 @@ Budget ceiling including permitted retries: **$7.00**. Each failed request gets 
 - Receive `OUTCOME` (`survive`/`death`) from Manager. Lock it in `storyboard.json → outcome`. Write the whole arc backwards from it.
 - **Read the story bible** passed by Manager (`used_situations[]` + `anti_repetition`). Choose a situation that has NOT been used before — different threat type, different setting, different core premise. If all obvious candidates are taken, escalate to Manager.
 - Pick the situation: lore event OR gameplay scenario, per the game (`games/{GAME_TAG}/{GAME_TAG}.md`). If the game has no usable lore, use a gameplay scenario; if neither reads well in POV, tell Manager this format is a weak fit.
-- **Video structure: 1 title-card clip + 5–6 POV clips, each 5s, independent.** Total ~30–35s before CTA. Each clip = one Kling I2V call.
+- **Video structure: 1 title-card clip + 5–6 POV clips, each 5s, independent.** Total ~30–35s before CTA. Each animated clip = one Kling I2V call; a still scene needs none.
 - **Write flat clips, not nested shots.** Each entry in `clips[]` is one clip:
   - `index` — integer, 0 = title card, 1–N = POV clips
   - `clip_type` — `"title_card"` (index 0) | `"pov"` (index 1+)
   - `type` — (pov only) `"hook"` | `"threat"` | `"moves"` | `"outcome"`
-  - `duration` — `"5"` (string)
+  - `duration` — `"5"` (string). A still scene also carries `duration_sec: 5` (number; see "Still shots: allowed").
   - `location` — human-readable location name. **MUST differ between adjacent clips** (location variety is the immersion engine).
   - `survival_pct` — (pov only) integer 0–100. Starts at the hook value matching `hook_plate`, moves per narration step, lands at 0 (`death`) or 60–85 (`survive`) on the final clip.
   - `tts_segment` — mandatory on every clip. On the title card: the displayed situation title + starting survival %, ≤8 words. On POV clips: **10–12 word** narration fragment (hard cap — see word cap rule), second person, present tense, imperative, opening by placing the viewer IN the new location. **Final POV clip only:** segment MUST end with `"You died."` or `"You survived."` (always EN).
@@ -333,9 +345,10 @@ Budget ceiling including permitted retries: **$7.00**. Each failed request gets 
 
 ### Animator
 
-**Architecture: one Kling v3 Standard I2V call per clip (5s each).** N clips → N Kling calls. Simple, controllable, no chaining artifacts.
+**Architecture: one Kling v3 Standard I2V call per animated clip (5s each).** N animated clips → N Kling calls; a still scene needs none. Simple, controllable, no chaining artifacts.
 
-- All calls via **Kling v3 Standard I2V** (`fal-ai/kling-video/v3/standard/image-to-video`), `generate_audio: true`. Keep the model, endpoint, route, and serialized request fixed; retry once on failure, then stop the whole video. Never switch automatically to Kling 2.6.
+- All animated clips via **Kling v3 Standard I2V** (`fal-ai/kling-video/v3/standard/image-to-video`), `generate_audio: true` (still scenes are rendered locally, no paid clip). Keep the model, endpoint, route, and serialized request fixed; retry once on failure, then stop the whole video. Never switch automatically to Kling 2.6, and never replace a failed clip with a still.
+- **Still scenes** (`motion: "still"`, normally only the title card): no Kling call; render with `tools/still_shot.py` as `rules/roles/animator.md` §2b describes. The still clip has no audio stream.
 
 **Call structure per clip:**
 - `start_image_url` — Supabase URL of `scene-K.png` (Storyboarder uploaded it)
@@ -346,7 +359,7 @@ Budget ceiling including permitted retries: **$7.00**. Each failed request gets 
 - **No `multi_prompt`**, no `end_image_url`, no `shot_type`
 
 **Title card motion (clip 0):**
-- Very slow camera push-in toward the crisis. Atmospheric debris drifts and settles. Distant explosion flares and holds. Continuous verb tense throughout.
+- Very slow camera push-in toward the crisis. Atmospheric debris drifts and settles. Distant explosion flares and holds. Continuous verb tense throughout. As a still shot, the push-in is rendered by `tools/still_shot.py` instead (no SFX under it).
 
 **POV clip motion (clips 1–N):**
 - Every prompt starts with: `"Environmental first-person POV."` (style anchor)
@@ -364,7 +377,7 @@ Then append style anti-drift terms **derived from the resolved `style_tags`** (t
 ```
 === ANIMATOR DEBUG: {SITUATION} — per-clip I2V ===
 
-Clip 0  title-card  /  PNG: scene-0.png  /  5s = $0.63
+Clip 0  title-card  /  PNG: scene-0.png  /  5s = $0.63  (as a still: $0.00, {still_effect})
   prompt: "Slow camera push toward {crisis}, {debris} drifts and settles, distant explosion flares then holds."
 
 Clip 1  pov/hook    /  PNG: scene-1.png  /  5s = $0.63  /  {pct}%
@@ -378,7 +391,7 @@ Clip 2  pov/threat  /  PNG: scene-2.png  /  5s = $0.63  /  {pct}%
 Clip N  pov/outcome /  PNG: scene-N.png  /  5s = $0.63  /  {pct}%
   prompt: "Environmental first-person POV. {≤512 UTF-8 bytes, endpoint verb}"
 
-Total: {N+1} × $0.63 = ${total}  (cap $6.30)
+Total: {animated clips} × $0.63 + {still clips} × $0.00 = ${total}  (cap $6.30)
 Proceed? (y/n)
 ```
 
@@ -386,7 +399,7 @@ Proceed? (y/n)
 
 Polling: base `fal-ai/kling-video`, every 15s, max 10 min per clip.
 
-**Pricing:** (N+1) clips × $0.63 per clip. Base (6 clips total) = $3.78 + title card $0.63 = **$4.41** (well within $6.30 cap). A separately authorized no-audio configuration is a new stopped-run decision, never an automatic fallback.
+**Pricing:** (N+1) clips × $0.63 per clip. Base (6 clips total) = $3.78 + title card $0.63 = **$4.41** (well within $6.30 cap). A still title card saves $0.63. A separately authorized no-audio configuration is a new stopped-run decision, never an automatic fallback.
 
 ### Sound
 
@@ -420,7 +433,7 @@ FRAG=$(python3 tools/overlays.py storyboard.json --scene-index $K --workdir buil
 - Overlays — ONLY via overlays.py; never ask NB2/Kling to draw HUD/numbers/text.
 
 **Stage 1 — Picture-only concat:**
-- Normalize each HUD'd clip: scale 1080×1920, 30fps, `preset slow`, `crf 20`. Kling I2V is 24fps → normalize to 30fps before concat.
+- Normalize each HUD'd clip: scale 1080×1920, 30fps, `preset slow`, `crf 20`. Kling I2V is 24fps → normalize to 30fps before concat. Still clips are already 1080×1920, 30fps and exactly `duration_sec`; never trim them.
 - Hard cuts, no crossfade.
 - Concat-list entries: `scene-0-hud.mp4` + `scene-1-hud.mp4` + … + `scene-N-hud.mp4`. No duplicates.
 - Output: `build/concat-noaudio.mp4` (silent; CTA NOT yet appended).
@@ -429,7 +442,7 @@ FRAG=$(python3 tools/overlays.py storyboard.json --scene-index $K --workdir buil
 **Stage 2 — Subtitle burn-in:** the canonical path, editor.md §6 — `python3 tools/add_subtitles.py build/voice-final.wav build/subs.ass --storyboard storyboard.json --lang {lang} --main-dur {MAIN_DUR}`, then `ass=build/subs.ass` as the last video filter. TTS starts at 0, so `--offset` is not needed.
 
 **Stage 3 — Final audio mix (one ffmpeg pass):**
-- Inputs: `build/concat-subbed.mp4` + `tts-output.mp3` + Kling SFX (baked in each clip's audio — preserve) + music + `cta-scaled.mp4`.
+- Inputs: `build/concat-subbed.mp4` + `tts-output.mp3` + Kling SFX (baked in each clip's audio — preserve; a still scene has no audio stream, so it gets an `anullsrc` slot of its length) + music + `cta-scaled.mp4`.
 - **Audio levels:** narrator TTS = 1.0 (front), Kling combat SFX = ~0.30 (bed), music = `music.volume` (~0.12). Mix all three over MAIN_DUR.
 - TTS starts at the beginning of the mix with `TTS_OFFSET = 0`; do not add title-card lead silence.
 - `apad=whole_dur=${MAIN_DUR}` on TTS. NOT `-shortest`.
@@ -454,7 +467,7 @@ output/YYYY-MM-DD/{GAME_TAG}/in-game-pov/
 ├── storyboard.json
 ├── scenes/
 │   ├── scene-0.png              (title card — cinematic establishing shot, NOT POV)
-│   ├── scene-0.mp4              (Kling I2V title card, 5s, generate_audio: true)
+│   ├── scene-0.mp4              (Kling I2V title card, 5s, generate_audio: true — or a silent still-shot clip)
 │   ├── scene-0-hud.mp4          (after Stage 0 drawtext)
 │   ├── scene-1.png              (POV clip 1 start frame — environment, NO hands)
 │   ├── scene-1.mp4
@@ -499,7 +512,8 @@ Generated PNG/MP4/audio receives technical validation only (path, size, hash, di
 - [ ] Kling I2V `generate_audio: true`; `negative_prompt` forbids voices/speech/music/on-screen-text/hands/protagonist
 - [ ] Kling audio exists when `generate_audio: true`; validate the audio stream technically. If the user rejects its content, stop for an explicitly authorized rerun configuration.
 - [ ] Audio mix: narrator 1.0, Kling SFX ~0.30, music ~0.12; TTS starts at 0 on the title card
-- [ ] Every clip has an active camera move in the motion_prompt (no "holds steady") — endpoint verb present
+- [ ] Every animated clip has an active camera move in the motion_prompt (no "holds steady") — endpoint verb present; a still's `still_effect` counts as its camera move
+- [ ] Still scenes (if any, normally only the title card) were planned in Phase 1, have `scene_video_kind: "still"`, numeric `duration_sec` and no audio stream, and stay within the `rules/roles/scenarist.md` "Still shots" cap; every other clip is a Kling v3 Standard clip with `generate_audio: true`
 - [ ] Every motion_prompt starts with `"Environmental first-person POV."` for clips 1–N; title card uses slow push-in
 - [ ] TTS via MiniMax, or Chatterbox only with an approved exact-format sample; no ElevenLabs TTS or cross-format sample
 - [ ] Subtitles — universal whisper style (editor.md §6); clip 0 has mandatory `tts_segment`; `TTS_OFFSET = 0`

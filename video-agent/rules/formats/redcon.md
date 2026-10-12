@@ -46,6 +46,15 @@ Keywords: "redcon", "what if lore", "alternate history", "альтернатив
 
 Same as `character-story`: character does NOT speak on camera (no lipsync). I2V visualizes scenes; TTS is the alternate-self narrating what happened. One key addition: **mandatory title card as clip 1** — a static text-over-image scene establishing the premise ("WHAT IF: / SPOCK / BECAME / BORG").
 
+### Still shots: allowed
+
+The scenarist may plan still shots (`motion: "still"`) under the rule, cap and fields in `rules/roles/scenarist.md` "Still shots" (§8). A still scene gets its start PNG as usual and is rendered free by the Animator (`tools/still_shot.py`, no paid clip), saving that scene's Kling clip ($0.42 per 5s scene); narration plays over it as normal.
+
+- **Best candidate:** the title card (clip 1; clip 2 in the Player-POV variant). It is a dark atmospheric background with no character in focus and its text is rendered later by ASS, so a slow `push-in` (or `pull-out`) still loses nothing.
+- **Other candidates:** a wide establishing or aftermath shot with no character in focus (a ruined city, an empty bridge, a planet from orbit).
+- **Never a still:** the HOOK, the DIVERGENCE or TRANSFORMATION beats, or any clip whose point is the alternate-self's face or transformation. Zero stills is a normal result.
+- A still scene's camera move is its `still_effect`; the three-motion-layer and banned-phrase rules apply to animated clips.
+
 ---
 
 ## Budget (rough estimates)
@@ -53,7 +62,7 @@ Same as `character-story`: character does NOT speak on camera (no lipsync). I2V 
 | Component | Cost |
 |---|---|
 | Title card image (NB2) | $0.08 |
-| Title card I2V 5s (Kling v3 Standard, no audio) | $0.42 |
+| Title card I2V 5s (Kling v3 Standard, no audio; $0.00 as a still shot) | $0.42 |
 | Story clip image (NB2) | $0.08 |
 | Story clip I2V 5s (Kling v3 Standard, no audio) | $0.42 |
 | **Per story clip** | **~$0.50** |
@@ -62,8 +71,10 @@ Same as `character-story`: character does NOT speak on camera (no lipsync). I2V 
 
 | Variant | Clips | Cost |
 |---|---|---|
-| Base (recommended) | 1 title card + 6 story clips | ~$3.20 |
-| Extended | 1 title card + 7 story clips | ~$3.55 |
+| Base (recommended) | 1 title card + 6 story clips | ~$3.20 (~$2.80 with a still title card) |
+| Extended | 1 title card + 7 story clips | ~$3.55 (~$3.15 with a still title card) |
+
+A still scene saves its Kling clip ($0.42 per 5s, no audio).
 
 ---
 
@@ -122,7 +133,7 @@ Use this variant when `character_name = "You"` / the player is the protagonist (
 
 - `PRE_MS = 0` — TTS starts immediately at t=0 (clip 1 hook). No adelay.
 - Title card (clip 2) is silent: TTS from clip 1 + silence(3s) + clips 3–7 TTS concatenated.
-- Title card duration is **3 seconds** (not 5s). Trim or generate accordingly.
+- Title card duration is **3 seconds** (not 5s). Trim or generate accordingly (a still title card is rendered at exactly `duration_sec: 3`).
 - `atempo = TTS_DUR / MAIN_DUR`. `MAIN_DUR = 5 + 3 + 5×5 + CTA_DUR`.
 
 #### Title card text (clip 2)
@@ -201,15 +212,16 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
   - the pulled hero must have a specific story-solving function;
   - the changed outcome must be meaningfully different from canon/lore;
   - include one downstream consequence beyond the immediate rescue.
-- Clip 1 is the **title card**: `clip_type: "action"`, `tts_segment: null`, `character_speech: null`. `action_description` = slow drift over dark textured background with the title text rendered large. No character in frame — or character silhouette only, unrecognizable.
+- Clip 1 is the **title card**: `clip_type: "action"`, `tts_segment: null`, `character_speech: null`. `action_description` = slow drift over dark textured background with the title text rendered large. No character in frame — or character silhouette only, unrecognizable. It is the format's best still-shot candidate (see "Still shots: allowed").
 - Clips 2–7: `clip_type: "action"`, `character_speech: null`, `tts_segment` = monologue fragment for that clip
 - **HOOK clip (clip 2) must name the alternate designation** — e.g. "I am Borg. Designation Seven of Seven... but I remember being Spock." Full canonical name + alternate designation in the first 15 words.
 - Offer-driven exception: clip 2 may prioritize the recognizable doomed scene over the alternate designation, as long as `character_name`, `alternate_designation`, and `divergence_point` are explicit in top-level storyboard fields and the title card names the pulled hero/outcome.
 - Age progression: if the character has canonical age variants, show the *before* clip at the younger/mid age, the *after* clips at the transformed state. Two character refs minimum: canonical-self and alternate-self.
 - **The divergence clip (clip 4) must specify the exact canon year and event** in `action_description` so Storyboarder can ground the visual.
 - For offer-driven redcon, `divergence_point` and the relevant clip `action_description` must include the causal chain: `free reward/currency -> wish/pull -> pulled hero -> changed canon outcome`.
-- Three motion layers per clip in `action_description` — same rules as `character-story`.
-- `camera_angle` must differ between adjacent clips; every clip has an active camera move.
+- Three motion layers per animated clip in `action_description` — same rules as `character-story`.
+- `camera_angle` must differ between adjacent clips; every clip has an active camera move (a still scene's `still_effect` counts).
+- Still shots: optional, per "Still shots: allowed" above and `rules/roles/scenarist.md` "Still shots"; zero is a normal result.
 - `format: "redcon"` in storyboard.json
 - General script rules — `rules/roles/scenarist.md`
 
@@ -267,10 +279,11 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
 
 ### Animator
 
-- All clips via **Kling v3 Standard I2V** (`generate_audio: false`). Retry a failed request once with the same endpoint/settings, then STOP; never switch to v2.6 or another provider.
+- All animated clips via **Kling v3 Standard I2V** (`generate_audio: false`; still scenes are rendered locally, no paid clip). Retry a failed request once with the same endpoint/settings, then STOP; never switch to v2.6 or another provider, and never replace a failed clip with a still.
+- Still scenes (`motion: "still"`, usually the title card): no Kling call; render with `tools/still_shot.py` as `rules/roles/animator.md` §2b describes.
 - For multi-beat clips use v3's native `multi_prompt` array. **Segment length: 2–3s each. Max clip duration: 7s.** Never use 5+5=10s — 7s is the hard cap per pass. Example: divergence + transformation → 3s+3s=6s per clip.
 - **Start frame only.** No `tail_image_url`.
-- Title card clip: very slow camera drift (parallax or gentle push-in). Minimal motion — text must remain readable throughout 5s.
+- Title card clip: very slow camera drift (parallax or gentle push-in). Minimal motion — text must remain readable throughout 5s. As a still shot, the same slow move is rendered by `tools/still_shot.py`.
 - Story clips: **active, dynamic prompts only** — three concurrent layers (camera + primary action + atmosphere), continuous present-tense verbs, no freeze phrases ("remains still", "holds position", "stays motionless" are banned).
 - **Known failure mode (user-flagged, 2026-07-07 Worf episode):** redcon's monologue-over-static-shot pacing tends to read as static even when `motion_prompt` technically satisfies the three-layer rule — the talking-head/portrait framing common to this format leaves little room for perceptible camera or environment motion. Prevent this in the prompt by using stronger camera movement (push-in/pull-out/orbit) and wider or three-quarter framing. Generated media receives technical validation only; the user makes any visual judgment during debug review.
 - Duration: 5s for standard clips, up to 7s for multi-prompt clips
@@ -366,8 +379,9 @@ ${OUTPUT_DIR}/
 - [ ] All images 608×1080
 - [ ] No bg-reference files
 - [ ] One PNG per scene — no end frames
-- [ ] camera_angle differs between adjacent clips; every clip has active camera move
-- [ ] Motion prompts: three concurrent layers, continuous verbs, no banned freeze phrases
+- [ ] camera_angle differs between adjacent clips; every clip has active camera move (a still's `still_effect` counts)
+- [ ] Animated clips' motion prompts: three concurrent layers, continuous verbs, no banned freeze phrases
+- [ ] Still scenes (if any) were planned in Phase 1, have `scene_video_kind: "still"` and stay within the `rules/roles/scenarist.md` "Still shots" cap; every other scene is a Kling v3 Standard clip
 - [ ] TTS voice = alternate-self identity (not canonical)
 - [ ] Music from Dark/ only
 - [ ] Subtitles via `add_subtitles.py` with `--offset 5`

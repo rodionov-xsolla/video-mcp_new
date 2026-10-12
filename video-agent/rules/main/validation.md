@@ -53,16 +53,43 @@ Missing state/URL is a Phase 3 failure. Do not launch Animator and do not manual
 
 For schema-v3 fal video jobs, Scenarist/Manager/Animator own the semantic plan and exact provider payload. `tools/kling_runner.py` validates only execution safety: registered route descriptor, immutable canonical payload, permanent URLs at any payload depth, saved request ID, and the caller-supplied technical `expect` (duration/tolerance, audio required/optional/forbidden, minimum bytes/dimensions, orientation). It fully decodes the MP4, uploads it and byte-verifies the permanent public copy. Animator handoff requires runner `phase: "DONE"`, local `scene_video == output_path`, and permanent `scene_video_url == supabase_url`.
 
+**Still scenes are exempt from the runner rules.** A scene planned in Phase 1 as `motion: "still"` has no runner job, no state and no permanent URL: it is rendered locally by `tools/still_shot.py` and handed off with `scene_video_kind: "still"`, `scene_video_route: "local.still_shot"`, `scene_video_url: null`. It passes with MP4 ≥ 100 KB, 1080×1920, no audio stream and duration within ±0.05 s of `duration_sec`. A `scene_video_kind: "still"` on a scene that Phase 1 did not plan as `motion: "still"` is a fallback and fails.
+
 ```bash
 # File downloaded (Kling returns <1KB JSON on error)
 [ -s "scene-1.mp4" ] && [ $(stat -f%z scene-1.mp4) -gt 100000 ]
 
-# Duration close to expected (±0.1s)
+# Duration close to expected (±0.1s); still clips ±0.05 s of duration_sec
 ffprobe -v error -show_entries format=duration -of csv=p=0 scene-1.mp4
 
 # Video stream present
 ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 scene-1.mp4
 ```
+
+Still-scene gate (read-only; works for both `.clips` and `.scenes`):
+
+```bash
+SB="$OUTPUT_DIR/storyboard.json"
+# Read every row first, so a jq error stops the gate instead of passing it with no rows.
+ROWS=$(jq -er '(.clips // .scenes) | if length == 0 then error("no scenes") else .[] end
+  | [.index, (.motion // "animated"), (.scene_video_kind // "-"), (.scene_video_route // "-"), (.scene_video // "-"), (.duration_sec // "-")]
+  | map(tostring) | @tsv' "$SB") || { echo "still gate: cannot read scenes from $SB"; exit 1; }
+while IFS=$'\t' read -r idx motion kind route clip dur; do
+  if [ "$motion" != "still" ]; then
+    [ "$kind" != "still" ] || { echo "scene-$idx: still clip on a scene not planned as still"; exit 1; }
+    continue
+  fi
+  [ "$kind" = "still" ] && [ "$route" = "local.still_shot" ] || { echo "scene-$idx: still scene not rendered by local.still_shot"; exit 1; }
+  case "$clip" in /*) ;; *) clip="$OUTPUT_DIR/$clip" ;; esac
+  [ -s "$clip" ] && [ "$(stat -f%z "$clip" 2>/dev/null || stat -c%s "$clip")" -ge 100000 ] || { echo "scene-$idx: still MP4 missing or < 100 KB"; exit 1; }
+  [ "$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "$clip")" = "1080,1920" ] || { echo "scene-$idx: still clip is not 1080x1920"; exit 1; }
+  got=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$clip")
+  awk -v g="$got" -v e="$dur" 'BEGIN { d = g - e; if (d < 0) d = -d; exit !(d <= 0.05) }' || { echo "scene-$idx: still duration $got, expected $dur ±0.05 s"; exit 1; }
+  [ -z "$(ffprobe -v error -select_streams a -show_entries stream=index -of csv=p=0 "$clip")" ] || { echo "scene-$idx: still clip must have no audio stream"; exit 1; }
+done <<< "$ROWS"
+```
+
+Runner scenes keep the `phase: "DONE"` / `scene_video == output_path` / `scene_video_url == supabase_url` requirement; a still scene needs no `state.json`.
 
 ### For MP3 (audio)
 

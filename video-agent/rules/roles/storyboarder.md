@@ -54,7 +54,8 @@ Storyboarder may add only these fields to each scene/clip in `storyboard.json`:
 It may add format-declared image side-assets such as `product_logo_url` or `elements`, but
 must not modify narrative, speech, TTS, duration, or Sound-owned fields.
 
-Every scene receives its own generated start PNG. Never use a reusable ref directly as a
+Every scene receives its own generated start PNG, including a `motion: "still"` scene (the
+Animator renders its free still shot from that PNG). Never use a reusable ref directly as a
 scene image. Never generate an end frame.
 
 Canonical local paths:
@@ -212,6 +213,9 @@ Do not rewrite unrelated style, identity, composition, or location content.
   individuals or one non-identifiable silhouette.
 - A visible/speaking identity-critical character requires their own eligible ref unless the
   active format explicitly defines an anonymous background figure.
+- `motion: "still"` scenes: keep the subject and any baked-in text inside the central ~85% of
+  the frame. The still shot's 12% zoom crops ~11% of the frame and a pan or tilt travels ~11%
+  of the width/height, so anything near the edges can be cut off.
 
 ## 8. Scale and depth
 
@@ -353,6 +357,8 @@ intent from technically validated facts.
 - Every reused asset satisfies section 3 approval and ownership rules.
 - Ref count/order follows the active format and section 11.
 - Avatar scenes follow section 9; I2V scenes have start frames only.
+- `motion: "still"` scenes have the same start-PNG fields and follow the still framing rule in
+  section 7.
 - No temporary fal URL or unsupported artifact kind appears in the handoff.
 - Report generated-image count, reused refs, local paths, permanent URLs, and cost.
 

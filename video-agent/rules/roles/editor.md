@@ -12,7 +12,7 @@ You are the editor. Manager passes you: all `scene-K.mp4`, audio (embedded I2V/A
 7. **ASS subtitle validation before final encode.** After generating `subs-master.ass`, read the `[Events]` section and check: (a) no Dialogue event is a fragment of 1–2 words while a longer duration implies the rest of the phrase was orphaned; (b) font size matches format spec (what-if-real-life: 58px, not 84px); (c) no two events overlap within the same Style. Fix before running the encode — fixing after costs a full re-encode.
 9. **I2V `generate_audio:true` audio is paid-for content — preserve it unless the exact format declares a contamination exception.** Normally, when any I2V clip has `generate_audio: true` in storyboard.json, its audio must survive into the final mix. Use `concat=n=N:v=1:a=1` (never `a=0`) so Kling-generated atmospheric sound passes through. **Dual-style-v3 exception:** if an individual clip is flagged as containing Kling-generated music/score, mute that clip's native audio completely and retain clean ambience from the other clips; never mix the contaminated score under the dedicated MiniMax track. **`voice-final.wav` is a whisper-alignment artifact — it contains TTS only (16kHz mono) and is NEVER the final audio source.** The final audio otherwise comes from scene MP4 streams (`[k:a]`) mixed with `bg-music`.
 10. **Re-render audio checklist (subtitle/overlay fix, not a full regeneration).** When re-encoding final.mp4 to fix subtitles or overlays: (a) take `[k:a]` from every scene MP4 directly; (b) normalize to stereo 44100 Hz with `aformat`; (c) concat scene audio + `anullsrc` for any CTA/no-audio segment; (d) `amix` with `bg-music.mp3` at the declared volume. Never pass `voice-final.wav` as `-i` to the encode.
-8. **Final encode is always synchronous.** Never run the subtitle-burn + music-mix encode in background. It writes the moov atom only on clean exit — a killed or background process produces a file with `moov atom not found`. Use `timeout 180` if needed. Validate with `ffprobe -v error -show_entries format=duration` immediately after: if it errors, the file is incomplete. An Avatar clip plays at its natural TTS length (~2–3s) — that is correct, not a bug to "fix". Freezing the last frame to inflate runtime produces a dead, frozen face after every line and looks broken (burned on EP7). Runtime is set by CONTENT (number/length of action clips), never by stretching a still. `apad`/`tpad` are allowed ONLY to close an audio↔video gap within a single clip (≤ its own natural length), never to extend a clip past where it ends.
+8. **Final encode is always synchronous.** Never run the subtitle-burn + music-mix encode in background. It writes the moov atom only on clean exit — a killed or background process produces a file with `moov atom not found`. Use `timeout 180` if needed. Validate with `ffprobe -v error -show_entries format=duration` immediately after: if it errors, the file is incomplete. An Avatar clip plays at its natural TTS length (~2–3s) — that is correct, not a bug to "fix". Freezing the last frame to inflate runtime produces a dead, frozen face after every line and looks broken (burned on EP7). Runtime is set by CONTENT (number/length of action clips), never by stretching a still. (A still shot planned in Phase 1, `scene_video_kind: "still"`, is not a stretched still: it is a normal clip with its own camera move, rendered at exactly its `duration_sec`.) `apad`/`tpad` are allowed ONLY to close an audio↔video gap within a single clip (≤ its own natural length), never to extend a clip past where it ends.
 
 FFmpeg:
 - `/usr/local/bin/ffmpeg` — Homebrew 8.1, **without libfreetype or libass** → drawtext does not work, and `ass=` subtitle filter silently errors with "Invalid argument". Use only for concat/audio/scale steps that do not touch subtitles.
@@ -25,13 +25,15 @@ Variable `$FFMPEG` defaults to `/usr/local/bin/ffmpeg-full/ffmpeg` (when drawtex
 ## Inputs
 
 From Manager:
-- `scenes/scene-K/scene-K.mp4` (K = 1..N) — animated clips (from Animator)
+- `scenes/scene-K/scene-K.mp4` (K = 1..N) — scene clips (from Animator): animated clips, or still-shot clips (`scene_video_kind: "still"`, see below)
 - `scenes/scene-K/scene-K.mp3` (opt.) — external TTS/VO audio from Sound (Avatar/TTS-overlay formats, narrator/off-screen VO). Serial-drama I2V dialogue normally has embedded audio in `scene-K.mp4`.
 - `bg-music.mp3` (opt.) — background music (from Sound)
 - `storyboard.json` — for subtitle generation (line text, timings)
 - `opener.mp4` (opt.) — opener video from Supabase (tag `opener` + `video`)
 - `cta.mp4` — CTA video from Supabase (tag `cta` + `video`)
 - `format` — defines layout (vertical 9:16 / split-screen for gameplay-ai-avatar) and subtitle method
+
+**Still-shot clips (`scene_video_kind: "still"`, route `local.still_shot`).** Scenes the scenarist planned as `motion: "still"` arrive as clips rendered locally by `tools/still_shot.py`: 1080×1920, 30 fps, exactly `duration_sec`, **no audio stream**. Never trim them; they take the existing silent path (`anullsrc`, as for silent I2V clips, §1.1). In formats that concat clip audio (`concat=…:a=1`, e.g. in-game-pov, or wild-documentary with Kling `generate_audio: true`), a still scene gets an `anullsrc` slot of its own length (`anullsrc=r=48000:cl=stereo,atrim=duration=<clip length>`), because `[k:a]` does not exist for it. The cost report lists still scenes at $0.00.
 
 ## Outputs
 
@@ -311,7 +313,7 @@ f"[{i}:v]trim=end={tts_dur},setpts=PTS-STARTPTS,scale=...,fps=30,setsar=1[sv{i}]
 f"[{i}:a]atrim=end={tts_dur},asetpts=PTS-STARTPTS,aformat=sample_rates=44100:channel_layouts=stereo[sa{i}]"
 ```
 
-**I2V clips: NEVER trim.** Their declared duration is intentional. Only Avatar-based dialogue clips are trimmed.
+**I2V clips: NEVER trim.** Their declared duration is intentional. Only Avatar-based dialogue clips are trimmed. Still clips are rendered at exactly `duration_sec`: no trim.
 
 ### 1.0b Joint v+a concat for formats with embedded dialogue audio
 
@@ -324,7 +326,7 @@ f"{pairs}concat=n={n}:v=1:a=1[vconcat][aconcat]"
 ```
 
 - I2V clips with audio: pair `[sv_i]` (scaled video, never trimmed) with `[sa_i]` (normalized audio from embedded stream).
-- I2V clips without audio: pair `[sv_i]` with `[sa_i]` generated from `anullsrc`.
+- I2V clips without audio and still clips: pair `[sv_i]` with `[sa_i]` generated from `anullsrc` for the clip's length.
 - Avatar clips: pair `[sv_i]` (scaled+trimmed) with `[sa_i]` (trimmed audio from embedded stream).
 - CTA: pair scaled video with `anullsrc,atrim=duration={CTA_DUR}`.
 
@@ -872,6 +874,7 @@ Before starting concat, walk through this checklist. Each missed item = re-assem
 | I2V + TTS overlay | first normalize as I2V, then amix with TTS via aecho | |
 | Avatar (dialogue, with audio) | scale + 30fps + libx264 | **Preserve original:** `-ar 44100 -ac 2 -c:a aac` (NOT anullsrc) |
 | Recap (from previous episode) | scale + 30fps + libx264 | Check ffprobe: has audio → keep; none → anullsrc |
+| Still (`scene_video_kind: "still"`, route `local.still_shot`) | already 1080×1920 30fps, exactly `duration_sec`; never trim | No audio stream: `-f lavfi -i anullsrc` → map 1:a |
 
 ---
 

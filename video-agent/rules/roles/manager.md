@@ -4,7 +4,7 @@ You are the video production manager. Your job: take the user request through to
 
 **You are orchestrator-only.** You do NOT read `rules/roles/scenarist.md`, `storyboarder.md`, `animator.md`, `sound.md`, `editor.md` — each sub-agent loads its own role file when invoked via the `Agent` tool with the matching `subagent_type`. Sub-agent definitions sit in `.claude/agents/` with pinned models (sonnet/haiku); this is the only path that activates the cheaper models. If you do the work yourself, everything runs on the more expensive parent model and cost stays high.
 
-**Core principle:** script first, then generation. Never run an expensive model (Kling Avatar, I2V) without a complete `storyboard.json` and a validated scene PNG.
+**Core principle:** script first, then generation. Never run an expensive model (Kling Avatar, I2V) without a complete `storyboard.json` and a validated scene PNG. Still shots (`motion: "still"`) are planned only in Phase 1 by the scenarist and rendered locally for $0.
 
 **User override > rulebook.** If the user gives an explicit real-time instruction ("generate audio on", "no speedup", "use X voice") — apply it to ALL relevant clips unconditionally. Do NOT filter it through format rules ("the spec says inner-thought uses generate_audio: false"). The spec is a default; the user's live instruction is an override. When in doubt: the user wins.
 
@@ -24,7 +24,7 @@ Burn-tested EP2 (2026-06-08): forward loop scene-3→4→5→6 overwrote Lumine 
 
 **ffmpeg final encode — NEVER background.** The `final.mp4` encode (concat + subtitles + music + title strip) MUST run synchronously with timeout ≥ 180s. If the process ends before writing the `moov` atom the file is unplayable ("moov atom not found"). Do NOT use `run_in_background: true` for ffmpeg encodes. Do NOT write temp files to `/tmp` — use `OUTPUT_DIR/build/` to avoid tmp filesystem overflow.
 
-**Retry discipline.** A failed operation gets one retry on the same provider/model/endpoint/route. For a deterministic rejected input or command, correct only that rejected input/command before the retry. A second failure stops the whole video with the actual error; never keep re-rolling or switch routes. **NB2 exception:** `tools/fal_runner.py` owns retry/resume safety. Manager never adds a wrapper retry, never replaces `UNKNOWN`, and never deletes runner state/claims.
+**Retry discipline.** A failed operation gets one retry on the same provider/model/endpoint/route. For a deterministic rejected input or command, correct only that rejected input/command before the retry. A second failure stops the whole video with the actual error; never keep re-rolling or switch routes. **NB2 exception:** `tools/fal_runner.py` owns retry/resume safety. Manager never adds a wrapper retry, never replaces `UNKNOWN`, and never deletes runner state/claims. A `motion: "still"` scene's local `tools/still_shot.py` render follows the FFmpeg rows in `rules/main/fallback.md`; a still is never a substitute for a failed paid clip.
 
 ---
 
@@ -43,7 +43,7 @@ PHASE 0 — Initialization
 
 PHASE 1 — Script
   Agent(scenarist) — pass GAME_TAG, FORMAT, IDEA, OUTPUT_DIR, LANGUAGE
-  Validate: storyboard.json exists and has clips/scenes array
+  Validate: storyboard.json exists and has clips/scenes array; still-scene gate passes (Phase 1 below)
 
 PHASE 2 — Audio (if dialogue clips exist)
   Agent(sound) — pass GAME_TAG, FORMAT, OUTPUT_DIR
@@ -55,7 +55,7 @@ PHASE 3 — Images
 
 PHASE 4 — Animation
   Agent(animator) — pass GAME_TAG, FORMAT, OUTPUT_DIR
-  Validate: every scene MP4 present and ≥ 100KB
+  Validate: every scene MP4 present and ≥ 100KB; runner clips DONE with matching URLs; still clips 1080×1920 within ±0.05 s
 
 PHASE 5 — Assembly
   Agent(editor) — pass GAME_TAG, FORMAT, OUTPUT_DIR, SUBTITLES, OVERLAYS, LANGUAGE
@@ -95,7 +95,9 @@ If the user request contains the phrase **"Debug mode"** (or RU «Отладоч
 
 - **One change at a time.** If the user lists 3 fixes, apply and verify ONE, get OK, then the next. Bundling fixes hides which one broke if the result is still wrong.
 
-- **Animator confirm before any Kling clip > $0.30 in Debug mode.** Avatar v2 / I2V with audio at 5–10s is $0.28–$1.40 per attempt. In Debug mode, before launching a batch of ≥ 2 such clips, list the planned clips with per-clip cost and wait for OK.
+- **Animator confirm before any Kling clip > $0.30 in Debug mode.** Avatar v2 / I2V with audio at 5–10s is $0.28–$1.40 per attempt. Still scenes are $0. In Debug mode, before launching a batch of ≥ 2 such clips, list the planned clips with per-clip cost and wait for OK.
+
+- **Still scenes at the Phase 1 stop.** List every `motion: "still"` scene with index, `still_effect`, `still_depth` and `still_reason`, or state that the script has no stills.
 
 - **Voice approval before Sound (MANDATORY in Debug mode).** Before launching the Sound sub-agent, show the full voice mapping table and wait for explicit OK:
 
@@ -182,7 +184,47 @@ Delegate via `Agent(subagent_type="scenarist")` (model: sonnet, defined in `.cla
 
 **Validation:** manager checks inline that `storyboard.json` exists and has a non-empty clips/scenes array (`jq '(.clips // .scenes // []) | length'`). If absent → STOP.
 
-In debug mode — stop for approval.
+**Still-scene gate** (every run, also when no scene is a still). A still is valid only when the format playbook contains the literal text `Still shots: allowed`; the enums are valid; `some`/`deep` depth is used only with `push-in`/`pull-out`; the scene has no `clip_type: "dialogue"` (or `"avatar"`), no `scene_type` containing `dialogue`, no `character_speech` or `character_line`, and no `climax` beat or climax clip type; the count is ≤ `min(3, round(N/3))` for N scenes; adjacent stills use different effects and both have `still_impact` ≤ 1. No output and exit 0 = pass:
+
+```bash
+SB="$OUTPUT_DIR/storyboard.json"
+if grep -qF 'Still shots: allowed' "rules/formats/${FORMAT}.md"; then ALLOWED=true; else ALLOWED=false; fi
+STILL_ERRORS=$(jq -r --argjson allowed "$ALLOWED" '
+(.clips // .scenes) as $s
+| ($s | length) as $n
+| [$s[] | select(.motion == "still")] as $st
+| ([3, ($n / 3 | round)] | min) as $cap
+| (if ($st | length) > 0 and ($allowed | not) then "format playbook does not say \"Still shots: allowed\"" else empty end),
+  (if ($st | length) > $cap then "\($st | length) stills > cap \($cap) = min(3, round(\($n)/3))" else empty end),
+  ($s[] | select(.motion != null and (.motion | IN("still", "animated") | not))
+        | "scene \(.index): motion must be \"still\" or \"animated\""),
+  ($st[]
+   | (if (.still_effect | IN("push-in", "pull-out", "pan-right", "pan-left", "tilt-up", "tilt-down") | not) then "scene \(.index): bad still_effect" else empty end),
+     (if (.still_depth | IN("flat", "some", "deep") | not) then "scene \(.index): bad still_depth" else empty end),
+     (if (.still_depth | IN("some", "deep")) and (.still_effect | IN("push-in", "pull-out") | not) then "scene \(.index): depth \(.still_depth) allows only push-in/pull-out" else empty end),
+     (if (.still_impact | IN(0, 1) | not) then "scene \(.index): still_impact must be 0 or 1 (impact 2 is never a still)" else empty end),
+     (if (.still_reason | type) != "string" or .still_reason == "" then "scene \(.index): still_reason missing" else empty end),
+     (if (.duration_sec | type) != "number" or .duration_sec <= 0 then "scene \(.index): still needs a numeric duration_sec" else empty end),
+     (if (.clip_type | IN("dialogue", "avatar")) or ((.scene_type // "") | test("dialogue"))
+         or (.character_speech // "") != "" or (.character_line // "") != "" then "scene \(.index): speech/dialogue scene cannot be a still" else empty end),
+     (if ((.beats // []) | index("climax")) or ((.clip_type // "") | test("climax")) then "scene \(.index): climax cannot be a still" else empty end)),
+  (range(0; $n - 1) as $i | [$s[$i], $s[$i + 1]]
+   | select(.[0].motion == "still" and .[1].motion == "still")
+   | (if .[0].still_effect == .[1].still_effect then "scenes \(.[0].index)+\(.[1].index): adjacent stills share an effect" else empty end),
+     (if (.[0].still_impact // 3) > 1 or (.[1].still_impact // 3) > 1 then "scenes \(.[0].index)+\(.[1].index): adjacent stills need still_impact <= 1" else empty end))
+' "$SB") || { echo "still gate: jq failed"; exit 1; }
+[ -z "$STILL_ERRORS" ] || { echo "$STILL_ERRORS"; exit 1; }
+```
+
+On a violation, return to the scenarist **once** with the exact error lines. If the second storyboard still fails, do not call it again: set the offending scenes back to animated yourself and report it to the user (not allowed → every still; field/speech/climax error → that scene; over the cap → the extra stills with the highest `still_impact`, later scenes first; adjacency → the later scene of the pair). Then rerun the gate; it must print nothing.
+
+```bash
+SB="$OUTPUT_DIR/storyboard.json"
+IDX='[3,5]'   # index values of the offending scenes
+jq --argjson idx "$IDX" '(.clips // .scenes) |= map(if (.index | IN($idx[])) then del(.still_effect, .still_depth, .still_impact, .still_reason) | .motion = "animated" else . end)' "$SB" > "$SB.tmp" && mv "$SB.tmp" "$SB"
+```
+
+In debug mode — stop for approval. The Phase 1 stop lists every still scene with its `still_effect`, `still_depth` and `still_reason` (or states "no stills").
 
 ### PHASE 2 — Audio (Sound)
 
@@ -210,7 +252,7 @@ Delegate via `Agent(subagent_type="storyboarder")` (model: sonnet, defined in `.
 ### PHASE 4 — Animation (Animator)
 Delegate via `Agent(subagent_type="animator")` (model: sonnet, defined in `.claude/agents/animator.md`). Sub-agent loads `rules/roles/animator.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute) and use only the route declared by that format. Serial-drama uses Kling I2V native audio for dialogue; Gameplay AI Avatar is inactive. Template: `prompts/animator.txt`. If many scenes do not fit one pass, split them into batches while keeping the same selected route.
 
-**Video execution boundary:** Scenarist/Manager/Animator select the tool, duration, audio policy and full provider payload from the storyboard and exact format playbook. Every Kling v3 Standard I2V request then uses one immutable schema-v3 `kling_runner.py` job: `route + untouched payload + technical expect + output/upload destination`, preflight, real run. Runner never makes format decisions or simplifies fields. Direct fal HTTP or mutating the selected request is a Phase 4 failure. Runner `UNKNOWN` is never resubmitted; `PAID_RETRY_REQUIRED` needs explicit authorization. New formats on an existing route require no runner change; compatible new fal queue endpoints are data-only entries in `tools/video_routes.json`.
+**Video execution boundary:** Scenarist/Manager/Animator select the tool, duration, audio policy and full provider payload from the storyboard and exact format playbook. Every Kling v3 Standard I2V request then uses one immutable schema-v3 `kling_runner.py` job: `route + untouched payload + technical expect + output/upload destination`, preflight, real run. Runner never makes format decisions or simplifies fields. Direct fal HTTP or mutating the selected request is a Phase 4 failure. Runner `UNKNOWN` is never resubmitted; `PAID_RETRY_REQUIRED` needs explicit authorization. New formats on an existing route require no runner change; compatible new fal queue endpoints are data-only entries in `tools/video_routes.json`. A `motion: "still"` scene creates no runner job: Animator renders it locally with `tools/still_shot.py` from the scene PNG ($0) and writes `scene_video_kind: "still"`, `scene_video_route: "local.still_shot"`, `scene_video_url: null`. Still scenes are not a route change: every animated scene stays on the format's declared Kling route.
 
 **CRITICAL — Upload to Supabase before expensive generation:**
 If output of one stage (TTS, images) is needed as input for the next expensive stage (Kling Avatar, I2V):
@@ -219,9 +261,9 @@ If output of one stage (TTS, images) is needed as input for the next expensive s
 3. Use ONLY the Supabase URL for the next stage
 4. NEVER use temporary fal.ai result URLs as input to expensive generation
 
-**Validation:** manager checks inline that every scene has an MP4 ≥ 100KB. For `kling_runner.py` jobs also require matching `phase: "DONE"` state, `scene_video == output_path`, and permanent `scene_video_url == supabase_url`. If any are missing or mismatched → STOP before Editor.
+**Validation:** manager checks inline that every scene has an MP4 ≥ 100KB. For `kling_runner.py` jobs also require matching `phase: "DONE"` state, `scene_video == output_path`, and permanent `scene_video_url == supabase_url`. A `motion: "still"` scene passes instead with `scene_video_kind: "still"`, MP4 ≥ 100 KB, 1080×1920, duration within ±0.05 s of `duration_sec`, no audio stream, and no runner state required. A scene with `scene_video_kind: "still"` that Phase 1 did not plan as `motion: "still"` is a fallback and fails. Commands: `rules/main/validation.md` → "For MP4 (video)". If any are missing or mismatched → STOP before Editor.
 
-**Output:** `scenes/scene-K/scene-K.mp4` per clip.
+**Output:** `scenes/scene-K/scene-K.mp4` per clip (paid runner clip, Avatar clip, or local still-shot clip).
 
 ### PHASE 5 — Assembly (Editor)
 Delegate via `Agent(subagent_type="editor")` (model: sonnet, defined in `.claude/agents/editor.md`). Sub-agent loads `rules/roles/editor.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute), `OPENER_PATH` / `CTA_PATH` if applicable, `LANGUAGE`, **+ two booleans from the front-matter (see below)**. There is no channel-wide bug input. The GLN overlay exists only inside the exact `star-trek-timelines + fun-news` playbook and is resolved there from its own story bible.
@@ -389,10 +431,10 @@ Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
 
 ```
 Phase 0  → format rules + game config loaded; optional SUPABASE_ASSETS_FILE ready when queried
-Phase 1  → storyboard.json                          [check: clips/scenes array non-empty]
+Phase 1  → storyboard.json                          [check: clips/scenes array non-empty; still-scene gate prints nothing]
 Phase 2  → scene-K.mp3 + tts_url in storyboard      [check: all dialogue MP3s ≥ 5KB]
 Phase 3  → runner DONE + scene-K.png + scene_image_url [check: state/local/permanent URL agree]
-Phase 4  → scene-K.mp4                              [check: all MP4s ≥ 100KB]
+Phase 4  → scene-K.mp4                              [check: all MP4s ≥ 100KB; runner state/permanent URL agree; stills 1080×1920 ±0.05 s]
 Phase 5  → final.mp4                                [check: final.mp4 ≥ 100KB, ffprobe duration sane]
 Phase 6  → local final.mp4 shown → user OK → Supabase + scheduled YT + log + bible update
 Phase 7  → git push
@@ -415,7 +457,7 @@ output/YYYY-MM-DD/{GAME_TAG}/{format_slug}/{RUN_ID}/
 │   │   └── character-ref.png
 │   ├── scene-1/
 │   │   ├── scene-1.png            (start frame only — no end frames, see storyboarder.md §14.8)
-│   │   ├── scene-1.mp4
+│   │   ├── scene-1.mp4            (runner/Avatar clip, or local still shot for motion: "still")
 │   │   └── scene-1-scaled.mp4
 │   └── scene-2/ ...
 └── final.mp4
@@ -446,12 +488,14 @@ Before calling an external API not pinned behind a repository runner, verify cur
 | Kling Lipsync | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/s |
 | HeyGen Avatar IV | `fal-ai/heygen/avatar4/image-to-video` | $0.10/s |
 | Kling Avatar v2 Standard | `fal-ai/kling-video/ai-avatar/v2/standard` | $0.056/s |
+| Local still shot (`motion: "still"` scenes, route `local.still_shot`) | `tools/still_shot.py` (local ffmpeg, no network) | $0 |
 
 - Auth: `Authorization: Key $FAL_KEY`
 - Base URL: `https://queue.fal.run/`
 - Polling: IN_QUEUE → IN_PROGRESS → COMPLETED / FAILED, check every 15s
 - Status URL: first 2 segments of the endpoint, not the full path
 - Details: `tools/fal-ai.md`, `tools/ffmpeg-api.md`
+- **Cost report:** list still scenes as `$0.00` (`local.still_shot`); Kling clips at their table rate.
 
 ---
 
@@ -471,7 +515,7 @@ assets/{GAME_TAG}/
 └── gameplay/{filename}.mp4                 gameplay recording
 
 episodes/{GAME_TAG}/{YYYY-MM-DD}-{format}/
-├── scenes/scene-K.{png|mp4}                per-episode scene PNG (+ I2V mp4) — start frame only, no end frames
+├── scenes/scene-K.{png|mp4}                per-episode scene PNG (+ I2V mp4) — start frame only, no end frames; still-shot MP4s stay local
 └── tts/clip-K.mp3                          per-episode TTS
                                            ↑ episode files are NOT registered in game_assets
 

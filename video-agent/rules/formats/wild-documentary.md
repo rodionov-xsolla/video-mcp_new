@@ -42,6 +42,15 @@ Every clip: Kling generates the visual + ambient sound. MiniMax TTS generates th
 
 **CTA-in-scene:** the last generated creature clip has `cta_in_scene: true`. Resolve both the exact sign wording and the standard CTA asset exclusively from the exact current `STORY_BIBLE_PATH` at `cta.sign_text` and `cta.standard_asset_url`; never use a global or cross-game fallback. Its NB2 start frame shows the creature approaching the camera with the story-bible sign facing the lens; Kling animates the approach and presentation without regenerating the text. The narrator reacts quietly to the message. Append the story-bible standard CTA asset after this generated CTA scene. If either CTA field is missing or empty, STOP before generation and ask to complete the exact bible.
 
+### Still shots: allowed
+
+The scenarist may plan still shots (`motion: "still"`) under the rule, cap and fields in `rules/roles/scenarist.md` "Still shots" (§8). A still scene gets its start PNG as usual and is rendered free by the Animator (`tools/still_shot.py`, no paid clip), saving that scene's Kling clip ($0.63 per 5s scene with `generate_audio: true`); narration plays over it as normal.
+
+- **Best candidates:** the establishing shot (clip 1) when it is a wide biome view with the creature small and at rest; a habitat or landscape shot where no creature motion matters (an empty clearing, a nest, tracks in mud).
+- **Never a still:** the CTA-in-scene clip (the approach is the point), a dramatic-behavior clip, or a face/portrait close-up. Zero stills is a normal result.
+- A still has no clip sound: the Kling ambience drops out for that scene and the narration plays over silence. Count that loss in the impact score and prefer at most one still per episode.
+- A still scene carries `duration_sec: 5` (a number): the Phase 1 still gate and `tools/still_shot.py` read it. Its `still_effect` counts as the clip's camera move.
+
 ### Locked across the format
 
 - **Aspect ratio:** 9:16, 1080×1920
@@ -70,6 +79,8 @@ Every clip: Kling generates the visual + ambient sound. MiniMax TTS generates th
 | Kling v3 Standard I2V 5s (with audio) | $0.63 | 4–5 | $2.52–$3.15 |
 | MiniMax TTS narration (~15 words/clip) | ~$0.01 | 4–5 | $0.04–$0.06 |
 | **Typical total** | | | **$2.96–$3.69** |
+
+A still scene saves its Kling clip ($0.63 per 5s with audio); its NB2 image is still generated.
 
 Max with 1 technical retry per failed request: **$5.00**. Retry once with the same provider/settings; a second failure stops the video with an error. No provider/model/local fallback. Stop at **$4.50**.
 
@@ -156,6 +167,7 @@ Example error (EP1 tribbles): manager described "no visible eyes" from memory �
 - `clip_type: "action"` for all clips — no dialogue, no Avatar.
 - `character_speech: null` for all clips — no lipsync anywhere.
 - No title card scene — cold open on creature.
+- Still shots: optional, per "Still shots: allowed" above and `rules/roles/scenarist.md` "Still shots"; at most one is preferred, zero is a normal result.
 - Format fields in storyboard.json:
 
 ```json
@@ -258,7 +270,8 @@ Recommended rhythm: **wide establishing → extreme close-up detail → dramatic
 
 ### Animator
 
-- All clips: **Kling v3 Standard I2V, `generate_audio: true`** — let Kling generate ambient nature sounds.
+- All animated clips: **Kling v3 Standard I2V, `generate_audio: true`** — let Kling generate ambient nature sounds (still scenes are rendered locally, no paid clip).
+- Still scenes (`motion: "still"`): no Kling call; render with `tools/still_shot.py` as `rules/roles/animator.md` §2b describes. The still clip has no audio stream. Never replace a failed Kling clip with a still.
 - Retry one technically failed v3 request once with the same endpoint/settings. If it fails again, STOP and report the error. Do not switch to v2.6 or another provider.
 - **Start frame only.** No `tail_image_url`.
 - **Kling prompt hard limit: 512 serialized UTF-8 bytes.** Measure `len(prompt.encode("utf-8"))` before submitting. Trim secondary details first.
@@ -275,7 +288,7 @@ Face and body morphing is the most common failure mode in this format. Every mot
 
 **For face/portrait close-ups:** use multi-prompting for more naturalistic motion — two motion stages within the 5s clip: e.g. `"first 2s: creature holds perfectly still, nostrils flaring. next 3s: slow deliberate turn of the head, ears angle toward camera"`. This avoids the static→morph failure pattern.
 
-Motion prompts must have three concurrent motion layers:
+Animated clips' motion prompts must have three concurrent motion layers:
   1. Creature motion (breathing, moving, blinking — never face deformation)
   2. Environment motion (leaves swaying, water rippling, grass moving)
   3. Camera motion ("shaky handheld telephoto", "slight handheld drift", "fixed trail cam with minimal jitter")
@@ -320,6 +333,8 @@ $FF -y \
   -c:a aac -b:a 128k -ar 44100 \
   build/concat_audio.mp4
 ```
+
+- Still scenes: the clip is already 1080×1920, 30fps and exactly `duration_sec` (never trim it) and has **no audio stream**, so `[K-1:a]volume=0.20` does not exist for it: give that slot an `anullsrc` of its length instead (`anullsrc=r=48000:cl=stereo,atrim=duration=<clip length>`, `rules/roles/editor.md` "Still-shot clips").
 
 **atempo normalization (mandatory before Pass 1):**
 ```bash
@@ -371,8 +386,8 @@ ${OUTPUT_DIR}/
 │   │   └── {creature}-ref.png    # one creature ref, reused across all clips
 │   ├── scene-1/
 │   │   ├── scene-1.png           # start frame only
-│   │   ├── scene-1.mp4           # Kling output (audio embedded)
-│   │   ├── scene-1-kling.wav     # extracted Kling audio
+│   │   ├── scene-1.mp4           # Kling output (audio embedded), or a silent still-shot clip
+│   │   ├── scene-1-kling.wav     # extracted Kling audio (animated scenes only)
 │   │   └── scene-1-final.mp4    # Kling video + mixed audio
 │   └── scene-N/ ...
 ├── build/
@@ -394,9 +409,10 @@ ${OUTPUT_DIR}/
 - [ ] All image prompts declare 9:16 and the locked photorealistic wildlife style; generated files pass technical decode/dimension checks
 - [ ] No two clips with identical shot type (camera distance + creature pose)
 - [ ] All Kling clips generated with `generate_audio: true`
+- [ ] Still scenes (if any, preferably at most one) were planned in Phase 1, have `scene_video_kind: "still"`, numeric `duration_sec` and no audio stream, and stay within the `rules/roles/scenarist.md` "Still shots" cap; every other clip is a Kling v3 Standard clip
 - [ ] Every Kling motion prompt includes `"no face morphing, no facial deformation, anatomy stable throughout"`
 - [ ] Wide/medium shots: head locked in motion prompt, motion on body + environment
-- [ ] Kling ambient audio attenuated to vol 0.20 in final mix
+- [ ] Kling ambient audio attenuated to vol 0.20 in final mix; still scenes get a silent `anullsrc` slot
 - [ ] TTS narration continuous (not cut per-clip), audible — RMS > -30 dB
 - [ ] `atempo` applied to TTS: `TTS_DUR / VID_DUR` in range 0.95–1.10
 - [ ] ASS subtitles — universal whisper style (editor.md §6), text matches the narration
@@ -427,7 +443,7 @@ ${OUTPUT_DIR}/
 - ❌ Putting motion budget on the face in wide/medium shots — lock the head, animate the body and environment
 - ❌ Same shot type repeated — no two clips with identical camera distance + creature pose. Vary: wide telephoto → extreme close-up → dramatic action → CTA trail cam
 - ❌ Generic title overlay ("Wildlife Documentary") — use in-universe world name: "TEYVAT DOCUMENTARY", "KANTO DOCUMENTARY" etc.
-- ❌ `generate_audio: false` — ambient sounds are the atmosphere; silence kills the format
+- ❌ `generate_audio: false` — ambient sounds are the atmosphere; silence kills the format. A planned still scene is the only silent exception; prefer at most one
 - ❌ Cutting TTS per-clip — severs words at clip boundaries; use ONE continuous TTS over full concat
 - ❌ Skipping atempo normalization — TTS duration ≠ video duration; without atempo the narration is cut or runs long
 - ❌ Manual ASS generation with `--text`/`--atempo`/`--style` — those flags are removed; Editor does it universally via whisper

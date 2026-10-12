@@ -73,6 +73,8 @@ The chosen provider, model and route remain fixed for the request. A transient/A
 
 Do not switch to GPT Image, Kling 2.6, Ken Burns, another provider, a local substitute, or a no-audio/no-music result. A different model may be used only after the stopped run when the user explicitly authorizes that separate route.
 
+**Still scenes are not a fallback.** A scene the scenarist planned in Phase 1 as `motion: "still"` (format playbook says "Still shots: allowed") is a normal, planned route: Animator renders it locally with `tools/still_shot.py` and no paid job. The ban above still applies to failures: never turn a scene whose paid clip failed, timed out or was rejected into a still or any other local camera move.
+
 ---
 
 ## fal.ai API errors
@@ -98,6 +100,8 @@ Maximum **1 retry** per generation. Don't loop.
 | HTTP 500 / timeout | Retry the same request once, then stop |
 | Concat/audio overlay fails | Correct the same FFmpeg command once; never omit required audio or music |
 | 0-byte file | Retry the same operation once, then stop |
+
+These rows also cover `tools/still_shot.py` (it prints a JSON error to stderr and exits 1): correct only a command/input defect (e.g. a wrong path) and retry once, then stop and report. Never change the planned `still_effect`, `still_depth` or `duration_sec` to make it pass (a storyboard defect stops the run), never pass `--force` over a path a runner job claimed, and never replace a failed still with a paid clip without the user's instruction.
 
 ---
 
@@ -141,6 +145,7 @@ For any error that leads to `status='failed'`:
 |----------|---------|
 | Image generation (Nano Banana 2 runner polling window) | 10 minutes |
 | Video generation | 10 minutes |
+| Still-shot render (`tools/still_shot.py`, local ffmpeg) | 5 minutes |
 | File download (curl) | 120 seconds |
 | FFmpeg operation | 5 minutes |
 | **Whole pipeline (interactive manager run)** | **40 minutes** |

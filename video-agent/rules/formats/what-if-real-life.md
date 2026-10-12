@@ -41,6 +41,14 @@ The chosen tone is fixed for the whole video in `visual_identity.reaction_mode` 
 - **Music:** Generated via MiniMax with an upbeat, light `style` prompt (instrumental) — see `rules/roles/sound.md` §6. Volume 0.08. Never dark/dramatic — a somber underscore will tank the mood. See `rules/roles/sound.md` §11 (music tone).
 - **Negative prompt (all Avatar clips) — HARDENED (replaces the removed artifact mask):** `extra characters facing camera, lipsync on background extras, CJK text, Chinese characters, Japanese characters, Korean characters, hanzi, kanji, hangul, garbled text, gibberish glyphs, on-screen captions, bottom-bar text, UI overlay, station ID, ticker text, signage with text, any text at frame bottom, subtitle text in scene, watermark`
 
+### Still shots: allowed
+
+The scenarist may plan still shots (`motion: "still"`) under the rule, cap and fields in `rules/roles/scenarist.md` "Still shots" (§8). A still scene gets its start PNG as usual and is rendered free by the Animator (`tools/still_shot.py`, no paid clip).
+
+- **Best candidate:** the title card — its NB2 still gets a slow `push-in`/`pull-out` instead of an optional paid Kling I2V clip; the four `title` overlays are drawn on top as usual. A still title card carries `duration_sec: 3` (a number): the Phase 1 still gate and `tools/still_shot.py` read it.
+- **Only the title card or a non-dialogue scene can be a still.** Never a still: any `dialogue-offscreen` or `dialogue-on-screen` scene (these stay Kling Avatar v2), an `inner-thought` scene (the character's face carries it), a `physical-gag` scene (the motion is the joke), or a `monologue` scene whose point is the character's silent action. Zero stills is a normal result.
+- A still's `still_effect` counts as the clip's camera move.
+
 ### Variable per video
 
 - Character (must be visually recognizable in 1 second)
@@ -80,8 +88,10 @@ Fix the mode in `storyboard.json → visual_identity.reaction_mode`. Sound uses 
 | Kling I2V 5s no audio (silent vignette) | $0.42 | 0–2 | $0–$0.84 |
 | Routed speech — character lines | provider-dependent | 4–6 | provider-dependent |
 | Routed speech — off-screen customer / narrator | provider-dependent | 0–5 | provider-dependent |
-| Title card (NB2 still, optional minor I2V) | $0.08 (+$0.42 if I2V) | 1 | $0.08–$0.50 |
+| Title card (NB2 still, optional minor I2V; $0.00 extra as a still shot) | $0.08 (+$0.42 if I2V) | 1 | $0.08–$0.50 |
 | **Typical total** | | | **$2.50–$4.50** |
+
+A still scene saves its Kling I2V clip ($0.42 per 5s, no audio). Dialogue scenes are never stills, so Avatar costs are unchanged.
 
 Max with one same-provider retry for a failed request: **$6.00**. A second failure stops the video. Stop at **$5.40**.
 
@@ -205,6 +215,7 @@ Other scene types have no overlays (subtitles only).
 - Pick the character (must be visually unmistakable) + real-world role + ONE `reaction_mode` from the table above. Lock it in `visual_identity`.
 - Write all character lines in the chosen `reaction_mode`. No mode-flips. Sarcasm is forbidden for `deadpan-logical` and `world-weary-monotone` — those modes work because the character is sincere.
 - For each vignette, pick `scene_type` from the table. Default to `dialogue-offscreen`. Allow at most one `dialogue-on-screen` per video (cost).
+- Still shots: optional, only on the title card or a non-dialogue scene, per "Still shots: allowed" above and `rules/roles/scenarist.md` "Still shots"; zero is a normal result.
 - Each vignette = one specific real-world element that conflicts with the persona (the espresso machine for Spock, snack-time for Kratos, the boutique price-tag system for Roblox guy). No two vignettes with the same conflict mechanic.
 - General script rules — `rules/roles/scenarist.md`.
 
@@ -224,6 +235,7 @@ Other scene types have no overlays (subtitles only).
   - `dialogue-on-screen` → 2× Kling Avatar v2. Coordinate timings via two padded mp3s so the two voices don't talk over each other. Do not switch model/provider if a request fails.
   - `monologue`, `inner-thought` → Kling I2V with `generate_audio: false`.
   - `physical-gag` → Kling I2V with `generate_audio: true` for SFX.
+  - Still scenes (`motion: "still"`, normally only the title card): no Kling call; render with `tools/still_shot.py` as `rules/roles/animator.md` §2b describes. Dialogue scenes are never stills: they stay Kling Avatar v2.
 - Apply the hardened negative prompt before generation. Generated media receives technical validation only; visual judgment belongs to the user during debug review.
 - A failed generation gets one retry with the same model/settings. A second failure stops the video and returns the error; no provider or local fallback.
 - **Debug mode:** before launching the Avatar batch, list planned clips with per-clip cost and get user OK (see `rules/roles/manager.md` Debug-mode safety rules).
@@ -243,7 +255,7 @@ Other scene types have no overlays (subtitles only).
 ### Editor
 
 - Per-scene burn-in pipeline:
-  - `title-card`: a GRAPHIC OVERLAY (`title` type in `scenes[].overlays[]`), rendered by `tools/overlays.py` (see `## Overlays`), NOT a subtitle. 4 lines: "What if..." / character name / "Becomes a" / role. No audio → anullsrc. MANDATORY.
+  - `title-card`: a GRAPHIC OVERLAY (`title` type in `scenes[].overlays[]`), rendered by `tools/overlays.py` (see `## Overlays`), NOT a subtitle. 4 lines: "What if..." / character name / "Becomes a" / role. No audio → anullsrc (also when the title card is a still shot). MANDATORY.
   - `dialogue-offscreen`: scale → amix(Avatar audio, customer.mp3) **in the final video**. Both lines (character + off-screen customer) go into `voice-final.wav` and are subtitled in ONE universal style — there is no separate Customer style anymore. Burn — the shared `build/subs.ass` (editor.md §6).
 
     ⚠️ **voice-final.wav construction for dialogue-offscreen scenes — SEQUENTIAL, NOT amix:**
@@ -285,7 +297,7 @@ ${OUTPUT_DIR}/
 │   │   └── {char-slug}-sheet.png
 │   ├── scene-1/                       # title card
 │   │   ├── scene-1.png
-│   │   └── scene-1.mp4
+│   │   └── scene-1.mp4            # optional minor I2V, or a still-shot clip
 │   ├── scene-2/ ... scene-N/          # vignettes (dispatched by scene_type)
 │   │   ├── scene-K.png
 │   │   ├── scene-K.mp3                # character TTS (silence-padded for dialogue-offscreen)
@@ -308,6 +320,7 @@ ${OUTPUT_DIR}/
 - [ ] No two vignettes share the same gag mechanic
 - [ ] For every `dialogue-offscreen` scene: off-screen voice audible (RMS > -30 dB on the dialogue interval)
 - [ ] Every `dialogue-offscreen` storyboard prompt declares the customer's face turned away from camera
+- [ ] Still scenes (if any, normally only the title card) were planned in Phase 1, have `scene_video_kind: "still"` and numeric `duration_sec`, are never a dialogue, inner-thought or physical-gag scene, and stay within the `rules/roles/scenarist.md` "Still shots" cap
 - [ ] Subtitles — one universal style (editor.md §6), no event overlap, text matches the scenarist's
 - [ ] No AI Vision or sampled-frame visual inspection is run; the user performs any visual review during debug
 - [ ] Music was generated for this run/format and mixed at volume 0.08

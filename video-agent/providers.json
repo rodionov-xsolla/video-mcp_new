@@ -84,8 +84,14 @@
     "local-ffmpeg": {
       "name": "Local FFmpeg",
       "tools_file": "rules/roles/editor.md",
-      "capabilities": ["ffmpeg"],
-      "status": "active"
+      "capabilities": ["ffmpeg", "still_shot"],
+      "status": "active",
+      "tools": {
+        "still_shot": "tools/still_shot.py"
+      },
+      "pricing": {
+        "still_shot": "$0.00 (local ffmpeg; replaces a paid clip on motion: \"still\" scenes)"
+      }
     },
     "ffmpeg-api": {
       "name": "FFmpeg Cloud API",

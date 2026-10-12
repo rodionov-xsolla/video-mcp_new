@@ -16,7 +16,7 @@ DO NOT load:
 
 INPUT (already on disk in ${OUTPUT_DIR}):
 - ${OUTPUT_DIR}/storyboard.json — narrative + image_prompt + motion_prompt for every scene; subtitle text and timings
-- ${OUTPUT_DIR}/scenes/scene-K/scene-K.mp4 — animated clips (K = 1..N)
+- ${OUTPUT_DIR}/scenes/scene-K/scene-K.mp4 — scene clips (K = 1..N): animated clips, or still-shot clips (`scene_video_kind: "still"`, 1080×1920, 30fps, exact `duration_sec`, no audio stream)
 - ${OUTPUT_DIR}/scenes/scene-K/scene-K.mp3 — TTS audio (only for dialogue clips with TTS overlay; Avatar clips have audio embedded)
 
 ASSETS FROM SUPABASE (URLs passed below — already downloaded if non-empty):
@@ -30,6 +30,8 @@ Pre-flight (off the main pipeline):
 1. Download + ffprobe-validate CTA (do NOT pre-normalize; §0 ingests it raw via scale/pad/fps).
 2. Build `build/voice-final.wav` (the final speech after atempo+adelay+concat, before bg-music — editor.md §6.1), then `tools/add_subtitles.py build/voice-final.wav build/subs.ass --storyboard storyboard.json --lang ${LANGUAGE} --main-dur ${MAIN_DUR}`. Whisper gives timings, text is canonical from storyboard. §0 burns `ass=build/subs.ass` as the last video filter.
 3. Per format, compute MAIN_DUR (sum of scene durations), TOTAL_DUR (= MAIN_DUR + CTA_DUR), atempo value (= TTS_DUR / TTS_WINDOW), title-card pre-delay (PRE_MS, e.g. 5000 for redcon — it is baked into voice-final.wav via adelay).
+
+Still-shot clips (editor.md "Still-shot clips"): never trim them; they take the silent anullsrc path. Where the format concats clip audio (`a=1`, e.g. in-game-pov, wild-documentary with Kling generate_audio true), give a still scene an `anullsrc` slot of its length, because its `[k:a]` does not exist.
 
 Main pipeline = ONE ffmpeg-full invocation per §0.2. Encoder is `-preset medium -crf 22`. Hard cap with `-t TOTAL_DUR` (NEVER -shortest, NEVER unbounded amix).
 
@@ -56,12 +58,12 @@ If OVERLAYS = `true` → per-scene drawtext fragments via `tools/overlays.py` (e
 
 CONSTRAINTS:
 - WORKSPACE LAYOUT: write every scratch file (concat lists, intermediate MP4s, normalized assets, temp audio, ad-hoc scripts/logs) under ${OUTPUT_DIR}/build/. The OUTPUT_DIR root must end up with only final.mp4, storyboard.json, scenes/, and optional recap/_archive/. See editor.md "Workspace layout (MANDATORY)" + final checklist.
-- DO NOT regenerate any scene MP4/MP3 — that work is finished
+- DO NOT regenerate any scene MP4/MP3 — that work is finished (this includes still-shot clips: `tools/still_shot.py` is Animator's tool)
 - DO NOT call fal.ai / Kling / NB2 / ElevenLabs APIs — your toolset is FFmpeg only
 - DO NOT use Read tool on generated PNG/MP4/MP3 files — technical validation only; there is no machine visual review of the final
 - DO NOT modify storyboard.json — it is the source of truth
 - DO NOT push to git — that is Manager's responsibility (Phase 6)
-- ALWAYS print the cost report at the end (see budgets.md "Mandatory cost report")
+- ALWAYS print the cost report at the end (see budgets.md "Mandatory cost report"); still scenes are listed at $0.00
 
 ON ERROR:
 - Diagnose via stderr (never suppress with `2>/dev/null` — see editor.md section 8.1)

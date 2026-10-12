@@ -25,6 +25,7 @@ Write a complete storyboard.json at ${OUTPUT_DIR}/storyboard.json with all narra
 - visual_identity (character_description with 8+ details, environment_description, style_tags, color_palette, lighting)
 - For serial-drama: retention_strategy, active_loops, cliffhanger
 - scenes / clips array with: index, beats, clip_type (action|dialogue), duration_sec, character_state, facial_expression, character_speech (or null), external speech text only where required by the format, environment_state, action_description
+- Still scenes only (format playbook says "Still shots: allowed"): motion: "still", still_effect, still_depth, still_impact, still_reason — see scenarist.md section "Still shots". Every other scene has no motion field (or "animated") and no still_* fields
 - For format-specific extras (subtitle_emphasis, episode_number, music.mood, voices, hero, etc.) — follow the schema in the format playbook
 
 CONSTRAINTS:
@@ -32,17 +33,18 @@ CONSTRAINTS:
 - DEFAULT 3 clips for dual-style / etc.; format playbooks may override
 - Multi-character: max 2 in frame; describe interaction in action_description
 - I2V clips: action_description must NOT contain walking/running/hits — micro motion only
+- Still shots: only when the format playbook says "Still shots: allowed"; follow scenarist.md section "Still shots" (impact score, depth check, effect, cap min(3, round(N/3)), adjacency). Never on dialogue / character_speech / Avatar / impact-3 / climax scenes. Zero stills is a normal, correct result
 - Avatar clips: tts text ≤25 words to fit 5s; longer → split into 2×5s
 - For serial-drama: respect anti_repetition (phrases, hooks, cliffhangers) from story bible
 - Pass the full Scenarist validation checklist before saving (scenarist.md section "Validation checklist")
 - Do NOT write Storyboarder fields (image_prompt, image_urls, scene_image, camera_angle is OK if format uses it but Storyboarder will refine)
-- Do NOT write Animator fields (motion_prompt)
+- Do NOT write Animator fields (motion_prompt, scene_video*, still_render). The Phase 1 fields motion and still_* ARE yours to write
 - Do NOT call any external API or read any binary file (PNG/MP4/MP3)
 
 OUTPUT:
 - ${OUTPUT_DIR}/storyboard.json — the complete narrative draft
 - Do NOT update the story bible. Manager may update it only after the user approves the final video; you only READ it.
-- A short summary at the end: format, clips count, total estimated duration, voices used, any anti-repetition notes.
+- A short summary at the end: format, clips count, total estimated duration, voices used, any anti-repetition notes, and every still scene (index, still_effect, still_depth, still_reason) or "no stills".
 
 ON ERROR (e.g. missing game config, broken story bible JSON):
 - Print the error to stderr, exit non-zero. Do NOT write a partial storyboard.json.

@@ -285,6 +285,52 @@ Runner не имеет archive/reset и не выполняет automatic batch.
 
 ---
 
+### `still_shot.py` 🟢
+
+**Role:** renders a still-shot scene clip — a slow eased camera move (push, pull, pan or tilt) over the scene's still PNG — for scenes the scenarist marked `"motion": "still"` in Phase 1 (only in formats whose playbook says "Still shots: allowed"). Called by the animator agent instead of a paid I2V job. Deterministic local ffmpeg, no network, **$0**.
+
+**Run:**
+```bash
+python3 tools/still_shot.py --image scenes/scene-K/scene-K.png \
+    --out scenes/scene-K/scene-K.mp4 \
+    --effect <still_effect> --depth <still_depth> --duration <duration_sec>
+```
+
+**Flags:**
+
+| Flag | Default | Meaning |
+|------|---------|---------|
+| `--image` | required | scene still PNG |
+| `--out` | required | output `.mp4`, normally `scenes/scene-K/scene-K.mp4` |
+| `--effect` | required | `push-in`, `pull-out`, `pan-right`, `pan-left`, `tilt-up`, `tilt-down` (the scene's `still_effect`) |
+| `--depth` | `flat` | the scene's `still_depth`: `flat` = 12% move; `some` / `deep` = gentler 7% zoom, `push-in` / `pull-out` only |
+| `--duration` | `5` | seconds, the scene's `duration_sec` |
+| `--fps` | `30` | the editor normalizes every clip to 30 fps |
+| `--width` / `--height` | `1080` / `1920` | must be even (yuv420p) |
+| `--audio` | `none` | `none` = no audio stream; `silent` adds a silent AAC track |
+| `--sample-rate` / `--channels` | `44100` / `2` | only for `--audio silent` |
+| `--force` | off | replace an existing output file |
+
+**Output:** one JSON line on stdout, for example:
+
+```json
+{"ok":true,"output":"scenes/scene-3/scene-3.mp4","image":"scenes/scene-3/scene-3.png","effect":"push-in","depth":"flat","zoom":0.12,"duration":5.0,"fps":30,"frames":150,"width":1080,"height":1920,"audio":"none","bytes":2345678,"sha256":"<64 hex>","cost_usd":0}
+```
+
+On failure it prints `{"ok": false, "error": "..."}` to stderr and exits 1. Before reporting success it checks its own render with ffprobe (size, exact frame count, duration within ±0.05 s, audio track as requested). The animator copies `sha256`, `image_sha256` (the source PNG) and `frames` into the scene's `still_render` and sets `scene_video_kind: "still"`, `scene_video_route: "local.still_shot"`, `scene_video_url: null`.
+
+**Reads:** scene PNG  
+**Writes:** one MP4  
+**Network:** none
+
+**⚠ Pitfalls:**
+- **Refuses to overwrite** an existing `--out` without `--force` — the path may hold a paid clip. Never pass `--force` over a path that a runner job claimed (`build/video/_claims/`).
+- Stills are planned in Phase 1 only. Never render one as a fallback after a failed paid clip; if the tool fails, stop and report.
+- `--depth some|deep` with a pan or tilt is rejected: the missing parallax would show.
+- A 12% zoom crops ~11% and a pan travels ~11% of the width, so the storyboarder keeps the subject and any baked-in text inside the central ~85% of the frame.
+
+---
+
 ## FFmpeg-помощники (вызываются editor-агентом)
 
 ---
@@ -559,6 +605,7 @@ python3 tools/growtopia_parser.py --limit 1 --preprocess    # тест на од
 |--------|----------|------------|----------|
 | `fal_runner.py` | 🟠 | storyboarder-агент | NB2 job state + PNG + Supabase |
 | `kling_runner.py` | 🟠 | animator-агент | format-agnostic fal video payload state + MP4 + Supabase |
+| `still_shot.py` | 🟢 | animator agent (`motion: "still"` scenes) | one local scene MP4, $0, no network |
 | `add_subtitles.py` | 🟠 | editor-агент | .ass файл |
 | `overlays.py` | 🟡 | editor-агент | temp .txt файлы |
 | `log-video.sh` | 🟢 | manager (после OK) | Supabase video_agent_runs |

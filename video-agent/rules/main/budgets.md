@@ -32,6 +32,7 @@ Tracking: after each generation, record the cost. Before the next one — check 
 |--------|----------|-----------|
 | Nano Banana 2 (image) | fal-ai/nano-banana-2/edit | ~$0.08 |
 | GPT Image 1 (alternate route; no automatic fallback) | fal-ai/gpt-image-1/text-to-image | ~$0.02 |
+| Still shot (`motion: "still"`; replaces a paid clip) | local ffmpeg, `tools/still_shot.py` | $0.00 |
 | Kling v3 Standard I2V 5s (no audio) | fal-ai/kling-video/v3/standard/image-to-video | $0.42 |
 | Kling v3 Standard I2V 5s (with audio) | fal-ai/kling-video/v3/standard/image-to-video | $0.63 |
 | Kling v3 Standard I2V 10s (no audio) | fal-ai/kling-video/v3/standard/image-to-video | $0.84 |
@@ -59,8 +60,11 @@ After completing video generation, ALWAYS show the user a detailed breakdown:
 === Generation cost ===
 Images: N × $X.XX = $X.XX
 Video (model, duration): N × $X.XX = $X.XX
+Still shots (local): N × $0.00 = $0.00
 ---
 TOTAL: $X.XX
 ```
+
+Still scenes (`scene_video_kind: "still"`) are listed on their own line at $0.00.
 
 Never skip this report — the user must see the cost of every generation.
