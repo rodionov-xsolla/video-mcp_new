@@ -1,6 +1,7 @@
 {
   "format": "wild-documentary",
   "game_tag": "star-trek-timelines",
+  "style_tags": "ultra-realistic hidden camera documentary footage, RAW wildlife photography look, naturalistic uneven lighting, no studio lighting, heavy film grain with ISO 3200 digital noise, grainy texture, 4K photorealistic, 9:16 vertical frame, real wild animal in a real location, not game art, not stylized",
   "narrator": {
     "provider": "fal-ai/chatterbox/text-to-speech",
     "voice_ref_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/star-trek-timelines/branding/voice-old-man.mp3",

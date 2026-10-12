@@ -50,5 +50,24 @@
       "Vision Hunt Decree / Tenryou Commission"
     ],
     "note": "Mondstadt (Fatui streets), Liyue Harbor (Osial flood), Sumeru Akademiya (Shouki no Kami), and Inazuma (Vision Hunt courier escape) used. Next: Natlan Abyss siege or a distinct Fontaine courtroom/fortress premise. Avoid water flood, sea god, mechanical god, city-center invasion, and authority-chase/courier premises."
+  },
+  "style_tags": [
+    "Genshin Impact anime style",
+    "cel-shaded",
+    "painterly fantasy environments",
+    "soft outline anime aesthetic",
+    "magical elemental effects"
+  ],
+  "cta": {
+    "status": "ready",
+    "standard_asset_url": "https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/public/assets/genshin-impact/branding/cta.mp4",
+    "append_standard_asset_after_in_scene": true,
+    "note": "Genshin game CTA registered in game_assets (tags cta+video); user-approved for in-game-pov on 2026-10-09."
+  },
+  "narrator": {
+    "provider": "minimax",
+    "register": "tense second-person tactical instructor, English",
+    "language": "en",
+    "note": "No approved Chatterbox sample owned by this bible; MiniMax narration user-approved 2026-10-09. Sound picks voice_id; Manager locks it here after final approval."
   }
 }
