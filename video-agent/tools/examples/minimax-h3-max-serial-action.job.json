@@ -1,0 +1,30 @@
+{
+  "schema_version": 3,
+  "job_id": "replace-with-unique-serial-action-job-v1",
+  "route": "minimax.h3max.i2v",
+  "artifact_kind": "scene_video",
+  "output_dir": "/ABSOLUTE/OUTPUT_DIR",
+  "output_path": "scenes/scene-2/scene-2.mp4",
+  "payload": {
+    "prompt": "Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters. Camera slow push-in at deck level. Seated figure on left curls fingers off the door, lowers gaze; standing figure on right lifts chin to ceiling grille, then steadies. Diegetic ambience only, no music, no voices. Mouth stays closed; no talking.",
+    "image_url": "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/episodes/GAME_TAG/EPISODE/scenes/scene-2.png",
+    "duration": 5,
+    "resolution": "768P",
+    "prompt_expansion_mode": "disabled"
+  },
+  "expect": {
+    "kind": "video",
+    "duration_seconds": 5,
+    "duration_tolerance_seconds": 0.8,
+    "audio": "required",
+    "min_bytes": 100000,
+    "min_width": 600,
+    "min_height": 1000,
+    "orientation": "portrait"
+  },
+  "supabase": {
+    "game": "replace-game-tag",
+    "episode": "YYYY-MM-DD-serial-drama-run-id",
+    "name": "scene-2.mp4"
+  }
+}

@@ -13,6 +13,12 @@
       "poll_base": "https://queue.fal.run/minimax/h3-max",
       "result_url_path": ["video", "url"]
     },
+    "minimax.h3max.r2v": {
+      "protocol": "fal_queue",
+      "submit_url": "https://queue.fal.run/minimax/h3-max/reference-to-video",
+      "poll_base": "https://queue.fal.run/minimax/h3-max",
+      "result_url_path": ["video", "url"]
+    },
     "minimax.h3max.turbo.i2v": {
       "protocol": "fal_queue",
       "submit_url": "https://queue.fal.run/minimax/h3-max-turbo/image-to-video",

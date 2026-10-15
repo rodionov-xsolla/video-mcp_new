@@ -22,17 +22,26 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 
 - **Genre:** endless micro-dramas with brainrot aesthetic, cliffhangers, plot loops
 - **Style:** read from the resolved style chain — story bible top-level `style_tags` (the series' canonical look), else game config `prompt_prefix`. This file does not hardcode a render medium; the scenarist resolves the chain into `visual_identity.style_tags` and the storyboarder applies it verbatim to every `image_prompt`. Preserve the exact proportions of locked character cards (cards carry appearance only — style comes solely from `style_tags`).
-- **Duration:** 40–45s (**max 6 clips** × 5–10s). Hard cap — Scenarist must not exceed 6 scenes. EP2 had 8 scenes = $8.42, target is ≤$6 per episode.
-- **Budget:** up to $7 per episode. Stop if spend > $6.50. Each dialogue I2V clip costs ~$0.63–1.26 — 6 clips max keeps you under budget.
+- **Duration:** 40–45s (**max 6 clips** × 5–10s). Hard cap — Scenarist must not exceed 6 scenes. EP2 had 8 scenes = $8.42 on Kling; on H3 a full episode is ~$3.25 (see Budget).
+- **Budget:** up to $7 per episode. Stop if spend > $6.50. An action clip is ~$0.41 per 5 s (H3 Max), a dialogue clip ~$0.04/s on its returned length (H3 Max Turbo lip-sync, ~$0.30 for a 7 s exchange) plus ~$0.01 of TTS — 6 clips max keeps you well under budget.
 - **Frame format:** 9:16 (608×1080) for all scenes. Square forbidden.
+
+### Models — all-H3 (same pattern as what-if-real-life)
+
+- **Action clips** (no speech): plain I2V on **MiniMax H3 Max**, route `minimax.h3max.i2v`. The clip keeps its own ambience (`scene_video_audio: "native"`, `expect.audio: "required"`, no silent `target_audio_url`); the prompt ends with `Diegetic ambience only, no music, no voices.` and, when a face is visible, `Mouth stays closed; no talking.`
+- **Dialogue clips** (characters talk): **H3 lip-sync** on **MiniMax H3 Max Turbo**, route `minimax.h3max.turbo.i2v`, exactly as what-if-real-life dialogue (`rules/roles/animator.md` §2a "H3 lip-sync"): the Sound phase generates every `character_speech` line with MiniMax TTS in the speaker's series voice and builds one audio file per dialogue clip, uploaded as that clip's `tts_url`; the Animator sends it as `target_audio_url`. H3 lip-syncs the visible speakers to it and returns that file unchanged as the clip's soundtrack, so the clip carries its dialogue (`scene_video_lipsync: true`).
+- **Voices:** each speaking character has one MiniMax TTS voice for the whole series, locked: the series' "Locked TTS voices" table in `games/{GAME_TAG}/serial-drama_special.md` (The Airlock: the Test 9 voices) or `characters[].tts_voice` in the series bible. Sound picks a voice only for a speaking character that has none (see the Sound brief).
+- **Why:** the cost trial on The Airlock S2E1 (Test 9, `trials/2026-10-cost-trials/`) re-made the episode this way: 6/6 clips OK, the same episode was **$6.57 on Kling and $3.24 on H3 (51% saved)**, and the user chose this pipeline. Kling v3 Standard (`multi_prompt` + `voice_ids` + `generate_audio`) is the historical serial-drama route; it is no longer used, and never as a fallback.
+- **One pipeline per episode:** H3 Max action clips next to H3 Max Turbo lip-sync dialogue clips is the declared mix, not a model mix. Plain clips never run on Turbo, lip-sync never runs on H3 Max, and no clip runs on Kling.
+- **No still shots.** Serial-drama bans freeze padding and its dialogue dominates the runtime, so no scene may be `motion: "still"`.
 
 ### Clip mix (balances)
 
 - **ACTION/DIALOGUE ~ 50/50.** All-dialogue episode = monotonous; all-action = no plot.
-- **I2V only.** Every serial-drama clip, including dialogue, is Kling v3 Standard I2V. Retry a technically failed request once with the same endpoint/settings; a second failure stops the video with an error. No v2.6, provider, or local fallback.
-- **Dialogue I2V uses Kling voice support:** `generate_audio: true`, `voice_ids`, `shot_type: "customize"`, and `multi_prompt` with `<<<voice_1>>>` / `<<<voice_2>>>`.
+- **Every clip is H3.** Retry a technically failed request once with the same route/settings; a second failure stops the video with an error. No Kling, other provider, route switch (Max ↔ Turbo), still, or local fallback.
+- **Dialogue clips are H3 lip-sync:** one start frame, the clip's whole exchange in one TTS file (`tts_url`), one prompt that names each speaker by look and position. No `multi_prompt`, `voice_ids`, `shot_type`, `<<<voice_N>>>` tags, `generate_audio` or Kling `create-voice`. What used to be a two-shot Kling `multi_prompt` clip is one H3 lip-sync clip.
 - **Kling Avatar v2 is forbidden for serial-drama.** Do not create Avatar refs, do not call `fal-ai/kling-video/ai-avatar/*`, and do not render dialogue as a separate lipsync avatar clip.
-- **Identity is physical, not nominal — no character name anywhere in visual/descriptive prompt text, not just not-leading.** Kling/NB2 do not know character names. Every `image_prompt`, every `motion_prompt`, and every `multi_prompt` shot must identify visible/speaking characters ONLY by their locked physical descriptors and attached refs — role/species + hair/eyes/outfit/build, never the proper name (e.g. "Male Fatui Harbinger, short bright orange hair, teal-blue eyes..." not "Male Fatui Harbinger Tartaglia..."). This is stricter than just avoiding a leading name (see the `character_description` field rule below) — a name appearing anywhere in the visual text, even mid-sentence after a role prefix, is still a name the image model can (uselessly) latch onto. User-requested tightening 2026-07-22 after genshin-dont-save-me-en EP7. `character_speech` (spoken dialogue) is exempt — characters naturally say each other's names out loud.
+- **Identity is physical, not nominal — no character name anywhere in visual/descriptive prompt text, not just not-leading.** H3/NB2 do not know character names. Every `image_prompt` and every `motion_prompt` (action prompt and lip-sync prompt) must identify visible/speaking characters ONLY by their locked physical descriptors and attached refs — role/species + hair/eyes/outfit/build, never the proper name (e.g. "Male Fatui Harbinger, short bright orange hair, teal-blue eyes..." not "Male Fatui Harbinger Tartaglia..."). This is stricter than just avoiding a leading name (see the `character_description` field rule below) — a name appearing anywhere in the visual text, even mid-sentence after a role prefix, is still a name the image model can (uselessly) latch onto. User-requested tightening 2026-07-22 after genshin-dont-save-me-en EP7. `character_speech` (spoken dialogue) is exempt — characters naturally say each other's names out loud.
 - **When a scene chains 2+ character reference images, explicitly bind each reference to its position/role in the prompt** (e.g. "the reference image showing a male Fatui Harbinger is the figure standing center-left; the reference image showing a female Traveler is the smaller figure in the background"), in addition to the normal descriptive prose. This is a cheap, low-risk mitigation, not a confirmed fix: a controlled reproducibility test (genshin-dont-save-me-en EP7, 2026-07-21) re-ran a byte-identical prompt+refs twice and got a correct single-instance result once and a duplicated background character (two instances of the same secondary character) once — proving that this kind of duplication can be pure generation-to-generation randomness, not something the prompt structure alone fully controls. Tightening ref-to-role binding costs nothing and may lower the odds, but do not treat a recurrence as proof the binding was missing or wrong.
 - **The story bible's `character_description` field itself must never lead with a name/rank+name** (e.g. "Captain James T. Kirk" or "Chief Engineer Montgomery Scott") — every sub-agent copies this field verbatim into prompts, so a name baked in here propagates into every episode's `image_prompt`/`motion_prompt` regardless of how careful Scenarist/Storyboarder/Animator are downstream. Write it as role/species + physical descriptors only (e.g. "Male Starfleet captain, athletic build..."). Burned in EP13 (2026-07-14, star-trek-airlock): both Kirk and Mirror Kirk's bible descriptions started with "James T. Kirk", which combined with a `multi_prompt` shot that dropped mid-frame characters from its text caused Kling to hallucinate a duplicate Kirk face in scene 6 — the two twin-faced characters gave the model an easy "safe" duplicate to fall back on. Spoken dialogue lines (`character_speech`) may still contain names naturally (characters address each other by name) — this rule is about the visual/descriptive identification text only.
 
@@ -43,22 +52,21 @@ Keywords: "serial", "episode", "series", "ep1", "ep2", "сериал", or `serie
 | Component | 5s clip | 10s clip |
 |---|---|---|
 | Image (NB2) | $0.08 | $0.08 |
-| Kling v3 Standard I2V, no audio ($0.084/s) | $0.42 | $0.84 |
-| Kling v3 Standard I2V with generated dialogue/audio ($0.126/s) | $0.63 | $1.26 |
-| MiniMax / local TTS | not used for serial-drama dialogue |
-| Kling Avatar v2 | forbidden |
-| **I2V action clip** | **~$0.50–0.63** | **~$0.92–1.26** |
-| **I2V dialogue clip** | **~$0.63** | **~$1.26** |
+| **H3 Max action clip** (`minimax.h3max.i2v`, own ambience; $0.08/s on the returned ~5.18 s / ~10.2 s) | **~$0.41** | **~$0.83** |
+| **H3 Max Turbo lip-sync dialogue clip** (`minimax.h3max.turbo.i2v`; $0.04/s on the returned length, which is the audio length plus ~0.2–0.6 s) | **~$0.21** (a 7 s exchange ≈ $0.30) | **~$0.42** |
+| MiniMax TTS for the dialogue lines (~$0.10 per 1,000 characters) | ~$0.01 per clip | ~$0.01 per clip |
+| Kling v3 Standard I2V (historical; not used) | was $0.63 with audio | was $1.26 |
+| Kling Avatar v2 | forbidden | forbidden |
 
 | Variant | Clips | Cost |
 |---|---|---|
-| Base (recommended) | 5 × 5s | ~$2.00–3.00 |
-| Extended | 6–7 × 5s | ~$2.50–4.00 |
-| Exception (undividable monologue) | 4×5s + 1×10s | ~$2.80–3.80 |
+| Base (recommended) | 5 clips: 2–3 dialogue (~7 s) + 2–3 action (5 s) | ~$2.20–2.80 |
+| Extended | 6 clips: 3 dialogue (7–9 s) + 3 action (5 s) | ~$2.70–3.40 (Test 9: $3.24 with 11 images; the same episode was $6.57 on Kling) |
+| Exception (one 10 s action clip) | as above + 1 × 10 s | +$0.42 |
 
-⚠️ **Dynamics > savings.** 2×5s almost always beats 1×10s. Angle change / counterpart reaction matters more than $0.04 saved.
+⚠️ **Dynamics > savings.** 2×5s almost always beats 1×10s. Angle change / counterpart reaction matters more than the few cents saved.
 
-When reporting actual spend, calculate from rendered seconds, model rates, regenerations, and any burn tests; do not reuse the rough estimate after generation.
+When reporting actual spend, calculate from the returned clip seconds (H3 Max at $0.08/s, lip-sync at $0.04/s), TTS characters, model rates, regenerations, and any burn tests; do not reuse the rough estimate after generation.
 
 ---
 
@@ -66,10 +74,10 @@ When reporting actual spend, calculate from rendered seconds, model rates, regen
 
 | Phase | Timing | Goal | Clips |
 |---|---|---|---|
-| **HOOK** | 0–5s | Spoken hook line / gag / engaging moment. Stop the scroll | 1 clip (5s, DIALOGUE/I2V) |
+| **HOOK** | 0–5s | Spoken hook line / gag / engaging moment. Stop the scroll | 1 clip (5s, DIALOGUE / H3 lip-sync) |
 | **TITLE CARD** | after HOOK | Series overlay card | interstitial, not a scene |
 | **CLIMAX** | 5–30s | Dialogue, confrontation, rising tempo | 2–3 clips (5–10s each) |
-| **CLIFFHANGER** | last 5s | Cut at the peak. Shock, reveal, mid-sentence stop | 1 clip (5s, ACTION/I2V) |
+| **CLIFFHANGER** | last 5s | Cut at the peak. Shock, reveal, mid-sentence stop | 1 clip (5s, ACTION / H3 Max) |
 
 **Scene 1 (HOOK) is always a dialogue clip carrying a spoken line/gag/engaging moment — never a silent action beat.** A silent hook (pure action, no line) reads as a slow establishing shot, not a scroll-stopper. This is Scenarist's job: write scene 1 as `clip_type: "dialogue"` with a punchy opening line, same convention as EP1–3's cold opens ("You're backup. Not competition." etc.).
 
@@ -97,7 +105,7 @@ Never default the title card window to the start of scene 2 (or any other dialog
 - ❌ Theatrical speeches, long monologues
 - ❌ Slow buildup without conflict in the first 5 seconds
 - ❌ All clips dialogue (monotonous, expensive, boring)
-- ❌ Static talking heads. Dialogue should be staged as two-shots, over-shoulders, reaction beats, or multi-shot I2V, not Avatar bust shots.
+- ❌ Static talking heads. Dialogue should be staged as two-shots, over-shoulders or reaction beats with both speakers in the start frame, not Avatar bust shots.
 
 ### Brainrot vocabulary
 
@@ -112,17 +120,15 @@ Appropriate in dialogue: `rizz`, `sigma`, `cooked`, `negative aura`, `bro`, `no 
 
 #### Dialogue runtime planning
 
-Serial-drama dialogue is I2V, so `duration_sec` is the actual rendered clip length. Plan runtime from the storyboard durations:
+A dialogue clip's length is set by its audio (H3 lip-sync). The Scenarist's `duration_sec` is the estimate; after building the clip's audio, Sound overwrites the dialogue clip's `duration_sec` with the audio length rounded **up** to 0.1 s (the lip-sync request `duration`; the Editor trims the clip to it). Action clips keep the Scenarist's `duration_sec`. Plan runtime from these:
 
-- Dialogue I2V target length is **6–10s**. Go longer only with explicit `duration_reason` and budget check.
-- `multi_prompt` shot duration is not fixed. Default 2–3s per shot; 4s only when the phrase or acting beat genuinely needs it.
-- Estimate spoken timing before generation: `speech_seconds = word_count / words_per_second`. Default pace is ~2.4 words/sec; relaxed/sarcastic lines can be slower, tension/mission-rant beats can be faster. Avoid accidentally cramming too many words into a short shot.
-- Add acting/pause padding when needed: +0.2s for a simple line, +0.4–0.7s for pause/comma/reaction, +0.8–1.2s for prop handoff or physical beat.
-- One Kling dialogue request can use at most 2 `voice_ids`. The series/story bible may have 3+ reusable character voices, but each request remaps only the voices used in that clip to local `<<<voice_1>>>` / `<<<voice_2>>>` tags. If a scene needs 3 speaking characters in the same moment, split the scene into multiple clips.
-- Prompt text per shot must stay ≤512 serialized UTF-8 bytes.
-- The physical descriptor immediately before each `<<<voice_N>>>` must match `voice_ids[N-1]`.
-- Any spoken line in a dialogue I2V clip must have `generate_audio: true`, `voice_ids`, and a matching `<<<voice_N>>>` tag. A dialogue clip rendered without voice is a failed request, not an acceptable silent beat.
-- Never pad a clip with a frozen frame; the I2V duration is the duration.
+- Dialogue clip target length is **6–10s**. Go longer only with explicit `duration_reason` and budget check; the hard maximum is **15 s** of audio (H3's limit). A longer exchange is split into two clips by the Scenarist, or its text is shortened (trim text first).
+- The clip audio is: 0.2 s of silence, then the lines in `character_speech` order with a 0.3 s gap between them (Sound builds it). Estimate spoken timing before generation: `speech_seconds = word_count / words_per_second`. Default pace is ~2.4 words/sec; relaxed/sarcastic lines can be slower, tension/mission-rant beats can be faster. Add 0.2 s + 0.3 s per line break to the estimate.
+- **At most 2 speakers per dialogue clip**, both visible in the start frame (the tested pattern: speaker A's line, then speaker B's answer). The series may have 3+ voices; a beat with a third speaker, or with a speaker who is not in the start frame, becomes another dialogue clip with its own start frame. More than two lines in one clip (A, B, A) is untested on H3: allowed only within 15 s, and the Animator flags it.
+- One H3 clip is one continuous shot from one start frame: no shot cuts inside a clip. A reaction angle or close-up is its own clip.
+- Lip-sync prompt ≤512 serialized UTF-8 bytes (the speakers' descriptors, both lines verbatim and the fixed sentences must fit: keep lines short).
+- Every spoken line must be in `character_speech` with its `speaker`; a dialogue clip without its uploaded `tts_url` is a Phase 2 failure, never an acceptable silent beat.
+- Never pad a clip with a frozen frame; the clip duration is the duration (dialogue: its audio).
 
 ---
 
@@ -158,7 +164,7 @@ The exact manager-resolved `STORY_BIBLE_PATH` stores the universe state between 
       "name": "Noob Dave",
       "role": "protagonist",
       "character_description": "Roblox-style blocky humanoid, bright yellow smooth plastic skin, simple blue torso shirt, bright green pants, round head with wide innocent eyes, small curved mouth, matte plastic texture",
-      "voice": "Casual_Guy",
+      "tts_voice": {"voice_id": "Casual_Guy", "speed": 1.0},
       "status": "just joined the server, secretly rich",
       "aura_points": 0,
       "relationships": {}
@@ -184,6 +190,8 @@ The exact manager-resolved `STORY_BIBLE_PATH` stores the universe state between 
 }
 ```
 
+**`characters[].tts_voice`** — the character's one MiniMax TTS voice for the whole series (`fal-ai/minimax/speech-2.8-hd`): `voice_id` (a preset from `rules/roles/sound.md` §2) and a fixed `speed`; emotion is chosen per line. A series may also lock voices in its game's `serial-drama_special.md` ("Locked TTS voices"; The Airlock's table holds the Test 9 voices), which Sound reads first. A character with neither gets a voice picked by Sound on its first speaking episode, recorded run-locally in `storyboard.json → tts_voices` (`"source": "new"`), and written here by Manager only after that episode is approved (State Transition below). Older voice fields (`voice`, `voice_id_kling`, `voice_ref_url`, `voice_route`) belong to the historical Kling route and are not used for dialogue; Sound may only reuse a legacy `voice` value as the pick when it already names a MiniMax preset from §2.
+
 ### State Analysis (before generation)
 
 1. Load the story bible from the exact `STORY_BIBLE_PATH` passed by Manager. If it is absent, invalid, or ambiguous, STOP and ask the user whether to create/select one; never silently use the generic default.
@@ -201,7 +209,8 @@ Do not mutate series state when generation or Editor finishes. Present the final
 4. Add `episode_summaries[]` with a brief summary + cliffhanger
 5. Update `anti_repetition` — add used phrases, hooks, cliffhangers
 6. Update `world_state`
-7. Increment `last_episode`
+7. For every `storyboard.json → tts_voices` entry with `"source": "new"`, write `{"voice_id", "speed"}` to that character's `characters[].tts_voice` (add the character entry if the bible has none). Never change an existing `tts_voice`.
+8. Increment `last_episode`
 
 ---
 
@@ -255,9 +264,10 @@ Before writing the storyboard, check `anti_repetition` in story bible:
 
 - Episode structure: HOOK → CLIMAX (2–3 clips) → CLIFFHANGER
 - **5s default**, 10s dialogue = almost always a mistake (split into 2×5s)
-- **Dialogue clips are I2V `multi_prompt`, not Avatar.** Stage them as medium two-shots, over-shoulders, group reactions, and insert beats. Avoid static frontal bust shots.
+- **Dialogue clips are H3 lip-sync clips, not Avatar and not Kling `multi_prompt`.** Write `clip_type: "dialogue"` with `character_speech` as an ordered list of `{"speaker": "<bible character name>", "line": "<spoken text>"}` (at most 2 speakers, both visible in the start frame; see "Dialogue runtime planning"); `tts: null`. Do not write `voice_ids`, `multi_prompt`, `shot_type`, `generate_audio` or `<<<voice_N>>>` tags. Stage them as medium two-shots or over-shoulders with both speakers' faces readable. Avoid static frontal bust shots.
+- Action clips: `clip_type: "action"`, `character_speech: null`. No `motion: "still"` scenes in this format.
 - Balance ACTION/DIALOGUE ~ 50/50; at least 2 different characters speak per episode
-- Read the exact resolved series bible: characters, format-owned native voice refs/IDs (`voice_ref_url` / `voice_id_kling`), active loops, anti-repetition
+- Read the exact resolved series bible: characters (including `tts_voice`, which Sound uses; you do not pick voices), active loops, anti-repetition
 - **`retention_strategy` mandatory** in storyboard — why the cliffhanger pulls the next episode
 - Brainrot vocabulary in moderation, dialogue only
 - camera_angle differs for every adjacent clip
@@ -318,46 +328,59 @@ vertical 9:16 frame, no text overlays, keep facial features exactly matching the
 
 - **ALL visible/speaking character sheets are mandatory** — even for chars who are blurred background. Their sheet anchors the face even at low prominence. Missing a sheet = face drifts or character looks generic.
 - **NEVER include a cross-episode scene image as a ref.** A previous episode's room photo (e.g. `room1701-ep1-last-scene.png`) will bleed its location (bedroom furniture, colors) into the new scene. EP2 attempt 2 used the EP1 last scene as anchor → bedroom elements appeared in the coffee shop. Only use character sheets + location bg-ref.
-- **Reusing the same location bg-ref across two DIFFERENT scenes in the same episode (not a `continues_from_scene` pair) risks Kling hallucinating an extra background person during I2V motion**, especially near a door/threshold/off-frame edge. Burned in EP13 star-trek-airlock (2026-07-14): scene 3 and scene 4 both chained off `bridge-tactical-ep13.png` with similar framing — across two separate render attempts, Kling invented a random extra character near the turbolift door during the I2V camera motion, not present in either scene's static start-frame prompt. This is distinct from the cross-episode bleed rule above (same episode, same format, still wrong): when two scenes in one episode are NOT declared continuations of each other (no `continues_from_scene` link) but would otherwise reuse the identical location bg-ref and near-identical camera framing, generate a genuinely fresh location bg-ref for one of them instead — a different angle/composition is not sufficient on its own to fix this once it's happened, a fresh underlying location asset is the reliable fix.
+- **Reusing the same location bg-ref across two DIFFERENT scenes in the same episode (not a `continues_from_scene` pair) risks the video model hallucinating an extra background person during I2V motion** (burned on Kling; the rule stays on H3), especially near a door/threshold/off-frame edge. Burned in EP13 star-trek-airlock (2026-07-14): scene 3 and scene 4 both chained off `bridge-tactical-ep13.png` with similar framing — across two separate render attempts, Kling invented a random extra character near the turbolift door during the I2V camera motion, not present in either scene's static start-frame prompt. This is distinct from the cross-episode bleed rule above (same episode, same format, still wrong): when two scenes in one episode are NOT declared continuations of each other (no `continues_from_scene` link) but would otherwise reuse the identical location bg-ref and near-identical camera framing, generate a genuinely fresh location bg-ref for one of them instead — a different angle/composition is not sufficient on its own to fix this once it's happened, a fresh underlying location asset is the reliable fix.
 - **Each scene is independent by default** — no ref chaining between scenes. Each NB2 call gets a fresh set of refs: location ref + relevant char sheets for that scene. Do not pass a previous scene's output as input to the next.
 - **EXCEPTION — blocking continuity for a continuous physical sequence within ONE episode.** When 2+ consecutive scenes are staged as one continuous physical moment in the same location (characters moving/repositioning across scenes — someone crosses the room, a third character enters and walks toward the others, etc.), generating each scene's start frame independently from text alone causes characters to visually "teleport" between clips — position, distance, and even who's still in frame can jump discontinuously. Burned in genshin-impact "Don't Save Me" EP4 (2026-07-07, scenes 4→5→6): a wound-tending exchange, a doorway confrontation, and a cliffhanger stand-off across 3 consecutive scenes in the same teahouse produced 3 unrelated spatial arrangements — caught only on user review. Room 1701's sitcom blocking (characters mostly seated, small movements) doesn't trigger this as visibly; any format/series with continuous cross-scene action will. **Fix:** Scenarist sets `"continues_from_scene": N` on a clip when it's staged as a direct spatial continuation of clip N (same location, same continuous moment, characters mid-repositioning) — omit/null when a scene is a clean new beat. Storyboarder reads this field: when set, it adds the immediately-preceding scene's PNG (same episode, one scene back only — never cross-episode, never more than one scene back) as an EXTRA chain-ref alongside the location bg-ref, and explicitly describes the new scene's blocking as a continuation of the previous scene's declared end-state/blocking metadata. Never inspect the rendered MP4 or extract its last frame automatically; generated media receives technical validation only. This still respects the bg-ref-first / no-cross-episode-bleed rules — it only adds a positional anchor, not a new location source.
   - For a tight `continues_from_scene` link, use the immediately preceding same-episode start PNG plus the declared end-state/blocking metadata. Do not extract or inspect frames from the rendered MP4 automatically; any visual continuity judgment is the user's during debug.
   - **⚠️ The extra chain-ref does NOT substitute for a fresh location bg-ref when the text describes REAL spatial repositioning (walking to a different wall, turning a corner, advancing down a corridor/dock).** Burned in genshin-impact "Don't Save Me" EP6 (2026-07-14): scenes 1→2 (running further down a dock) and scenes 3→4→5 (character steps to a side wall, then the other closes the distance) all reused the SAME location bg-ref file across the whole chain, with only the text and the continuation-PNG anchor describing the movement. Result: every cut looked like teleportation — running scene 2 showed the exact same framing as scene 1 (no sense of having covered distance), and the alcove scenes never actually showed a side wall despite the text repeatedly saying characters moved to one, because the underlying bg-ref photo was identical every time and NB2/Kling anchor heavily on the literal pixels of the location image, not just the text describing where people now stand in it. **Rule: if the blocking description says a character reaches a new vantage point (turns a corner, crosses to a different wall/landmark, advances a visible distance), generate a genuinely NEW location bg-ref for that vantage point** — a fresh NB2 generation (can be an `/edit` chained off the original bg-ref for style/architecture consistency, e.g. "same corridor, seen from further down / rotated to show the side wall") — not just a text instruction layered on the identical unchanged photo. Reserve the "text + continuation-PNG only" version of this exception for blocking that stays in essentially the same framing (a small step, a turn of the head, a hand reaching out) — anything that covers visible ground needs its own generated background.
-  - **⚠️ Even a genuinely fresh bg-ref per vantage point can still fail — two independently-generated "same room, different angle" images rarely read as connected, and characters can flip left/right across the cut (crossing the 180-degree line), which looks like a place-swap, not dynamism.** This is what actually happened in the EP6 retry: a purpose-built "side wall" bg-ref for scenes 4-5 didn't visually connect to scene 3's door, and the characters' screen-left/right positions weren't held constant across the three scenes. **When a multi-beat exchange needs to happen in ONE location across several key_lines, prefer merging it into a SINGLE `multi_prompt` I2V clip (one start frame, several sequential shots) over splitting it into separate independently-generated scenes** — this sidesteps the whole problem, since there is no cut between independently-generated backgrounds, just continuous camera motion from one anchor. Kling's multi_prompt hard cap (≤15s, ≤6 shots per call) is usually enough for a 3-4 line exchange. Only fall back to separate scenes with fresh bg-refs when the exchange genuinely can't fit those caps, and if you do, fix each character's screen-left/right position for the ENTIRE sequence and never let it flip.
+  - **⚠️ Even a genuinely fresh bg-ref per vantage point can still fail — two independently-generated "same room, different angle" images rarely read as connected, and characters can flip left/right across the cut (crossing the 180-degree line), which looks like a place-swap, not dynamism.** This is what actually happened in the EP6 retry: a purpose-built "side wall" bg-ref for scenes 4-5 didn't visually connect to scene 3's door, and the characters' screen-left/right positions weren't held constant across the three scenes. **When a multi-beat exchange needs to happen in ONE location across several key_lines, prefer merging it into a SINGLE dialogue clip (one start frame, the lines in order in one lip-sync audio file) over splitting it into separate independently-generated scenes** — this sidesteps the whole problem, since there is no cut between independently-generated backgrounds, just one continuous shot from one anchor. The H3 lip-sync cap (≤15 s of audio, at most 2 speakers) is usually enough for a 2-3 line exchange (more than two lines is untested). Only fall back to separate scenes with fresh bg-refs when the exchange genuinely can't fit those caps, and if you do, fix each character's screen-left/right position for the ENTIRE sequence and never let it flip.
   - **⚠️ When a scene shows a character running/approaching TOWARD a destination visible in-frame, they must be oriented toward it (e.g. back-to-camera, angled toward the landmark) — not sprinting toward the camera with the destination as passive backdrop.** Burned in the same EP6 pursuit scene: the characters were composed running straight at the viewer while the door they were supposedly fleeing toward sat behind them, unrelated to their direction of motion — visually incoherent once cut against the arrival scene. Also: **that destination landmark's bg-ref must be generated as an `/edit` descendant of the SAME bg-ref asset used in the scene where they actually arrive there**, not independently re-generated as a "similar-looking" building — two separate NB2 calls describing "a Golden House entrance" will not produce the same door, and cutting between them reads as two different buildings.
 - **bg-ref must be a TIGHT MEDIUM SHOT** — not a wide establishing shot. Wide bg-refs make characters appear tiny and child-proportioned. EP2: wide coffee-spot refs caused this; regenerating as tight medium shots fixed it. If a new location has no saved bg-ref, generate it as a tight medium shot first.
 - **No style-conflicting source refs.** An asset whose visual style differs from the resolved `style_tags` biases the render toward that other style; a text negative does NOT override a style-conflicting source image (e.g. a `photoreal` / `live-action` asset pulls toward realism regardless of `"not photorealistic"` in the prompt).
 - **`nb2.edit` inherits the base image's existing geometry/scale — it does not recompute the scene.** Chaining `nb2.edit` off a location bg-ref that itself has broken proportions (e.g. a console-only shot with no chair, no person, filling most of the frame) forces the model to fit any newly-requested object (a chair, standing/seated characters) into that already-wrong geometry rather than generating correct scale from scratch — no amount of text description fixes this, the same way a style-conflicting source image beats a text negative (rule above). Burned in star-trek-airlock EP14 (2026-07-21): scenes 1/2/4 were all generated via `nb2.edit` chained directly off `bridge-weapons-ep13.png`/`bridge-tactical-ep13.png` (console filling the frame, no chair, no human), and the console rendered torso-height in every one of them. **Fix:** when a scene needs an object or amount of open floor space that the existing bg-ref doesn't already show at correct scale (e.g. adding a chair to a console-only shot), generate the scene via `nb2.text` (fresh generation from character refs + text, no broken base to inherit from) instead of editing onto the flawed asset. Reserve `nb2.edit` for cases where the base image's own geometry is already correct and only a smaller local change is needed.
 
 #### General storyboarder rules
-- I2V clips: **start frame only** (`scene-K.png`). End frames are NEVER generated. `end_image_url` is FORBIDDEN with `multi_prompt` (Kling returns 422).
+- Every clip: **start frame only** (`scene-K.png`). End frames are NEVER generated (H3 has no end-frame field in this pipeline).
+- **Dialogue start frames show every speaker of that clip** with a readable face and mouth (two-shot / over-shoulder), at the left/right positions `action_description` declares: H3 lip-syncs only faces that are in the start frame, and the lip-sync prompt names the speakers by those positions. Every visible character's sheet goes into `image_urls` as usual.
 - Each clip = its own scene PNG (not the ref directly)
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
 
-- I2V clips via Kling v3 Standard — micro motion only. Retry one technically failed request once with the same endpoint/settings, then STOP; never switch to v2.6 or another provider.
-  - **Dialogue I2V:** `generate_audio: true`, `shot_type: "customize"`, `voice_ids`, `multi_prompt`. No external TTS, no Avatar.
-  - **Action I2V:** `generate_audio: true` when room tone/ambient helps; `false` only for purely visual shots.
+- Every clip runs through `tools/kling_runner.py` on H3 — micro motion only. Retry one technically failed request once with the same route/settings, then STOP; never switch to Kling, between H3 Max and Turbo, to another provider, or to a still.
+  - **Action clips** (`clip_type: "action"`) → **H3 Max** `minimax.h3max.i2v` (`rules/roles/animator.md` §2a). Payload exactly `prompt`, `image_url` = `scene_image_url`, numeric `duration` = `duration_sec`, `resolution: "768P"`, `prompt_expansion_mode: "disabled"` (template `tools/examples/minimax-h3-max-serial-action.job.json`); **no silent `target_audio_url`** (the clip's own ambience is used). `expect`: tolerance `0.8`, `audio: "required"`. Write `scene_video_audio: "native"`.
+  - **Action prompt (exactly the Test 9 shape, ≤512 UTF-8 bytes):** `<style anchor>. <camera move>. <each figure by position with its micro-action and endpoint>. Diegetic ambience only, no music, no voices. Mouth stays closed; no talking.` — the technical action prompt (`animator.md` §3–§4) with the two closing sentences verbatim; drop only the mouth sentence when no face is visible. Example (Test 9, scene 2, 319 bytes):
+    ```
+    Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters. Camera slow push-in at deck level. Seated figure on left curls fingers off the door, lowers gaze; standing figure on right lifts chin to ceiling grille, then steadies. Diegetic ambience only, no music, no voices. Mouth stays closed; no talking.
+    ```
+    Template: `tools/examples/minimax-h3-max-serial-action.job.json` (that exact Test 9 job).
+  - **Dialogue clips** (`clip_type: "dialogue"`) → **H3 lip-sync** on **H3 Max Turbo** `minimax.h3max.turbo.i2v`, exactly as what-if-real-life (`rules/roles/animator.md` §2a "H3 lip-sync"). First run the pre-flight curl check on `tts_url` and `scene_image_url` (both 200; otherwise STOP and return to Manager). Payload exactly `prompt`, `image_url` = `scene_image_url`, `target_audio_url` = `tts_url` (the clip's whole exchange), numeric `duration` = the audio length rounded up to 0.1 s (equal to the `duration_sec` Sound wrote), `resolution: "768P"`, `prompt_expansion_mode: "disabled"`. `expect`: `duration_seconds` = that `duration`, tolerance `0.8`, `audio: "required"`. Write `scene_video_audio: "native"` and `scene_video_lipsync: true`. Template: `tools/examples/minimax-h3-max-turbo-serial-dialogue.job.json` (the Test 9 scene 1 job; Test 9 sent the audio as a data URI because the trial uploaded nothing, production sends the uploaded `tts_url`). No `multi_prompt`, `voice_ids`, `shot_type`, `generate_audio`, `negative_prompt`, `<<<voice_N>>>` tag or Kling `create-voice`.
+  - **Lip-sync prompt (exactly the Test 9 shape, ≤512 UTF-8 bytes):** `<style medium>. <location light>. A <speaker A look>, <position A>; a <speaker B look>, <position B>. The <A> speaks first: "<line 1>" Then the <B> answers: "<line 2>" Each character's lips move only while they speak and stay closed otherwise. They do not stare into the lens: their gaze rests on each other and drifts naturally, with small relaxed head movements.` Speaker A is the first speaker in `character_speech`; each line is copied verbatim with its own final punctuation inside the quotes (no extra period after the closing quote); `<A>` / `<B>` are short role words for the same two figures (`engineer`, `captain`, `admiral`, `officer`), never names; positions as in the start frame (`at right`, `on the wall screen at right`, `at left`). No gaze/head-lock phrases (`unblinking`, `eyes locked on`, `facing the camera head-on`, `holds still`), no music/voice clause (the soundtrack is the TTS). A one-speaker clip writes `The <A> speaks: "<line>"` and keeps the other visible character's lips closed; a clip with more than two lines lists them in order — both untested on H3, flag them in the report. Example (Test 9, scene 1, 495 bytes):
+    ```
+    Star Trek cinematic 3D animation. Dim amber corridor. A stocky engineer, grey temples, red tunic, alarmed, at right; a light brown-haired captain, gold tunic, at left. The engineer speaks first: "Captain, Starfleet just locked every command code you own." Then the captain answers: "Who signed it?" Each character's lips move only while they speak and stay closed otherwise. They do not stare into the lens: their gaze rests on each other and drifts naturally, with small relaxed head movements.
+    ```
 - Motion prompt = technical (positions, camera, physical actions), without names/moods
-- One I2V model for the whole episode — do not mix Kling I2V versions within one episode
-- Start frame only for I2V; Kling animates from the start frame via `motion_prompt`
+- One pipeline for the whole episode: H3 Max action clips + H3 Max Turbo lip-sync dialogue clips (the declared mix, as in what-if-real-life); no Kling clip, no plain clip on Turbo, no lip-sync on H3 Max
+- Start frame only; H3 animates from the start frame (`image_url`) via the prompt
 - **Style-hold for this format (not universal — lives here, not in `animator.md`):**
-  - **Anti-drift negative in EVERY I2V clip**, not selectively. DERIVE the negative from the resolved `style_tags`: it must push away from whatever the locked style is NOT (e.g. if `style_tags` is a stylized/animated look, the negative pushes away from photoreal — `photorealistic, film grain, realistic skin, live action, photograph`). Do not hardcode a fixed medium here; build the negative from the style the bible actually declares. EP6 scene 2 omitted it and the close-up drifted; scenes 7/8 that had it held better.
-  - **Carry the style anchor into EVERY shot of a `multi_prompt`**, not just shot 1 — each shot's prompt opens with the resolved `style_tags` + current location lighting. The anchor is LOCATION-SPECIFIC, not a boilerplate: prepend the exact `style_tags` string, then the per-location lighting (e.g. `"..., warm Edison bulb interior light"` for a coffee shop interior; `"..., soft warm morning light, exterior"` for exterior; `"..., warm lamp light, bedroom"` for an interior bedroom). The style string itself is never hardcoded here — it is copied from `style_tags`. Late shots without an anchor drift to the model's prior.
-  - **Carry physical descriptors into EVERY shot of a `multi_prompt`**, especially immediately before each `<<<voice_N>>>` tag. Do not rely on names: the model will assign lines to the wrong visible person. Full physical description = at least hair color/style, glasses if any, hoodie/top color, and one distinctive item (headphones, badge, necklace).
-  - **Do not end a `multi_prompt` on a tight close-up of a face that is not present in the start frame.** This was the real "problem is always in the third shot": both EP6 multi-prompts ended on an invented face close-up; by the last shot Kling has left the start frame and re-renders that face with its own (realistic) prior. Keep the final shot within the framing the start frame supports, or split the close-up into its own clip.
-  - **A second character enters mid-`multi_prompt` clip** → via Kling `elements` + `@Element1` in the relevant shot (`animator.md §5a`, burn-tested 2026-06-01). Works well **when the character occupies a noticeable share of the frame** (especially a face close-up — this fixes final-shot drift). For recognizability in a small/occluded shot (face behind glass, etc.) an element reads as generic → use a separate clip with its own start-frame instead.
-  - **`elements` and `voice_ids` cannot both be set on the same Kling request** (hard API constraint) — Scenarist/Storyboarder must not plan a background/non-speaking character via `elements` in a scene that ALSO has a speaking character requiring `voice_ids`. Burned in genshin-dont-save-me-en EP7 (2026-07-21): Storyboarder's handoff called for introducing a background Fatui soldier via `elements` in a scene where Lumine's cliffhanger line already required `voice_ids`, so Animator had no valid way to honor the plan as written and silently fell back to introducing the soldier via plain descriptive text instead. **Fix at planning time:** if a scene needs both a `elements`-introduced character and dialogue audio, either (a) split it into two clips — a silent `elements` clip and a separate dialogue clip, or (b) introduce the extra character through the normal start-frame/character-sheet ref instead of `elements`. Do not leave this contradiction for Animator to resolve ad hoc.
-- **Do NOT use Avatar** in serial-drama. If a storyboard contains `clip_type: "avatar"` or an Avatar endpoint, return it to Scenarist before generation.
+  - **Style anchor at the start of EVERY prompt** (action and lip-sync), LOCATION-SPECIFIC, not a boilerplate: the render-medium words of the resolved `style_tags`, then the per-location lighting (e.g. `"..., warm Edison bulb interior light"` for a coffee shop interior; `"..., soft warm morning light, exterior"`; `"..., warm lamp light, bedroom"`). The style string is copied from `style_tags`, never hardcoded here; because H3 prompts are capped at 512 bytes, condense it to its medium words (Test 9: `Star Trek cinematic 3D animation, semi-realistic Pixar-quality characters.` in action prompts, `Star Trek cinematic 3D animation.` in lip-sync prompts) — the start frame carries the full style.
+  - **No `negative_prompt` on H3.** The Kling-era anti-drift negative is not sent; the style anchor that opens every prompt and the start frame hold the style, as in Test 9. The closing sentences are exactly the tested ones (action: the sound clause + the mouth guard; dialogue: the lips + no-stare sentences); add no other constraint sentence.
+  - **Physical descriptors for every visible character in every prompt**, and in a lip-sync prompt immediately with each speaker's line. Do not rely on names: the model will assign lines to the wrong visible person. Full physical description = at least hair color/style, glasses if any, top color, and one distinctive item (badge, headphones, necklace), condensed to fit 512 bytes.
+  - **One continuous shot per clip.** Never ask H3 for a cut or for a tight close-up of a face that is not in the start frame (on Kling, invented last-shot close-ups re-rendered the face with the model's realistic prior). A close-up or reaction angle is its own clip with its own start frame.
+  - **Every character who is visible or speaks must be in the start frame.** H3 has no `elements`: a character who enters mid-moment gets a separate clip with its own start frame (plan it at Scenarist/Storyboarder time).
+- **Do NOT use Avatar** in serial-drama. If a storyboard contains `clip_type: "avatar"` or an Avatar endpoint, return it to Scenarist before generation. A dialogue scene without `tts_url`, or a storyboard that still carries `voice_ids` / `multi_prompt` for this format, is returned to Manager before any paid call.
+- **Debug mode:** list the planned clips with per-clip cost before the paid batch (a 5 s H3 Max action clip ~$0.41 is above the $0.30 confirm threshold; a 7 s lip-sync clip ~$0.30).
+- Cost: H3 Max clips at $0.08/s and lip-sync clips at $0.04/s on the returned length, on separate lines.
 - General rules — `rules/roles/animator.md`
 
 ### Sound
 
-- **No per-scene TTS for serial-drama dialogue.** Dialogue voices come from Kling I2V `voice_ids` in Animator. Sound only generates external audio for explicit narrator/off-screen VO tracks.
-- For serial-drama dialogue I2V, one character = one reusable voice across the series. Use supplied voice refs / existing Kling voice IDs from the exact bible. If Kling requires `fal-ai/kling-video/create-voice`, call it once from the supplied format-owned ref and keep the returned ID in run-local state / `proposed_bible_updates`; Manager writes it to the exact bible only after explicit final user approval.
-- If a speaking character has no approved native voice ref/ID owned by the resolved series bible, STOP and report the missing requirement. Never substitute an ElevenLabs ID or borrow a voice from another format.
-- For explicit narrator/off-screen VO only: intentional native audio → approved sample owned by this resolved series bible through Chatterbox → otherwise MiniMax. Retry the same route once, then STOP; do not switch provider.
+- **Dialogue TTS for every dialogue clip (the H3 lip-sync audio).** Full procedure: `rules/roles/sound.md` §5a "Serial-drama dialogue". In short:
+  1. **Voices:** one MiniMax TTS voice per speaking character for the whole series. Use the series' locked voices: the "Locked TTS voices" table in `games/{GAME_TAG}/serial-drama_special.md` when it applies to the resolved series (The Airlock: the exact Test 9 voices — Kirk `Determined_Man` 0.9, Scotty `Casual_Guy` 1.0, Fleet Admiral `Imposing_Manner` 0.9, Worf `Deep_Voice_Man` 0.9), else the bible's `characters[].tts_voice` (`voice_id` + `speed`). Only for a speaking character with neither, pick a voice from `sound.md` §2 (character type → `voice_id`, tone → `speed`; two characters who share a clip must sound clearly apart). Record every speaker in `storyboard.json → tts_voices` (`{"<name>": {"voice_id", "speed", "source": "locked" | "bible" | "new"}}`) and never write the bible or the special file — Manager stores the `new` picks in the bible after the episode is approved. Never use the old Kling voice fields, an ElevenLabs ID, or a voice from another format.
+  2. **Lines:** generate every `character_speech` line with MiniMax TTS (`fal-ai/minimax/speech-2.8-hd`, `sound.md` §5a) with exactly the Test 9 body — `{"prompt": "<line>", "voice_setting": {"voice_id", "speed", "emotion"}, "audio_setting": {"format": "mp3"}, "language_boost": "English"}` — in the speaker's voice, with a per-line `emotion` from `facial_expression` / `character_state`; one line = one file, `scenes/scene-K/scene-K-line-N.mp3`.
+  3. **Clip audio:** build one file per dialogue clip, `scenes/scene-K/scene-K.mp3`: 0.2 s of silence, then the lines in order with 0.3 s of silence between them, mono 44.1 kHz MP3. Measure it; above 15 s → STOP and return the scene (shorten the text first).
+  4. **Upload and write back:** upload `scene-K.mp3` to Supabase like Avatar TTS (`queue/upload-asset.sh --kind episode-tts … --name clip-K.mp3`, `sound.md` §5) and write the permanent URL as the scene's `tts_url`, its length as `tts_duration_sec`, and the length rounded up to 0.1 s as the scene's `duration_sec`.
+- For explicit narrator/off-screen VO only: intentional native audio → approved sample owned by this resolved series bible through Chatterbox → otherwise MiniMax. A line spoken by a character who is not lip-synced (off-screen, behind glass) gets its own TTS file in that character's `tts_voice` for the Editor's overlay (`sound.md` §9). Retry the same route once, then STOP; do not switch provider.
 - **Music is mandatory and generated:** Sound always generates `bg-music.mp3` through `fal-ai/minimax-music/v2.6`; never skip it or replace it with a local library track. For sitcom tone: instrumental low-density comedy underscore, no vocals/lyrics, no dramatic swell.
 - **Narrator VO (optional):** off-screen series intro voice over I2V action clips. Store as `narrator_vo` top-level field in storyboard.json: `{text, voice, tts_url, duration_sec, overlay_clips, volume}`. Sound generates the MP3; Editor overlays it via amix starting at t=0. Generate with `faster-whisper` for timing (offset=0 per clip, then +cumulative_start for ASS timecodes).
 - **Subtitles:** ASS via `ffmpeg-full` (`/usr/local/bin/ffmpeg-full/ffmpeg`) — libass is required; stock Homebrew ffmpeg silently errors on `ass=` filter. Use sentence-level Whisper timing — NOT word-by-word. Dialogue style: Bold=1, Outline=6, Fontsize=70, white, MarginV=520. Narrator style: Bold=1, Outline=4, italic, warm color `#EDE0C8`, Fontsize=65, MarginV=540.
@@ -370,14 +393,14 @@ vertical 9:16 frame, no text overlays, keep facial features exactly matching the
 ### Editor
 
 - **One ffmpeg pipeline for the entire final assembly** (concat + overlays + music + fade + CTA). NOT layered.
-- I2V clips: fps normalization 24 → 30 mandatory before concat. **NEVER trim I2V clips** — their declared duration is intentional and exact.
-- I2V clips: **never trim**; their declared duration is intentional. Preserve each clip's embedded audio stream when `generate_audio:true`.
+- Every clip is H3 (`scene_video_route` starts with `minimax.`): fps normalization 24 → 30 mandatory before concat, fill-and-crop 768×1344 → 1080×1920 ending in `setsar=1`, and the **H3 trim**: cut video and audio to the scene's `duration_sec` (never below; a shorter clip plays whole). For a dialogue clip `duration_sec` is its audio length rounded up (written by Sound), so the trim only removes H3's silent padding and never cuts speech. No other trimming, no speed-up.
+- **Every clip keeps its own audio** (`scene_video_audio: "native"`): action clips carry their ambience, dialogue clips (`scene_video_lipsync: true`) carry the dialogue — their soundtrack **is** the scene's TTS file. **Never lay `scene-K.mp3` (or any line file) over a lip-sync clip again**: the line would play twice.
 - **A/V sync — joint concat mandatory:** use a single `concat=n=N:v=1:a=1` with interleaved `[sv_i][sa_i]` pairs. CTA (no audio) gets `anullsrc` paired with its video.
-- **I2V `generate_audio:true` audio must be preserved.** Dialogue voices are inside the I2V MP4. Never replace final audio with `voice-final.wav`; that file is for Whisper timing only.
-- **`voice-final.wav` is NOT an audio source for the final encode.** It is a whisper-alignment artifact (TTS only, 16kHz mono). Final audio = scene `[k:a]` streams + mandatory `bg-music.mp3`. Passing `voice-final.wav` to the encode discards all I2V atmospheric sounds. Burned in EP3 — cost 3 re-renders.
+- **Clip audio must be preserved.** Dialogue voices are inside the lip-sync MP4s; ambience is inside the action MP4s. Never replace final audio with `voice-final.wav`; that file is for Whisper timing only.
+- **`voice-final.wav` is NOT an audio source for the final encode.** It is a whisper-alignment artifact (speech only, 16kHz mono, extracted from the dialogue clips). Final audio = scene `[k:a]` streams + mandatory `bg-music.mp3`. Passing `voice-final.wav` to the encode discards all clip ambience. Burned in EP3 — cost 3 re-renders.
 - **amix for overlay tracks:** narrator VO + bg-music overlay on top of joint concat via `amix=inputs=3:duration=first:normalize=0`. `normalize=0` is mandatory (prevents volume division by N). `duration=first` anchors output length to the scene audio, avoiding music bleed-through.
 - Off-screen narrator VO: overlay as separate amix input starting at t=0; music ducked during VO. See storyboard.json `narrator_vo` field.
-- TTS overlay "behind glass" (rare): `aecho=0.8:0.9:10:0.3`, `adelay=500`
+- TTS overlay "behind glass" (rare; a line whose speaker is not lip-synced, from Sound's separate line file): `aecho=0.8:0.9:10:0.3`, `adelay=500`
 - Subtitles: ASS via ffmpeg-full (has libass); sentence-level Whisper timing. Two styles: `Default` (Bold=1, Outline=6, white, MarginV=520) for dialogue; `Narrator` (Bold=1, Outline=4, italic, warm color, MarginV=540) for off-screen VO.
 - **CTA included in concat list** as the last clip (not a separate re-encode)
 - TBC overlay 2s before the end (before fade)
@@ -419,9 +442,10 @@ ${OUTPUT_DIR}/
 │   │   └── bg-{location}.png
 │   ├── scene-1/
 │   │   ├── scene-1.png
-│   │   ├── scene-1.mp4
+│   │   ├── scene-1.mp4              (dialogue: H3 lip-sync clip; action: H3 Max clip)
 │   │   ├── scene-1-scaled.mp4
-│   │   └── tts-1.mp3 (for dialogue only)
+│   │   ├── scene-1-line-N.mp3       (dialogue only: one TTS file per line)
+│   │   └── scene-1.mp3              (dialogue only: the clip's whole exchange, uploaded as tts_url)
 │   └── scene-N/...
 ├── subs/sub-N.png
 └── final.mp4
@@ -441,15 +465,18 @@ After explicit user approval, Manager uploads through its canonical run-scoped p
 - [ ] Scene 1 (HOOK) is a dialogue clip with a spoken line/gag, not a silent action beat
 - [ ] Title card window sits after HOOK and before scene 2, and does NOT overlap any scene's `character_speech` window (own trailing silent portion of scene 1, or a freeze-frame interstitial — never defaulted onto scene 2's start)
 - [ ] ACTION/DIALOGUE ~ 50/50; at least 2 characters speak
-- [ ] Dialogue clips = 5s (10s only with `duration_reason`)
+- [ ] Dialogue clips 6–10 s (longer only with `duration_reason`; never above 15 s of audio); each dialogue clip's `duration_sec` equals its audio length rounded up to 0.1 s
 - [ ] All images 608×1080 (9:16)
 - [ ] bg-reference per location created
-- [ ] I2V: start frame only (`scene-K.png`), no end frames generated
+- [ ] Start frame only (`scene-K.png`), no end frames generated; every speaker of a dialogue clip is in its start frame
 - [ ] Cross-asset pre-flight passed (all URLs 200, distinct audio per clip, filename=index, scene_image_url↔hero) — `validation.md`
 - [ ] Each character from ONE locked ref; no photoreal-tagged refs; every `image_prompt` has full style prefix
-- [ ] Each I2V has an anti-drift negative derived from the resolved `style_tags`; each multi_prompt shot has a style anchor copied from `style_tags`; no multi_prompt ends on an invented face close-up
-- [ ] For every `<<<voice_N>>>` tag in every multi_prompt shot: the physical descriptor IMMEDIATELY preceding it belongs to `voice_ids[N-1]`'s character — check who actually SPEAKS the line, not just who is mentioned last in the sentence. Burned EP4 (genshin, 2026-07-07): a shot described character A then tagged `<<<voice_1>>>` for character B's line, sitting right after A's descriptor — Kling rendered both characters off-model/identity-confused.
-- [ ] Dialogue clips use I2V `multi_prompt + voice_ids`; no Avatar endpoint and no `clip_type: "avatar"`
+- [ ] Every H3 prompt opens with the condensed style anchor + location light and is ≤512 UTF-8 bytes; no prompt asks for a cut or an invented face close-up
+- [ ] Action clips: `minimax.h3max.i2v`, no `target_audio_url`, `expect.audio: "required"`, prompt ends with `Diegetic ambience only, no music, no voices.` (+ `Mouth stays closed; no talking.` when a face is visible), `scene_video_audio: "native"`
+- [ ] Dialogue clips: `minimax.h3max.turbo.i2v` with `target_audio_url` = `tts_url` and `duration` = audio length rounded up; the prompt names every speaker by look and position immediately with that speaker's line — check who actually SPEAKS each line, not just who is mentioned last (the Kling-era EP4 lesson: a line placed after the wrong character's descriptor went to the wrong face); ends with the lips-only-while-speaking and no-stare sentences; `scene_video_audio: "native"`, `scene_video_lipsync: true`
+- [ ] Every speaking character used one MiniMax voice in every line (`tts_voices`); new picks recorded as `"source": "new"` for the post-approval bible update
+- [ ] No Kling clip, no `multi_prompt` / `voice_ids` / `shot_type` / `generate_audio` anywhere; no Avatar endpoint and no `clip_type: "avatar"`; no still scene
+- [ ] No lip-sync clip has its TTS laid over it again
 - [ ] Subtitles ASS events are clamped to dialogue scene windows; no bleed into action scenes or silence
 - [ ] fps normalized to 30 before concat
 - [ ] One ffmpeg pipeline, not layered
@@ -463,18 +490,20 @@ After explicit user approval, Manager uploads through its canonical run-scoped p
 ## Anti-patterns
 
 - ❌ Kling Avatar v2 for serial-drama.
-- ❌ External TTS as the primary serial-drama dialogue source. Dialogue voice comes from Kling I2V `voice_ids`.
+- ❌ Kling v3 Standard for any clip (`multi_prompt` + `voice_ids` + `generate_audio` is the retired serial-drama route), Kling `create-voice`, or TTS laid over a plain H3 Max clip as dialogue — dialogue is H3 lip-sync on our MiniMax TTS
+- ❌ A plain action clip on H3 Max Turbo, a lip-sync clip on H3 Max, or a silent `target_audio_url` on an action clip (this format keeps the clip's ambience)
 - ❌ Kokoro TTS, Kling Lipsync, ElevenLabs
-- ❌ `voice_id` hash instead of `voice` name
+- ❌ A character speaking in a different voice than its `tts_voice` / earlier lines, or two voices for one character in one episode
 - ❌ 1:1 square scenes (all serial-drama frames are 9:16)
 - ❌ character ref directly as scene image (each clip = its own PNG)
-- ❌ Generating `scene-K-end.png` for I2V — end frames forbidden (storyboarder.md §14.8); `end_image_url` + `multi_prompt` = Kling 422
+- ❌ Generating `scene-K-end.png` — end frames forbidden (storyboarder.md §14.8)
 - ❌ `-shortest` in FFmpeg
 - ❌ Closing all loops (at least 2 active)
 - ❌ Repeating hooks/cliffhangers from the last 8 episodes
-- ❌ Redoing clips that already work (each extra generation = $0.42+)
+- ❌ Redoing clips that already work (each extra generation = $0.21–0.83)
 - ❌ Layered assembly (breaks music and timing)
-- ❌ Padding dialogue clips with `tpad=stop_mode=clone` / freeze-last-frame to fake extra runtime inside a scene. Runtime comes from I2V durations. (This does NOT forbid the title-card freeze-frame interstitial between scene 1 and scene 2 — that's a distinct beat, not padding a clip's own duration.)
+- ❌ Laying a dialogue clip's `scene-K.mp3` over its lip-sync clip — its soundtrack already is that file, so the lines play twice
+- ❌ Padding dialogue clips with `tpad=stop_mode=clone` / freeze-last-frame to fake extra runtime inside a scene. Runtime comes from the clip lengths (dialogue: its audio). (This does NOT forbid the title-card freeze-frame interstitial between scene 1 and scene 2 — that's a distinct beat, not padding a clip's own duration.)
 - ❌ Title-card overlay window defaulted onto scene 2 (or any scene with `character_speech`) — always place it on scene 1's silent tail or as its own freeze-frame interstitial (see "Episode structure" above). Burned ROOM 1701 EP4 (2026-07-10).
 - ❌ Mid-episode title cards, brainrot tags, character name overlays (the episode-open title card is the one exception — see "Episode structure")
 - ❌ Long 10s dialogue clips for $0.04 savings (kills dynamics)
@@ -482,6 +511,6 @@ After explicit user approval, Manager uploads through its canonical run-scoped p
 - ❌ Referencing one character from two different ref asset paths across clips (face differs between adjacent clips)
 - ❌ Source ref whose visual style conflicts with the resolved `style_tags` (a mismatched-style source image is not overridden by text negatives — e.g. a photoreal ref will not be un-realistified by "NOT photorealistic")
 - ❌ `image_prompt` without the full `style_tags` prefix (off-style clip)
-- ❌ I2V clip without an anti-drift negative derived from `style_tags`; `multi_prompt` shot without a style anchor copied from `style_tags`
-- ❌ Ending a `multi_prompt` on a tight invented face close-up not present in the start frame (drifts realistic)
-- ❌ Launching Kling before the cross-asset pre-flight gate passes (dead ref / duplicate audio / wrong PNG — see `validation.md`)
+- ❌ H3 prompt without the style anchor from `style_tags`; any `negative_prompt` sent to H3
+- ❌ Asking one H3 clip for a cut or a tight invented face close-up not present in the start frame (drifts realistic)
+- ❌ Launching H3 before the cross-asset pre-flight gate passes (dead ref / duplicate audio / wrong PNG — see `validation.md`)

@@ -2,11 +2,11 @@
 
 You are the animator. Manager passes you one start PNG per scene, any format-required external audio, `action_description`, `facial_expression`, and the exact animation route declared by the format. **You write `motion_prompt` yourself** and never switch provider/model/endpoint after the run starts. Scenes the scenarist planned as `motion: "still"` get no paid clip: you render them locally for free (§2b).
 
-**Serial-drama override:** serial-drama uses Kling I2V for every clip, including dialogue. Do not call Kling Avatar v2 for serial-drama. Dialogue clips must use I2V `multi_prompt + voice_ids + generate_audio:true`.
+**Serial-drama override:** serial-drama is all-H3, like what-if-real-life. Action clips run on H3 Max `minimax.h3max.i2v` and keep their own ambience (`scene_video_audio: "native"`, no silent `target_audio_url`); dialogue clips run as H3 lip-sync on H3 Max Turbo `minimax.h3max.turbo.i2v` with the clip's uploaded dialogue audio (`tts_url`) as `target_audio_url` (§2a "H3 lip-sync", two-speaker prompt in `rules/formats/serial-drama.md`). Never Kling (`multi_prompt` / `voice_ids` / `generate_audio` is the retired serial-drama route) and never Kling Avatar v2.
 
-**Dual-style override:** `rules/formats/dual-style.md` contract `dual-style-v3` is the sole authority for dual-style motion and payload shape. Its synchronized measured forward walk is an intentional exception to the generic micro-motion preference below. Require one valid `comparison_mode`, the exact one-entry `multi_prompt + elements + generate_audio:true` payload for that mode, and the exact ≤400 UTF-8-byte motion template from the playbook. `source-vs-live-action` uses one element; `canonical-alternate` uses two. A dual-style storyboard with a non-walking `action_description`, missing/different contract or mode, or any static/subtle/legacy Pattern A/B branch is returned before generation.
+**Dual-style override:** `rules/formats/dual-style.md` contract `dual-style-h3` is the sole authority for dual-style motion and payload shape. Its synchronized measured forward walk is an intentional exception to the generic micro-motion preference below. Require one valid `comparison_mode`, the exact H3 Max face-reference payload for that mode (route `minimax.h3max.r2v`: `image_url` = scene PNG, `reference_image_urls` = the scene-derived headshot(s), §2a "H3 Max face reference"), and the exact ≤512 UTF-8-byte motion template from the playbook. `source-vs-live-action` uses one face reference; `canonical-alternate` uses two. A dual-style storyboard with a non-walking `action_description`, missing/different contract or mode (the Kling `dual-style-v3` included), or any static/subtle/legacy Pattern A/B branch is returned before generation.
 
-**Mandatory schema-v3 runner:** you resolve the tool, duration, audio setting and complete provider payload from the storyboard plus exact format playbook. The playbook declares the I2V route: H3 Max (`minimax.h3max.i2v`, §2a) or Kling v3 Standard (`kling.v3.standard.i2v`, §2); what-if-real-life dialogue additionally uses H3 Max Turbo lip-sync (`minimax.h3max.turbo.i2v`, §2a "H3 lip-sync"). Execute every runner-routed I2V request, on any route, only through schema-v3 `tools/kling_runner.py` (the name is historical; the runner is model-agnostic): pass the untouched payload and an explicit technical `expect`. Runner is format-agnostic and will not add, remove, validate semantically, or simplify `multi_prompt`, `voice_ids`, `elements`, or future provider fields. A new format using an existing route needs no runner change; a compatible new fal queue endpoint is registered in `tools/video_routes.json`. Direct fal HTTP, hand-written polling/download, and separate upload are reference-only.
+**Mandatory schema-v3 runner:** you resolve the tool, duration, audio setting and complete provider payload from the storyboard plus exact format playbook. The playbook declares the route: H3 Max (`minimax.h3max.i2v`, §2a) for plain clips, H3 Max Turbo lip-sync (`minimax.h3max.turbo.i2v`, §2a "H3 lip-sync") for what-if-real-life and serial-drama dialogue, H3 Max face reference (`minimax.h3max.r2v`, §2a) for dual-style; Kling v3 Standard (`kling.v3.standard.i2v`, §2) only where a playbook still names it. Execute every runner-routed I2V request, on any route, only through schema-v3 `tools/kling_runner.py` (the name is historical; the runner is model-agnostic): pass the untouched payload and an explicit technical `expect`. Runner is format-agnostic and will not add, remove, validate semantically, or simplify `multi_prompt`, `voice_ids`, `elements`, or future provider fields. A new format using an existing route needs no runner change; a compatible new fal queue endpoint is registered in `tools/video_routes.json`. Direct fal HTTP, hand-written polling/download, and separate upload are reference-only.
 
 **Core principle:** I2V (any model) animates only micro motion reliably. Any "epic" macro animation (walking, running, hits) → deformation. If `action_description` asks for macro motion — that's Scenarist's mistake, return to Manager.
 
@@ -25,24 +25,25 @@ Clip K | image_url (last 40 chars) | audio_url (last 40 chars) | hero | http_ima
 ```
 Confirm all http codes = 200 and hero names match before proceeding.
 
-For serial-drama, verify `scene_image_url` and every `voice_ids[]` URL instead of Avatar `audio_url`. If a serial-drama dialogue clip has a local voice file or missing `voice_ids`, return it to Manager.
+For serial-drama dialogue (H3 lip-sync), the gate above applies with `tts_url` as the audio: the clip's whole exchange, uploaded by Sound. If a serial-drama dialogue clip has only a local audio file, no `tts_url`, or still carries Kling `voice_ids` / `multi_prompt`, return it to Manager. For dual-style, check `scene_image_url` and every headshot URL the same way.
 
-**Serial-drama voice/identity gate — verify BEFORE submit.** For every dialogue I2V clip, print and check:
+**Serial-drama speaker/identity gate — verify BEFORE submit.** For every dialogue clip, print and check:
 ```
-Clip K | voice_1 character + physical descriptor | voice_2 character + physical descriptor | visible refs in scene image/image_urls | line owners
+Clip K | speaker 1 + physical descriptor + frame position + line | speaker 2 + physical descriptor + frame position + line | visible refs in scene image/image_urls | tts_url | TTS length → duration
 ```
 Hard stops:
-- A shot uses a bare name as the only identifier before `<<<voice_N>>>`.
-- The physical descriptor before `<<<voice_N>>>` does not match `voice_ids[N-1]`.
+- The prompt uses a bare name as the only identifier of a speaker.
+- A line in the prompt sits with the wrong speaker's descriptor (check who actually SPEAKS each `character_speech` line, not who is mentioned last), or the lines are out of `character_speech` order.
 - A speaking character is missing from the start frame or from the scene generation refs.
 - A visible important character is mentioned in the prompt but their character ref was not attached by Storyboarder.
-- A new speaking character enters mid-`multi_prompt` while using `voice_ids`; `voice_ids + elements` is forbidden, so split the scene instead.
-- A dialogue clip contains quoted speech but `generate_audio` is false/missing, `voice_ids` is missing, or the line has no `<<<voice_N>>>` tag.
+- More than two speakers in one clip, or a speaker who enters mid-clip (H3 has no `elements`): split the scene instead.
+- A dialogue clip contains quoted speech but has no `tts_url`, or its TTS is longer than 15 s.
 
 Pricing:
 - **MiniMax H3 Max I2V** (`minimax.h3max.i2v`; plain I2V route of formats whose playbook declares it) — $0.08/s at 768P (fal promo $0.048/s until 15 Oct 2026). Assume billing on the returned length: 5s ≈ $0.41, 3s ≈ $0.25, 10s ≈ $0.83. No audio switch: the price is the same with or without clip sound.
-- **MiniMax H3 Max Turbo lip-sync** (`minimax.h3max.turbo.i2v` plus `target_audio_url`; what-if-real-life dialogue only, never plain clips) — $0.04/s on the returned length: a 5 s exchange ≈ $0.21 (Kling Avatar v2: $0.28)
-- **Kling v3 Standard I2V** (`kling.v3.standard.i2v`; the route for `multi_prompt` / `voice_ids` / `elements` formats such as serial-drama and dual-style, and for every playbook that still declares it) — $0.084/s without audio (5s = $0.42, 10s = $0.84); $0.126/s with audio (5s = $0.63, 10s = $1.26)
+- **MiniMax H3 Max face reference** (`minimax.h3max.r2v`; dual-style only) — $0.08/s at 768P like H3 Max: 5 s ≈ $0.41 on the returned 5.184 s (Kling v3 Standard with audio: $0.63)
+- **MiniMax H3 Max Turbo lip-sync** (`minimax.h3max.turbo.i2v` plus `target_audio_url`; what-if-real-life and serial-drama dialogue only, never plain clips) — $0.04/s on the returned length: a 5 s exchange ≈ $0.21 (Kling Avatar v2: $0.28), a 7 s two-speaker exchange ≈ $0.30
+- **Kling v3 Standard I2V** (`kling.v3.standard.i2v`; no longer the clip route of any migrated format — redcon, item-story, character-story, in-game-pov, wild-documentary, what-if-real-life, top-list, fake-ad, serial-drama and dual-style are on H3; kept only where a playbook still names a Kling I2V clip, e.g. the fun-news / streettalk openers, and as historical reference for `multi_prompt` / `voice_ids` / `elements`) — $0.084/s without audio (5s = $0.42, 10s = $0.84); $0.126/s with audio (5s = $0.63, 10s = $1.26)
 - Kling 2.6 Pro I2V (format-selected route only) — $0.07/s without audio (5s = $0.35, 10s = $0.70); $0.14/s with audio (5s = $0.70, 10s = $1.40)
 - Kling Avatar v2 Standard — $0.056/s (5s = $0.28, 10s = $0.56)
 - Still shot (`motion: "still"`, local `tools/still_shot.py`, route id `local.still_shot`) — $0.00
@@ -69,13 +70,13 @@ From Manager:
 | `scene_video` | runner `output_path` (local MP4) | local MP4 path | absolute local MP4 path `$OUTPUT_DIR/scenes/scene-K/scene-K.mp4` (same style as runner paths) |
 | `scene_video_url` | runner `supabase_url` | permanent Supabase URL | `null` |
 | `scene_video_kind` | `"i2v"` | `"avatar"` | `"still"` |
-| `scene_video_route` | the route id used: `minimax.h3max.i2v`, `kling.v3.standard.i2v`, or `minimax.h3max.turbo.i2v` (H3 lip-sync clips only) | the Avatar endpoint, e.g. `fal-ai/kling-video/ai-avatar/v2/standard` | `"local.still_shot"` |
+| `scene_video_route` | the route id used: `minimax.h3max.i2v`, `minimax.h3max.turbo.i2v` (H3 lip-sync clips only), `minimax.h3max.r2v` (dual-style), or `kling.v3.standard.i2v` | the Avatar endpoint, e.g. `fal-ai/kling-video/ai-avatar/v2/standard` | `"local.still_shot"` |
 | `scene_video_audio` | `"native"` or `"none"` (rule below); always `"native"` for an H3 lip-sync clip | `"native"` | `"none"` |
 | `scene_video_lipsync` | `true` only for an H3 lip-sync clip (§2a "H3 lip-sync"); not written otherwise | — | — |
 | `still_render` | — | — | `{"sha256", "image_sha256", "frames"}` from the tool's JSON |
 | `motion_prompt` | written by you | written by you | not written |
 
-**`scene_video_audio` rule:** `"native"` when the format mixes the clip's own sound: in-game-pov, wild-documentary, what-if-real-life physical gags, H3 lip-sync dialogue (what-if-real-life), Avatar dialogue, and Kling `generate_audio: true` clips (serial-drama dialogue, dual-style). `"none"` otherwise: silent formats, still shots, Kling `generate_audio: false` clips. An H3 clip in a silent format is `"none"` even though H3 always returns a soundtrack. The Editor decides clip sound from this field, not from whether the file has an audio stream.
+**`scene_video_audio` rule:** `"native"` when the format mixes the clip's own sound: in-game-pov, wild-documentary, what-if-real-life physical gags, serial-drama action clips (ambience), dual-style (`minimax.h3max.r2v`, ambience), H3 lip-sync dialogue (what-if-real-life, serial-drama), Avatar dialogue, and Kling `generate_audio: true` clips. `"none"` otherwise: silent formats, still shots, Kling `generate_audio: false` clips. An H3 clip in a silent format is `"none"` even though H3 always returns a soundtrack. The Editor decides clip sound from this field, not from whether the file has an audio stream.
 
 Output type:
 - I2V: Kling audio follows the exact format payload (`generate_audio:true` must produce an audio stream; `false` produces none). H3 (Max and Max Turbo) always returns AAC 32 kHz stereo audio and has no audio switch. In both cases `scene_video_audio` is the contract for the Editor.
@@ -91,23 +92,23 @@ Output type:
 
 ## 1. One Avatar/I2V model per video
 
-All animated I2V clips of an episode use the playbook's one I2V route: H3 Max (`minimax.h3max.i2v`) or Kling v3 Standard (`kling.v3.standard.i2v`). Do not mix H3 and Kling I2V in the same episode, and never put a plain clip on H3 Max Turbo. The single exception to one route per episode: H3 Max Turbo lip-sync dialogue clips (`minimax.h3max.turbo.i2v`, §2a "H3 lip-sync") may sit next to H3 Max action clips where the playbook declares it (what-if-real-life), as Kling Avatar dialogue clips sit next to I2V action clips. Do not mix Kling Avatar v2 and HeyGen IV in the same episode. Do not mix Kling I2V v3 Standard and v2.6 Pro in the same episode. One model = one face/motion style. Mixing → visible jumps between scenes.
+All animated I2V clips of an episode use the playbook's one I2V route: H3 Max (`minimax.h3max.i2v`), H3 Max face reference (`minimax.h3max.r2v`, dual-style only) or Kling v3 Standard (`kling.v3.standard.i2v`, where a playbook still names it). Do not mix H3 and Kling I2V in the same episode, and never put a plain clip on H3 Max Turbo. The single exception to one route per episode: H3 Max Turbo lip-sync dialogue clips (`minimax.h3max.turbo.i2v`, §2a "H3 lip-sync") may sit next to H3 Max action clips where the playbook declares it (what-if-real-life, serial-drama), as Kling Avatar dialogue clips sit next to I2V action clips. Do not mix Kling Avatar v2 and HeyGen IV in the same episode. Do not mix Kling I2V v3 Standard and v2.6 Pro in the same episode. One model = one face/motion style. Mixing → visible jumps between scenes.
 
-**What-if-real-life is all-H3:** its action scenes run on H3 Max (`minimax.h3max.i2v`) and its dialogue scenes on H3 Max Turbo lip-sync (`minimax.h3max.turbo.i2v`, §2a "H3 lip-sync"); it has no Kling Avatar clips.
+**What-if-real-life and serial-drama are all-H3:** their action scenes run on H3 Max (`minimax.h3max.i2v`) and their dialogue scenes on H3 Max Turbo lip-sync (`minimax.h3max.turbo.i2v`, §2a "H3 lip-sync"); they have no Kling or Kling Avatar clips. **Dual-style is all-H3 too:** every clip runs on `minimax.h3max.r2v` (§2a "H3 Max face reference").
 
-Not a mix: Kling Avatar v2 dialogue clips next to the I2V action clips when the playbook declares both (the Kling Avatar formats), H3 Max Turbo lip-sync dialogue clips next to H3 Max action clips (what-if-real-life), and still scenes (§2b) — a still is not a model.
+Not a mix: Kling Avatar v2 dialogue clips next to the I2V action clips when the playbook declares both (the Kling Avatar formats), H3 Max Turbo lip-sync dialogue clips next to H3 Max action clips (what-if-real-life, serial-drama), and still scenes (§2b) — a still is not a model.
 
 **I2V model selection:** use the one route already selected by the format/Manager. A failure never authorizes switching to another model or route, and never turns the scene into a still.
 
-**Serial-drama and dual-style** stay all-Kling v3 Standard: they need `multi_prompt` / `voice_ids` / `elements`, which H3 does not have.
+**Serial-drama and dual-style moved off Kling** (Oct 2026 cost trials, Tests 8 and 9): their old `multi_prompt` / `voice_ids` / `elements` payloads (§5a) are historical and never a fallback.
 
-**Serial-drama:** one model means I2V only. If `format == "serial-drama"` and any clip points to `fal-ai/kling-video/ai-avatar/*`, stop and return to Manager.
+**Serial-drama:** if `format == "serial-drama"` and any clip points to `fal-ai/kling-video/ai-avatar/*` or to `kling.v3.standard.i2v`, stop and return to Manager.
 
 ---
 
 ## 2. Kling I2V — parameters and polling
 
-This section applies only when the playbook declares a Kling I2V route (serial-drama, dual-style, and every playbook that still declares `kling.v3.standard.i2v`). For H3 Max (and H3 Max Turbo lip-sync) see §2a; for still shots see §2b.
+This section applies only when a playbook still declares a Kling I2V route (`kling.v3.standard.i2v`; none of the ten formats moved to H3 does). For H3 Max (and H3 Max Turbo lip-sync, H3 Max face reference) see §2a; for still shots see §2b.
 
 ### Endpoint example (v3 Standard when selected by the format)
 
@@ -135,12 +136,12 @@ Body (minimum):
 Required:
 - `start_image_url` — start frame, **public Supabase URL** (not fal.ai temp). ⚠️ On Kling, NOT `image_url` — that is a deprecated Kling alias. (H3 is the opposite: it requires `image_url`; see §2a.)
 - Do not send `end_image_url` or `tail_image_url`; this pipeline never creates end frames.
-- `generate_audio: false` — Kling default for silent I2V (H3 has no such field). Exceptions: serial-drama dialogue I2V uses `generate_audio: true` with `voice_ids` and `multi_prompt`; action clips where atmospheric ambient sound is desired may use `generate_audio: true`.
-- **`generate_audio: true` — Kling can add background music/score, not just ambient/SFX, when a motion prompt reads as cinematic or dramatic.** When a format also mixes a separate music bed, use that format's exact anti-music clause verbatim; do not substitute a weaker generic phrase. For `dual-style-v3`, the mandatory ending is `DIEGETIC AMBIENCE ONLY. NO MUSIC: no beat, melody, instruments, score or soundtrack.` and the entire substituted prompt must remain ≤400 UTF-8 bytes.
+- `generate_audio: false` — Kling default for silent I2V (H3 has no such field). Exceptions: action clips where atmospheric ambient sound is desired may use `generate_audio: true` (the Kling-era serial-drama dialogue used it with `voice_ids` and `multi_prompt`; historical, §5a).
+- **`generate_audio: true` — Kling can add background music/score, not just ambient/SFX, when a motion prompt reads as cinematic or dramatic.** When a format also mixes a separate music bed, use that format's exact anti-music clause verbatim; do not substitute a weaker generic phrase. (The historical Kling `dual-style-v3` used `DIEGETIC AMBIENCE ONLY. NO MUSIC: no beat, melody, instruments, score or soundtrack.` within ≤400 UTF-8 bytes; `dual-style-h3` on H3 ends with its own plain clause, `rules/formats/dual-style.md`.)
 - `duration` — `"5"` or `"10"` (string, not number) on Kling. Per `storyboard.json`. (H3 takes a number; see §2a.)
 - `negative_prompt` (Kling only) tail `banding in blacks, posterization, harsh color shift, overexposed clipping` — color-fidelity guards. Kling drifts color/tone across a clip (lifts blacks, pushes green/magenta, clips bright FX); these cut the most common grading artifacts, especially on dark/space scenes and clips with bright light bursts. Borrowed from production T2V negative_prompt arrays.
 
-**`expect.min_width`/`min_height` for `kling_runner.py` jobs — use `600`/`1000`, not full-HD guesses.** Kling v3 Standard's real 9:16 output for this route is natively **716×1284**, not 1080×1920 (H3 Max and H3 Max Turbo return **768×1344**; the same `600`/`1000` minimums apply). An `expect` written against an assumed full-HD size (e.g. `min_width: 1000, min_height: 1700`) rejects a successfully completed, already-paid generation at local MP4 validation — the remote job shows `COMPLETED` but the runner state goes `FAILED` with `"MP4 dimensions do not meet expectation"`. This has burned real spend more than once (growtopia EP2/EP3, star-trek dual-style). Always default to the canonical example in `tools/SCRIPTS.md` (`min_width: 600, min_height: 1000`) for this route unless the format explicitly requires a different resolution. If it happens anyway: the paid `result_url` in the failed job's `state.json` is usually still fetchable (fal URLs are typically immutable/long-cached) — download and upload it manually rather than paying for a second generation, since the runner has no safe reset for a claimed `output_path`.
+**`expect.min_width`/`min_height` for `kling_runner.py` jobs — use `600`/`1000`, not full-HD guesses.** Kling v3 Standard's real 9:16 output for this route is natively **716×1284**, not 1080×1920 (H3 Max, H3 Max Turbo and H3 Max face reference return **768×1344**; the same `600`/`1000` minimums apply). An `expect` written against an assumed full-HD size (e.g. `min_width: 1000, min_height: 1700`) rejects a successfully completed, already-paid generation at local MP4 validation — the remote job shows `COMPLETED` but the runner state goes `FAILED` with `"MP4 dimensions do not meet expectation"`. This has burned real spend more than once (growtopia EP2/EP3, star-trek dual-style). Always default to the canonical example in `tools/SCRIPTS.md` (`min_width: 600, min_height: 1000`) for this route unless the format explicitly requires a different resolution. If it happens anyway: the paid `result_url` in the failed job's `state.json` is usually still fetchable (fal URLs are typically immutable/long-cached) — download and upload it manually rather than paying for a second generation, since the runner has no safe reset for a claimed `output_path`.
 
 ### Polling — base path
 
@@ -169,7 +170,7 @@ H3 Max uses a different base: `https://queue.fal.run/minimax/h3-max` (H3 Max Tur
 
 ## 2a. H3 Max (`minimax.h3max.i2v`)
 
-Plain image-to-video for formats whose playbook declares this route: one single prompt per clip from one start frame. A plain clip whose sound is discarded (`scene_video_audio: "none"`) adds one field, a **silent** `target_audio_url` ("Silent `target_audio_url`" below). Dialogue clips of a format that declares H3 lip-sync (what-if-real-life) use **H3 Max Turbo** (`minimax.h3max.turbo.i2v`) with the same payload plus one extra field, `target_audio_url` ("H3 lip-sync" below). H3 Max Turbo is never used for plain clips: in the cost trials (Test 6) its plain clips made characters open their mouths as if talking while the narrator spoke, plus some weird animations, and the user chose H3 Max (Test 6b).
+Plain image-to-video for formats whose playbook declares this route: one single prompt per clip from one start frame. A plain clip whose sound is discarded (`scene_video_audio: "none"`) adds one field, a **silent** `target_audio_url` ("Silent `target_audio_url`" below). Dialogue clips of a format that declares H3 lip-sync (what-if-real-life, serial-drama) use **H3 Max Turbo** (`minimax.h3max.turbo.i2v`) with the same payload plus one extra field, `target_audio_url` ("H3 lip-sync" below). H3 Max Turbo is never used for plain clips: in the cost trials (Test 6) its plain clips made characters open their mouths as if talking while the narrator spoke, plus some weird animations, and the user chose H3 Max (Test 6b). Dual-style clips use the H3 Max **reference-to-video** endpoint (`minimax.h3max.r2v`): the start frame plus the scene-derived face reference(s) ("H3 Max face reference" below).
 
 ### Route
 
@@ -236,11 +237,11 @@ $0.08/s at 768P (fal promo $0.048/s until 15 Oct 2026). Assume billing on the re
 
 ### What H3 does not have
 
-No `negative_prompt`, `generate_audio` (no audio switch), `multi_prompt`, `voice_ids`, `elements`, `shot_type`, `end_image_url` / `tail_image_url`, or `++emphasis++`. Never send these to H3. A clip that needs any of them belongs to a format that declares Kling v3 Standard; an H3 format never borrows Kling for it mid-run. A multi-beat clip on an H3 format (for example redcon) is written as one staged prompt (`first …, then …`) in a 5–7 s clip, as its playbook says; that pattern is untested on H3, so flag it in your report. `target_audio_url` is sent only on H3 Max clips whose sound is discarded (a silent track, below) and on H3 lip-sync dialogue clips (the scene's TTS, below).
+No `negative_prompt`, `generate_audio` (no audio switch), `multi_prompt`, `voice_ids`, `elements`, `shot_type`, `end_image_url` / `tail_image_url`, or `++emphasis++`. Never send these to H3. An H3 format never borrows Kling for them mid-run: a multi-shot exchange becomes one H3 lip-sync clip (serial-drama), a character face-lock becomes the H3 Max face reference (dual-style), and a character who enters mid-clip gets a separate clip with its own start frame. `reference_image_urls` and `aspect_ratio` exist only on the face-reference route (`minimax.h3max.r2v`). A multi-beat clip on an H3 format (for example redcon) is written as one staged prompt (`first …, then …`) in a 5–7 s clip, as its playbook says; that pattern is untested on H3, so flag it in your report. `target_audio_url` is sent only on H3 Max clips whose sound is discarded (a silent track, below) and on H3 lip-sync dialogue clips (the scene's TTS, below); never on a face-reference clip.
 
 ### Silent `target_audio_url` (every H3 Max clip whose sound is discarded)
 
-**Rule:** every plain H3 Max clip (`minimax.h3max.i2v`) whose clip sound is discarded (`scene_video_audio: "none"`) carries a **silent `target_audio_url` of the requested `duration`**. Clips whose own sound is used (`scene_video_audio: "native"`: wild-documentary, in-game-pov, what-if-real-life physical gags) do **not** get it: they keep H3's soundtrack and their sound clause (`No music, no voices.` or the format's ambient-only wording). The `Mouth stays closed; no talking.` prompt rule (Prompt rules above) stays on every clip with a visible face, silent track or not. H3 lip-sync clips keep their TTS `target_audio_url` ("H3 lip-sync" below), unchanged.
+**Rule:** every plain H3 Max clip (`minimax.h3max.i2v`) whose clip sound is discarded (`scene_video_audio: "none"`) carries a **silent `target_audio_url` of the requested `duration`**. Clips whose own sound is used (`scene_video_audio: "native"`: wild-documentary, in-game-pov, what-if-real-life physical gags, serial-drama action clips, and every dual-style face-reference clip) do **not** get it: they keep H3's soundtrack and their sound clause (`No music, no voices.` or the format's ambient-only wording). The `Mouth stays closed; no talking.` prompt rule (Prompt rules above) stays on every clip with a visible face, silent track or not. H3 lip-sync clips keep their TTS `target_audio_url` ("H3 lip-sync" below), unchanged.
 
 **Why:** H3 always writes its own soundtrack and invents speech for a visible face, so silent characters move their lips, even with `Mouth stays closed; no talking.` in the prompt. When H3 is given an audio track through `target_audio_url`, it moves the lips to that track (Test 4: the speaker's lips stayed closed during the silent part of the TTS); a silent track gives it nothing to speak. **Evidence (Test 6b, `trials/2026-10-cost-trials/`):** 30 H3 Max clips in silent-clip scenes were sent with a silent `target_audio_url` (a base64 data URI of a silent MP3); all 30 came back with a silent soundtrack (about −91 dB), and the user approved H3 Max for production.
 
@@ -277,9 +278,9 @@ python3 tools/kling_runner.py --preflight "$JOB"
 
 ### H3 lip-sync (dialogue on H3 Max Turbo, `minimax.h3max.turbo.i2v`)
 
-Lip-synced dialogue on the H3 Max Turbo route `minimax.h3max.turbo.i2v` (the plain H3 payload plus `target_audio_url`), for formats whose playbook declares it: today only the **what-if-real-life** dialogue scenes. In the cost trials (Tests 4 and 4b, `trials/2026-10-cost-trials/`) the user judged H3 lip-sync with the no-stare prompt below on par with or slightly better than Kling Avatar v2, at $0.04/s against $0.056/s. The Kling Avatar formats (news, fun-news, special-report, streettalk, gameplay-ai-avatar) stay on Kling Avatar v2 (§6–§7) until each has passed one pilot; never use H3 lip-sync in a format whose playbook does not declare it. This is the only use of H3 Max Turbo; lip-sync on H3 Max (`minimax.h3max.i2v`) is untested, so never send a lip-sync job there (the silent `target_audio_url` above is not lip-sync: it carries no speech).
+Lip-synced dialogue on the H3 Max Turbo route `minimax.h3max.turbo.i2v` (the plain H3 payload plus `target_audio_url`), for formats whose playbook declares it: the **what-if-real-life** dialogue scenes (one on-screen speaker) and the **serial-drama** dialogue clips (two on-screen speakers, "Serial-drama two-speaker prompt" below). In the cost trials (Tests 4 and 4b, `trials/2026-10-cost-trials/`) the user judged H3 lip-sync with the no-stare prompt below on par with or slightly better than Kling Avatar v2, at $0.04/s against $0.056/s; Test 9 re-made a serial-drama episode with two-speaker lip-sync clips (3/3 OK, the returned soundtrack was the TTS file, lag 0) and the user chose it over Kling native voices. The Kling Avatar formats (news, fun-news, special-report, streettalk, gameplay-ai-avatar) stay on Kling Avatar v2 (§6–§7) until each has passed one pilot; never use H3 lip-sync in a format whose playbook does not declare it. This is the only use of H3 Max Turbo; lip-sync on H3 Max (`minimax.h3max.i2v`) is untested, so never send a lip-sync job there (the silent `target_audio_url` above is not lip-sync: it carries no speech).
 
-**Precondition — TTS uploaded first.** Sound must already have uploaded the scene's TTS file to Supabase and written `tts_url`, exactly as for Avatar (for what-if `dialogue-offscreen` this is the silence-padded `scene-K.mp3`: the whole dialogue exchange in one file). Before writing the job, run the Avatar pre-flight gate (top of this file) on `tts_url` and `scene_image_url`: both must return 200. A missing `tts_url` or a non-200 code → STOP and return to Manager; never re-upload, substitute a file or use a local path. The runner additionally checks every payload URL before submit.
+**Precondition — TTS uploaded first.** Sound must already have uploaded the scene's TTS file to Supabase and written `tts_url`, exactly as for Avatar (for what-if `dialogue-offscreen` this is the silence-padded `scene-K.mp3`: the whole dialogue exchange in one file; for serial-drama it is the clip's `scene-K.mp3` with every line in order, 0.2 s lead-in and 0.3 s gaps, `rules/roles/sound.md` §5a). Before writing the job, run the Avatar pre-flight gate (top of this file) on `tts_url` and `scene_image_url`: both must return 200. A missing `tts_url` or a non-200 code → STOP and return to Manager; never re-upload, substitute a file or use a local path. The runner additionally checks every payload URL before submit.
 
 **Payload — exact field set, nothing else:**
 
@@ -295,18 +296,18 @@ Lip-synced dialogue on the H3 Max Turbo route `minimax.h3max.turbo.i2v` (the pla
 ```
 
 - `target_audio_url` — the scene's `tts_url` (the same file the Avatar route would receive as `audio_url`).
-- `duration` — a **number**: the TTS file's length rounded **up** to 0.1 s (4.70 s → `4.8`, 4.04 s → `4.1`), not `duration_sec`. Measure the uploaded file. If the result is above 15 s (H3's maximum), do not submit: return the scene to Manager to shorten the line.
+- `duration` — a **number**: the TTS file's length rounded **up** to 0.1 s (4.70 s → `4.8`, 4.04 s → `4.1`), not the Scenarist's planned `duration_sec` (in serial-drama, Sound has already written this value as the clip's `duration_sec`; if the two differ, use the measured one and report it). Measure the uploaded file. If the result is above 15 s (H3's maximum), do not submit: return the scene to Manager to shorten the line.
   ```bash
   TTS_DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$TTS_URL")
   DURATION=$(python3 -c 'import math,sys; print(math.ceil(round(float(sys.argv[1]) * 10, 6)) / 10)' "$TTS_DUR")
   ```
 - `expect` — as in §2a with `duration_seconds` = that `duration`, `duration_tolerance_seconds: 0.8`, `audio: "required"`, `min_bytes: 100000`, `min_width: 600`, `min_height: 1000`, `orientation: "portrait"`. Template: `tools/examples/minimax-h3-max-turbo-lipsync.job.json`.
 
-**Measured (Tests 4/4b, 9/9 clips, no refusals):**
-- H3 rounds the length up further and pads the audio with silence: 4.8 → 5.184 s, 4.1 → 4.48 s. Valid within the tolerance; not a re-roll reason, and you do not trim it.
+**Measured (Tests 4/4b and 9, 12/12 clips, no refusals):**
+- H3 rounds the length up further and pads the audio with silence: 4.8 → 5.184 s, 4.1 → 4.48 s, 6.7 → 7.328 s, 7.5 → 8.032 s, 9.2 → 9.44 s. Valid within the tolerance; not a re-roll reason, and you do not trim it.
 - The returned soundtrack **is the TTS file itself** (cross-correlation 1.000, lag 0), so the series voices are unchanged.
 - Otherwise the output is as in §2a (768×1344, 24 fps, AAC 32 kHz stereo).
-- The trial stills were framed as for Avatar (medium close-up, off-screen customer back to camera or out of frame); closer framing is untested.
+- The what-if trial stills were framed as for Avatar (medium close-up, off-screen customer back to camera or out of frame); the serial-drama trial stills were medium two-shots with both speakers' faces visible. Closer framing is untested.
 
 **Prompt rules (tested in Test 4b).** Build the prompt from the scene's `facial_expression` and `action_description` — behaviour before, during and after the line, as in §7 "Avatar motion_prompt" — and the playbook's dialogue rules (who speaks, the off-screen voice, lips closed while the other voice speaks). Then:
 1. Remove every phrase that locks the gaze or the head: `unblinking`, `eyes locked on`, `eyes steady on`, `facing the camera head-on`, `holds still` (and §7's `Steady eye contact with camera`).
@@ -319,9 +320,51 @@ Example (Test 4b, scene 3, 483 bytes):
 Lips stay closed and still in the opening silence; eyes lift from the portafilter to the customer, brows draw together slightly in concern. Lips close after the line. He does not stare into the lens: his gaze rests on the off-screen customer just beside the camera and drifts naturally between phrases, with small, relaxed head movements throughout. Data speaks the line "You are four minutes late." with lips in sync with the audio; lips closed while the off-screen customer speaks.
 ```
 
+**Serial-drama two-speaker prompt (tested in Test 9).** Both speakers are on screen and their lines are in one TTS file, so the prompt names each speaker by look and position (never by name), in the order of the TTS:
+1. Open with the condensed style anchor and the location light (`rules/formats/serial-drama.md` "Style-hold"), then `A <speaker A look>, <position>; a <speaker B look>, <position>.`
+2. `The <A> speaks first: "<line 1>" Then the <B> answers: "<line 2>"` — the `character_speech` lines verbatim with their own final punctuation inside the quotes (no extra period after a closing quote), in order; each line directly with its own speaker's role word.
+3. `Each character's lips move only while they speak and stay closed otherwise.`
+4. The two-character no-stare sentence: `They do not stare into the lens: their gaze rests on each other and drifts naturally, with small relaxed head movements.`
+5. No gaze/head-lock phrases, no music/voice clause; ≤512 UTF-8 bytes (Test 9: 495–508 bytes, so keep descriptors short).
+
+A one-speaker serial-drama clip writes `The <A> speaks: "<line>"` and keeps the other visible character's lips closed; a clip with more than two lines lists them in order. Both are untested on H3: flag them in your report. Example and exact template: `rules/formats/serial-drama.md` Animator brief; job template `tools/examples/minimax-h3-max-turbo-serial-dialogue.job.json` (the Test 9 scene 1 job).
+
 **Write-back:** as for any runner job (`scene_video` = `output_path`, `scene_video_url` = `supabase_url`, `motion_prompt` = the lip-sync prompt), plus `scene_video_kind: "i2v"`, `scene_video_route: "minimax.h3max.turbo.i2v"`, `scene_video_audio: "native"` (the clip's audio is the dialogue) and **`scene_video_lipsync: true`**, so the Editor knows the clip already carries the scene's speech: it uses the clip's audio, never lays the TTS over it again, and applies the H3 trim, not Avatar's TTS trim (§10). Do not trim, speed up or remux the clip yourself.
 
-**Failure and cost:** a lip-sync clip is an ordinary H3 runner job: runner state rules, no switch to Kling Avatar, to H3 Max, to TTS over a plain I2V clip, or to a still; a refusal is rephrased per §4 "Kling content filter". Report it at $0.04/s on the returned length (5.184 s ≈ $0.21; Kling Avatar v2: $0.28 per 5 s), on its own cost line.
+**Failure and cost:** a lip-sync clip is an ordinary H3 runner job: runner state rules, no switch to Kling Avatar, to Kling I2V `voice_ids`, to H3 Max, to TTS over a plain I2V clip, or to a still; a refusal is rephrased per §4 "Kling content filter". Report it at $0.04/s on the returned length (5.184 s ≈ $0.21; Kling Avatar v2: $0.28 per 5 s), on its own cost line.
+
+### H3 Max face reference (dual-style, `minimax.h3max.r2v`)
+
+Dual-style only (`rules/formats/dual-style.md`, contract `dual-style-h3`, which owns the exact templates and payload). H3 Max's **reference-to-video** endpoint takes the scene still as the start frame plus the scene-derived frontal headshot(s) as face references, so the photoreal face stays locked during the synchronized walk; it replaces Kling `elements` + `multi_prompt`. Tested in Test 8 (`trials/2026-10-cost-trials/`): 6/6 trial clips OK (3 of them on this route), the endpoint accepted `image_url` together with `reference_image_urls`, and the user chose this variant over start-frame-only H3 Max.
+
+| | |
+|---|---|
+| Route id | `minimax.h3max.r2v` (registered in `tools/video_routes.json`) |
+| Submit | `https://queue.fal.run/minimax/h3-max/reference-to-video` |
+| Poll base | `https://queue.fal.run/minimax/h3-max` (the same base as H3 Max I2V) |
+| Result path | `video.url` |
+| Execution | schema-v3 `tools/kling_runner.py` only; template `tools/examples/minimax-h3-max-r2v-face-ref.job.json` |
+
+**Payload — exact field set, nothing else:**
+
+```json
+"payload": {
+  "prompt": "<the playbook's locked walk template; starts with the face-reference sentence>",
+  "image_url": "<scene_image_url: the start frame>",
+  "reference_image_urls": ["<headshot_url>"],
+  "aspect_ratio": "9:16",
+  "duration": 5,
+  "resolution": "768P",
+  "prompt_expansion_mode": "disabled"
+}
+```
+
+- `reference_image_urls` — the permanent Supabase URL(s) of the frontal headshot(s) only (one in `source-vs-live-action`; original then alternate in `canonical-alternate`, untested). Never the scene PNG: that is `image_url`.
+- The prompt opens with `The photoreal woman/man on the right has exactly the face in Image 1; keep it unchanged.` and ends with `Diegetic ambience only, no music. Mouth stays closed; no talking.`; ≤512 UTF-8 bytes; no `@Element`, `negative_prompt` or `++`.
+- No `target_audio_url` (neither TTS nor silent: the clip's ambience is used), no Kling fields.
+- `expect`: `duration_seconds: 5`, `duration_tolerance_seconds: 0.8`, `audio: "required"`, `min_bytes: 100000`, `min_width: 600`, `min_height: 1000`, `orientation: "portrait"`. Measured: 768×1344, 5.184 s, AAC audio.
+- Write-back: `scene_video_kind: "i2v"`, `scene_video_route: "minimax.h3max.r2v"`, `scene_video_audio: "native"`. The Editor applies the H3 trim (route starts with `minimax.`).
+- Cost: $0.08/s on the returned length (5.184 s ≈ $0.41), reported like H3 Max clips. Failure: runner state rules; never switch to Kling, to plain H3 Max or to a still.
 
 ---
 
@@ -401,7 +444,7 @@ Treat every I2V model (Kling and H3 alike) as **pose animation**, not physics si
 - Movement from point A to point B
 - Falls, flying
 - Any active physical actions with contact
-- Kling `generate_audio: true` without `voice_ids` for dialogue — voice will not generate correctly. Serial-drama dialogue is allowed only with `voice_ids` and `multi_prompt`.
+- Kling `generate_audio: true` without `voice_ids` for dialogue — voice will not generate correctly. Spoken dialogue on H3 is only H3 lip-sync (§2a) with an uploaded TTS file; never ask a plain clip to "speak".
 - **Mouth animation (open/close) in I2V clips** — if `clip_type: action` and the character is NOT speaking by the story, the mouth must not move. On Kling, add to negative_prompt: `"mouth movement, talking, lip movement, opening mouth"`; on H3 (no negative_prompt), end the prompt with `Mouth stays closed.` as one of its two constraint sentences (§2a), and when the clip's sound is discarded also send the silent `target_audio_url` (§2a "Silent `target_audio_url`"). Without it Kling sometimes animates the mouth of a silent character — looks like a bug. Exception: if `action_description` has the character screaming, yawning, or otherwise explicitly moving the mouth
 - **Front-body hand actions on a back-facing character** — when the character's back is turned to camera and `motion_prompt` describes a hand action in front of their body (e.g. "hand pressing against chest", "hand reaching forward"), Kling physically bends the arm backward to show the gesture toward camera → anatomically broken movement. **Rule:** for back-facing poses, `motion_prompt` may only describe what is visible from behind — posture shifts, shoulder movement, hair/cape in wind. Front-body hand gestures must be cut. If the hand action is essential to the scene's emotion, the shot must be reframed (profile or facing camera) so Kling can animate it naturally.
 
@@ -457,7 +500,7 @@ The I2V model (Kling or H3) **does not understand** character names, motivations
 - ❌ Literature: "the weight of command presses on his shoulders" → zero visual
 - ❌ Passive freeze phrases: "remains still", "holds position", "stays motionless", "does not move", "freezes in place" — this reads as a dead frame; the model renders it as static. Every element in frame should be doing something every second.
 
-For serial-drama dialogue, this applies to `multi_prompt` shots too: names may appear only in your internal mapping table, not as the model-facing identifier. The model-facing prompt must identify people by visible traits and position: clothing, hair, build, accessories, frame side, current action.
+For serial-drama dialogue, this applies to the lip-sync prompt too: names may appear only in your internal mapping table, not as the model-facing identifier. The model-facing prompt must identify people by visible traits and position: clothing, hair, build, accessories, frame side, current action.
 
 ### Mandatory
 
@@ -676,7 +719,7 @@ Every I2V request uses one start frame (`start_image_url` on Kling, `image_url` 
 
 ## 5a. Kling I2V `multi_prompt` — single call, multiple shots
 
-**Kling only.** Everything in §5a (`multi_prompt`, `shot_type`, `voice_ids`, `elements`, multi-call chaining) exists only on Kling. Formats that need it declare Kling v3 Standard (serial-drama, dual-style). H3 (Max and Max Turbo) has none of these fields: on an H3 format, write a multi-beat clip (for example redcon) as one staged single prompt (`first …, then …`) per §2a.
+**Kling only — reference for playbooks that still declare Kling I2V.** Everything in §5a (`multi_prompt`, `shot_type`, `voice_ids`, `elements`, multi-call chaining) exists only on Kling. Serial-drama and dual-style used it until Oct 2026 and are now on H3 (serial-drama dialogue = H3 lip-sync, dual-style face lock = H3 Max face reference, §2a); the serial-drama and dual-style notes below are historical. H3 (Max, Max Turbo and the face-reference route) has none of these fields: on an H3 format, write a multi-beat clip (for example redcon) as one staged single prompt (`first …, then …`) per §2a.
 
 Kling v3 (`standard`, `pro`, `4k`) `image-to-video` supports a `multi_prompt` field that produces one continuous MP4 with N sequential shots from a single `start_image_url`. Use this for **training montages, multi-shot action sequences, dance loops, transformations** — anything that would otherwise require N separate I2V calls with chaining.
 
@@ -686,7 +729,7 @@ Kling v3 (`standard`, `pro`, `4k`) `image-to-video` supports a `multi_prompt` fi
 - **Max 6 shots** per call.
 - Each shot `duration`: enum string `"1"`–`"15"`. Sum of shot durations must equal top-level `duration`.
 - For sequences > 15s: split into N calls and concat (see "Multi-call chaining" below).
-- **Each shot `prompt` ≤512 serialized UTF-8 bytes (hard Kling limit), not Unicode characters.** fal.ai validates this at deferred compute, so an over-limit shot can pass submit and fail with a 422 in `detail` at result fetch. Measure `len(prompt.encode("utf-8"))` before preflight; an exact format may impose a lower ceiling (`dual-style-v3`: ≤400 bytes).
+- **Each shot `prompt` ≤512 serialized UTF-8 bytes (hard Kling limit), not Unicode characters.** fal.ai validates this at deferred compute, so an over-limit shot can pass submit and fail with a 422 in `detail` at result fetch. Measure `len(prompt.encode("utf-8"))` before preflight; an exact format may impose a lower ceiling (the historical Kling `dual-style-v3` used ≤400 bytes).
 - **Plural human nouns in a shot prompt = clones.** A shot that says `four figures advance`, `the crew freezes`, `silhouettes approach` against a start frame anchored to one character → Kling replicates that face across the frame. Describe a specific named subject + position, or `a single blurred silhouette`; never a plural crowd noun (mirror of `storyboarder.md §11`).
 
 ### Body — strict rules
@@ -696,12 +739,12 @@ Kling v3 (`standard`, `pro`, `4k`) `image-to-video` supports a `multi_prompt` fi
 - **`end_image_url`: FORBIDDEN with `multi_prompt`.** Multi-shot mode does not support end-frame anchoring.
 - `shot_type`: `"customize"` (you define the shot list; default) or `"intelligent"` (model picks shot boundaries).
 - `generate_audio: false` for silent/action `multi_prompt`.
-- `generate_audio: true` for serial-drama dialogue `multi_prompt` with `voice_ids`.
+- `generate_audio: true` for native-voice dialogue `multi_prompt` with `voice_ids` (the historical serial-drama route).
 - `negative_prompt`: standard I2V negatives apply.
-- Serial-drama dialogue hard limits: max 2 `voice_ids` per request, each shot prompt ≤512 serialized UTF-8 bytes, no `elements` together with `voice_ids`. A series may have 3+ reusable voices; the request-local array defines the mapping (`voice_ids[0]` = `<<<voice_1>>>`, `voice_ids[1]` = `<<<voice_2>>>`).
+- Kling dialogue hard limits (historical serial-drama route): max 2 `voice_ids` per request, each shot prompt ≤512 serialized UTF-8 bytes, no `elements` together with `voice_ids`. A series may have 3+ reusable voices; the request-local array defines the mapping (`voice_ids[0]` = `<<<voice_1>>>`, `voice_ids[1]` = `<<<voice_2>>>`).
 - Do not force all dialogue shots to 3s. Use the Scenarist timing: 2–3s default, 4s for a real phrase/acting need, total dialogue clip target 6–10s.
 - Before every `<<<voice_N>>>`, write the physical descriptor of the speaker in the same sentence or immediately previous clause. This prevents the wrong visible person from receiving the line.
-- For serial-drama dialogue I2V, use the reusable supplied voice IDs/refs for established characters. Do not substitute a new character voice because a URL failed; stop and return to Manager. This does not apply to formats or tracks where Sound is explicitly generating new TTS/VO.
+- For Kling native-voice dialogue (historical serial-drama route), use the reusable supplied voice IDs/refs for established characters. Do not substitute a new character voice because a URL failed; stop and return to Manager. This does not apply to formats or tracks where Sound is explicitly generating new TTS/VO.
 
 Example body (5 shots × 3s = 15s):
 
@@ -722,7 +765,7 @@ Example body (5 shots × 3s = 15s):
 }
 ```
 
-Serial-drama dialogue body:
+Native-voice dialogue body (historical Kling serial-drama route; serial-drama now uses H3 lip-sync, §2a):
 
 ```json
 {
@@ -763,7 +806,7 @@ Serial-drama dialogue body:
 - `elements` is request-level, not shot-level. `@ElementN` is called from `prompt` in any shot.
 - Video-element — only 1 per request (`video_url` + optional `voice_id`).
 - All URLs must be permanent Supabase, NOT fal.media.
-- Style-anchor and anti-photoreal negative still go in EVERY shot — an element does not override the drift rules (`serial-drama.md`).
+- Style-anchor and anti-photoreal negative still go in EVERY shot — an element does not override the drift rules.
 - **An element anchors the WHOLE reference image, not just the face — costume/state included.** Pick the reference to match the character's IN-STORY state for this exact scene, not just "the canonical character sheet." Burned in EP13 star-trek-airlock (2026-07-14): a mirror-double character needed to appear disguised in a stolen uniform for a specific scene; the canonical character sheet (his own default uniform) was used as `frontal_image_url` — Kling correctly anchored his face but also faithfully rendered his own uniform, silently dropping the disguise the story required, even though the shot's text prompt described the disguise. Fix: crop/use an already-rendered frame of the character in the correct in-scene state (e.g. a later scene's start frame or output) as `frontal_image_url` when the canonical sheet doesn't match this scene's costume/state, keeping the canonical sheet only as a secondary `reference_image_urls` entry for face-fidelity backup.
 - **No `voice_ids` on the clip is what unlocks `elements`, and this is easy to miss.** `elements + voice_ids` together is forbidden (see hard rule above), so a silent/action clip with `generate_audio:false` is exactly the case where `elements` is available and should be considered for reliably introducing a character that isn't in the start frame — don't default to describing them by text alone just because a previous attempt in the same episode used voice_ids and couldn't use elements.
 
@@ -937,7 +980,7 @@ Eyes narrow before speaking, brows furrow slightly. Steady eye contact with came
 Avatar v2 = $0.28 per 5s, Kling I2V = $0.42–$0.70 per 5s, H3 Max I2V ≈ $0.41 per 5s, H3 Max Turbo lip-sync ≈ $0.21 per 5s. If generation fails with "invalid url" due to expired fal.ai temp URL — money is already spent.
 
 **Before each paid video call (Kling or H3):**
-1. Start image (`start_image_url` on Kling, `image_url` on H3 and Avatar) — uploaded to Supabase Storage, public URL
+1. Start image (`start_image_url` on Kling, `image_url` on H3 and Avatar) and, on the dual-style face-reference route, every `reference_image_urls` headshot — uploaded to Supabase Storage, public URL
 2. `audio_url` (for Avatar) or `target_audio_url` (for H3 lip-sync) — the TTS uploaded to Supabase Storage by Sound, public URL. The silent `target_audio_url` of an H3 Max clip whose sound is discarded is a local data URI from `tools/silent_audio.py`, not uploaded (§2a)
 3. Verify `curl -I` that URLs return 200
 
@@ -976,9 +1019,15 @@ Clip 4 (still local.still_shot): image=scenes/scene-4/scene-4.png | effect=pull-
 
 On a Kling I2V format the I2V rows show `kling.v3.standard.i2v` and `generate_audio=true|false` instead; one episode never has both I2V routes.
 
-An H3 lip-sync dialogue row (what-if-real-life; §2a "H3 lip-sync"; route `minimax.h3max.turbo.i2v`, the one allowed neighbour of H3 Max rows) shows the image, the TTS and the line:
+An H3 lip-sync dialogue row (what-if-real-life, serial-drama; §2a "H3 lip-sync"; route `minimax.h3max.turbo.i2v`, the one allowed neighbour of H3 Max rows) shows the image, the TTS and the line(s):
 ```
 Clip 2 (I2V lip-sync minimax.h3max.turbo.i2v): image=supabase.co/.../scene-2.png | target_audio=supabase.co/.../clip-2.mp3 | text="This is not a beverage." | duration=4.8 (TTS 4.70 s) | expect.audio=required | scene_video_audio=native | lipsync=true
+Clip 1 (I2V lip-sync minimax.h3max.turbo.i2v, serial-drama): image=supabase.co/.../scene-1.png | target_audio=supabase.co/.../clip-1.mp3 | lines=engineer right "Captain, Starfleet…" → captain left "Who signed it?" | duration=6.7 (TTS 6.63 s) | expect.audio=required | scene_video_audio=native | lipsync=true
+```
+
+A dual-style row (§2a "H3 Max face reference") shows the start frame and the headshot(s):
+```
+Clip 1 (I2V face-ref minimax.h3max.r2v): image=supabase.co/.../scene-1.png | refs=supabase.co/.../scene-1-headshot.png | duration=5 | expect.audio=required | scene_video_audio=native
 ```
 
 Verify:
@@ -1069,14 +1118,15 @@ After each paid generation (Kling or H3; runner jobs already validate against `e
 - [ ] All files > 100 KB, ffprobe shows correct duration (H3 within its 0.8 s tolerance; stills within ±0.05 s)
 - [ ] All clips passed programmatic validation (filesize > 100KB, ffprobe duration correct, video stream present)
 - [ ] Every scene has `scene_video`, `scene_video_url` (`null` only for stills), `scene_video_kind`, `scene_video_route` and `scene_video_audio`; every still scene has `still_render` and no runner job
-- [ ] Serial-drama: all clips are I2V; dialogue I2V clips have embedded audio stream from Kling `generate_audio:true`
-- [ ] Serial-drama dialogue: every voice tag was checked against voice index, line owner, physical descriptor, and visible refs before submit
+- [ ] Serial-drama: action clips on `minimax.h3max.i2v` with `expect.audio: "required"`, no `target_audio_url`, `scene_video_audio: "native"`; dialogue clips on `minimax.h3max.turbo.i2v` as H3 lip-sync (below); no Kling or Avatar clip
+- [ ] Serial-drama dialogue: every line was checked against its speaker, the speaker's physical descriptor and frame position, the `character_speech` order and the visible refs before submit (speaker/identity gate)
+- [ ] Dual-style: every clip on `minimax.h3max.r2v` with the exact §2a "H3 Max face reference" payload (`image_url` = scene PNG, `reference_image_urls` = headshot(s), `aspect_ratio: "9:16"`), the playbook's locked prompt (≤512 bytes), `expect.audio: "required"`, `scene_video_audio: "native"`
 - [ ] Avatar-based formats: Avatar clips have embedded audio stream (lipsync)
-- [ ] H3 lip-sync clips (what-if-real-life dialogue, route `minimax.h3max.turbo.i2v`): `tts_url` and `scene_image_url` passed the pre-flight curl check; payload is the exact §2a "H3 lip-sync" field set with `target_audio_url` = `tts_url` and `duration` = TTS length rounded up to 0.1 s; `expect.audio: "required"`; prompt has no gaze/head lock, has the no-stare sentence and ends with the lip-sync sentence (≤512 bytes); write-back has `scene_video_audio: "native"` and `scene_video_lipsync: true`
+- [ ] H3 lip-sync clips (what-if-real-life and serial-drama dialogue, route `minimax.h3max.turbo.i2v`): `tts_url` and `scene_image_url` passed the pre-flight curl check; payload is the exact §2a "H3 lip-sync" field set with `target_audio_url` = `tts_url` and `duration` = TTS length rounded up to 0.1 s; `expect.audio: "required"`; prompt has no gaze/head lock, has the no-stare sentence and ends with the lip-sync sentence (what-if) or the lips-only-while-speaking + two-character no-stare sentences (serial-drama) (≤512 bytes); write-back has `scene_video_audio: "native"` and `scene_video_lipsync: true`
 - [ ] Every plain H3 Max clip (`minimax.h3max.i2v`) with `scene_video_audio: "none"` carried a silent `target_audio_url` (data URI from `tools/silent_audio.py`, same length as its payload `duration`), added before `--preflight`; no `"native"` H3 Max clip has one (they keep their sound clause); the prompt still has `Mouth stays closed; no talking.` where a face is visible; its returned silent stream was accepted, not re-rolled
 - [ ] `scene_video_audio` is `"native"` only where the format mixes the clip's own sound; `"none"` for silent formats, still shots and Kling `generate_audio:false` clips (an H3 clip in a silent format still carries a stream; the Editor ignores it)
 - [ ] For gameplay-ai-avatar: avatar-fast.mp4 sped up 1.3x (setpts+atempo)
 - [ ] All inputs (image, audio) were Supabase URLs, not fal.ai temp (the one exception: the silent `target_audio_url` data URI, §2a)
-- [ ] All animated I2V clips use the playbook's one route (H3 Max for plain H3 clips, never H3 Max Turbo; the single exception is H3 Max Turbo lip-sync dialogue next to H3 Max action clips where the playbook declares it; Avatar dialogue may sit next to them where the playbook declares it; stills are not a model); no automatic fallback, model/route switch, or still substitution after a failure
+- [ ] All animated I2V clips use the playbook's one route (H3 Max for plain H3 clips, never H3 Max Turbo; H3 Max face reference for dual-style; the single exception is H3 Max Turbo lip-sync dialogue next to H3 Max action clips where the playbook declares it (what-if-real-life, serial-drama); Avatar dialogue may sit next to them where the playbook declares it; stills are not a model); no automatic fallback, model/route switch, or still substitution after a failure
 
 In debug mode — send Manager an explanation (what was generated, fps/dur of each clip, any regenerations and why).

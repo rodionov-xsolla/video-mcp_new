@@ -8,19 +8,21 @@ overlays: true
 
 In one frame, two clearly related presentations of a character walk toward a front-facing retreating camera in one shared environment. The comparison may translate a stylized source character into live action, or compare an original live-action persona with its canonical alternate. Both are the same format and production pipeline.
 
-This file is the **playbook**. Craft rules (NB2, Kling I2V, ffmpeg) — in `rules/roles/*.md`.
+This file is the **playbook**. Craft rules (NB2, H3 I2V, ffmpeg) — in `rules/roles/*.md`.
 
 This playbook is game-agnostic — every rule below applies identically whether the game is Genshin Impact, Star Trek Timelines, or any other title. Never reference a specific past episode, game, or date as the authority for a rule; state the rule itself so it transfers cleanly to any game/format run.
 
 ## Canonical contract and precedence
 
-**Contract version: `dual-style-v3`. There is one production method with one required comparison selector. Do not create another format slug for a different source medium, and do not use or invent "Pattern A", "Pattern B", static, subtle-motion, wig-match, studio-default, or other named variants.**
+**Contract version: `dual-style-h3`. There is one production method with one required comparison selector. Do not create another format slug for a different source medium, and do not use or invent "Pattern A", "Pattern B", static, subtle-motion, wig-match, studio-default, or other named variants.**
+
+`dual-style-h3` keeps the composition, comparison modes, synchronized forward walk, headshots, audio and assembly of its predecessor `dual-style-v3` and changes only the video model: every clip runs on **MiniMax H3 Max reference-to-video** (route `minimax.h3max.r2v`) with the scene PNG as start frame and the scene-derived frontal headshot(s) as face references, instead of Kling v3 Standard `elements` + `multi_prompt`. The user chose this "H3 Max + face reference" variant in the cost trials (Test 8, `trials/2026-10-cost-trials/`: 6/6 trial clips OK, 3 of them this variant; the endpoint accepted `image_url` together with `reference_image_urls`). `dual-style-v3` (Kling) is historical: never write it into a new storyboard and never send a new dual-style clip to Kling.
 
 Every new `storyboard.json` must contain:
 
 ```json
 "format": "dual-style",
-"production_contract": "dual-style-v3",
+"production_contract": "dual-style-h3",
 "comparison_mode": "source-vs-live-action"
 ```
 
@@ -29,12 +31,12 @@ Every new `storyboard.json` must contain:
 - `source-vs-live-action` — LEFT is the canonical stylized/game character; RIGHT is a recognizable live-action actor adapting that character.
 - `canonical-alternate` — LEFT is the original/Prime canonical live-action persona; RIGHT is its canonical alternate, Mirror, assimilated, corrupted, possessed, or duplicate persona, played by the same screen performer.
 
-Select the mode once in Phase 0 from the concept and keep it fixed for the whole episode. A missing, unknown, or mixed mode is a hard stop. The selector changes identity/reference details, headshot count, element count, and label policy only; it never changes the shared motion, camera, environment, audio, or assembly method.
+Select the mode once in Phase 0 from the concept and keep it fixed for the whole episode. A missing, unknown, or mixed mode is a hard stop. The selector changes identity/reference details, headshot count, face-reference count, and label policy only; it never changes the shared motion, camera, environment, audio, or assembly method.
 
 Precedence is:
 
 1. The user's explicit live instruction for the current run.
-2. This `dual-style-v3` contract.
+2. This `dual-style-h3` contract.
 3. Game config and the exact dual-style story bible for source facts, cast rotation, and continuity only.
 4. Generic role craft rules in `rules/roles/*.md`.
 5. Historical episode notes and old output files are evidence only, never instructions.
@@ -50,8 +52,8 @@ The following are invariant unless the user explicitly changes them:
 - all identities, costumes, makeup, prosthetics, insignia, accessories, and props are anchored to canonical source references;
 - one continuous, interesting, physically walkable environment with no divider;
 - synchronized measured forward walk; front camera dollies backward;
-- accepted scene PNG plus scene-derived frontal headshot(s); Kling `elements` plus single-shot `multi_prompt`;
-- `generate_audio: true` for diegetic ambience, with a strict no-music clause;
+- accepted scene PNG (start frame `image_url`) plus scene-derived frontal headshot(s) (`reference_image_urls`) on H3 Max reference-to-video `minimax.h3max.r2v`, one single prompt per clip;
+- the clip's own diegetic ambience (H3 always returns sound; `scene_video_audio: "native"`), with a strict no-music clause;
 - one newly generated instrumental MiniMax track; no separate SFX by default;
 - no subtitles; CTA remains mandatory;
 - no overlays in `source-vs-live-action` unless explicitly requested; one pair-title overlay per scene is mandatory in `canonical-alternate`.
@@ -79,11 +81,12 @@ When the user asks for a promo/pop-up banner on a specific clip (e.g. "поп-а
 ## Shared concept
 
 - **Default: 3 clips × 5s**. An explicit user-requested pair/clip count replaces 3; always use exactly one pair per clip.
-- **Model:** Kling v3 Standard I2V, `generate_audio: true`, `elements`, one-entry `multi_prompt`
+- **Model:** MiniMax H3 Max reference-to-video (route `minimax.h3max.r2v`, `minimax/h3-max/reference-to-video`): start frame + frontal headshot reference(s), one single prompt, numeric `duration` 5, 768P, own ambience kept. ~$0.41 per 5 s clip ($0.08/s on the returned ~5.18 s; Kling v3 Standard with audio was $0.63)
+- **Still shots:** none. Every clip carries the synchronized walk, so no scene can be a still.
 - **Speech:** NO, `character_speech: null` everywhere
 - **Music:** one new instrumental MiniMax Music v2.6 track is mandatory
 - **Separate SFX:** `false` unless explicitly requested
-- **Budget:** $5 max
+- **Budget:** $5 max. A default 3-pair episode is ~$1.80: 3 H3 clips (~$1.24) + 3 scene PNGs and 3 headshots (~$0.48) + music ($0.03); each extra pair adds ~$0.57. On Kling (`dual-style-v3`) the same clips were $1.89.
 
 ---
 
@@ -108,7 +111,7 @@ Use this mode only when the right side is a real-world adaptation of a stylized/
 - LEFT: canonical source rendering, canonical proportions and height class.
 - RIGHT: a specific recognizable actor keeping their real face, natural hair, natural adult height, natural build, and age.
 - The right costume is a near-identical practical construction of the source design: preserve silhouette, panels, cutouts, color blocking, signature ornaments/armor/accessories, and prop while translating material physics.
-- One scene-derived frontal headshot and one Kling element are required for the right actor.
+- One scene-derived frontal headshot is required for the right actor; it is the clip's one face reference (`reference_image_urls[0]`).
 - No pair-title overlay unless the user explicitly requests one.
 
 ### Key prompting rules
@@ -144,19 +147,23 @@ The prompt must be complete enough to lock identity, costume construction, and w
 blur, distort, merged characters, single character, text overlay, watermark, split screen, diptych, dividing line, anime style on right figure, cartoon right side, cel-shaded right side, illustrated right figure, anime on both sides, unintended chibi, deformed proportions, exaggerated head size, actor shrunk to character height, actor aged down, character-colored wig on actor, copied anime hairstyle on actor, generic palette-inspired costume, simplified costume, unsafe footing, cliff edge, narrow ledge, blocked walking path
 ```
 
-**Animator motion_prompt — exact shape, ALWAYS walking + dolly-back, regardless of what the scene's narrative pose says:**
+**Animator motion_prompt (H3 `prompt`) — exact shape, ALWAYS walking + dolly-back, regardless of what the scene's narrative pose says:**
 ```
-Front camera dollies back as both walk toward it, centered and facing lens. {source role} left and @Element1 photoreal right walk in measured sync. Faces locked forward: no head, eye, expression or identity change; no morphing. Only legs, fabric, natural hair and {particles} move. DIEGETIC AMBIENCE ONLY. NO MUSIC: no beat, melody, instruments, score or soundtrack.
+The photoreal {woman|man} on the right has exactly the face in Image 1; keep it unchanged. Front camera dollies back as both walk toward it, centered and facing lens. {source role} left and photoreal {Name} right walk in measured sync. Faces locked forward: no head, eye, expression or identity change; no morphing. Only legs, fabric, natural hair and {particles} move. Diegetic ambience only, no music. Mouth stays closed; no talking.
 ```
 **This is mandatory verbatim structure, not a suggestion, and there is no "static/subtle" variant** (see §Face stability below). Scenarist must write the forward walk into every `action_description`; if any scene instead declares standing, sitting, dancing, fighting, jumping or another action, return the storyboard for correction before spending on animation. Animator never chooses or silently converts between motion approaches.
 
-Keep `{source role}` at ≤20 ASCII characters and `{particles}` at ≤24 ASCII characters. Before preflight, measure the final substituted prompt as UTF-8 bytes (`len(prompt.encode("utf-8"))`), not character count. Hard-require **≤400 bytes** to retain margin below Kling `multi_prompt[].prompt`'s 512-byte provider limit; a near-limit prompt can pass a character-count check and still fail at deferred result fetch.
+- The opening face sentence binds the face reference (`reference_image_urls[0]`, the frontal headshot) to the photoreal figure by position; pick `woman` or `man` to match that figure. The start frame (`image_url`) carries the rest of the composition.
+- `{Name}` is the source character's name (the same character on both sides), never the actor's name; the photoreal figure is otherwise identified only by position. There is no `@Element1`: H3 has no `elements`.
+- The closing `Diegetic ambience only, no music. Mouth stays closed; no talking.` is the format's no-music clause and the mouth guard, as plain sentences (H3 has no `negative_prompt`; nobody in this format speaks, and H3 otherwise invents speech for a visible face).
+- This is the template tested in Test 8 (V2), rewritten from the Kling `dual-style-v3` template only by the face sentence, `photoreal {Name} right` for `@Element1 photoreal right`, and the plain closing sentences. The exact Test 8 prompt (scene 1, 431 bytes; job template `tools/examples/minimax-h3-max-r2v-face-ref.job.json`):
+  ```
+  The photoreal woman on the right has exactly the face in Image 1; keep it unchanged. Front camera dollies back as both walk toward it, centered and facing lens. Anime Keqing left and photoreal Keqing right walk in measured sync. Faces locked forward: no head, eye, expression or identity change; no morphing. Only legs, fabric, natural hair and electro sparks move. Diegetic ambience only, no music. Mouth stays closed; no talking.
+  ```
 
-**Kling negative_prompt — reuse verbatim:**
-```
-blur, distort, deformed, extra limbs, extra fingers, morphing face, smoothing facial features, changing skin color, altering proportions, banding in blacks, posterization, harsh color shift, overexposed clipping, running, jogging, sprinting, split screen, dividing line, merged characters, single character, anime style on right figure
-```
-(`running, jogging, sprinting` keep the walk at a measured stride, not a run.)
+Keep `{source role}` at ≤20 ASCII characters, `{Name}` at ≤20 and `{particles}` at ≤24. Before preflight, measure the final substituted prompt as UTF-8 bytes (`len(prompt.encode("utf-8"))`), not character count. Hard-require **≤512 bytes** (H3's prompt limit, `rules/roles/animator.md` §2a); the Test 8 prompts were 431–439 bytes.
+
+**No video `negative_prompt`.** H3 has none, and the Kling `dual-style-v3` negative list is retired. Its guards live in the template: `Faces locked forward … no morphing` (identity), `walk in measured sync` (a measured stride, not a run), and the closing no-music and mouth sentences. Do not append further constraint sentences.
 
 **Environment:** an interesting, source-world-specific location is the default. It must be staged as a real walking set: a broad level center lane, solid dry footing, several meters of clear floor in front of and behind the pair, a safe camera retreat corridor, and hazards or scenic features kept behind guards or several meters to the sides. Never place the pair on an exposed cliff edge, narrow ledge, broken bridge, water, lava, stairs, loose rubble, or a blocked path. A plain studio floor is allowed only when the user explicitly asks for it or explicitly approves it as a controlled recovery after a failed rich-background frame.
 
@@ -234,7 +241,7 @@ The realistic side depicts a **specific publicly known, widely recognizable acto
 - The actor keeps natural adult height/build even when the source character is small or chibi
 - Do NOT alter the actor's face (no heavy makeup or distortion in the prompt)
 - `style_tags`: add `live-action cast, [Actor Name] as [Character]`
-- **Actor names are for Scenarist/Storyboarder prompts only (image generation) — never pass a real person's name into Animator/Kling-facing text** (motion_prompt, elements prompt reference). Kling doesn't parse identity from names; describe the photorealistic figure only by role/position ("the photorealistic figure on the right") and let the image itself (start frame + `elements` face-lock) carry the likeness.
+- **Actor names are for Scenarist/Storyboarder prompts only (image generation) — never pass a real person's name into Animator/video-model-facing text** (`motion_prompt`, the H3 `prompt`). The video model doesn't parse identity from names; describe the photorealistic figure only by role/position ("the photoreal woman on the right") and let the images (start frame + headshot face reference) carry the likeness.
 
 ---
 
@@ -247,7 +254,7 @@ Use this mode when the source franchise is already live action and both sides ar
 - Both figures use the same recognizable canonical screen performer. There is no fancasting and no unrelated Hollywood actor.
 - Each persona follows its own canonical hair, facial hair, makeup, prosthetics, uniform, accessories, insignia, and weapons. The natural-hair adaptation rule from `source-vs-live-action` does not apply because neither side is a newly cast adaptation.
 - One accepted scene requires two frontal headshots derived from that same scene: left/original and right/alternate.
-- Kling receives two `elements`, one for each persona, and the exact shared one-entry `multi_prompt`.
+- H3 receives both headshots as face references (`reference_image_urls`: original first, alternate second) and the exact shared single prompt below.
 
 ### Canonical reference policy
 
@@ -278,50 +285,29 @@ Image negative prompt, verbatim:
 blur, distort, merged characters, single character, text overlay, watermark, split screen, diptych, dividing line, illustrated, cartoon, anime, game render, different actors, unrelated faces, face swap, matching uniforms, missing alternate details, generic redesign, deformed proportions, extra limbs, unsafe footing, cliff edge, narrow ledge, blocked walking path
 ```
 
-Motion prompt, exact shape:
+Motion prompt (H3 `prompt`), exact shape:
 
 ```text
-Front camera dollies back as @Element1 original left and @Element2 alternate right walk toward it in measured sync, centered facing lens. Faces locked: no head, eye, expression or identity change; no morphing. Only legs, costume fabric, hair and {particles} move. DIEGETIC AMBIENCE ONLY. NO MUSIC: no beat, melody, instruments, score or soundtrack.
+The {woman|man} on the left has exactly the face in Image 1 and the {woman|man} on the right has exactly the face in Image 2; keep both unchanged. Front camera dollies back as the original left and the alternate right walk toward it in measured sync, centered facing lens. Faces locked: no head, eye, expression or identity change; no morphing. Only legs, costume fabric, hair and {particles} move. Diegetic ambience only, no music. Mouth stays closed; no talking.
 ```
 
-Keep `{particles}` at no more than 24 ASCII characters. Measure the final substituted prompt as UTF-8 bytes and require ≤400 bytes.
+Keep `{particles}` at no more than 24 ASCII characters. Measure the final substituted prompt as UTF-8 bytes and require ≤512 bytes. No video `negative_prompt` (H3 has none; the Kling list is retired).
 
-Kling negative prompt, verbatim:
-
-```text
-blur, distort, deformed, extra limbs, extra fingers, morphing face, changing identity, different actors, smoothing facial features, changing skin color, altering proportions, running, jogging, sprinting, split screen, dividing line, merged characters, single character, banding in blacks, posterization, harsh color shift, overexposed clipping
-```
-
-Exact provider payload:
+Exact provider payload (route `minimax.h3max.r2v`):
 
 ```json
 {
-  "start_image_url": "{accepted permanent scene PNG URL}",
-  "multi_prompt": [
-    {
-      "prompt": "{exact substituted canonical-alternate motion template, <=400 UTF-8 bytes}",
-      "duration": "5"
-    }
-  ],
-  "shot_type": "customize",
-  "duration": "5",
+  "prompt": "{exact substituted canonical-alternate motion template, <=512 UTF-8 bytes}",
+  "image_url": "{accepted permanent scene PNG URL}",
+  "reference_image_urls": ["{original_headshot_url}", "{alternate_headshot_url}"],
   "aspect_ratio": "9:16",
-  "generate_audio": true,
-  "elements": [
-    {
-      "frontal_image_url": "{original_headshot_url}",
-      "reference_image_urls": ["{same scene PNG URL}"]
-    },
-    {
-      "frontal_image_url": "{alternate_headshot_url}",
-      "reference_image_urls": ["{same scene PNG URL}"]
-    }
-  ],
-  "negative_prompt": "{exact canonical-alternate Kling negative prompt}"
+  "duration": 5,
+  "resolution": "768P",
+  "prompt_expansion_mode": "disabled"
 }
 ```
 
-No bare `prompt`, no `end_image_url`, and no real performer name in Kling-facing text.
+`expect` and write-back are those of `source-vs-live-action` (Animator brief). No `start_image_url`, `multi_prompt`, `elements`, `shot_type`, `generate_audio`, `negative_prompt` or `end_image_url`, and no real performer name in video-model-facing text. **Two face references are untested on H3** (Test 8 covered `source-vs-live-action` with one headshot): Animator flags the first canonical-alternate H3 episode in its report, and in Debug mode the Manager shows one clip before the rest are generated.
 
 ### Pair-title overlay — mandatory
 
@@ -348,7 +334,7 @@ Render it locally after scene generation; never ask the image model to draw text
 ```json
 {
   "format": "dual-style",
-  "production_contract": "dual-style-v3",
+  "production_contract": "dual-style-h3",
   "comparison_mode": "source-vs-live-action",
   "visual_identity": {
     "character_description": {
@@ -363,12 +349,10 @@ Render it locally after scene generation; never ask the image model to draw text
     "hair_policy": "source figure keeps canonical hair; actor keeps natural real hair with no matching wig",
     "environment_policy": "interesting source-world setting with safe unobstructed forward path and camera retreat corridor",
     "animation_policy": "measured synchronized forward walk with front dolly-back in every clip",
-    "audio_policy": "Kling diegetic ambience only plus one separate instrumental MiniMax music track; no separate SFX by default"
+    "audio_policy": "clip diegetic ambience only (H3) plus one separate instrumental MiniMax music track; no separate SFX by default"
   },
   "sfx": false,
   "music_required": true,
-  "generate_audio": true,
-  "multi_prompt": true,
   "scenes": [
     {
       "index": 1,
@@ -382,7 +366,8 @@ Render it locally after scene generation; never ask the image model to draw text
 ```
 
 - `style_tags` must include **both** styles
-- `production_contract` must equal `dual-style-v3` and `comparison_mode` must be valid; missing or different values are a hard stop
+- `production_contract` must equal `dual-style-h3` and `comparison_mode` must be valid; missing or different values (including the historical `dual-style-v3`) are a hard stop
+- No Kling fields: the storyboard carries no `generate_audio`, `multi_prompt`, `elements`, `shot_type` or `voice_ids` at any level
 - `image_prompt` follows §0's semantic order and names 4–6 source-backed design anchors without an exhaustive micro-accessory inventory
 
 ---
@@ -406,7 +391,7 @@ In `source-vs-live-action`, if these blocks are missing, Manager must flag and s
 ## Role briefs
 
 ### Scenarist
-- Write `production_contract: "dual-style-v3"` and the one valid `comparison_mode`; default 3 clips × 5s, or exactly the user-requested count; `character_speech: null` everywhere
+- Write `production_contract: "dual-style-h3"` and the one valid `comparison_mode`; default 3 clips × 5s, or exactly the user-requested count; `character_speech: null` everywhere; no `motion: "still"` scene (every clip walks)
 - In `source-vs-live-action`, cartoon and realistic markers are mandatory; preserve the near-identical practical costume adaptation with natural actor hair/height/build.
 - In `canonical-alternate`, use the same canonical screen performer for both official personas and write the exact `{ORIGINAL} VS {ALTERNATE}` overlay text for every scene.
 - Every `action_description` is the same production action: both figures walk toward a front-facing retreating camera; only environment, starting stance and particles vary
@@ -425,51 +410,45 @@ In `source-vs-live-action`, if these blocks are missing, Manager must flag and s
 - Borrowing a ref from another *format's* dedicated tagged asset (e.g. a `redcon`-tagged or `serial-drama`-tagged variant) still requires explicit user instruction — only the canonical untagged game-wide ref is pre-authorized for reuse.
 - **Multi-character:** every new character starts the chain anew (do NOT pass the previous character's scene)
 - For one character: scene 1 = `[asset]`; scene 2+ = `[asset, scene-(K-1)]`
-- **Face-lock headshot (mandatory side-asset, every character pairing, every episode):** after the scene PNG is accepted, generate ONE additional frontal headshot crop of the photorealistic figure via NB2 edit, using the already-rendered scene PNG as the image reference (not a fresh text-only generation) — the headshot must match the exact identity already locked in that scene, not a new likeness. Plain neutral background, head+shoulders, facing camera, neutral expression. Upload as a per-episode asset (`episode-scene` kind), not `game_assets`. Cost ≈$0.04–0.08.
+- **Face-lock headshot (mandatory side-asset, every character pairing, every episode):** after the scene PNG is accepted, generate ONE additional frontal headshot crop of the photorealistic figure via NB2 edit, using the already-rendered scene PNG as the image reference (not a fresh text-only generation) — the headshot must match the exact identity already locked in that scene, not a new likeness. Plain neutral background, head+shoulders, facing camera, neutral expression. Upload as a per-episode asset (`episode-scene` kind), not `game_assets`, and write its permanent URL as the scene's `headshot_url` (`canonical-alternate`: one headshot per persona, written as `original_headshot_url` and `alternate_headshot_url`). The Animator sends it as the H3 face reference (`reference_image_urls`). Cost ≈$0.04–0.08.
 - Before accepting each scene, verify solid footing and a clear forward lane/camera retreat corridor. A visually attractive frame that strands either figure on an edge, ledge, obstacle, stair, hazard or blocked path is rejected before animation.
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
-- **Kling v3 Standard I2V**, `aspect_ratio: "9:16"`
-- `duration: "5"`; without `end_image_url`
-- `character_speech: null` → Kling does not receive speech text
-- One model for the whole video
-- **Exact `source-vs-live-action` payload shape — no bare `prompt`:**
+- **MiniMax H3 Max reference-to-video**, route `minimax.h3max.r2v` (`https://queue.fal.run/minimax/h3-max/reference-to-video`, poll base `https://queue.fal.run/minimax/h3-max`), through schema-v3 `tools/kling_runner.py` only. Template: `tools/examples/minimax-h3-max-r2v-face-ref.job.json`. Craft: `rules/roles/animator.md` §2a "H3 Max face reference".
+- One route for the whole video: every clip is `minimax.h3max.r2v`. Never plain H3 Max `minimax.h3max.i2v` without the face reference (Test 8 V1, not chosen), never H3 Max Turbo, never Kling, and no still shots.
+- `character_speech: null` → H3 receives no speech text, and no `target_audio_url` of any kind (no TTS, no silent track: the clip's own ambience is used).
+- **Exact `source-vs-live-action` payload — exactly these seven fields, nothing else:**
   ```json
   {
-    "start_image_url": "{accepted permanent scene PNG URL}",
-    "multi_prompt": [
-      {
-        "prompt": "{exact substituted §0 motion template, <=400 UTF-8 bytes}",
-        "duration": "5"
-      }
-    ],
-    "shot_type": "customize",
-    "duration": "5",
+    "prompt": "{exact substituted §0 motion template, <=512 UTF-8 bytes}",
+    "image_url": "{accepted permanent scene PNG URL}",
+    "reference_image_urls": ["{derived permanent actor headshot URL (headshot_url)}"],
     "aspect_ratio": "9:16",
-    "generate_audio": true,
-    "elements": [
-      {
-        "frontal_image_url": "{derived permanent actor headshot URL}",
-        "reference_image_urls": ["{same accepted scene PNG URL}"]
-      }
-    ],
-    "negative_prompt": "{exact §0 Kling negative prompt}"
+    "duration": 5,
+    "resolution": "768P",
+    "prompt_expansion_mode": "disabled"
   }
   ```
-- **`generate_audio: true` risk — unwanted music.** Kling can add a score even when the intended output is ambient SFX. Every motion prompt must end with the exact strong clause from §0: `DIEGETIC AMBIENCE ONLY. NO MUSIC: no beat, melody, instruments, score or soundtrack.` Avoid `cinematic`, `epic`, `dramatic`, `trailer`, and rhythm/tempo language in Kling-facing text. If Kling still bakes music into an individual clip, Editor must mute that clip's native audio before mixing the separately generated `bg-music.mp3`; never stack the accidental score under the intended track.
+  - `image_url` = the scene's `scene_image_url` (start frame); `reference_image_urls` = the frontal headshot(s) only — never the scene PNG again (H3 takes the start frame from `image_url`).
+  - `duration` is the number `5` (not Kling's string); `prompt_expansion_mode: "disabled"` keeps H3 from rewriting the locked template.
+  - No `start_image_url`, `multi_prompt`, `elements`, `shot_type`, `generate_audio`, `negative_prompt`, `end_image_url`, `target_audio_url` or `++` syntax.
+- **`expect`:** `duration_seconds: 5`, `duration_tolerance_seconds: 0.8`, `audio: "required"` (the format mixes the clip's ambience), `min_bytes: 100000`, `min_width: 600`, `min_height: 1000`, `orientation: "portrait"`. Measured in Test 8: every clip 768×1344, 5.184 s, AAC audio.
+- **Write-back:** `scene_video_kind: "i2v"`, `scene_video_route: "minimax.h3max.r2v"`, `scene_video_audio: "native"`; no `scene_video_lipsync`. The Editor trims the ~5.18 s clip to 5 s (H3 trim, `scene_video_route` starts with `minimax.`).
+- **Unwanted music.** The clip keeps its own sound, and a video model can add a score even when the intended output is ambience. Every prompt ends with the exact plain closing from §0: `Diegetic ambience only, no music. Mouth stays closed; no talking.` Avoid `cinematic`, `epic`, `dramatic`, `trailer`, and rhythm/tempo language in the prompt. If a clip still carries music, Editor must mute that clip's native audio before mixing the separately generated `bg-music.mp3`; never stack the accidental score under the intended track.
 - **Face stability — one mandatory pattern, no exceptions:**
-  - **Macro-motion (walking toward camera) with `elements` face-lock is the only supported pattern — see the §0 locked template's motion_prompt and reuse it verbatim, substituting only names/details.** Requires the Storyboarder-generated frontal headshot passed as `elements[0].frontal_image_url`, with the scene PNG as `reference_image_urls`. **`elements` is mandatory-paired with `multi_prompt: true`** — passing `elements` with a bare top-level `prompt` causes a deferred 500 at result-fetch (`rules/roles/animator.md` §4). Reference the bound face as `@Element1` in the shot prompt; still state the explicit face-lock clause (no head turn/no morphing) even with `elements` — the binding reduces drift, it does not by itself guarantee zero motion.
+  - **Macro-motion (walking toward camera) with the headshot face reference is the only supported pattern — see the §0 locked template and reuse it verbatim, substituting only names/details.** Requires the Storyboarder-generated frontal headshot as `reference_image_urls[0]`, bound by the opening sentence `The photoreal {woman|man} on the right has exactly the face in Image 1; keep it unchanged.` Still state the explicit face-lock clause (no head turn/no morphing): the reference reduces drift, it does not by itself guarantee zero motion.
   - **No "keep it static/subtle" override, ever.** Every `action_description` and motion prompt must already declare the forward walk and front dolly-back. A non-walking scene is returned to Scenarist before generation, not reinterpreted by Animator.
-  - Every episode requires the Storyboarder-generated frontal headshot side-asset for every character pairing — do not skip it.
+  - Every episode requires the Storyboarder-generated frontal headshot side-asset for every character pairing — do not skip it. A missing or non-200 `headshot_url` stops the clip before submit (return to Manager); the runner also checks every payload URL.
   - **Camera direction for walking shots — camera must be IN FRONT of the figures (receding/dolly-back tracking, retreating at their walking pace), never behind.** The whole point of dual-style is comparing the two faces side by side; a behind-the-figures tracking shot shows only backs/backs-of-heads and defeats the format.
-  - Use the exact Kling `negative_prompt` list from §0 verbatim.
-- In `canonical-alternate`, use the exact two-element payload and prompt lists from that mode's section. Both headshots and the accepted scene URL are mandatory.
+- In `canonical-alternate`, use the exact two-reference payload and prompt from that mode's section. Both headshots and the accepted scene URL are mandatory; two references are untested on H3, so flag it in the report.
+- Failure: one runner job per clip, runner state rules (`rules/main/fallback.md`); a refusal is rephrased per `animator.md` §4 "Kling content filter" without touching the locked structure. Never switch to Kling, plain H3 Max or a still.
+- Cost: ~$0.41 per clip ($0.08/s on the returned ~5.18 s; Kling v3 Standard with audio was $0.63).
 - General rules — `rules/roles/animator.md`
 
 ### Sound
 - TTS **not needed** (no speech)
-- **SFX is `false`.** Kling native ambience covers environmental sound. Set `sfx: true` only when the user explicitly asks for a separate SFX layer.
+- **SFX is `false`.** The H3 clips' own ambience covers environmental sound. Set `sfx: true` only when the user explicitly asks for a separate SFX layer.
 - **SFX per scene via CassetteAI on fal.ai** (only when `sfx: true` is explicitly set in storyboard.json):
   - Endpoint: `https://queue.fal.run/cassetteai/sound-effects-generator` (async, polling base = `cassetteai/sound-effects-generator`)
   - Auth: `Authorization: Key $FAL_KEY`
@@ -485,8 +464,9 @@ In `source-vs-live-action`, if these blocks are missing, Manager must flag and s
 ### Editor
 - Scale 1080×1920, 30fps, concat with re-encode, hard cuts (no crossfade)
 - **Animated CTA mandatory at the end** — fetch from `game_assets` where `tags` contains `cta` and `video`. Append after the last scene clip. If CTA is missing in Supabase — STOP and notify the Manager.
-- **Audio mix:** keep clean Kling diegetic ambience at approximately `-28 LUFS`; normalize the dedicated MiniMax music bed to approximately `-20 LUFS`; target the final mix near `-20 LUFS` with true peak no higher than `-2 dBTP`. Do not rely on a fixed scalar alone—measure the result.
-- **Accidental Kling music is the only dual-style exception to the generic "never discard paid I2V audio" rule.** If a clip is flagged as containing a score/melody, mute that clip's native audio completely; never place it beneath the MiniMax track. Keep clean ambience from the other clips. Record which clip was muted in storyboard notes.
+- **H3 clips** (`scene_video_route: "minimax.h3max.r2v"`, `scene_video_audio: "native"`): trim each ~5.18 s clip and its audio to `duration_sec` (5 s) per the H3 trim in `rules/roles/editor.md`; resample the 32 kHz stereo ambience; fill-and-crop the 768×1344 picture to 1080×1920 ending in `setsar=1`.
+- **Audio mix:** keep clean clip diegetic ambience at approximately `-28 LUFS`; normalize the dedicated MiniMax music bed to approximately `-20 LUFS`; target the final mix near `-20 LUFS` with true peak no higher than `-2 dBTP`. Do not rely on a fixed scalar alone—measure the result.
+- **Accidental clip music is the only dual-style exception to the generic "never discard paid I2V audio" rule.** If a clip is flagged as containing a score/melody, mute that clip's native audio completely; never place it beneath the MiniMax track. Keep clean ambience from the other clips. Record which clip was muted in storyboard notes.
 - **SFX mixing** (only when explicitly requested and `scene-K-sfx.mp3` files are present): align each file to its scene start using `amix` or per-stream `adelay`; SFX target approximately `-28 LUFS`. NEVER `-shortest`.
 - **Music plays through the full video including CTA** — do not cut music before the CTA clip. Apply `afade=t=out` only at the very end of the last clip.
 - In `canonical-alternate`, render the mandatory exact pair-title overlay on every scene. In `source-vs-live-action`, render no comparison overlay unless the user requested one.
@@ -512,9 +492,9 @@ ${OUTPUT_DIR}/
 
 ## Validation
 
-- [ ] `production_contract == "dual-style-v3"` and one valid `comparison_mode`; no second format slug, Pattern A/B, static, subtle-motion, wig-match, or studio-default branch
-- [ ] `source-vs-live-action`: one scene-derived right-actor headshot and one element; no overlay unless requested
-- [ ] `canonical-alternate`: same canonical screen performer for both personas, two scene-derived headshots and two elements, exact pair-title overlay on every scene
+- [ ] `production_contract == "dual-style-h3"` and one valid `comparison_mode`; no second format slug, Pattern A/B, static, subtle-motion, wig-match, or studio-default branch
+- [ ] `source-vs-live-action`: one scene-derived right-actor headshot, sent as the one face reference; no overlay unless requested
+- [ ] `canonical-alternate`: same canonical screen performer for both personas, two scene-derived headshots sent as two face references (original first), exact pair-title overlay on every scene
 - [ ] In `source-vs-live-action`, exact source-rendering markers are bound to the left figure only; source height/proportions remain canonical
 - [ ] In `source-vs-live-action`, realistic markers appear in image_prompt (`photorealistic`, `real skin textures`)
 - [ ] In `source-vs-live-action`, the realistic card names the actor's real physical features before costume details
@@ -522,10 +502,11 @@ ${OUTPUT_DIR}/
 - [ ] Every distinctive design detail (hair color/style, signature accessories) is sourced from an actual canonical/dual-style reference image, never invented from memory
 - [ ] Environment is source-world-specific and interesting, with solid dry footing, broad unobstructed forward lane and camera retreat corridor; hazards/scenery stay safely to the sides
 - [ ] Every `action_description` already declares synchronized forward walking and front dolly-back; Animator motion_prompt follows the §0 template verbatim
-- [ ] Camera is in front (dolly-back), not behind, for macro-motion shots; `elements` + `multi_prompt: true` used for face-lock (mandatory every episode); frontal headshot side-asset generated for every character pairing; no real actor name in motion_prompt
-- [ ] Every Kling motion prompt ends with the exact strong diegetic-only/no-music clause and is ≤400 UTF-8 bytes after substitutions
-- [ ] If a clip still contains accidental Kling music: Editor mutes that clip's native audio before mixing `bg-music.mp3`
-- [ ] Clean Kling ambience is near `-28 LUFS`, MiniMax music near `-20 LUFS`, final near `-20 LUFS` and ≤`-2 dBTP`
+- [ ] Camera is in front (dolly-back), not behind, for macro-motion shots; every clip on `minimax.h3max.r2v` with the exact seven-field payload (`image_url` = scene PNG, `reference_image_urls` = headshot(s), `aspect_ratio: "9:16"`, numeric `duration: 5`, `resolution: "768P"`, `prompt_expansion_mode: "disabled"`), `expect.audio: "required"`, tolerance 0.8; frontal headshot side-asset generated for every character pairing; no real actor name in motion_prompt
+- [ ] Every H3 prompt opens with the face-reference sentence, ends with `Diegetic ambience only, no music. Mouth stays closed; no talking.` and is ≤512 UTF-8 bytes after substitutions; no `@Element`, no `negative_prompt`, no Kling field
+- [ ] Every clip written back with `scene_video_route: "minimax.h3max.r2v"` and `scene_video_audio: "native"`; Editor trimmed each to 5 s
+- [ ] If a clip still contains accidental music: Editor mutes that clip's native audio before mixing `bg-music.mp3`
+- [ ] Clean clip ambience is near `-28 LUFS`, MiniMax music near `-20 LUFS`, final near `-20 LUFS` and ≤`-2 dBTP`
 - [ ] Comparison roles remain on fixed sides for the whole video
 - [ ] `character_speech: null` in all clips
 - [ ] `camera_angle` different for adjacent clips
@@ -554,15 +535,16 @@ ${OUTPUT_DIR}/
 - ❌ Using a plain studio as an unannounced fallback; it requires an explicit user request or explicit approval after a failed rich-environment frame
 - ❌ Choosing a beautiful but unwalkable composition: cliff edge, ledge, stairs, rubble, hazard, narrow bridge, blocked lane or no camera retreat corridor
 - ❌ Camera positioned BEHIND the figures for a walking/macro-motion shot — hides both faces, defeats the format's core comparison device. Camera goes in front (dolly-back) for any shot where the figures move toward it.
-- ❌ Passing Kling `elements` with a bare top-level `prompt` (no `multi_prompt: true`) — causes a deferred 500 at result-fetch, not an immediate error
-- ❌ Real actor name in Animator/Kling-facing motion_prompt text — Kling doesn't parse identity from names; use `elements`/the image for likeness, describe the figure only by role/position in motion_prompt
-- ❌ `generate_audio: true` with an energetic/cinematic motion_prompt and no anti-music clause, when a separate `bg-music.mp3` already exists — Kling may bake in its own unwanted score on top
-- ❌ Counting prompt characters instead of serialized UTF-8 bytes — near-limit `multi_prompt` text can fail only at result fetch; enforce ≤400 bytes before preflight
-- ❌ Mixing an accidental Kling score beneath the intended `bg-music.mp3` — mute the contaminated clip audio first
-- ❌ `character_speech ≠ null` (Kling I2V does not generate voice)
+- ❌ Sending a dual-style clip to Kling (`elements` / `multi_prompt`, the historical `dual-style-v3`), to plain H3 Max `minimax.h3max.i2v` without the face reference, or to H3 Max Turbo — the only route is `minimax.h3max.r2v` with the headshot reference
+- ❌ Putting the scene PNG into `reference_image_urls` or leaving `image_url` out — the start frame is `image_url`, the references are the headshots only (the tested shape)
+- ❌ Real actor name in Animator/video-model-facing prompt text — the model doesn't parse identity from names; use the headshot reference and the start frame for likeness, describe the figure only by role/position in the prompt
+- ❌ An energetic/cinematic prompt without the closing no-music clause, when a separate `bg-music.mp3` already exists — the clip may carry its own unwanted score
+- ❌ Counting prompt characters instead of serialized UTF-8 bytes — enforce ≤512 bytes before preflight
+- ❌ Mixing an accidental clip score beneath the intended `bg-music.mp3` — mute the contaminated clip audio first
+- ❌ `character_speech ≠ null` (the format has no speech, and H3 would invent mouth movement for it)
 - ❌ `-shortest` in ffmpeg
 - ❌ Re-deriving the prompt method from theory instead of copying the §0 locked template verbatim — trying successive unverified "fixes" without a controlled comparison against a known-working example tends to make likeness worse, not better. When something worked before, copy its literal structure first; only vary per-episode names/details.
-- ❌ Recovering Pattern A/B or another legacy branch from a historical episode note/output; `dual-style-v3` with a required comparison mode is the only normative method
+- ❌ Recovering Pattern A/B, the Kling `dual-style-v3` payload or another legacy branch from a historical episode note/output; `dual-style-h3` with a required comparison mode is the only normative method
 - ❌ Instructing Animator to keep motion "static/subtle" for any scene — contradicts the mandatory walking + dolly-back pattern (see §0 and Animator brief) and produces motionless statue clips
 - ❌ Inventing hair color/style or costume details "from known character facts" without an actual reference image to check against — verify against a real canonical/dual-style asset every time
 - ❌ Citing a specific past episode/game/date as the justification for a rule — state the rule itself; this playbook must transfer cleanly to any game
@@ -578,7 +560,7 @@ Required path: `games/{GAME_TAG}/dual-style_story_bible.json`. If it is missing,
   "series_id": "dual-style-{GAME_TAG}",
   "game_tag": "{GAME_TAG}",
   "title": "{Game} Dual Style",
-  "production_contract": "dual-style-v3",
+  "production_contract": "dual-style-h3",
   "comparison_mode": "source-vs-live-action",
   "created_at": "{TODAY}",
   "last_episode": 0,
@@ -603,6 +585,8 @@ Required path: `games/{GAME_TAG}/dual-style_story_bible.json`. If it is missing,
 }
 ```
 
+**`production_contract` in an existing bible** records the contract of the series' approved episodes. A bible that still reads `dual-style-v3` is valid for a `dual-style-h3` run: the two contracts share composition, rotation and cooldown data, and only the video model changed. Manager writes `dual-style-h3` into the bible at the first post-approval story-bible update under this contract; never edit it before the user approves the final video. The storyboard itself always carries `dual-style-h3`.
+
 **`character_pool`** — mirrors the characters defined in `games/{GAME_TAG}/{GAME_TAG}.md` with dual-style blocks. Populate on first run; add new characters as they are added to the game config. `last_seen_episode: null` means the character has never been featured.
 
 **`episode_summary`** structure (FIFO 5):
@@ -621,7 +605,7 @@ Required path: `games/{GAME_TAG}/dual-style_story_bible.json`. If it is missing,
 }
 ```
 
-**`action_types`** — under `dual-style-v3`, every produced clip uses `"walking-approach"`. Visual variety belongs in characters, environments, starting silhouettes, particles, lens height and framing; it never changes the motion contract.
+**`action_types`** — under `dual-style-h3` (as under `dual-style-v3`), every produced clip uses `"walking-approach"`. Visual variety belongs in characters, environments, starting silhouettes, particles, lens height and framing; it never changes the motion contract.
 
 **Story Bible update (Manager, only after the user explicitly approves the local `final.mp4`):**
 
@@ -632,6 +616,7 @@ Required path: `games/{GAME_TAG}/dual-style_story_bible.json`. If it is missing,
 5. For each character featured: set `character_pool[].last_seen_episode = current episode number`.
 6. Append `episode_summary`; FIFO keep last **7** so the cooldown can be reconstructed without guesswork.
 7. Increment `last_episode`.
+8. If the bible's top-level `production_contract` is not `dual-style-h3`, set it to `dual-style-h3`.
 
 ---
 

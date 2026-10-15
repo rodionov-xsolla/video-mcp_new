@@ -40,9 +40,19 @@ Not for: news / patch recaps (use `news`), lore monologue (use `character-story`
 ### Models
 
 - **Image:** Nano Banana 2 (title card + 4 ranked items + 2 rank-1 climax images, 7 generations total)
-- **Video:** Kling I2V v3 Standard (`generate_audio: false`). Keep the selected model/endpoint/route fixed; retry the same serialized request once, then stop. Kling 2.6 is not an automatic fallback.
+- **Video:** MiniMax H3 Max I2V (route `minimax.h3max.i2v`, `minimax/h3-max/image-to-video`) — 768P, numeric `duration` = `duration_sec`, `prompt_expansion_mode: "disabled"`. H3 always returns a soundtrack; this format never uses it (`scene_video_audio: "none"`). Keep the selected model/endpoint/route fixed; retry the same serialized request once, then stop. Kling v3 Standard and Kling 2.6 are not automatic fallbacks. H3 has no `negative_prompt`, `multi_prompt` or end frame.
 - **Audio:** MiniMax TTS narrator overlay by default. Chatterbox is allowed only with an approved sample owned by the exact `top-list` story bible. ElevenLabs TTS and cross-format voice samples are forbidden. Music bed stays under everything.
 - **Pre-built assets:** title card is generated inline. CTA is a **pack-shot from Supabase if the game has one** (query `game_assets` for `tags @> ["cta"]` and `asset_type` containing "video"); otherwise fall back to a drawtext CTA overlay on the rank-1 part-2 clip. Star Trek Timelines, for example, has `assets/star-trek-timelines/refs/cta.mp4` ready.
+
+### Still shots: allowed
+
+The scenarist may plan still shots (`motion: "still"`) under the rule, cap and fields in `rules/roles/scenarist.md` "Still shots" (§8; 7 scenes → at most 2). A still scene gets its start PNG as usual and is rendered free by the Animator (`tools/still_shot.py`, no paid clip), saving ~$0.41 per 5s scene; narration and overlays play over it as normal.
+
+- **Best candidate:** the title card (scene 0). Its text is baked into the NB2 image, and an I2V clip can warp baked letters; a slow `push-in` still keeps the title exactly as generated and loses only drifting sparkles.
+- **Other candidates:** in a locations or items list only, a low-rank entry (#5 or #4) that shows an empty location or an object at rest, with no character in focus.
+- **Never a still:** a character entry (characters acting, a reaction, a gesture or expression beat), or either rank-1 climax scene (5 and 6). Zero stills is a normal result.
+- A still scene's camera move is its `still_effect`; the three-motion-layer, ≥2-action and banned-phrase rules apply to animated clips.
+- In the cost trials (Oct 2026, Star Trek aliens list) the scenarist picked exactly the title card; H3 Max plus that still saved 12% of the whole video against Kling v3 Standard.
 
 ---
 
@@ -51,16 +61,18 @@ Not for: news / patch recaps (use `news`), lore monologue (use `character-story`
 | Component | 5s clip | 7× total |
 |---|---|---|
 | NB2 image | $0.08 | $0.56 |
-| Kling v3 Standard I2V 5s (no audio) | $0.42 | $2.94 |
+| MiniMax H3 Max I2V 5s ($0.08/s on the returned ~5.18s; clip sound unused) | ~$0.41 | ~$2.90 |
+| **Per animated scene** | **~$0.49** | |
+| Still-shot scene (NB2 image only; `tools/still_shot.py` render is free) | $0.08 | |
 | External TTS (MiniMax, or Chatterbox with an approved exact-format sample) | see `providers.json` | see `providers.json` |
 | NB2 anchor refs (per new character — when not in Supabase) | $0.08 | varies |
 
 | Variant | Total |
 |---|---|
-| Typical (v3 Standard, all anchors in Supabase) | **~$3.80** |
-| Worst case (2 new anchor refs to generate) | ~$3.96 |
+| Typical (H3 Max, all anchors in Supabase) | **~$3.75** (~$3.35 with a still title card) |
+| Worst case (2 new anchor refs to generate) | ~$3.90 (~$3.50 with a still title card) |
 
-Slightly more than the previous 6-clip layout because rank-1 is split into 2 clips for the climax. 
+Approx. totals = 7 images + 7 clips + a small TTS/music allowance. Each planned still scene saves ~$0.41. Slightly more than the previous 6-clip layout because rank-1 is split into 2 clips for the climax. 
 
 ---
 
@@ -68,13 +80,13 @@ Slightly more than the previous 6-clip layout because rank-1 is split into 2 cli
 
 | Index | Beat | Duration | Visual | Narrator (TTS) |
 |---|---|---|---|---|
-| 0 (title) | Hook / theme reveal | 5s | Title-card NB2 + Kling I2V: sparkles, lens-flare, slow push-in, baked "TOP 5 {THEME}" text | Optional: 1-line teaser, e.g. `"Five Starfleet women who broke the warp drive — who tops the list?"` |
-| 1 (`#5`) | Lowest entry | 5s | Item NB2 + Kling I2V: subtle motion (camera arc, breath, magical aura) | `"In fifth place: {NAME} — {one-line reason}."` |
-| 2 (`#4`) | Rising | 5s | Item NB2 + Kling I2V | `"Number four: {NAME} — {one-line reason}."` |
-| 3 (`#3`) | Mid | 5s | Item NB2 + Kling I2V (slightly more intense motion) | `"At three: {NAME} — {one-line reason}."` |
-| 4 (`#2`) | Penultimate, tease #1 | 5s | Item NB2 + Kling I2V (energy step up) | `"And the runner-up: {NAME} — {one-line reason}."` |
-| 5 (`#1`, part 1) | **Climax** — wide hero reveal | 5s | Item NB2 + Kling I2V (large motion: pull-back, dramatic lighting, particles, banner reveal) | `"Topping the list: {NAME}. {one-line reason A — pacing setup}."` |
-| 6 (`#1`, part 2) | **Climax payoff**; CTA overlay last 1.5s ONLY if no Supabase CTA pack-shot exists | 5s | Item NB2 (chain from scene 5) + Kling I2V (closer angle: emotional push-in, slow-motion hair drift, screen flash) | `"{one-line reason B — emotional/legacy beat}. Follow for more tops."` |
+| 0 (title) | Hook / theme reveal | 5s | Title-card NB2 + I2V (or a still shot): sparkles, lens-flare, slow push-in, baked "TOP 5 {THEME}" text | Optional: 1-line teaser, e.g. `"Five Starfleet women who broke the warp drive — who tops the list?"` |
+| 1 (`#5`) | Lowest entry | 5s | Item NB2 + I2V: subtle motion (camera arc, breath, magical aura) | `"In fifth place: {NAME} — {one-line reason}."` |
+| 2 (`#4`) | Rising | 5s | Item NB2 + I2V | `"Number four: {NAME} — {one-line reason}."` |
+| 3 (`#3`) | Mid | 5s | Item NB2 + I2V (slightly more intense motion) | `"At three: {NAME} — {one-line reason}."` |
+| 4 (`#2`) | Penultimate, tease #1 | 5s | Item NB2 + I2V (energy step up) | `"And the runner-up: {NAME} — {one-line reason}."` |
+| 5 (`#1`, part 1) | **Climax** — wide hero reveal | 5s | Item NB2 + I2V (large motion: pull-back, dramatic lighting, particles, banner reveal) | `"Topping the list: {NAME}. {one-line reason A — pacing setup}."` |
+| 6 (`#1`, part 2) | **Climax payoff**; CTA overlay last 1.5s ONLY if no Supabase CTA pack-shot exists | 5s | Item NB2 (chain from scene 5) + I2V (closer angle: emotional push-in, slow-motion hair drift, screen flash) | `"{one-line reason B — emotional/legacy beat}. Follow for more tops."` |
 
 - `camera_angle` MUST be different for adjacent clips (close-up → medium → low-angle → wide → hero shot)
 - Energy / motion intensity escalates from #5 → #1
@@ -98,10 +110,10 @@ Two-stage build (fallback when there is no locked reference), the same as a regu
    - Font: read `top_font` from `games/{GAME_TAG}/top-list_special.md` if present, otherwise default **"Montserrat Black"** or **"Bebas Neue"** (bold, sans-serif, high stroke), accent color from game `palette`
    - Add: lens-flare, sparkles, magical particles, embers — whatever fits the game's tone
 
-2. **Kling I2V**, `generate_audio: false`, `duration: 5`:
+2. **Motion** — the title card is the format's best still-shot candidate (see "Still shots: allowed"): as a still, a slow `push-in` over the PNG keeps the baked text exactly as generated. When it is animated, **H3 Max I2V**, `duration: 5`, `scene_video_audio: "none"` with a silent `target_audio_url`:
    - `motion_prompt`: short, multi-action — sparkles drift, light rays sweep across the title, slow camera push-in, particles swirl. Two distinct movements minimum.
    - Title plate must stay readable: no warp, no rotation past 5°, no obscuring particles in the center 60% of the frame
-   - `negative_prompt`: `"warped text, illegible letters, garbled text, distorted typography, blurred title, missing letters, extra letters"`
+   - H3 has no `negative_prompt`; the text-legibility guard is the closing sentence `Text stays sharp and unchanged.` (plus `Mouth stays closed; no talking.` if a face is visible in the collage)
 
 3. **No text-overlay pass needed** in Editor for the title card — text is baked into NB2. Editor only handles the optional narrator subtitle.
 
@@ -116,7 +128,7 @@ NB2 image of the character / location / item, **no number-text baked in** (numbe
 - For locations: wide establishing shot, optional foreground silhouette for depth
 - For items/weapons: 3/4 hero-product angle on a stylized background (smoke, sparks, energy)
 
-Kling I2V `motion_prompt`: ≥2 distinct micro-motions, e.g. `"hair drifts in low gravity AND camera arcs slowly to the right; particles drift across the lens"`. Escalate motion intensity #5 → #1.
+I2V `motion_prompt`: ≥2 distinct micro-motions, e.g. `"hair drifts in low gravity AND camera arcs slowly to the right; particles drift across the lens"`. Escalate motion intensity #5 → #1.
 
 ---
 
@@ -177,7 +189,7 @@ No per-scene drawtext / manual style / position override.
 
 ---
 
-## Prompting rules (NB2 + Kling)
+## Prompting rules (NB2 + I2V)
 
 ### NB2 chain
 
@@ -272,13 +284,13 @@ After publishing:
 - Manager updates `last_episode` and the `anti_repetition` FIFO arrays.
 - If a run is cancelled after storyboard approval but before publish, log it with `status: "cancelled"` and `final_url: ""` so parallel workspaces know the topic was attempted.
 
-### Kling I2V
+### I2V (H3 Max)
 
-- `generate_audio: false` (always — TTS overlay handles sound, music bed handles ambience)
-- `duration: 5` (locked for every clip including title)
+- `scene_video_audio: "none"` and a silent `target_audio_url` on every animated clip (always — TTS overlay handles sound, music bed handles ambience; H3's own soundtrack is discarded)
+- `duration: 5` (locked for every clip including title; a still scene keeps `duration_sec: 5`)
 - `motion_prompt`: minimum 2 different actions, escalating from #5 → #1
-- Title card extra: `negative_prompt` mandatory for text legibility
-- Polling base: `fal-ai/kling-video` (2-segment path)
+- Title card extra: when animated, the prompt ends with `Text stays sharp and unchanged.` (H3 has no `negative_prompt`); as a still it needs no guard
+- Polling: done by `tools/kling_runner.py` against the route's poll base in `tools/video_routes.json` (H3 Max: `https://queue.fal.run/minimax/h3-max`); never poll by hand
 
 ---
 
@@ -405,13 +417,14 @@ If file absent → defaults from this playbook.
 - Exactly **7 scenes**: 1 title + 4 items (ranks 5..2) + 2 climax clips (both rank 1, `part` 1 and 2).
 - Check `Story State` from `merged-context.md` before choosing the theme/ranking. Avoid recent categories, full lineups, and winners unless the user's idea explicitly repeats them.
 - Set top-level `category` and `ranking_basis` in `storyboard.json`. `category` should be machine-friendly (`male-characters`, `villains`, `locations`, `weapons`, etc.).
-- Title scene fields: `role: "title_card"`, `clip_type: "title"`, `title_text`, `subtitle_text`, optional `tts`.
+- Title scene fields: `role: "title_card"`, `clip_type: "title"`, `title_text`, `subtitle_text`, optional `tts`. It is the format's best still-shot candidate (see "Still shots: allowed").
 - Item scene fields: `rank` (int), `name`, `character_description` (8+ visual details), `camera_angle`, `motion_hint`, `tts`, **`overlays[]`** (one object: `rank_number` `"#{rank}"` — see the `## Overlays` section).
 - Rank-1 climax: TWO scenes (indices 5 and 6) BOTH with `rank: 1`. Index 5 = `part: 1`, `clip_type: "item_climax"`. Index 6 = `part: 2`, `clip_type: "item_climax"`. Same `name` and `character_description`. Different `camera_angle` (wide → close), `motion_hint`, and `tts` text.
 - `tts` for ranks 5..2: **8–15 words**, must START with the rank phrase ("In fifth place: / Number four: / At three: / And the runner-up:"). Include the exact `name` + one-line reason.
 - `tts` for rank 1: **two short lines (≤10 words each)**. Part 1 starts with `"Topping the list:"` + exact `name` + a pacing-setup beat. Part 2 = emotional/legacy beat + literal closing `"Follow for more tops."`
-- `camera_angle` different for adjacent scenes (including across the rank-1 pair: e.g. wide hero → close-up push-in).
-- `motion_hint` ≥2 different actions; intensity escalates 5→1; rank-1 part 2 is the most intense.
+- `camera_angle` different for adjacent scenes (including across the rank-1 pair: e.g. wide hero → close-up push-in); every scene has an active camera move (a still scene's `still_effect` counts).
+- `motion_hint` ≥2 different actions per animated scene; intensity escalates 5→1; rank-1 part 2 is the most intense.
+- Still shots: optional, per "Still shots: allowed" above and `rules/roles/scenarist.md` "Still shots"; zero is a normal result.
 - `cta_overlay: true` ONLY on the rank-1 part-2 scene (index 6) when no Supabase CTA pack-shot exists. NOT on part 1.
 - Read style, palette, lighting, and appearance only from the exact `top-list` story bible (or live user override). `top-list_special.md` may supply format-owned layout/font directives, but never cross-format appearance/style/voice assets.
 - General rules — `rules/roles/scenarist.md`
@@ -421,7 +434,7 @@ If file absent → defaults from this playbook.
 - **7 NB2 generations** (title + 4 items + 2 climax clips for rank-1). All 608×1080 (9:16).
 - **Title card NB2**: bake `"TOP 5"` + `"{theme}"` text into the image using `top_font` from `visual_identity` (defaults Montserrat Black / Bebas Neue). Use only exact-top-list-owned style refs, no prior-scene ref. Add sparkles/lens-flare/particles aligned with the locked palette.
 - **Item NB2**: do NOT bake numbers — numbers are an Editor overlay. Compose with center 50–70% subject + clear space top-left for the `#N` overlay.
-- **No on-screen text on character images (HARD RULE).** Per-item NB2 outputs must be CLEAN illustrations — no character-card layout, no game UI labels, no nameplate banners, no era/series logos ("STAR TREK: DEEP SPACE NINE", "VOYAGER" etc.), no #N number, no caption strip, no rarity stars/borders. All text and number callouts come from Editor drawtext overlays. Every per-item `image_prompt` MUST end with `". Clean illustration with NO on-screen text, NO captions, NO labels, NO logos, NO nameplate banners, NO game UI of any kind."` Push the same intent into NB2 `negative_prompt` and into the per-clip Kling `negative_prompt` so any drift is caught: `"on-screen text, character card layout, trading card, nameplate, banner text, game UI labels, captions, watermark, rarity stars, series logo, era label, subtitle"`.
+- **No on-screen text on character images (HARD RULE).** Per-item NB2 outputs must be CLEAN illustrations — no character-card layout, no game UI labels, no nameplate banners, no era/series logos ("STAR TREK: DEEP SPACE NINE", "VOYAGER" etc.), no #N number, no caption strip, no rarity stars/borders. All text and number callouts come from Editor drawtext overlays. Every per-item `image_prompt` MUST end with `". Clean illustration with NO on-screen text, NO captions, NO labels, NO logos, NO nameplate banners, NO game UI of any kind."` Push the same intent into NB2 `negative_prompt` so any drift is caught: `"on-screen text, character card layout, trading card, nameplate, banner text, game UI labels, captions, watermark, rarity stars, series logo, era label, subtitle"`. (The H3 clip takes no `negative_prompt`; a clean start frame is the guard.)
 - **Rank-1 climax pair (scenes 5 + 6):** generate part 1 first (wide hero shot, ≥7-detail backdrop, dramatic establishing composition). Then generate part 2 using part 1 as `[anchor_ref?, scene-5_image]` chain — same character, closer angle, same lighting/palette. Part 2 = closer crop, more intimate; show eyes/face cleanly for the emotional payoff.
 - Chain refs: `[exact_top_list_anchor_ref?, same_run_prev_scene?]`; title card uses no prior-scene ref; rank-1 part 2 ALWAYS chains on part 1 from the same run.
 - An anchor is eligible only when the exact `top-list` story bible records it and its metadata matches the exact game/format/series. Do not visually compare or borrow another format's asset. If the owned anchor is missing, use NB2 text-to-image with the full top-list-owned `character_description` and omit `image_urls`, or generate/upload a new reusable top-list-bound anchor when repeated use is planned.
@@ -430,24 +443,27 @@ If file absent → defaults from this playbook.
 
 ### Animator
 
-- **Model:** Kling I2V v3 Standard. The model/endpoint/route and serialized request stay fixed; retry once on failure, then stop. Kling 2.6 requires a separate explicit user authorization after the stopped run.
-- **All 7 scenes:** `duration: 5`, `generate_audio: false`, **NO end frame** (start frame only — end frames make Kling interpolate-then-freeze).
-- **Three motion layers per clip (MANDATORY).** Every clip's `motion_prompt` must specify three concurrent layers, each continuing throughout the full 5s — no "then settles" / "then steady" / "then dies" cues (Kling reads those as freeze):
+- **Model:** all animated scenes via the format's route, **MiniMax H3 Max I2V** (`minimax.h3max.i2v`), through `tools/kling_runner.py` (payload: `prompt`, `image_url`, numeric `duration`, `resolution: "768P"`, `prompt_expansion_mode: "disabled"`; see `tools/examples/minimax-h3-max-scene-video.job.json`). `expect.audio: "optional"`, never `"forbidden"` (H3 always returns a soundtrack). Write `scene_video_audio: "none"` on every scene. The model/endpoint/route and serialized request stay fixed; retry once on the same route, then stop; any other route (Kling v3 Standard, Kling 2.6) requires a separate explicit user authorization after the stopped run.
+- Every animated clip adds a **silent `target_audio_url`** of its `duration` (clip sound is discarded): a data URI from `tools/silent_audio.py --duration <duration_sec> --out <file>`, read into the job with `jq --rawfile` before `--preflight` (`rules/roles/animator.md` §2a "Silent `target_audio_url`"; it stops H3 from mouthing words, Test 6b).
+- **Still scenes** (`motion: "still"`, usually the title card): no paid job; render with `tools/still_shot.py` as `rules/roles/animator.md` describes.
+- **All 7 scenes:** `duration: 5`, **NO end frame** (start frame only — H3 has none; on Kling, end frames make it interpolate-then-freeze).
+- **Three motion layers per animated clip (MANDATORY).** Every animated clip's `motion_prompt` must specify three concurrent layers, each continuing throughout the full 5s — no "then settles" / "then steady" / "then dies" cues (I2V models read those as freeze):
   1. **Camera move** — pick one per clip: slow push-in, slow pull-back, lateral dolly, low boom up, crane up, parallax handheld drift, slow arc. Distribute variety across the 7 clips. NEVER "camera holds steady".
   2. **Environment motion** — wind, smoke, sparks, particles, light flicker, distant figures, holographic UI motion, console glow pulses, viewscreen shimmer, starfield drift. Continuous throughout the 5s.
   3. **Character action** — one gesture or expression beat sustained through the clip (slow head turn, eyes lifting, half-smile forming, jaw tightening, hand drifting). Sustained, NOT completed mid-clip.
 - **Phrasing rules for `motion_prompt`:**
   - Continuous-tense verbs (`is drifting`, `tightens`, `lifts gently`) and explicit duration cues (`throughout the shot`, `held for the full 5 seconds`, `continues across the frame`).
-  - **Banned phrases (read as freeze by Kling):** `"then settles"`, `"then steady"`, `"then holds"`, `"then dissipates"`, `"then dies"`, `"camera holds steady"`, `"hold position"`, `"no morphing"`, `"maintain exact character appearance"`. NEVER use.
+  - **Banned phrases (read as freeze by I2V models):** `"then settles"`, `"then steady"`, `"then holds"`, `"then dissipates"`, `"then dies"`, `"camera holds steady"`, `"hold position"`, `"no morphing"`, `"maintain exact character appearance"`. NEVER use.
   - **Avoid stacked negative listings.** Do not pile `No walking, no running, no fighting, no impact`. Replace with positive grounded instructions ("character remains rooted at the console", "feet planted, weight shifts gently").
-  - Trust Kling to hold identity from the start frame — do not write defensive identity-lock phrases.
+  - Trust the I2V model to hold identity from the start frame — do not write defensive identity-lock phrases.
 - **Micro vs. macro motion.** Avoid full-body locomotion (walking, running, combat hits) — identity drift becomes visible. Motion WITHIN the frame (head, hands, torso, breath, sustained gestures, environment) MUST be alive.
-- **Rank-1 climax pair (scenes 5 + 6):** generate independently as two separate Kling I2V calls (no end frame; two distinct shots). Part 1 motion: pull-back reveal + viewscreen flare + golden particles bursting outward + still-sustained character pose. Part 2 motion: slow push-in + laurel wreath shimmer + golden sparks rising + character eyes lifting to camera in the final third. Strongest motion intensity of the whole video.
-- **Universal `negative_prompt` (every clip):** `"on-screen text, captions, character card, trading card layout, nameplate, banner text, game UI labels, watermark, rarity stars, series logo, era label, talking, mouth open, lip sync, blurry face, text deformation, garbled letters"`. Title-card scene 0 adds the text-legibility set already specified in its section.
-- Title card: `negative_prompt` mandatory (`"warped text, illegible letters, garbled text, distorted typography, blurred title, missing letters, extra letters"`).
-- Items: standard negative-prompt set + game-specific anti-style.
-- Polling base = first 2 segments of endpoint (`fal-ai/kling-video`).
-- Validate after each clip: filesize > 100KB, ffprobe duration ≈ 5.0s ±0.2s.
+- **Rank-1 climax pair (scenes 5 + 6):** generate independently as two separate H3 Max calls (no end frame; two distinct shots; never a still). Part 1 motion: pull-back reveal + viewscreen flare + golden particles bursting outward + still-sustained character pose. Part 2 motion: slow push-in + laurel wreath shimmer + golden sparks rising + character eyes lifting to camera in the final third. Strongest motion intensity of the whole video.
+- **No `negative_prompt` on H3 — closing sentences instead.** Kling's universal anti-text / anti-talking `negative_prompt` becomes at most two short plain sentences at the end of `prompt` (`rules/roles/animator.md` §2a), never a banned phrase:
+  - Ranked items (scenes 1–6): `Mouth stays closed; no talking.` whenever a face is visible; add a second sentence only if an exclusion is truly needed. The clean start frame (no baked text, Storyboarder rule) is the anti-text guard.
+  - Animated title card (scene 0): `Text stays sharp and unchanged.` (plus the mouth sentence if a face is visible). A still title card needs neither.
+  - No sound clause is needed (clip sound is discarded). Keep prompts ≤512 UTF-8 bytes.
+- Polling: done by `tools/kling_runner.py` against the route's poll base in `tools/video_routes.json` (H3 Max: `https://queue.fal.run/minimax/h3-max`); never poll by hand.
+- Validate after each clip: filesize > 100KB, ffprobe duration within 0.8s of 5.0s (H3 returns ~5.18s; the Editor trims it to `duration_sec`, do not trim yourself). A still clip is exact (±0.05s).
 - General rules — `rules/roles/animator.md`
 
 ### Sound
@@ -466,7 +482,7 @@ If file absent → defaults from this playbook.
 - `item_name` overlays are banned for top-list. Names are carried by `tts`.
 - Rank-1 pair (scenes 5 + 6) both show `#1`. They are visually continuous (same rank), but distinct shots.
 - Title card (scene 0): NO number/name overlay (text is in NB2). Its optional narration is handled by the universal ASS timeline.
-- Per-scene branches apply rank overlays and normalization before concat. Burn the one universal ASS only after concat, as the last video filter.
+- Per-scene branches apply rank overlays and normalization before concat (fill-and-crop to 1080×1920 ending in `setsar=1`, 30fps; H3 clips trimmed to `duration_sec`, still clips already exact; `rules/roles/editor.md`). A still scene gets its rank overlay like any other scene. Burn the one universal ASS only after concat, as the last video filter.
 - Concat with re-encode (NOT `-c copy`); hard cuts, NO crossfade between items (countdown rhythm). Hard cut also between rank-1 part 1 and part 2 — the match-cut is the moment, not a dissolve.
 - **CTA pack-shot from Supabase (preferred):** query `game_assets` for `tags @> ["cta"]` + video asset. If present, normalize (1080×1920, 30fps, AAC 128k) and concatenate AFTER scene 6 as the final clip. Apply fade-to-black on the pack-shot tail (last 0.5–1.0s), NOT on scene 6. Music fades 0.5s before the pack-shot starts.
 - **CTA fallback (only if no Supabase pack-shot):** drawtext `"Follow for more tops →"` lower-center on translucent black box on scene 6, last 1.5s. Fade-to-black final 1.0s of scene 6.
@@ -483,12 +499,12 @@ output/YYYY-MM-DD/{GAME_TAG}/top-list/
 ├── scenes/
 │   ├── scene-0/                # title card
 │   │   ├── scene-0.png         # NB2 with baked title text
-│   │   ├── scene-0.mp4         # Kling I2V raw
+│   │   ├── scene-0.mp4         # H3 I2V raw, or local still render
 │   │   ├── scene-0.mp3         # TTS (optional)
 │   │   └── scene-0-sub.mp4     # with subtitle (if tts)
 │   ├── scene-1/                # rank #5
 │   │   ├── scene-1.png         # NB2 (no number)
-│   │   ├── scene-1.mp4         # Kling I2V raw
+│   │   ├── scene-1.mp4         # H3 I2V raw
 │   │   ├── scene-1.mp3         # narrator TTS
 │   │   ├── scene-1-overlay.mp4 # with #5 rank overlay
 │   │   └── scene-1-sub.mp4     # + subtitle
@@ -513,9 +529,9 @@ Generated PNG/MP4/audio receives technical validation only (path, size, hash, di
 - [ ] Ranks present: 5, 4, 3, 2, 1, 1 (rank 1 appears twice with `part: 1` and `part: 2`); no other duplicates / gaps
 - [ ] Title-card prompt/schema contains `"TOP 5"` + `"{theme}"`; generated file passes programmatic size/dimension/hash checks, with appearance left to user review
 - [ ] Item NB2s have NO number baked in (numbers come from Editor overlay)
-- [ ] All 7 Kling clips `generate_audio: false`, duration 5s ±0.2s
+- [ ] Animated scenes use `minimax.h3max.i2v` with `scene_video_audio: "none"`, a silent `target_audio_url` and no end frame, duration within 0.8s of 5s (played as 5s after the Editor's trim); still scenes (if any) have `scene_video_kind: "still"`, are not a character entry or the rank-1 pair, and stay within the `rules/roles/scenarist.md` "Still shots" cap
 - [ ] `camera_angle` different for adjacent scenes (including across rank-1 pair: part 1 wide → part 2 close)
-- [ ] `motion_hint` ≥2 different actions per scene; intensity escalates 5→1
+- [ ] `motion_hint` ≥2 different actions per animated scene; intensity escalates 5→1; every scene has an active camera move (a still's `still_effect` counts)
 - [ ] Each item TTS begins with the correct rank phrase ("In fifth place / Number four / At three / Runner-up / Topping the list")
 - [ ] Each ranked item TTS says the exact scene `name` (rank-1 part 1 must say it; part 2 may omit it)
 - [ ] Rank-1 TTS split across two parts: part 1 ≤10w; part 2 ≤10w and ends with literal "Follow for more tops."
@@ -524,8 +540,8 @@ Generated PNG/MP4/audio receives technical validation only (path, size, hash, di
 - [ ] CTA: if game has Supabase pack-shot video → concatenated after scene 6 (no drawtext CTA on scene 6, no fade-to-black on scene 6 — fade goes on pack-shot tail). If no pack-shot → drawtext CTA on scene 6 last 1.5s + fade-to-black on scene 6 last 1.0s.
 - [ ] Per-item prompts/negative prompts enforce CLEAN illustrations with no on-screen text, character-card layout, game UI labels, era logos, or nameplate banners; generated files receive technical checks only
 - [ ] `visual_identity.style_tags` was resolved from the exact top-list bible or a live user override and applied verbatim to every `image_prompt`
-- [ ] Every `motion_prompt` includes three concurrent layers (camera move + environment motion + character action) and contains NONE of the banned freeze phrases (`then settles`, `then steady`, `camera holds steady`, `hold position`, `no morphing`, `maintain exact character appearance`)
-- [ ] Every Kling clip has the universal anti-text `negative_prompt` set
+- [ ] Every animated clip's `motion_prompt` includes three concurrent layers (camera move + environment motion + character action) and contains NONE of the banned freeze phrases (`then settles`, `then steady`, `camera holds steady`, `hold position`, `no morphing`, `maintain exact character appearance`)
+- [ ] No H3 job has a `negative_prompt`; every animated prompt ends with at most two closing sentences: `Mouth stays closed; no talking.` whenever a face is visible, `Text stays sharp and unchanged.` on an animated title card
 - [ ] Music `volume=0.15`, mixed via `amix` + `apad`, NO `-shortest`. Music fades 0.5s before pack-shot starts (if pack-shot path used).
 - [ ] `final.mp4`: 1080×1920, 30fps. Duration = ~35s without pack-shot or ~35s + pack-shot length. Budget ≤ $5.00
 
@@ -538,12 +554,14 @@ Generated PNG/MP4/audio receives technical validation only (path, size, hash, di
 - ❌ TTS that skips the scene `name` — if the name is not said aloud, the audience loses the entry after name overlays were removed.
 - ❌ Counting UP (1→5). Always 5→1 with climax on #1.
 - ❌ Same `camera_angle` on adjacent items (kills rhythm).
-- ❌ `generate_audio: true` on Kling I2V — wastes ~$1.20/video, TTS+music bed already cover sound.
+- ❌ Using the I2V clip's own sound (`scene_video_audio` must be `"none"`), or an H3 clip without its silent `target_audio_url` — TTS+music bed already cover sound, and without the silent track H3 mouths words.
+- ❌ `negative_prompt`, `generate_audio`, `multi_prompt` or an end frame on the H3 route (not supported; guards are closing sentences).
 - ❌ Per-scene drawtext subtitles or format-local subtitle styling. Use one universal whisper-timed ASS on the final shaped voice timeline and burn it last.
 - ❌ Crossfade between item clips — countdown needs hard cuts for snap rhythm.
 - ❌ `-shortest` in FFmpeg (universal). Always `apad` on music side.
 - ❌ ElevenLabs TTS, a cross-format voice sample, or Chatterbox without an approved exact-top-list sample.
-- ❌ Title card NB2 without `negative_prompt` for text legibility — Kling warps text without it.
+- ❌ An animated title card without the closing `Text stays sharp and unchanged.` — I2V warps baked text without a guard. A still title card avoids the problem.
+- ❌ A still on a character entry or on either rank-1 climax scene — stills are for the title card or a character-free low-rank entry only.
 - ❌ Generating a brand-new CTA video inside the top-list run. If a game already has a Supabase CTA pack-shot, use it. If it does not, use the drawtext fallback on rank-1 part 2.
 - ❌ TTS lines longer than 15 words on rank 5–2, or longer than 10 words on rank-1 parts — eats into the 5s clip, narration runs over the next clip's overlay.
 - ❌ Rendering rank-1 as a single 5s or 10s clip. RULE: rank-1 is ALWAYS 2× 5s clips with a hard match-cut. No exceptions.
@@ -554,6 +572,6 @@ Generated PNG/MP4/audio receives technical validation only (path, size, hash, di
 - ❌ Scene 6 looking identical to scene 5. The chain reference makes NB2 reproduce part 1 unless the prompt explicitly demands a NEW visual element (crown / laurel wreath / fireworks / pedestal / #1 banner) plus a tighter crop. No winner beat = broken climax cut.
 - ❌ Per-item NB2 outputs containing baked text — character-card layouts, game UI labels, era/series logos ("STAR TREK: DEEP SPACE NINE"), nameplate banners, rarity stars. Per-item images must be CLEAN; all callouts come from Editor drawtext overlays.
 - ❌ Generating without resolved exact-top-list `style_tags`, or silently falling back to game-wide/another-format style data.
-- ❌ `motion_prompt` with "camera holds steady" / "then settles" / "then steady" / "hold position" / "no morphing" / "maintain exact character appearance" — Kling reads these as freeze cues and produces static clips. Every clip needs three concurrent motion layers (camera + environment + character).
+- ❌ `motion_prompt` with "camera holds steady" / "then settles" / "then steady" / "hold position" / "no morphing" / "maintain exact character appearance" — I2V models read these as freeze cues and produce static clips. Every animated clip needs three concurrent motion layers (camera + environment + character); a planned still shot is a rendered camera move chosen in Phase 1 under "Still shots: allowed", not a freeze prompt.
 - ❌ Using a drawtext CTA overlay when the game already has a Supabase pack-shot video. The pack-shot is the on-brand, branded ending; drawtext is the fallback.
 - ❌ Skipping `top-list_story_bible.json` or forgetting to update it after publishing. Repeating the same "Top 5 men/villains/locations" kills the format faster than a weak individual entry.

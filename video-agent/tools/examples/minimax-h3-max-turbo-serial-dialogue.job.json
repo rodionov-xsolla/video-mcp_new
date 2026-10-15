@@ -1,0 +1,31 @@
+{
+  "schema_version": 3,
+  "job_id": "replace-with-unique-serial-dialogue-lipsync-job-v1",
+  "route": "minimax.h3max.turbo.i2v",
+  "artifact_kind": "scene_video",
+  "output_dir": "/ABSOLUTE/OUTPUT_DIR",
+  "output_path": "scenes/scene-1/scene-1.mp4",
+  "payload": {
+    "prompt": "Star Trek cinematic 3D animation. Dim amber corridor. A stocky engineer, grey temples, red tunic, alarmed, at right; a light brown-haired captain, gold tunic, at left. The engineer speaks first: \"Captain, Starfleet just locked every command code you own.\" Then the captain answers: \"Who signed it?\" Each character's lips move only while they speak and stay closed otherwise. They do not stare into the lens: their gaze rests on each other and drifts naturally, with small relaxed head movements.",
+    "image_url": "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/episodes/GAME_TAG/EPISODE/scenes/scene-1.png",
+    "target_audio_url": "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/episodes/GAME_TAG/EPISODE/tts/clip-1.mp3",
+    "duration": 6.7,
+    "resolution": "768P",
+    "prompt_expansion_mode": "disabled"
+  },
+  "expect": {
+    "kind": "video",
+    "duration_seconds": 6.7,
+    "duration_tolerance_seconds": 0.8,
+    "audio": "required",
+    "min_bytes": 100000,
+    "min_width": 600,
+    "min_height": 1000,
+    "orientation": "portrait"
+  },
+  "supabase": {
+    "game": "replace-game-tag",
+    "episode": "YYYY-MM-DD-serial-drama-run-id",
+    "name": "scene-1.mp4"
+  }
+}

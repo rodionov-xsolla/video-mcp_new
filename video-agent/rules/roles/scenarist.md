@@ -93,18 +93,18 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
 
 | Content | Duration | When |
 |---|---|---|
-| Line ≤15 words | **5s** | Default for ALL dialogue clips unless the format uses I2V multi-shot dialogue |
+| Line ≤15 words | **5s** | Default for ALL dialogue clips unless the format plans two-speaker dialogue clips (serial-drama: 6–10s) |
 | Action / reaction | **5s** | Default for ALL I2V clips |
 | Long undividable monologue (16–25 words) | **10s** | Only if splitting would lose the meaning |
 | Complex physical sequence | **10s** | Extremely rare |
 
 **Hard rules:**
-1. Dialogue clips > 5s require a format-specific reason. For serial-drama, dialogue can be 6–12s only when it is I2V `multi_prompt` with multiple 3s shots; a static talking head for 10s is a mistake.
+1. Dialogue clips > 5s require a format-specific reason. For serial-drama, a dialogue clip carries a two-speaker exchange (H3 lip-sync) and runs 6–10s (≤15 s of audio); a static talking head for 10s is a mistake.
 2. More 5s clips > fewer 10s clips. Dynamics beats cost.
 3. A 10s clip requires justification in `duration_reason`. Can't explain — make it 5s.
 4. If the dialogue doesn't fit in 5s — cut text, don't stretch the clip.
 
-> ⚠️ Format override: serial-drama dialogue is I2V `multi_prompt + voice_ids`, not Avatar. In serial-drama, `duration_sec` is the real clip duration. In Avatar-based formats, dialogue runtime follows TTS duration; read the format playbook before planning runtime.
+> ⚠️ Format override: serial-drama dialogue is H3 lip-sync on Sound's TTS, not Avatar and not Kling `multi_prompt + voice_ids`. Your serial-drama dialogue `duration_sec` is an estimate: Sound overwrites it with the clip audio's length rounded up to 0.1 s; action clips keep yours. In Avatar-based formats, dialogue runtime follows TTS duration; read the format playbook before planning runtime.
 
 ---
 
@@ -135,7 +135,7 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
 
 **For I2V clips — micro motion only.** Don't describe walking, hits, running — image-to-video does not animate that. Movement = montage transition between clips, not animation inside one clip.
 
-**For dialogue clips — obey the format's animation mode.** Serial-drama dialogue is I2V and may stage two-shots / over-shoulders / group reactions if the start frame supports them. Avatar-based formats should not introduce background characters into a solo Avatar frame unless the format says so.
+**For dialogue clips — obey the format's animation mode.** Serial-drama dialogue is H3 lip-sync and stages two-shots / over-shoulders with both speakers visible in the start frame. Avatar-based formats should not introduce background characters into a solo Avatar frame unless the format says so.
 
 ---
 
@@ -152,7 +152,7 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
   "character_state": "what the character does AT THE START of the clip",
   "facial_expression": "concrete expression: scared wide eyes, cocky smirk, tearful gaze (NOT 'sad'/'happy')",
   "character_speech": "line" or null,
-  "tts": "text for external TTS (Avatar-based formats only; null for serial-drama I2V dialogue)",
+  "tts": "text for external TTS (Avatar-based formats only; null for serial-drama dialogue, whose TTS Sound builds from character_speech)",
   "subtitle_emphasis": ["word or phrase to emphasize"],
   "environment_state": "what is happening in the environment",
   "action_description": "what happens in the scene — description for Storyboarder and Animator",
@@ -168,21 +168,17 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
 Write the four `still_*` fields only on scenes with `motion: "still"`; animated scenes carry none of them.
 
 ### `character_speech` / `tts`
-- **Serial-drama dialogue (I2V):** `character_speech` contains the spoken lines; `tts` is null; include `generate_audio: true`, `shot_type: "customize"`, `voice_ids`, and `multi_prompt` with `<<<voice_1>>>` / `<<<voice_2>>>`.
+- **Serial-drama dialogue (H3 lip-sync):** `character_speech` is an ordered list of `{"speaker": "<bible character name>", "line": "<spoken text>"}`; `tts` is null. Do not write `generate_audio`, `shot_type`, `voice_ids`, `multi_prompt` or `<<<voice_N>>>` tags: Sound generates each line in the speaker's series voice and builds the clip's audio, and the Animator writes the lip-sync prompt.
 - **Avatar-based formats:** `character_speech` = null; `tts` = text for external TTS.
 - **Silent I2V action:** both null.
 
-Serial-drama `multi_prompt` rules:
-- At most 2 speakers / `voice_ids` per Kling request. The series can have 3+ reusable voices; `<<<voice_1>>>` and `<<<voice_2>>>` are local to the current request and must be remapped from the selected `voice_ids` array. Split true 3-speaker exchanges into separate clips.
-- Target dialogue clip length: 6–10s. Shot duration is variable: 2–3s default, 4s only when a phrase/acting beat needs it.
-- Timing formula before generation: `shot_seconds = word_count / pace + pause_padding + acting_padding`, rounded up to whole seconds. Default pace is 2.4 words/sec; use faster pace for tension/Michael mission-rant only when intentional.
-- Each shot prompt ≤512 serialized UTF-8 bytes, measured with `len(prompt.encode("utf-8"))`; exact formats may require a lower safety ceiling.
-- Each shot restates the style anchor and the visible characters by physical description, not just by name.
-- **No bare character names in Kling-facing shot prompts.** The model does not know "Alex", "Michael", or "Emily"; it only sees the start frame and text. Use the story bible `character_description` / `visual_prompt` every time.
-- **The speaker must be physically identified immediately before the voice tag.** Pattern: `[physical descriptor + frame position + action]. <<<voice_1>>> "line"`. Do not write `Alex says <<<voice_1>>>`.
-- `voice_ids[N-1]`, `<<<voice_N>>>`, `character_speech.speaker`, and the physical descriptor in that shot must all refer to the same character.
-- If a beat needs a third speaker or a character who is not already visible in the start frame, split into another I2V dialogue clip. Do not drop the beat and do not rely on a name to introduce the character mid-clip.
-- `duration_sec` equals the sum of `multi_prompt[].duration`.
+Serial-drama dialogue rules (H3 lip-sync, `rules/formats/serial-drama.md`):
+- At most 2 speakers per dialogue clip, both visible in the start frame; the tested shape is speaker A's line, then speaker B's answer. Split a third speaker, or a speaker who enters mid-moment, into another dialogue clip. More than two lines in one clip is untested.
+- Target dialogue clip length: 6–10s; the clip audio (0.2 s lead-in + lines + 0.3 s gaps) must stay ≤15 s. Timing estimate before generation: `line_seconds = word_count / pace` (default pace 2.4 words/sec) plus 0.3 s per gap and 0.2 s lead-in; write the rounded-up total as `duration_sec` (Sound replaces it with the measured value).
+- Keep lines short: the lip-sync prompt (≤512 UTF-8 bytes) carries both lines verbatim plus the speakers' descriptors.
+- **No bare character names in visual text.** The video model does not know "Alex", "Michael", or "Emily"; `action_description` places each speaker by physical description and left/right position, which the Animator turns into the prompt. Names stay in `character_speech.speaker` (and may appear inside spoken lines).
+- `character_speech[].speaker` must be the exact bible character name, so Sound can resolve the speaker's locked voice.
+- If a beat needs a third speaker or a character who is not already visible in the start frame, split into another dialogue clip. Do not drop the beat and do not rely on a name to introduce the character mid-clip.
 
 ### `subtitle_emphasis` — NO LONGER USED
 
@@ -221,7 +217,7 @@ Formats with `overlays: false` need no array.
 
 ### `clip_type`
 - `action` — I2V clip (no dialogue, micro motion)
-- `dialogue` — format-specific dialogue clip. For serial-drama this is I2V `multi_prompt + voice_ids`; for Avatar-based formats this may be a lipsync Avatar clip.
+- `dialogue` — format-specific dialogue clip. For serial-drama (and what-if-real-life) this is an H3 lip-sync clip; for Avatar-based formats this may be a lipsync Avatar clip.
 - A still shot (`motion: "still"`, §8) always has `character_speech: null` and is never a `dialogue` or Avatar clip. It is usually an `action` clip; a format-specific type such as `title_card` or `pov` may be a still when the playbook allows stills.
 
 ---
@@ -332,7 +328,7 @@ Never use the same effect on two stills in a row.
 - ❌ Walking/running/hits in `action_description` for an I2V clip — impossible to animate
 - ❌ One looped action across the whole clip — minimum 2 beats
 - ❌ Adjacent dialogue clips with the same angle — change composition
-- ❌ Avatar fields in serial-drama (`clip_type: "avatar"`, `tts` as primary dialogue, Avatar endpoint) — serial-drama dialogue is I2V
+- ❌ Avatar or Kling fields in serial-drama (`clip_type: "avatar"`, `tts` as primary dialogue, Avatar endpoint, `voice_ids`, `multi_prompt`, `shot_type`, `generate_audio`) — serial-drama dialogue is H3 lip-sync from `character_speech`
 - ❌ Dialogue clip > 5s without justification in `duration_reason`
 - ❌ Title/brainrot text overlays in storyboard — only dialogue subs + TBC + CTA
 - ❌ `motion: "still"` in a format whose playbook does not say "Still shots: allowed"
@@ -350,8 +346,8 @@ Never use the same effect on two stills in a row.
 - [ ] Each `action_description` contains at least 2 distinct beats (still scenes: one frame + its camera move, §8)
 - [ ] Default 3 clips (~15–30s); 4+ only if each is necessary
 - [ ] Duration 5s by default; for 10s `duration_reason` is filled
-- [ ] `character_speech` / `tts` filled according to format mode; serial-drama dialogue uses `character_speech` + `multi_prompt`, not `tts`
-- [ ] Serial-drama `multi_prompt`: every `<<<voice_N>>>` is preceded by the correct physical character descriptor; no bare names as the only identifier
+- [ ] `character_speech` / `tts` filled according to format mode; serial-drama dialogue uses `character_speech` (`{speaker, line}` list, ≤2 speakers), not `tts`, and no Kling fields
+- [ ] Serial-drama dialogue: every speaker is placed by physical descriptor and left/right position in `action_description`; no bare names as the only identifier
 - [ ] Every requested/key beat is present. If video-model limits force a split, insert an extra clip instead of removing the story beat
 - [ ] `facial_expression` — concrete expression (not "sad"/"happy")
 - [ ] I2V clips: `action_description` does not contain walking/running/hits

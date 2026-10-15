@@ -53,7 +53,7 @@ Agent(subagent_type="scenarist")
 # Pass: GAME_TAG, FORMAT, IDEA, OUTPUT_DIR, LANGUAGE
 ```
 
-### Phase 2 — Audio (run when external speech or format-required music/SFX is needed; always run for serial-drama music)
+### Phase 2 — Audio (run when external speech or format-required music/SFX is needed; always run for serial-drama: dialogue TTS + music)
 
 ```bash
 Agent(subagent_type="sound")

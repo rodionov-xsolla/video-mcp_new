@@ -25,7 +25,7 @@ Every Storyboarder NB2 text/edit request goes through `tools/fal_runner.py`. Its
 
 ### Video runner Animator override — runner owns recovery
 
-All schema-v3 `tools/kling_runner.py` video jobs follow the same transport safety contract, whatever the route (H3 Max `minimax.h3max.i2v`, H3 Max Turbo lip-sync `minimax.h3max.turbo.i2v` or Kling v3 Standard `kling.v3.standard.i2v`; the runner is model-agnostic). The runner never chooses a semantic fallback: recovery resumes the exact saved route and payload. A different tool, duration, audio setting, or request body is an orchestrator decision represented by a new job after the current run has stopped:
+All schema-v3 `tools/kling_runner.py` video jobs follow the same transport safety contract, whatever the route (H3 Max `minimax.h3max.i2v`, H3 Max Turbo lip-sync `minimax.h3max.turbo.i2v`, H3 Max face reference `minimax.h3max.r2v` or Kling v3 Standard `kling.v3.standard.i2v`; the runner is model-agnostic). The runner never chooses a semantic fallback: recovery resumes the exact saved route and payload. A different tool, duration, audio setting, or request body is an orchestrator decision represented by a new job after the current run has stopped:
 
 - Never wrap the runner in a submit/poll/download retry loop; rerun the same immutable job to resume its saved request ID.
 - `UNKNOWN` is ambiguous and must never be resubmitted.

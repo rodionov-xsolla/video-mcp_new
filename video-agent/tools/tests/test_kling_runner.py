@@ -514,6 +514,113 @@ class KlingRunnerTests(unittest.TestCase):
         self.assertIn("kling-v3-standard-scene-video.job.json", video_examples)
         self.assertIn("minimax-h3-max-scene-video.job.json", video_examples)
         self.assertIn("minimax-h3-max-turbo-lipsync.job.json", video_examples)
+        self.assertIn("minimax-h3-max-r2v-face-ref.job.json", video_examples)
+        self.assertIn("minimax-h3-max-serial-action.job.json", video_examples)
+        self.assertIn("minimax-h3-max-turbo-serial-dialogue.job.json", video_examples)
+
+    def test_h3_max_r2v_route_loads_from_registry(self):
+        route, route_sha256 = kr.load_route("minimax.h3max.r2v")
+        self.assertEqual(
+            route,
+            {
+                "protocol": "fal_queue",
+                "submit_url": "https://queue.fal.run/minimax/h3-max/reference-to-video",
+                "poll_base": "https://queue.fal.run/minimax/h3-max",
+                "result_url_path": ["video", "url"],
+            },
+        )
+        self.assertRegex(route_sha256, r"^[0-9a-f]{64}$")
+
+    def test_h3_max_r2v_example_matches_face_ref_contract(self):
+        # Dual-style face reference (Test 8 V2): start frame + frontal headshot on H3 Max r2v.
+        path = TOOLS_DIR / "examples" / "minimax-h3-max-r2v-face-ref.job.json"
+        prepared = kr.validate_and_prepare_job(path)
+        self.assertEqual(prepared["route_id"], "minimax.h3max.r2v")
+        self.assertEqual(
+            prepared["submit_url"], "https://queue.fal.run/minimax/h3-max/reference-to-video"
+        )
+        payload = prepared["payload"]
+        self.assertEqual(
+            set(payload),
+            {
+                "prompt",
+                "image_url",
+                "reference_image_urls",
+                "aspect_ratio",
+                "duration",
+                "resolution",
+                "prompt_expansion_mode",
+            },
+        )
+        self.assertEqual(len(payload["reference_image_urls"]), 1)
+        self.assertEqual(payload["aspect_ratio"], "9:16")
+        self.assertIsInstance(payload["duration"], int)
+        self.assertEqual(payload["resolution"], "768P")
+        self.assertEqual(payload["prompt_expansion_mode"], "disabled")
+        prompt = payload["prompt"]
+        self.assertLessEqual(len(prompt.encode("utf-8")), 512)
+        self.assertTrue(
+            prompt.startswith("The photoreal woman on the right has exactly the face in Image 1")
+        )
+        self.assertNotIn("@Element", prompt)
+        self.assertIn("Diegetic ambience only, no music.", prompt)
+        self.assertTrue(prompt.endswith("Mouth stays closed; no talking."))
+        self.assertEqual(
+            prepared["input_urls"], [payload["image_url"], *payload["reference_image_urls"]]
+        )
+        expect = kr.preflight_summary(prepared)["expect"]
+        self.assertEqual(expect["duration_seconds"], payload["duration"])
+        self.assertEqual(expect["duration_tolerance_seconds"], 0.8)
+        self.assertEqual(expect["audio"], "required")
+
+    def test_serial_drama_h3_examples_match_test_9_contract(self):
+        # Serial-drama on H3 (Test 9): action clip on H3 Max keeps its ambience,
+        # dialogue clip is H3 Max Turbo lip-sync on the clip's uploaded TTS.
+        action = kr.validate_and_prepare_job(
+            TOOLS_DIR / "examples" / "minimax-h3-max-serial-action.job.json"
+        )
+        self.assertEqual(action["route_id"], "minimax.h3max.i2v")
+        self.assertEqual(
+            set(action["payload"]),
+            {"prompt", "image_url", "duration", "resolution", "prompt_expansion_mode"},
+        )
+        self.assertTrue(
+            action["payload"]["prompt"].endswith(
+                "Diegetic ambience only, no music, no voices. Mouth stays closed; no talking."
+            )
+        )
+        self.assertEqual(kr.preflight_summary(action)["expect"]["audio"], "required")
+
+        dialogue = kr.validate_and_prepare_job(
+            TOOLS_DIR / "examples" / "minimax-h3-max-turbo-serial-dialogue.job.json"
+        )
+        self.assertEqual(dialogue["route_id"], "minimax.h3max.turbo.i2v")
+        payload = dialogue["payload"]
+        self.assertEqual(
+            set(payload),
+            {"prompt", "image_url", "target_audio_url", "duration", "resolution", "prompt_expansion_mode"},
+        )
+        self.assertNotIn("<<<voice_", payload["prompt"])
+        self.assertIn(" speaks first: ", payload["prompt"])
+        self.assertIn(
+            "Each character's lips move only while they speak and stay closed otherwise.",
+            payload["prompt"],
+        )
+        self.assertTrue(
+            payload["prompt"].endswith(
+                "They do not stare into the lens: their gaze rests on each other and drifts "
+                "naturally, with small relaxed head movements."
+            )
+        )
+        for job in (action, dialogue):
+            self.assertLessEqual(len(job["payload"]["prompt"].encode("utf-8")), 512)
+        expect = kr.preflight_summary(dialogue)["expect"]
+        self.assertEqual(expect["duration_seconds"], payload["duration"])
+        self.assertEqual(expect["duration_tolerance_seconds"], 0.8)
+        self.assertEqual(expect["audio"], "required")
+        self.assertEqual(
+            dialogue["input_urls"], [payload["image_url"], payload["target_audio_url"]]
+        )
 
     def test_h3_max_routes_load_from_registry(self):
         route, route_sha256 = kr.load_route("minimax.h3max.i2v")

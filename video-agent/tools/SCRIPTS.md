@@ -254,7 +254,7 @@ ${OUTPUT_DIR}/build/fal/_claims/*.json            # output-path ownership; не 
 }
 ```
 
-**H3 Max job** (route `minimax.h3max.i2v`, the plain I2V route for the formats switched on 12 Oct 2026 — see `fal-ai.md §2y`; what-if dialogue lip-sync uses H3 Max Turbo `minimax.h3max.turbo.i2v` with `target_audio_url`, template `tools/examples/minimax-h3-max-turbo-lipsync.job.json`). Same schema, same runner, same commands; only `route`, `payload` and `expect` differ:
+**H3 Max job** (route `minimax.h3max.i2v`, the plain I2V route of the H3 formats — see `fal-ai.md §2y`; what-if and serial-drama dialogue lip-sync uses H3 Max Turbo `minimax.h3max.turbo.i2v` with `target_audio_url`, templates `tools/examples/minimax-h3-max-turbo-lipsync.job.json` and `tools/examples/minimax-h3-max-turbo-serial-dialogue.job.json`; dual-style uses H3 Max face reference `minimax.h3max.r2v`, template `tools/examples/minimax-h3-max-r2v-face-ref.job.json`, payload below). Same schema, same runner, same commands; only `route`, `payload` and `expect` differ:
 
 ```json
 {
@@ -293,6 +293,7 @@ ${OUTPUT_DIR}/build/fal/_claims/*.json            # output-path ownership; не 
 - `expect.duration_tolerance_seconds` is `0.8`: H3 returns ~5.18 s for 5 s and can run up to ~0.7 s long.
 - `expect.audio` is `"required"` when the format uses clip sound and `"optional"` when it does not — **never `"forbidden"`**: H3 always returns a soundtrack, so a forbidden-audio job fails validation after payment. Whether the editor uses the clip's sound comes from the scene's `scene_video_audio`, not from the stream.
 - **Clips whose sound is discarded** (`scene_video_audio: "none"`) add exactly one field, a silent `target_audio_url` (`data:audio/mpeg;base64,...`, from `silent_audio.py` below; `rules/roles/animator.md` §2a). The template `tools/examples/minimax-h3-max-scene-video.job.json` shows the five-field payload, so add the field with `jq --rawfile` before `--preflight`. `"native"` clips send the five fields unchanged. A `data:` value is not a URL to the runner: it is not checked before submit and is sent untouched.
+- **Dual-style face-reference job** (route `minimax.h3max.r2v`): the same schema with exactly seven payload fields — `prompt`, `image_url` (scene still = start frame), `reference_image_urls` (the frontal headshot URL(s)), `aspect_ratio: "9:16"`, `duration: 5`, `resolution: "768P"`, `prompt_expansion_mode: "disabled"` — and `expect.audio: "required"`, tolerance `0.8`; no `target_audio_url`. The runner checks every URL in `reference_image_urls` before submit like any other payload URL.
 
 Граница ответственности:
 
@@ -321,7 +322,7 @@ python3 tools/kling_runner.py "$JOB"   # invoke with Bash timeout ≥150s (see b
 python3 tools/kling_runner.py --allow-paid-retry "$JOB"
 ```
 
-Runner не имеет archive/reset и не выполняет automatic batch. State хранится в `${OUTPUT_DIR}/build/video/{job_id}/`, claim — в `${OUTPUT_DIR}/build/video/_claims/`. Tracked templates: `tools/examples/kling-v3-standard-scene-video.job.json`, `tools/examples/kling-v3-serial-dialogue.job.json`, `tools/examples/kling-v3-elements.job.json`, `tools/examples/minimax-h3-max-scene-video.job.json`, `tools/examples/minimax-h3-max-turbo-lipsync.job.json`.
+Runner не имеет archive/reset и не выполняет automatic batch. State хранится в `${OUTPUT_DIR}/build/video/{job_id}/`, claim — в `${OUTPUT_DIR}/build/video/_claims/`. Tracked templates: `tools/examples/minimax-h3-max-scene-video.job.json`, `tools/examples/minimax-h3-max-serial-action.job.json` (serial-drama action, Test 9), `tools/examples/minimax-h3-max-turbo-lipsync.job.json` (what-if), `tools/examples/minimax-h3-max-turbo-serial-dialogue.job.json` (serial-drama dialogue, Test 9), `tools/examples/minimax-h3-max-r2v-face-ref.job.json` (dual-style, Test 8); historical Kling: `tools/examples/kling-v3-standard-scene-video.job.json`, `tools/examples/kling-v3-serial-dialogue.job.json`, `tools/examples/kling-v3-elements.job.json`.
 
 ---
 
@@ -508,9 +509,10 @@ python tools/overlays.py storyboard.json \
 **Покрывает:**
 - Nano Banana 2 — T2I / I2I с chain reference. $0.08/img
 - GPT Image 1 — альтернативный маршрут только по предварительному/явному разрешению; не automatic fallback. $0.02/img  
-- MiniMax H3 Max I2V — $0.08/s at 768P (5 s ≈ $0.41 on the returned length); plain I2V route (redcon, item-story, character-story, in-game-pov, wild-documentary, what-if-real-life I2V scenes)
-- MiniMax H3 Max Turbo lip-sync — $0.04/s at 768P (5 s ≈ $0.21); what-if-real-life dialogue only, never plain clips
-- Kling v3 Standard I2V — $0.084/с без audio, $0.126/с с audio. multi_prompt, voice_ids, elements (serial-drama, dual-style, formats not yet migrated)
+- MiniMax H3 Max I2V — $0.08/s at 768P (5 s ≈ $0.41 on the returned length); plain I2V route (redcon, item-story, character-story, in-game-pov, wild-documentary, top-list, fake-ad, what-if-real-life I2V scenes, serial-drama action clips)
+- MiniMax H3 Max face reference (`reference-to-video`, route `minimax.h3max.r2v`) — $0.08/s at 768P (5 s ≈ $0.41); dual-style only (start frame + headshot `reference_image_urls`)
+- MiniMax H3 Max Turbo lip-sync — $0.04/s at 768P (5 s ≈ $0.21); what-if-real-life and serial-drama dialogue only, never plain clips
+- Kling v3 Standard I2V — $0.084/с без audio, $0.126/с с audio. multi_prompt, voice_ids, elements — historical/alternate: not the active route of any of the ten H3 formats (serial-drama and dual-style moved to H3 on 15 Oct 2026)
 - Kling v2.6 Pro — отдельный format/user-selected I2V route; не automatic fallback
 - Veo 3 — T2V / I2V, $1.60–$3.20 за 8-секундный клип
 - MiniMax TTS — Speech 2.8-HD, $0.10/1k символов
@@ -523,7 +525,7 @@ python tools/overlays.py storyboard.json \
 - Polling base path = первые 2 сегмента endpoint (не полный путь с версией)
 - Kling: `generate_audio` выбирается оркестратором по storyboard + format playbook до создания exact payload; native-audio режимы сохраняют оплаченный audio, silent-режимы используют `false`
 - H3 (Max and Max Turbo) always returns sound (no audio switch): the editor uses clip sound only when the scene's `scene_video_audio` is `"native"`; `expect.audio` is never `"forbidden"`
-- `multi_prompt[].prompt`: provider hard limit is 512 serialized UTF-8 bytes, not Unicode character count. Measure `len(prompt.encode("utf-8"))`; exact format playbooks may require a lower safety ceiling (`dual-style-v3`: ≤400 bytes).
+- `multi_prompt[].prompt`: provider hard limit is 512 serialized UTF-8 bytes, not Unicode character count. Measure `len(prompt.encode("utf-8"))`; exact format playbooks may require a lower safety ceiling (the historical Kling `dual-style-v3`: ≤400 bytes).
 - Elements: максимум 3 на запрос
 - Параллельных запросов: не более 3
 

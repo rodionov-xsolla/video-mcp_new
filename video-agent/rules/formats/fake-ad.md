@@ -26,7 +26,7 @@ Not for: news / patch recaps (use `news`), character lore (use `character-story`
 
 - **Genre:** Fake TV commercial — absurdist product advertisement
 - **Style:** game-specific visual style (from `games/{GAME_TAG}/{GAME_TAG}.md`), but with commercial-ad staging (hero product angles, clean backgrounds, dynamic lighting)
-- **Duration:** 15–20s total (5 clips × ~3–4s, rendered as 5s Kling clips with tight voiceover)
+- **Duration:** 15–20s total (5 clips × ~3–4s, rendered as 5s clips with tight voiceover)
 - **Budget:** up to **$3.50** per video. Stop if spend > **$3.00**.
 - **Frame format:** 9:16 (1080×1920)
 
@@ -45,8 +45,17 @@ Not for: news / patch recaps (use `news`), character lore (use `character-story`
 ### Models
 
 - **Image:** Nano Banana 2 (5 scenes including packshot product hero shot)
-- **Video:** Kling I2V v3 Standard (`generate_audio: false`) — all 5 scenes
+- **Video:** MiniMax H3 Max I2V (route `minimax.h3max.i2v`, `minimax/h3-max/image-to-video`) — all 5 scenes unless one is planned as a still shot. 768P, numeric `duration` = `duration_sec`, `prompt_expansion_mode: "disabled"`. H3 always returns a soundtrack; this format never uses it (`scene_video_audio: "none"`). H3 has no `negative_prompt`, `multi_prompt` or end frame.
 - **Audio:** native model speech when intentionally available; otherwise a current-format-owned sample through Chatterbox; otherwise MiniMax. Music bed continuous.
+
+### Still shots: allowed
+
+The scenarist may plan still shots (`motion: "still"`) under the rule, cap and fields in `rules/roles/scenarist.md` "Still shots" (§8; 5 scenes → at most 2). A still scene gets its start PNG as usual and is rendered free by the Animator (`tools/still_shot.py`, no paid clip), saving ~$0.41 per 5s scene; the VO, music and packshot overlays play over it as normal.
+
+- **Best candidate:** the product packshot (scene 4). It has no character, its motion is a slow push-in over sparkles, and the slogan and disclaimer are Editor overlays, so a `push-in` still loses only the small product rotation and drifting sparkles.
+- **Never a still:** the setup, product, peak-effect and twist scenes (0–3): a character is acting or reacting in each, and the twist is the punchline. A still setup scene (impact 2, a visible character) read as wrong in review. In practice the packshot is the only still; zero stills is a normal result.
+- A still scene's camera move is its `still_effect`; the three-motion-layer rule applies to animated clips.
+- In the cost trials (Oct 2026, Star Trek fake ad) the scenarist picked exactly the packshot; H3 Max plus that still saved 15% of the whole video against Kling v3 Standard.
 
 ---
 
@@ -55,11 +64,15 @@ Not for: news / patch recaps (use `news`), character lore (use `character-story`
 | Component | Per clip | 5 clips |
 |---|---|---|
 | NB2 image | $0.08 | **$0.40** |
-| Kling I2V v3 Standard 5s (no audio) | $0.42 | **$2.10** |
+| MiniMax H3 Max I2V 5s ($0.08/s on the returned ~5.18s; clip sound unused) | ~$0.41 | **~$2.07** |
+| **Per animated scene** | **~$0.49** | |
+| Still-shot scene (NB2 image only; `tools/still_shot.py` render is free) | $0.08 | |
 | Routed speech generation (5 short lines) | provider-dependent | provider-dependent |
-| **Total** | | **~$2.75** |
+| **Total** | | **~$2.70** (~$2.30 with a still packshot) |
 
-Kling v3 failures get one retry with the same endpoint/settings. If the retry fails, STOP and report the error; do not switch model/provider or use a local fallback.
+Approx. totals = 5 images + 5 clips + the product logo and a small TTS/music allowance. Each planned still scene saves ~$0.41.
+
+H3 Max failures get one retry with the same route/settings. If the retry fails, STOP and report the error; do not switch model/provider (Kling v3 Standard and Kling 2.6 are not automatic fallbacks) or use a local fallback (a still is planned in Phase 1, never a fallback).
 
 ---
 
@@ -105,13 +118,15 @@ Scene 4 is always the packshot. Specific rules:
 - **NO text baked into NB2** — text is applied by Editor as overlay
 - `negative_prompt`: `"character, player, hands, text, labels, UI elements, watermark"`
 
-### Kling I2V for packshot
+### Motion for packshot
+
+The packshot is the format's best still-shot candidate (see "Still shots: allowed"): as a still, it is a slow `push-in` (`still_depth: "flat"` for a product on a clean gradient) over the PNG. When it is animated (H3 Max I2V):
 
 - Gentle product rotation (15–20° arc over 5s)
 - Sparkles drift across the lens continuously
 - Slow push-in (camera moves toward product)
-- `generate_audio: false`
-- `negative_prompt`: `"on-screen text, captions, character, hands, walking, warped logo"`
+- `scene_video_audio: "none"` with a silent `target_audio_url`
+- No `negative_prompt` (H3 has none; Kling's packshot set was `"on-screen text, captions, character, hands, walking, warped logo"`). No face is visible, so no mouth sentence; end the prompt with at most two short plain sentences: `Text stays sharp and unchanged.` when the product shows a logo or label, and `No hands or people enter the frame.` if needed
 
 ## Overlays
 
@@ -227,7 +242,7 @@ Example: `"RESIN ENERGY.\nDOESN'T RESTORE RESIN. HELPS YOU OUTLIVE THE WAIT."`
 
 ---
 
-## Prompting rules (NB2 + Kling)
+## Prompting rules (NB2 + I2V)
 
 ### Scene 0 (setup) — the problem
 
@@ -276,6 +291,7 @@ Example: `"RESIN ENERGY.\nDOESN'T RESTORE RESIN. HELPS YOU OUTLIVE THE WAIT."`
 - `slogan` should be the official tagline from the brief (e.g. `"DOESN'T GUARANTEE SKILL.\nJUST CONFIDENCE."`). Uppercase. May be 2 lines (use `\n`).
 - `disclaimer` is optional but strongly recommended — it's a reliable laugh beat.
 - Character in scenes 0–3: confirm which character to use from game config (e.g. Roblox → Noob by default unless brief specifies otherwise).
+- Still shots: optional, per "Still shots: allowed" above and `rules/roles/scenarist.md` "Still shots" — in practice only the packshot (scene 4); never scenes 0–3; zero is a normal result.
 - General script rules — `rules/roles/scenarist.md`
 
 ### Storyboarder
@@ -301,12 +317,16 @@ Generate a **standalone logo PNG** for the advertised product at the same time a
 
 ### Animator
 
-- Kling I2V v3 Standard, `generate_audio: false`, `duration: 5` — all 5 scenes.
-- Three concurrent motion layers per clip (camera move + environment + character/product action).
+- All animated scenes via the format's route, **MiniMax H3 Max I2V** (`minimax.h3max.i2v`), through `tools/kling_runner.py` (payload: `prompt`, `image_url`, numeric `duration` = 5, `resolution: "768P"`, `prompt_expansion_mode: "disabled"`; see `tools/examples/minimax-h3-max-scene-video.job.json`). `expect.audio: "optional"`, never `"forbidden"` (H3 always returns a soundtrack). Write `scene_video_audio: "none"` on every scene. Retry the same serialized request once on the same route, then stop; any other route (Kling v3 Standard, Kling 2.6) requires separate explicit user authorization after the stopped run.
+- Every animated clip adds a **silent `target_audio_url`** of its `duration` (clip sound is discarded): a data URI from `tools/silent_audio.py --duration <duration_sec> --out <file>`, read into the job with `jq --rawfile` before `--preflight` (`rules/roles/animator.md` §2a "Silent `target_audio_url`"; it stops H3 from mouthing words, Test 6b).
+- Still scenes (`motion: "still"`, usually the packshot): no paid job; render with `tools/still_shot.py` as `rules/roles/animator.md` describes.
+- Start frame only; never an end frame (H3 has none).
+- Three concurrent motion layers per animated clip (camera move + environment + character/product action).
 - Scene 2 (peak_effect): highest energy motion — character in flight, dynamic camera, maximum sense of speed/power.
-- Scene 3 (twist): motion captures the fall/failure fully — do not let Kling hold on a mid-air pose; the whole fall arc should read.
-- Scene 4 (packshot): gentle rotation + slow push-in + sparkles. Very different from scenes 2–3.
-- Universal `negative_prompt`: `"on-screen text, captions, watermark, game UI, blurry face, talking, mouth open, lip sync"`.
+- Scene 3 (twist): motion captures the fall/failure fully — do not let the model hold on a mid-air pose; the whole fall arc should read.
+- Scene 4 (packshot): gentle rotation + slow push-in + sparkles. Very different from scenes 2–3. As a still, its slow `push-in` is rendered by `tools/still_shot.py`.
+- H3 has no `negative_prompt`: Kling's universal `"on-screen text, captions, watermark, game UI, blurry face, talking, mouth open, lip sync"` becomes at most two short plain closing sentences (`rules/roles/animator.md` §2a), never a banned freeze phrase: `Mouth stays closed; no talking.` whenever a face is visible (scenes 0–3); `Text stays sharp and unchanged.` where the product label or logo is in shot (scene 1, the packshot). No sound clause is needed (clip sound is discarded). Keep prompts ≤512 UTF-8 bytes.
+- Duration is 5s for every clip (H3 returns ~5.18s; the Editor trims it to `duration_sec`, do not trim yourself).
 - General rules — `rules/roles/animator.md`
 
 ### Sound
@@ -328,7 +348,7 @@ Generate a **standalone logo PNG** for the advertised product at the same time a
   - If `disclaimer` is null or empty — skip it.
 - **Music:** continuous `amix` across all 5 scenes. `volume=0.25`. **NO `-shortest`.**
 - **Subtitles: `bold` style**, announcer VO only. Run `add_subtitles.py` for scenes 0–4 using `tts` field text. Do NOT subtitle `character_reactions` lines.
-- Normalize: 1080×1920, 30fps, `-c:v libx264 -preset slow -crf 20`, AAC 128k stereo.
+- Normalize: 1080×1920 (fill-and-crop ending in `setsar=1`), 30fps, `-c:v libx264 -preset slow -crf 20`, AAC 128k stereo. H3 clips are trimmed to `duration_sec`; still clips are already exact (`rules/roles/editor.md`). A still packshot gets the same slogan/disclaimer overlays and fade.
 - Fade-to-black on scene 4 (packshot) last 1.0s.
 - General rules — `rules/roles/editor.md`
 
@@ -345,14 +365,14 @@ ${OUTPUT_DIR}/
 │   │   └── product-ref.png          (optional: reference for the product if complex design)
 │   ├── scene-0/
 │   │   ├── scene-0.png              (NB2: character in problem setup)
-│   │   ├── scene-0.mp4              (Kling I2V raw)
+│   │   ├── scene-0.mp4              (H3 I2V raw)
 │   │   └── scene-0.mp3              (TTS VO)
 │   ├── scene-1/   (product appears)
 │   ├── scene-2/   (peak effect)
 │   ├── scene-3/   (twist)
 │   └── scene-4/
 │       ├── scene-4.png              (NB2: product hero shot, NO character)
-│       ├── scene-4.mp4              (Kling I2V raw)
+│       ├── scene-4.mp4              (H3 I2V raw, or local still render)
 │       ├── scene-4-packshot.mp4     (with slogan + disclaimer overlays)
 │       └── scene-4.mp3              (TTS tagline)
 ├── concat-list.txt
@@ -366,7 +386,8 @@ ${OUTPUT_DIR}/
 - [ ] Exactly **5 scenes** with beats: `setup`, `product`, `peak_effect`, `twist`, `packshot`
 - [ ] Scene 4 has `slogan` field (non-empty)
 - [ ] Scene 4 storyboard/image prompt declares product only and excludes characters; generated file passes technical checks (decode, dimensions, filesize > 50KB)
-- [ ] All 5 Kling clips: `generate_audio: false`, duration ≈ 5.0s ±0.2s
+- [ ] Animated scenes use `minimax.h3max.i2v` with `scene_video_audio: "none"`, a silent `target_audio_url` and no end frame, duration within 0.8s of 5.0s (played as 5s after the Editor's trim); still scenes (if any, normally only the packshot) have `scene_video_kind: "still"`, are not scenes 0–3, and stay within the `rules/roles/scenarist.md` "Still shots" cap
+- [ ] No H3 job has a `negative_prompt`; every animated prompt ends with at most two closing sentences (`Mouth stays closed; no talking.` whenever a face is visible)
 - [ ] `final.mp4` duration 20–30s (5 × 5s + transitions)
 - [ ] Slogan drawtext event is present in the Editor filtergraph for scene 4
 - [ ] Music runs continuously through ALL 5 clips including scene 4 (no gap, no gate)
@@ -380,9 +401,11 @@ ${OUTPUT_DIR}/
 
 - ❌ Forgetting the TWIST — the product MUST fail at the worst possible moment. A straight commercial is not this format.
 - ❌ Character in the packshot (scene 4). Packshot = product only. Character presence kills the commercial ending.
-- ❌ Baking slogan text into NB2 — Kling warps it. Editor handles all text overlays.
+- ❌ Baking slogan text into NB2 — I2V warps it. Editor handles all text overlays.
 - ❌ Cropping the logo from a scene image (e.g. from the PADD in scene 1) — always captures borders/hands/background, degrades quality. Generate `product-logo.png` as a separate NB2 asset in Phase 3.
-- ❌ `generate_audio: true` — wastes ~$0.21/clip. TTS+music bed handle all audio.
+- ❌ Using the I2V clip's own sound (`scene_video_audio` must be `"none"`), or an H3 clip without its silent `target_audio_url` — TTS+music bed handle all audio, and without the silent track H3 mouths words.
+- ❌ `negative_prompt`, `generate_audio`, `multi_prompt` or an end frame on the H3 route (not supported; guards are closing sentences).
+- ❌ A still on scenes 0–3 (characters acting or reacting, the twist punchline) — only the packshot is a still candidate.
 - ❌ Music gating (going silent during VO). Music is continuous in this format — the mismatch between upbeat music and the twist is intentional.
 - ❌ Long VO lines (>15 words per scene). Commercial rhythm = punchy, 6–12 words.
 - ❌ Explaining the twist in the VO. Let the visual speak. Scene 3 VO may be minimal ("And then…") or even empty.

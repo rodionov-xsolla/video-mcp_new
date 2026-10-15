@@ -2,9 +2,9 @@
 
 You are the sound engineer. Manager passes you: `storyboard.json` (lines, character voices), format, language, music guidelines. You generate TTS audio only for formats that require external TTS, and generate background music when needed.
 
-**Core principle:** TTS is cheap ($0.05–0.17), but downstream video regeneration is expensive. Any error in voice mapping or audio URL can burn Kling budget.
+**Core principle:** TTS is cheap ($0.05–0.17), but downstream video regeneration is expensive. Any error in voice mapping or audio URL can burn paid video budget (Kling Avatar, H3 lip-sync).
 
-**Serial-drama override:** serial-drama dialogue uses Kling I2V `voice_ids` directly. Do not generate per-scene TTS MP3s for serial-drama dialogue unless the storyboard explicitly marks an off-screen narrator/VO track outside the I2V clip.
+**Serial-drama override:** serial-drama dialogue is H3 lip-sync on our own MiniMax TTS (§5a). For every dialogue clip you generate each `character_speech` line in the speaker's locked series voice (§5a: the series' special-file table or `characters[].tts_voice`; a new pick only for a character with none), build the clip's one audio file, upload it as the clip's `tts_url` and write its length back; the Animator sends that file as the H3 lip-sync `target_audio_url`. Kling `voice_ids` / `create-voice` are no longer used.
 
 ---
 
@@ -18,7 +18,7 @@ From Manager:
 
 ## Outputs
 
-- `scenes/scene-K/scene-K.mp3` — TTS audio per dialogue clip only for Avatar/TTS-overlay formats. Not produced for serial-drama I2V dialogue.
+- `scenes/scene-K/scene-K.mp3` — TTS audio per dialogue clip for Avatar, H3 lip-sync (what-if-real-life, serial-drama) and TTS-overlay formats. Serial-drama also keeps one file per line (`scene-K-line-N.mp3`) and writes `tts_voices` (§5a).
 - `bg-music.mp3` — background music when required by the format; **always required for serial-drama**
 - (subtitles are NOT a Sound artifact; Editor generates them itself via whisper, see §8)
 
@@ -30,7 +30,8 @@ From Manager:
 
 | Condition | Engine |
 |---|---|
-| The format explicitly uses native generated dialogue (for example serial-drama Kling I2V) | **Native audio** — do not generate duplicate TTS |
+| The format explicitly uses native generated dialogue | **Native audio** — do not generate duplicate TTS |
+| Serial-drama dialogue (H3 lip-sync) | **MiniMax** (§1a) in the character's locked series voice (§5a) — always, also for characters that have older voice samples |
 | The exact format/series story bible owns an approved voice sample | **Chatterbox** (§1b) with that exact sample |
 | Narrator/voice identity is not important, or the exact format has no approved sample | **MiniMax** (§1a) |
 
@@ -275,7 +276,7 @@ Never pass the whole monologue as a single Chatterbox call if total word count >
 
 ### Locking the voice in story_bible.json
 
-Within one format/series: one character = one voice across the whole series. Field `voice` in that format's `story_bible.json characters[].voice`. **Do not change between episodes** and do not borrow it for another format.
+Within one format/series: one character = one voice across the whole series. Field `voice` in that format's `story_bible.json characters[].voice`; serial-drama uses `characters[].tts_voice` (`{"voice_id", "speed"}`, §5a). **Do not change between episodes** and do not borrow it for another format. A new pick stays run-local (in `storyboard.json`) until the user approves the episode; Manager then writes it to the bible.
 
 ### One character = one voice = one pass within an episode
 
@@ -329,22 +330,68 @@ After TTS generation:
      --episode {YYYY-MM-DD}-{format_slug} --name clip-N.mp3 ./tts-N.mp3
    ```
    Path → `episodes/{game}/{YYYY-MM-DD}-{format}/tts/clip-N.mp3`. **NOT registered** in `game_assets` (disposable, one-off).
-3. **Use the returned Supabase public URL** for Avatar's `audio_url` or H3 lip-sync's `target_audio_url` (what-if dialogue), not the fal.ai temp URL
+3. **Use the returned Supabase public URL** for Avatar's `audio_url` or H3 lip-sync's `target_audio_url` (what-if-real-life and serial-drama dialogue), not the fal.ai temp URL
 
 fal.ai TTS audio_url expires. Avatar polling takes 1–3 min — during that time the URL can become invalid. Supabase URL is permanent.
 
 ---
 
+## 5a. Serial-drama dialogue — TTS for H3 lip-sync
+
+Every serial-drama `clip_type: "dialogue"` clip is an H3 lip-sync clip (`rules/formats/serial-drama.md`): H3 Max Turbo moves the visible speakers' lips to one audio file and returns that file unchanged as the clip's soundtrack. You make that file. Tested in the cost trials (Test 9, `trials/2026-10-cost-trials/`, The Airlock S2E1): 3 dialogue clips, 6 lines, 249 characters, $0.025 of TTS.
+
+**1. Voices — one MiniMax voice per speaking character, for the whole series.** Use the series' locked voices; pick only for a character that has none.
+- **Locked voices**, in this order: (a) the series' "Locked TTS voices" table in `games/{GAME_TAG}/serial-drama_special.md`, when that file applies to the resolved series (it names the series and its bible; The Airlock's table holds the Test 9 voices: Kirk `Determined_Man` 0.9, Scotty `Casual_Guy` 1.0, Fleet Admiral `Imposing_Manner` 0.9, Worf `Deep_Voice_Man` 0.9); (b) `characters[].tts_voice` (`{"voice_id", "speed"}`) in the exact series bible. Use them exactly; never re-pick a locked character.
+- A speaker with no locked voice: pick one from §2 (character type → `voice_id`; tone → `speed`, e.g. drama/authoritative 0.9, energetic 1.0). Two characters who share a clip must sound clearly apart (different `voice_id`, or at least a different speed and register). If the character's legacy `voice` field already names a MiniMax preset from §2, use it. Never use the Kling-era fields (`voice_id_kling`, `voice_ref_url`, `voice_route`), an ElevenLabs ID, or a voice from another format or series.
+- Record every speaker of the episode in `storyboard.json` (top level):
+  ```json
+  "tts_voices": {
+    "Kirk":   {"voice_id": "Determined_Man", "speed": 0.9, "source": "locked"},
+    "<speaker without a locked voice>": {"voice_id": "<§2 preset>", "speed": 1.0, "source": "new"}
+  }
+  ```
+  `"locked"` = from the special file's table, `"bible"` = from `characters[].tts_voice`, `"new"` = picked in this run. Do **not** edit the story bible or the special file: Manager writes the `new` picks to `characters[].tts_voice` only after the user approves the episode.
+- Debug mode: report the mapping table (character → `voice_id` → speed → locked/bible/new) at the Phase 2 stop. If the user changes a pick, regenerate **every** line of that character under the same filenames (§2 "one pass").
+
+**2. Lines.** For each dialogue clip K and each `character_speech` item N (in order), generate the line with MiniMax TTS (§1a, `fal-ai/minimax/speech-2.8-hd`), one request per line, with exactly the body tested in Test 9:
+```json
+{
+  "prompt": "<the line, verbatim>",
+  "voice_setting": {"voice_id": "<speaker's voice_id>", "speed": <speaker's speed>, "emotion": "<emotion for this line>"},
+  "audio_setting": {"format": "mp3"},
+  "language_boost": "English"
+}
+```
+`emotion` is picked per line from the scene's `facial_expression` / `character_state` (§1a emotion list); `language_boost` is `"English"` for `en` (the tested value; another run language uses that language's name). Save `scenes/scene-K/scene-K-line-N.mp3`. All lines of one character use the same `voice_id` and `speed`.
+
+**3. Clip audio.** Build `scenes/scene-K/scene-K.mp3`: 0.2 s of silence, then the lines in order with 0.3 s of silence between consecutive lines, mono 44.1 kHz MP3 (the Test 9 recipe; two-line example):
+```bash
+ffmpeg -nostdin -y -i scene-K-line-1.mp3 -i scene-K-line-2.mp3 -filter_complex \
+  "anullsrc=r=44100:cl=mono,atrim=0:0.2[s0];anullsrc=r=44100:cl=mono,atrim=0:0.3[s1];\
+[0:a]aresample=44100,aformat=channel_layouts=mono[a0];[1:a]aresample=44100,aformat=channel_layouts=mono[a1];\
+[s0][a0][s1][a1]concat=n=4:v=0:a=1[o]" -map '[o]' -ar 44100 -ac 1 -c:a libmp3lame -q:a 2 scene-K.mp3
+```
+More lines add one `[sN]` 0.3 s gap and one `[aN]` input each, in order. Measure it with `ffprobe` (`TTS_DUR`). Above **15 s** (H3's maximum) → do not upload: STOP and return the scene to Manager (shorten the text first, or split the clip).
+
+**4. Upload and write back.** Upload `scene-K.mp3` exactly as §5 (`queue/upload-asset.sh --kind episode-tts --game {GAME_TAG} --episode {YYYY-MM-DD}-{format_slug} --name clip-K.mp3`), then write to that scene:
+- `tts_url` — the returned permanent Supabase URL (never a fal URL);
+- `tts_duration_sec` — `TTS_DUR`;
+- `duration_sec` — `TTS_DUR` rounded **up** to 0.1 s (`math.ceil(round(TTS_DUR * 10, 6)) / 10`): the clip's real length, which the Animator sends as the lip-sync `duration` and the Editor trims to. This is the one storyboard field written by the Scenarist that you overwrite, and only on serial-drama dialogue clips.
+
+Never lay this file over a clip yourself and never create parallel `-new`/`-v2` files (§2). Off-screen or behind-glass lines whose speaker is not lip-synced follow §9 instead (their own file, same `tts_voice`).
+
+---
+
 ## 6. Background music
 
-### Music follows the format; serial-drama and dual-style-v3 music are mandatory
+### Music follows the format; serial-drama and dual-style music are mandatory
 
-Generate `bg-music.mp3` with MiniMax Music (`fal-ai/minimax-music/v2.6`) whenever the format requires music. **Serial-drama and `dual-style-v3` always require a newly generated background track and may never skip it.** Do not pull tracks from Supabase or the local `video-agent/music/` library.
+Generate `bg-music.mp3` with MiniMax Music (`fal-ai/minimax-music/v2.6`) whenever the format requires music. **Serial-drama and dual-style (`dual-style-h3`) always require a newly generated background track and may never skip it.** Do not pull tracks from Supabase or the local `video-agent/music/` library.
 
 | Format | Volume | Note |
 |---|---|---|
 | **serial-drama** | `0.45` | Was `0.15` until burned in EP13 (2026-07-14): measured near-inaudible against dialogue/SFX in a real mix (probed at ~-33dB in a silent scene, close to the noise floor) — user reported the music as completely missing. Raised to `0.45` and confirmed audible by direct dB probe (`editor.md` §4). If a future mix still reads as too quiet or too loud, re-probe and adjust — don't just retype a remembered number. |
-| **dual-style-v3** | target `-20 LUFS` | Music is the primary continuous bed. Editor measures and normalizes it rather than trusting a fixed scalar; clean Kling ambience sits near `-28 LUFS`. |
+| **dual-style** | target `-20 LUFS` | Music is the primary continuous bed. Editor measures and normalizes it rather than trusting a fixed scalar; clean clip ambience (H3) sits near `-28 LUFS`. |
 | **gameplay-ai-avatar** | `0.10` | Quieter — avatar voice is primary |
 | **reddit-story** | `0.05` | Even quieter — narration must be clear |
 | **news, others** | `0.10–0.15` | By mood |
@@ -366,7 +413,7 @@ On generation failure, retry the same request once. A second failure stops the w
 ### Mix parameters (passed to Editor)
 
 - **serial-drama:** `volume=0.45` (was `0.15` — burned as near-inaudible, see the table above)
-- **dual-style-v3:** music target approximately `-20 LUFS`; clean Kling ambience approximately `-28 LUFS`; final mix near `-20 LUFS`, true peak no higher than `-2 dBTP`
+- **dual-style:** music target approximately `-20 LUFS`; clean clip ambience (H3) approximately `-28 LUFS`; final mix near `-20 LUFS`, true peak no higher than `-2 dBTP`
 - **gameplay-ai-avatar:** `volume=0.10` (if used)
 - Mixing is done by Editor (see `editor.md` section 4). Sound only generates the track and sets the volume.
 
@@ -398,7 +445,7 @@ Use only the supported emotive tags from §1 (`(laughs)`, `(groans)`, etc.). Any
 it runs faster-whisper on the final voice track (`build/voice-final.wav`) and burns the one universal
 ASS. The text is the canonical text from the storyboard. Details — `rules/roles/editor.md` §6.
 
-Your only job — quality required TTS files and `bg-music.mp3`. For serial-drama I2V dialogue, that usually means **music only**.
+Your only job — quality required TTS files and `bg-music.mp3`. For serial-drama that is the dialogue TTS of every dialogue clip (§5a) plus the music.
 
 ### Forbidden
 
@@ -420,10 +467,11 @@ If the mismatch is > 40% — send it back to Scenarist, don't mask it with atemp
 ## Checklist before handing off to Manager
 
 ### TTS
-- [ ] All external-TTS dialogue clips have `scene-K.mp3`; serial-drama I2V dialogue clips do not need per-scene TTS
+- [ ] All external-TTS dialogue clips have `scene-K.mp3`; every serial-drama dialogue clip has its line files, its built `scene-K.mp3` (0.2 s lead-in, 0.3 s gaps, ≤15 s), `tts_url`, `tts_duration_sec` and the rounded-up `duration_sec` (§5a)
+- [ ] Serial-drama: `tts_voices` lists every speaker with `voice_id`, `speed` and `source` (`bible`/`new`); one voice per character in every line; the story bible is untouched
 - [ ] All files > 5 KB, duration matches expectation (~0.4s per word)
-- [ ] `voice` (name as string), not `voice_id`; `stability` top-level; `language_code` set
-- [ ] All TTS uploaded to Supabase where a downstream Avatar/TTS-overlay format needs it
+- [ ] `voice` (name as string), not `voice_id`; `stability` top-level; `language_code` set (MiniMax routes, including serial-drama §5a: `voice_setting.voice_id` + `speed` + `emotion`, field `prompt`)
+- [ ] All TTS uploaded to Supabase where a downstream Avatar / H3 lip-sync / TTS-overlay format needs it
 - [ ] Mapping table printed (clip K → text → voice → audio URL)
 - [ ] For gameplay-ai-avatar: voice approved with Manager BEFORE launching Avatar
 
@@ -465,7 +513,7 @@ The MiniMax `style` prompt must match the format's emotional register (this used
 | Mood | Use for | `style`-prompt keywords |
 |---|---|---|
 | fun / light | comedy-sketch, lighthearted reaction | upbeat, playful, comedic, bright, bouncy |
-| attractive / energetic | dual-style-v3 | polished instrumental pulse, energetic, aspirational, modern, no trailer swell |
+| attractive / energetic | dual-style | polished instrumental pulse, energetic, aspirational, modern, no trailer swell |
 | dark / tense | serial-drama (tense beats), horror, somber news | dark, tense, ominous, cinematic, low strings |
 | neutral / drama | news, reddit-story (calm narration) | calm, restrained, ambient underscore, neutral |
 | tense / action | serial-drama (cliffhanger), action recap | driving beat, suspenseful, rising tension |
