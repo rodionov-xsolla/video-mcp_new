@@ -281,7 +281,7 @@ A still shot replaces a scene's paid animation with a slow eased camera move ove
 
 **Savings are not available in every video.** Many videos have no eligible scene: fast action, first-person footage, and dialogue- or character-driven stories must stay fully animated. **Zero stills is a normal, correct result.** Never lower the quality bar to find a saving.
 
-**Narration over a still is fine.** External narration/TTS plays over the picture. On-screen speech is not: a scene with a visible speaker, an Avatar clip, `clip_type: "dialogue"` or `character_speech` is never a still.
+**Narration over a still is fine.** External narration/TTS plays over the picture. On-screen speech is not: a scene with a visible speaker, lip-sync, an Avatar clip, `clip_type: "dialogue"` or `character_speech` is never a still.
 
 ### Impact score (`still_impact`)
 
@@ -290,7 +290,7 @@ What freezing the scene would cost the viewer. Judge what a viewer would notice 
 - **0**: nothing is lost. Nothing in the frame moves, or the only motion is a camera move a still effect reproduces. Empty locations, landscapes, establishing shots, objects at rest, maps, documents.
 - **1**: only atmosphere is lost. Decorative motion that adds life but no information: fire and flame flicker, embers, an aura or glow, mist, smoke, rain, drifting particles, light flicker, or anonymous hands simply holding or adjusting a grip with no face shown. The still's camera move keeps it alive.
 - **2**: a noticeable but secondary loss. A dominant moving element that will clearly read as frozen (a crashing wave, a crowd, a flag filling the frame), or a small action beat that is not the scene's point. **Never a still.** A visible character who moves at all (shoulders sink, a head turns, a hand reacts) scores at least 2, even when small in the frame.
-- **3**: information or performance is lost. The motion tells the story: a reveal or transition (the camera travels to show a new subject or place), an action that changes the situation, a character's face or performance, dialogue or on-screen speech. Never a still.
+- **3**: information or performance is lost. The motion tells the story: a reveal or transition (the camera travels to show a new subject or place), an action that changes the situation, a character's face or performance, dialogue or lip-sync. Never a still.
 
 ### Camera-move match
 
@@ -318,7 +318,7 @@ Never use the same effect on two stills in a row.
 ### Process (while writing the script)
 
 1. **Score** every scene's impact (0–3) and rate its depth.
-2. **Mark candidates:** impact 0–1 only; never impact 2 or 3, the climax, or any scene with on-screen speech, `clip_type: "dialogue"` or `character_speech`. (Tested: an impact-2 still of a small, moving character read as wrong in review.)
+2. **Mark candidates:** impact 0–1 only; never impact 2 or 3, the climax, or any scene with on-screen speech, lip-sync, `clip_type: "dialogue"` or `character_speech`. (Tested: an impact-2 still of a small, moving character read as wrong in review.)
 3. **Choose** under the cap: at most `round(N/3)` stills and never more than 3, where N is the number of scenes (3–4 scenes → 1, 5–7 → 2, 8 or more → 3). Prefer impact 0, then 1; drop a candidate if freezing it would be noticed; never the climax; prefer spreading the stills through the video. Two stills in a row only when they use different effects.
 4. **If nothing qualifies,** you may design **at most one** scene as a camera-only shot from the start: decorative motion only, never a character in focus, dialogue or the climax, little depth (passes the depth check, nothing travelling past the camera). Write its `action_description` as that calm camera-only shot so the start PNG is generated for it. The cap and adjacency rules still apply. When in doubt, none.
 5. **Write** on each chosen scene: `motion: "still"`, `still_effect`, `still_depth`, `still_impact`, `still_reason`. Keep its normal `duration_sec` (the duration rules in §3 are unchanged). Every other scene stays animated, with no `motion` field (or `"animated"`) and no `still_*` fields.
@@ -336,7 +336,7 @@ Never use the same effect on two stills in a row.
 - ❌ Dialogue clip > 5s without justification in `duration_reason`
 - ❌ Title/brainrot text overlays in storyboard — only dialogue subs + TBC + CTA
 - ❌ `motion: "still"` in a format whose playbook does not say "Still shots: allowed"
-- ❌ A still on a dialogue / `character_speech` / Avatar scene, an impact-3 scene, or the climax
+- ❌ A still on a dialogue / `character_speech` / lip-sync scene, an impact-3 scene, or the climax
 - ❌ Forcing a still to save money — zero stills is a normal, correct result
 
 ---

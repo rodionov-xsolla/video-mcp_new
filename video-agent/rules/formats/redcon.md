@@ -38,7 +38,7 @@ Keywords: "redcon", "what if lore", "alternate history", "альтернатив
 ### Models
 
 - **Image:** NB2 (`fal-ai/nano-banana-2/edit`) — character refs + scene images
-- **Video:** Kling v3 Standard I2V (`fal-ai/kling-video/v3/standard/image-to-video`) — `generate_audio: false`. v3 supports native `multi_prompt` for multi-beat clips. A failed request is retried once with the same endpoint/settings; a second failure stops the video with an error. No v2.6, provider, or local fallback.
+- **Video:** MiniMax H3 Max I2V (route `minimax.h3max.i2v`, `minimax/h3-max/image-to-video`) — 768P, numeric `duration` = `duration_sec`, `prompt_expansion_mode: "disabled"`. H3 always returns a soundtrack; this format never uses it (`scene_video_audio: "none"`). H3 has no `negative_prompt`, `multi_prompt` or end frame: multi-beat clips are one staged prompt (see Animator). A failed request is retried once with the same endpoint/settings; a second failure stops the video with an error. No Kling (v3 or v2.6), other provider, or local fallback.
 - **Audio:** native speech when intentionally provided by the scene model; otherwise an approved sample owned by this resolved `redcon` bible through Chatterbox; otherwise MiniMax
 - **Music:** Dark/ folder only — dramatic, tense, atmospheric
 
@@ -48,7 +48,7 @@ Same as `character-story`: character does NOT speak on camera (no lipsync). I2V 
 
 ### Still shots: allowed
 
-The scenarist may plan still shots (`motion: "still"`) under the rule, cap and fields in `rules/roles/scenarist.md` "Still shots" (§8). A still scene gets its start PNG as usual and is rendered free by the Animator (`tools/still_shot.py`, no paid clip), saving that scene's Kling clip ($0.42 per 5s scene); narration plays over it as normal.
+The scenarist may plan still shots (`motion: "still"`) under the rule, cap and fields in `rules/roles/scenarist.md` "Still shots" (§8). A still scene gets its start PNG as usual and is rendered free by the Animator (`tools/still_shot.py`, no paid clip), saving ~$0.41 per 5s scene (~$0.25 for the 3s Player-POV title card); narration plays over it as normal.
 
 - **Best candidate:** the title card (clip 1; clip 2 in the Player-POV variant). It is a dark atmospheric background with no character in focus and its text is rendered later by ASS, so a slow `push-in` (or `pull-out`) still loses nothing.
 - **Other candidates:** a wide establishing or aftermath shot with no character in focus (a ruined city, an empty bridge, a planet from orbit).
@@ -62,19 +62,17 @@ The scenarist may plan still shots (`motion: "still"`) under the rule, cap and f
 | Component | Cost |
 |---|---|
 | Title card image (NB2) | $0.08 |
-| Title card I2V 5s (Kling v3 Standard, no audio; $0.00 as a still shot) | $0.42 |
+| Title card clip 5s (H3 Max; $0.00 as a still shot) | ~$0.41 |
 | Story clip image (NB2) | $0.08 |
-| Story clip I2V 5s (Kling v3 Standard, no audio) | $0.42 |
-| **Per story clip** | **~$0.50** |
+| Story clip I2V 5s (H3 Max, $0.08/s on the returned ~5.18s, clip sound unused) | ~$0.41 (~$0.58 for a 7s staged clip) |
+| **Per story clip** | **~$0.49** |
 | Routed speech generation (~40s monologue) | provider-dependent |
 | Character refs (1–2) | $0.08 each |
 
 | Variant | Clips | Cost |
 |---|---|---|
-| Base (recommended) | 1 title card + 6 story clips | ~$3.20 (~$2.80 with a still title card) |
-| Extended | 1 title card + 7 story clips | ~$3.55 (~$3.15 with a still title card) |
-
-A still scene saves its Kling clip ($0.42 per 5s, no audio).
+| Base (recommended) | 1 title card + 6 story clips | ~$3.60 approx. (~$3.20 with a still title card) |
+| Extended | 1 title card + 7 story clips | ~$4.10 approx. (~$3.70 with a still title card) |
 
 ---
 
@@ -133,7 +131,7 @@ Use this variant when `character_name = "You"` / the player is the protagonist (
 
 - `PRE_MS = 0` — TTS starts immediately at t=0 (clip 1 hook). No adelay.
 - Title card (clip 2) is silent: TTS from clip 1 + silence(3s) + clips 3–7 TTS concatenated.
-- Title card duration is **3 seconds** (not 5s). Trim or generate accordingly (a still title card is rendered at exactly `duration_sec: 3`).
+- Title card duration is **3 seconds** (not 5s): `duration_sec: 3` (H3 `duration: 3`, trimmed to plan by the Editor, or a 3s still).
 - `atempo = TTS_DUR / MAIN_DUR`. `MAIN_DUR = 5 + 3 + 5×5 + CTA_DUR`.
 
 #### Title card text (clip 2)
@@ -279,14 +277,16 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
 
 ### Animator
 
-- All animated clips via **Kling v3 Standard I2V** (`generate_audio: false`; still scenes are rendered locally, no paid clip). Retry a failed request once with the same endpoint/settings, then STOP; never switch to v2.6 or another provider, and never replace a failed clip with a still.
-- Still scenes (`motion: "still"`, usually the title card): no Kling call; render with `tools/still_shot.py` as `rules/roles/animator.md` §2b describes.
-- For multi-beat clips use v3's native `multi_prompt` array. **Segment length: 2–3s each. Max clip duration: 7s.** Never use 5+5=10s — 7s is the hard cap per pass. Example: divergence + transformation → 3s+3s=6s per clip.
-- **Start frame only.** No `tail_image_url`.
+- All animated clips via the format's route, **MiniMax H3 Max I2V** (`minimax.h3max.i2v`), through `tools/kling_runner.py` (payload: `prompt`, `image_url`, numeric `duration`, `resolution: "768P"`, `prompt_expansion_mode: "disabled"`; see `tools/examples/minimax-h3-max-scene-video.job.json`). `expect.audio: "optional"`, never `"forbidden"`. Write `scene_video_audio: "none"` on every scene. Retry a failed request once with the same route/settings, then STOP; never switch to Kling (v3 or v2.6) or another provider.
+- Every animated clip adds a **silent `target_audio_url`** of its `duration` (clip sound is discarded): a data URI from `tools/silent_audio.py --duration <duration_sec> --out <file>`, read into the job with `jq --rawfile` before `--preflight` (`rules/roles/animator.md` §2a "Silent `target_audio_url`"; it stops H3 from mouthing words, Test 6b).
+- Still scenes (`motion: "still"`, usually the title card): no paid job; render with `tools/still_shot.py` as `rules/roles/animator.md` describes.
+- For multi-beat clips, H3 has no `multi_prompt`: write the beats as **one staged prompt** (`first …, then …`) in a single 5–7s clip. **Each stage ~2–3s. Max clip duration: 7s.** Never use 10s — 7s is the hard cap per pass. Example: divergence + transformation → one 6s clip, "first …, then …". Note: staged multi-beat prompts are untested on H3 so far.
+- **Start frame only.** No end frame (H3 has none; no `tail_image_url`).
 - Title card clip: very slow camera drift (parallax or gentle push-in). Minimal motion — text must remain readable throughout 5s. As a still shot, the same slow move is rendered by `tools/still_shot.py`.
+- H3 has no `negative_prompt`: exclusions become at most two short plain closing sentences, never a banned freeze phrase. No sound clause is needed (clip sound is discarded). Keep prompts ≤512 UTF-8 bytes.
 - Story clips: **active, dynamic prompts only** — three concurrent layers (camera + primary action + atmosphere), continuous present-tense verbs, no freeze phrases ("remains still", "holds position", "stays motionless" are banned).
 - **Known failure mode (user-flagged, 2026-07-07 Worf episode):** redcon's monologue-over-static-shot pacing tends to read as static even when `motion_prompt` technically satisfies the three-layer rule — the talking-head/portrait framing common to this format leaves little room for perceptible camera or environment motion. Prevent this in the prompt by using stronger camera movement (push-in/pull-out/orbit) and wider or three-quarter framing. Generated media receives technical validation only; the user makes any visual judgment during debug review.
-- Duration: 5s for standard clips, up to 7s for multi-prompt clips
+- Duration: 5s for standard clips, up to 7s for staged multi-beat clips (H3 runs slightly long; the Editor trims it to `duration_sec`)
 - General rules — `rules/roles/animator.md`
 
 ### Sound
@@ -306,6 +306,7 @@ This is weak because Zhongli already secretly saves Xiao in canon; making the sa
 Format-specific parameters to compute and pass into §0:
 - **Standard redcon** (canonical character): `PRE_MS = 5000` — TTS starts after the 5 s title card via `adelay=5000|5000`. `atempo = TTS_DUR / (MAIN_DUR − 5)`. `MAIN_DUR = 5 + 6×5 + CTA_DUR`.
 - **Player-POV redcon** (`character_name = "You"`): `PRE_MS = 0` — TTS starts at t=0 (hook clip 1). Title card (clip 2) is **3 seconds** and has `tts_segment: null` — no TTS audio for that clip. Concatenate clip-1 TTS + silence(3s) + clips 3–7 TTS. `atempo = TTS_DUR / MAIN_DUR`. `MAIN_DUR = 5 + 3 + 5×5 + CTA_DUR`.
+- Clip lengths in these formulas are played lengths (`rules/roles/editor.md`): H3 clips are trimmed to `duration_sec` and stills are exact, so a 5s scene counts as 5s; a 6–7s staged clip counts its own `duration_sec`.
 - Fade-to-black: 1.0 s on the last story clip (scene-8) before CTA
 - Music: `volume=0.15`, `afade=t=out:st=(MAIN_DUR−1):d=1.0`
 
@@ -381,7 +382,7 @@ ${OUTPUT_DIR}/
 - [ ] One PNG per scene — no end frames
 - [ ] camera_angle differs between adjacent clips; every clip has active camera move (a still's `still_effect` counts)
 - [ ] Animated clips' motion prompts: three concurrent layers, continuous verbs, no banned freeze phrases
-- [ ] Still scenes (if any) were planned in Phase 1, have `scene_video_kind: "still"` and stay within the `rules/roles/scenarist.md` "Still shots" cap; every other scene is a Kling v3 Standard clip
+- [ ] Animated scenes use `minimax.h3max.i2v` with `scene_video_audio: "none"` and a silent `target_audio_url`; still scenes (if any) have `scene_video_kind: "still"` and stay within the `rules/roles/scenarist.md` "Still shots" cap
 - [ ] TTS voice = alternate-self identity (not canonical)
 - [ ] Music from Dark/ only
 - [ ] Subtitles via `add_subtitles.py` with `--offset 5`
@@ -404,7 +405,8 @@ ${OUTPUT_DIR}/
 - ❌ TTS starting over the title card (5s silence before TTS in final mix)
 - ❌ Single character ref — both canonical-self and alternate-self refs are mandatory
 - ❌ Music from Fun/ — dark atmospheric only
-- ❌ `generate_audio: true` in Kling I2V
+- ❌ Using the I2V clip's own sound (`scene_video_audio` must be `"none"`)
+- ❌ `multi_prompt` on the H3 route (not supported — write one staged prompt)
 - ❌ End frames / `tail_image_url`
 - ❌ `-shortest` in FFmpeg
 - ❌ Freeze phrases in motion_prompt

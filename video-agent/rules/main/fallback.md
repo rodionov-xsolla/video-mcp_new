@@ -23,9 +23,9 @@ Every Storyboarder NB2 text/edit request goes through `tools/fal_runner.py`. Its
 - `FAILED` and `INPUT_REJECTED` are terminal for that job. Generic advice below to edit a rejected request and retry does not authorize mutation/resubmission of a runner job.
 - The runner has no safe reset command for a claimed canonical output. Never delete state or `_claims` manually; preserve them and stop for an explicit recovery decision.
 
-### Kling v3 Standard Animator override — runner owns recovery
+### Video runner Animator override — runner owns recovery
 
-All schema-v3 video jobs follow the same transport safety contract. The runner never chooses a semantic fallback: recovery resumes the exact saved route and payload. A different tool, duration, audio setting, or request body is an orchestrator decision represented by a new job after the current run has stopped:
+All schema-v3 `tools/kling_runner.py` video jobs follow the same transport safety contract, whatever the route (H3 Max `minimax.h3max.i2v`, H3 Max Turbo lip-sync `minimax.h3max.turbo.i2v` or Kling v3 Standard `kling.v3.standard.i2v`; the runner is model-agnostic). The runner never chooses a semantic fallback: recovery resumes the exact saved route and payload. A different tool, duration, audio setting, or request body is an orchestrator decision represented by a new job after the current run has stopped:
 
 - Never wrap the runner in a submit/poll/download retry loop; rerun the same immutable job to resume its saved request ID.
 - `UNKNOWN` is ambiguous and must never be resubmitted.
@@ -50,6 +50,8 @@ base = "/".join(endpoint.split("/")[:2])
 |--------|-----------------|-------------------|
 | NB2 edit | `fal-ai/nano-banana-2/edit` | `fal-ai/nano-banana-2` |
 | Kling I2V | `fal-ai/kling-video/v2.6/pro/image-to-video` | `fal-ai/kling-video` |
+| MiniMax H3 Max I2V | `minimax/h3-max/image-to-video` | `minimax/h3-max` (`https://queue.fal.run/minimax/h3-max`) |
+| MiniMax H3 Max Turbo lip-sync | `minimax/h3-max-turbo/image-to-video` | `minimax/h3-max-turbo` (`https://queue.fal.run/minimax/h3-max-turbo`) |
 | Kling Avatar v2 | `fal-ai/kling-video/ai-avatar/v2/standard` | `fal-ai/kling-video` |
 | MiniMax speech | `fal-ai/minimax/speech-2.8-hd` | `fal-ai/minimax` |
 | Chatterbox | `fal-ai/chatterbox/text-to-speech` | `fal-ai/chatterbox` |
@@ -62,18 +64,18 @@ base = "/".join(endpoint.split("/")[:2])
 |--------|--------|
 | `IN_QUEUE` / `IN_PROGRESS` | Continue polling |
 | `COMPLETED` | Fetch the result via GET /requests/{REQUEST_ID}, continue pipeline |
-| `FAILED` | Generic non-runner call: retry the same serialized request once. NB2/Kling runner: let saved state decide; terminal runner `FAILED` stops |
-| Timeout 10 min | Generic non-runner call: cancel/retry once. NB2/Kling runner: rerun the same job to resume the saved request ID; never submit a replacement |
+| `FAILED` | Generic non-runner call: retry the same serialized request once. NB2/video runner (H3 or Kling): let saved state decide; terminal runner `FAILED` stops |
+| Timeout 10 min | Generic non-runner call: cancel/retry once. NB2/video runner (H3 or Kling): rerun the same job to resume the saved request ID; never submit a replacement |
 
 ---
 
 ## Failure policy — no automatic fallback
 
-The chosen provider, model and route remain fixed for the request. A transient/API/download/zero-byte failure gets one retry with the same serialized request. For deterministic HTTP 400/422, content-filter rejection, or a local FFmpeg command defect, correct only the rejected input/parameter/command and retry once on the same route. If that attempt fails, stop the whole video and return the actual error. For NB2 and allowlisted Kling v3 Standard runner jobs, the runner overrides above apply instead: do not mutate or wrap-retry the job.
+The chosen provider, model and route remain fixed for the request. A transient/API/download/zero-byte failure gets one retry with the same serialized request. For deterministic HTTP 400/422, content-filter rejection, or a local FFmpeg command defect, correct only the rejected input/parameter/command and retry once on the same route. If that attempt fails, stop the whole video and return the actual error. For NB2 and video runner jobs (any route registered in `tools/video_routes.json`), the runner overrides above apply instead: do not mutate or wrap-retry the job.
 
 Do not switch to GPT Image, Kling 2.6, Ken Burns, another provider, a local substitute, or a no-audio/no-music result. A different model may be used only after the stopped run when the user explicitly authorizes that separate route.
 
-**Still scenes are not a fallback.** A scene the scenarist planned in Phase 1 as `motion: "still"` (format playbook says "Still shots: allowed") is a normal, planned route: Animator renders it locally with `tools/still_shot.py` and no paid job. The ban above still applies to failures: never turn a scene whose paid clip failed, timed out or was rejected into a still or any other local camera move.
+**Still scenes are not a fallback.** A scene the scenarist planned in Phase 1 as `motion: "still"` (format playbook says "Still shots: allowed") is a normal, planned route: Animator renders it locally with `tools/still_shot.py` and no paid job. The ban above still applies to failures: never turn a scene whose paid clip failed, timed out or was rejected into a still or any other local camera move, and never switch H3 ↔ Kling mid-run.
 
 ---
 
@@ -144,7 +146,7 @@ For any error that leads to `status='failed'`:
 | Operation | Timeout |
 |----------|---------|
 | Image generation (Nano Banana 2 runner polling window) | 10 minutes |
-| Video generation | 10 minutes |
+| Video generation (any I2V route) | 10 minutes |
 | Still-shot render (`tools/still_shot.py`, local ffmpeg) | 5 minutes |
 | File download (curl) | 120 seconds |
 | FFmpeg operation | 5 minutes |

@@ -7,6 +7,18 @@
       "poll_base": "https://queue.fal.run/fal-ai/kling-video",
       "result_url_path": ["video", "url"]
     },
+    "minimax.h3max.i2v": {
+      "protocol": "fal_queue",
+      "submit_url": "https://queue.fal.run/minimax/h3-max/image-to-video",
+      "poll_base": "https://queue.fal.run/minimax/h3-max",
+      "result_url_path": ["video", "url"]
+    },
+    "minimax.h3max.turbo.i2v": {
+      "protocol": "fal_queue",
+      "submit_url": "https://queue.fal.run/minimax/h3-max-turbo/image-to-video",
+      "poll_base": "https://queue.fal.run/minimax/h3-max-turbo",
+      "result_url_path": ["video", "url"]
+    },
     "seedance2.mini.reference_to_video": {
       "protocol": "fal_queue",
       "submit_url": "https://queue.fal.run/bytedance/seedance-2.0/mini/reference-to-video",

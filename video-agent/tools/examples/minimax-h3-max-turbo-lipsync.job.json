@@ -1,0 +1,31 @@
+{
+  "schema_version": 3,
+  "job_id": "replace-with-unique-lipsync-scene-video-job-v1",
+  "route": "minimax.h3max.turbo.i2v",
+  "artifact_kind": "scene_video",
+  "output_dir": "/ABSOLUTE/OUTPUT_DIR",
+  "output_path": "scenes/scene-2/scene-2.mp4",
+  "payload": {
+    "prompt": "Only the barista speaks; the customer stays silent. Lips stay closed and still in the opening silence; brows lift slightly as he listens. Lips close after the line. He does not stare into the lens: his gaze rests on the off-screen customer just beside the camera and drifts naturally between phrases, with small, relaxed head movements throughout. The barista speaks the line \"This is not a beverage.\" with lips in sync with the audio; lips closed while the off-screen customer speaks.",
+    "image_url": "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/episodes/GAME_TAG/EPISODE/scenes/scene-2.png",
+    "target_audio_url": "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/episodes/GAME_TAG/EPISODE/tts/clip-2.mp3",
+    "duration": 4.8,
+    "resolution": "768P",
+    "prompt_expansion_mode": "disabled"
+  },
+  "expect": {
+    "kind": "video",
+    "duration_seconds": 4.8,
+    "duration_tolerance_seconds": 0.8,
+    "audio": "required",
+    "min_bytes": 100000,
+    "min_width": 600,
+    "min_height": 1000,
+    "orientation": "portrait"
+  },
+  "supabase": {
+    "game": "replace-game-tag",
+    "episode": "YYYY-MM-DD-format-slug-run-id",
+    "name": "scene-2.mp4"
+  }
+}

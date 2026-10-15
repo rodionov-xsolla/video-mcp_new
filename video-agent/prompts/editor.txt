@@ -16,8 +16,8 @@ DO NOT load:
 
 INPUT (already on disk in ${OUTPUT_DIR}):
 - ${OUTPUT_DIR}/storyboard.json — narrative + image_prompt + motion_prompt for every scene; subtitle text and timings
-- ${OUTPUT_DIR}/scenes/scene-K/scene-K.mp4 — scene clips (K = 1..N): animated clips, or still-shot clips (`scene_video_kind: "still"`, 1080×1920, 30fps, exact `duration_sec`, no audio stream)
-- ${OUTPUT_DIR}/scenes/scene-K/scene-K.mp3 — TTS audio (only for dialogue clips with TTS overlay; Avatar clips have audio embedded)
+- ${OUTPUT_DIR}/scenes/scene-K/scene-K.mp4 — scene clips (K = 1..N): animated I2V/Avatar clips, or silent still-shot clips (`scene_video_kind: "still"`, 1080×1920, 30fps, exact `duration_sec`, no audio stream). Each scene's `scene_video_kind` / `scene_video_route` / `scene_video_audio` in storyboard.json decide trim and clip sound (editor.md "Per-scene clip fields").
+- ${OUTPUT_DIR}/scenes/scene-K/scene-K.mp3 — TTS audio (only for dialogue clips with TTS overlay; Avatar and H3 lip-sync clips have audio embedded)
 
 ASSETS FROM SUPABASE (URLs passed below — already downloaded if non-empty):
 - Opener: ${OPENER_PATH:-<none>}
@@ -29,11 +29,10 @@ Assemble ${OUTPUT_DIR}/final.mp4 (1080×1920, 30fps, AAC 128k stereo). DEFAULT p
 Pre-flight (off the main pipeline):
 1. Download + ffprobe-validate CTA (do NOT pre-normalize; §0 ingests it raw via scale/pad/fps).
 2. Build `build/voice-final.wav` (the final speech after atempo+adelay+concat, before bg-music — editor.md §6.1), then `tools/add_subtitles.py build/voice-final.wav build/subs.ass --storyboard storyboard.json --lang ${LANGUAGE} --main-dur ${MAIN_DUR}`. Whisper gives timings, text is canonical from storyboard. §0 burns `ass=build/subs.ass` as the last video filter.
-3. Per format, compute MAIN_DUR (sum of scene durations), TOTAL_DUR (= MAIN_DUR + CTA_DUR), atempo value (= TTS_DUR / TTS_WINDOW), title-card pre-delay (PRE_MS, e.g. 5000 for redcon — it is baked into voice-final.wav via adelay).
-
-Still-shot clips (editor.md "Still-shot clips"): never trim them; they take the silent anullsrc path. Where the format concats clip audio (`a=1`, e.g. in-game-pov, wild-documentary with Kling generate_audio true), give a still scene an `anullsrc` slot of its length, because its `[k:a]` does not exist.
+3. Per format, compute MAIN_DUR (sum of scene durations — played lengths: `minimax.*` H3 clips are trimmed to plan, so they count at their `duration_sec`; every other clip at its MP4 duration), TOTAL_DUR (= MAIN_DUR + CTA_DUR), atempo value (= TTS_DUR / TTS_WINDOW), title-card pre-delay (PRE_MS, e.g. 5000 for redcon — it is baked into voice-final.wav via adelay).
 
 Main pipeline = ONE ffmpeg-full invocation per §0.2. Encoder is `-preset medium -crf 22`. Hard cap with `-t TOTAL_DUR` (NEVER -shortest, NEVER unbounded amix).
+Per-scene rules (editor.md §0.1): portrait scene clips (I2V, still, Avatar) use fill-and-crop `scale=1080:1920:force_original_aspect_ratio=increase:flags=lanczos,crop=1080:1920,setsar=1`; landscape sources (gameplay footage) and the CTA/opener keep the pad chain. Trim clips whose `scene_video_route` starts with `minimax.` to `duration_sec` (never below); Kling I2V clips are never trimmed; Avatar clips keep their TTS trim (editor.md §1.0a). Clip sound comes from `scene_video_audio`: `"native"` → keep and resample it; `"none"` and still clips → anullsrc slot, even if the file has a stream; field missing → today's stream-based behaviour. A clip with `scene_video_lipsync: true` (H3 lip-sync) already carries the scene's speech: use its audio (`"native"`), never add that scene's TTS again (off-screen VO such as `customer.mp3` is still mixed), and give it the H3 trim, not Avatar's TTS trim.
 
 Use §§1–5 (legacy multi-stage) only when:
 - Format playbook explicitly requires a per-scene composite that does not fit in §0 (e.g. gameplay-ai-avatar split-screen — build each split-scene first via §7, then feed those composites into §0)
@@ -59,7 +58,7 @@ If OVERLAYS = `true` → per-scene drawtext fragments via `tools/overlays.py` (e
 CONSTRAINTS:
 - WORKSPACE LAYOUT: write every scratch file (concat lists, intermediate MP4s, normalized assets, temp audio, ad-hoc scripts/logs) under ${OUTPUT_DIR}/build/. The OUTPUT_DIR root must end up with only final.mp4, storyboard.json, scenes/, and optional recap/_archive/. See editor.md "Workspace layout (MANDATORY)" + final checklist.
 - DO NOT regenerate any scene MP4/MP3 — that work is finished (this includes still-shot clips: `tools/still_shot.py` is Animator's tool)
-- DO NOT call fal.ai / Kling / NB2 / ElevenLabs APIs — your toolset is FFmpeg only
+- DO NOT call fal.ai / Kling / MiniMax H3 / NB2 / ElevenLabs APIs — your toolset is FFmpeg only
 - DO NOT use Read tool on generated PNG/MP4/MP3 files — technical validation only; there is no machine visual review of the final
 - DO NOT modify storyboard.json — it is the source of truth
 - DO NOT push to git — that is Manager's responsibility (Phase 6)

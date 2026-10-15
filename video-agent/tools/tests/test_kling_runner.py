@@ -1,3 +1,4 @@
+import base64
 import json
 import shutil
 import subprocess
@@ -499,10 +500,96 @@ class KlingRunnerTests(unittest.TestCase):
         self.assertEqual(len(no_network.download_calls), 0)
 
     def test_tracked_examples_pass_preflight(self):
-        for path in sorted((TOOLS_DIR / "examples").glob("kling-v3-*.job.json")):
+        video_examples = []
+        for path in sorted((TOOLS_DIR / "examples").glob("*.job.json")):
             with self.subTest(example=path.name):
-                prepared = kr.validate_and_prepare_job(path)
-                self.assertEqual(prepared["artifact_kind"], kr.ARTIFACT_KIND)
+                job = json.loads(path.read_text(encoding="utf-8"))
+                if job.get("artifact_kind") == kr.ARTIFACT_KIND:
+                    prepared = kr.validate_and_prepare_job(path)
+                    self.assertEqual(prepared["artifact_kind"], kr.ARTIFACT_KIND)
+                    self.assertTrue(kr.preflight_summary(prepared)["ok"])
+                    video_examples.append(path.name)
+                else:
+                    fr.validate_and_prepare_job(path)
+        self.assertIn("kling-v3-standard-scene-video.job.json", video_examples)
+        self.assertIn("minimax-h3-max-scene-video.job.json", video_examples)
+        self.assertIn("minimax-h3-max-turbo-lipsync.job.json", video_examples)
+
+    def test_h3_max_routes_load_from_registry(self):
+        route, route_sha256 = kr.load_route("minimax.h3max.i2v")
+        self.assertEqual(
+            route,
+            {
+                "protocol": "fal_queue",
+                "submit_url": "https://queue.fal.run/minimax/h3-max/image-to-video",
+                "poll_base": "https://queue.fal.run/minimax/h3-max",
+                "result_url_path": ["video", "url"],
+            },
+        )
+        self.assertRegex(route_sha256, r"^[0-9a-f]{64}$")
+        turbo_route, turbo_sha256 = kr.load_route("minimax.h3max.turbo.i2v")
+        self.assertEqual(
+            turbo_route,
+            {
+                "protocol": "fal_queue",
+                "submit_url": "https://queue.fal.run/minimax/h3-max-turbo/image-to-video",
+                "poll_base": "https://queue.fal.run/minimax/h3-max-turbo",
+                "result_url_path": ["video", "url"],
+            },
+        )
+        self.assertRegex(turbo_sha256, r"^[0-9a-f]{64}$")
+        kling_route, _ = kr.load_route("kling.v3.standard.i2v")
+        self.assertEqual(kling_route["poll_base"], "https://queue.fal.run/fal-ai/kling-video")
+
+    def test_h3_max_example_matches_plain_i2v_contract(self):
+        path = TOOLS_DIR / "examples" / "minimax-h3-max-scene-video.job.json"
+        prepared = kr.validate_and_prepare_job(path)
+        self.assertEqual(prepared["route_id"], "minimax.h3max.i2v")
+        self.assertEqual(
+            prepared["submit_url"], "https://queue.fal.run/minimax/h3-max/image-to-video"
+        )
+        payload = prepared["payload"]
+        self.assertEqual(
+            set(payload),
+            {"prompt", "image_url", "duration", "resolution", "prompt_expansion_mode"},
+        )
+        self.assertIsInstance(payload["duration"], int)
+        self.assertEqual(payload["resolution"], "768P")
+        self.assertEqual(payload["prompt_expansion_mode"], "disabled")
+        self.assertLessEqual(len(payload["prompt"].encode("utf-8")), 512)
+        expect = kr.preflight_summary(prepared)["expect"]
+        self.assertEqual(expect["duration_seconds"], payload["duration"])
+        self.assertEqual(expect["duration_tolerance_seconds"], 0.8)
+        self.assertEqual(expect["audio"], "optional")
+
+    def test_silent_data_uri_target_audio_is_payload_data_not_an_input_url(self):
+        # A silent-sound H3 Max clip carries a silent target_audio_url (tools/silent_audio.py).
+        silence = "data:audio/mpeg;base64," + base64.b64encode(b"ID3\x04silent-mp3").decode("ascii")
+        image_url = "https://assets.example.test/scene-1.png"
+        payload = {
+            "prompt": "Slow push-in on the subject. Mouth stays closed; no talking.",
+            "image_url": image_url,
+            "target_audio_url": silence,
+            "duration": 5,
+            "resolution": "768P",
+            "prompt_expansion_mode": "disabled",
+        }
+        path = self.write_job(
+            payload=payload,
+            route="minimax.h3max.i2v",
+            expect={**self.default_expect("optional"), "duration_tolerance_seconds": 0.8},
+        )
+        prepared = kr.validate_and_prepare_job(path)
+        self.assertTrue(kr.preflight_summary(prepared)["ok"])
+        self.assertEqual(prepared["payload"]["target_audio_url"], silence)
+        self.assertEqual(prepared["input_urls"], [image_url])
+        self.assertNotIn(silence, prepared["input_urls"])
+
+        transport = self.successful_transport()
+        self.runner(path, transport).run()
+        self.assertEqual(transport.ref_checks, [image_url])
+        submitted = json.loads(transport.submit_calls[0][1])
+        self.assertEqual(submitted["target_audio_url"], silence)
 
 
 if __name__ == "__main__":

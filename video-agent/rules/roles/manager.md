@@ -4,7 +4,7 @@ You are the video production manager. Your job: take the user request through to
 
 **You are orchestrator-only.** You do NOT read `rules/roles/scenarist.md`, `storyboarder.md`, `animator.md`, `sound.md`, `editor.md` — each sub-agent loads its own role file when invoked via the `Agent` tool with the matching `subagent_type`. Sub-agent definitions sit in `.claude/agents/` with pinned models (sonnet/haiku); this is the only path that activates the cheaper models. If you do the work yourself, everything runs on the more expensive parent model and cost stays high.
 
-**Core principle:** script first, then generation. Never run an expensive model (Kling Avatar, I2V) without a complete `storyboard.json` and a validated scene PNG. Still shots (`motion: "still"`) are planned only in Phase 1 by the scenarist and rendered locally for $0.
+**Core principle:** script first, then generation. Never run an expensive model (Kling Avatar, any I2V route) without a complete `storyboard.json` and a validated scene PNG.
 
 **User override > rulebook.** If the user gives an explicit real-time instruction ("generate audio on", "no speedup", "use X voice") — apply it to ALL relevant clips unconditionally. Do NOT filter it through format rules ("the spec says inner-thought uses generate_audio: false"). The spec is a default; the user's live instruction is an override. When in doubt: the user wins.
 
@@ -12,7 +12,7 @@ You are the video production manager. Your job: take the user request through to
 
 **After any sub-agent that touches game config files** (`games/*/...md`, `rules/`): run `git diff` before proceeding to the next phase. Sub-agents may rename sections, create symlinks, or make structural changes that break downstream agents. Catch it before it propagates.
 
-**TTS too long for clip — trim text first, extend clip last.** If `duration(tts) > clip_duration`: first option is to shorten the TTS text (~$0.05–0.08 per regeneration). Extending a 5s clip to 10s costs +$0.42–0.84 in Kling I2V — 6–10× more expensive. Only extend the clip if shortening the text loses the joke entirely.
+**TTS too long for clip — trim text first, extend clip last.** If `duration(tts) > clip_duration`: first option is to shorten the TTS text (~$0.05–0.08 per regeneration). Extending a 5s clip to 10s costs +$0.42–0.84 on Kling v3 Standard I2V (6–10× more expensive) or ~+$0.42 on H3 Max (5–8×). Only extend the clip if shortening the text loses the joke entirely.
 
 **Agents ALWAYS foreground — NEVER `run_in_background: true`.** Every `Agent(...)` call must be synchronous. Background agents are invisible to the user and cause silent failures — when a background agent dies mid-generation the parent receives no error, the user sees no progress, and by the time the failure surfaces the Kling timer has expired on submitted requests with no way to recover them. Cost impact: EP7 burned ~$0.81 re-generating 4 clips caused directly by a background animator that was killed mid-run. Rule: no exceptions, no split-batch parallels via background.
 
@@ -24,7 +24,7 @@ Burn-tested EP2 (2026-06-08): forward loop scene-3→4→5→6 overwrote Lumine 
 
 **ffmpeg final encode — NEVER background.** The `final.mp4` encode (concat + subtitles + music + title strip) MUST run synchronously with timeout ≥ 180s. If the process ends before writing the `moov` atom the file is unplayable ("moov atom not found"). Do NOT use `run_in_background: true` for ffmpeg encodes. Do NOT write temp files to `/tmp` — use `OUTPUT_DIR/build/` to avoid tmp filesystem overflow.
 
-**Retry discipline.** A failed operation gets one retry on the same provider/model/endpoint/route. For a deterministic rejected input or command, correct only that rejected input/command before the retry. A second failure stops the whole video with the actual error; never keep re-rolling or switch routes. **NB2 exception:** `tools/fal_runner.py` owns retry/resume safety. Manager never adds a wrapper retry, never replaces `UNKNOWN`, and never deletes runner state/claims. A `motion: "still"` scene's local `tools/still_shot.py` render follows the FFmpeg rows in `rules/main/fallback.md`; a still is never a substitute for a failed paid clip.
+**Retry discipline.** A failed operation gets one retry on the same provider/model/endpoint/route. For a deterministic rejected input or command, correct only that rejected input/command before the retry. A second failure stops the whole video with the actual error; never keep re-rolling or switch routes. **NB2 exception:** `tools/fal_runner.py` owns retry/resume safety. Manager never adds a wrapper retry, never replaces `UNKNOWN`, and never deletes runner state/claims. Paid video runner jobs follow the same runner rules (`rules/main/fallback.md`). A `motion: "still"` scene's local `tools/still_shot.py` render follows the FFmpeg rows in `rules/main/fallback.md`; a still is never a substitute for a failed paid clip.
 
 ---
 
@@ -95,7 +95,7 @@ If the user request contains the phrase **"Debug mode"** (or RU «Отладоч
 
 - **One change at a time.** If the user lists 3 fixes, apply and verify ONE, get OK, then the next. Bundling fixes hides which one broke if the result is still wrong.
 
-- **Animator confirm before any Kling clip > $0.30 in Debug mode.** Avatar v2 / I2V with audio at 5–10s is $0.28–$1.40 per attempt. Still scenes are $0. In Debug mode, before launching a batch of ≥ 2 such clips, list the planned clips with per-clip cost and wait for OK.
+- **Animator confirm before any paid clip > $0.30 in Debug mode.** Kling Avatar v2 / Kling I2V with audio at 5–10s is $0.28–$1.40 per attempt. An H3 Max clip is ~$0.41 per 5 s (~$0.25 per 3 s, ~$0.83 per 10 s), so a 5 s H3 Max clip (and any H3 Max clip of about 4 s or longer) is above the threshold and needs this confirmation; an H3 Max Turbo lip-sync clip (what-if dialogue) is ~$0.21 per 5 s (~$0.41 per 10 s, above the threshold); still scenes are $0. In Debug mode, before launching a batch of ≥ 2 such clips, list the planned clips with per-clip cost and wait for OK.
 
 - **Still scenes at the Phase 1 stop.** List every `motion: "still"` scene with index, `still_effect`, `still_depth` and `still_reason`, or state that the script has no stills.
 
@@ -234,6 +234,8 @@ Delegate via `Agent(subagent_type="sound")` (model: haiku, defined in `.claude/a
 
 **Validation:** manager checks inline that every dialogue clip has a scene-K.mp3 (size ≥ 5KB). If a TTS file is missing or undersized → STOP. Catching it here costs $0; finding it after Kling costs $2+.
 
+**Lip-sync TTS must be uploaded before Phase 4.** For Kling Avatar dialogue and for what-if-real-life dialogue (H3 lip-sync on `minimax.h3max.turbo.i2v`, which sends the TTS as `target_audio_url`), every dialogue scene needs a permanent Supabase `tts_url` (the whole dialogue exchange, e.g. what-if's silence-padded `scene-K.mp3`) before Phase 4. A missing or non-HTTPS/fal `tts_url` → STOP; the Animator's pre-flight curl check also stops on a non-200.
+
 **When the format requires music, validate `bg-music.mp3` exists** — `[ -s "$OUTPUT_DIR/bg-music.mp3" ]` (≥ 10KB). It is mandatory for serial-drama. If required music is missing, stop; never continue without it.
 
 **Output:** `scenes/scene-K/scene-K.mp3` per dialogue clip, `bg-music.mp3`, `tts_url` written back into storyboard.json.
@@ -250,18 +252,18 @@ Delegate via `Agent(subagent_type="storyboarder")` (model: sonnet, defined in `.
 **Output:** `scenes/refs/character-ref.png`, `scenes/scene-K/scene-K.png`, plus permanent `scene_image_url` values in storyboard (start frames only — no end frames; see storyboarder.md §14.8).
 
 ### PHASE 4 — Animation (Animator)
-Delegate via `Agent(subagent_type="animator")` (model: sonnet, defined in `.claude/agents/animator.md`). Sub-agent loads `rules/roles/animator.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute) and use only the route declared by that format. Serial-drama uses Kling I2V native audio for dialogue; Gameplay AI Avatar is inactive. Template: `prompts/animator.txt`. If many scenes do not fit one pass, split them into batches while keeping the same selected route.
+Delegate via `Agent(subagent_type="animator")` (model: sonnet, defined in `.claude/agents/animator.md`). Sub-agent loads `rules/roles/animator.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute) and use only the route declared by that format (H3 Max `minimax.h3max.i2v` where the playbook declares it, Kling v3 Standard `kling.v3.standard.i2v` otherwise; no automatic fallback between them). One I2V route per episode, with a single exception: H3 Max Turbo lip-sync dialogue clips (`minimax.h3max.turbo.i2v`, what-if-real-life) may sit next to H3 Max action clips, as Kling Avatar dialogue clips may sit next to I2V action clips. Plain clips never use H3 Max Turbo, and `motion: "still"` scenes are a local render, not a route change. Serial-drama uses Kling I2V native audio for dialogue; Gameplay AI Avatar is inactive. Template: `prompts/animator.txt`. If many scenes do not fit one pass, split them into batches while keeping the same selected route.
 
-**Video execution boundary:** Scenarist/Manager/Animator select the tool, duration, audio policy and full provider payload from the storyboard and exact format playbook. Every Kling v3 Standard I2V request then uses one immutable schema-v3 `kling_runner.py` job: `route + untouched payload + technical expect + output/upload destination`, preflight, real run. Runner never makes format decisions or simplifies fields. Direct fal HTTP or mutating the selected request is a Phase 4 failure. Runner `UNKNOWN` is never resubmitted; `PAID_RETRY_REQUIRED` needs explicit authorization. New formats on an existing route require no runner change; compatible new fal queue endpoints are data-only entries in `tools/video_routes.json`. A `motion: "still"` scene creates no runner job: Animator renders it locally with `tools/still_shot.py` from the scene PNG ($0) and writes `scene_video_kind: "still"`, `scene_video_route: "local.still_shot"`, `scene_video_url: null`. Still scenes are not a route change: every animated scene stays on the format's declared Kling route.
+**Video execution boundary:** Scenarist/Manager/Animator select the tool, duration, audio policy and full provider payload from the storyboard and exact format playbook. Every paid I2V request on the declared route (H3 Max or Kling v3 Standard, plus H3 Max Turbo for what-if lip-sync) then uses one immutable schema-v3 `kling_runner.py` job (the runner is model-agnostic despite its name): `route + untouched payload + technical expect + output/upload destination`, preflight, real run. Runner never makes format decisions or simplifies fields. Direct fal HTTP or mutating the selected request is a Phase 4 failure. Runner `UNKNOWN` is never resubmitted; `PAID_RETRY_REQUIRED` needs explicit authorization. New formats on an existing route require no runner change; compatible new fal queue endpoints are data-only entries in `tools/video_routes.json`. A `motion: "still"` scene creates no runner job: Animator renders it locally with `tools/still_shot.py` from the scene PNG ($0) and writes `scene_video_kind: "still"`, `scene_video_route: "local.still_shot"`, `scene_video_url: null`, `scene_video_audio: "none"`.
 
 **CRITICAL — Upload to Supabase before expensive generation:**
-If output of one stage (TTS, images) is needed as input for the next expensive stage (Kling Avatar, I2V):
+If output of one stage (TTS, images) is needed as input for the next expensive stage (Kling Avatar, any I2V route):
 1. Download the file locally immediately after generation
 2. Upload to Supabase Storage → get a permanent public URL
 3. Use ONLY the Supabase URL for the next stage
 4. NEVER use temporary fal.ai result URLs as input to expensive generation
 
-**Validation:** manager checks inline that every scene has an MP4 ≥ 100KB. For `kling_runner.py` jobs also require matching `phase: "DONE"` state, `scene_video == output_path`, and permanent `scene_video_url == supabase_url`. A `motion: "still"` scene passes instead with `scene_video_kind: "still"`, MP4 ≥ 100 KB, 1080×1920, duration within ±0.05 s of `duration_sec`, no audio stream, and no runner state required. A scene with `scene_video_kind: "still"` that Phase 1 did not plan as `motion: "still"` is a fallback and fails. Commands: `rules/main/validation.md` → "For MP4 (video)". If any are missing or mismatched → STOP before Editor.
+**Validation:** manager checks inline that every scene has an MP4 ≥ 100KB. For `kling_runner.py` runner jobs (H3 Max, H3 Max Turbo lip-sync or Kling) also require matching `phase: "DONE"` state, `scene_video == output_path`, and permanent `scene_video_url == supabase_url`. A `motion: "still"` scene passes instead with `scene_video_kind: "still"`, MP4 ≥ 100 KB, 1080×1920, duration within ±0.05 s of `duration_sec`, and no runner state required. A scene with `scene_video_kind: "still"` that Phase 1 did not plan as `motion: "still"` is a fallback and fails. Commands: `rules/main/validation.md` → "For MP4 (video)". If any are missing or mismatched → STOP before Editor.
 
 **Output:** `scenes/scene-K/scene-K.mp4` per clip (paid runner clip, Avatar clip, or local still-shot clip).
 
@@ -482,7 +484,9 @@ Before calling an external API not pinned behind a repository runner, verify cur
 |--------|----------|-----------|
 | Nano Banana 2 via `tools/fal_runner.py` | pinned `nb2.text` / `nb2.edit` | ~$0.08/image |
 | GPT Image 2 medium (image) | `fal-ai/gpt-image-2` (verify via Context7) | ~$0.04 |
-| Kling v3 Standard I2V (primary) | `fal-ai/kling-video/v3/standard/image-to-video` | $0.084/s without audio, $0.126/s with audio; Scenarist/Manager/Animator choose exact `generate_audio` from storyboard + format playbook |
+| MiniMax H3 Max I2V via `kling_runner.py` route `minimax.h3max.i2v` (plain I2V for redcon, item-story, character-story, in-game-pov, wild-documentary, what-if-real-life I2V scenes) | `minimax/h3-max/image-to-video` | $0.08/s at 768P, billed on the returned length (3 s ≈ $0.25, 5 s ≈ $0.41, 10 s ≈ $0.83); fal promo $0.048/s until 15 Oct 2026, budget at $0.08/s. Always returns a soundtrack: `scene_video_audio` decides whether it is used |
+| MiniMax H3 Max Turbo lip-sync via `kling_runner.py`, route `minimax.h3max.turbo.i2v` + `target_audio_url` = the scene's `tts_url` (what-if-real-life dialogue; the Kling Avatar formats stay on Kling Avatar v2 until their pilots) | `minimax/h3-max-turbo/image-to-video` | $0.04/s on the returned length (a 5 s exchange ≈ $0.21; Kling Avatar v2 $0.28). The returned soundtrack is the TTS itself; the clip is written with `scene_video_audio: "native"`, `scene_video_lipsync: true` |
+| Kling v3 Standard I2V via `kling_runner.py` route `kling.v3.standard.i2v` (serial-drama, dual-style and formats not yet migrated; the `multi_prompt` / `voice_ids` / `elements` route) | `fal-ai/kling-video/v3/standard/image-to-video` | $0.084/s without audio, $0.126/s with audio; Scenarist/Manager/Animator choose exact `generate_audio` from storyboard + format playbook |
 | Kling 2.6 Pro I2V (user-authorized route only; never automatic fallback) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.07/s ($0.35/5s no audio) |
 | MiniMax TTS (via fal.ai) | `fal-ai/minimax/speech-2.8-hd` | ~$0.10/1k chars. `voice_setting.voice_id`, `emotion`. Field is `prompt` not `text`. |
 | Kling Lipsync | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/s |
@@ -493,9 +497,9 @@ Before calling an external API not pinned behind a repository runner, verify cur
 - Auth: `Authorization: Key $FAL_KEY`
 - Base URL: `https://queue.fal.run/`
 - Polling: IN_QUEUE → IN_PROGRESS → COMPLETED / FAILED, check every 15s
-- Status URL: first 2 segments of the endpoint, not the full path
+- Status URL: first 2 segments of the endpoint, not the full path (H3 Max: `minimax/h3-max`; H3 Max Turbo lip-sync: `minimax/h3-max-turbo`)
 - Details: `tools/fal-ai.md`, `tools/ffmpeg-api.md`
-- **Cost report:** list still scenes as `$0.00` (`local.still_shot`); Kling clips at their table rate.
+- **Cost report:** list still scenes as `$0.00` (`local.still_shot`); price H3 Max clips at $0.08/s and H3 Max Turbo lip-sync clips at $0.04/s on the returned length (ffprobe duration of the clip, e.g. 5.184 s ≈ $0.41 on H3 Max, ≈ $0.21 on Turbo lip-sync), Kling clips at their table rate.
 
 ---
 

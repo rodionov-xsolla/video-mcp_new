@@ -27,7 +27,7 @@ What you personally do:
    | 1. Script | `scenarist` | sonnet | writes `storyboard.json` (narrative + visual_identity) |
    | 2. Audio | `sound` | haiku | Routed external speech and format-required music/SFX; serial-drama always generates music |
    | 3. Images | `storyboarder` | sonnet | NB2 PNGs per scene, image_prompt + scene_image into storyboard.json |
-   | 4. Animation | `animator` | sonnet | Kling I2V/Avatar v2, or a free still shot → MP4 per scene |
+   | 4. Animation | `animator` | sonnet | I2V (H3 Max or Kling, per format), H3 Max Turbo lip-sync (what-if dialogue), Kling Avatar v2, or a free still shot → MP4 per scene |
    | 5. Assembly | `editor` | sonnet | ffmpeg concat → local `final.mp4`, subtitles, music, CTA |
 
 7. **For every sub-agent, pass in `prompt`** (it does not see your context):
@@ -57,7 +57,7 @@ rules/
 │   ├── manager.md             — orchestration (you read this)
 │   ├── scenarist.md           — script (storyboard.json)
 │   ├── storyboarder.md        — NB2 images
-│   ├── animator.md            — Kling I2V/Avatar video, or a free still shot
+│   ├── animator.md            — I2V (H3 Max / Kling), H3 Max Turbo lip-sync, Avatar and still-shot video
 │   ├── sound.md               — routed speech, music
 │   └── editor.md              — FFmpeg assembly
 ├── formats/                   ← format playbooks (briefs per role)

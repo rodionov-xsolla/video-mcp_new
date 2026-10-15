@@ -254,10 +254,50 @@ ${OUTPUT_DIR}/build/fal/_claims/*.json            # output-path ownership; не 
 }
 ```
 
+**H3 Max job** (route `minimax.h3max.i2v`, the plain I2V route for the formats switched on 12 Oct 2026 — see `fal-ai.md §2y`; what-if dialogue lip-sync uses H3 Max Turbo `minimax.h3max.turbo.i2v` with `target_audio_url`, template `tools/examples/minimax-h3-max-turbo-lipsync.job.json`). Same schema, same runner, same commands; only `route`, `payload` and `expect` differ:
+
+```json
+{
+  "schema_version": 3,
+  "job_id": "unique-scene-video-id",
+  "route": "minimax.h3max.i2v",
+  "artifact_kind": "scene_video",
+  "output_dir": "/absolute/episode/output",
+  "output_path": "scenes/scene-1/scene-1.mp4",
+  "payload": {
+    "prompt": "motion prompt authored by Animator, ending with at most two short constraint sentences",
+    "image_url": "https://permanent-supabase/scene-1.png",
+    "duration": 5,
+    "resolution": "768P",
+    "prompt_expansion_mode": "disabled"
+  },
+  "expect": {
+    "kind": "video",
+    "duration_seconds": 5,
+    "duration_tolerance_seconds": 0.8,
+    "audio": "optional",
+    "min_bytes": 100000,
+    "min_width": 600,
+    "min_height": 1000,
+    "orientation": "portrait"
+  },
+  "supabase": {
+    "game": "game-tag",
+    "episode": "YYYY-MM-DD-format-run-id",
+    "name": "scene-1.mp4"
+  }
+}
+```
+
+- `payload` is exactly these five fields (plus a silent `target_audio_url` on clips whose sound is discarded, below): `image_url` (not `start_image_url`), `duration` as a **number** equal to the scene's `duration_sec` (H3 accepts 0.92–15 s), `resolution: "768P"`, `prompt_expansion_mode: "disabled"`. H3 has no `negative_prompt`, `generate_audio`, `multi_prompt`, `voice_ids`, `elements` or `shot_type`.
+- `expect.duration_tolerance_seconds` is `0.8`: H3 returns ~5.18 s for 5 s and can run up to ~0.7 s long.
+- `expect.audio` is `"required"` when the format uses clip sound and `"optional"` when it does not — **never `"forbidden"`**: H3 always returns a soundtrack, so a forbidden-audio job fails validation after payment. Whether the editor uses the clip's sound comes from the scene's `scene_video_audio`, not from the stream.
+- **Clips whose sound is discarded** (`scene_video_audio: "none"`) add exactly one field, a silent `target_audio_url` (`data:audio/mpeg;base64,...`, from `silent_audio.py` below; `rules/roles/animator.md` §2a). The template `tools/examples/minimax-h3-max-scene-video.job.json` shows the five-field payload, so add the field with `jq --rawfile` before `--preflight`. `"native"` clips send the five fields unchanged. A `data:` value is not a URL to the runner: it is not checked before submit and is sent untouched.
+
 Граница ответственности:
 
 - `payload` — любой непустой canonical JSON object; runner передаёт его без field allowlist, type conversion или format-specific validation;
-- все URL, найденные внутри payload на любой глубине, должны быть permanent HTTPS и проверяются до paid submit; fal temporary URLs запрещены;
+- все URL, найденные внутри payload на любой глубине, должны быть permanent HTTPS и проверяются до paid submit; fal temporary URLs запрещены; значение `data:` (silent `target_audio_url`) — не URL и передаётся без проверки;
 - `expect` задаёт техническую проверку результата: duration/tolerance, audio `required|optional|forbidden`, minimum bytes/dimensions и orientation;
 - route descriptor, exact payload, exact `expect`, Supabase destination и output path входят в immutable contract hash;
 - runner recovery никогда не меняет payload или route. Смена инструмента/параметров — решение оркестратора и новый job после остановленного запуска.
@@ -281,7 +321,7 @@ python3 tools/kling_runner.py "$JOB"   # invoke with Bash timeout ≥150s (see b
 python3 tools/kling_runner.py --allow-paid-retry "$JOB"
 ```
 
-Runner не имеет archive/reset и не выполняет automatic batch. State хранится в `${OUTPUT_DIR}/build/video/{job_id}/`, claim — в `${OUTPUT_DIR}/build/video/_claims/`. Tracked templates: `tools/examples/kling-v3-standard-scene-video.job.json`, `tools/examples/kling-v3-serial-dialogue.job.json`, `tools/examples/kling-v3-elements.job.json`.
+Runner не имеет archive/reset и не выполняет automatic batch. State хранится в `${OUTPUT_DIR}/build/video/{job_id}/`, claim — в `${OUTPUT_DIR}/build/video/_claims/`. Tracked templates: `tools/examples/kling-v3-standard-scene-video.job.json`, `tools/examples/kling-v3-serial-dialogue.job.json`, `tools/examples/kling-v3-elements.job.json`, `tools/examples/minimax-h3-max-scene-video.job.json`, `tools/examples/minimax-h3-max-turbo-lipsync.job.json`.
 
 ---
 
@@ -317,7 +357,7 @@ python3 tools/still_shot.py --image scenes/scene-K/scene-K.png \
 {"ok":true,"output":"scenes/scene-3/scene-3.mp4","image":"scenes/scene-3/scene-3.png","effect":"push-in","depth":"flat","zoom":0.12,"duration":5.0,"fps":30,"frames":150,"width":1080,"height":1920,"audio":"none","bytes":2345678,"sha256":"<64 hex>","cost_usd":0}
 ```
 
-On failure it prints `{"ok": false, "error": "..."}` to stderr and exits 1. Before reporting success it checks its own render with ffprobe (size, exact frame count, duration within ±0.05 s, audio track as requested). The animator copies `sha256`, `image_sha256` (the source PNG) and `frames` into the scene's `still_render` and sets `scene_video_kind: "still"`, `scene_video_route: "local.still_shot"`, `scene_video_url: null`.
+On failure it prints `{"ok": false, "error": "..."}` to stderr and exits 1. Before reporting success it checks its own render with ffprobe (size, exact frame count, duration within ±0.05 s, audio track as requested). The animator copies `sha256`, `image_sha256` (the source PNG) and `frames` into the scene's `still_render` and sets `scene_video_kind: "still"`, `scene_video_route: "local.still_shot"`, `scene_video_url: null`, `scene_video_audio: "none"`.
 
 **Reads:** scene PNG  
 **Writes:** one MP4  
@@ -328,6 +368,39 @@ On failure it prints `{"ok": false, "error": "..."}` to stderr and exits 1. Befo
 - Stills are planned in Phase 1 only. Never render one as a fallback after a failed paid clip; if the tool fails, stop and report.
 - `--depth some|deep` with a pan or tilt is rejected: the missing parallax would show.
 - A 12% zoom crops ~11% and a pan travels ~11% of the width, so the storyboarder keeps the subject and any baked-in text inside the central ~85% of the frame.
+
+---
+
+### `silent_audio.py` 🟢
+
+**Role:** renders the **silent `target_audio_url`** of a plain H3 Max clip (`minimax.h3max.i2v`) whose sound is discarded (`scene_video_audio: "none"`): a silent mono MP3 of the requested `duration` as a base64 `data:audio/mpeg;base64,...` URI. H3 always writes its own soundtrack and invents speech for a visible face; given a silent track it keeps the mouth closed (Test 6b: 30/30 clips returned a silent soundtrack, about −91 dB). Called by the animator agent while writing the job. Not for `"native"` clips (wild-documentary, in-game-pov, what-if physical gags) and not for H3 lip-sync (TTS). Local ffmpeg, no network, **$0**. Rule: `rules/roles/animator.md` §2a "Silent `target_audio_url`".
+
+**Run:**
+```bash
+python3 tools/silent_audio.py --duration <duration_sec> --out "$OUTPUT_DIR/build/video/silence/scene-K.txt"
+jq --rawfile silence "$OUTPUT_DIR/build/video/silence/scene-K.txt" \
+  '.payload.target_audio_url = $silence' "$JOB_DRAFT" > "$JOB"   # before --preflight
+```
+
+**Flags:**
+
+| Flag | Default | Meaning |
+|------|---------|---------|
+| `--duration` | required | seconds, the H3 payload `duration` (the scene's `duration_sec`); 2–15 s (H3 needs at least 2 s of target audio) |
+| `--out` | off | write only the data URI (no trailing newline) to this file; without it the URI is printed inside the JSON |
+
+ffmpeg command: `-f lavfi -i anullsrc=r=16000:cl=mono -t <d> -c:a libmp3lame -b:a 16k` into a temp file (~2 KB per second; a 5 s track is ~10 KB, ~14 KB as a data URI).
+
+**Output:** one JSON line on stdout: `{"ok":true,"duration":5.0,"bytes":10376,"data_uri":"data:audio/mpeg;base64,..."}`; with `--out` the line has `"out": "<file>"` instead of `"data_uri"` (`bytes` = MP3 size). Before reporting success it checks its render with ffprobe (one mp3 stream, duration within 0.1 s). On failure it prints `{"ok": false, "error": "..."}` to stderr and exits 1 (also for a duration below 2 s or above 15 s).
+
+**Reads:** nothing  
+**Writes:** the `--out` file only (temp MP3 removed)  
+**Network:** none
+
+**⚠ Pitfalls:**
+- Add the field before `--preflight`: after it the job is immutable.
+- Never paste, shorten or hand-edit the data URI, and never reuse one rendered for a different `duration`.
+- The returned H3 clip carries a silent audio stream: expected, not a defect (the stream is discarded anyway).
 
 ---
 
@@ -435,7 +508,9 @@ python tools/overlays.py storyboard.json \
 **Покрывает:**
 - Nano Banana 2 — T2I / I2I с chain reference. $0.08/img
 - GPT Image 1 — альтернативный маршрут только по предварительному/явному разрешению; не automatic fallback. $0.02/img  
-- Kling v3 Standard I2V — $0.084/с без audio, $0.126/с с audio. multi_prompt, elements
+- MiniMax H3 Max I2V — $0.08/s at 768P (5 s ≈ $0.41 on the returned length); plain I2V route (redcon, item-story, character-story, in-game-pov, wild-documentary, what-if-real-life I2V scenes)
+- MiniMax H3 Max Turbo lip-sync — $0.04/s at 768P (5 s ≈ $0.21); what-if-real-life dialogue only, never plain clips
+- Kling v3 Standard I2V — $0.084/с без audio, $0.126/с с audio. multi_prompt, voice_ids, elements (serial-drama, dual-style, formats not yet migrated)
 - Kling v2.6 Pro — отдельный format/user-selected I2V route; не automatic fallback
 - Veo 3 — T2V / I2V, $1.60–$3.20 за 8-секундный клип
 - MiniMax TTS — Speech 2.8-HD, $0.10/1k символов
@@ -446,7 +521,8 @@ python tools/overlays.py storyboard.json \
 **Критичные правила из документа:**
 - fal.media URL — временные, скачивать немедленно
 - Polling base path = первые 2 сегмента endpoint (не полный путь с версией)
-- `generate_audio` выбирается оркестратором по storyboard + format playbook до создания exact payload; native-audio режимы сохраняют оплаченный audio, silent-режимы используют `false`
+- Kling: `generate_audio` выбирается оркестратором по storyboard + format playbook до создания exact payload; native-audio режимы сохраняют оплаченный audio, silent-режимы используют `false`
+- H3 (Max and Max Turbo) always returns sound (no audio switch): the editor uses clip sound only when the scene's `scene_video_audio` is `"native"`; `expect.audio` is never `"forbidden"`
 - `multi_prompt[].prompt`: provider hard limit is 512 serialized UTF-8 bytes, not Unicode character count. Measure `len(prompt.encode("utf-8"))`; exact format playbooks may require a lower safety ceiling (`dual-style-v3`: ≤400 bytes).
 - Elements: максимум 3 на запрос
 - Параллельных запросов: не более 3
@@ -606,6 +682,7 @@ python3 tools/growtopia_parser.py --limit 1 --preprocess    # тест на од
 | `fal_runner.py` | 🟠 | storyboarder-агент | NB2 job state + PNG + Supabase |
 | `kling_runner.py` | 🟠 | animator-агент | format-agnostic fal video payload state + MP4 + Supabase |
 | `still_shot.py` | 🟢 | animator agent (`motion: "still"` scenes) | one local scene MP4, $0, no network |
+| `silent_audio.py` | 🟢 | animator agent (H3 Max clips with `scene_video_audio: "none"`) | silent MP3 data URI for `target_audio_url` (`--out` file only), $0, no network |
 | `add_subtitles.py` | 🟠 | editor-агент | .ass файл |
 | `overlays.py` | 🟡 | editor-агент | temp .txt файлы |
 | `log-video.sh` | 🟢 | manager (после OK) | Supabase video_agent_runs |

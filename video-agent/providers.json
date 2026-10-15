@@ -36,7 +36,9 @@
       "models": {
         "image_gen": "fal-ai/nano-banana-2/edit",
         "image_gen_alternate_user_only": "fal-ai/gpt-image-1/text-to-image",
-        "video_gen_i2v": "fal-ai/kling-video/v3/standard/image-to-video",
+        "video_gen_i2v": "minimax/h3-max/image-to-video",
+        "video_gen_lipsync": "minimax/h3-max-turbo/image-to-video",
+        "video_gen_i2v_kling_features": "fal-ai/kling-video/v3/standard/image-to-video",
         "video_gen_i2v_alternate_user_only": "fal-ai/kling-video/v2.6/pro/image-to-video",
         "tts": "fal-ai/minimax/speech-2.8-hd",
         "tts_chatterbox": "fal-ai/chatterbox/text-to-speech",
@@ -48,14 +50,17 @@
         "motion_control_v3_pro": "fal-ai/kling-video/v3/pro/motion-control"
       },
       "pricing": {
-        "image_gen": "~$0.04/image",
+        "image_gen": "$0.08/image (1K)",
         "image_gen_alternate_user_only": "~$0.02/image (GPT Image 1)",
         "avatar": "$0.056/sec (Kling Avatar v2)",
         "motion_control": "$0.07/sec (Kling Motion Control v2.6 Standard)",
-        "video_gen_i2v": "$0.084/sec (Kling v3 Standard, audio off)",
+        "video_gen_i2v": "$0.08/sec (H3 Max, 768P; ~$0.41 per 5 s clip billed on returned ~5.18 s; fal promo $0.048/sec until 15 Oct 2026)",
+        "video_gen_lipsync": "$0.04/sec (H3 Max Turbo lip-sync, 768P; ~$0.21 per 5 s exchange billed on returned length)",
+        "video_gen_i2v_kling_features": "$0.084/sec (Kling v3 Standard, audio off)",
         "video_gen_i2v_alternate_user_only": "$0.07/sec (Kling 2.6 Pro, audio off)",
         "tts": "~$0.10/1k chars (~$0.001-0.005/phrase, MiniMax via fal.ai)"
-      }
+      },
+      "notes": "video_gen_i2v = MiniMax H3 Max (route minimax.h3max.i2v), the plain I2V route for redcon, item-story, character-story, in-game-pov, wild-documentary and what-if-real-life I2V scenes. video_gen_lipsync = MiniMax H3 Max Turbo (route minimax.h3max.turbo.i2v + target_audio_url), used only for what-if-real-life dialogue lip-sync, never for plain clips. video_gen_i2v_kling_features = Kling v3 Standard (route kling.v3.standard.i2v), kept for formats that need multi_prompt / voice_ids / elements (serial-drama, dual-style) and for formats not yet migrated. Each format playbook declares its route; no automatic fallback between them."
     },
     "kling-direct": {
       "name": "Kling Direct API",

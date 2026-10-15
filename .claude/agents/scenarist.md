@@ -41,7 +41,7 @@ CONSTRAINTS — STRICT:
 - DEFAULT 3 clips for standard / dual-style / dance-battle; format playbooks may override
 - Multi-character: max 2 in frame; describe interaction in action_description
 - I2V clips: action_description must NOT contain walking/running/hits — micro motion only
-- Still shots: only when the format playbook says "Still shots: allowed"; follow scenarist.md "Still shots" (impact score, depth check, effect, cap `min(3, round(N/3))`, adjacency). Never on dialogue / `character_speech` / Avatar / impact-3 / climax scenes. Zero stills is a normal, correct result
+- Still shots: only when the format playbook says "Still shots: allowed"; follow scenarist.md "Still shots" (impact score, depth check, effect, cap `min(3, round(N/3))`, adjacency). Never on dialogue / `character_speech` / lip-sync / impact-3 / climax scenes. Zero stills is a normal, correct result
 - Avatar clips: tts text ≤25 words to fit 5s; longer → split into 2×5s
 - For serial-drama: respect anti_repetition (phrases, hooks, cliffhangers) from story bible
 - Pass the full Scenarist validation checklist before saving (scenarist.md "Validation checklist")

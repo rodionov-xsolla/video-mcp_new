@@ -34,13 +34,13 @@ DO NOT load:
 
 INPUT (already on disk in {OUTPUT_DIR}):
 - `{OUTPUT_DIR}/storyboard.json` — narrative + image_prompt + motion_prompt per scene; subtitle text
-- `{OUTPUT_DIR}/scenes/scene-K/scene-K.mp4` — scene clips (K = 1..N): animated clips, or still-shot clips (`scene_video_kind: "still"`, 1080×1920, 30fps, exact `duration_sec`, no audio stream)
-- `{OUTPUT_DIR}/scenes/scene-K/scene-K.mp3` — TTS audio (only for dialogue clips with TTS overlay; Avatar clips have audio embedded)
+- `{OUTPUT_DIR}/scenes/scene-K/scene-K.mp4` — scene clips (K = 1..N): animated I2V/Avatar clips, or silent still-shot clips (`scene_video_kind: "still"`, no audio stream)
+- `{OUTPUT_DIR}/scenes/scene-K/scene-K.mp3` — TTS audio (only for dialogue clips with TTS overlay; Avatar and H3 lip-sync clips have audio embedded)
 - `{OPENER_PATH}` and `{CTA_PATH}` if provided by parent; otherwise download from Supabase per format brief
 
 TASK:
 Assemble `{OUTPUT_DIR}/final.mp4` (1080×1920, 30fps, AAC 128k stereo) following editor.md and rules/formats/{FORMAT}.md exactly. Standard pipeline:
-1. Normalize each scene (scale + 30fps + AAC, add anullsrc to silent I2V clips and still clips; never trim still clips; where clip audio is concatenated (`a=1`), a still scene gets an anullsrc slot of its length because its `[k:a]` does not exist)
+1. Normalize each scene (scale + 30fps + AAC): fill-and-crop for portrait clips, pad for landscape sources and the CTA; trim `minimax.*` clips to `duration_sec`; clip sound by the scene's `scene_video_audio` — `"native"` keeps it, `"none"` and still clips get anullsrc even if the file has an audio stream; only when the field is missing, add anullsrc to clips without an audio stream (editor.md "Per-scene clip fields"); a `scene_video_lipsync: true` clip (H3 lip-sync) already carries the scene's speech: use its audio, never add that scene's TTS again (off-screen VO such as `customer.mp3` is still mixed), and give it the H3 trim, not Avatar's TTS trim
 2. Apply subtitles per-scene (formats: serial-drama drawtext via `tools/add_subtitles.py`; gameplay-ai-avatar drawtext + faster_whisper; reddit-story drawtext word-highlight)
 3. Episode number / TBC overlays per format
 4. Concat all clips with re-encode (NEVER `-c copy`, NEVER `-shortest`)
@@ -53,7 +53,7 @@ Assemble `{OUTPUT_DIR}/final.mp4` (1080×1920, 30fps, AAC 128k stereo) following
 
 CONSTRAINTS:
 - DO NOT regenerate any scene MP4/MP3 — that work is finished (this includes still-shot clips)
-- DO NOT call fal.ai / Kling / NB2 / ElevenLabs APIs — your toolset is FFmpeg only
+- DO NOT call fal.ai / Kling / MiniMax H3 / NB2 / ElevenLabs APIs — your toolset is FFmpeg only
 - DO NOT use Read tool on generated PNG/MP4/MP3 files — technical validation only; there is no machine visual check of the final
 - DO NOT modify storyboard.json — it is the source of truth
 - DO NOT push to git — Manager handles Phase 6

@@ -6,7 +6,7 @@ overlays: false
 
 # Format "Character Story" — first-person lore monologue with visualization
 
-A tightly-cut lore video: the character tells their story in first person while Kling I2V visualizes the key moments. TTS overlay on silent picture; subtitles use the universal whisper-timed ASS pipeline from `rules/roles/editor.md`.
+A tightly-cut lore video: the character tells their story in first person while image-to-video clips (MiniMax H3 Max) visualize the key moments. TTS overlay on silent picture; subtitles use the universal whisper-timed ASS pipeline from `rules/roles/editor.md`.
 
 This file is the **playbook**: when to use, concept, budget, role briefs. Craft rules — in `rules/roles/*.md`.
 
@@ -31,7 +31,7 @@ Before generation, resolve the exact `games/{GAME_TAG}/character-story_story_bib
 ### Models
 
 - **Image:** NB2 (`fal-ai/nano-banana-2/edit`) — character refs + scene images
-- **Video:** Kling v3 Standard I2V (`fal-ai/kling-video/v3/standard/image-to-video`) — `generate_audio: false`. Keep the selected model/endpoint/route and serialized request fixed; retry once, then stop. Kling 2.6 is not an automatic fallback. v3 supports native `multi_prompt`.
+- **Video:** MiniMax H3 Max I2V (route `minimax.h3max.i2v`, `minimax/h3-max/image-to-video`) — 768P, numeric `duration` = `duration_sec`, `prompt_expansion_mode: "disabled"`. H3 always returns a soundtrack; this format never uses it (`scene_video_audio: "none"`). Keep the selected model/endpoint/route and serialized request fixed; retry once, then stop. Kling v3 Standard and Kling 2.6 are not automatic fallbacks. H3 has no `negative_prompt`, `multi_prompt` or end frame.
 - **Audio:** Chatterbox only when the exact `character-story` story bible owns an approved character sample. If no sample exists and voice identity is important, STOP and ask; use MiniMax only when the user accepts a non-identity-critical voice. ElevenLabs TTS and cross-format samples are forbidden.
 - **Music:** yes, mood per plot, `volume` per mood (0.10–0.20)
 
@@ -41,7 +41,7 @@ The character does NOT speak on camera (no lipsync). Video = visualization of wh
 
 ### Still shots: allowed
 
-The scenarist may plan still shots (`motion: "still"`) under the rule, cap and fields in `rules/roles/scenarist.md` "Still shots" (§8). A still scene gets its start PNG as usual and is rendered free by the Animator (`tools/still_shot.py`, no paid clip), saving that scene's Kling clip ($0.42 per 5s scene); narration plays over it as normal.
+The scenarist may plan still shots (`motion: "still"`) under the rule, cap and fields in `rules/roles/scenarist.md` "Still shots" (§8). A still scene gets its start PNG as usual and is rendered free by the Animator (`tools/still_shot.py`, no paid clip), saving ~$0.41 per 5s scene; narration plays over it as normal.
 
 - **Best candidates:** a wide establishing or location shot with no character in focus (homeworld skyline, ship exterior, an empty room after a loss), a close-up of a meaningful object at rest (a medal, a letter, a memento), a quiet aftermath pause.
 - **Never a still:** the HOOK, the TURNING POINT climax, or any clip whose point is the character's face, gesture or age-variant performance. Zero stills is a normal result.
@@ -54,8 +54,8 @@ The scenarist may plan still shots (`motion: "still"`) under the rule, cap and f
 | Component | 5s clip |
 |---|---|
 | Image (NB2, start frame only — no end frame, no bg-ref) | $0.08 |
-| Kling v3 Standard I2V 5s (generate_audio=false) | $0.42 |
-| **Per clip** | **~$0.50** |
+| MiniMax H3 Max I2V 5s ($0.08/s on the returned ~5.18s; clip sound unused) | ~$0.41 |
+| **Per clip** | **~$0.49** |
 | Still-shot scene (NB2 image only; `tools/still_shot.py` render is free) | $0.08 |
 
 | Component | Cost |
@@ -66,10 +66,10 @@ The scenarist may plan still shots (`motion: "still"`) under the rule, cap and f
 
 | Variant | Clips | Cost |
 |---|---|---|
-| Base (recommended) | 6 × 5s = 30s + 1–2 char-refs (NO separate bg-refs) | ~$2.80 |
-| Extended | 8 × 5s = 40s + 1–2 char-refs (NO separate bg-refs) | ~$3.60 |
+| Base (recommended) | 6 × 5s = 30s + 1–2 char-refs (NO separate bg-refs) | ~$3.15–3.35 (approx.) |
+| Extended | 8 × 5s = 40s + 1–2 char-refs (NO separate bg-refs) | ~$4.10–4.35 (approx.) |
 
-A still scene saves its Kling clip ($0.42 per 5s, no audio).
+Approx. totals = per-clip cost × clips + char-refs + a small TTS/music allowance. Each planned still scene saves ~$0.41.
 
 ---
 
@@ -124,7 +124,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - `action_description` — what happens visually, NOT a repeat of the monologue text
 - **HOOK self-introduction is MANDATORY.** The first clip's `tts_segment` must name the character with their full canonical designation so unfamiliar viewers (most of the audience) immediately know who they're watching. Include four elements when applicable: **rank + full name + role + ship/affiliation**. Examples: "I am Captain Benjamin Lafayette Sisko", "I am Seven of Nine, Tertiary Adjunct of Unimatrix Zero One", "I am Lieutenant Nyota Uhura, Communications Officer, Starship Enterprise". One line, ≤18 words, hard requirement. Without this the video reads as art-piece monologue rather than a character story.
 - **Show visual age progression where canon supports it.** If the character has clearly distinct age variants in their canon (child / young adult / cadet / mature), the arc MUST visualize AT LEAST 2 of them across the clips — ideally 3 (child → young → mature). ORIGIN clips usually carry the youngest variant; HOOK and REVELATION the most mature. Mark each clip's image_prompt with the specific age variant ("child X at ~8 years old", "young cadet X at ~20", "Captain X at ~50"). A flat single-age character story loses the "growing-up arc" that defines the format.
-- **Three motion layers per animated clip** (mandatory): camera move + environment motion + character action. Each layer continues throughout the full 5s — do NOT write "then settles / then steady / then dissipates" (Kling reads those as freeze cues).
+- **Three motion layers per animated clip** (mandatory): camera move + environment motion + character action. Each layer continues throughout the full 5s — do NOT write "then settles / then steady / then dissipates" (I2V models read those as freeze cues).
 - camera_angle differs between adjacent clips, AND every clip specifies an active camera move (push-in / pull-back / lateral dolly / low boom / crane up / handheld drift; for a still scene, its `still_effect`). No "camera holds steady" clips.
 - Still shots: optional, per "Still shots: allowed" above and `rules/roles/scenarist.md` "Still shots"; zero is a normal result.
 - Number of characters in frame — per plot (1–2, max 2 in frame)
@@ -176,27 +176,29 @@ The structure is flexible — the scenarist adapts it to the specific character'
 - Chain: `scene-1` refs = `[exact-character-story-ref]`; `scene-N` (N≥2) refs = `[exact-character-story-ref, same-run scene-(N-1).png]`. No bg ref (background comes through text in `image_prompt`), but the same-run prev-scene chain is mandatory for continuity between frames. See storyboarder.md §10.
 - If 2 characters in frame — both via refs, max 2 refs per image
 - `image_prompt` describes the visual action from `action_description`, NOT the monologue text
-- **One PNG per clip — start frame only.** Do NOT generate `scene-K-end.png`. End frames waste $0.08/clip and are FORBIDDEN with `multi_prompt`. See storyboarder.md §14.8.
+- **One PNG per clip — start frame only.** Do NOT generate `scene-K-end.png`. End frames waste $0.08/clip, and the H3 route takes none. See storyboarder.md §14.8.
 - General rules — `rules/roles/storyboarder.md`
 
 ### Animator
 
-- All animated clips via **Kling v3 Standard I2V** (`generate_audio: false`; still scenes are rendered locally, no paid clip). Retry the same serialized request once on the same route, then stop the whole video; Kling 2.6 requires separate explicit authorization after the stopped run. Never replace a failed clip with a still.
-- **Still scenes** (`motion: "still"`): no Kling call; render with `tools/still_shot.py` as `rules/roles/animator.md` §2b describes.
-- **Start frame only.** Do NOT pass `tail_image_url` / end frame. Identity is held by `image_url` (start frame, chain-ref'd by Storyboarder) + the chain consistency Kling already enforces between adjacent frames. End frames make Kling interpolate-then-freeze and produce static clips.
+- All animated clips via the format's route, **MiniMax H3 Max I2V** (`minimax.h3max.i2v`), through `tools/kling_runner.py` (payload: `prompt`, `image_url`, numeric `duration`, `resolution: "768P"`, `prompt_expansion_mode: "disabled"`; see `tools/examples/minimax-h3-max-scene-video.job.json`). `expect.audio: "optional"`, never `"forbidden"` (H3 always returns a soundtrack). Write `scene_video_audio: "none"` on every scene. Retry the same serialized request once on the same route, then stop the whole video; any other route (Kling v3 Standard, Kling 2.6) requires separate explicit authorization after the stopped run.
+- Every animated clip adds a **silent `target_audio_url`** of its `duration` (clip sound is discarded): a data URI from `tools/silent_audio.py --duration <duration_sec> --out <file>`, read into the job with `jq --rawfile` before `--preflight` (`rules/roles/animator.md` §2a "Silent `target_audio_url`"; it stops H3 from mouthing words, Test 6b).
+- **Still scenes** (`motion: "still"`): no paid job; render with `tools/still_shot.py` as `rules/roles/animator.md` describes.
+- **Start frame only.** Never pass an end frame (H3 has no end-frame field; on Kling, `tail_image_url` makes it interpolate-then-freeze and produces static clips). Identity is held by `image_url` (start frame, chain-ref'd by Storyboarder) + the chain consistency between adjacent frames.
 - **Motion is mandatory, not optional.** Every animated clip must specify three concurrent layers:
   1. **Camera move** — pick one per clip: slow push-in, slow pull-back, lateral dolly, low boom up, crane up, parallax handheld drift. Distribute variety across the 6–8 clips. NEVER "camera holds steady".
   2. **Environment motion** — wind, smoke, sparks, particles, light flicker, distant figures, water/dust, holographic UI motion. Continuous throughout the 5s.
   3. **Character action** — one gesture or expression beat sustained through the clip (a slow head turn, a hand rising to the brow, a sip, a jaw clenching, a half-smile forming). Sustained, NOT completed mid-clip.
 - **Phrasing rules for `motion_prompt`:**
   - Use continuous-tense verbs (`is lifting`, `tightens`, `drifts past`) and explicit duration cues (`throughout the shot`, `held for the full 5 seconds`, `continues across the frame`).
-  - **Banned phrases:** `"then settles"`, `"then steady"`, `"then holds"`, `"then dissipates"`, `"then dies"`, `"camera holds steady"`, `"hold position"`, `"no morphing"`, `"maintain exact character appearance"`. These all read to Kling as "freeze".
+  - **Banned phrases:** `"then settles"`, `"then steady"`, `"then holds"`, `"then dissipates"`, `"then dies"`, `"camera holds steady"`, `"hold position"`, `"no morphing"`, `"maintain exact character appearance"`. These all read to I2V models as "freeze".
   - **Avoid negative listings.** Do not stack `No walking, no running, no fighting, no impact`. Replace with positive instructions ("character remains rooted at the console", "feet planted, weight shifts gently").
-  - Trust Kling to hold identity from the start frame — do not write defensive phrases.
+  - Trust the I2V model to hold identity from the start frame — do not write defensive phrases.
+  - H3 has no `negative_prompt`. This format needs no sound clause (clip sound is discarded). When a face is visible, always end with `Mouth stays closed; no talking.` (animator.md §2a; it is not a defensive identity phrase); otherwise add at most one short plain closing sentence only if an exclusion is truly needed, never a banned phrase. Keep prompts ≤512 UTF-8 bytes.
 - Micro vs. macro motion: avoid full-body locomotion (walking across the frame, running, combat hits) because identity drift is visible. BUT motion within the frame (head, hands, torso, breath, sustained gestures, props in motion, environment) MUST be alive.
-- Duration: 5s for all clips
-- Polling: base URL `fal-ai/kling-video`, every 15s, max 10 min
-- Do NOT use: Kling Avatar, generate_audio: true
+- Duration: 5s for all clips (H3 returns ~5.18s; the Editor trims it to `duration_sec`)
+- Polling: done by `tools/kling_runner.py` against the route's poll base in `tools/video_routes.json` (H3 Max: `https://queue.fal.run/minimax/h3-max`); never poll by hand
+- Do NOT use: Kling Avatar, or the clip's own sound (`scene_video_audio` is `"none"` on every scene)
 - General rules — `rules/roles/animator.md`
 
 ### Sound
@@ -223,7 +225,7 @@ The structure is flexible — the scenarist adapts it to the specific character'
 Two-stage assembly because subtitles need a picture-only concat to whisper-align against:
 
 **Stage 1 — Picture-only concat:**
-- Normalize each clip: scale 1080×1920, 30fps, `preset slow`, `crf 20`. Kling I2V is 24fps → normalize to 30fps mandatory before concat.
+- Normalize each clip: fill-and-crop to 1080×1920 ending in `setsar=1`, 30fps, `preset slow`, `crf 20`. I2V clips arrive at 24fps (H3 and Kling) → normalize to 30fps mandatory before concat. H3 clips are trimmed to `duration_sec`; still clips are already exact (`rules/roles/editor.md`).
 - Hard cuts, no crossfade.
 - Output: `build/concat-noaudio.mp4` (silent, full main duration; CTA NOT yet appended).
 
@@ -291,7 +293,7 @@ Generated PNG/MP4/audio receives technical validation only (path, size, hash, di
 - [ ] All Supabase uploads use date-suffix paths (`<slug>-<YYYY-MM-DD>.png` for refs, `scene-K-<slug>-<YYYY-MM-DD>.png` for scenes) — no bare `scene-K.png` paths that would collide with prior episodes
 - [ ] camera_angle differs between adjacent clips, and every clip has an active camera move (no "holds steady"; a still scene's `still_effect` counts)
 - [ ] Every animated clip's motion_prompt has three concurrent layers (camera + environment + character) and uses continuous-tense verbs
-- [ ] Still scenes (if any) were planned in Phase 1, have `scene_video_kind: "still"` and stay within the `rules/roles/scenarist.md` "Still shots" cap; every other scene is a Kling v3 Standard clip
+- [ ] Animated scenes: `scene_video_route: "minimax.h3max.i2v"`, `scene_video_audio: "none"`, a silent `target_audio_url`; still scenes (if any): `scene_video_kind: "still"`, within the `rules/roles/scenarist.md` "Still shots" cap
 - [ ] motion_prompt contains NONE of the banned freeze phrases (then settles / then steady / then holds / hold position / no morphing / camera holds steady)
 - [ ] TTS uses approved exact-character-story Chatterbox, or user-authorized MiniMax; no ElevenLabs TTS or cross-format sample
 - [ ] Subtitles use the universal `add_subtitles.py` contract from `rules/roles/editor.md` — no format-local chunk/font/margin overrides and no PIL PNG by `tts_segment`
@@ -316,18 +318,18 @@ Generated PNG/MP4/audio receives technical validation only (path, size, hash, di
 
 ## Anti-patterns
 
-- ❌ `generate_audio: true` in Kling I2V (voice is bad, use TTS overlay)
+- ❌ Using the I2V clip's own sound (`scene_video_audio` must be `"none"`; voice comes only from the TTS overlay)
 - ❌ Kling Avatar (format does not use lipsync)
 - ❌ `character_speech ≠ null` (voice only via TTS overlay)
 - ❌ ElevenLabs TTS, a cross-format voice sample, or Chatterbox without an approved exact-character-story sample
 - ❌ Sending an 80+ word monologue in one Chatterbox request, or changing route/voice intent between chunks
 - ❌ Monologue text = description of footage (voice complements, doesn't duplicate)
 - ❌ character ref directly as scene image (each clip = its own PNG)
-- ❌ Generating scene-K-end.png and/or passing `tail_image_url` to Kling — wastes $0.08/clip and biases Kling toward static interpolation
+- ❌ Generating scene-K-end.png and/or passing an end frame (`tail_image_url` on Kling; H3 takes none) — wastes $0.08/clip and biases the model toward static interpolation
 - ❌ `-shortest` in FFmpeg (use `apad`)
 - ❌ Layered assembly (breaks music and timing)
 - ❌ Monotonous footage (one angle for the whole 40 seconds)
-- ❌ "Camera holds steady" / "then settles" / "then steady" / "hold position" / "no morphing" / "maintain exact character appearance" anywhere in `motion_prompt` (Kling reads these as freeze cues — produces static clips)
+- ❌ "Camera holds steady" / "then settles" / "then steady" / "hold position" / "no morphing" / "maintain exact character appearance" anywhere in `motion_prompt` (I2V models read these as freeze cues — produces static clips)
 - ❌ Stacked negative listings (`No walking, no running, no fighting, no impact`) — replace with positive grounded actions
 - ❌ Title cards, brainrot tags, character name overlays
 - ❌ Separate `bg-{location}.png` references generated as a phase before scene PNGs — NB2 paints the background inline with the character; chaining `[bg-ref, character-ref]` produces stiff composite-feel results with mismatched lighting/perspective. Describe the location verbosely in `image_prompt` instead.

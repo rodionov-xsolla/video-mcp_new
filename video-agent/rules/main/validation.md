@@ -51,7 +51,7 @@ Missing state/URL is a Phase 3 failure. Do not launch Animator and do not manual
 
 ### For MP4 (video)
 
-For schema-v3 fal video jobs, Scenarist/Manager/Animator own the semantic plan and exact provider payload. `tools/kling_runner.py` validates only execution safety: registered route descriptor, immutable canonical payload, permanent URLs at any payload depth, saved request ID, and the caller-supplied technical `expect` (duration/tolerance, audio required/optional/forbidden, minimum bytes/dimensions, orientation). It fully decodes the MP4, uploads it and byte-verifies the permanent public copy. Animator handoff requires runner `phase: "DONE"`, local `scene_video == output_path`, and permanent `scene_video_url == supabase_url`.
+For schema-v3 fal video jobs, Scenarist/Manager/Animator own the semantic plan and exact provider payload. `tools/kling_runner.py` validates only execution safety: registered route descriptor, immutable canonical payload, permanent URLs at any payload depth, saved request ID, and the caller-supplied technical `expect` (duration/tolerance, audio required/optional/forbidden, minimum bytes/dimensions, orientation). It fully decodes the MP4, uploads it and byte-verifies the permanent public copy. The runner is model-agnostic: the same rules apply to every route (H3 Max `minimax.h3max.i2v`, H3 Max Turbo lip-sync `minimax.h3max.turbo.i2v`, Kling v3 Standard `kling.v3.standard.i2v`). Animator handoff for a runner job requires runner `phase: "DONE"`, local `scene_video == output_path`, and permanent `scene_video_url == supabase_url`.
 
 **Still scenes are exempt from the runner rules.** A scene planned in Phase 1 as `motion: "still"` has no runner job, no state and no permanent URL: it is rendered locally by `tools/still_shot.py` and handed off with `scene_video_kind: "still"`, `scene_video_route: "local.still_shot"`, `scene_video_url: null`. It passes with MP4 ≥ 100 KB, 1080×1920, no audio stream and duration within ±0.05 s of `duration_sec`. A `scene_video_kind: "still"` on a scene that Phase 1 did not plan as `motion: "still"` is a fallback and fails.
 
@@ -59,7 +59,8 @@ For schema-v3 fal video jobs, Scenarist/Manager/Animator own the semantic plan a
 # File downloaded (Kling returns <1KB JSON on error)
 [ -s "scene-1.mp4" ] && [ $(stat -f%z scene-1.mp4) -gt 100000 ]
 
-# Duration close to expected (±0.1s); still clips ±0.05 s of duration_sec
+# Duration close to expected: runner jobs within the job's expect.duration_tolerance_seconds
+# (Kling 0.4 s, H3 0.8 s); still clips within ±0.05 s of duration_sec
 ffprobe -v error -show_entries format=duration -of csv=p=0 scene-1.mp4
 
 # Video stream present
@@ -125,7 +126,7 @@ Any non-200 → STOP, do not spend on the clip. (EP6 scene-9 Spock ref was HTTP 
 
 ### 2. Distinct-audio — no two dialogue clips share an audio track
 
-After Sound, before Avatar:
+After Sound, before Avatar or H3 lip-sync:
 
 ```bash
 # md5 of every dialogue clip's audio must be unique

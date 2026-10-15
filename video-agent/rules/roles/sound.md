@@ -329,7 +329,7 @@ After TTS generation:
      --episode {YYYY-MM-DD}-{format_slug} --name clip-N.mp3 ./tts-N.mp3
    ```
    Path → `episodes/{game}/{YYYY-MM-DD}-{format}/tts/clip-N.mp3`. **NOT registered** in `game_assets` (disposable, one-off).
-3. **Use the returned Supabase public URL** for Avatar's `audio_url`, not the fal.ai temp URL
+3. **Use the returned Supabase public URL** for Avatar's `audio_url` or H3 lip-sync's `target_audio_url` (what-if dialogue), not the fal.ai temp URL
 
 fal.ai TTS audio_url expires. Avatar polling takes 1–3 min — during that time the URL can become invalid. Supabase URL is permanent.
 
