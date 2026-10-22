@@ -822,7 +822,7 @@ RESULT_URL="https://queue.fal.run/fal-ai/minimax/requests/${REQUEST_ID}"
 **Polling base:** `fal-ai/elevenlabs`
 **Стоимость:** ~$0.03–0.05 за фразу
 
-> **Не вызывать. ElevenLabs TTS запрещён.** Разрешён только отдельный endpoint `fal-ai/elevenlabs/sound-effects` для SFX; это не TTS.
+> **Не вызывать. ElevenLabs TTS запрещён.** Разрешён только отдельный endpoint `fal-ai/elevenlabs/sound-effects/v2` для SFX (§9); это не TTS.
 
 ### Запрос
 
@@ -900,6 +900,7 @@ RESULT_URL="https://queue.fal.run/fal-ai/elevenlabs/requests/${REQUEST_ID}"
 | `fal-ai/kling-video/v3/standard/motion-control` | `fal-ai/kling-video` |
 | `fal-ai/kling-video/v3/pro/motion-control` | `fal-ai/kling-video` |
 | `fal-ai/elevenlabs/tts/eleven-v3` | `fal-ai/elevenlabs` |
+| `fal-ai/elevenlabs/sound-effects/v2` | `fal-ai/elevenlabs` |
 | `fal-ai/minimax-music/v2.6` | `fal-ai/minimax-music` |
 | `fal-ai/gpt-image-1/text-to-image` | `fal-ai/gpt-image-1` |
 | `fal-ai/heygen/avatar4/image-to-video` | `fal-ai/heygen` |
@@ -1174,6 +1175,74 @@ curl -s -o bg-music.mp3 "$AUDIO_URL"
   }
 }
 ```
+
+---
+
+## 9. ElevenLabs Sound Effects v2 — SFX and ambient beds
+
+**Endpoint:** `https://queue.fal.run/fal-ai/elevenlabs/sound-effects/v2`
+**Polling base:** `fal-ai/elevenlabs`
+**Cost:** $0.002 per second of output (a 22s clip is about $0.044)
+
+> Sound effects only; this is not TTS. Use the `/v2` endpoint. The unversioned `fal-ai/elevenlabs/sound-effects` endpoint is broken (confirmed 2026-10-22): fal sends `model_id: eleven_text_to_sound_v0` upstream, and ElevenLabs rejects it with HTTP 400 ("must be `eleven_text_to_sound_v2` or `eleven_text_to_sound_v3`"). Neither endpoint has a `model_id` input, so sending one does nothing.
+
+### Request
+
+**CRITICAL:** the description field is `text`, NOT `prompt`. A body with `prompt` returns HTTP 422 "field `text` required".
+
+```bash
+jq -n --arg text "$AMBIENT_PROMPT" '{text: $text, duration_seconds: 22}' > /tmp/sfx-body.json
+
+RESPONSE=$(curl -s -X POST "https://queue.fal.run/fal-ai/elevenlabs/sound-effects/v2" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d @/tmp/sfx-body.json)
+
+REQUEST_ID=$(echo "$RESPONSE" | jq -r '.request_id')
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+|----------|-----|-------------|----------|
+| `text` | string | Yes | Description of the sound. Take it from the format's source field (e.g. story bible `location.ambient_prompt`, storyboard `scene_ambient.description`). |
+| `duration_seconds` | number | No | 0.5–22. If omitted, the model picks a length from the text. The format playbook decides the value. |
+| `prompt_influence` | number | No | 0–1, default `0.3`. Higher means closer to the text and less variation. |
+| `loop` | boolean | No | Default `false`. `true` makes a clip that loops smoothly. |
+| `output_format` | string | No | Default `mp3_44100_128`. Keep the default. |
+
+### Polling and download
+
+```bash
+while true; do
+  STATUS=$(curl -s "https://queue.fal.run/fal-ai/elevenlabs/requests/$REQUEST_ID/status" \
+    -H "Authorization: Key $FAL_KEY" | jq -r '.status')
+  case "$STATUS" in
+    "COMPLETED") break ;;
+    "FAILED") echo "FAILED"; exit 1 ;;
+    *) sleep 5 ;;
+  esac
+done
+
+RESULT=$(curl -s "https://queue.fal.run/fal-ai/elevenlabs/requests/$REQUEST_ID" \
+  -H "Authorization: Key $FAL_KEY")
+curl -s -o build/ambient.mp3 "$(echo "$RESULT" | jq -r '.audio.url')"
+```
+
+### Response
+
+```json
+{
+  "audio": {
+    "url": "https://v3b.fal.media/files/b/.../sound_effect.mp3",
+    "content_type": "audio/mpeg",
+    "file_name": "sound_effect.mp3",
+    "file_size": 353218
+  }
+}
+```
+
+Verified 2026-10-22 with `{text: <DS9 Promenade ambient_prompt>, duration_seconds: 22}`: completed in under 30s and returned an MP3 of exactly 22.0s, stereo, 44.1 kHz, 128 kbps. The raw clip is quiet (mean about -40 dB, peak about -24 dB). Mix volumes stay as each format playbook sets them.
 
 ---
 

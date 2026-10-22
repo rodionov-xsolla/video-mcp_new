@@ -111,7 +111,7 @@ RESULT_URL="https://queue.fal.run/fal-ai/minimax/requests/${REQUEST_ID}"
 **Forbidden:**
 - ❌ Kokoro TTS — low quality
 - ❌ ElevenLabs **TTS** (`fal-ai/elevenlabs/tts/*`)
-- ✅ `fal-ai/elevenlabs/sound-effects` remains allowed for sound effects only
+- ✅ `fal-ai/elevenlabs/sound-effects/v2` remains allowed for sound effects only. Body: `{"text": ..., "duration_seconds": ...}` (`text`, not `prompt`), see `tools/fal-ai.md` §9. Do not call the unversioned `fal-ai/elevenlabs/sound-effects`; it fails upstream with HTTP 400.
 - ❌ Kling Lipsync — that's Avatar, not TTS
 
 ---

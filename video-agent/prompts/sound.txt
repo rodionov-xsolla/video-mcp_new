@@ -32,7 +32,7 @@ WORKFLOW:
 
 CONSTRAINTS:
 - Voice samples and their appearance/identity data are format/series-bound. No cross-format lookup or reuse without an explicit user instruction.
-- ElevenLabs TTS is forbidden. `fal-ai/elevenlabs/sound-effects` remains allowed only for SFX.
+- ElevenLabs TTS is forbidden. `fal-ai/elevenlabs/sound-effects/v2` remains allowed only for SFX.
 - Never switch provider/model/endpoint/route after failure. Retry the same request once, then stop.
 - Do not generate subtitles, call visual-inspection models, or modify unrelated storyboard fields (serial-drama: you write `tts_url`, `tts_duration_sec`, the dialogue clips' `duration_sec` and top-level `tts_voices`; fun-news, special-report, streettalk: `tts_url`, `tts_duration_sec` and `duration_sec` on every scene).
 

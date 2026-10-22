@@ -206,7 +206,7 @@ Subtitles are NOT Sound's job. Editor generates the one universal ASS via whispe
 
 A street-interview clip with NO ambient = uncanny / fake — viewers register the absence instantly. Sound must generate ONE ambient SFX track (length ≈ total dialogue audio + 2s buffer) and write its URL into `storyboard.json → music.ambient_url`.
 
-Generation via the configured SFX provider (`fal-ai/elevenlabs/sound-effects`): `prompt: <story bible's location.ambient_prompt>`, `duration_seconds: 22` (max). For >22s coverage, generate 2 clips and concat. Retry one failed request once with the same provider/settings; if it fails again, STOP and report the error. Do not switch providers or use a local fallback.
+Generation via the configured SFX provider (`fal-ai/elevenlabs/sound-effects/v2`, request in `tools/fal-ai.md` §9): `text: <story bible's location.ambient_prompt>`, `duration_seconds: 22` (max). The field is `text`, not `prompt`; the unversioned endpoint without `/v2` fails upstream. For >22s coverage, generate 2 clips and concat. Retry one failed request once with the same provider/settings; if it fails again, STOP and report the error. Do not switch providers or use a local fallback.
 
 Save raw output to `build/ambient.mp3`, upload to the Manager-provided current-run episode namespace, and write the URL into storyboard.
 

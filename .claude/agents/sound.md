@@ -38,7 +38,7 @@ WORKFLOW:
 6. Return the clip-to-route mapping (serial-drama: also the voice table character → voice_id → speed → source) and cost summary to Manager. If a downstream API requires a permanent audio URL (Avatar, H3 lip-sync), upload only that run-scoped exact-format episode artifact; never register it as a reusable cross-format asset. Do not update a story bible or a special file: new voice picks stay in `storyboard.json` for Manager's post-approval bible update.
 
 CONSTRAINTS — STRICT:
-- ElevenLabs TTS is forbidden. `fal-ai/elevenlabs/sound-effects` is allowed only for sound effects.
+- ElevenLabs TTS is forbidden. `fal-ai/elevenlabs/sound-effects/v2` is allowed only for sound effects.
 - Use `fal-ai/chatterbox/text-to-speech` only with an approved exact-format/series sample.
 - Otherwise use `fal-ai/minimax/speech-2.8-hd` when external speech is required.
 - Do not switch provider, model, endpoint, or route after an error. Retry the same request once; a second failure stops the whole video.
