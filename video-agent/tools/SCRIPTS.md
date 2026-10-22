@@ -254,7 +254,7 @@ ${OUTPUT_DIR}/build/fal/_claims/*.json            # output-path ownership; не 
 }
 ```
 
-**H3 Max job** (route `minimax.h3max.i2v`, the plain I2V route of the H3 formats — see `fal-ai.md §2y`; what-if and serial-drama dialogue lip-sync uses H3 Max Turbo `minimax.h3max.turbo.i2v` with `target_audio_url`, templates `tools/examples/minimax-h3-max-turbo-lipsync.job.json` and `tools/examples/minimax-h3-max-turbo-serial-dialogue.job.json`; dual-style uses H3 Max face reference `minimax.h3max.r2v`, template `tools/examples/minimax-h3-max-r2v-face-ref.job.json`, payload below). Same schema, same runner, same commands; only `route`, `payload` and `expect` differ:
+**H3 Max job** (route `minimax.h3max.i2v`, the plain I2V route of the H3 formats — see `fal-ai.md §2y`; what-if and serial-drama dialogue lip-sync and every fun-news, special-report and streettalk scene use H3 Max Turbo `minimax.h3max.turbo.i2v` with `target_audio_url`, templates `tools/examples/minimax-h3-max-turbo-lipsync.job.json`, `tools/examples/minimax-h3-max-turbo-serial-dialogue.job.json` and `tools/examples/minimax-h3-max-turbo-talking-head.job.json` (the talking-head formats add `seed: 20261021`); dual-style uses H3 Max face reference `minimax.h3max.r2v`, template `tools/examples/minimax-h3-max-r2v-face-ref.job.json`, payload below). Same schema, same runner, same commands; only `route`, `payload` and `expect` differ:
 
 ```json
 {
@@ -322,7 +322,7 @@ python3 tools/kling_runner.py "$JOB"   # invoke with Bash timeout ≥150s (see b
 python3 tools/kling_runner.py --allow-paid-retry "$JOB"
 ```
 
-Runner не имеет archive/reset и не выполняет automatic batch. State хранится в `${OUTPUT_DIR}/build/video/{job_id}/`, claim — в `${OUTPUT_DIR}/build/video/_claims/`. Tracked templates: `tools/examples/minimax-h3-max-scene-video.job.json`, `tools/examples/minimax-h3-max-serial-action.job.json` (serial-drama action, Test 9), `tools/examples/minimax-h3-max-turbo-lipsync.job.json` (what-if), `tools/examples/minimax-h3-max-turbo-serial-dialogue.job.json` (serial-drama dialogue, Test 9), `tools/examples/minimax-h3-max-r2v-face-ref.job.json` (dual-style, Test 8); historical Kling: `tools/examples/kling-v3-standard-scene-video.job.json`, `tools/examples/kling-v3-serial-dialogue.job.json`, `tools/examples/kling-v3-elements.job.json`.
+Runner не имеет archive/reset и не выполняет automatic batch. State хранится в `${OUTPUT_DIR}/build/video/{job_id}/`, claim — в `${OUTPUT_DIR}/build/video/_claims/`. Tracked templates: `tools/examples/minimax-h3-max-scene-video.job.json`, `tools/examples/minimax-h3-max-serial-action.job.json` (serial-drama action, Test 9), `tools/examples/minimax-h3-max-turbo-lipsync.job.json` (what-if), `tools/examples/minimax-h3-max-turbo-serial-dialogue.job.json` (serial-drama dialogue, Test 9), `tools/examples/minimax-h3-max-turbo-talking-head.job.json` (fun-news / special-report / streettalk talking head, Test 12), `tools/examples/minimax-h3-max-r2v-face-ref.job.json` (dual-style, Test 8); historical Kling: `tools/examples/kling-v3-standard-scene-video.job.json`, `tools/examples/kling-v3-serial-dialogue.job.json`, `tools/examples/kling-v3-elements.job.json`.
 
 ---
 
@@ -511,14 +511,14 @@ python tools/overlays.py storyboard.json \
 - GPT Image 1 — альтернативный маршрут только по предварительному/явному разрешению; не automatic fallback. $0.02/img  
 - MiniMax H3 Max I2V — $0.08/s at 768P (5 s ≈ $0.41 on the returned length); plain I2V route (redcon, item-story, character-story, in-game-pov, wild-documentary, top-list, fake-ad, what-if-real-life I2V scenes, serial-drama action clips)
 - MiniMax H3 Max face reference (`reference-to-video`, route `minimax.h3max.r2v`) — $0.08/s at 768P (5 s ≈ $0.41); dual-style only (start frame + headshot `reference_image_urls`)
-- MiniMax H3 Max Turbo lip-sync — $0.04/s at 768P (5 s ≈ $0.21); what-if-real-life and serial-drama dialogue only, never plain clips
+- MiniMax H3 Max Turbo lip-sync — $0.04/s at 768P (5 s ≈ $0.21); what-if-real-life and serial-drama dialogue and the fun-news, special-report and streettalk talking heads only, never plain clips
 - Kling v3 Standard I2V — $0.084/с без audio, $0.126/с с audio. multi_prompt, voice_ids, elements — historical/alternate: not the active route of any of the ten H3 formats (serial-drama and dual-style moved to H3 on 15 Oct 2026)
 - Kling v2.6 Pro — отдельный format/user-selected I2V route; не automatic fallback
 - Veo 3 — T2V / I2V, $1.60–$3.20 за 8-секундный клип
 - MiniMax TTS — Speech 2.8-HD, $0.10/1k символов
 - MiniMax TTS + exact-format Chatterbox; ElevenLabs TTS запрещён, ElevenLabs Sound Effects разрешён только для SFX
 - Kling Lipsync — audio-to-video lip-sync
-- Kling Avatar v2 — image + audio → avatar видео. $0.056/с
+- Kling Avatar v2 — image + audio → avatar видео. $0.056/с (news and gameplay-ai-avatar only; fun-news, special-report and streettalk moved to H3 lip-sync)
 
 **Критичные правила из документа:**
 - fal.media URL — временные, скачивать немедленно

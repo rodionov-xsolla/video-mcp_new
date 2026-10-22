@@ -26,7 +26,7 @@ Variable `$FFMPEG` defaults to `/usr/local/bin/ffmpeg-full/ffmpeg` (when drawtex
 
 From Manager:
 - `scenes/scene-K/scene-K.mp4` (K = 1..N) — scene clips (from Animator): animated I2V/Avatar clips, or still-shot clips (`scene_video_kind: "still"`, rendered locally by `tools/still_shot.py`: 1080×1920, 30 fps, exactly `duration_sec`, **no audio stream**)
-- `scenes/scene-K/scene-K.mp3` (opt.) — external TTS/VO audio from Sound (Avatar/TTS-overlay formats, narrator/off-screen VO). An H3 lip-sync clip (what-if-real-life and serial-drama dialogue, `scene_video_lipsync: true`) has its dialogue embedded in `scene-K.mp4`: its soundtrack is this TTS file — never overlay it.
+- `scenes/scene-K/scene-K.mp3` (opt.) — external TTS/VO audio from Sound (Avatar/TTS-overlay formats, narrator/off-screen VO). An H3 lip-sync clip (what-if-real-life and serial-drama dialogue, and every scene of fun-news, special-report and streettalk, `scene_video_lipsync: true`) has its dialogue embedded in `scene-K.mp4`: its soundtrack is this TTS file — never overlay it.
 - `bg-music.mp3` (opt.) — background music (from Sound)
 - `storyboard.json` — for subtitle generation (line text, timings)
 - `opener.mp4` (opt.) — opener video from Supabase (tag `opener` + `video`)
@@ -296,6 +296,7 @@ WWE Champions fun-news pilot (2026-06-01) burned 1× re-render because the origi
 ### 0.5 Format-specific overrides
 
 - **gameplay-ai-avatar split-screen** (§7) — the per-scene 60/40 stack cannot be expressed across N scene inputs cleanly inside one concat. Two-stage: first build each split-scene composite (§7), then feed those composites as inputs into the §0 canonical pipeline.
+- **talking-head lip-sync formats** (`fun-news`, `special-report`, `streettalk`) — every scene is an H3 lip-sync clip (`scene_video_route: "minimax.h3max.turbo.i2v"`, `scene_video_lipsync: true`, `scene_video_audio: "native"`): its own audio is the scene's speech. Put the H3 trim first in each scene branch (video and audio to `duration_sec`, the TTS length rounded up to 0.1 s; a clip that came back shorter plays whole), then apply the playbook's own steps to the clip and its audio, unchanged: streettalk's per-scene 1.5×/1.7× speed-up and lower-thirds, special-report's per-scene `apad` and opener delay, fun-news's per-scene `apad` and measured opener delay, the ambient and music layers. Never Avatar's TTS trim (§1.0a), never `scene-K.mp3` over the clip; `build/voice-final.wav` is extracted from the clips' own audio (§6.1 multi-voice).
 - **serial-drama "behind glass" TTS overlay** (§3) — per-scene aecho is a pre-mix on the I2V scene before §0. Treat output of §3 as the canonical input `[k:v]/[k:a]` for the main pipeline.
 - **dual-style audio contract** (`rules/formats/dual-style.md`, `dual-style-h3`) — a new MiniMax instrumental bed is mandatory. Every clip is an H3 face-reference clip (`scene_video_route: "minimax.h3max.r2v"`, `scene_video_audio: "native"`, H3 trim to 5 s). Keep clean clip ambience near `-28 LUFS`, normalize music near `-20 LUFS`, and target the final mix near `-20 LUFS` with true peak no higher than `-2 dBTP`. If a scene is flagged for an accidental score/melody in its clip audio, replace only that scene's audio branch with normalized silence before concat and record the muted scene in storyboard notes. This is the sole exception to §0 rule 9; do not blanket-mute all clean ambience.
 - **Subtitle generation** (§6) — ONE universal ASS for the whole video, whisper-timed from `build/voice-final.wav`. `§0` picks it up as the last video filter `ass=build/subs.ass`. No per-format styles.
@@ -683,7 +684,7 @@ from §6.5. Check: `ass=` is the last token of the video chain before `-map [v�
 **SUB-2 — Loudnorm 2-pass on the final audio** (-14 LUFS / -1 dBTP / 11 LU). Two passes (measure →
 apply), otherwise social platforms drop the volume unevenly across scenes.
 
-**SUB-4 — subtitle events must not bleed outside dialogue scene windows.** After `add_subtitles.py` runs, build the cumulative timeline from the played scene clip lengths (actual MP4 durations; H3 clips at their trimmed `duration_sec`) and classify clips from `storyboard.json`. Every ASS `Dialogue` event must fit inside one dialogue clip window. If an event overlaps action/silent I2V, a still scene, CTA, or the next dialogue scene, clamp it to the dialogue window it overlaps most. If Whisper merged words across a boundary (`THE GIRL DIPLOMACY`, `HOW CIVILIZATIONS FALL FIRST`), split the text manually at the scene boundary. This applies to serial-drama I2V dialogue as well as Avatar-based formats.
+**SUB-4 — subtitle events must not bleed outside dialogue scene windows.** After `add_subtitles.py` runs, build the cumulative timeline from the played scene clip lengths (actual MP4 durations; H3 clips at their trimmed `duration_sec`) and classify clips from `storyboard.json`. Every ASS `Dialogue` event must fit inside one dialogue clip window. If an event overlaps action/silent I2V, a still scene, CTA, or the next dialogue scene, clamp it to the dialogue window it overlaps most. If Whisper merged words across a boundary (`THE GIRL DIPLOMACY`, `HOW CIVILIZATIONS FALL FIRST`), split the text manually at the scene boundary. This applies to serial-drama dialogue as well as Avatar-based formats and the talking-head lip-sync formats (fun-news, special-report, streettalk).
 
 **SUB-3 — never cut inside a word.** If you trim a scene tail for music / `-t TOTAL_DUR`, snap to a word
 boundary. The boundaries come from `build/subs.ass` events (already whisper-aligned); no separate
@@ -707,7 +708,7 @@ $FFMPEG -y -i build/tts-output.mp3 \
 The `adelay` lead silence shifts the first word to `${PRE_MS}` — whisper sees the real position, no
 `--offset` needed.
 
-**Multi-voice** (serial-drama, news, gameplay-ai-avatar, what-if-real-life, fun-news, special-report):
+**Multi-voice** (serial-drama, news, gameplay-ai-avatar, what-if-real-life, fun-news, special-report, streettalk):
 ```bash
 # For EACH scene K in index order, build its speech slot EXACTLY as long as the scene:
 #   - silent I2V / action / physical-gag, still scenes (scene_video_kind "still"), and any clip with

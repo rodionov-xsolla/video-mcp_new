@@ -6,6 +6,8 @@ You are the sound engineer. Manager passes you: `storyboard.json` (lines, charac
 
 **Serial-drama override:** serial-drama dialogue is H3 lip-sync on our own MiniMax TTS (§5a). For every dialogue clip you generate each `character_speech` line in the speaker's locked series voice (§5a: the series' special-file table or `characters[].tts_voice`; a new pick only for a character with none), build the clip's one audio file, upload it as the clip's `tts_url` and write its length back; the Animator sends that file as the H3 lip-sync `target_audio_url`. Kling `voice_ids` / `create-voice` are no longer used.
 
+**Talking-head override (fun-news, special-report, streettalk):** every scene's TTS is the H3 lip-sync audio of that scene (it replaced the Kling Avatar `audio_url`). Generate it on the format's usual speech route, upload it as the scene's `tts_url` before Phase 4, and write `tts_duration_sec` and `duration_sec` (§5b).
+
 ---
 
 ## Inputs
@@ -18,7 +20,7 @@ From Manager:
 
 ## Outputs
 
-- `scenes/scene-K/scene-K.mp3` — TTS audio per dialogue clip for Avatar, H3 lip-sync (what-if-real-life, serial-drama) and TTS-overlay formats. Serial-drama also keeps one file per line (`scene-K-line-N.mp3`) and writes `tts_voices` (§5a).
+- `scenes/scene-K/scene-K.mp3` — TTS audio per dialogue clip for Avatar, H3 lip-sync (what-if-real-life, serial-drama, fun-news, special-report, streettalk) and TTS-overlay formats. Serial-drama also keeps one file per line (`scene-K-line-N.mp3`) and writes `tts_voices` (§5a).
 - `bg-music.mp3` — background music when required by the format; **always required for serial-drama**
 - (subtitles are NOT a Sound artifact; Editor generates them itself via whisper, see §8)
 
@@ -330,7 +332,7 @@ After TTS generation:
      --episode {YYYY-MM-DD}-{format_slug} --name clip-N.mp3 ./tts-N.mp3
    ```
    Path → `episodes/{game}/{YYYY-MM-DD}-{format}/tts/clip-N.mp3`. **NOT registered** in `game_assets` (disposable, one-off).
-3. **Use the returned Supabase public URL** for Avatar's `audio_url` or H3 lip-sync's `target_audio_url` (what-if-real-life and serial-drama dialogue), not the fal.ai temp URL
+3. **Use the returned Supabase public URL** for Avatar's `audio_url` or H3 lip-sync's `target_audio_url` (what-if-real-life and serial-drama dialogue, every fun-news, special-report and streettalk scene), not the fal.ai temp URL
 
 fal.ai TTS audio_url expires. Avatar polling takes 1–3 min — during that time the URL can become invalid. Supabase URL is permanent.
 
@@ -376,9 +378,24 @@ More lines add one `[sN]` 0.3 s gap and one `[aN]` input each, in order. Measure
 **4. Upload and write back.** Upload `scene-K.mp3` exactly as §5 (`queue/upload-asset.sh --kind episode-tts --game {GAME_TAG} --episode {YYYY-MM-DD}-{format_slug} --name clip-K.mp3`), then write to that scene:
 - `tts_url` — the returned permanent Supabase URL (never a fal URL);
 - `tts_duration_sec` — `TTS_DUR`;
-- `duration_sec` — `TTS_DUR` rounded **up** to 0.1 s (`math.ceil(round(TTS_DUR * 10, 6)) / 10`): the clip's real length, which the Animator sends as the lip-sync `duration` and the Editor trims to. This is the one storyboard field written by the Scenarist that you overwrite, and only on serial-drama dialogue clips.
+- `duration_sec` — `TTS_DUR` rounded **up** to 0.1 s (`math.ceil(round(TTS_DUR * 10, 6)) / 10`): the clip's real length, which the Animator sends as the lip-sync `duration` and the Editor trims to. This is the one storyboard field written by the Scenarist that you overwrite, and only on serial-drama dialogue clips (and on the talking-head scenes, §5b).
 
 Never lay this file over a clip yourself and never create parallel `-new`/`-v2` files (§2). Off-screen or behind-glass lines whose speaker is not lip-synced follow §9 instead (their own file, same `tts_voice`).
+
+---
+
+## 5b. Talking-head lip-sync (fun-news, special-report, streettalk) — TTS write-back
+
+Every scene of these three formats is one on-screen speaker and an H3 lip-sync clip (`rules/roles/animator.md` §2a): H3 Max Turbo moves the speaker's lips to the scene's TTS file and returns that file unchanged as the clip's soundtrack. Tested in Test 12 (15 clips, the same TTS files the Kling Avatar baseline used).
+
+1. **Voices, routes, text:** unchanged — the format playbook's Sound brief and §1 (native → approved format-owned sample through Chatterbox → otherwise MiniMax), with the playbook's speed and punctuation rules. One file per scene, `scenes/scene-K/scene-K.mp3`, with that scene's `tts` line: no lead-in, padding, trim or speed change.
+2. **Length:** measure it with `ffprobe` (`TTS_DUR`). Above **15 s** (H3's maximum) → do not upload: STOP and return the scene to Manager to shorten the line.
+3. **Upload and write back:** upload `scene-K.mp3` exactly as §5 (`queue/upload-asset.sh --kind episode-tts --game {GAME_TAG} --episode {YYYY-MM-DD}-{format_slug} --name clip-K.mp3`) before Phase 4, then write to that scene, exactly as §5a step 4:
+   - `tts_url` — the returned permanent Supabase URL (never a fal URL);
+   - `tts_duration_sec` — `TTS_DUR`;
+   - `duration_sec` — `TTS_DUR` rounded **up** to 0.1 s (`math.ceil(round(TTS_DUR * 10, 6)) / 10`): the Animator sends it as the lip-sync `duration` and the Editor trims to it. You overwrite this Scenarist field only on these scenes.
+
+Never lay this file over a clip yourself. Location ambient SFX and music stay exactly as each playbook's Sound brief says.
 
 ---
 
@@ -468,6 +485,7 @@ If the mismatch is > 40% — send it back to Scenarist, don't mask it with atemp
 
 ### TTS
 - [ ] All external-TTS dialogue clips have `scene-K.mp3`; every serial-drama dialogue clip has its line files, its built `scene-K.mp3` (0.2 s lead-in, 0.3 s gaps, ≤15 s), `tts_url`, `tts_duration_sec` and the rounded-up `duration_sec` (§5a)
+- [ ] Fun-news, special-report, streettalk: every scene has its `scene-K.mp3` (≤15 s), `tts_url`, `tts_duration_sec` and the rounded-up `duration_sec` (§5b)
 - [ ] Serial-drama: `tts_voices` lists every speaker with `voice_id`, `speed` and `source` (`bible`/`new`); one voice per character in every line; the story bible is untouched
 - [ ] All files > 5 KB, duration matches expectation (~0.4s per word)
 - [ ] `voice` (name as string), not `voice_id`; `stability` top-level; `language_code` set (MiniMax routes, including serial-drama §5a: `voice_setting.voice_id` + `speed` + `emotion`, field `prompt`)

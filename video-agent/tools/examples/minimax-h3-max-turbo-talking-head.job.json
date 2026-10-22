@@ -1,0 +1,32 @@
+{
+  "schema_version": 3,
+  "job_id": "replace-with-unique-talking-head-lipsync-job-v1",
+  "route": "minimax.h3max.turbo.i2v",
+  "artifact_kind": "scene_video",
+  "output_dir": "/ABSOLUTE/OUTPUT_DIR",
+  "output_path": "scenes/scene-2/scene-2.mp4",
+  "payload": {
+    "prompt": "A Bajoran vendor in an earth-toned tunic stands behind his stall counter, three-quarter medium close-up. Wide puzzled eyes; he gestures toward the candle dish. He does not stare into the lens: his gaze rests on the reporter just beside the camera and drifts naturally between phrases, with small, relaxed head movements throughout. The vendor speaks the line \"Oh, the constable sleeps in a bucket? I thought that was a very small shrine, I've been leaving offerings for weeks.\" with lips in sync with the audio.",
+    "image_url": "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/episodes/GAME_TAG/EPISODE/scenes/scene-2.png",
+    "target_audio_url": "https://YOUR_PROJECT.supabase.co/storage/v1/object/public/episodes/GAME_TAG/EPISODE/tts/clip-2.mp3",
+    "duration": 7.1,
+    "resolution": "768P",
+    "prompt_expansion_mode": "disabled",
+    "seed": 20261021
+  },
+  "expect": {
+    "kind": "video",
+    "duration_seconds": 7.1,
+    "duration_tolerance_seconds": 0.8,
+    "audio": "required",
+    "min_bytes": 100000,
+    "min_width": 600,
+    "min_height": 1000,
+    "orientation": "portrait"
+  },
+  "supabase": {
+    "game": "replace-game-tag",
+    "episode": "YYYY-MM-DD-streettalk-run-id",
+    "name": "scene-2.mp4"
+  }
+}

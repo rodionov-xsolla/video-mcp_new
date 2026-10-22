@@ -27,7 +27,7 @@ What you personally do:
    | 1. Script | `scenarist` | sonnet | writes `storyboard.json` (narrative + visual_identity) |
    | 2. Audio | `sound` | haiku | Routed external speech and format-required music/SFX; serial-drama always generates its dialogue TTS (H3 lip-sync audio) and music |
    | 3. Images | `storyboarder` | sonnet | NB2 PNGs per scene, image_prompt + scene_image into storyboard.json |
-   | 4. Animation | `animator` | sonnet | I2V (H3 Max, H3 Max face reference for dual-style, or Kling, per format), H3 Max Turbo lip-sync (what-if and serial-drama dialogue), Kling Avatar v2, or a free still shot → MP4 per scene |
+   | 4. Animation | `animator` | sonnet | I2V (H3 Max, H3 Max face reference for dual-style, or Kling, per format), H3 Max Turbo lip-sync (what-if and serial-drama dialogue, fun-news / special-report / streettalk talking heads), Kling Avatar v2 (news), or a free still shot → MP4 per scene |
    | 5. Assembly | `editor` | sonnet | ffmpeg concat → local `final.mp4`, subtitles, music, CTA |
 
 7. **For every sub-agent, pass in `prompt`** (it does not see your context):

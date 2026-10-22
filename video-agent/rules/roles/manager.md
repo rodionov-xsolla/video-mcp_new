@@ -95,7 +95,7 @@ If the user request contains the phrase **"Debug mode"** (or RU «Отладоч
 
 - **One change at a time.** If the user lists 3 fixes, apply and verify ONE, get OK, then the next. Bundling fixes hides which one broke if the result is still wrong.
 
-- **Animator confirm before any paid clip > $0.30 in Debug mode.** Kling Avatar v2 / Kling I2V with audio at 5–10s is $0.28–$1.40 per attempt. An H3 Max clip is ~$0.41 per 5 s (~$0.25 per 3 s, ~$0.83 per 10 s), so a 5 s H3 Max clip (and any H3 Max clip of about 4 s or longer) is above the threshold and needs this confirmation; a dual-style H3 Max face-reference clip is ~$0.41 per 5 s (above the threshold); an H3 Max Turbo lip-sync clip (what-if and serial-drama dialogue) is ~$0.21 per 5 s (~$0.30 per 7 s, ~$0.41 per 10 s: a lip-sync clip of about 7.5 s or longer is above the threshold); still scenes are $0. In Debug mode, before launching a batch of ≥ 2 such clips, list the planned clips with per-clip cost and wait for OK.
+- **Animator confirm before any paid clip > $0.30 in Debug mode.** Kling Avatar v2 / Kling I2V with audio at 5–10s is $0.28–$1.40 per attempt. An H3 Max clip is ~$0.41 per 5 s (~$0.25 per 3 s, ~$0.83 per 10 s), so a 5 s H3 Max clip (and any H3 Max clip of about 4 s or longer) is above the threshold and needs this confirmation; a dual-style H3 Max face-reference clip is ~$0.41 per 5 s (above the threshold); an H3 Max Turbo lip-sync clip (what-if and serial-drama dialogue, every fun-news, special-report and streettalk scene) is ~$0.21 per 5 s (~$0.30 per 7 s, ~$0.41 per 10 s: a lip-sync clip of about 7.5 s or longer is above the threshold); still scenes are $0. In Debug mode, before launching a batch of ≥ 2 such clips, list the planned clips with per-clip cost and wait for OK.
 
 - **Still scenes at the Phase 1 stop.** List every `motion: "still"` scene with index, `still_effect`, `still_depth` and `still_reason`, or state that the script has no stills.
 
@@ -161,7 +161,7 @@ Without this phrase — work autonomously.
    |-----------|----------|------------|
    | tag `opener` + `video` | **Editor** | Download `.mp4`, normalize, insert first in concat |
    | tag `cta` + `video` | **Editor** | Download `.mp4`, normalize, insert last in concat |
-   | `asset_type = avatar_ref` | **Animator** | Use URL as `image_url` in Kling Avatar |
+   | `asset_type = avatar_ref` | **Animator** | Use URL as `image_url` in Kling Avatar (news) or in an H3 lip-sync clip (fun-news, special-report, streettalk) |
    | `asset_type = reference_image` / `generated_ref` | **Storyboarder** | Use URL as chain ref (skip generation) |
    | `prompt_block` | **Scenarist** | Use as `character_description` |
    | `asset_type = gameplay_clip` | **Editor** | Download for reddit-story / gameplay-ai-avatar |
@@ -234,7 +234,19 @@ Delegate via `Agent(subagent_type="sound")` (model: haiku, defined in `.claude/a
 
 **Validation:** manager checks inline that every dialogue clip has a scene-K.mp3 (size ≥ 5KB). If a TTS file is missing or undersized → STOP. Catching it here costs $0; finding it after paid video generation costs $2+.
 
-**Lip-sync TTS must be uploaded before Phase 4.** For Kling Avatar dialogue and for H3 lip-sync dialogue (what-if-real-life and serial-drama, `minimax.h3max.turbo.i2v`, which sends the TTS as `target_audio_url`), every dialogue scene needs a permanent Supabase `tts_url` (the whole dialogue exchange: what-if's silence-padded `scene-K.mp3`, serial-drama's clip `scene-K.mp3` with every line in order) before Phase 4. A missing or non-HTTPS/fal `tts_url` → STOP; the Animator's pre-flight curl check also stops on a non-200.
+**Lip-sync TTS must be uploaded before Phase 4.** For Kling Avatar dialogue (news) and for H3 lip-sync dialogue (what-if-real-life, serial-drama, and every scene of fun-news, special-report and streettalk, `minimax.h3max.turbo.i2v`, which sends the TTS as `target_audio_url`), every dialogue scene needs a permanent Supabase `tts_url` (the whole dialogue exchange: what-if's silence-padded `scene-K.mp3`, serial-drama's clip `scene-K.mp3` with every line in order, a talking-head scene's `scene-K.mp3` with its one line) before Phase 4. A missing or non-HTTPS/fal `tts_url` → STOP; the Animator's pre-flight curl check also stops on a non-200.
+
+**Talking-head Phase 2 gate** (fun-news, special-report, streettalk; every scene with a `tts` line; no output = pass):
+
+```bash
+SB="$OUTPUT_DIR/storyboard.json"
+jq -r '
+(.clips // .scenes)[] | select((.tts // "") != "")
+| (if ((.tts_url // "") | test("^https://") | not) or ((.tts_url // "") | test("fal\\.media|queue\\.fal\\.run")) then "scene \(.index): tts_url missing or not a permanent Supabase URL" else empty end),
+  (if (.tts_duration_sec | type) != "number" or .tts_duration_sec > 15 then "scene \(.index): tts_duration_sec missing or above 15 s" else empty end),
+  (if (.tts_duration_sec | type) == "number" and (((.duration_sec // 0) * 10 | round) != ((.tts_duration_sec * 10 * 1000000 | round) / 1000000 | ceil)) then "scene \(.index): duration_sec is not the TTS length rounded up to 0.1 s" else empty end)
+' "$SB"
+```
 
 **Serial-drama Phase 2 gate** (no output = pass):
 
@@ -255,7 +267,7 @@ The story bible is not touched in Phase 2; the `tts_voices` entries with `"sourc
 
 **When the format requires music, validate `bg-music.mp3` exists** — `[ -s "$OUTPUT_DIR/bg-music.mp3" ]` (≥ 10KB). It is mandatory for serial-drama and dual-style. If required music is missing, stop; never continue without it.
 
-**Output:** `scenes/scene-K/scene-K.mp3` per dialogue clip, `bg-music.mp3`, `tts_url` written back into storyboard.json (serial-drama also: `scene-K-line-N.mp3` per line, `tts_duration_sec`, the dialogue clip's rounded-up `duration_sec`, and top-level `tts_voices`).
+**Output:** `scenes/scene-K/scene-K.mp3` per dialogue clip, `bg-music.mp3`, `tts_url` written back into storyboard.json (serial-drama also: `scene-K-line-N.mp3` per line, `tts_duration_sec`, the dialogue clip's rounded-up `duration_sec`, and top-level `tts_voices`; fun-news, special-report and streettalk also: `tts_duration_sec` and the rounded-up `duration_sec` on every scene).
 
 ### PHASE 3 — Images (Storyboarder)
 Delegate via `Agent(subagent_type="storyboarder")` (model: sonnet, defined in `.claude/agents/storyboarder.md`). The sub-agent loads `rules/roles/storyboarder.md` itself. In the `prompt`, pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute, with `storyboard.json` already inside), exact `STORY_BIBLE_PATH`, and optional `SUPABASE_ASSETS_FILE` only when a real dump exists. Do not invent or require `${OUTPUT_DIR}/_supabase-assets.json`. Template: `prompts/storyboarder.txt`.
@@ -269,9 +281,9 @@ Delegate via `Agent(subagent_type="storyboarder")` (model: sonnet, defined in `.
 **Output:** `scenes/refs/character-ref.png`, `scenes/scene-K/scene-K.png`, plus permanent `scene_image_url` values in storyboard (start frames only — no end frames; see storyboarder.md §14.8).
 
 ### PHASE 4 — Animation (Animator)
-Delegate via `Agent(subagent_type="animator")` (model: sonnet, defined in `.claude/agents/animator.md`). Sub-agent loads `rules/roles/animator.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute) and use only the route declared by that format (H3 Max `minimax.h3max.i2v` for plain clips — redcon, item-story, character-story, in-game-pov, wild-documentary, what-if-real-life, top-list, fake-ad, serial-drama; H3 Max face reference `minimax.h3max.r2v` for dual-style; Kling v3 Standard `kling.v3.standard.i2v` only where a playbook still names it; no automatic fallback between them). One I2V route per episode, with a single exception: H3 Max Turbo lip-sync dialogue clips (`minimax.h3max.turbo.i2v`, what-if-real-life and serial-drama) may sit next to H3 Max action clips, as Kling Avatar dialogue clips may sit next to I2V action clips. Plain clips never use H3 Max Turbo, and `motion: "still"` scenes are a local render, not a route change. Serial-drama dialogue is H3 lip-sync on Sound's TTS (not Kling native audio); Gameplay AI Avatar is inactive. Template: `prompts/animator.txt`. If many scenes do not fit one pass, split them into batches while keeping the same selected route.
+Delegate via `Agent(subagent_type="animator")` (model: sonnet, defined in `.claude/agents/animator.md`). Sub-agent loads `rules/roles/animator.md` itself. Pass: `GAME_TAG`, `FORMAT`, `OUTPUT_DIR` (absolute) and use only the route declared by that format (H3 Max `minimax.h3max.i2v` for plain clips — redcon, item-story, character-story, in-game-pov, wild-documentary, what-if-real-life, top-list, fake-ad, serial-drama; H3 Max face reference `minimax.h3max.r2v` for dual-style; H3 Max Turbo lip-sync `minimax.h3max.turbo.i2v` for every scene of fun-news, special-report and streettalk, their one route; Kling Avatar v2 only for news; Kling v3 Standard `kling.v3.standard.i2v` only where a playbook still names it; no automatic fallback between them). One I2V route per episode, with a single exception: H3 Max Turbo lip-sync dialogue clips (`minimax.h3max.turbo.i2v`, what-if-real-life and serial-drama) may sit next to H3 Max action clips, as Kling Avatar dialogue clips may sit next to I2V action clips. Plain clips never use H3 Max Turbo, and `motion: "still"` scenes are a local render, not a route change. Serial-drama dialogue is H3 lip-sync on Sound's TTS (not Kling native audio); Gameplay AI Avatar is inactive. Template: `prompts/animator.txt`. If many scenes do not fit one pass, split them into batches while keeping the same selected route.
 
-**Video execution boundary:** Scenarist/Manager/Animator select the tool, duration, audio policy and full provider payload from the storyboard and exact format playbook. Every paid I2V request on the declared route (H3 Max, H3 Max face reference or Kling v3 Standard, plus H3 Max Turbo for what-if and serial-drama lip-sync) then uses one immutable schema-v3 `kling_runner.py` job (the runner is model-agnostic despite its name): `route + untouched payload + technical expect + output/upload destination`, preflight, real run. Runner never makes format decisions or simplifies fields. Direct fal HTTP or mutating the selected request is a Phase 4 failure. Runner `UNKNOWN` is never resubmitted; `PAID_RETRY_REQUIRED` needs explicit authorization. New formats on an existing route require no runner change; compatible new fal queue endpoints are data-only entries in `tools/video_routes.json`. A `motion: "still"` scene creates no runner job: Animator renders it locally with `tools/still_shot.py` from the scene PNG ($0) and writes `scene_video_kind: "still"`, `scene_video_route: "local.still_shot"`, `scene_video_url: null`, `scene_video_audio: "none"`.
+**Video execution boundary:** Scenarist/Manager/Animator select the tool, duration, audio policy and full provider payload from the storyboard and exact format playbook. Every paid I2V request on the declared route (H3 Max, H3 Max face reference or Kling v3 Standard, plus H3 Max Turbo for what-if, serial-drama and talking-head lip-sync) then uses one immutable schema-v3 `kling_runner.py` job (the runner is model-agnostic despite its name): `route + untouched payload + technical expect + output/upload destination`, preflight, real run. Runner never makes format decisions or simplifies fields. Direct fal HTTP or mutating the selected request is a Phase 4 failure. Runner `UNKNOWN` is never resubmitted; `PAID_RETRY_REQUIRED` needs explicit authorization. New formats on an existing route require no runner change; compatible new fal queue endpoints are data-only entries in `tools/video_routes.json`. A `motion: "still"` scene creates no runner job: Animator renders it locally with `tools/still_shot.py` from the scene PNG ($0) and writes `scene_video_kind: "still"`, `scene_video_route: "local.still_shot"`, `scene_video_url: null`, `scene_video_audio: "none"`.
 
 **CRITICAL — Upload to Supabase before expensive generation:**
 If output of one stage (TTS, images) is needed as input for the next expensive stage (Kling Avatar, any I2V route):
@@ -451,7 +463,7 @@ Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
 ```
 Phase 0  → format rules + game config loaded; optional SUPABASE_ASSETS_FILE ready when queried
 Phase 1  → storyboard.json                          [check: clips/scenes array non-empty; still-scene gate prints nothing]
-Phase 2  → scene-K.mp3 + tts_url in storyboard      [check: all dialogue MP3s ≥ 5KB; serial-drama Phase 2 gate prints nothing]
+Phase 2  → scene-K.mp3 + tts_url in storyboard      [check: all dialogue MP3s ≥ 5KB; serial-drama / talking-head Phase 2 gate prints nothing]
 Phase 3  → runner DONE + scene-K.png + scene_image_url [check: state/local/permanent URL agree]
 Phase 4  → scene-K.mp4                              [check: all MP4s ≥ 100KB; runner state/permanent URL agree; stills 1080×1920 ±0.05 s]
 Phase 5  → final.mp4                                [check: final.mp4 ≥ 100KB, ffprobe duration sane]
@@ -472,6 +484,12 @@ For `serial-drama`, append these hard gates:
 - Phase 1: no `motion: "still"`; no `voice_ids`, `multi_prompt`, `shot_type` or `generate_audio`; every dialogue clip has a `character_speech` list of `{speaker, line}` with at most 2 speakers; scene 1 is a dialogue clip.
 - Phase 2: the serial-drama Phase 2 gate above prints nothing; `bg-music.mp3` present; the story bible is unchanged.
 - Phase 4: action clips `scene_video_route == "minimax.h3max.i2v"` with `scene_video_audio == "native"`; dialogue clips `scene_video_route == "minimax.h3max.turbo.i2v"` with `scene_video_lipsync == true` and `scene_video_audio == "native"`; no Kling route.
+
+For `fun-news`, `special-report` and `streettalk` (talking heads on H3 lip-sync, Test 12), append these hard gates:
+
+- Phase 1: no `motion: "still"`; every scene has a non-empty `tts` line.
+- Phase 2: the talking-head Phase 2 gate above prints nothing (`tts_url`, `tts_duration_sec` ≤ 15, rounded-up `duration_sec` on every scene).
+- Phase 4: every scene `scene_video_route == "minimax.h3max.turbo.i2v"` with `scene_video_lipsync == true` and `scene_video_audio == "native"`; every job payload is the exact seven-field talking-head payload (`prompt`, `image_url` = `scene_image_url`, `target_audio_url` = `tts_url`, `duration` = `duration_sec`, `resolution: "768P"`, `prompt_expansion_mode: "disabled"`, `seed: 20261021`), the prompt ends with `… with lips in sync with the audio.` and is ≤512 UTF-8 bytes; runner DONE with an audio stream; no Kling Avatar endpoint.
 
 Output structure:
 ```
@@ -509,13 +527,13 @@ Before calling an external API not pinned behind a repository runner, verify cur
 | GPT Image 2 medium (image) | `fal-ai/gpt-image-2` (verify via Context7) | ~$0.04 |
 | MiniMax H3 Max I2V via `kling_runner.py` route `minimax.h3max.i2v` (plain I2V for redcon, item-story, character-story, in-game-pov, wild-documentary, what-if-real-life I2V scenes, top-list, fake-ad, serial-drama action clips) | `minimax/h3-max/image-to-video` | $0.08/s at 768P, billed on the returned length (3 s ≈ $0.25, 5 s ≈ $0.41, 10 s ≈ $0.83); fal promo $0.048/s until 15 Oct 2026, budget at $0.08/s. Always returns a soundtrack: `scene_video_audio` decides whether it is used |
 | MiniMax H3 Max face reference via `kling_runner.py` route `minimax.h3max.r2v` (dual-style: `image_url` = scene PNG + `reference_image_urls` = headshot(s)) | `minimax/h3-max/reference-to-video` | $0.08/s at 768P on the returned length (5 s ≈ $0.41; Kling with audio was $0.63). Clip ambience kept: `scene_video_audio: "native"` |
-| MiniMax H3 Max Turbo lip-sync via `kling_runner.py`, route `minimax.h3max.turbo.i2v` + `target_audio_url` = the scene's `tts_url` (what-if-real-life and serial-drama dialogue; the Kling Avatar formats stay on Kling Avatar v2 until their pilots) | `minimax/h3-max-turbo/image-to-video` | $0.04/s on the returned length (a 5 s exchange ≈ $0.21; Kling Avatar v2 $0.28). The returned soundtrack is the TTS itself; the clip is written with `scene_video_audio: "native"`, `scene_video_lipsync: true` |
+| MiniMax H3 Max Turbo lip-sync via `kling_runner.py`, route `minimax.h3max.turbo.i2v` + `target_audio_url` = the scene's `tts_url` (what-if-real-life and serial-drama dialogue; every fun-news, special-report and streettalk scene, with `seed: 20261021`; news stays on Kling Avatar v2 until its pilot) | `minimax/h3-max-turbo/image-to-video` | $0.04/s on the returned length (a 5 s exchange ≈ $0.21; Kling Avatar v2 $0.28; Test 12: 19.5–21.7% saved per talking-head video). The returned soundtrack is the TTS itself; the clip is written with `scene_video_audio: "native"`, `scene_video_lipsync: true` |
 | Kling v3 Standard I2V via `kling_runner.py` route `kling.v3.standard.i2v` (not the clip route of any of the ten H3 formats; kept where a playbook still names a Kling I2V clip and as the historical `multi_prompt` / `voice_ids` / `elements` route) | `fal-ai/kling-video/v3/standard/image-to-video` | $0.084/s without audio, $0.126/s with audio; Scenarist/Manager/Animator choose exact `generate_audio` from storyboard + format playbook |
 | Kling 2.6 Pro I2V (user-authorized route only; never automatic fallback) | `fal-ai/kling-video/v2.6/pro/image-to-video` | $0.07/s ($0.35/5s no audio) |
 | MiniMax TTS (via fal.ai) | `fal-ai/minimax/speech-2.8-hd` | ~$0.10/1k chars. `voice_setting.voice_id`, `emotion`. Field is `prompt` not `text`. |
 | Kling Lipsync | `fal-ai/kling-video/lipsync/audio-to-video` | ~$0.10/s |
 | HeyGen Avatar IV | `fal-ai/heygen/avatar4/image-to-video` | $0.10/s |
-| Kling Avatar v2 Standard | `fal-ai/kling-video/ai-avatar/v2/standard` | $0.056/s |
+| Kling Avatar v2 Standard (news; gameplay-ai-avatar is inactive; replaced by H3 lip-sync in fun-news, special-report, streettalk) | `fal-ai/kling-video/ai-avatar/v2/standard` | $0.056/s |
 | Local still shot (`motion: "still"` scenes, route `local.still_shot`) | `tools/still_shot.py` (local ffmpeg, no network) | $0 |
 
 - Auth: `Authorization: Key $FAL_KEY`

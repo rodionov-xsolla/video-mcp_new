@@ -53,7 +53,7 @@
       "pricing": {
         "image_gen": "$0.08/image (1K)",
         "image_gen_alternate_user_only": "~$0.02/image (GPT Image 1)",
-        "avatar": "$0.056/sec (Kling Avatar v2)",
+        "avatar": "$0.056/sec (Kling Avatar v2; news and gameplay-ai-avatar only)",
         "motion_control": "$0.07/sec (Kling Motion Control v2.6 Standard)",
         "video_gen_i2v": "$0.08/sec (H3 Max, 768P; ~$0.41 per 5 s clip billed on returned ~5.18 s; fal promo $0.048/sec until 15 Oct 2026)",
         "video_gen_lipsync": "$0.04/sec (H3 Max Turbo lip-sync, 768P; ~$0.21 per 5 s exchange billed on returned length)",
@@ -62,7 +62,7 @@
         "video_gen_i2v_alternate_user_only": "$0.07/sec (Kling 2.6 Pro, audio off)",
         "tts": "~$0.10/1k chars (~$0.001-0.005/phrase, MiniMax via fal.ai)"
       },
-      "notes": "video_gen_i2v = MiniMax H3 Max (route minimax.h3max.i2v), the plain I2V route for redcon, item-story, character-story, in-game-pov, wild-documentary, top-list, fake-ad, what-if-real-life I2V scenes and serial-drama action clips. video_gen_lipsync = MiniMax H3 Max Turbo (route minimax.h3max.turbo.i2v + target_audio_url), used only for what-if-real-life and serial-drama dialogue lip-sync, never for plain clips. video_gen_face_ref = MiniMax H3 Max reference-to-video (route minimax.h3max.r2v: image_url start frame + reference_image_urls headshots), dual-style only. video_gen_i2v_kling_features = Kling v3 Standard (route kling.v3.standard.i2v): not the active route of any of these ten formats; kept as the historical/alternate multi_prompt / voice_ids / elements route and for playbooks that still name a Kling I2V clip. The Kling Avatar formats keep Kling Avatar v2; motion-dance keeps Kling Motion Control. Each format playbook declares its route; no automatic fallback between them."
+      "notes": "video_gen_i2v = MiniMax H3 Max (route minimax.h3max.i2v), the plain I2V route for redcon, item-story, character-story, in-game-pov, wild-documentary, top-list, fake-ad, what-if-real-life I2V scenes and serial-drama action clips. video_gen_lipsync = MiniMax H3 Max Turbo (route minimax.h3max.turbo.i2v + target_audio_url), used only for lip-sync (what-if-real-life and serial-drama dialogue, and every fun-news, special-report and streettalk talking-head scene, which also sends seed 20261021), never for plain clips. video_gen_face_ref = MiniMax H3 Max reference-to-video (route minimax.h3max.r2v: image_url start frame + reference_image_urls headshots), dual-style only. video_gen_i2v_kling_features = Kling v3 Standard (route kling.v3.standard.i2v): not the active route of any of these ten formats; kept as the historical/alternate multi_prompt / voice_ids / elements route and for playbooks that still name a Kling I2V clip. News and gameplay-ai-avatar keep Kling Avatar v2 (avatar); fun-news, special-report and streettalk moved from it to H3 lip-sync after Test 12; motion-dance keeps Kling Motion Control. Each format playbook declares its route; no automatic fallback between them."
     },
     "kling-direct": {
       "name": "Kling Direct API",

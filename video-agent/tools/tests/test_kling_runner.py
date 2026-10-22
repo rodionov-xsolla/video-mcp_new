@@ -517,6 +517,7 @@ class KlingRunnerTests(unittest.TestCase):
         self.assertIn("minimax-h3-max-r2v-face-ref.job.json", video_examples)
         self.assertIn("minimax-h3-max-serial-action.job.json", video_examples)
         self.assertIn("minimax-h3-max-turbo-serial-dialogue.job.json", video_examples)
+        self.assertIn("minimax-h3-max-turbo-talking-head.job.json", video_examples)
 
     def test_h3_max_r2v_route_loads_from_registry(self):
         route, route_sha256 = kr.load_route("minimax.h3max.r2v")
@@ -620,6 +621,50 @@ class KlingRunnerTests(unittest.TestCase):
         self.assertEqual(expect["audio"], "required")
         self.assertEqual(
             dialogue["input_urls"], [payload["image_url"], payload["target_audio_url"]]
+        )
+
+    def test_talking_head_lipsync_example_matches_test_12_contract(self):
+        # Talking-head formats on H3 (Test 12): one on-screen speaker, H3 Max Turbo
+        # lip-sync on the scene's uploaded TTS, with the format-declared seed.
+        prepared = kr.validate_and_prepare_job(
+            TOOLS_DIR / "examples" / "minimax-h3-max-turbo-talking-head.job.json"
+        )
+        self.assertEqual(prepared["route_id"], "minimax.h3max.turbo.i2v")
+        self.assertEqual(
+            prepared["submit_url"], "https://queue.fal.run/minimax/h3-max-turbo/image-to-video"
+        )
+        payload = prepared["payload"]
+        self.assertEqual(
+            set(payload),
+            {
+                "prompt",
+                "image_url",
+                "target_audio_url",
+                "duration",
+                "resolution",
+                "prompt_expansion_mode",
+                "seed",
+            },
+        )
+        self.assertEqual(payload["seed"], 20261021)
+        self.assertEqual(payload["duration"], 7.1)
+        self.assertEqual(payload["resolution"], "768P")
+        self.assertEqual(payload["prompt_expansion_mode"], "disabled")
+        prompt = payload["prompt"]
+        self.assertLessEqual(len(prompt.encode("utf-8")), 512)
+        self.assertIn(
+            "does not stare into the lens: his gaze rests on the reporter just beside the camera",
+            prompt,
+        )
+        self.assertTrue(prompt.endswith(" with lips in sync with the audio."))
+        for lock in ("unblinking", "eyes locked on", "facing the camera head-on", "holds still"):
+            self.assertNotIn(lock, prompt)
+        expect = kr.preflight_summary(prepared)["expect"]
+        self.assertEqual(expect["duration_seconds"], payload["duration"])
+        self.assertEqual(expect["duration_tolerance_seconds"], 0.8)
+        self.assertEqual(expect["audio"], "required")
+        self.assertEqual(
+            prepared["input_urls"], [payload["image_url"], payload["target_audio_url"]]
         )
 
     def test_h3_max_routes_load_from_registry(self):

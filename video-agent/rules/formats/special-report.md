@@ -6,7 +6,7 @@ overlays: false
 
 # Format "Special Report" — Single-reporter investigative special from a game's lore
 
-> **Single video model — Kling Avatar v2 Standard.** Opener and CTA — pre-built from Supabase. Anchor and reporter — locked independently in this format's resolved story bible. Reporter visits **3 locations** telling ONE unified ironic story. Tone — mock-journalistic / absurd-earnest. KEY VISUAL: reporter stands to the SIDE of frame, leaving room for the subject being investigated.
+> **Single video route — H3 lip-sync on MiniMax H3 Max Turbo** (`minimax.h3max.turbo.i2v` with the scene's TTS as `target_audio_url`; it replaced Kling Avatar v2 Standard after Test 12, and Kling Avatar is forbidden here). Opener and CTA — pre-built from Supabase. Anchor and reporter — locked independently in this format's resolved story bible. Reporter visits **3 locations** telling ONE unified ironic story. Tone — mock-journalistic / absurd-earnest. KEY VISUAL: reporter stands to the SIDE of frame, leaving room for the subject being investigated.
 
 This file is the **playbook**: when to use, pipeline, role briefs. Craft rules — in `rules/roles/*.md`.
 
@@ -28,17 +28,17 @@ Keywords: "special report", "спецрепортаж", "специальный 
 - **1 permanent anchor** + **1 permanent reporter**, both locked in this format's story bible without reading appearance or voice assignments from other formats
 - Reporter visits **exactly 3 locations** to tell ONE unified ironic/absurd investigative story
 - At each location: reporter stands to the **SIDE** of frame (~30% width), leaving 65-70% for the evidence/subject
-- **Only Kling Avatar v2 Standard** + routed speech audio (lipsync via `audio_url`)
+- **Only H3 lip-sync on H3 Max Turbo** (`minimax.h3max.turbo.i2v`, `rules/roles/animator.md` §2a "H3 lip-sync") + routed speech audio (lip-sync via `target_audio_url` = the scene's `tts_url`). Every dialogue scene is one H3 lip-sync clip; no plain clip, no still, no Kling Avatar clip
 - **Opener and CTA — pre-built mp4 from Supabase**, not regenerated per episode
 - **Tone:** mock-journalistic / ironic-investigative / absurd-earnest — reporter treats absurd topic with full journalistic seriousness
 - **Duration:** 35–50s natural TTS speed (including opener + CTA)
-- **Budget:** up to $4.50 hard cap (~$2.85 typical EP2+; pilot ~$3.35 with new assets)
+- **Budget:** up to $4.50 hard cap (~$2.35 typical EP2+; pilot ~$2.85 with new assets; Test 12: $2.64 per video)
 - **Frame format:** 9:16 (1080×1920)
 
 ### Models
 
 - **Image:** NB2 (3 per-episode on-location reporter edits + one-time anchor studio avatar)
-- **Video:** Kling Avatar v2 Standard ($0.056/s of input audio duration)
+- **Video:** H3 lip-sync on MiniMax H3 Max Turbo (`minimax.h3max.turbo.i2v`, $0.04/s of the returned clip length ≈ the TTS length). Kling Avatar v2 Standard ($0.056/s of input audio) is the replaced route (the Test 12 baseline) and is forbidden in this format
 - **Audio:** native model speech when intentionally available; otherwise a current-format-owned sample through Chatterbox; otherwise MiniMax
 
 ---
@@ -200,24 +200,26 @@ Upload each as `refs/{reporter}-special-report-loc{N}-{topic}.png`.
 
 **Word budget:**
 
-| Scene | Words | ~TTS dur | Cost (Avatar v2) |
+| Scene | Words | ~TTS dur | Cost (H3 lip-sync) |
 |---|---|---|---|
-| 1 Anchor intro | 15–20 | ~6–8s | ~$0.40 |
-| 2 Reporter loc 1 | 20–28 | ~8–11s | ~$0.50 |
-| 3 Reporter loc 2 | 20–28 | ~8–11s | ~$0.50 |
-| 4 Reporter loc 3 | 20–28 | ~8–11s | ~$0.50 |
-| 5 Anchor reaction | 15–20 | ~6–8s | ~$0.40 |
-| **Total** | **~95–120** | **~36–49s** | **~$2.30** |
+| 1 Anchor intro | 15–20 | ~6–8s | ~$0.29 |
+| 2 Reporter loc 1 | 20–28 | ~8–11s | ~$0.39 |
+| 3 Reporter loc 2 | 20–28 | ~8–11s | ~$0.39 |
+| 4 Reporter loc 3 | 20–28 | ~8–11s | ~$0.39 |
+| 5 Anchor reaction | 15–20 | ~6–8s | ~$0.29 |
+| **Total** | **~95–120** | **~36–49s** | **~$1.75** (Test 12: $2.14; Kling Avatar v2: $2.87) |
+
+Every line's TTS must stay ≤15 s (H3's maximum); a longer line goes back to be shortened. The Animator quotes each line verbatim in a ≤512-byte prompt, so a reporter line near 28 words leaves little room for the descriptors (the tested 26-word line fit in 508 bytes with short descriptors).
 
 Same punctuation tax rules as fun-news (prefer commas/em-dashes over periods).
 
-### Phase 4: Animation (Kling Avatar v2 only)
+### Phase 4: Animation (H3 lip-sync on H3 Max Turbo only)
 
 For each dialogue scene:
-1. Resolve speech source in this order: native model audio when intentionally supported for the scene → Chatterbox only when this resolved `special-report` story bible owns an approved sample for the speaker → otherwise MiniMax. Generate mp3 and upload to Supabase. Never read a sample or voice assignment from another format. On failure, retry once with the same source/settings, then STOP and report the error.
-2. Kling Avatar v2: `image_url` = per-location NB2 edit (reporter scenes) or studio avatar (anchor scenes). `audio_url` = TTS mp3 from Supabase.
+1. Resolve speech source in this order: native model audio when intentionally supported for the scene → Chatterbox only when this resolved `special-report` story bible owns an approved sample for the speaker → otherwise MiniMax. Generate mp3 and upload to Supabase as the scene's `tts_url`; Sound also writes `tts_duration_sec` and `duration_sec` (= the TTS length rounded up to 0.1 s, `rules/roles/sound.md` §5b). Never read a sample or voice assignment from another format. On failure, retry once with the same source/settings, then STOP and report the error.
+2. H3 lip-sync (`minimax.h3max.turbo.i2v`, `rules/roles/animator.md` §2a "H3 lip-sync" and "Talking-head prompt"), one `tools/kling_runner.py` job per scene: `image_url` = the scene's `scene_image_url` (the same still the Kling Avatar route used: per-location NB2 edit for reporter scenes, studio avatar for anchor scenes), `target_audio_url` = `tts_url`, `duration` = `duration_sec`, `seed: 20261021` (Animator brief). The Animator does not trim, speed up or remux the clip.
 3. No speedup — natural TTS pace
-4. `apad=whole_dur=<raw_video_dur>` per scene (Avatar v2 trailing silence buffer)
+4. `apad=whole_dur=<played_dur>` per scene, after the Editor's H3 trim to `duration_sec` (a clip that came back shorter plays whole)
 
 ### Phase 5: Assembly (FFmpeg)
 
@@ -225,13 +227,13 @@ Same canonical single-pass pipeline as fun-news. 7 clips: opener + 5 scenes + CT
 
 ```
 Inputs:
-  [0..4]  scene-1..5.mp4  (Avatar v2 raw)
+  [0..4]  scene-1..5.mp4  (H3 lip-sync clips, own audio = the scene TTS; H3 trim to duration_sec first)
   [5]     opener.mp4      (pre-built, Supabase)
   [6]     cta.mp4         (pre-built, Supabase)
   [7]     music-timed.wav (pre-built by Sound)
 
 VIDEO: opener → scene-1 → scene-2 → scene-3 → scene-4 → scene-5 (fade-out last 1s) → cta
-AUDIO: per-scene apad → concat → adelay=2000 for opener offset → amix with music-timed.wav
+AUDIO: per-scene clip audio (H3 trim) → apad → concat → adelay=2000 for opener offset → amix with music-timed.wav
 ```
 
 Output: local `final.mp4`; after explicit user approval, Manager uploads through its canonical run-scoped path.
@@ -243,11 +245,13 @@ Output: local `final.mp4`; after explicit user approval, Manager uploads through
 | Component | Cost |
 |---|---|
 | 3 reporter on-location NB2 edits | 3 × $0.08 = **$0.24** |
-| 5 Avatar v2 scenes (~8s avg each) | 5 × $0.45 ≈ **$2.25** |
+| 5 H3 lip-sync scenes (~8s avg each; $0.04/s on the returned length) | 5 × ~$0.35 ≈ **$1.75** (Kling Avatar v2: 5 × $0.45 ≈ $2.25) |
 | Routed speech generation (5 lines) | provider-dependent |
-| **Steady-state total** | **~$2.85** |
+| **Steady-state total** | **~$2.35** |
 | Pilot extra (2 new avatars + opener NB2) | +~$0.50 |
-| **Pilot total** | **~$3.35** |
+| **Pilot total** | **~$2.85** |
+
+**Test 12 (Oct 2026, Kling Avatar v2 baseline → H3 lip-sync):** $3.37 → $2.64 per whole video (21.7% saved); the five clips $2.87 → $2.14 (its lines averaged ~10 s).
 
 **Cap: $4.50. Stop if spend > $4.00.**
 
@@ -409,7 +413,7 @@ ${OUTPUT_DIR}/
 ├── research.json
 ├── final.mp4
 ├── scenes/
-│   ├── scene-1.mp4
+│   ├── scene-1.mp4      # H3 lip-sync clip as returned (the Editor applies the H3 trim)
 │   ├── scene-2.mp4
 │   ├── scene-3.mp4
 │   ├── scene-4.mp4
@@ -426,6 +430,7 @@ ${OUTPUT_DIR}/
 
 - [ ] All 5 scene mp4s exist and each > 100KB
 - [ ] `ffprobe` duration ≥ 5s per scene
+- [ ] Every scene is H3 lip-sync on `minimax.h3max.turbo.i2v` with the exact seven-field payload (`seed: 20261021`), `scene_video_audio: "native"`, `scene_video_lipsync: true`, and has `tts_url`, `tts_duration_sec` ≤ 15 and the rounded-up `duration_sec`; no Kling Avatar clip
 - [ ] `final.mp4` duration 35–55s
 - [ ] Anchor and reporter are resolved only from this format's story bible
 - [ ] Reporter same character across scenes 2–4 (same `image_url` base)
@@ -442,7 +447,11 @@ ${OUTPUT_DIR}/
 - ❌ Separate unrelated news items instead of ONE unified investigation
 - ❌ `-shortest` in FFmpeg (ALWAYS use `apad`)
 - ❌ ElevenLabs or provider/sample switching after a failed speech generation
-- ❌ `atempo` speedup on Avatar v2 output
+- ❌ `atempo` speedup on the lip-sync clips
+- ❌ Kling Avatar v2 (`fal-ai/kling-video/ai-avatar/*`) for any special-report scene — replaced by H3 lip-sync after Test 12; never a fallback
+- ❌ A plain clip on H3 Max Turbo, a lip-sync clip on H3 Max, or a still for a dialogue scene
+- ❌ Gaze- or head-locking phrases in a lip-sync prompt (`unblinking`, `eyes locked on`, `steady eye contact with camera`, `facing the camera head-on`, `holds still`, `stares`) — H3 then stares into the lens
+- ❌ Laying `scene-K.mp3` over a lip-sync clip (its soundtrack already is that TTS), trimming the clip in the Animator, or Kling Avatar's TTS trim in the Editor
 - ❌ Reusing fun-news opener for special-report (separate brand, separate mp4)
 
 ---
@@ -473,16 +482,25 @@ ${OUTPUT_DIR}/
 
 ### Animator
 
-- Kling Avatar v2 Standard only
-- Reporter scenes: `image_url` = per-episode on-location NB2 edit; anchor scenes: studio avatar
-- No speedup (`atempo`)
-- `apad=whole_dur=<raw_video_dur>` per scene before concat
+- **ONLY H3 lip-sync on H3 Max Turbo** (`minimax.h3max.turbo.i2v`; `rules/roles/animator.md` §2a "H3 lip-sync" and "Talking-head prompt"), one `tools/kling_runner.py` job per scene, all 5 scenes. Kling Avatar v2 is forbidden (the replaced route); never a plain clip on H3 Max Turbo, never lip-sync on H3 Max, no still.
+- `image_url` = the scene's `scene_image_url`: the per-episode on-location NB2 edit (reporter scenes) or the studio avatar (anchor scenes). Run the pre-flight curl check on `tts_url` and `scene_image_url` first (both 200; otherwise STOP and return to Manager).
+- **Payload — exactly these seven fields (the Test 12 jobs):** `prompt`, `image_url` = `scene_image_url`, `target_audio_url` = `tts_url`, numeric `duration` = the TTS length rounded up to 0.1 s (`math.ceil(round(d*10,6))/10`, equal to the `duration_sec` Sound wrote), `resolution: "768P"`, `prompt_expansion_mode: "disabled"`, `seed: 20261021`. `expect`: `duration_seconds` = that `duration`, `duration_tolerance_seconds: 0.8`, `audio: "required"`, `min_bytes: 100000`, `min_width: 600`, `min_height: 1000`, `orientation: "portrait"`. Template: `tools/examples/minimax-h3-max-turbo-talking-head.job.json`.
+- A scene whose TTS is longer than 15 s (H3's maximum) is not submitted: return it to be shortened.
+- **Prompt (≤512 UTF-8 bytes):** the speaker by look, position and framing (from the storyboard and the scene image: the reporter's side of frame, the anchor at the desk), the expression and at most one small gesture; no gaze or head lock (`unblinking`, `eyes locked on`, `steady eye contact with camera`, `facing the camera head-on`, `holds still`, `stares`). Then the anchor/reporter gaze sentence — both address the viewer: `He looks into the camera like a TV news presenter, blinking naturally, with small relaxed head movements and changing expression between phrases; no frozen stare.` (`She` for a female speaker). End with `<Speaker> speaks the line "<line>" with lips in sync with the audio.` (`<line>` = the scene's `tts` verbatim). Over 512 bytes: shorten the descriptors first and keep the line whole; only if still too long, shorten the quoted line to its first sentence followed by `…` and report it. No music/voice clause. Example (Test 12, reporter standing to the side of frame, 508 bytes):
+  ```
+  Hu Tao, with dark twin tails and a black wide-brimmed hat, stands left of frame with a mic by folder stacks. Grinning. She looks into the camera like a TV news presenter, blinking naturally, with small relaxed head movements and changing expression between phrases; no frozen stare. Hu Tao speaks the line "Aiya, I'm inside Favonius headquarters, where Jean's desk hides under stacks of incident reports, all filed under one name, Klee. Bomb fishing, again. Next, the lake." with lips in sync with the audio.
+  ```
+- Write-back: `scene_video_kind: "i2v"`, `scene_video_route: "minimax.h3max.turbo.i2v"`, `scene_video_audio: "native"`, `scene_video_lipsync: true`, `motion_prompt` = the prompt. No speedup (`atempo`); do not trim, pre-encode or remux the clip.
+- Retry a technically failed job once with the same route/settings, then STOP; no switch to Kling Avatar, H3 Max, another provider or a still.
+- **Debug mode:** list the 5 planned clips with per-clip cost (requested `duration` × $0.04/s) before the paid batch; a lip-sync clip of about 7.5 s or longer is above the $0.30 confirm threshold.
+- Cost: $0.04/s on the returned length, on the H3 lip-sync cost line.
 - General rules — `rules/roles/animator.md`
 
 ### Sound
 
 - Speech priority: native audio → approved sample owned by this `special-report` bible through Chatterbox → otherwise MiniMax
 - Anchor and reporter routes come only from this format's resolved story bible; retry the same route once, then stop
+- Upload each scene's mp3 as its `tts_url` before Phase 4 (the Animator sends it as the lip-sync `target_audio_url`) and write `tts_duration_sec` and `duration_sec` = the TTS length rounded up to 0.1 s on every scene (`rules/roles/sound.md` §5b). A line whose TTS is longer than 15 s is not uploaded: STOP and return it to be shortened.
 - Ambient SFX: location-appropriate per reporter scene (optional, 0.10–0.15 vol)
 - Music: opener + CTA only; dialogue = silence (same gate as fun-news)
 - General rules — `rules/roles/sound.md`
@@ -490,7 +508,9 @@ ${OUTPUT_DIR}/
 ### Editor
 
 - 7-clip concat: opener (pre-built) + scenes 1–5 + CTA (pre-built)
-- `apad` per scene to raw video duration
+- Every scene is an H3 lip-sync clip (`scene_video_lipsync: true`): **H3 trim** of video and audio to `duration_sec` first (play whole when the clip is shorter), never Kling Avatar's TTS trim; the clip's own audio is the scene's speech — never lay `scene-K.mp3` over it again
+- `apad` per scene to the played video duration
+- `build/voice-final.wav` for subtitle timing is extracted from the lip-sync clips' own audio (`rules/roles/editor.md` §6.1, multi-voice)
 - `bold` subtitle style, per-scene ASS burn-in before concat
 - Music-timed.wav: opener theme + anullsrc silence + CTA reprise (same as fun-news — no `volume:enable`)
 - Fade-to-black on scene 5 (last 1s before CTA)
