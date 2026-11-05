@@ -146,6 +146,7 @@ Strict order:
 2. **Normalize** all clips: 1080×1920, 30fps, AAC 128k
 3. **Opener** — normalize the `.mp4` downloaded from Supabase (same scale/fps/codec)
 4. **Concat:** opener → scene-1-sub → scene-2-sub → scene-3-sub
+4a. **Lip-sync offset:** the concatenated speech track (opener silence, scenes, CTA) plays 200 ms after the picture: `adelay=200:all=1`, `asetpts=N/SR/TB`, trimmed to the video length; the picture does not move (`rules/roles/editor.md` §0.5, Test 15: 200 ms looked right after the 1.18x speed-up)
 5. **Music:** fun/energetic beat, `volume=0.10`
 6. **Fade-to-black:** last 1.5s
 7. **CTA:** concat with normalized CTA from Supabase

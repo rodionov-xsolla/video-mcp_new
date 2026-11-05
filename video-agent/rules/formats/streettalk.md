@@ -266,7 +266,7 @@ VIDEO branch:
 AUDIO branch (THREE layers: dialogue + ambient + music):
   [k:a] atrim=end=DUR_k,asetpts=PTS-STARTPTS,atempo=${SP_k},asetpts=PTS-STARTPTS,apad=whole_dur=<sped_video_dur_k>  [ak]   (the clip's own audio; H3 trim, then the per-scene speedup from storyboard; sped_video_dur_k = played_dur_k / SP_k)
   [a1][a2][a3][a4][a5] concat=n=5:v=0:a=1                            → [adlg]
-  [adlg] adelay=2000|2000                                            → [atts]   (2s opener silence prefix)
+  [adlg] adelay=2200|2200                                            → [atts]   (2s opener silence prefix + the 200 ms lip-sync offset, editor.md §0.5)
   [8:a]  volume=0.15,apad=whole_dur=TOTAL_DUR,
          afade=t=in:st=0:d=0.5,
          afade=t=out:st=TOTAL-1:d=1.0                                → [aamb]   (ambient SFX, 0.15 — plays throughout)
@@ -610,7 +610,7 @@ ${OUTPUT_DIR}/
 - Per-scene `apad=whole_dur=<sped_video_dur>` on audio — mandatory.
 - `build/voice-final.wav` for subtitle timing is extracted from the lip-sync clips' own audio with the same per-scene speedup (`rules/roles/editor.md` §6.1, multi-voice).
 - Per-scene ASS burn-in inside each `[vk]` BEFORE concat.
-- `adelay=2000|2000` matches 2s opener silence prefix.
+- `adelay=2200|2200`: the 2s opener silence prefix plus the 200 ms lip-sync offset (`rules/roles/editor.md` §0.5).
 - Fade-out on scene-5 video (last 1s before CTA) + afade-out on music.
 - `-t TOTAL_DUR` mandatory.
 - Atomic finalize: `build/final.tmp.mp4` → ffprobe-validate → `mv` to root.

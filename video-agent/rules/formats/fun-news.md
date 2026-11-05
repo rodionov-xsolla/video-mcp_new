@@ -261,7 +261,7 @@ AUDIO branch:
   [5:a]  asetpts=PTS-STARTPTS                                        → [aopen] (preserve embedded audio; inject matching anullsrc only if absent)
   [k:a]  atrim=end=DUR_k,asetpts=PTS-STARTPTS,apad=whole_dur=<played_dur_k> → [ak]   (k=0..4, scenes 1-5; the clip's own audio)
   [a0][a1][a2][a3][a4] concat=n=5:v=0:a=1                           → [adlg]
-  [adlg] adelay=<OPEN_DUR_MS>|<OPEN_DUR_MS>                          → [atts]   (measured opening duration; never fixed 2s)
+  [adlg] adelay=<OPEN_DUR_MS+200>|<OPEN_DUR_MS+200>                  → [atts]   (measured opening duration + the 200 ms lip-sync offset, editor.md §0.5; never fixed 2s)
   [7:a]  (music-timed.wav — silence for opening+dialogue, theme for CTA) → [amus]
   [aopen][atts][amus] amix=inputs=3:duration=longest:normalize=0     → [aout]
 
@@ -610,7 +610,7 @@ ${OUTPUT_DIR}/
 - **Per-scene `apad=whole_dur=<played_dur>` on audio** — non-negotiable. Without it, audio leads video by 3+ seconds by scene 5.
 - `build/voice-final.wav` for subtitle timing is extracted from the lip-sync clips' own audio (`rules/roles/editor.md` §6.1, multi-voice).
 - Per-scene ASS burn-in inside each `[vk]` branch BEFORE concat.
-- `adelay=OPEN_DUR_MS|OPEN_DUR_MS` on concat dialogue audio, where `OPEN_DUR_MS` is measured from the resolved opening asset; never hardcode 2 seconds.
+- `adelay=(OPEN_DUR_MS+200)|(OPEN_DUR_MS+200)` on concat dialogue audio, where `OPEN_DUR_MS` is measured from the resolved opening asset and +200 ms is the lip-sync offset (`rules/roles/editor.md` §0.5); never hardcode 2 seconds.
 - Fade-out on scene-5 video (last 1s before CTA) + afade-out on music.
 - `-t TOTAL_DUR` mandatory to cap on amix duration=longest.
 - Atomic finalize: write to `build/final.tmp.mp4`, ffprobe-validate, `mv` to `final.mp4`.

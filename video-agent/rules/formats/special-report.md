@@ -233,7 +233,7 @@ Inputs:
   [7]     music-timed.wav (pre-built by Sound)
 
 VIDEO: opener → scene-1 → scene-2 → scene-3 → scene-4 → scene-5 (fade-out last 1s) → cta
-AUDIO: per-scene clip audio (H3 trim) → apad → concat → adelay=2000 for opener offset → amix with music-timed.wav
+AUDIO: per-scene clip audio (H3 trim) → apad → concat → adelay=2200 (2000 opener offset + the 200 ms lip-sync offset, editor.md §0.5) → amix with music-timed.wav
 ```
 
 Output: local `final.mp4`; after explicit user approval, Manager uploads through its canonical run-scoped path.
