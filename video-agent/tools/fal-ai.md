@@ -190,7 +190,7 @@ curl -s -o scene-1.png "$IMAGE_URL"
 **Метод:** POST (асинхронный — нужен polling)
 **Стоимость:** $0.084/сек без аудио (5s = $0.42, 10s = $0.84) | $0.126/сек с аудио (5s = $0.63, 10s = $1.26)
 
-> **Which route (Oct 2026):** plain image-to-video for `redcon`, `item-story`, `character-story`, `in-game-pov`, `wild-documentary`, `top-list`, `fake-ad`, the I2V scenes of `what-if-real-life` and the action clips of `serial-drama` runs on **MiniMax H3 Max** (§2y, `minimax.h3max.i2v`); `what-if-real-life` and `serial-drama` dialogue and every talking-head scene of `fun-news`, `special-report` and `streettalk` run on **H3 Max Turbo** lip-sync (`minimax.h3max.turbo.i2v`, §2y "H3 Max Turbo lip-sync"); `dual-style` runs on **H3 Max reference-to-video** (`minimax.h3max.r2v`, §2y "H3 Max face reference"). H3 Max Turbo is never used for plain clips. Kling v3 Standard is therefore **not the active route of any of these ten formats**; it stays documented here as the historical/alternate route for `multi_prompt`, `voice_ids` and `elements`, and for a playbook that still names a Kling I2V clip (e.g. the `fun-news` / `streettalk` openers). `news` and `gameplay-ai-avatar` keep Kling Avatar v2 (§7) and `motion-dance` keeps Kling Motion Control. The format playbook declares the route; the animator never switches route after the run starts, and there is no automatic fallback between them.
+> **Which route (Oct 2026):** plain image-to-video for `redcon`, `item-story`, `character-story`, `in-game-pov`, `wild-documentary`, `top-list`, `fake-ad`, the I2V scenes of `what-if-real-life` and the action clips of `serial-drama` runs on **MiniMax H3 Max** (§2y, `minimax.h3max.i2v`); `what-if-real-life` and `serial-drama` dialogue and every talking-head scene of `fun-news`, `special-report`, `streettalk` and `news` run on **H3 Max Turbo** lip-sync (`minimax.h3max.turbo.i2v`, §2y "H3 Max Turbo lip-sync"); `dual-style` runs on **H3 Max reference-to-video** (`minimax.h3max.r2v`, §2y "H3 Max face reference"). H3 Max Turbo is never used for plain clips. Kling v3 Standard is therefore **not the active route of any of these ten formats**; it stays documented here as the historical/alternate route for `multi_prompt`, `voice_ids` and `elements`, and for a playbook that still names a Kling I2V clip (e.g. the `fun-news` / `streettalk` openers). `news` and `gameplay-ai-avatar` keep Kling Avatar v2 (§7) and `motion-dance` keeps Kling Motion Control. The format playbook declares the route; the animator never switches route after the run starts, and there is no automatic fallback between them.
 
 > Используй только когда этот endpoint выбран Scenarist/Manager/Animator для текущего запуска. Они определяют duration, request shape и `generate_audio` по сценарию и format playbook, затем передают уже готовый provider payload runner'у.
 >
@@ -336,7 +336,7 @@ curl -s -o scene-1.mp4 "$VIDEO_URL"
 
 ## 2y. MiniMax H3 Max — image-to-video (plain I2V route)
 
-**Status:** the plain I2V route for `redcon`, `item-story`, `character-story`, `in-game-pov`, `wild-documentary`, `top-list`, `fake-ad`, the I2V scenes of `what-if-real-life` and the action clips of `serial-drama`. H3 Max Turbo (`minimax.h3max.turbo.i2v`) is the lip-sync route for `what-if-real-life` and `serial-drama` dialogue and for every scene of `fun-news`, `special-report` and `streettalk` only ("H3 Max Turbo lip-sync" below), so these formats are all-H3; `dual-style` uses H3 Max reference-to-video ("H3 Max face reference" below). Decided 12 Oct 2026 after the cost trials in `trials/2026-10-cost-trials/`: plain clips moved from H3 Max Turbo to H3 Max after Test 6, where Turbo made characters open their mouths as if talking while the narrator spoke, plus some weird animations (Test 6b re-ran the same scenes on H3 Max). `serial-drama` (Test 9) and `dual-style` (Test 8) moved from Kling v3 Standard on 15 Oct 2026; `fun-news`, `special-report` and `streettalk` moved from Kling Avatar v2 after Test 12 (Oct 2026). `news` and `gameplay-ai-avatar` keep Kling Avatar v2 (§7) until each has passed one pilot.
+**Status:** the plain I2V route for `redcon`, `item-story`, `character-story`, `in-game-pov`, `wild-documentary`, `top-list`, `fake-ad`, the I2V scenes of `what-if-real-life` and the action clips of `serial-drama`. H3 Max Turbo (`minimax.h3max.turbo.i2v`) is the lip-sync route for `what-if-real-life` and `serial-drama` dialogue and for every scene of `fun-news`, `special-report`, `streettalk` and `news` only ("H3 Max Turbo lip-sync" below), so these formats are all-H3; `dual-style` uses H3 Max reference-to-video ("H3 Max face reference" below). Decided 12 Oct 2026 after the cost trials in `trials/2026-10-cost-trials/`: plain clips moved from H3 Max Turbo to H3 Max after Test 6, where Turbo made characters open their mouths as if talking while the narrator spoke, plus some weird animations (Test 6b re-ran the same scenes on H3 Max). `serial-drama` (Test 9) and `dual-style` (Test 8) moved from Kling v3 Standard on 15 Oct 2026; `fun-news`, `special-report`, `streettalk` and `news` moved from Kling Avatar v2 after Test 12 (Oct 2026). `news` and `gameplay-ai-avatar` keep Kling Avatar v2 (§7) until each has passed one pilot.
 
 **Endpoint:** `https://queue.fal.run/minimax/h3-max/image-to-video`
 **Polling base:** `https://queue.fal.run/minimax/h3-max` (first 2 segments, like every fal endpoint)
@@ -405,7 +405,7 @@ H3 Max Turbo lip-sync dialogue clips use the same field set plus exactly one fie
 
 - No `negative_prompt`, no `generate_audio` switch (sound is always on), no `multi_prompt`, no `voice_ids`, no `elements`, no `shot_type`, no `end_image_url` use (the pipeline never creates end frames), no `++emphasis++` syntax.
 - The formats that used them moved anyway: `serial-drama` replaces Kling multi-shot voiced dialogue with one H3 lip-sync clip per exchange on our TTS, and `dual-style` replaces `elements` face-lock with the H3 Max face reference (`reference_image_urls`). `reference_image_urls` and `aspect_ratio` exist only on the face-reference endpoint.
-- **One model per episode:** all animated clips of an episode use the playbook's one I2V route. The single exception: H3 Max Turbo lip-sync dialogue clips may sit next to H3 Max action clips (`what-if-real-life`, `serial-drama`), as Kling Avatar dialogue clips sit next to the I2V clips where a playbook declares both. `fun-news`, `special-report` and `streettalk` use only H3 Max Turbo lip-sync. Still shots (`tools/still_shot.py`, `$0`) are not a model.
+- **One model per episode:** all animated clips of an episode use the playbook's one I2V route. The single exception: H3 Max Turbo lip-sync dialogue clips may sit next to H3 Max action clips (`what-if-real-life`, `serial-drama`), as Kling Avatar dialogue clips sit next to the I2V clips where a playbook declares both. `fun-news`, `special-report`, `streettalk` and `news` use only H3 Max Turbo lip-sync. Still shots (`tools/still_shot.py`, `$0`) are not a model.
 
 ### Silent `target_audio_url` (H3 Max clips whose sound is discarded)
 
@@ -430,7 +430,7 @@ H3 Max Turbo lip-sync dialogue clips use the same field set plus exactly one fie
 
 `duration`, `expect` (`audio "optional"`, tolerance `0.8`) and the write-back (`scene_video_audio: "none"`) stay those of the plain clip; the route stays `minimax.h3max.i2v`. Full rule: `rules/roles/animator.md` §2a.
 
-### H3 Max Turbo lip-sync (`target_audio_url`; `what-if-real-life` and `serial-drama` dialogue, `fun-news` / `special-report` / `streettalk` talking heads)
+### H3 Max Turbo lip-sync (`target_audio_url`; `what-if-real-life` and `serial-drama` dialogue, `fun-news` / `special-report` / `streettalk` / `news` talking heads)
 
 **Endpoint:** `https://queue.fal.run/minimax/h3-max-turbo/image-to-video`
 **Polling base:** `https://queue.fal.run/minimax/h3-max-turbo`
@@ -453,7 +453,7 @@ H3 Max Turbo, used only for lip-sync: the plain payload above plus one field, `t
 |---|---|---|
 | `target_audio_url` | string | The scene's `tts_url`: the TTS file uploaded to Supabase by the Sound phase before Phase 4 (as for Avatar's `audio_url`); never `fal.media` |
 | `duration` | number | The TTS file's length rounded **up** to 0.1 s (4.70 s → `4.8`), not the Scenarist's `duration_sec` (Sound writes this value as `duration_sec` in serial-drama and the talking-head formats) |
-| `seed` | number | **Talking-head formats only** (`fun-news`, `special-report`, `streettalk`): `20261021`, the value of every Test 12 job. No other format sends it |
+| `seed` | number | **Talking-head formats only** (`fun-news`, `special-report`, `streettalk`, `news`): `20261021`, the value of every Test 12 and Test 13 job. No other format sends it |
 
 `expect`: `duration_seconds` = that `duration`, `duration_tolerance_seconds 0.8`, `audio "required"`, `min_bytes 100000`, `min_width 600`, `min_height 1000`, `orientation "portrait"`.
 
@@ -1060,7 +1060,7 @@ curl -s -o avatar.mp4 "$VIDEO_URL"
 
 ## 7. Kling Avatar v2 — Image + Audio to Avatar Video (fallback)
 
-**Status (Oct 2026):** the Avatar route of `news` (and of the inactive `gameplay-ai-avatar`) only. `fun-news`, `special-report` and `streettalk` moved to H3 Max Turbo lip-sync after Test 12 (§2y) and never use this endpoint, also not as a fallback.
+**Status (Oct 2026):** the Avatar route of the inactive `gameplay-ai-avatar` only. `fun-news`, `special-report` and `streettalk` moved to H3 Max Turbo lip-sync after Test 12 and `news` after Test 13 (§2y) and never use this endpoint, also not as a fallback.
 
 **Endpoint (Standard):** `https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/standard`
 **Endpoint (Pro):** `https://queue.fal.run/fal-ai/kling-video/ai-avatar/v2/pro`

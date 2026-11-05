@@ -104,7 +104,7 @@ Format-specific structure (serial-drama: hook → climax → cliffhanger; gamepl
 3. A 10s clip requires justification in `duration_reason`. Can't explain — make it 5s.
 4. If the dialogue doesn't fit in 5s — cut text, don't stretch the clip.
 
-> ⚠️ Format override: serial-drama dialogue is H3 lip-sync on Sound's TTS, not Avatar and not Kling `multi_prompt + voice_ids`. Your serial-drama dialogue `duration_sec` is an estimate: Sound overwrites it with the clip audio's length rounded up to 0.1 s; action clips keep yours. In Avatar-based formats (news, gameplay-ai-avatar), dialogue runtime follows TTS duration; read the format playbook before planning runtime. **Talking-head formats** (fun-news, special-report, streettalk) are H3 lip-sync on each scene's `tts` (no longer Kling Avatar): runtime follows the TTS too, each scene's TTS must stay ≤15 s (H3's maximum; the playbook word budgets keep it well under), and Sound overwrites your `duration_sec` with the TTS length rounded up to 0.1 s.
+> ⚠️ Format override: serial-drama dialogue is H3 lip-sync on Sound's TTS, not Avatar and not Kling `multi_prompt + voice_ids`. Your serial-drama dialogue `duration_sec` is an estimate: Sound overwrites it with the clip audio's length rounded up to 0.1 s; action clips keep yours. In Avatar-based formats (news, gameplay-ai-avatar), dialogue runtime follows TTS duration; read the format playbook before planning runtime. **Talking-head formats** (fun-news, special-report, streettalk, news) are H3 lip-sync on each scene's `tts` (no longer Kling Avatar): runtime follows the TTS too, each scene's TTS must stay ≤15 s (H3's maximum; the playbook word budgets keep it well under), and Sound overwrites your `duration_sec` with the TTS length rounded up to 0.1 s.
 
 ---
 
@@ -169,7 +169,7 @@ Write the four `still_*` fields only on scenes with `motion: "still"`; animated 
 
 ### `character_speech` / `tts`
 - **Serial-drama dialogue (H3 lip-sync):** `character_speech` is an ordered list of `{"speaker": "<bible character name>", "line": "<spoken text>"}`; `tts` is null. Do not write `generate_audio`, `shot_type`, `voice_ids`, `multi_prompt` or `<<<voice_N>>>` tags: Sound generates each line in the speaker's series voice and builds the clip's audio, and the Animator writes the lip-sync prompt.
-- **Avatar-based formats (news, gameplay-ai-avatar) and talking-head lip-sync formats (fun-news, special-report, streettalk):** `character_speech` = null; `tts` = text for external TTS. In the talking-head formats `tts` is the one line of the scene's on-screen speaker; the Animator quotes it verbatim in a ≤512-byte lip-sync prompt, so stay inside the playbook's word budget.
+- **Avatar-based format (gameplay-ai-avatar, inactive) and talking-head lip-sync formats (fun-news, special-report, streettalk, news):** `character_speech` = null; `tts` = text for external TTS. In the talking-head formats `tts` is the one line of the scene's on-screen speaker; the Animator quotes it verbatim in a ≤512-byte lip-sync prompt, so stay inside the playbook's word budget.
 - **Silent I2V action:** both null.
 
 Serial-drama dialogue rules (H3 lip-sync, `rules/formats/serial-drama.md`):
@@ -217,7 +217,7 @@ Formats with `overlays: false` need no array.
 
 ### `clip_type`
 - `action` — I2V clip (no dialogue, micro motion)
-- `dialogue` — format-specific dialogue clip. For serial-drama (and what-if-real-life) this is an H3 lip-sync clip, and every fun-news, special-report and streettalk scene is an H3 lip-sync talking head; for Avatar-based formats (news, gameplay-ai-avatar) this may be a lipsync Avatar clip.
+- `dialogue` — format-specific dialogue clip. For serial-drama (and what-if-real-life) this is an H3 lip-sync clip, and every fun-news, special-report, streettalk and news scene is an H3 lip-sync talking head; for the Avatar-based format (gameplay-ai-avatar, inactive) this may be a lipsync Avatar clip.
 - A still shot (`motion: "still"`, §8) always has `character_speech: null` and is never a `dialogue` or Avatar clip. It is usually an `action` clip; a format-specific type such as `title_card` or `pov` may be a still when the playbook allows stills.
 
 ---
