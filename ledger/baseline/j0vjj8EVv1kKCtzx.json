@@ -1,0 +1,2423 @@
+{
+  "active": true,
+  "connections": {
+    "Add pic gen": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "BASE64 to Binary1",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Append file_id to array": {
+      "1": [
+        [
+          {
+            "index": 0,
+            "node": "Error Notification",
+            "type": "0"
+          }
+        ]
+      ],
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Translation Loop",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "BASE64 to Binary1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send picture for File ID1",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Base64 to Binary Translation": {
+      "1": [
+        [
+          {
+            "index": 0,
+            "node": "Error Notification",
+            "type": "0"
+          }
+        ]
+      ],
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send translated to TG",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript8": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Create a row2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Country Filter1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Prepare data for loop1",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    },
+    "Create a row2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Merge1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Create a row3": {
+      "main": [
+        [
+          {
+            "index": 1,
+            "node": "Merge1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Error Notification1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Stop on Error",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Error Notification2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Create a row3",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extract best file_id": {
+      "1": [
+        [
+          {
+            "index": 0,
+            "node": "Error Notification",
+            "type": "0"
+          }
+        ]
+      ],
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Append file_id to array",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Gemini Translate Image": {
+      "1": [
+        [
+          {
+            "index": 0,
+            "node": "Error Notification",
+            "type": "0"
+          }
+        ]
+      ],
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Base64 to Binary Translation",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get TG file for translation": {
+      "1": [
+        [
+          {
+            "index": 0,
+            "node": "Error Notification",
+            "type": "0"
+          }
+        ]
+      ],
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Upload to Supabase Storage",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If3",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get all channels1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Media Validator",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get picture1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If3",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Update a row6",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Update a row",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Get picture1",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Get a file",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Merge",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Send picture for File ID1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If5": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "make sora request",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "make sora request2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Media Validator": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Country Filter1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Запись картинки в сторедж SUPABASE",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Start loop1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Parse pic_url array": {
+      "1": [
+        [
+          {
+            "index": 0,
+            "node": "Error Notification",
+            "type": "0"
+          }
+        ]
+      ],
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Translation Loop",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Prepare data for loop1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Start loop1",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Save original & clear pic_url": {
+      "1": [
+        [
+          {
+            "index": 0,
+            "node": "Error Notification",
+            "type": "0"
+          }
+        ]
+      ],
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parse pic_url array",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Send picture for File ID1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript8",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Send translated to TG": {
+      "1": [
+        [
+          {
+            "index": 0,
+            "node": "Error Notification",
+            "type": "0"
+          }
+        ]
+      ],
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extract best file_id",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Set status wait moderation": {
+      "1": [
+        [
+          {
+            "index": 0,
+            "node": "Error Notification",
+            "type": "0"
+          }
+        ]
+      ]
+    },
+    "Start loop1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Update row in sheet2",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Text creator model1",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Start trigger": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Test Webhook POST": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Text creator model1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If2",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Translation Loop": {
+      "2": [
+        [
+          {
+            "index": 0,
+            "node": "Error Notification",
+            "type": "0"
+          }
+        ]
+      ],
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Set status wait moderation",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Get TG file for translation",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Save original & clear pic_url",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Update a row4": {
+      "main": [
+        [],
+        [
+          {
+            "index": 0,
+            "node": "Send a text message2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Update a row6": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Get all channels1",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Update row in sheet2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Update a row4",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Upload to Supabase Storage": {
+      "1": [
+        [
+          {
+            "index": 0,
+            "node": "Error Notification",
+            "type": "0"
+          }
+        ]
+      ],
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Gemini Translate Image",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "check progress": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "switch for result",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    },
+    "get picture": {
+      "main": [
+        []
+      ]
+    },
+    "make sora request": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "waiting generation",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    },
+    "make sora request2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "waiting generation",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    },
+    "switch for result": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "get picture",
+            "type": "main"
+          }
+        ],
+        [],
+        [],
+        [
+          {
+            "index": 0,
+            "node": "waiting generation",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "waiting generation": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "check progress",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Запись картинки в сторедж SUPABASE": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Add pic gen",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Error Notification2",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-10T18:51:23.948Z",
+  "id": "j0vjj8EVv1kKCtzx",
+  "isArchived": false,
+  "name": "MEMES GENERATION",
+  "nodes": [
+    {
+      "executeOnce": false,
+      "id": "3bd2d624-dbad-4ff2-9e18-ff5b5b45934d",
+      "name": "Add pic gen",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"model\": \"google/gemini-3-pro-image-preview\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Translate the whole text on this picture to {{ $('Get all channels1').item.json.language }} language except logotypes and game name {{ $('Start trigger').item.json.game_tag }} The text must fit entirely within the image. No part of the text should go outside the image boundaries. All text must be fully contained inside the image area. Nothing should extend beyond the image edges\"\n        },\n        {\n          \"type\": \"image_url\",\n          \"image_url\": {\n            \"url\": \"https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/{{ $json.Key }}\"\n          }\n        }\n      ]\n    }\n  ],\n  \"modalities\": [\n    \"image\",\n    \"text\"\n  ]\n}",
+        "method": "POST",
+        "nodeCredentialType": "openAiApi",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://openrouter.ai/api/v1/chat/completions"
+      },
+      "position": [
+        4048,
+        336
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "append-file-id-to-array",
+      "name": "Append file_id to array",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {},
+        "query": "=UPDATE xsolla_ai_posted_content_base SET pic_url = (pic_url::jsonb || to_jsonb('{{ $json.file_id_best }}'::text))::text WHERE id = '{{ $json.id }}' RETURNING id, pic_url"
+      },
+      "position": [
+        4000,
+        1056
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "f1b7c675-23cc-4295-8332-fc42a652a77c",
+      "name": "BASE64 to Binary1",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "jsCode": "// Берём JSON из предыдущего узла\nconst choices = $json.choices || [];\nif (!choices.length) return [];\n\nconst img = choices[0]?.message?.images?.[0];\nif (!img) return [];\n\nconst dataUrl = img?.image_url?.url || '';\nconst m = dataUrl.match(/^data:(.+);base64,(.*)$/);\nif (!m) return [];\n\nconst mimeType = m[1];\nconst base64 = m[2];\nconst ext = (mimeType.split('/')[1] || 'png').split(';')[0];\nconst fileName = `openrouter_${Date.now()}_1.${ext}`;\n\nreturn [{\n  json: {\n    index: 1,\n    fileName,\n    mimeType,\n    sizeBase64Chars: base64.length\n  },\n  binary: {\n    data: {\n      data: base64,\n      fileName,\n      mimeType\n    }\n  }\n}];\n"
+      },
+      "position": [
+        4384,
+        320
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "base64-to-binary-translation",
+      "name": "Base64 to Binary Translation",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "jsCode": "// Convert Gemini response to binary\nconst choices = $json.choices || [];\nif (!choices.length) return [];\n\nconst img = choices[0]?.message?.images?.[0];\nif (!img) return [];\n\nconst dataUrl = img?.image_url?.url || '';\nconst m = dataUrl.match(/^data:(.+);base64,(.*)$/);\nif (!m) return [];\n\nconst mimeType = m[1];\nconst base64 = m[2];\nconst ext = (mimeType.split('/')[1] || 'png').split(';')[0];\nconst fileName = `translated_${Date.now()}_${$('Parse pic_url array').item.json.file_index}.${ext}`;\n\nreturn [{\n  json: {\n    ...$('Parse pic_url array').item.json,\n    fileName,\n    mimeType\n  },\n  binary: {\n    data: {\n      data: base64,\n      fileName,\n      mimeType\n    }\n  }\n}];"
+      },
+      "position": [
+        3328,
+        1056
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "80932e75-4676-48dd-8cee-8ac3adeffb1a",
+      "name": "Code in JavaScript8",
+      "parameters": {
+        "jsCode": "const res = $('Send picture for File ID1').item.json;\nconst photo = res?.result?.photo;\n\nif (!Array.isArray(photo) || photo.length === 0) {\n  return [{ json: { file_id_max: null, error: 'no photo sizes' } }];\n}\n\n// На всякий: выберем по максимальному file_size, fallback — последний элемент\nconst best = photo.reduce((a, b) => ((a.file_size || 0) >= (b.file_size || 0) ? a : b), photo[photo.length - 1]);\n\nreturn [{ json: { file_id_max: best.file_id } }];\nreturn $input.all();"
+      },
+      "position": [
+        4864,
+        144
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "4c265b46-1294-4bbf-b773-2c02bd163f70",
+      "name": "Country Filter1",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "50e2d7a4-fa63-4490-b3ba-a652b63ad765",
+              "leftValue": "={{ $('Start trigger').item.json.community }}",
+              "operator": {
+                "operation": "contains",
+                "type": "string"
+              },
+              "rightValue": "={{ $json.country }}"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1920,
+        384
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "b1d8cffd-3d03-4ad6-ab37-6fe9cba3f74e",
+      "name": "Create a row2",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "game",
+              "fieldValue": "={{ $('Start trigger').item.json.game_tag }}"
+            },
+            {
+              "fieldId": "channel_id",
+              "fieldValue": "={{ $('Get all channels1').item.json.credentials }}"
+            },
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $('Send picture for File ID1').item.json.result.message_id }}"
+            },
+            {
+              "fieldId": "channel_name",
+              "fieldValue": "={{ $('Start loop1').item.json.link }}"
+            },
+            {
+              "fieldId": "post_text",
+              "fieldValue": "={{ $('Text creator model1').item.json.message.content }}"
+            },
+            {
+              "fieldId": "source_text",
+              "fieldValue": "={{ $('Prepare data for loop1').item.json.Content }}"
+            },
+            {
+              "fieldId": "pic_url",
+              "fieldValue": "={{ $json.file_id_max }}"
+            },
+            {
+              "fieldId": "country",
+              "fieldValue": "={{ $('Get all channels1').item.json.country }}"
+            },
+            {
+              "fieldId": "language",
+              "fieldValue": "={{ $('Get all channels1').item.json.language }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "wait moderation"
+            },
+            {
+              "fieldId": "news_id",
+              "fieldValue": "={{ $('Prepare data for loop1').item.json.id }}"
+            },
+            {
+              "fieldId": "pic_type",
+              "fieldValue": "={{ $('Prepare data for loop1').item.json.pic_type }}"
+            },
+            {
+              "fieldId": "channel_type",
+              "fieldValue": "={{ $('Prepare data for loop1').item.json.channel }}"
+            }
+          ]
+        },
+        "tableId": "xsolla_ai_posted_content_base"
+      },
+      "position": [
+        5088,
+        144
+      ],
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1
+    },
+    {
+      "id": "fa3a6772-4c56-4e71-af6d-7bad3bf44aa1",
+      "name": "Create a row3",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "game",
+              "fieldValue": "={{ $('Start trigger').item.json.game_tag }}"
+            },
+            {
+              "fieldId": "channel_id",
+              "fieldValue": "={{ $json.result.sender_chat.id }}"
+            },
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $json.result.message_id }}"
+            },
+            {
+              "fieldId": "channel_name",
+              "fieldValue": "={{ $('Start loop1').item.json.link }}"
+            },
+            {
+              "fieldId": "post_text",
+              "fieldValue": "={{ $('Text creator model1').item.json.message.content }}"
+            },
+            {
+              "fieldId": "source_text",
+              "fieldValue": "={{ $('Prepare data for loop1').item.json.Content }}"
+            },
+            {
+              "fieldId": "pic_url",
+              "fieldValue": "={{ $('Prepare data for loop1').item.json.pic_url }}"
+            },
+            {
+              "fieldId": "country",
+              "fieldValue": "={{ $('Get all channels1').item.json.country }}"
+            },
+            {
+              "fieldId": "language",
+              "fieldValue": "={{ $('Get all channels1').item.json.language }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "error"
+            },
+            {
+              "fieldId": "news_id",
+              "fieldValue": "={{ $('Prepare data for loop1').item.json.id }}"
+            },
+            {
+              "fieldId": "channel_type",
+              "fieldValue": "={{ $('Prepare data for loop1').item.json.channel }}"
+            }
+          ]
+        },
+        "tableId": "xsolla_ai_posted_content_base"
+      },
+      "position": [
+        5088,
+        384
+      ],
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1
+    },
+    {
+      "id": "308f06de-7c64-413b-8097-80c612037a5a",
+      "name": "Error Notification1",
+      "parameters": {
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        },
+        "chatId": "@WNMTEST",
+        "text": "=🚨 **ERROR in Translation Pipeline**\n\n**Workflow:** MEMES GENERATION\n**Node:** {{ $json.error?.node || 'Unknown' }}\n**Message:** {{ $json.error?.message || JSON.stringify($json) }}\n**Time:** {{ new Date().toISOString() }}\n**Record ID:** {{ $('Save original & clear pic_url').first().json.id || 'N/A' }}"
+      },
+      "position": [
+        4336,
+        1424
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "3b4e3411-66cd-47ac-8b19-1d4b54ccb190"
+    },
+    {
+      "id": "aaea38af-b996-4755-a58e-796d52d67f1d",
+      "name": "Error Notification2",
+      "parameters": {
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        },
+        "chatId": "@WNMTEST",
+        "text": "=🚨 **ERROR in Meme translation Pipeline**\n\n**Workflow:** MEMES GENERATION\n**Node:** {{ $json.error?.node || 'Unknown' }}\n**Message:** {{ $json.error?.message || JSON.stringify($json) }}\n**Time:** {{ new Date().toISOString() }}\n**Record ID:** {{ $('Save original & clear pic_url').first().json.id || 'N/A' }}"
+      },
+      "position": [
+        4864,
+        640
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "3b4e3411-66cd-47ac-8b19-1d4b54ccb190"
+    },
+    {
+      "id": "extract-best-file-id",
+      "name": "Extract best file_id",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "jsCode": "// Extract the best quality file_id from Telegram response\nconst res = $json;\nconst photo = res?.result?.photo;\n\nif (!Array.isArray(photo) || photo.length === 0) {\n  return [{ json: { ...($('Parse pic_url array').item.json), file_id_best: null, error: 'no photo sizes' } }];\n}\n\n// Select by maximum file_size, fallback to last element\nconst best = photo.reduce((a, b) => ((a.file_size || 0) >= (b.file_size || 0) ? a : b), photo[photo.length - 1]);\n\nreturn [{ json: { ...($('Parse pic_url array').item.json), file_id_best: best.file_id } }];"
+      },
+      "position": [
+        3776,
+        1056
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "gemini-translate-image",
+      "name": "Gemini Translate Image",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"model\": \"google/gemini-2.5-flash-image\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Translate the whole text on this picture to {{ $('Update a row').item.json.language }} language except logotypes and game name {{ $('Update a row').item.json.game }}. The text must fit entirely within the image. No part of the text should go outside the image boundaries. All text must be fully contained inside the image area. Nothing should extend beyond the image edges\"\n        },\n        {\n          \"type\": \"image_url\",\n          \"image_url\": {\n            \"url\": \"https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/{{ $json.Key }}\"\n          }\n        }\n      ]\n    }\n  ],\n  \"modalities\": [\n    \"image\",\n    \"text\"\n  ]\n}",
+        "method": "POST",
+        "nodeCredentialType": "openAiApi",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://openrouter.ai/api/v1/chat/completions"
+      },
+      "position": [
+        3104,
+        1056
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "get-tg-file-translation",
+      "name": "Get TG file for translation",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "additionalFields": {},
+        "fileId": "={{ $json.current_file_id }}",
+        "resource": "file"
+      },
+      "position": [
+        2656,
+        1056
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "00e6928a-560a-4d15-b2d4-8c58e5c1f91a"
+    },
+    {
+      "id": "0149d491-1b30-48e5-b5c7-923ae7b8db56",
+      "name": "Get a file",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "additionalFields": {},
+        "fileId": "={{ $('Start trigger').item.json.pic_url }}",
+        "resource": "file"
+      },
+      "position": [
+        3072,
+        480
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "366f9c61-92d8-45ca-b88b-fc86643bb9f2"
+    },
+    {
+      "executeOnce": true,
+      "id": "6294e2df-36cc-43c1-ad1c-e174326de73c",
+      "name": "Get all channels1",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "cachedResultName": "xsolla // tg channels // ai community control center",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cqsIMfD-bCLehTAXOnZVMZ9aSmugalNpoEfaFf7W3q8/edit?usp=<redacted>",
+          "mode": "list",
+          "value": "1cqsIMfD-bCLehTAXOnZVMZ9aSmugalNpoEfaFf7W3q8"
+        },
+        "options": {},
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ $json.game_tag }}"
+        }
+      },
+      "position": [
+        1584,
+        368
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "id": "9a66967b-e441-4055-9c42-496b40e4156d",
+      "name": "Get picture1",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "jsonHeaders": "<redacted>",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          },
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        },
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "url": "={{ $('Start trigger').item.json.pic_url }}"
+      },
+      "position": [
+        3072,
+        304
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "2e2866ed-4584-4775-bf77-d6cff5e7285b",
+      "name": "If",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "706d3fe2-48c2-40b6-826c-bf8ff4d67e5a",
+              "leftValue": "={{ $json.pic_type }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "MEME"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1200,
+        400
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3
+    },
+    {
+      "id": "965102d4-ecae-4571-8819-89e4eb7f5289",
+      "name": "If2",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c13f8465-3eb5-4bdd-b788-d7fefb07365c",
+              "leftValue": "={{ $('Start trigger').item.json.pic_url }}",
+              "operator": {
+                "operation": "startsWith",
+                "type": "string"
+              },
+              "rightValue": "http"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        2880,
+        384
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "1a4960b3-74a9-4dbb-982b-9e6d962ab860",
+      "name": "If3",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "01a8832b-0210-46fc-8fdb-07e4ee955586",
+              "leftValue": "={{ $('Start trigger').item.json.text_language }}",
+              "operator": {
+                "operation": "notEquals",
+                "type": "string"
+              },
+              "rightValue": "={{ $('Country Filter1').item.json.language }}"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        3312,
+        400
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "b00aa42d-9cc4-46ec-b1b2-f601a04bbffd",
+      "name": "If5",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "752aa648-7763-4498-b5fb-8e416977779e",
+              "leftValue": "={{ $('Start loop1').item.json.language }}",
+              "operator": {
+                "operation": "notEquals",
+                "type": "string"
+              },
+              "rightValue": "Russian"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        3456,
+        -816
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "7961dff5-27f4-4527-afd7-7feb06fd6771",
+      "name": "Media Validator",
+      "parameters": {
+        "jsCode": "// ============================================================\n// Media Validator — фильтрует каналы по совместимости с медиа.\n// (MEMES GENERATION workflow)\n//\n// Каждая платформа имеет свои ограничения на количество\n// картинок в посте и максимальную длительность видео.\n// Если контент новости не укладывается в лимиты платформы,\n// канал этой платформы исключается из списка.\n// ============================================================\n\n// Лимиты платформ:\n// maxImages — максимальное кол-во картинок в одном посте\n// maxVideoDuration — максимальная длительность видео в секундах (null = без ограничений)\nconst PLATFORM_LIMITS = {\n  'tg':        { maxImages: 10, maxVideoDuration: null },\n  'telegram':  { maxImages: 10, maxVideoDuration: null },\n  'instagram': { maxImages: 20, maxVideoDuration: 60 },    // 1 мин на слайд\n  'facebook':  { maxImages: 10, maxVideoDuration: 14400 },  // 240 мин\n  'x':         { maxImages: 4,  maxVideoDuration: null },\n  'threads':   { maxImages: 20, maxVideoDuration: 300 },    // 5 мин\n  'linkedin':  { maxImages: 10, maxVideoDuration: 600 },    // 10 мин\n  'discord':   { maxImages: 10, maxVideoDuration: null }\n};\n\n// Получаем данные новости из предыдущих нод\nlet news;\ntry { news = $('Start trigger').first().json; } catch(e) {}\nif (!news) return items; // если данных нет — пропускаем все каналы без фильтрации\n\nconst picType = news.pic_type;\n\n// Парсим pic_info — JSON с метаданными медиа (images[], duration, width, height)\nlet picInfo = {};\ntry { picInfo = JSON.parse(news.pic_info || '{}'); } catch(e) {}\n\n// Определяем количество картинок в новости\nlet imageCount = 1;\nif (picType === 'group_of_photo') {\n  // Для группы фото — считаем из pic_info.images или из pic_url (массив file_id)\n  if (Array.isArray(picInfo.images)) {\n    imageCount = picInfo.images.length;\n  } else if (news.pic_url) {\n    try {\n      const urls = JSON.parse(news.pic_url);\n      if (Array.isArray(urls)) imageCount = urls.length;\n    } catch (e) {}\n  }\n}\n\n// Длительность видео в секундах (приходит в pic_info.duration)\nconst videoDuration = picInfo.duration || null;\nconst isVideo = ['video', 'video_url', 'video_file_id'].includes(picType);\n\n// Фильтруем каналы: оставляем только те, где контент укладывается в лимиты\nreturn items.filter(item => {\n  const channelType = (item.json.channel_type || '').toLowerCase();\n  const limits = PLATFORM_LIMITS[channelType];\n\n  // Неизвестная платформа — пропускаем без фильтрации\n  if (!limits) return true;\n\n  // Проверка лимита картинок\n  if (limits.maxImages && imageCount > limits.maxImages) return false;\n\n  // Проверка длительности видео\n  if (isVideo && limits.maxVideoDuration && videoDuration > limits.maxVideoDuration) return false;\n\n  return true;\n});"
+      },
+      "position": [
+        1760,
+        320
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "0211be5e-db56-4e0d-bd3b-4a0eabe4ada1",
+      "name": "Merge",
+      "parameters": {},
+      "position": [
+        3552,
+        336
+      ],
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "b721ea55-54d7-46d2-aa9e-2eb2af071ab8",
+      "name": "Merge1",
+      "parameters": {},
+      "position": [
+        5328,
+        304
+      ],
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "parse-pic-url-array",
+      "name": "Parse pic_url array",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "jsCode": "// Parse pic_url JSON array and create items for each file_id\nconst picUrl = $('Update a row').first().json.pic_url;\nlet fileIds = [];\n\ntry {\n  fileIds = JSON.parse(picUrl);\n} catch (e) {\n  // If not valid JSON, treat as single item\n  fileIds = [picUrl];\n}\n\nif (!Array.isArray(fileIds)) {\n  fileIds = [fileIds];\n}\n\n// Return items with original data plus individual file_id\nreturn fileIds.map((fileId, index) => ({\n  json: {\n    ...$json,\n    current_file_id: fileId,\n    file_index: index,\n    total_files: fileIds.length\n  }\n}));"
+      },
+      "position": [
+        2160,
+        976
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "03a526de-3caf-433f-b5cd-f64558584c23",
+      "name": "Prepare data for loop1",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa212b43-de59-4dcc-8ba7-7a8ea36bd53a",
+              "name": "Content",
+              "type": "string",
+              "value": "={{ $('Start trigger').item.json.Content }}"
+            },
+            {
+              "id": "63906319-8302-46af-8a2e-da547e4461ec",
+              "name": "id",
+              "type": "number",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "id": "8c1188d1-f0ea-4d24-9a2a-08d8482ca0f7",
+              "name": "pic_url",
+              "type": "string",
+              "value": "={{ $('Start trigger').item.json.pic_url }}"
+            },
+            {
+              "id": "38e68cee-2b9d-4724-b519-401306f94588",
+              "name": "id",
+              "type": "number",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "id": "26f9cfc0-a4ef-437d-8ac6-54a7ce407b61",
+              "name": "generic prompt",
+              "type": "string",
+              "value": "={{ $json['generic prompt'] }}"
+            },
+            {
+              "id": "cf4759df-477e-4bd5-a559-2ef194c2a943",
+              "name": "tov",
+              "type": "string",
+              "value": "={{ $json.tov }}"
+            },
+            {
+              "id": "87a32164-12d4-4763-a192-8edbcfe3706b",
+              "name": "additional_requirements",
+              "type": "string",
+              "value": "={{ $json.additional_requirements }}"
+            },
+            {
+              "id": "fe0ff055-86b0-4e0a-8e8a-c99e4af522ba",
+              "name": "content_requierements",
+              "type": "string",
+              "value": "={{ $json.content_requierements }}"
+            },
+            {
+              "id": "f8764dac-8650-4354-8ec5-c5e22e367da5",
+              "name": "credentials",
+              "type": "string",
+              "value": "={{ $json.credentials }}"
+            },
+            {
+              "id": "0fc22d39-8738-4434-8151-4f7b275b3091",
+              "name": "id",
+              "type": "string",
+              "value": "={{ $('Start trigger').item.json.id }}"
+            },
+            {
+              "id": "3e4b65a4-4327-4c4a-80a8-94dd35df2a31",
+              "name": "pic_url",
+              "type": "string",
+              "value": "={{ $('Start trigger').item.json.pic_url }}"
+            },
+            {
+              "id": "42f414a8-e681-4f9a-b78b-a105582c97c8",
+              "name": "text_on_picture",
+              "type": "string",
+              "value": "={{ $('Start trigger').item.json.text_on_picture }}"
+            },
+            {
+              "id": "e38f9689-496e-4a0f-87c7-b4ceda208dec",
+              "name": "pic_type",
+              "type": "string",
+              "value": "={{ $('Start trigger').item.json.pic_type }}"
+            },
+            {
+              "id": "442a0827-3348-40d4-b02e-a465919ed5a9",
+              "name": "channel",
+              "type": "string",
+              "value": "={{ $('Get all channels1').item.json.channel }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {
+          "stripBinary": true
+        }
+      },
+      "position": [
+        2160,
+        368
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "save-original-clear-array",
+      "name": "Save original & clear pic_url",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {},
+        "query": "=UPDATE xsolla_ai_posted_content_base SET ai_moderator_decision = pic_url, pic_url = '[]' WHERE id = '{{ $json.id }}' RETURNING id"
+      },
+      "position": [
+        1920,
+        976
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "6354f25f-89e9-4b25-9f1b-b2ee6e50dc65",
+      "name": "Send a text message2",
+      "parameters": {
+        "additionalFields": {
+          "parse_mode": "HTML"
+        },
+        "chatId": "@wnmtest",
+        "text": "=Ошибка обновления posted в базе provider:\n\nИнфо: \nID: {{ $('Start trigger').item.json.id }}\nGAME: {{ $('Start trigger').item.json.game_tag }}\nCOMMUNITY: {{ $('Start trigger').item.json.community }}"
+      },
+      "position": [
+        2928,
+        160
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "a0f46b30-72b4-4890-91c5-750ae4c71249"
+    },
+    {
+      "id": "460dedfc-9851-4aeb-ad4f-dac7269e3c62",
+      "name": "Send picture for File ID1",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "additionalFields": {},
+        "binaryData": true,
+        "chatId": "@WNMTEST",
+        "operation": "sendPhoto"
+      },
+      "position": [
+        4672,
+        304
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "1f31fa22-0d0e-4ae2-9536-3302bad64779"
+    },
+    {
+      "id": "send-translated-to-tg",
+      "name": "Send translated to TG",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "additionalFields": {},
+        "binaryData": true,
+        "chatId": "@WNMTEST",
+        "operation": "sendPhoto"
+      },
+      "position": [
+        3552,
+        1056
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "03b01ed2-ad25-4e70-b463-0b245d4780d0"
+    },
+    {
+      "executeOnce": true,
+      "id": "set-status-wait-moderation",
+      "name": "Set status wait moderation",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {},
+        "query": "=UPDATE xsolla_ai_posted_content_base SET status = 'wait moderation' WHERE id = '{{ $('Parse pic_url array').first().json.id }}' RETURNING id, status"
+      },
+      "position": [
+        2752,
+        832
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "e6a61c62-60e3-4797-8c98-f5be79736188",
+      "name": "Start loop1",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "position": [
+        2368,
+        368
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3
+    },
+    {
+      "id": "9710c471-6f01-41bc-a315-9ad7034c781d",
+      "name": "Start trigger",
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "position": [
+        960,
+        400
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "sticky-translation-branch",
+      "name": "Sticky Note Translation Branch",
+      "parameters": {
+        "content": "## Ветка перевода картинок (pic_type != MEME)\n\n**Поток:**\n1. `Update a row` — ставит status = \"translation\"\n2. `Save original & clear pic_url` — сохраняет оригинальные file_id в ai_moderator_decision, очищает pic_url\n3. `Parse pic_url array` — парсит JSON массив, создаёт items для каждой картинки\n4. `Translation Loop` — итерация по картинкам (batch=1)\n\n**В каждой итерации:**\n- Получение файла из Telegram по file_id\n- Загрузка в Supabase Storage\n- Перевод через Gemini 3 Pro Image (OpenRouter)\n- Конвертация Base64 → Binary\n- Отправка в Telegram @WNMTEST\n- Извлечение лучшего file_id\n- Добавление в pic_url через PostgreSQL jsonb append\n\n**После завершения loop:**\n- Статус меняется на \"wait moderation\"",
+        "height": 754,
+        "width": 3168
+      },
+      "position": [
+        1360,
+        784
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "9e420efc-1021-43ff-8f82-ef718a9535cb",
+      "name": "Sticky Note3",
+      "parameters": {
+        "content": "## Prepare data for translating memes and content with text on picture\n1. Делаем новость в провайдеры in_progress, чтобы она не зашла дважды в генерацию\n2. Получаем каналы для постинга\n3. Фильтруем по странам для публикации\n4. Готовим все данные для запуска лупа\n",
+        "height": 944,
+        "width": 912
+      },
+      "position": [
+        1360,
+        -160
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "f7be2f52-c9a0-4135-ae40-be08bb257be2",
+      "name": "Sticky Note4",
+      "parameters": {
+        "content": "## Loop with translation text on pictures and creating posts \n1. Начинаем луп, в каждом батче 1 айтем\n2. Генерируем текст поста в чат гпт\n3. Проверяем в каком статусе у нас картинка URL или FILE ID\n4. Получаем картинку либо http запросом, либо get file методом ТГ\n5. Проверяем на каком языке мем, если он на том же языке, что и канал, отправляем на публикацию\n6. Если язык отличается то проверяем нужен ли перевод на русский или другой язык\n7. Если язык русский, то используем уже переведенный текст из базы с контентом, если язык другой, то просто просим сору перевести текст на картинке\n8. Создаем запрос в соре\n9. Проверяем статус, при успехе скачиваем картинку\n10. Создаем FILE ID загружая её в ТГ\n11. Создаем пост в базе супабейз\n",
+        "height": 944,
+        "width": 3296
+      },
+      "position": [
+        2288,
+        -176
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "stop-on-error",
+      "name": "Stop on Error",
+      "parameters": {
+        "errorMessage": "=Translation pipeline failed: {{ $json.error?.message || 'Unknown error' }}"
+      },
+      "position": [
+        4528,
+        1424
+      ],
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1
+    },
+    {
+      "id": "test-webhook-post",
+      "name": "Test Webhook POST",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "memes-generation-test"
+      },
+      "position": [
+        944,
+        768
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "webhookId": "65aaa894-78d5-4dae-a659-0ed5e668983e"
+    },
+    {
+      "id": "2554eb20-28a4-4d7f-8790-81fd7d451e94",
+      "name": "Text creator model1",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json['generic prompt'] }}",
+              "role": "system"
+            },
+            {
+              "content": "={{ $json.tov }}",
+              "role": "assistant"
+            },
+            {
+              "content": "={{ $json.additional_requirements }}{{ $json.content_requierements }} {{ $json.possible_cta }}{{ $json.floating }}"
+            },
+            {
+              "content": "=Text is:  {{ $json.Content }}"
+            }
+          ]
+        },
+        "modelId": {
+          "__rl": true,
+          "cachedResultName": "CHATGPT-4O-LATEST",
+          "mode": "list",
+          "value": "chatgpt-4o-latest"
+        },
+        "options": {}
+      },
+      "position": [
+        2560,
+        384
+      ],
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8
+    },
+    {
+      "id": "translation-loop",
+      "name": "Translation Loop",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "position": [
+        2432,
+        944
+      ],
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3
+    },
+    {
+      "id": "d862421d-d451-4f40-af77-1a1a88e18ec7",
+      "name": "Update a row",
+      "parameters": {
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "translation"
+            }
+          ]
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "operation": "update",
+        "tableId": "xsolla_ai_posted_content_base"
+      },
+      "position": [
+        1696,
+        976
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1
+    },
+    {
+      "id": "915f65f3-7186-4526-8021-613ed4671b47",
+      "name": "Update a row4",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "posted"
+            }
+          ]
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "id",
+              "keyValue": "={{ $('Start trigger').item.json.id }}"
+            }
+          ]
+        },
+        "matchType": "allFilters",
+        "operation": "update",
+        "tableId": "xsolla_ai_content_provider"
+      },
+      "position": [
+        2720,
+        144
+      ],
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1
+    },
+    {
+      "id": "36e1444f-0a09-4abf-82c3-690a54d48a31",
+      "name": "Update a row6",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "in_progress"
+            }
+          ]
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "matchType": "allFilters",
+        "operation": "update",
+        "tableId": "xsolla_ai_content_provider"
+      },
+      "position": [
+        1408,
+        400
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1
+    },
+    {
+      "alwaysOutputData": true,
+      "id": "9746bee7-b9b3-4484-a7a6-8250222886b4",
+      "name": "Update row in sheet2",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "columns": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": true,
+              "display": true,
+              "displayName": "id",
+              "id": "id",
+              "removed": false,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "link",
+              "id": "link",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "channel",
+              "id": "channel",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "generic prompt",
+              "id": "generic prompt",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "tov",
+              "id": "tov",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "additional_requirements",
+              "id": "additional_requirements",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "content_requierements",
+              "id": "content_requierements",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "language",
+              "id": "language",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "region",
+              "id": "region",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "country",
+              "id": "country",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "possible_cta",
+              "id": "possible_cta",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "floating",
+              "id": "floating",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "additional_fields",
+              "id": "additional_fields",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "credentials",
+              "id": "credentials",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "additional_field",
+              "id": "additional_field",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "posted_ids",
+              "id": "posted_ids",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "row_number",
+              "id": "row_number",
+              "readOnly": true,
+              "removed": true,
+              "required": false,
+              "type": "number"
+            }
+          ],
+          "value": {
+            "id": "={{ $('Get all channels1').item.json.row_number }}",
+            "posted_ids": "={{ $('Start trigger').item.json.published_at }}"
+          }
+        },
+        "documentId": {
+          "__rl": true,
+          "cachedResultName": "xsolla // tg channels // ai community control center",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cqsIMfD-bCLehTAXOnZVMZ9aSmugalNpoEfaFf7W3q8/edit?usp=<redacted>",
+          "mode": "list",
+          "value": "1cqsIMfD-bCLehTAXOnZVMZ9aSmugalNpoEfaFf7W3q8"
+        },
+        "operation": "update",
+        "options": {},
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ $('Start trigger').item.json.game_tag }}"
+        }
+      },
+      "position": [
+        2560,
+        144
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "id": "upload-to-supabase-translation",
+      "name": "Upload to Supabase Storage",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "contentType": "binaryData",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            },
+            {
+              "name": "x-upsert",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "inputDataFieldName": "data",
+        "method": "POST",
+        "nodeCredentialType": "supabaseApi",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "url": "=https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/memes_for_banana/translation_{{ $json.result.file_id }}"
+      },
+      "position": [
+        2880,
+        1056
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "18d6bea9-998f-47a6-928a-68135b3d98dc",
+      "name": "check progress",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        },
+        "url": "=http://private.lab.koka.team:6789/requests/{{ $json.data.request_id }}"
+      },
+      "position": [
+        4320,
+        -816
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "56edeebc-5a37-4a34-9df1-67cade178851",
+      "name": "get picture",
+      "parameters": {
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        },
+        "url": "={{ $json.data.image_url }}"
+      },
+      "position": [
+        4736,
+        -880
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "1f71f480-5978-4fc2-9da5-b8ee3bc12827",
+      "name": "make sora request",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "=Translate the whole text on this picture to {{ $('Get all channels1').item.json.language }} language except logotypes and game name {{ $('Start trigger').item.json.game_tag }} The text must fit entirely within the image. No part of the text should go outside the image boundaries. All text must be fully contained inside the image area. Nothing should extend beyond the image edges"
+            },
+            {
+              "name": "aspect_ratio",
+              "value": "={{ $('Start trigger').item.json.ratio }}"
+            },
+            {
+              "inputDataFieldName": "data",
+              "name": "images",
+              "parameterType": "formBinaryData"
+            }
+          ]
+        },
+        "contentType": "multipart-form-data",
+        "genericAuthType": "httpBearerAuth",
+        "method": "POST",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        },
+        "sendBody": true,
+        "url": "http://private.lab.koka.team:6789/requests"
+      },
+      "position": [
+        3712,
+        -912
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "114a04db-e433-4537-879a-df9801212488",
+      "name": "make sora request2",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "=Change the text on this picture to this: {{ $('Start trigger').item.json.text_on_russian }} The text must fit entirely within the image. No part of the text should go outside the image boundaries. All text must be fully contained inside the image area. Nothing should extend beyond the image edges"
+            },
+            {
+              "name": "aspect_ratio",
+              "value": "={{ $('Start trigger').item.json.ratio }}"
+            },
+            {
+              "inputDataFieldName": "data",
+              "name": "images",
+              "parameterType": "formBinaryData"
+            }
+          ]
+        },
+        "contentType": "multipart-form-data",
+        "genericAuthType": "httpBearerAuth",
+        "method": "POST",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        },
+        "sendBody": true,
+        "url": "http://private.lab.koka.team:6789/requests"
+      },
+      "position": [
+        3696,
+        -704
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "a8c85f1b-410e-4581-ab21-4cb9891c647d",
+      "name": "switch for result",
+      "parameters": {
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "19b79d71-4b1b-4d98-bfd7-1e4aed1077da",
+                    "leftValue": "={{ $json.data.status }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "succeeded"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "succeeded",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "11af2e54-fb8d-47c5-8111-e6627bb9264f",
+                    "leftValue": "={{ $json.data.status }}",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "cancelled"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "cancelled",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "62c973a4-0984-4cee-a5b0-c8e1e4c09081",
+                    "leftValue": "={{ $json.data.status }}",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "failed"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "failed",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "d71627be-c39f-438f-8bac-e0eb5377d8a4",
+                    "leftValue": "={{ $json.data.status }}",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "pending"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "pending",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        4512,
+        -864
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "d0583b1c-0294-4e45-8667-dd3cbc664837",
+      "name": "waiting generation",
+      "parameters": {
+        "amount": 30
+      },
+      "position": [
+        4176,
+        -816
+      ],
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "webhookId": "c280d989-480d-4e18-bfcd-2fe3f0f53aef"
+    },
+    {
+      "executeOnce": true,
+      "id": "be185c90-45df-4841-9a2e-5795d8bac984",
+      "name": "Запись картинки в сторедж SUPABASE",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "contentType": "binaryData",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            },
+            {
+              "name": "x-upsert",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "inputDataFieldName": "data",
+        "method": "POST",
+        "nodeCredentialType": "supabaseApi",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "url": "=https://txckerrkubbvmzlionjf.supabase.co/storage/v1/object/memes_for_banana/{{ $json.result.file_unique_id }}"
+      },
+      "position": [
+        3792,
+        336
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-05-04T10:41:58.388Z",
+  "versionId": "b28d339e-f78e-489a-83d1-c73ccafd4466"
+}

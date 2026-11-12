@@ -1,0 +1,434 @@
+{
+  "active": true,
+  "connections": {
+    "Call 'XSOLLA CONTENT PROVIDER | FOR UPDATES 3'": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Get news",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Call 'XSOLLA CONTENT PUBLISHER": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Execute a SQL query",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get news": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Call 'XSOLLA CONTENT PROVIDER | FOR UPDATES 3'",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Get news",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Call 'XSOLLA CONTENT PUBLISHER",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Execute a SQL query",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Call 'XSOLLA POSTING PIPELINE",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Select Top 1 Inbox Item",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Select Top 1 Inbox Item": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-25T12:08:10.146Z",
+  "id": "hLCspmwIoGGalkGGDIIp1",
+  "isArchived": false,
+  "name": "XSOLLA PIPELINE ORCHESTRATOR",
+  "nodes": [
+    {
+      "id": "73a63cc2-8b0a-4358-8902-d8c0f92c7c3a",
+      "name": "Call 'XSOLLA CONTENT PROVIDER | FOR UPDATES 3'",
+      "parameters": {
+        "options": {
+          "waitForSubWorkflow": false
+        },
+        "workflowId": {
+          "__rl": true,
+          "cachedResultUrl": "/workflow/ALobcKHwRGXxTkzG",
+          "mode": "id",
+          "value": "ALobcKHwRGXxTkzG"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [],
+          "value": {}
+        }
+      },
+      "position": [
+        400,
+        -192
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3
+    },
+    {
+      "id": "12e00c3a-84ff-4510-99f8-c87953395cb0",
+      "name": "Call 'XSOLLA CONTENT PUBLISHER",
+      "parameters": {
+        "options": {
+          "waitForSubWorkflow": false
+        },
+        "workflowId": {
+          "__rl": true,
+          "cachedResultUrl": "/workflow/2SSIbhVPbKONRjcN",
+          "mode": "id",
+          "value": "2SSIbhVPbKONRjcN"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [],
+          "value": {}
+        }
+      },
+      "position": [
+        1152,
+        -192
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3
+    },
+    {
+      "id": "ace1ed55-79b2-4d6f-9ccc-7807c9aa311a",
+      "name": "Call 'XSOLLA POSTING PIPELINE",
+      "parameters": {
+        "options": {
+          "waitForSubWorkflow": false
+        },
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "XSOLLA // AI content posting pipeline",
+          "cachedResultUrl": "/workflow/iJNExgMktpMdK8bk",
+          "mode": "list",
+          "value": "iJNExgMktpMdK8bk"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [],
+          "value": {}
+        }
+      },
+      "position": [
+        1952,
+        -176
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3
+    },
+    {
+      "id": "8290654d-86a9-4cbd-bce3-99328496bb1b",
+      "name": "Execute a SQL query",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {},
+        "query": "SELECT EXISTS (\n  -- overtime wait\n  SELECT 1 FROM public.xsolla_ai_posted_content_base\n  WHERE status = 'wait moderation'\n    AND COALESCE(status_updated_at, created_at) <= NOW() - INTERVAL '48 hours'\n  \n  UNION ALL\n  \n  -- overtime approved  \n  SELECT 1 FROM public.xsolla_ai_posted_content_base\n  WHERE status = 'approved'\n    AND COALESCE(status_updated_at, created_at) <= NOW() - INTERVAL '48 hours'\n  \n  UNION ALL\n  \n  -- ready to post\n  SELECT 1 \n  FROM public.xsolla_ai_posted_content_base p\n  LEFT JOIN (\n    SELECT channel_id, MAX(status_updated_at) AS last_posted_at\n    FROM public.xsolla_ai_posted_content_base\n    WHERE status = 'posted'\n    GROUP BY channel_id\n  ) lp USING (channel_id)\n  JOIN public.post_schedule s ON lower(p.country) = lower(s.country)\n  WHERE p.status = 'approved'\n    AND p.channel_id IS NOT NULL\n    AND NOT EXISTS (\n      SELECT 1 FROM public.xsolla_ai_posted_content_base \n      WHERE status = 'posting' AND channel_id = p.channel_id\n    )\n    AND (lp.last_posted_at IS NULL OR lp.last_posted_at <= NOW() - INTERVAL '60 minutes')\n    AND EXTRACT(ISODOW FROM (NOW() AT TIME ZONE s.tz))::int = ANY(s.weekdays)\n    AND (\n      (s.start_local <= s.end_local \n       AND (NOW() AT TIME ZONE s.tz)::time >= s.start_local\n       AND (NOW() AT TIME ZONE s.tz)::time < s.end_local)\n      OR\n      (s.start_local > s.end_local \n       AND ((NOW() AT TIME ZONE s.tz)::time >= s.start_local\n            OR (NOW() AT TIME ZONE s.tz)::time < s.end_local))\n    )\n) AS has_work;"
+      },
+      "position": [
+        1440,
+        -32
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "alwaysOutputData": true,
+      "id": "5537bafc-f36e-44da-bc28-4ac5cb313877",
+      "name": "Get news",
+      "parameters": {
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "status",
+              "keyValue": "new"
+            }
+          ]
+        },
+        "limit": 1,
+        "matchType": "allFilters",
+        "operation": "getAll",
+        "tableId": "xsolla_ai_content_provider"
+      },
+      "position": [
+        704,
+        -48
+      ],
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1
+    },
+    {
+      "id": "770cf0ff-ef7d-4344-bebb-ead86ac939e3",
+      "name": "If",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "48d4f213-e150-4077-9182-c693df81c6cf",
+              "leftValue": "={{ $json.status }}",
+              "operator": {
+                "operation": "notEmpty",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        144,
+        -64
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3
+    },
+    {
+      "id": "01934923-37c2-462a-99b0-c48c428ee8eb",
+      "name": "If1",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "48d4f213-e150-4077-9182-c693df81c6cf",
+              "leftValue": "={{ $json.id }}",
+              "operator": {
+                "operation": "exists",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        880,
+        -48
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3
+    },
+    {
+      "id": "48318c66-b002-45ec-9463-9fe0d15848ac",
+      "name": "If2",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c46fe17d-b4e6-4889-b073-47f7c68453f5",
+              "leftValue": "={{ $json.has_work }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1648,
+        -32
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3
+    },
+    {
+      "id": "401391ea-278a-4a5d-925c-00d75a69c138",
+      "name": "Schedule Trigger",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "position": [
+        -304,
+        -64
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3
+    },
+    {
+      "alwaysOutputData": true,
+      "id": "11e91123-bc30-46b4-8f36-66447d0ecd48",
+      "name": "Select Top 1 Inbox Item",
+      "parameters": {
+        "combineConditions": "OR",
+        "limit": 1,
+        "operation": "select",
+        "options": {
+          "outputColumns": [
+            "status",
+            "id"
+          ]
+        },
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "sort": {
+          "values": [
+            {
+              "column": "created_at"
+            }
+          ]
+        },
+        "table": {
+          "__rl": true,
+          "cachedResultName": "xsolla_ai_content_inbox",
+          "mode": "list",
+          "value": "xsolla_ai_content_inbox"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "status",
+              "condition": "LIKE",
+              "value": "RETRY_%"
+            },
+            {
+              "column": "status",
+              "value": "PENDING"
+            }
+          ]
+        }
+      },
+      "position": [
+        -16,
+        -64
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-09-15T13:07:15.905Z",
+  "versionId": "dba2e3b2-0990-4a6a-91d6-52d620424424"
+}

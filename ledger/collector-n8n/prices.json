@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "currency": "USD",
+  "drafted": "2026-11-12",
+  "scope": "Non-model calls of the n8n content pipeline only. OpenRouter model calls are not priced here: their cost is reported by OpenRouter, or estimated from the model price when the node drops usage (see INVENTORY.md section 1).",
+  "rule": "unit_price_usd null means the price is unknown: the collector writes cost_usd NULL and counts the call in unpriced_calls. Never 0 unless the call is known to be free.",
+  "prices": {
+    "brightdata.web_scraper_api": {
+      "provider": "brightdata",
+      "nodes": {
+        "BrightData Scrape": "dataset gd_lyclm1571iy3mv57zw, facebook.com URLs, sync /datasets/v3/scrape",
+        "BrightData Reddit Scrape": "dataset gd_lvz8ah06191smkebj4, reddit.com URLs, async /datasets/v3/trigger"
+      },
+      "unit": "records",
+      "unit_price_usd": 0.0015,
+      "basis": "Pay-as-you-go list price, $1.50 per 1,000 records, billed for successful records only.",
+      "count_units_from": "Number of records delivered: the scrape response itself when it returns records, otherwise BrightData Scrape2 / Get BrightData Reddit Snapshot(/Retry). Progress and snapshot polls are not billed separately.",
+      "source": "brightdata.com/pricing/web-scraper-api as quoted by search results, and dupple.com/pricing/bright-data (dated October 2026). brightdata.com itself is blocked by the Xsolla VPN, so the official page was not opened.",
+      "checked": "2026-11-12",
+      "verified": false,
+      "open_question": "Which BrightData plan is the account on? On the $499/month Scale plan the rate is $1.30 per 1,000 after 384,000 included records, and dataset-specific rates can differ."
+    },
+    "brightdata.web_unlocker": {
+      "provider": "brightdata",
+      "nodes": {
+        "HTTP Request2": "zone web_unlocker1, POST api.brightdata.com/request, sites other than Reddit/Facebook/Telegram/VK"
+      },
+      "unit": "requests",
+      "unit_price_usd": 0.0015,
+      "basis": "Pay-as-you-go list price, $1.50 per 1,000 successful requests; failed requests are not charged.",
+      "count_units_from": "1 per execution of HTTP Request2 whose response is a page, 0 when it errored (node has continueRegularOutput, so check the output for an error).",
+      "source": "brightdata.com/pricing/web-unlocker as quoted by search results. Official page blocked by the Xsolla VPN.",
+      "checked": "2026-11-12",
+      "verified": false,
+      "open_question": "Same as above: plan and actual rate for zone web_unlocker1."
+    },
+    "ffmpeg_service.ffmpeg_api_com": {
+      "provider": "ffmpeg_service",
+      "nodes": {
+        "Merge content": "POST /ffmpeg/process (Reddit DASH video + audio merge)",
+        "Compress Video": "POST /ffmpeg/process (only when Needs Compression? is true)",
+        "Probe Video": "POST /ffprobe/analyze",
+        "Create directory": "POST /directory",
+        "Video upload link": "POST /file",
+        "Audio upload link": "POST /file"
+      },
+      "unit": "gb_seconds",
+      "unit_price_usd": null,
+      "basis": "Monthly subscription metered in GB-seconds = (input GB + output GB) x processing seconds; only successful operations that produce output count. Published plans: Starter $11/month for 500 GB-s, Pro $39/month for 2,000 GB-s, Growth $99/month for 5,000 GB-s. No per-call or overage price is published.",
+      "count_units_from": "Unknown. The docs do not say whether the API response reports GB-seconds per call, or whether /directory, /file and /ffprobe/analyze use quota.",
+      "source": "https://ffmpeg-api.com/pricing and https://ffmpeg-api.com/docs/gb-sec",
+      "checked": "2026-11-12",
+      "verified": true,
+      "open_question": "Which plan is the account on? Should the ledger spread the monthly fee over GB-seconds (about $0.02 per GB-s on any plan), or record these calls as unpriced? Does a response carry the GB-seconds used?"
+    },
+    "koka.telegram_parser": {
+      "provider": "koka",
+      "nodes": {
+        "TG parser": "GET telegram-parser.koka.team/summary, t.me URLs"
+      },
+      "unit": "calls",
+      "unit_price_usd": null,
+      "basis": "Unknown. Looks like a partner or internal service.",
+      "source": null,
+      "checked": "2026-11-12",
+      "verified": false,
+      "open_question": "Does telegram-parser.koka.team charge per call, a flat fee, or nothing? If nothing, set unit_price_usd to 0."
+    }
+  }
+}

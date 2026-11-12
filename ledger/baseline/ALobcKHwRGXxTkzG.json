@@ -1,0 +1,5260 @@
+{
+  "active": true,
+  "connections": {
+    "Aggregate Media Metadata": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Is Production Mode",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Analyze Image": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parse Analysis Response",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Continue Analysis1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Analyze image": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Audio upload link": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parse mpd data",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "BrightData Reddit Scrape": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Is BrightData Reddit Snapshot?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "BrightData Scrape": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "BrightData Scrape1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "BrightData Scrape2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "If1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Clean the text1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Get pic URL1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Clean the text2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "TG parser",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Clean_the_article": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Switch2",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Retry Inbox Item",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Switch4",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Switch",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Get Titles Whitelist",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send a photo message",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Prepare Meme Picture Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript7": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Start loop",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript8": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Prepare Gallery Analysis1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Collapse Titles Whitelist": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Clean_the_article",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Compress Video": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Download Compressed",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Continue Analysis1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Gallery Analysis Loop1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Create directory": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Video upload link",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Discard Reddit Fallback": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mark Reddit Fallback as Invalid",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Do Nothing, Test Execution": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mark Inbox Item as Processed",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Download Compressed": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send TG Video",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Download GIF": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send Animation",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Download Image": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Analyze Image",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Continue Analysis1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Download Original": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send TG Video",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Download audio": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Upload audio",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Download result": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send a video1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Download video": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Upload video",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Early Exit: MEME/Invalid": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Merge Analysis Results1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Evaluate Video": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Needs Compression?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Every 30 seconds": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Select Top 1 Inbox Item",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extract Inbox Item ID": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extract RSS data",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extract RSS data": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Switch3",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extract game tag": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Is Whitelisted Game Tag",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Find the most similar Post": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Found a very similar Post",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "For Each New Item": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Save Pending Item in Inbox",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Found a very similar Post": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Duplicated Post",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Get_community",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Gallery Analysis Loop1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Loop Done: All URL",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Download Image",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Generate Embedding": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Find the most similar Post",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get BrightData Reddit Snapshot": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Is BrightData Snapshot Still Running?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get BrightData Reddit Snapshot Retry": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Reddit Fallback: Image Only",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get Titles Whitelist": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Collapse Titles Whitelist",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get a post1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript3",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "BrightData Reddit Scrape",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get pic URL1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript3",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get picture": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Analyze image",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Prepare No-Picture Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get picture2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send a photo message1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get resolution": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send a video2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get resolution1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send a video",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get_community": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Getting urls": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Create directory",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Clean the text1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "IF: MEME or Invalid?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Early Exit: MEME/Invalid",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Continue Analysis1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Wait",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript3",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript3",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "ChatGPT Error1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "BrightData Scrape2",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Wait",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Is BrightData Reddit Snapshot?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Wait BrightData Reddit Snapshot",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Reddit Fallback: Image Only",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Is BrightData Snapshot Still Running?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Wait BrightData Reddit Snapshot Retry",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Reddit Fallback: Image Only",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Is Production Mode": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Save the Post",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Do Nothing, Test Execution",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Is Reddit Fallback Image?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript3",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Discard Reddit Fallback",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Is Whitelisted Game Tag": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Generate Embedding",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Forbidden Game Tag",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Loop Done: All URL": {
+      "main": [
+        [
+          {
+            "index": 1,
+            "node": "Merge Analysis Results1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "MPD data urls": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Download audio",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Download video",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Mark Inbox Item as Taken": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extract Inbox Item ID",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Start loop",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Merge Analysis Results1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Prepare Group Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Merge content": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Download result",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Needs Compression?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Compress Video",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Download Original",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Parse Analysis Response": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "IF: MEME or Invalid?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Parse mpd data": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "MPD data urls",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Prepare Animation Metadata": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Aggregate Media Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Prepare Gallery Analysis1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Gallery Analysis Loop1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Prepare Group Metadata": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Aggregate Media Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Prepare Meme Picture Metadata": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Aggregate Media Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Prepare No-Picture Metadata": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Aggregate Media Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Prepare Reddit Video Metadata": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Aggregate Media Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Prepare Regular Picture Metadata": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Aggregate Media Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Prepare TG Video Metadata": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Aggregate Media Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Probe Video": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Evaluate Video",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Reddit Fallback: Image Only": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Is Reddit Fallback Image?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Retry Inbox Item": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "ChatGPT Error",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Save the Post": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Total_posts_counter",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Select Top 1 Inbox Item": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mark Inbox Item as Taken",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Send Animation": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Prepare Animation Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Send TG Video": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Prepare TG Video Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Send a photo message": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript5",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Send a photo message1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Merge",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Send a video1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Prepare Reddit Video Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Start loop": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript8",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Get picture2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript4",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Prepare Regular Picture Metadata",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Disturbing Post",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Commercial Post",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Extract game tag",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Switch3": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "get ID1",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Clean the text2",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "BrightData Scrape",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Clean the text1",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Switch4": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Get picture",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Switch5",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript7",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Download GIF",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Switch5": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Getting urls",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Probe Video",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "TG parser": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript3",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Total_posts_counter": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mark Inbox Item as Processed",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Unite lines": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Merge content",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Upload audio": {
+      "main": [
+        [
+          {
+            "index": 1,
+            "node": "Unite lines",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Upload video": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Unite lines",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Video upload link": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Audio upload link",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "BrightData Scrape1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Wait BrightData Reddit Snapshot": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Get BrightData Reddit Snapshot",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Wait BrightData Reddit Snapshot Retry": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Get BrightData Reddit Snapshot Retry",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "For Each New Item",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mark Inbox Item as Taken",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "get ID1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "BrightData Reddit Scrape",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "koka video download": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Get resolution",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "koka video download1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Get resolution1",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-13T10:30:36.773Z",
+  "id": "ALobcKHwRGXxTkzG",
+  "isArchived": false,
+  "name": "XSOLLA CONTENT PROVIDER | FOR UPDATES 3",
+  "nodes": [
+    {
+      "id": "df3d425e-3fd3-4ecd-a67b-1e46f168137a",
+      "name": "Aggregate Media Metadata",
+      "parameters": {
+        "jsonOutput": "={{ (() => { const nodes = ['Prepare Regular Picture Metadata', 'Prepare No-Picture Metadata', 'Prepare Meme Picture Metadata', 'Prepare Reddit Video Metadata', 'Prepare TG Video Metadata', 'Prepare TG Video Metadata1', 'Prepare Group Metadata', 'Prepare Animation Metadata']; for (const name of nodes) { try { const n = $(name); if (n.isExecuted) return n.item.json; } catch {} } return {}; })() }}",
+        "mode": "raw",
+        "options": {}
+      },
+      "position": [
+        8048,
+        -176
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "8c0c687d-02bb-4b03-a834-26b3f4d0daff",
+      "name": "Analyze Image",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "inputType": "base64",
+        "modelId": {
+          "__rl": true,
+          "cachedResultName": "GPT-4.1-MINI",
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "operation": "analyze",
+        "options": {
+          "detail": "low"
+        },
+        "resource": "image",
+        "text": "=Analyze the provided image in the context of the given news text. You must return only a valid JSON object, with no prefixes, suffixes, explanations, code blocks, or additional comments. The output must be strictly JSON. Do not include backticks. Do not include any natural language outside of the JSON. All line breaks inside string values must be escaped as \\n.\n\nWhen transcribing text from the image, ALWAYS include ALL distinct text blocks that are visible in the image, in reading order. Wrap EACH block in double quotes and separate blocks with \\n inside the string. Do not omit small, faint, partial, or cropped text if it is readable.\n\nIf the image is missing, corrupted, unreadable, or the content is unrelated even if it contains a irrelevant commercial offer, return a valid JSON object with empty strings for textual fields and classification set to \"Invalid\". Never output anything except a single valid JSON object.\n\nThe JSON schema to follow:\n{\n  \"description\": \"A short one-sentence description of the image, not a copy of the text on the image.\",\n \"classification\":\n    \"URL\" — if the image is relevant and appropriate for a news or article context (photos, screenshots, game art, UI shots, etc.), even if it contains some text;\n    \"MEME\" — if LARGE/CENTRAL/BIG layered text is the main visual focus (teaser, promo, captioned image, poster). In this case, you MUST fully transcribe the text into text_on_picture;\n    \"Invalid\" — if the image is missing, corrupted, unreadable, shows intrusive watermarks, or is unrelated to the news.\n  \"is_text\": \"yes\" (if there is any visible text in the image) / \"no\" (if there is no text at all),\n  \"text_on_picture\": \"If text is present, transcribe ALL visible text blocks exactly (including punctuation, case, and emojis). Put EACH block in double quotes and separate blocks by \\\\n. If there is no text — return an empty string. If the text is too long or pictype is URL – shorten it to normal lenght\",\n  \"text_on_russian\": \"Translate the EXACT transcription from text_on_picture into Russian, preserving formatting and punctuation. DO NOT translate game names or logos. If there is no text — return an empty string.\",\n  \"text_language\": \"Detect the main language of the visible text (e.g., 'Russian', 'English'). If there's no text, return an empty string. If multiple languages — choose the dominant one.\",\n  \"ratio\": \"STRICTLY return ONLY one of: '1:1' / '3:2' / '2:3' (choose the closest match).\",\n \n}\n\nStrict rules:\n- Always return ALL keys, even if values are empty.\n- NEVER invent content that is not present in the image.\n- If text is partially cut/blurry but the image is still useful — set classification to \"URL\".\n- A logo, game title, or brand name alone DOES NOT make it a meme. If only a logo/title is visible, set is_text to \"yes\", transcribe it in text_on_picture (and translate it in text_on_russian), and set classification to \"URL\".\n- If the pic type is URL – STRICTLY DONT PUT  text on image in text_on_picture block\n- The news text is ONLY for context. Do not copy it into description.\n- If there is a blue and white picrure, says «Пост из ленты ВКонтакте», strictly mark it invalid!\n– Always output ALL THE CONTENT you generated. Dont brake it in the middle.\n\nImage input: the currently provided image (if multiple are provided, analyze the primary one).\n"
+      },
+      "position": [
+        6112,
+        432
+      ],
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8
+    },
+    {
+      "id": "9a8b32fd-4cf0-4fbb-8316-330633810795",
+      "name": "Analyze image",
+      "parameters": {
+        "inputType": "base64",
+        "modelId": {
+          "__rl": true,
+          "cachedResultName": "GPT-4.1-MINI",
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "operation": "analyze",
+        "options": {
+          "detail": "low"
+        },
+        "resource": "image",
+        "text": "=Analyze the provided image in the context of the given news text. You must return only a valid JSON object, with no prefixes, suffixes, explanations, code blocks, or additional comments. The output must be strictly JSON. Do not include backticks. Do not include any natural language outside of the JSON. All line breaks inside string values must be escaped as \\n.\n\nWhen transcribing text from the image, ALWAYS include ALL distinct text blocks that are visible in the image, in reading order. Wrap EACH block in double quotes and separate blocks with \\n inside the string. Do not omit small, faint, partial, or cropped text if it is readable.\n\nIf the image is missing, corrupted, unreadable, or the content is unrelated even if it contains a irrelevant commercial offer, return a valid JSON object with empty strings for textual fields and classification set to \"Invalid\". Never output anything except a single valid JSON object.\n\nThe JSON schema to follow:\n{\n  \"description\": \"A short one-sentence description of the image, not a copy of the text on the image.\",\n \"classification\":\n    \"URL\" — if the image is relevant and appropriate for a news or article context (photos, screenshots, game art, UI shots, etc.), even if it contains some text;\n    \"MEME\" — if LARGE/CENTRAL/BIG layered text is the main visual focus (teaser, promo, captioned image, poster). In this case, you MUST fully transcribe the text into text_on_picture;\n    \"Invalid\" — if the image is missing, corrupted, unreadable, shows intrusive watermarks, or is unrelated to the news.\n  \"is_text\": \"yes\" (if there is any visible text in the image) / \"no\" (if there is no text at all),\n  \"text_on_picture\": \"If text is present, transcribe ALL visible text blocks exactly (including punctuation, case, and emojis). Put EACH block in double quotes and separate blocks by \\\\n. If there is no text — return an empty string. If the text is too long or pictype is URL – shorten it to normal lenght\",\n  \"text_on_russian\": \"Translate the EXACT transcription from text_on_picture into Russian, preserving formatting and punctuation. DO NOT translate game names or logos. If there is no text — return an empty string.\",\n  \"text_language\": \"Detect the main language of the visible text (e.g., 'Russian', 'English'). If there's no text, return an empty string. If multiple languages — choose the dominant one.\",\n  \"ratio\": \"STRICTLY return ONLY one of: '1:1' / '3:2' / '2:3' (choose the closest match).\",\n \n}\n\nStrict rules:\n- Always return ALL keys, even if values are empty.\n- NEVER invent content that is not present in the image.\n- If text is partially cut/blurry but the image is still useful — set classification to \"URL\".\n- A logo, game title, or brand name alone DOES NOT make it a meme. If only a logo/title is visible, set is_text to \"yes\", transcribe it in text_on_picture (and translate it in text_on_russian), and set classification to \"URL\".\n- If the pic type is URL – STRICTLY DONT PUT  text on image in text_on_picture block\n- The news text is ONLY for context. Do not copy it into description.\n- If there is a blue and white picrure, says «Пост из ленты ВКонтакте», strictly mark it invalid!\n– Always output ALL THE CONTENT you generated. Dont brake it in the middle.\n\nNews input (context only): {{ $('Clean_the_article').item.json.message.content }}\nImage input: the currently provided image (if multiple are provided, analyze the primary one).\n"
+      },
+      "position": [
+        5264,
+        -1040
+      ],
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8
+    },
+    {
+      "id": "92117e91-de06-40ce-ab56-3b7674bbb752",
+      "name": "Audio upload link",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"file_name\": \"audio\",\n  \"dir_id\": \"{{ $('Create directory').item.json.directory.id }}\"\n}\n ",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.ffmpeg-api.com/file"
+      },
+      "position": [
+        5584,
+        -320
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "af9404c4-22f6-4555-b8f5-b2767884c405",
+      "name": "BrightData Reddit Scrape",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "jsonBody": "={{ [{ url: $('Extract RSS data').first().json.URL }] }}",
+        "jsonHeaders": "<redacted>",
+        "method": "POST",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 120000
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "specifyHeaders": "json",
+        "url": "https://api.brightdata.com/datasets/v3/trigger?dataset_id=<redacted>&include_errors=<redacted>"
+      },
+      "position": [
+        560,
+        -352
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "d3305e4e-f056-460e-8206-603b91e21bfb",
+      "name": "BrightData Scrape",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"input\": [\n    {\n      \"url\": \"{{ $json.URL }}\"\n    }\n  ]\n}\n",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.brightdata.com/datasets/v3/scrape?dataset_id=<redacted>&notify=<redacted>&include_errors=<redacted>"
+      },
+      "position": [
+        496,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3
+    },
+    {
+      "id": "34ef290e-0b92-4aae-9d88-09d680df3ae8",
+      "name": "BrightData Scrape1",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "options": {},
+        "sendHeaders": true,
+        "url": "=https://api.brightdata.com/datasets/v3/progress/{{ $json.snapshot_id }}"
+      },
+      "position": [
+        1008,
+        128
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3
+    },
+    {
+      "id": "1b079ad2-19f8-4b2d-91a7-2e7cf9434d1b",
+      "name": "BrightData Scrape2",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "options": {},
+        "sendHeaders": true,
+        "url": "=https://api.brightdata.com/datasets/v3/snapshot/{{ $json.snapshot_id }}?format=json"
+      },
+      "position": [
+        1280,
+        112
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3
+    },
+    {
+      "id": "7c43e53c-349d-40cd-961d-ba757d24abde",
+      "name": "ChatGPT Error",
+      "parameters": {
+        "errorMessage": "ChatGPT Token error"
+      },
+      "position": [
+        2592,
+        224
+      ],
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1
+    },
+    {
+      "id": "0a55345a-7eef-43f8-8b32-e3d764a44ec6",
+      "name": "ChatGPT Error1",
+      "parameters": {
+        "errorMessage": "Crawl FB parser error"
+      },
+      "position": [
+        1584,
+        240
+      ],
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1
+    },
+    {
+      "id": "0b5a6dc8-7f5d-492d-ad5b-2ed73d030187",
+      "name": "Clean the text1",
+      "parameters": {
+        "jsCode": "// 1) Берём текущий вход\nconst src = $input.first()?.json ?? {};\n\n// 2) Берём Prepare_data.TEXT\nconst prep = $items('Extract RSS data', 0, 0);\nconst textFromPrepare = prep?.[0]?.json?.TEXT || '';\n\n// 3) Приоритет: сначала data (HTTP), потом TEXT (Prepare_data)\nlet raw = '';\nif (src.data && String(src.data).trim()) {\n  raw = String(src.data);\n} else {\n  raw = textFromPrepare;\n}\n\n// 4) Чистим от тегов/сущностей/пробелов\nconst regex = /<script\\b[\\s\\S]*?<\\/script>|<style\\b[\\s\\S]*?<\\/style>|<[^>]+>|&[^;]+;|\\s{2,}|\\r?\\n|\\r/gi;\nlet cleaned = String(raw).replace(regex, ' ').replace(/\\s{2,}/g, ' ').trim();\n\nreturn [{ json: { cleaned } }];\n"
+      },
+      "position": [
+        1040,
+        336
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "29af34d6-f13c-402a-a27a-d47723687d8e",
+      "name": "Clean the text2",
+      "parameters": {
+        "jsCode": "// 1) Берём текущий вход\nconst src = $input.first()?.json ?? {};\n\n// 2) Берём Prepare_data.TEXT\nconst prep = $items('Extract RSS data', 0, 0);\nconst textFromPrepare = prep?.[0]?.json?.TEXT || '';\n\n// 3) Приоритет: сначала data (HTTP), потом TEXT (Prepare_data)\nlet raw = '';\nif (src.data && String(src.data).trim()) {\n  raw = String(src.data);\n} else {\n  raw = textFromPrepare;\n}\n\n// 4) Чистим от тегов/сущностей/пробелов\nconst regex = /<script\\b[\\s\\S]*?<\\/script>|<style\\b[\\s\\S]*?<\\/style>|<[^>]+>|&[^;]+;|\\s{2,}|\\r?\\n|\\r/gi;\nlet cleaned = String(raw).replace(regex, ' ').replace(/\\s{2,}/g, ' ').trim();\n\nreturn [{ json: { cleaned } }];\n"
+      },
+      "position": [
+        1072,
+        -64
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "alwaysOutputData": false,
+      "id": "5072b30d-0275-4d29-bd85-b8cd311d7ad1",
+      "name": "Clean_the_article",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "jsonOutput": true,
+        "messages": {
+          "values": [
+            {
+              "content": "=You will receive either full HTML of a page or plain text.\n\n1️⃣ SAFETY CHECK  \nIf the text mainly contains explicit graphic violence, sexual content involving minors, instructions for self-harm, or extremist propaganda/hate speech — output exactly this JSON and nothing else:\n{\n  \"game\": null,\n  \"article\": \"Disturbing article\"\n}\n\n2️⃣ SOURCE VALIDATION (CRITICAL)\nThis step ONLY applies to feeds representing a specific GAME (feed/group name names a game or is a game subreddit/community). If the feed/group name is a marketing, advertising, adtech, or general tech/industry news source (e.g. WeRSM, ADWEEK, MarkTechPost, \"The latest Marketing, Advertising, Digital & Media news\", or similar — not tied to any single game), SKIP this entire step 2 and go straight to step 3️⃣ classification. Any content from such a feed is by definition on-topic for it, regardless of what brand/company/product it discusses.\nYou receive the source URL and the feed/group name that provided this article.\nIf the source is a Reddit post, extract the subreddit name from the URL.\nThe subreddit MUST be directly and obviously related to the game from the feed/group name.\n\nIf the subreddit is about a completely different game, a non-gaming topic, a geographic region, a university, jokes, random communities, or anything clearly unrelated to the feed's game — output exactly:\n{\n  \"game\": null,\n  \"article\": \"Commercial article\"\n}\n\nExamples:\n- Feed \"Mobile Legends: Bang Bang\" but URL contains r/WutheringWaves → REJECT (different game)\n- Feed \"ARC Raiders Reddit\" but URL contains r/Ohio → REJECT (not a game subreddit)\n- Feed \"ARC Raiders Reddit\" but URL contains r/cleanjokes → REJECT (not related)\n- Feed \"ARC Raiders Reddit\" but URL contains r/utrgv → REJECT (university subreddit)\n- Any feed but URL contains a subreddit clearly unrelated to the expected game → REJECT\n\nDo NOT try to force-match content to a game tag. If the subreddit does not match the feed's game, always reject regardless of content.\n\n3️⃣ CLASSIFICATION  \nIf it is NOT disturbing and the source is valid, classify the text into one of:\n- AI_ADS_MARKETING → marketing/advertising/commercial news: brand integrations, merch, partner promos, product placements, collaborations, non-game services or hardware ads, sponsored campaigns, adtech/marketing industry news (deals, rebrands, agency news, etc). Always output \"AI ADS\" as the game for this category, regardless of which brand/game is mentioned.\n- EVENT_ANNOUNCEMENT → in-game/community events, updates, tournaments, patch/event notes, time-limited activities with dates/times or rewards.\n- ARTICLE/POST → any other normal article or post.\n\n4️⃣ OUTPUT RULES  \n- If AI_ADS_MARKETING → clean and output the readable text the same way as ARTICLE/POST (see cleaning rules below), but always set \"game\": \"AI ADS\" (do not try to infer another game name for this category).\n- If EVENT_ANNOUNCEMENT or ARTICLE/POST → clean and output the readable text:\n   • Remove HTML tags, links, scripts, styles, headers/footers, sidebars, ads, share blocks, comments, author/date/site metadata, boilerplate like: Share / Read more / Comments / Author / Published on / Related articles.  \n   • Keep logical order: title → subtitle → body.  \n   • If the text in short article are exact duplicates – keep only one sentense\n   • Keep punctuation and existing symbols; don't add new quotes or slashes.  \n   • Keep original language.  \n   • If cleaned text is very short (<10 characters) but not empty, output as is.  \nALWAYS infer the game name from the URL or text (concise, human-readable, e.g. \"PUBG Mobile\", \"Roblox\", \"Marvel Snap\", \"Delta Force\").  \n\n\nThe list of allowed gametag outputs (loaded live from Control Center \"TITLES LIST\"):\n{{ $('Get Titles Whitelist').all().map(r => `\"${r.json['Titles:']}\"` + (r.json['Titles:'] === 'AI ADS' ? ' (Use this if there\\'s marketing or commercial news and posts)' : '')).join('\\n') }}\nIf uncertain or doesnt match any of allowed ones return null for game.\nIf the article references multiple games, choose the one that is clearly the primary focus (e.g. based on frequency, sentiment, or deeper analysis).\nNEVER guess or fabricate. The decision must be based only on content and URL clearly present in the article.\nGametag may be in some subreddit or be contained in the link. If main article is short pay attention to the link. If it is some marvel game – also put game name from link in the article.\n\n5️⃣ FINAL OUTPUT FORMAT  \nReturn **only valid JSON** with two fields:  \n{\n  \"game\": \"<game name or null>\",\n  \"article\": \"<cleaned text or COMMERCIAL_ARTICLE or Disturbing article>\"\n}\n\nInputs:\nMain text/HTML → {{ $json.text }}\nGame URL (for name inference) → {{ $('Extract RSS data').item.json.URL }}\nGroup title → {{ $('Extract RSS data').item.json.FEED }}\n"
+            }
+          ]
+        },
+        "modelId": {
+          "__rl": true,
+          "cachedResultName": "GPT-4.1-MINI",
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "position": [
+        2032,
+        0
+      ],
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8
+    },
+    {
+      "id": "122bb9ec-1377-4e87-a86d-d0940a2aed32",
+      "name": "Code in JavaScript",
+      "parameters": {
+        "jsCode": "// ===== Константы / хелперы =====\nconst BASE = 'https://telegram-parser.koka.team';\n\nconst abs = (u) => {\n  const s = typeof u === 'string' ? u.trim() : '';\n  if (!s) return '';\n  return /^https?:\\/\\//i.test(s) ? s : (BASE + s);\n};\n\n// Безопасные геттеры (не падают, если нода не исполнялась/не существует)\nconst safeFirstJson = (name) => { try { return $(name).first().json; } catch (_) { return null; } };\nconst safeItems     = (name) => { try { return $items(name) || []; } catch (_) { return []; } };\n\n// Утилиты типов\nconst norm       = (s) => String(s || '').toLowerCase();\nconst isVideoAtt = (a) => norm(a?.type) === 'video' || norm(a?.mime).startsWith('video/');\nconst isAudioAtt = (a) => norm(a?.type) === 'audio' || norm(a?.mime).startsWith('audio/');\nconst isPhotoAtt = (a) => norm(a?.type) === 'photo' || norm(a?.type) === 'image' || norm(a?.mime).startsWith('image/');\n\n// ===== -2) Reddit API fallback: BrightData Reddit scraper image/gallery/video/mixed =====\n{\n  const fb = safeFirstJson('Reddit Fallback: Image Only');\n  if (fb?.reddit_fallback && fb?.should_process) {\n    const type = String(fb.type || fb.media_type || '').trim();\n    const videos = Array.isArray(fb.videos) ? fb.videos.filter(Boolean) : [];\n\n    if (type === 'mixed') {\n      const images = Array.isArray(fb.images) ? fb.images.filter(Boolean) : [];\n      const out = [];\n      if (images.length) {\n        out.push({ json: { type: images.length >= 2 ? 'gallery' : 'image', url: images[0], images: images.length >= 2 ? images : [], width: null, height: null, duration: null, reddit_fallback: true, mixed_media: true, videos }, pairedItem: { item: 0 } });\n      }\n      const videoUrl = fb.video_url || videos[0] || null;\n      if (videoUrl) {\n                out.push({ json: { type: 'video', url: videoUrl, images: [], width: null, height: null, duration: null, reddit_fallback: true, mixed_media: true, video_url: videoUrl, videos, dash_url: fb.dash_url || null, m3u8_url: fb.m3u8_url || null, has_audio: fb.has_audio !== false }, pairedItem: { item: 0 } });\n      }\n      if (out.length) return out;\n    }\n\n    if (type === 'gallery') {\n      const images = Array.isArray(fb.images) ? fb.images.filter(Boolean) : [];\n      if (images.length) return [{ json: { type: 'gallery', url: images[0], images, width: null, height: null, duration: null, reddit_fallback: true, videos, dash_url: fb.dash_url || null,\nm3u8_url: fb.m3u8_url || null, }, pairedItem: { item: 0 } }];\n    }\n    if (type === 'video') {\n      const url = fb.video_url || videos[0] || fb.dash_url || fb.m3u8_url || fb.url || null;\n      if (url) return [{ json: { type: 'video', url, images: [], width: null, height: null, duration: null, reddit_fallback: true, video_url: url, videos, dash_url: fb.dash_url || null, m3u8_url: fb.m3u8_url || null, has_audio: fb.has_audio !== false }, pairedItem: { item: 0 } }];\n    }\n    const url = typeof fb.url === 'string' && fb.url.trim() ? fb.url.trim() : (typeof fb.image === 'string' ? fb.image.trim() : '');\n    if (url) return [{ json: { type: 'image', url, images: [], width: null, height: null, duration: null, reddit_fallback: true, videos }, pairedItem: { item: 0 } }];\n  }\n}\n// ===== -1) BrightData Scrape/Scrape2 (attachments) =====\n{\n  const pickBD = (nodeName) => {\n    let j = safeFirstJson(nodeName);\n    if (Array.isArray(j)) j = j[0]; // иногда json — это массив из одного объекта\n    return j || null;\n  };\n\n  // Пробуем обе ноды: сперва Scrape2, затем Scrape\n  let bd = pickBD('BrightData Scrape2') || pickBD('BrightData Scrape');\n\n  // attachments могут быть на верхнем уровне или внутри original_post\n  let atts = [];\n  if (Array.isArray(bd?.attachments)) atts = bd.attachments;\n  else if (Array.isArray(bd?.original_post?.attachments)) atts = bd.original_post.attachments;\n\n  if (atts.length) {\n    const first = atts[0];\n\n    // (A) Видео — берём ТОЛЬКО первый аттач (аудио игнорируем)\n    if (isVideoAtt(first)) {\n      const url = abs(first?.attachment_url) || null; \n      if (url) return [{ json: { type: 'video', url, images: [], width: null, height: null, duration: null }, pairedItem: { item: 0 } }];\n    } else if (!isAudioAtt(first)) {\n      // (B) Фото: >=2 → group; =1 → image\n      \n      // !!! ИЗМЕНЕНИЕ ЗДЕСЬ: Используем ТОЛЬКО a?.url\n      const photos = atts.filter(isPhotoAtt)\n                           .map(a => abs(a?.url)) // Теперь берем только из поля 'url'\n                           .filter(Boolean);\n\n      if (photos.length >= 2) {\n        return [{ json: { type: 'gallery', url: photos[0] || null, images: photos, width: null, height: null, duration: null }, pairedItem: { item: 0 } }];\n      }\n      if (photos.length === 1) {\n        return [{ json: { type: 'image', url: photos[0], images: [], width: null, height: null, duration: null }, pairedItem: { item: 0 } }];\n      }\n    }\n    // если не видео/фото — спускаемся дальше по пайплайну\n  }\n}\n\n// ===== 0) Telegram parser =====\n{\n  const tg = safeFirstJson('TG parser');\n  if (tg) {\n    const ct   = String(tg.content_type || '').toLowerCase(); // 'group' | 'video' | 'img' | 'image'\n    const atts = Array.isArray(tg.attachments) ? tg.attachments : [];\n\n    // TG: GROUP -> 'group'\n    if (ct === 'group') {\n      const images = atts.map(a => abs(a?.url)).filter(Boolean);\n      return [{ json: { type: 'gallery', url: images[0] || null, images, width: null, height: null, duration: null }, pairedItem: { item: 0 } }];\n    }\n\n    // TG: VIDEO — передаём duration\n    if (ct === 'video') {\n      const v = atts.find(a => isVideoAtt(a)) || atts[0];\n      const url = abs(v?.url) || null;\n      // Duration может быть в attachment или на верхнем уровне tg\n      const duration = v?.duration ?? tg.duration ?? null;\n      const width = v?.width ?? null;\n      const height = v?.height ?? null;\n      return [{ json: { type: 'video', url, images: [], width, height, duration }, pairedItem: { item: 0 } }];\n    }\n\n    // TG: IMAGE (single)\n    if (ct === 'img' || ct === 'image' || atts.length) {\n      const imgAtt = atts.find(a => isPhotoAtt(a)) || atts[0];\n      const url = abs(imgAtt?.url) || null;\n      return [{ json: { type: 'image', url, images: [], width: null, height: null, duration: null }, pairedItem: { item: 0 } }];\n    }\n  }\n}\n\n// ===== 1) Reddit: GALLERY =====\n{\n  const unesc = s => String(s || '').replace(/&amp;/g, '&');\n  const posts = safeItems('Get a post1');\n  for (const it of posts) {\n    const j  = it?.json || {};\n    const md = j.media_metadata || {};\n    const order = (j.gallery_data?.items || []).map(i => i.media_id);\n    if (!order.length) continue;\n\n    const best = m => {\n      if (!m) return '';\n      const u = m.s?.u || (Array.isArray(m.p) && m.p.length ? m.p[m.p.length - 1].u : '');\n      return unesc(u);\n    };\n\n    const images = order.map(id => best(md[id])).filter(Boolean);\n    if (images.length) {\n      return [{ json: { type: 'gallery', url: images[0], images, width: null, height: null, duration: null }, pairedItem: { item: 0 } }];\n    }\n  }\n}\n\n// ===== 2) Reddit: VIDEO =====\n{\n  const posts = safeItems('Get a post1');\n  for (const it of posts) {\n    const rv  = it?.json?.media?.reddit_video;\n    const url = typeof rv?.fallback_url === 'string' ? rv.fallback_url.trim() : '';\n    if (url) {\n      // Reddit video — duration будет взят из MPD data urls\n      return [{ json: { type: 'video', url, images: [], width: rv?.width ?? null, height: rv?.height ?? null, duration: rv?.duration ?? null }, pairedItem: { item: 0 } }];\n    }\n  }\n}\n\n// ===== 3) IMAGE (fallback): Get pic URL1 -> Get a post1 -> вход =====\n{\n  // 3a: из \"Get pic URL1\" (single или gallery, если несколько видео на странице)\n  const direct = safeFirstJson('Get pic URL1');\n  const directImages = Array.isArray(direct?.images) ? direct.images.filter(Boolean) : [];\n  if (directImages.length >= 2) {\n    return [{ json: { type: 'gallery', url: directImages[0], images: directImages, width: null, height: null, duration: null }, pairedItem: { item: 0 } }];\n  }\n  const directUrl = (direct?.image && typeof direct.image === 'string') ? direct.image.trim() : '';\n  if (directUrl) {\n    return [{ json: { type: 'image', url: directUrl, images: [], width: null, height: null, duration: null }, pairedItem: { item: 0 } }];\n  }\n\n  // 3b: \"Get pic URL1\" (items)\n  const pics = safeItems('Get pic URL1');\n  for (const it of pics) {\n    const u = typeof it?.json?.image === 'string' ? it.json.image.trim() : '';\n    if (u) return [{ json: { type: 'image', url: u, images: [], width: null, height: null, duration: null }, pairedItem: { item: 0 } }];\n  }\n\n  // 3c: из \"Get a post1\"\n  const posts = safeItems('Get a post1');\n  for (const it of posts) {\n    const u = (it?.json?.url_overridden_by_dest || it?.json?.url || '');\n    const url = typeof u === 'string' ? u.trim() : '';\n    if (url) return [{ json: { type: 'image', url, images: [], width: null, height: null, duration: null }, pairedItem: { item: 0 } }];\n  }\n\n  // 3d: из входа текущего узла\n  const cur = $input.first()?.json || {};\n  const u   = (cur.image || cur.url_overridden_by_dest || cur.url || '');\n  const url = typeof u === 'string' ? u.trim() : null;\n  return [{ json: { type: 'image', url, images: [], width: null, height: null, duration: null }, pairedItem: { item: 0 } }];\n}\n"
+      },
+      "position": [
+        4400,
+        -80
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "0d7505b5-a733-44df-a810-761fdf67ab3d",
+      "name": "Code in JavaScript2",
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  let parsed = {};\n\n  try {\n    parsed = JSON.parse(item.json.result); // берём pic_info и парсим\n  } catch (error) {\n    parsed = { error: \"JSON parse error\", raw: item.json.pic_info };\n  }\n\n  return {\n    json: {\n      ...item.json,   // оставляем все исходные данные\n      ...parsed       // добавляем распарсенные поля\n    }\n  };\n});"
+      },
+      "position": [
+        5632,
+        -880
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "374eeaa8-f46e-4808-a9c8-ce5dc87181d2",
+      "name": "Code in JavaScript3",
+      "parameters": {
+        "jsCode": "// ===== helpers =====\nconst norm = (v) => String(v ?? '').replace(/\\s+/g, ' ').trim();\nconst getItems = (name) => { try { return $items(name) || []; } catch { return []; } };\nconst getFirstJson = (name) => { try { return $(name).first().json ?? null; } catch { return null; } };\n\nlet text = null;\n\n// Извлечение текста из объекта BrightData по всем возможным полям\nconst BD_FIELDS = ['content', 'description', 'title', 'text', 'post_text', 'post_content', 'caption', 'body'];\nconst extractBDText = (obj) => {\n  if (!obj) return null;\n  if (Array.isArray(obj)) obj = obj[0];\n  for (const f of BD_FIELDS) {\n    const v = norm(obj?.[f]);\n    if (v) return v;\n  }\n  return null;\n};\n\n// 0) Get a post1 → title + selftext (Reddit)\n//    MUST be before extractBDText($json) because Reddit posts have 'title' field\n//    which extractBDText would match, losing the selftext\n{\n  for (const it of getItems('Get a post1')) {\n    const s = norm(it?.json?.selftext);\n    const t = norm(it?.json?.title);\n    const parts = [];\n    if (t) parts.push(t);\n    if (s) parts.push(s);\n    if (parts.length) {\n      text = parts.join('\\n\\n');\n      break;\n    }\n  }\n}\n\n// 1) $json как BrightData source (когда айтем приходит через If → false напрямую из BrightData Scrape)\nif (!text) {\n  text = extractBDText($json);\n}\n\n// 2) BrightData Scrape2 (когда результат пришёл через async путь: Scrape → Wait → Scrape1 → Scrape2)\nif (!text) {\n  text = extractBDText(getFirstJson('BrightData Scrape2'));\n  if (!text) {\n    for (const it of getItems('BrightData Scrape2')) {\n      text = extractBDText(it?.json);\n      if (text) break;\n    }\n  }\n}\n\n// 3) BrightData Scrape (прямой референс на ноду)\nif (!text) {\n  text = extractBDText(getFirstJson('BrightData Scrape'));\n  if (!text) {\n    for (const it of getItems('BrightData Scrape')) {\n      text = extractBDText(it?.json);\n      if (text) break;\n    }\n  }\n}\n\n// 4) Clean the text1 → json.cleaned\nif (!text) {\n  for (const it of getItems('Clean the text1')) {\n    const c = norm(it?.json?.cleaned);\n    if (c) { text = c; break; }\n  }\n}\n// 5) Clean the text2 → json.cleaned\nif (!text) {\n  for (const it of getItems('Clean the text2')) {\n    const c = norm(it?.json?.cleaned);\n    if (c) { text = c; break; }\n  }\n}\n\n// 6) TG parser\nif (!text) {\n  const tg = getFirstJson('TG parser');\n  const t = norm(tg?.text) || norm(tg?.content) || norm(tg?.caption) || norm(tg?.message);\n  if (t) text = t;\n}\n\n// 7) Extract RSS data → TEXT\nif (!text) {\n  const rss = getFirstJson('Extract RSS data');\n  const t = norm(rss?.TEXT) || norm(rss?.text) || norm(rss?.TITLE) || norm(rss?.title);\n  if (t) text = t;\n}\n\n// 8) Фолбэк: текущий item (все оставшиеся поля)\nif (!text) {\n  const cand = [\n    norm($json.selftext),\n    norm($json.title),\n    norm($json.cleaned),\n    norm($json.body),\n    norm($json.data),\n    norm($json.TEXT),\n    norm($json?.message?.content)\n  ].find(Boolean);\n  if (cand) text = cand;\n}\n\nreturn [{ json: { text: text ?? null } }];\n"
+      },
+      "position": [
+        1824,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "251b7d38-451f-46ff-a196-77a7cd8a5f7f",
+      "name": "Code in JavaScript4",
+      "parameters": {
+        "jsCode": "// Берём исходный бинарь из \"HTTP Request1\" и приклеиваем к текущему item\nreturn $input.all().map((item, i) => {\n  // если несколько айтемов, подставляем i\n  const src = $items(\"Get picture\", 0, i)[0]; \n  item.binary = src.binary; // вернёт { data: { data, mimeType, fileName, ... } }\n  return item;\n});"
+      },
+      "position": [
+        6096,
+        -976
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "5ef30a57-6598-497a-8ae9-5ecf5392ea4c",
+      "name": "Code in JavaScript5",
+      "parameters": {
+        "jsCode": "const res = $('Send a photo message').item.json;\nconst photo = res?.result?.photo;\n\nif (!Array.isArray(photo) || photo.length === 0) {\n  return [{ json: { file_id_max: null, error: 'no photo sizes' } }];\n}\n\n// На всякий: выберем по максимальному file_size, fallback — последний элемент\nconst best = photo.reduce((a, b) => ((a.file_size || 0) >= (b.file_size || 0) ? a : b), photo[photo.length - 1]);\n\nreturn [{ json: { file_id_max: best.file_id } }];\n"
+      },
+      "position": [
+        6448,
+        -976
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "4f0dc65e-4479-462f-8262-ae80c8bddc23",
+      "name": "Code in JavaScript7",
+      "parameters": {
+        "jsCode": "const arr = ($input.first()?.json?.images ?? []).filter(Boolean);\nconst n = arr.length;\nreturn arr.map((u, i) => ({ json: { image: u, index: i + 1, count: n } }));"
+      },
+      "position": [
+        4704,
+        640
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "164647d8-81e8-4477-82f6-685a2312690a",
+      "name": "Code in JavaScript8",
+      "parameters": {
+        "jsCode": "// Соберём массив объектов-ответов\nconst raw = $input.all().map(i => i.json);\nconst entries = Array.isArray(raw[0]) ? raw[0] : raw;\nconst article = $('Clean_the_article').first().json.message.content.article\nconst game = $('Clean_the_article').first().json.message.content.game\nconst community = $('Get_community').first().json.message.content\nconst URL = $('Extract RSS data').first().json.URL\nconst embedding = $('Generate Embedding').first().json.data[0].embedding\n\n// Выбрать лучший вариант из result.photo\nfunction pickBest(photos) {\n  if (!Array.isArray(photos) || !photos.length) return null;\n  const score = p => (p.file_size ?? 0) || ((p.width || 0) * (p.height || 0));\n  return photos.reduce((best, p) => (score(p) > score(best) ? p : best), photos[0]);\n}\n\nconst file_ids = [];\nconst seenUnique = new Set();\n\nfor (const it of entries) {\n  const photos = it?.result?.photo;\n  const best = pickBest(photos);\n  if (!best) continue;\n\n  // Дедуп по file_unique_id (надёжнее), а в массив кладём file_id\n  if (!seenUnique.has(best.file_unique_id)) {\n    seenUnique.add(best.file_unique_id);\n    file_ids.push(best.file_id);\n  }\n}\n\nreturn [{ json: { file_ids, count: file_ids.length, article, game, URL, embedding, community } }];\n"
+      },
+      "position": [
+        5072,
+        480
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "31382967-1351-4bb9-9563-d165b4de62a7",
+      "name": "Code2",
+      "parameters": {
+        "jsCode": "// Возврат \"Invalid\" в нужном формате\nconst invalid = () => ({\n  description: '',\n  is_text: 'no',\n  text_on_picture: '',\n  text_on_russian: '',\n  text_language: '',\n  ratio: '',\n  classification: 'Invalid'\n});\n\n// Извлечение поля из обрезанного JSON через regex\nfunction extractField(str, field) {\n  const re = new RegExp('\"' + field + '\"\\\\s*:\\\\s*\"((?:[^\"\\\\\\\\]|\\\\\\\\.)*)');\n  const m = str.match(re);\n  return m ? m[1].replace(/\\\\n/g, '\\n').replace(/\\\\\\\\/g, '\\\\') : null;\n}\n\n// 1) Пытаемся взять контент из ноды \"Analyze image\"\nlet ai;\ntry { ai = $items('Analyze image', 0, 0); } catch { ai = []; }\nif (!ai || !ai.length) {\n  return [{ json: { result: JSON.stringify(invalid()) } }];\n}\n\nconst content = ai[0]?.json?.content;\nif (content == null) {\n  return [{ json: { result: JSON.stringify(invalid()) } }];\n}\n\n// 2) Пробуем JSON.parse; если не получилось — парсим regex-ом\nlet obj = null;\nif (typeof content === 'object') {\n  obj = content;\n} else {\n  const raw = String(content).trim();\n  try {\n    obj = JSON.parse(raw);\n  } catch {\n    // JSON обрезан — вытаскиваем поля regex-ом\n    const classification = extractField(raw, 'classification');\n    if (!classification) {\n      return [{ json: { result: JSON.stringify(invalid()) } }];\n    }\n    obj = {\n      description: extractField(raw, 'description') || '',\n      classification: classification,\n      is_text: extractField(raw, 'is_text') || 'no',\n      text_on_picture: extractField(raw, 'text_on_picture') || '',\n      text_on_russian: extractField(raw, 'text_on_russian') || '',\n      text_language: extractField(raw, 'text_language') || '',\n      ratio: extractField(raw, 'ratio') || ''\n    };\n  }\n}\n\n// 3) Формируем выход\nconst out = {\n  description: obj.description ?? '',\n  is_text: String(obj.is_text ?? obj.Is_text ?? '').toLowerCase(),\n  text_on_picture: String(obj.text_on_picture ?? '').replace(/\\r?\\n/g, '\\\\n'),\n  text_on_russian: String(obj.text_on_russian ?? '').replace(/\\r?\\n/g, '\\\\n'),\n  text_language: obj.text_language ?? '',\n  ratio: obj.ratio ?? '',\n  classification: obj.classification ?? 'URL'\n};\n\nreturn [{ json: { result: JSON.stringify(out) } }];\n"
+      },
+      "position": [
+        5488,
+        -880
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "b8c3d4e5-f6a7-4b8c-9d0e-collapsetitles1",
+      "name": "Collapse Titles Whitelist",
+      "parameters": {
+        "jsCode": "// Схлопываем 21 строку тайтлов обратно в 1 item, сохраняя исходный текст статьи\nconst rows = $input.all().map(i => i.json);\nconst original = $('Code in JavaScript3').first().json;\nreturn [{ json: { ...original, titlesRows: rows }, pairedItem: { item: 0 } }];"
+      },
+      "position": [
+        2224,
+        160
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "8044f34f-35f9-4413-b6c4-f1e28838da5f",
+      "name": "Commercial Post",
+      "parameters": {
+        "errorMessage": "Commercial"
+      },
+      "position": [
+        2816,
+        256
+      ],
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1
+    },
+    {
+      "id": "a1000001-0004-4000-a000-000000000004",
+      "name": "Compress Video",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"task\": {\n    \"inputs\": [{ \"file_path\": \"{{ $json.video_url }}\" }],\n    \"outputs\": [{\n      \"file\": \"compressed.mp4\",\n      \"options\": [\n        \"-c:v\", \"libx264\",\n        \"-preset\", \"medium\",\n        \"-b:v\", \"{{ $json.target_bitrate }}\",\n        \"-maxrate\", \"{{ Math.round($json.target_bitrate * 1.5) }}\",\n        \"-bufsize\", \"{{ Math.round($json.target_bitrate * 2) }}\",\n        \"-c:a\", \"aac\",\n        \"-b:a\", \"128k\",\n        \"-movflags\", \"+faststart\",\n        \"-pix_fmt\", \"yuv420p\"\n      ]\n    }]\n  }\n}",
+        "method": "POST",
+        "options": {
+          "timeout": 300000
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.ffmpeg-api.com/ffmpeg/process"
+      },
+      "position": [
+        5696,
+        -64
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "daeb159f-cf00-4755-9d87-a7ae0a9bfbff",
+      "name": "Continue Analysis1",
+      "parameters": {},
+      "position": [
+        6720,
+        512
+      ],
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "7fcad405-7220-4e9b-8fc3-77910b1722d4",
+      "name": "Create directory",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "jsonBody": "{\n  \"directory\": \"reddit\"\n}\n",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.ffmpeg-api.com/directory"
+      },
+      "position": [
+        5296,
+        -320
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "22afc1e8-e5f6-483c-ad04-c9fc8911b3dd",
+      "name": "Discard Reddit Fallback",
+      "parameters": {},
+      "position": [
+        1808,
+        -400
+      ],
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1
+    },
+    {
+      "id": "056674c2-4e23-450a-92b8-990020312177",
+      "name": "Disturbing Post",
+      "parameters": {
+        "errorMessage": "=Disturbing post"
+      },
+      "position": [
+        2928,
+        128
+      ],
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1
+    },
+    {
+      "id": "b4a04da9-7052-43bf-bf7f-6cb97bab6380",
+      "name": "Do Nothing, Test Execution",
+      "parameters": {},
+      "position": [
+        8608,
+        32
+      ],
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1
+    },
+    {
+      "id": "a1000001-0005-4000-a000-000000000005",
+      "name": "Download Compressed",
+      "parameters": {
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        },
+        "url": "={{ $json.result[0].download_url }}"
+      },
+      "position": [
+        5904,
+        -64
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "383b1f87-cab2-4f35-9b2b-c3367487da79",
+      "name": "Download GIF",
+      "parameters": {
+        "jsonHeaders": "<redacted>",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          },
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        },
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "url": "={{ $json.url }}"
+      },
+      "position": [
+        5040,
+        -560
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "e6209226-e586-4e00-ae64-0f74499d719d",
+      "name": "Download Image",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "jsonHeaders": "<redacted>",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        },
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "url": "={{ $json.image_url }}"
+      },
+      "position": [
+        5936,
+        432
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "a1000001-0006-4000-a000-000000000006",
+      "name": "Download Original",
+      "parameters": {
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        },
+        "url": "={{ $json.video_url }}"
+      },
+      "position": [
+        5696,
+        128
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "4c9d61e2-3de2-4df4-87e7-817337c5a60c",
+      "name": "Download audio",
+      "parameters": {
+        "jsonHeaders": "<redacted>",
+        "options": {},
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "url": "={{ $json.audio_url }}"
+      },
+      "position": [
+        6080,
+        -240
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "2ea2492b-b026-478c-a49d-490cf076db3b",
+      "name": "Download result",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "jsonHeaders": "<redacted>",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          },
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        },
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "url": "={{ $json.result[0].download_url }}"
+      },
+      "position": [
+        6768,
+        -320
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "55f84d7f-3096-4de8-af94-ba46a0d8fb6f",
+      "name": "Download video",
+      "parameters": {
+        "jsonHeaders": "<redacted>",
+        "options": {},
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "url": "={{ $json.video_url }}"
+      },
+      "position": [
+        6080,
+        -384
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "cb422601-b280-4acd-82bc-dda7bd5677b8",
+      "name": "Duplicated Post",
+      "parameters": {
+        "errorMessage": "=Highly similar post ({{ ($json.similarity * 10000).floor() / 100 }}%)"
+      },
+      "position": [
+        4032,
+        -208
+      ],
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1
+    },
+    {
+      "id": "d637355e-df86-4be4-9e0f-afd9b4699b55",
+      "name": "Early Exit: MEME/Invalid",
+      "parameters": {
+        "jsCode": "// MEME или Invalid найден — ранний выход\nconst input = $json;\nconst analysis = input.analysis_result || {};\n\n// pic_info только для MEME, для Invalid — пустая строка\nlet pic_info = '';\n\nif (analysis.classification === 'MEME') {\n  pic_info = JSON.stringify({\n    analyzed_index: input.index,\n    classification: analysis.classification,\n    is_text: analysis.is_text,\n    description: analysis.description || '',\n    text_on_picture: analysis.text_on_picture || '',\n    text_on_russian: analysis.text_on_russian || '',\n    text_language: analysis.text_language || '',\n    ratio: analysis.ratio || '1:1'\n  });\n}\n\nreturn [{\n  json: {\n    file_ids: input.file_ids,\n    count: input.count,\n    article: input.article,\n    game: input.game,\n    community: input.community,\n    URL: input.URL,\n    embedding: input.embedding,\n    pic_info: pic_info\n  }\n}];"
+      },
+      "position": [
+        6720,
+        352
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "a1000001-0002-4000-a000-000000000002",
+      "name": "Evaluate Video",
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst probe = input.result || {};\nconst format = probe.format || {};\nconst streams = Array.isArray(probe.streams) ? probe.streams : [];\nconst video = streams.find(s => s.codec_type === 'video') || streams[0] || {};\n\nconst width = video.width || 0;\nconst height = video.height || 0;\nconst duration = parseFloat(format.duration || '0');\nconst fileSize = parseInt(format.size || '0', 10);\nconst bitRate = parseInt(format.bit_rate || '0', 10);\n\nconst LIMIT = 47 * 1024 * 1024;\nconst needsCompression = fileSize > LIMIT;\n\nlet targetBitrate = null;\nif (needsCompression && duration > 0) {\n  targetBitrate = Math.floor((45 * 1024 * 1024 * 8) / duration);\n  if (targetBitrate < 500000) targetBitrate = 500000;\n}\n\nconst videoUrl = $('Code in JavaScript').item.json.url;\n\nreturn [{\n  json: {\n    width,\n    height,\n    duration: Math.round(duration),\n    file_size: fileSize,\n    needs_compression: needsCompression,\n    target_bitrate: targetBitrate,\n    video_url: videoUrl\n  }\n}];\n"
+      },
+      "position": [
+        5312,
+        32
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "disabled": true,
+      "id": "9a12df18-e8fd-4d3e-8d32-796a7d19b69d",
+      "name": "Every 30 seconds",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "expression": "*/30 * * * * *",
+              "field": "cronExpression"
+            }
+          ]
+        }
+      },
+      "position": [
+        -1264,
+        256
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "64c44809-1502-4173-b6c2-3f3987ba2645",
+      "name": "Extract Inbox Item ID",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4db078d9-81d2-481c-a91a-56453e598639",
+              "name": "id",
+              "type": "string",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "position": [
+        -448,
+        144
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "1366ed79-3404-451b-a92a-222dea08497a",
+      "name": "Extract RSS data",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f4cbd8c4-7b2c-4512-befc-d0f12739a31d",
+              "name": "URL",
+              "type": "string",
+              "value": "={{ $json.url }}"
+            },
+            {
+              "id": "38228253-6ca8-4b23-a2ec-788ad0f965e5",
+              "name": "TEXT",
+              "type": "string",
+              "value": "={{ $json.text }}"
+            },
+            {
+              "id": "b28c9caa-c009-4ada-b09b-852821fe0997",
+              "name": "PIC",
+              "type": "string",
+              "value": "={{ $json.pic }}"
+            },
+            {
+              "id": "1fba0740-b978-4aee-abd9-564ba9d4a3bb",
+              "name": "FEED",
+              "type": "string",
+              "value": "={{ $json.feed }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        -192,
+        32
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "31b0348c-d3d0-496a-97a3-1f5bc072948d",
+      "name": "Extract game tag",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "17990bb7-9576-4ee9-aafa-515a2fbba32e",
+              "name": "game_tag",
+              "type": "string",
+              "value": "={{ $(\"Clean_the_article\").item.json?.message?.content?.game?.trim() ?? '' }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "position": [
+        2880,
+        -80
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "alwaysOutputData": true,
+      "id": "079a8469-413e-4728-a29c-4e15309fca66",
+      "name": "Find the most similar Post",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ [$json.data[0].embedding, $('Extract game tag').item.json.game_tag] }}"
+        },
+        "query": "SELECT\n  id,\n  \"Content\",\n  \"URL\",\n  published_at,\n  1 - (\"Embedding\" <=> $1::vector) AS similarity\nFROM\n  xsolla_ai_content_provider\nWHERE\n  published_at > NOW() - interval '2 days' AND\n  game_tag = $2\nORDER BY\n  similarity DESC\nLIMIT 1"
+      },
+      "position": [
+        3600,
+        -64
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "6114c7f7-2756-460d-8b99-8bcb3391c3c1",
+      "name": "For Each New Item",
+      "parameters": {
+        "fieldToSplitOut": "body.data.items_new",
+        "fieldsToInclude": "body.feed",
+        "include": "selectedOtherFields",
+        "options": {
+          "destinationFieldName": "item"
+        }
+      },
+      "position": [
+        -1040,
+        -80
+      ],
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1
+    },
+    {
+      "id": "4c727c77-9525-419f-aca6-8739bf2981e4",
+      "name": "Forbidden Game Tag",
+      "parameters": {
+        "errorMessage": "=Forbidden Game Tag: {{ $('Extract game tag').item.json.game_tag }}"
+      },
+      "position": [
+        3328,
+        112
+      ],
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1
+    },
+    {
+      "id": "d4db1fd1-eabd-40b7-9422-42754b6ca549",
+      "name": "Found a very similar Post",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "a1ed45e9-95ad-4785-8132-a01a4f8d6dda",
+              "leftValue": "={{ $json.similarity }}",
+              "operator": {
+                "operation": "gte",
+                "type": "number"
+              },
+              "rightValue": 0.925
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        3840,
+        -32
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "61e2ed3a-df92-4417-be2f-e04113eb37bd",
+      "name": "Gallery Analysis Loop1",
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "position": [
+        5744,
+        416
+      ],
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3
+    },
+    {
+      "id": "7dfe2ea2-93ee-49bc-aa52-ab6939707158",
+      "name": "Generate Embedding",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"model\": \"text-embedding-ada-002\",\n  \"input\": {{ JSON.stringify($json.message.content.article) }}\n}",
+        "method": "POST",
+        "nodeCredentialType": "openAiApi",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://openrouter.ai/api/v1/embeddings"
+      },
+      "position": [
+        3360,
+        -96
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "1d15a7d5-146c-4431-a0bc-34509e428d98",
+      "name": "Get BrightData Reddit Snapshot",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "jsonHeaders": "<redacted>",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 120000
+        },
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "url": "=https://api.brightdata.com/datasets/v3/snapshot/{{ $json.snapshot_id }}?format=json"
+      },
+      "position": [
+        1136,
+        -592
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "fb7ce8f9-5b28-4f18-ad42-a64a0bb49c2b",
+      "name": "Get BrightData Reddit Snapshot Retry",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "jsonHeaders": "<redacted>",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 120000
+        },
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "url": "=https://api.brightdata.com/datasets/v3/snapshot/{{ $('BrightData Reddit Scrape').first().json.snapshot_id }}?format=json"
+      },
+      "position": [
+        1664,
+        -608
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "a1b2c3d4-e5f6-4a7b-8c9d-titleswhitelist1",
+      "name": "Get Titles Whitelist",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "cachedResultName": "xsolla // tg channels // ai community control center",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cqsIMfD-bCLehTAXOnZVMZ9aSmugalNpoEfaFf7W3q8/edit?usp=<redacted>",
+          "mode": "list",
+          "value": "1cqsIMfD-bCLehTAXOnZVMZ9aSmugalNpoEfaFf7W3q8"
+        },
+        "options": {},
+        "sheetName": {
+          "__rl": true,
+          "cachedResultName": "TITLES LIST",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cqsIMfD-bCLehTAXOnZVMZ9aSmugalNpoEfaFf7W3q8/edit#gid=198918850",
+          "mode": "list",
+          "value": 198918850
+        }
+      },
+      "position": [
+        2032,
+        160
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "id": "b76c9cdb-6b75-4367-ad5d-2aa446cab89f",
+      "name": "Get a post1",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "operation": "get",
+        "postId": "={{ $json.post_id }}",
+        "subreddit": "={{ $json.subreddit }}"
+      },
+      "position": [
+        784,
+        -272
+      ],
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1
+    },
+    {
+      "id": "cb3e2b37-92fa-40ec-bb45-19d8a5f7efeb",
+      "name": "Get pic URL1",
+      "parameters": {
+        "jsCode": "// 1) Ищем ВСЕ видео (YouTube) в сырой HTML от HTTP Request2 — приоритет над статичной RSS-картинкой\nlet html = '';\ntry {\n  const httpJson = $('HTTP Request2').first().json;\n  html = String(httpJson?.data || httpJson?.content || httpJson?.html || '');\n} catch (e) {}\n\nconst ytIds = [];\nconst seen = new Set();\nconst re = /(?:youtube\\.com\\/(?:watch\\?v=|embed\\/)|youtu\\.be\\/)([a-zA-Z0-9_-]{11})/gi;\nlet m;\nwhile ((m = re.exec(html)) !== null) {\n  if (!seen.has(m[1])) { seen.add(m[1]); ytIds.push(m[1]); }\n}\nconst ytThumbs = ytIds.map(id => `https://img.youtube.com/vi/${id}/hqdefault.jpg`);\n\n// 2) Берём PIC из ноды Prepare_data (RSS-превью)\nconst prep = $items('Extract RSS data', 0, 0);\nconst rssImg = prep?.[0]?.json?.PIC ?? null;\n\nlet img = null;\nlet images = [];\nif (ytThumbs.length >= 2) {\n  // Несколько видео на странице — отдаём все тумбнейлы, дальше пойдёт как gallery\n  img = ytThumbs[0];\n  images = ytThumbs;\n} else if (ytThumbs.length === 1) {\n  img = ytThumbs[0];\n} else if (rssImg) {\n  img = rssImg;\n} else {\n  // 3) Фолбэк: первый <img> в HTML\n  const mImg = html.match(/<img\\b[^>]*\\bsrc\\s*=\\s*(['\"])(.*?)\\1/i);\n  img = mImg ? mImg[2] : null;\n}\n\nreturn [{ json: { image: img, images } }];"
+      },
+      "position": [
+        1264,
+        336
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "fa049be3-3e49-4d0d-8321-3eaf79f9be4e",
+      "name": "Get picture",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "jsonHeaders": "<redacted>",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          },
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        },
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "url": "={{ $json.url }}"
+      },
+      "position": [
+        5040,
+        -896
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "2bff0df6-30de-46f7-928b-98864b26f4a0",
+      "name": "Get picture2",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "jsonHeaders": "<redacted>",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          },
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        },
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "url": "={{$json.image}}"
+      },
+      "position": [
+        5072,
+        656
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "disabled": true,
+      "id": "b7cf6952-0000-4000-a000-000000000002",
+      "name": "Get resolution",
+      "parameters": {
+        "jsCode": "// LEGACY: Replaced by Probe Video (ffprobe pipeline)\n// Original MP4 ISO-BMFF parser - disabled\nreturn [{json: {width: 0, height: 0, error: 'Legacy node, use Probe Video instead'}}];"
+      },
+      "position": [
+        7984,
+        896
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "disabled": true,
+      "id": "e2eda28f-0000-4000-a000-000000000005",
+      "name": "Get resolution1",
+      "parameters": {
+        "jsCode": "// LEGACY: Replaced by Probe Video (ffprobe pipeline)\n// Original MP4 ISO-BMFF parser - disabled\nreturn [{json: {width: 0, height: 0, error: 'Legacy node, use Probe Video instead'}}];"
+      },
+      "position": [
+        7984,
+        1072
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "a6342c8d-ac95-46d4-b707-aea676889f7f",
+      "name": "Get_community",
+      "parameters": {
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a content analyst for specific communities.\nFor the game \"{{ $('Clean_the_article').item.json.message.content.game }}\", the available communities (loaded live from Control Center \"TITLES LIST\") are: {{ (() => { const rows = $('Get Titles Whitelist').all(); const tag = $('Clean_the_article').item.json.message.content.game; const row = rows.find(r => r.json['Titles:'] === tag); return (row && row.json['Community']) ? row.json['Community'] : 'Russia, United States'; })() }}\n\nYour task is to analyze the provided article text and output a comma-separated list of the communities that STRICTLY would get this news relevant.\n\n\nDo NOT PAY ATTENTION TO the text language, analyse ONLY news content. It must be relevant to comunity by meaning.\n\nIf the news is a general update, some skins, heroes, a global tournament, or does not mention any specific regional teams, it MUST BE relevant to all countries equal to the game.\n\n\nYour final output must be a single string containing only the community names, separated by commas. Do not include any other text or punctuation.\n\nExpected Output is list of coutries mentioned in prompt like: Russia, Germany, Poland, France etc.\n\nPlease provide the output for the following article text:\n\n---\nGame: {{ $('Clean_the_article').item.json.message.content.game }}\nArticle Text:\n{{ $('Clean_the_article').item.json.message.content.article }}",
+              "role": "system"
+            }
+          ]
+        },
+        "modelId": {
+          "__rl": true,
+          "cachedResultName": "GPT-4.1-MINI",
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {
+          "temperature": 0.5
+        }
+      },
+      "position": [
+        4128,
+        -80
+      ],
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8
+    },
+    {
+      "id": "0322f77a-0fdd-4a7a-9a0c-f19f0ccd737c",
+      "name": "Getting urls",
+      "parameters": {
+        "jsCode": "const classified = (() => { try { return $json || {}; } catch { return {}; } })();\n\nif (classified.reddit_fallback && (classified.dash_url || classified.m3u8_url || classified.video_url || classified.url)) {\n  return [{\n    json: {\n      type: 'video',\n      video_url: classified.video_url || (!classified.dash_url && !classified.m3u8_url ? classified.url : null),\n      dash_url: classified.dash_url || null,\n      m3u8_url: classified.m3u8_url || null,\n      has_audio: classified.has_audio !== false,\n      width: classified.width ?? null,\n      height: classified.height ?? null\n    }\n  }];\n}\n\nconst post = $items('Get a post1', 0, 0)[0]?.json || {};\nconst rv = post.media?.reddit_video || post.secure_media?.reddit_video || {};\n\nconst fallback = rv.fallback_url || null; // mp4 без звука\nconst dash = rv.dash_url || null;         // MPD (со звуком в потоке)\nconst hls  = rv.hls_url  || null;         // M3U8 (со звуком, как ссылка)\n\n// Собираем audio с сохранением query-параметров\nlet audio = null;\nif (rv.has_audio && fallback) {\n  const qIdx = fallback.indexOf('?');\n  const qs = qIdx >= 0 ? fallback.slice(qIdx) : '';\n  const videoBase = fallback.split('/').slice(0, -1).join('/'); // https://v.redd.it/<id>\n  audio = videoBase + '/DASH_audio.mp4' + qs; // <= критично сохранить ?source=...\n}\n\nreturn [{\n  json: {\n    type: 'video',\n    video_url: fallback,   // немой mp4\n    dash_url: dash,        // MPD (со звуком, нужен ffmpeg/парсер)\n    m3u8_url: hls,          // M3U8 (со звуком, как ссылка)\n    has_audio: !!rv.has_audio,\n    width: rv.width ?? null,\n    height: rv.height ?? null\n  }\n}];"
+      },
+      "position": [
+        5168,
+        -288
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "continueOnFail": true,
+      "id": "500a55be-0293-4ab9-b2a7-2630b444996c",
+      "name": "HTTP Request2",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "jsonBody": "={\n  \"zone\": \"web_unlocker1\",\n  \"url\": \"{{ $json.URL }}\",\n  \"format\": \"raw\"\n}",
+        "jsonHeaders": "<redacted>",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "specifyHeaders": "json",
+        "url": "https://api.brightdata.com/request"
+      },
+      "position": [
+        816,
+        336
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "ef0ede0b-0f84-49cf-949b-3f9dd0cd9372",
+      "name": "IF: MEME or Invalid?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "check-should-exit",
+              "leftValue": "={{ $json.should_exit }}",
+              "operator": {
+                "operation": "equals",
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        6496,
+        432
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "9f687e6c-22b1-423a-9863-3994ae862297",
+      "name": "If",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "677836c8-54d5-4cf4-8177-f00c005a97b3",
+              "leftValue": "={{ $json.message }}",
+              "operator": {
+                "operation": "exists",
+                "singleValue": true,
+                "type": "string"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        672,
+        48
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "d98d9968-8d74-47bf-923e-7f551e04b0e1",
+      "name": "If1",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "36546deb-6b56-41dc-ba58-5aa1d3b0dbc9",
+              "leftValue": "={{ $json.error }}",
+              "operator": {
+                "operation": "notExists",
+                "singleValue": true,
+                "type": "string"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1424,
+        112
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "aadc0761-3265-4559-b484-1b55d58699ce",
+      "name": "If2",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "00baaaf6-2cb3-4f56-b9da-85a5686cf203",
+              "leftValue": "={{ $json.status }}",
+              "operator": {
+                "name": "filter.operator.equals",
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "ready"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1136,
+        128
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "ec54aa79-5208-4722-9c01-fd1c08dd03ce",
+      "name": "Is BrightData Reddit Snapshot?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "brightdata-snapshot-id",
+              "leftValue": "={{ $json.snapshot_id }}",
+              "operator": {
+                "operation": "exists",
+                "singleValue": true,
+                "type": "string"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        784,
+        -448
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "4af348d2-8b02-439a-ae9c-bbe585d0f5c8",
+      "name": "Is BrightData Snapshot Still Running?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "brightdata-snapshot-running",
+              "leftValue": "={{ $json.status }}",
+              "operator": {
+                "operation": "equals",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": "running"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1296,
+        -592
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "ac9f90b9-4fc2-45ef-83ca-59888260edf9",
+      "name": "Is Production Mode",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "3ee205ab-0279-4850-b83a-921673e8e026",
+              "leftValue": "={{ $execution.mode }}",
+              "operator": {
+                "name": "filter.operator.equals",
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "production"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        8288,
+        -176
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "975d25b0-1115-4c91-99bd-e7ddf4ec501f",
+      "name": "Is Reddit Fallback Image?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "reddit-fallback-image-only",
+              "leftValue": "={{ String($json.should_process) }}",
+              "operator": {
+                "name": "filter.operator.equals",
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "true"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1520,
+        -336
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "44c2260b-74ee-45ad-9c54-f2ef10690b90",
+      "name": "Is Whitelisted Game Tag",
+      "parameters": {
+        "conditions": {
+          "combinator": "or",
+          "conditions": [
+            {
+              "id": "7293dbef-6c5b-4d42-bb41-fa596b4cb9d7",
+              "leftValue": "={{ $('Get Titles Whitelist').all().map(r => r.json['Titles:']).includes($('Extract game tag').item.json.game_tag) }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": "=PUBG Mobile|DELTA FORCE|BATTLEFIELD 6|\n  'MLBB',\n  'POKEMON GO',\n  'ROBLOX',\n  'HERO WARS',\n  'POE',\n  'MARVEL GAMES',\n  'STAR TREK',\n  'MONOPOLY',\n  'SOCIAL CASINO',\n  'GAME OF THRONES',\n  'GENSHIN IMPACT',\n  'ARC RAIDERS"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        3104,
+        -48
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "c366a39a-3ecb-4d01-93cb-e27f89b97687",
+      "name": "Loop Done: All URL",
+      "parameters": {
+        "jsCode": "// Луп завершён — все картинки URL (нормальные)\n// pic_info не нужен\nconst items = $input.all();\nconst first = items[0]?.json || {};\n\nreturn [{\n  json: {\n    file_ids: first.file_ids,\n    count: first.count,\n    article: first.article,\n    game: first.game,\n    community: first.community,\n    URL: first.URL,\n    embedding: first.embedding,\n    pic_info: ''\n  }\n}];"
+      },
+      "position": [
+        6144,
+        272
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "258bc6ac-8cfa-4649-8f34-8fc1ee6d0dbc",
+      "name": "MPD data urls",
+      "parameters": {
+        "jsCode": "// Input:\n//   - $input.first().json.data  (строка MPD XML)\n//   - $('Getting urls').first().json.dash_url  (или m3u8_url) — URL MPD\n// Output: [ { json: { status:'ok', video_url, audio_url, duration, width, height } } ]\n\nfunction getBase(url) {\n  if (!url || typeof url !== 'string') return '';\n  const i = url.lastIndexOf('/');\n  return i >= 0 ? url.slice(0, i + 1) : url + '/';\n}\nfunction absJoin(base, rel) {\n  if (!rel) return base;\n  if (/^[a-z]+:\\/\\//i.test(rel)) return rel;\n  if (!base) return rel;\n  if (rel.startsWith('/')) {\n    const m = base.match(/^([a-z]+:\\/\\/[^\\/]+)/i);\n    return (m ? m[1] : '') + rel;\n  }\n  return base + rel;\n}\nfunction pickBest(repBlock, preferMp4a) {\n  const reps = [];\n  const repRe = /<Representation([^>]*)>[\\s\\S]*?<BaseURL>([^<]+)<\\/BaseURL>[\\s\\S]*?<\\/Representation>/gi;\n  let m;\n  while ((m = repRe.exec(repBlock))) {\n    const attrs   = m[1] || '';\n    const baseUrl = (m[2] || '').trim();\n    const bw      = parseInt((attrs.match(/bandwidth=\"(\\d+)\"/i) || [])[1] || '0', 10);\n    const codecs  = (attrs.match(/codecs=\"([^\"]+)\"/i) || [])[1] || '';\n    if (baseUrl) reps.push({ bw, baseUrl, codecs });\n  }\n  if (!reps.length) return null;\n  reps.sort((a,b) => b.bw - a.bw);\n  if (preferMp4a) {\n    const withAudio = reps.filter(r => /mp4a/i.test(r.codecs));\n    if (withAudio.length) return withAudio[0];\n  }\n  return reps[0];\n}\n\n// Парсинг ISO 8601 duration (PT36.066666S или PT1M30S)\nfunction parseDuration(str) {\n  if (!str) return null;\n  // Простой формат PTxxxS\n  const simpleMatch = str.match(/PT([\\d.]+)S/i);\n  if (simpleMatch) return parseFloat(simpleMatch[1]);\n  // Сложный формат PT1H2M3.5S\n  const match = str.match(/PT(?:(\\d+)H)?(?:(\\d+)M)?(?:([\\d.]+)S)?/i);\n  if (!match) return null;\n  const hours = parseInt(match[1] || '0', 10);\n  const minutes = parseInt(match[2] || '0', 10);\n  const seconds = parseFloat(match[3] || '0');\n  return hours * 3600 + minutes * 60 + seconds;\n}\n\n// 1) MPD XML из входа\nconst xml = $input.first()?.json?.data;\nif (typeof xml !== 'string' || !xml.trim().startsWith('<')) {\n  return [{ json: { status: 'error', message: 'MPD XML not found at $input.first().json.data' } }];\n}\n\n// 2) URL MPD из узла \"Getting urls\"\nconst srcNodeItems = $items(\"Getting urls\");\nconst srcJson = (srcNodeItems && srcNodeItems[0] && srcNodeItems[0].json) || {};\nconst mpdUrl = srcJson.dash_url || srcJson.m3u8_url || srcJson.mpd_url || srcJson.url || '';\n\nif (!mpdUrl) {\n  return [{ json: { status: 'error', message: 'MPD URL missing (dash_url / m3u8_url) from node \"Getting urls\"' } }];\n}\n\nconst base = getBase(mpdUrl);\n\n// 3) Парсинг duration из MPD\nconst durationAttr = (xml.match(/mediaPresentationDuration=\"([^\"]+)\"/i) || [])[1] || '';\nconst duration = parseDuration(durationAttr);\n\n// 4) Ищем видео/аудио AdaptationSet\nconst videoAdapt = (xml.match(/<AdaptationSet[^>]*contentType=\"video\"[\\s\\S]*?<\\/AdaptationSet>/i) || [null])[0] || '';\nconst audioAdapt = (xml.match(/<AdaptationSet[^>]*contentType=\"audio\"[\\s\\S]*?<\\/AdaptationSet>/i) || [null])[0] || '';\nif (!videoAdapt || !audioAdapt) {\n  return [{ json: { status: 'error', message: 'Missing video/audio AdaptationSet in MPD' } }];\n}\n\n// 5) Парсинг maxWidth/maxHeight из AdaptationSet\nconst maxWidth = parseInt((videoAdapt.match(/maxWidth=\"(\\d+)\"/i) || [])[1] || '0', 10) || null;\nconst maxHeight = parseInt((videoAdapt.match(/maxHeight=\"(\\d+)\"/i) || [])[1] || '0', 10) || null;\n\n// 6) Лучшие дорожки\nconst bestVideo = pickBest(videoAdapt, false);\nconst bestAudio = pickBest(audioAdapt, true);\nif (!bestVideo || !bestAudio) {\n  return [{ json: { status: 'error', message: 'No suitable video/audio Representation found' } }];\n}\n\n// 7) Абсолютные ссылки\nconst video_url = absJoin(base, bestVideo.baseUrl);\nconst audio_url = absJoin(base, bestAudio.baseUrl);\n\nreturn [{ json: { status: 'ok', video_url, audio_url, duration, width: maxWidth, height: maxHeight } }];\n"
+      },
+      "position": [
+        5888,
+        -320
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "88b2ca95-fd52-44a4-a7f2-d04e2e766bba",
+      "name": "Mark Inbox Item as Processed",
+      "parameters": {
+        "columns": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": true,
+              "display": true,
+              "displayName": "id",
+              "id": "id",
+              "removed": false,
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "created_at",
+              "id": "created_at",
+              "removed": true,
+              "required": false,
+              "type": "dateTime"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "url",
+              "id": "url",
+              "removed": true,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "text",
+              "id": "text",
+              "removed": true,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "feed",
+              "id": "feed",
+              "removed": true,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "pic",
+              "id": "pic",
+              "removed": true,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "status",
+              "id": "status",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "id": "={{ $('Extract Inbox Item ID').first().json.id }}",
+            "status": "PROCESSED"
+          }
+        },
+        "operation": "update",
+        "options": {},
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "cachedResultName": "xsolla_ai_content_inbox",
+          "mode": "list",
+          "value": "xsolla_ai_content_inbox"
+        }
+      },
+      "position": [
+        9056,
+        -32
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "d7b37659-637b-42e7-ac65-7249321de3f1",
+      "name": "Mark Inbox Item as Taken",
+      "parameters": {
+        "columns": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": true,
+              "display": true,
+              "displayName": "id",
+              "id": "id",
+              "removed": false,
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "created_at",
+              "id": "created_at",
+              "removed": true,
+              "required": false,
+              "type": "dateTime"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "url",
+              "id": "url",
+              "removed": true,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "text",
+              "id": "text",
+              "removed": true,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "feed",
+              "id": "feed",
+              "removed": true,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "pic",
+              "id": "pic",
+              "removed": true,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "status",
+              "id": "status",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "id": "={{ $json.id }}",
+            "status": "TAKEN"
+          }
+        },
+        "operation": "update",
+        "options": {},
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "cachedResultName": "xsolla_ai_content_inbox",
+          "mode": "list",
+          "value": "xsolla_ai_content_inbox"
+        }
+      },
+      "position": [
+        -720,
+        176
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "688b8d34-0c4c-472f-9385-cd887ef5d448",
+      "name": "Mark Reddit Fallback as Invalid",
+      "parameters": {
+        "columns": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": true,
+              "display": true,
+              "displayName": "id",
+              "id": "id",
+              "removed": false,
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "created_at",
+              "id": "created_at",
+              "removed": true,
+              "required": false,
+              "type": "dateTime"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "url",
+              "id": "url",
+              "removed": true,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "text",
+              "id": "text",
+              "removed": true,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "feed",
+              "id": "feed",
+              "removed": true,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "pic",
+              "id": "pic",
+              "removed": true,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "status",
+              "id": "status",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "id": "={{ $('Extract Inbox Item ID').first().json.id }}",
+            "status": "INVALID"
+          }
+        },
+        "operation": "update",
+        "options": {},
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "cachedResultName": "xsolla_ai_content_inbox",
+          "mode": "list",
+          "value": "xsolla_ai_content_inbox"
+        }
+      },
+      "position": [
+        2048,
+        -432
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "c89f619f-1557-4460-a710-5853069a1730",
+      "name": "Merge",
+      "parameters": {},
+      "position": [
+        5520,
+        640
+      ],
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "80b303f9-a6b3-4a52-87a4-425299085680",
+      "name": "Merge Analysis Results1",
+      "parameters": {},
+      "position": [
+        6944,
+        352
+      ],
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "8b644796-0056-47bc-a149-1c0f359aae10",
+      "name": "Merge content",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"task\": {\n    \"inputs\": [\n      { \"file_path\": \"{{ $('Audio upload link').item.json.file.dir_id }}/video\" },\n      { \"file_path\": \"{{ $('Audio upload link').item.json.file.dir_id }}/audio\" }\n    ],\n     \"outputs\": [\n      {\n        \"file\": \"result.mp4\",\n        \"maps\": [\"0:v:0\", \"1:a:0\"],\n        \"options\": [\"-c\", \"copy\", \"-shortest\", \"-movflags\", \"+faststart\"]\n      }\n    ]\n  }\n}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.ffmpeg-api.com/ffmpeg/process"
+      },
+      "position": [
+        6608,
+        -320
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "a1000001-0003-4000-a000-000000000003",
+      "name": "Needs Compression?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "nc-cond-001",
+              "leftValue": "={{ $json.needs_compression }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        5488,
+        32
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "619f4c15-f8ac-473c-8f16-772b4903da9d",
+      "name": "Parse Analysis Response",
+      "parameters": {
+        "jsCode": "// Возврат \"Invalid\" в нужном формате\nconst invalid = () => ({\n  description: '',\n  is_text: 'no',\n  text_on_picture: '',\n  text_on_russian: '',\n  text_language: '',\n  ratio: '',\n  classification: 'Invalid'\n});\n\n// 1) Пытаемся взять контент из ноды \"Analyze Image\" (внутри лупа)\nlet ai;\ntry { ai = $items('Analyze Image', 0, 0); } catch { ai = []; }\nif (!ai || !ai.length) {\n  const loopData = $('Gallery Analysis Loop1').first().json;\n  return [{ json: { \n    ...loopData, \n    analysis_result: invalid(),\n    is_meme: false,\n    is_invalid: true,\n    should_exit: true\n  }}];\n}\n\nconst content = ai[0]?.json?.content;\nif (content == null) {\n  const loopData = $('Gallery Analysis Loop1').first().json;\n  return [{ json: { \n    ...loopData, \n    analysis_result: invalid(),\n    is_meme: false,\n    is_invalid: true,\n    should_exit: true\n  }}];\n}\n\n// 2) Если уже объект — берём как есть; если строка — парсим\nlet obj = null;\nif (typeof content === 'object') {\n  obj = content;\n} else {\n  try {\n    obj = JSON.parse(String(content).trim());\n  } catch {\n    const loopData = $('Gallery Analysis Loop1').first().json;\n    return [{ json: { \n      ...loopData, \n      analysis_result: invalid(),\n      is_meme: false,\n      is_invalid: true,\n      should_exit: true\n    }}];\n  }\n}\n\n// 3) Формируем analysis_result\nconst analysis = {\n  description: obj.description ?? '',\n  is_text: String(obj.is_text ?? obj.Is_text ?? '').toLowerCase(),\n  text_on_picture: String(obj.text_on_picture ?? '').replace(/\\r?\\n/g, '\\\\n'),\n  text_on_russian: String(obj.text_on_russian ?? '').replace(/\\r?\\n/g, '\\\\n'),\n  text_language: obj.text_language ?? '',\n  ratio: obj.ratio ?? '',\n  classification: obj.classification ?? 'URL'\n};\n\n// 4) Прокидываем данные из лупа\nconst loopData = $('Gallery Analysis Loop1').first().json;\n\n// 5) Определяем, это MEME или Invalid\nconst isMeme = analysis.classification === 'MEME';\nconst isInvalid = analysis.classification === 'Invalid';\n\nreturn [{\n  json: {\n    ...loopData,\n    analysis_result: analysis,\n    is_meme: isMeme,\n    is_invalid: isInvalid,\n    should_exit: isMeme || isInvalid\n  }\n}];"
+      },
+      "position": [
+        6304,
+        432
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "1b429ea9-3633-4b8b-ad3b-225546912613",
+      "name": "Parse mpd data",
+      "parameters": {
+        "options": {},
+        "url": "={{ $('Getting urls').item.json.dash_url }}"
+      },
+      "position": [
+        5744,
+        -320
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "9dc4c8f0-18d6-40a0-84b1-339003f9c835",
+      "name": "Prepare Animation Metadata",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "anim-pic-url",
+              "name": "pic_url",
+              "type": "string",
+              "value": "={{ $('Send Animation').item.json.result.animation.file_id }}"
+            },
+            {
+              "id": "anim-pic-type",
+              "name": "pic_type",
+              "type": "string",
+              "value": "photo"
+            },
+            {
+              "id": "anim-pic-info",
+              "name": "pic_info",
+              "type": "string",
+              "value": "={{ { type: 'animation', width: $('Send Animation').item.json.result.animation.width, height: $('Send Animation').item.json.result.animation.height, duration: $('Send Animation').item.json.result.animation.duration } }}"
+            },
+            {
+              "id": "anim-article",
+              "name": "article",
+              "type": "string",
+              "value": "={{ $('Clean_the_article').item.json.message.content.article }}"
+            },
+            {
+              "id": "anim-game",
+              "name": "game",
+              "type": "string",
+              "value": "={{ $('Extract game tag').item.json.game_tag }}"
+            },
+            {
+              "id": "anim-embedding",
+              "name": "embedding",
+              "type": "string",
+              "value": "={{ $('Generate Embedding').item.json.data[0].embedding }}"
+            },
+            {
+              "id": "anim-community",
+              "name": "community",
+              "type": "string",
+              "value": "={{ $('Get_community').item.json.message.content }}"
+            },
+            {
+              "id": "anim-url",
+              "name": "URL",
+              "type": "string",
+              "value": "={{ $('Extract RSS data').item.json.URL }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        5520,
+        -544
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "b855a17f-5f22-482c-9c1e-0926e3191de5",
+      "name": "Prepare Gallery Analysis1",
+      "parameters": {
+        "jsCode": "// Подготовка картинок для анализа\n// Берём исходные URL из images[]\n\nconst input = $input.first().json;\n\n// Получаем оригинальный массив URL\nconst codeJS = $('Code in JavaScript').first().json;\nconst imageUrls = (codeJS.images || []).filter(Boolean);\n\nif (!imageUrls.length) {\n  // Нет картинок — пропускаем анализ\n  return [{\n    json: {\n      ...input,\n      analysis_result: null,\n      is_meme: false,\n      skip_reason: 'no_images'\n    }\n  }];\n}\n\n// Формируем массив для лупа\nreturn imageUrls.map((url, i) => ({\n  json: {\n    image_url: url,\n    index: i,\n    total: imageUrls.length,\n    // Прокидываем данные из Code in JavaScript8\n    file_ids: input.file_ids,\n    count: input.count,\n    article: input.article,\n    game: input.game,\n    community: input.community,\n    URL: input.URL,\n    embedding: input.embedding\n  }\n}));"
+      },
+      "position": [
+        5504,
+        480
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "d1f5bd18-71fa-4472-a12e-450e697e778b",
+      "name": "Prepare Group Metadata",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "pic-url",
+              "name": "pic_url",
+              "type": "string",
+              "value": "={{ JSON.stringify($json.file_ids) }}"
+            },
+            {
+              "id": "pic-type",
+              "name": "pic_type",
+              "type": "string",
+              "value": "group_of_photo"
+            },
+            {
+              "id": "article",
+              "name": "article",
+              "type": "string",
+              "value": "={{ $json.article }}"
+            },
+            {
+              "id": "game",
+              "name": "game",
+              "type": "string",
+              "value": "={{ $json.game }}"
+            },
+            {
+              "id": "url",
+              "name": "URL",
+              "type": "string",
+              "value": "={{ $json.URL }}"
+            },
+            {
+              "id": "embedding",
+              "name": "embedding",
+              "type": "array",
+              "value": "={{ $json.embedding }}"
+            },
+            {
+              "id": "community",
+              "name": "community",
+              "type": "string",
+              "value": "={{ $json.community }}"
+            },
+            {
+              "id": "pic-info",
+              "name": "pic_info",
+              "type": "string",
+              "value": "={{ $json.pic_info }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        7168,
+        224
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "12dd25e1-013e-4244-8a13-802b03999ee0",
+      "name": "Prepare Meme Picture Metadata",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "89866d3b-cd0f-4df7-8252-9392623480b8",
+              "name": "pic_url",
+              "type": "string",
+              "value": "={{ $('Code in JavaScript5').item.json.file_id_max }}"
+            },
+            {
+              "id": "1b24d6f5-c476-45c8-8910-ea29899aa162",
+              "name": "pic_info",
+              "type": "string",
+              "value": "={{ $('Code2').item.json.result }}"
+            },
+            {
+              "id": "ba9c189a-0290-465d-a112-e19e1a8c6542",
+              "name": "pic_type",
+              "type": "string",
+              "value": "={{ $('Code in JavaScript2').item.json.classification }}"
+            },
+            {
+              "id": "1c873b15-fae4-4b82-a7c1-adc6386d0ee8",
+              "name": "article",
+              "type": "string",
+              "value": "={{ $('Clean_the_article').item.json.message.content.article }}"
+            },
+            {
+              "id": "8c6d2640-a584-4e92-ab34-da7a89a96600",
+              "name": "game",
+              "type": "string",
+              "value": "={{ $('Extract game tag').item.json.game_tag }}"
+            },
+            {
+              "id": "767137d2-6683-41cd-b7f1-0c2ec0b47dd5",
+              "name": "embedding",
+              "type": "string",
+              "value": "={{ $('Generate Embedding').item.json.data[0].embedding }}"
+            },
+            {
+              "id": "6b4475ce-e753-498b-a959-1f1ce8b1882e",
+              "name": "community",
+              "type": "string",
+              "value": "={{ $('Get_community').item.json.message.content }}"
+            },
+            {
+              "id": "c0fb8d4c-3686-4c5f-8367-891d11a2739a",
+              "name": "URL",
+              "type": "string",
+              "value": "={{ $('Extract RSS data').item.json.URL }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        6688,
+        -976
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "b7a1e5f0-9c3d-4e2a-8f61-no-pic-fallback",
+      "name": "Prepare No-Picture Metadata",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "no-pic-1",
+              "name": "pic_url",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "no-pic-2",
+              "name": "pic_info",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "no-pic-3",
+              "name": "pic_type",
+              "type": "string",
+              "value": "Invalid"
+            },
+            {
+              "id": "no-pic-4",
+              "name": "community",
+              "type": "string",
+              "value": "={{ $('Get_community').item.json.message.content }}"
+            },
+            {
+              "id": "no-pic-5",
+              "name": "embedding",
+              "type": "string",
+              "value": "={{ $('Generate Embedding').item.json.data[0].embedding }}"
+            },
+            {
+              "id": "no-pic-6",
+              "name": "game",
+              "type": "string",
+              "value": "={{ $('Extract game tag').item.json.game_tag }}"
+            },
+            {
+              "id": "no-pic-7",
+              "name": "article",
+              "type": "string",
+              "value": "={{ $('Clean_the_article').item.json.message.content.article }}"
+            },
+            {
+              "id": "no-pic-8",
+              "name": "URL",
+              "type": "string",
+              "value": "={{ $('Extract RSS data').item.json.URL }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        5408,
+        -672
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "4eb71544-9195-46ce-8d22-e879ea9a5832",
+      "name": "Prepare Reddit Video Metadata",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "89866d3b-cd0f-4df7-8252-9392623480b8",
+              "name": "pic_url",
+              "type": "string",
+              "value": "={{ $('Send a video1').item.json.result.video.file_id }}"
+            },
+            {
+              "id": "ba9c189a-0290-465d-a112-e19e1a8c6542",
+              "name": "pic_type",
+              "type": "string",
+              "value": "video"
+            },
+            {
+              "id": "5ffe5093-811c-462d-8035-16a0207e3b43",
+              "name": "community",
+              "type": "string",
+              "value": "={{ $('Get_community').item.json.message.content }}"
+            },
+            {
+              "id": "71a26bad-79ce-43ea-96ff-333b6a590da2",
+              "name": "embedding",
+              "type": "string",
+              "value": "={{ $('Generate Embedding').item.json.data[0].embedding }}"
+            },
+            {
+              "id": "af511a94-6066-4696-b899-0c189b86b56b",
+              "name": "article",
+              "type": "string",
+              "value": "={{ $('Clean_the_article').item.json.message.content.article }}"
+            },
+            {
+              "id": "9de9bd75-7aa4-4c5e-96a8-1d0147ce7141",
+              "name": "game",
+              "type": "string",
+              "value": "={{ $('Extract game tag').item.json.game_tag }}"
+            },
+            {
+              "id": "7dcf8b2f-2475-46e5-b176-46a57b96cd96",
+              "name": "URL",
+              "type": "string",
+              "value": "={{ $('Extract RSS data').item.json.URL }}"
+            },
+            {
+              "id": "pic-info-reddit",
+              "name": "pic_info",
+              "type": "string",
+              "value": "={{ { duration: $('MPD data urls').item.json.duration, width: $('MPD data urls').item.json.width, height: $('MPD data urls').item.json.height, source: 'reddit_dash' } }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        7216,
+        -336
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "712a6fbf-3821-4acc-9bd6-f2e7f9752796",
+      "name": "Prepare Regular Picture Metadata",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "89866d3b-cd0f-4df7-8252-9392623480b8",
+              "name": "pic_url",
+              "type": "string",
+              "value": "={{ $('Code in JavaScript').item.json.url }}"
+            },
+            {
+              "id": "1b24d6f5-c476-45c8-8910-ea29899aa162",
+              "name": "pic_info",
+              "type": "string",
+              "value": "={{ $('Code2').item.json.result }}"
+            },
+            {
+              "id": "ba9c189a-0290-465d-a112-e19e1a8c6542",
+              "name": "pic_type",
+              "type": "string",
+              "value": "={{ $('Code in JavaScript2').item.json.classification }}"
+            },
+            {
+              "id": "82138ee0-b360-4aa7-9ddf-764d22782d71",
+              "name": "community",
+              "type": "string",
+              "value": "={{ $('Get_community').item.json.message.content }}"
+            },
+            {
+              "id": "15afeba3-98a2-4500-9992-7a52ea896d80",
+              "name": "embedding",
+              "type": "string",
+              "value": "={{ $('Generate Embedding').item.json.data[0].embedding }}"
+            },
+            {
+              "id": "29a4b9fa-d8c8-49aa-9482-02b79fb2d2cc",
+              "name": "game",
+              "type": "string",
+              "value": "={{ $('Extract game tag').item.json.game_tag }}"
+            },
+            {
+              "id": "4ad68f3a-3ad7-490c-ad60-3714d524da1e",
+              "name": "article",
+              "type": "string",
+              "value": "={{ $('Clean_the_article').item.json.message.content.article }}"
+            },
+            {
+              "id": "61f54518-50b1-498d-8081-ed28033d5bba",
+              "name": "URL",
+              "type": "string",
+              "value": "={{ $('Extract RSS data').item.json.URL }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        6688,
+        -720
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "622f0598-4575-4abe-aa17-269b153a7fb7",
+      "name": "Prepare TG Video Metadata",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "89866d3b-cd0f-4df7-8252-9392623480b8",
+              "name": "pic_url",
+              "type": "string",
+              "value": "={{ $('Send TG Video').item.json.result.video.file_id }}"
+            },
+            {
+              "id": "ba9c189a-0290-465d-a112-e19e1a8c6542",
+              "name": "pic_type",
+              "type": "string",
+              "value": "video"
+            },
+            {
+              "id": "fabd3181-2a09-4d83-b373-1057a3674eed",
+              "name": "community",
+              "type": "string",
+              "value": "={{ $('Get_community').item.json.message.content }}"
+            },
+            {
+              "id": "bb6cff9c-b829-4454-a2df-208d1c473391",
+              "name": "embedding",
+              "type": "string",
+              "value": "={{ $('Generate Embedding').item.json.data[0].embedding }}"
+            },
+            {
+              "id": "04390d98-87f4-4d77-b764-9ff8687131ed",
+              "name": "game",
+              "type": "string",
+              "value": "={{ $('Extract game tag').item.json.game_tag }}"
+            },
+            {
+              "id": "72540746-526e-4c02-a4af-0bd9d0133227",
+              "name": "article",
+              "type": "string",
+              "value": "={{ $('Clean_the_article').item.json.message.content.article }}"
+            },
+            {
+              "id": "ddb94dc4-64b4-4998-9eba-300eab4201c6",
+              "name": "URL",
+              "type": "string",
+              "value": "={{ $('Extract RSS data').item.json.URL }}"
+            },
+            {
+              "id": "pic-info-tg1",
+              "name": "pic_info",
+              "type": "string",
+              "value": "={{ { duration: $('Evaluate Video').item.json.duration, width: $('Evaluate Video').item.json.width, height: $('Evaluate Video').item.json.height, source: 'telegram' } }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        6960,
+        32
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "a1000001-0001-4000-a000-000000000001",
+      "name": "Probe Video",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"file_path\": \"{{ $json.url }}\",\n  \"probe\": {\n    \"format\": [\"duration\", \"bit_rate\", \"size\"],\n    \"streams\": [\"codec_name\", \"codec_type\", \"width\", \"height\", \"bit_rate\"],\n    \"select_streams\": \"v:0\"\n  }\n}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.ffmpeg-api.com/ffprobe/analyze"
+      },
+      "position": [
+        5136,
+        32
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "a39f5252-7442-4e4d-a345-a3d33fdcb23f",
+      "name": "Reddit Fallback: Image Only",
+      "parameters": {
+        "jsCode": "const getFirstJson = (name) => { try { return $(name).first().json ?? {}; } catch { return {}; } };\nconst rss = getFirstJson('Extract RSS data');\nconst url = String(rss.URL ?? rss.url ?? '').trim();\nconst pic = String(rss.PIC ?? rss.pic ?? '').trim().replace(/&amp;/g, '&');\nconst rssText = String(rss.TEXT ?? rss.text ?? '').replace(/\\s+/g, ' ').trim();\n\nconst imageExt = /\\.(?:jpe?g|png|webp|gif)(?:[?#].*)?$/i;\nconst isRedditSource = /^https?:\\/\\/(?:www\\.|old\\.)?reddit\\.com\\/r\\//i.test(url) || /^https?:\\/\\/redd\\.it\\//i.test(url);\n\nconst unique = (values) => {\n  const seen = new Set();\n  const out = [];\n  for (const v of values) {\n    const s = String(v || '').trim().replace(/&amp;/g, '&');\n    const key = s.split('?')[0];\n    if (!s || seen.has(key)) continue;\n    seen.add(key);\n    out.push(s);\n  }\n  return out;\n};\n\nconst arr = (v) => Array.isArray(v) ? v : (v ? [v] : []);\nconst cleanUrl = (s) => String(s || '').trim().replace(/[),.;]+$/g, '').replace(/&amp;/g, '&');\n\nconst redditImageFromPreview = (value) => {\n  const s = cleanUrl(value);\n  if (!s) return '';\n  const m = s.match(/^https?:\\/\\/(i|preview)\\.redd\\.it\\/([^?#\\s]+)(?:[?#].*)?$/i);\n  if (!m) return '';\n  let file = decodeURIComponent(m[2].split('/').filter(Boolean).pop() || '');\n  const slugMatch = file.match(/(?:^|-)v\\d+-([a-z0-9]+\\.(?:jpe?g|png|webp|gif))$/i);\n  if (slugMatch) file = slugMatch[1];\n  if (!imageExt.test(file) && !(m[1].toLowerCase() === 'i' && /^[a-z0-9]+$/i.test(file))) return '';\n  return 'https://i.redd.it/' + file;\n};\n\nconst bestVideo = (values) => {\n  const videos = unique(arr(values).map(cleanUrl)).filter(v => {\n    if (!/^https?:\\/\\//i.test(v)) return false;\n    if (/reddit\\.com\\/gallery\\//i.test(v)) return false;\n    if (/_AUDIO_/i.test(v)) return false;\n    return /(?:packaged-media\\.redd\\.it|v\\.redd\\.it|\\.mp4(?:[?#]|$)|\\.m3u8(?:[?#]|$)|\\.mpd(?:[?#]|$))/i.test(v);\n  });\n  if (!videos.length) return { videos: [], best: '' };\n  const score = (v) => {\n    const m = v.match(/(?:res_|DASH_)(\\d{3,4})p/i) || v.match(/[?&]height=(\\d{3,4})/i);\n    return m ? parseInt(m[1], 10) : 0;\n  };\n  videos.sort((a,b) => score(b) - score(a));\n  return { videos, best: videos[0] };\n};\n\nconst inputItems = (() => { try { return $input.all().map(i => i.json); } catch { return [$json]; } })();\nconst rawCandidates = [];\nfor (const j of inputItems) {\n  if (Array.isArray(j)) rawCandidates.push(...j);\n  else if (Array.isArray(j?.data)) rawCandidates.push(...j.data);\n  else rawCandidates.push(j);\n}\nconst bd = rawCandidates.find(x => x && (x.post_id || x.photos || x.videos || x.title || x.description || x.error || x.snapshot_id || x.message || x.status)) || null;\n\nconst bdText = String([bd?.title, bd?.description].filter(Boolean).join('. ')).replace(/\\s+/g, ' ').trim();\nconst hasText = (rssText || bdText).length > 0;\n\nconst bdPhotos = unique(arr(bd?.photos).map(redditImageFromPreview).filter(Boolean));\nconst videoPick = bestVideo(bd?.videos);\nconst audioTracks = unique(arr(bd?.videos).map(cleanUrl)).filter(v => /_AUDIO_/i.test(v));\nconst vredditId = (String(videoPick.best || '').match(/^https?:\\/\\/v\\.redd\\.it\\/([a-z0-9]+)\\//i) || [])[1] || '';\nconst dashUrl = vredditId ? 'https://v.redd.it/' + vredditId + '/DASHPlaylist.mpd' : null;\n\nconst rssImage = redditImageFromPreview(pic);\nconst nonRedditImage = /^https?:\\/\\//i.test(pic) && imageExt.test(pic) && !/reddit|redd\\.it|redditmedia/i.test(pic) ? pic : '';\nconst photos = bdPhotos.length ? bdPhotos : unique([rssImage || nonRedditImage].filter(Boolean));\nconst videos = videoPick.videos;\n\nlet media = null;\nif (photos.length && videos.length) {\n  media = { type: 'mixed', url: photos[0], images: photos, videos, video_url: videoPick.best, has_audio: audioTracks.length > 0 };\n} else if (photos.length >= 2) {\n  media = { type: 'gallery', url: photos[0], images: photos, videos: [] };\n} else if (photos.length === 1) {\n  media = { type: 'image', url: photos[0], images: [], videos: [] };\n} else if (videos.length) {\n  media = { type: 'video', url: videoPick.best, images: [], videos, video_url: videoPick.best, has_audio: audioTracks.length > 0 };\n}\n\nconst brightdataPending = Boolean(bd?.snapshot_id || bd?.status === 'building' || bd?.status === 'running');\nconst brightdataError = bd?.error || bd?.message || null;\nconst shouldProcess = Boolean(isRedditSource && hasText && media && !brightdataPending);\nconst isUnsupportedRedditMedia = /^https?:\\/\\/external-preview\\.redd\\.it\\//i.test(pic)\n  || /(?:thumbs|styles)\\.redditmedia\\.com/i.test(pic)\n  || /redditmedia\\.com\\/mediaembed/i.test(pic);\n\nlet skip_reason = null;\nif (!shouldProcess) {\n  if (!hasText) skip_reason = 'Reddit fallback invalid: no text in RSS/BrightData payload';\n  else if (brightdataPending) skip_reason = 'Reddit fallback invalid: BrightData returned async snapshot instead of ready scraper result';\n  else if (brightdataError) skip_reason = 'Reddit fallback invalid: BrightData scraper error: ' + String(brightdataError).slice(0, 300);\n  else if (!media && isUnsupportedRedditMedia) skip_reason = 'Reddit fallback invalid: unsupported Reddit media preview and BrightData did not return recoverable photos/videos';\n  else if (!media) skip_reason = 'Reddit fallback invalid: no recoverable photos/videos; text posts and unsupported embeds are ignored while Reddit API is unavailable';\n  else skip_reason = 'Reddit fallback invalid: unsupported source or payload';\n}\n\nreturn [{\n  json: {\n    ...rss,\n    reddit_fallback: true,\n    brightdata_reddit: Boolean(bd),\n    should_process: shouldProcess,\n    media_type: shouldProcess ? media.type : null,\n    type: shouldProcess ? media.type : null,\n    url: shouldProcess ? media.url : null,\n    image: shouldProcess && media.type === 'image' ? media.url : null,\n    images: shouldProcess ? media.images : [],\n    videos: shouldProcess ? (media.videos || []) : [],\n    video_url: shouldProcess ? (media.video_url ?? null) : null,\n    dash_url: shouldProcess ? dashUrl : null,\n    m3u8_url: null,\n    has_audio: shouldProcess ? (media.has_audio ?? null) : null,\n    mixed_media: shouldProcess ? media.type === 'mixed' : false,\n    source_image: pic || null,\n    brightdata_post_id: bd?.post_id || null,\n    brightdata_title: bd?.title || null,\n    brightdata_photos_count: bdPhotos.length,\n    brightdata_videos_count: videos.length,\n    image_recovered_from_preview: Boolean(shouldProcess && photos.some(i => i !== pic)),\n    skip_reason\n  }\n}];"
+      },
+      "position": [
+        1312,
+        -336
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "da8f1f90-52b1-4a9a-8545-a22da6564ed1",
+      "name": "Retry Inbox Item",
+      "parameters": {
+        "columns": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": true,
+              "display": true,
+              "displayName": "id",
+              "id": "id",
+              "removed": false,
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "created_at",
+              "id": "created_at",
+              "removed": true,
+              "required": false,
+              "type": "dateTime"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "url",
+              "id": "url",
+              "removed": true,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "text",
+              "id": "text",
+              "removed": true,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "feed",
+              "id": "feed",
+              "removed": true,
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "pic",
+              "id": "pic",
+              "removed": true,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "status",
+              "id": "status",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "id": "={{ $('Extract Inbox Item ID').first().json.id }}",
+            "status": "RETRY_CHATGPT_FAILURE"
+          }
+        },
+        "operation": "update",
+        "options": {},
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "cachedResultName": "xsolla_ai_content_inbox",
+          "mode": "list",
+          "value": "xsolla_ai_content_inbox"
+        }
+      },
+      "position": [
+        2384,
+        96
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "c37e6684-c0aa-447a-aeac-d29cdc08d829",
+      "name": "Save Pending Item in Inbox",
+      "parameters": {
+        "columns": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": true,
+              "display": true,
+              "displayName": "id",
+              "id": "id",
+              "removed": true,
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "created_at",
+              "id": "created_at",
+              "required": false,
+              "type": "dateTime"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "url",
+              "id": "url",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "text",
+              "id": "text",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "feed",
+              "id": "feed",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "pic",
+              "id": "pic",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "status",
+              "id": "status",
+              "removed": false,
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "created_at": "={{ $now }}",
+            "feed": "={{ $json['body.feed'].title }}",
+            "pic": "={{ $json.item.thumbnail }}",
+            "status": "PENDING",
+            "text": "={{ $json.item.title }}. {{ $json.item.description_text }}",
+            "url": "={{ $json.item.url }}"
+          }
+        },
+        "options": {},
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "cachedResultName": "xsolla_ai_content_inbox",
+          "mode": "list",
+          "value": "xsolla_ai_content_inbox"
+        }
+      },
+      "position": [
+        -800,
+        -80
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "d260dd63-b98e-4c43-82cc-9ce5a1dae9f2",
+      "name": "Save the Post",
+      "parameters": {
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "game_tag",
+              "fieldValue": "={{ $json.game }}"
+            },
+            {
+              "fieldId": "Content",
+              "fieldValue": "={{ $json.article }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "new"
+            },
+            {
+              "fieldId": "URL",
+              "fieldValue": "={{ $json.URL }}"
+            },
+            {
+              "fieldId": "pic_url",
+              "fieldValue": "={{ $json.pic_url }}"
+            },
+            {
+              "fieldId": "Embedding",
+              "fieldValue": "={{ $json.embedding }}"
+            },
+            {
+              "fieldId": "community",
+              "fieldValue": "={{ $json.community }}"
+            },
+            {
+              "fieldId": "pic_info",
+              "fieldValue": "={{ $json.pic_info }}"
+            },
+            {
+              "fieldId": "pic_type",
+              "fieldValue": "={{ $json.pic_type }}"
+            }
+          ]
+        },
+        "tableId": "xsolla_ai_content_provider"
+      },
+      "position": [
+        8544,
+        -192
+      ],
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1
+    },
+    {
+      "id": "5d7fab3d-514b-4249-b2d6-f63b6c82d33f",
+      "name": "Select Top 1 Inbox Item",
+      "parameters": {
+        "combineConditions": "OR",
+        "limit": 1,
+        "operation": "select",
+        "options": {},
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "sort": {
+          "values": [
+            {
+              "column": "created_at"
+            }
+          ]
+        },
+        "table": {
+          "__rl": true,
+          "cachedResultName": "xsolla_ai_content_inbox",
+          "mode": "list",
+          "value": "xsolla_ai_content_inbox"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "status",
+              "condition": "LIKE",
+              "value": "RETRY_%"
+            },
+            {
+              "column": "status",
+              "value": "PENDING"
+            }
+          ]
+        }
+      },
+      "position": [
+        -1056,
+        256
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "28a7f3bd-9d02-4099-b054-e48497908d28",
+      "name": "Send Animation",
+      "parameters": {
+        "additionalFields": {
+          "caption": "={{ String($('Clean_the_article').first().json.message.content.article || '').slice(0, 1024) }}"
+        },
+        "binaryData": true,
+        "chatId": "@wnmtest",
+        "operation": "sendAnimation"
+      },
+      "position": [
+        5280,
+        -560
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "9a9ac99f-2f65-437c-b61f-96997c706a59"
+    },
+    {
+      "id": "a1000001-0007-4000-a000-000000000007",
+      "name": "Send TG Video",
+      "parameters": {
+        "additionalFields": {
+          "caption": "={{ String($('Clean_the_article').first().json.message.content.article || '').slice(0, 1024) }}",
+          "height": "={{ $('Evaluate Video').item.json.height }}",
+          "width": "={{ $('Evaluate Video').item.json.width }}"
+        },
+        "binaryData": true,
+        "chatId": "@wnmtest",
+        "operation": "sendVideo"
+      },
+      "position": [
+        6224,
+        16
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "9651ed02-af1f-4dc6-a313-7a3813919082"
+    },
+    {
+      "id": "8c8216ec-67c8-45e8-a8d3-39edc76ae816",
+      "name": "Send a photo message",
+      "parameters": {
+        "additionalFields": {
+          "caption": "={{ String($('Clean_the_article').first().json.message.content.article || '').slice(0, 1024) }}"
+        },
+        "binaryData": true,
+        "chatId": "@wnmtest",
+        "operation": "sendPhoto"
+      },
+      "position": [
+        6272,
+        -992
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "27182e1c-3a57-478b-ab6d-70c7de7a6da6"
+    },
+    {
+      "id": "b16e9f0e-00b2-441f-a24f-ecaf91774e0e",
+      "name": "Send a photo message1",
+      "parameters": {
+        "additionalFields": {
+          "caption": "={{ String($('Clean_the_article').first().json.message.content.article || '').slice(0, 1024) }}"
+        },
+        "binaryData": true,
+        "chatId": "@wnmtest",
+        "operation": "sendPhoto"
+      },
+      "position": [
+        5296,
+        640
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "b5148358-4a34-42ab-9c4f-3b01426c28f0"
+    },
+    {
+      "disabled": true,
+      "id": "2061d065-0000-4000-a000-000000000006",
+      "name": "Send a video",
+      "parameters": {
+        "additionalFields": {
+          "height": "={{ $json.height }}",
+          "width": "={{ $json.width }}"
+        },
+        "binaryData": true,
+        "chatId": "@wnmtest",
+        "operation": "sendVideo"
+      },
+      "position": [
+        8208,
+        1072
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "b59058ea-d5b4-4630-a13d-1ebdf2a5ba12"
+    },
+    {
+      "id": "abc77066-6a71-4bd2-bd37-d76cc3217382",
+      "name": "Send a video1",
+      "parameters": {
+        "additionalFields": {
+          "caption": "={{ String($('Clean_the_article').first().json.message.content.article || '').slice(0, 1024) }}",
+          "height": "={{ $('Getting urls').item.json.height }}",
+          "width": "={{ $('Getting urls').item.json.width }}"
+        },
+        "binaryData": true,
+        "chatId": "@wnmtest",
+        "operation": "sendVideo"
+      },
+      "position": [
+        7024,
+        -336
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "e9e37bd1-cc08-40e8-a1e7-6522b83ddc95"
+    },
+    {
+      "disabled": true,
+      "id": "847dd3b6-0000-4000-a000-000000000003",
+      "name": "Send a video2",
+      "parameters": {
+        "additionalFields": {
+          "height": "={{ $json.height }}",
+          "width": "={{ $json.width }}"
+        },
+        "binaryData": true,
+        "chatId": "@wnmtest",
+        "operation": "sendVideo"
+      },
+      "position": [
+        8192,
+        896
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "228fad19-5ed6-4199-a0fd-7653f93a36ee"
+    },
+    {
+      "id": "b71c389a-4a30-424b-b645-211522405685",
+      "name": "Start loop",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "position": [
+        4880,
+        640
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3
+    },
+    {
+      "id": "c92962b3-1055-4a9a-8985-8fdf0b37e1c9",
+      "name": "Sticky Note",
+      "parameters": {
+        "color": 5,
+        "content": "## Content type VIDEO\n\n\n1. Если приходит видео из реддита, то мы с помощью ffmpeg API создаем и полуаем ссылку на то, куда будем загружать весь контент поочередно для аудио и видео\n2. Парсим MPD Data, которая приходит из реддита, чтобы получить разные дорожки видео и аудио\n3. Кодом делим их для последующей поочередной загрузки\n4. Параллельно получаем их бинарники через GET и загружаем по полученным ранее ссылкам\n5. Соединяем полученные файлы и получаем ссылку на загрузку\n6. Загружаем результат и отправляем в телеграм, чтобы получить FILE ID\n7. Готовую информацию заливаем в БД\n\n1. Если приходит видео из TG, то мы загружаем все по ссылке из парсера Koka\n2. Получаем разрешение из бинарника с помощью кода\n3. Загружаем все в ТГ, чтобы получить FILE ID\n4. Готовую информацию заливаем в БД",
+        "height": 688,
+        "width": 2736
+      },
+      "position": [
+        4352,
+        -480
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "24521b39-f528-46bf-9330-5b77c8b4c6f1",
+      "name": "Sticky Note1",
+      "parameters": {
+        "content": "## Get news\n1. Вебхук триггерится с каждой появившейся новостью в RSS бандле\n2. Все данные приходят в prepare data, которая формирует готовые для дальнейшей обработки: URL, предварительный текст и ссылку на картирку/обложку\n3. На основе URL ссылки на свиче выбирается тип обработки\n4.1 Если пришле пост с реддита, то с помощью кода мы вычленяем сабреддит и ID поста, передавая все в ноду get a post1, чтобы получить текст и ссылку на медиа файл\n4.2 Если пришел пост из телеграм, то мы используем koka TG parser api и с помощью ссылки на пост делаем запрос и получаем загруженный на сервер медиафайл (или несколько)\n4.3 Если это FB или ВК, то мы испольщуем превью из prepare data, очищаем его в Clean The text1 и вычленяем изображение в get pic URL\n4.4 Если пост с сайта, то то же самое, только перед этим делаем http GET и получаем весь код, который потом очищается\n5. Последний код определяет из какого источника пришел текст и изобрадение и передает его дальше",
+        "height": 944,
+        "width": 3200
+      },
+      "position": [
+        -1440,
+        -416
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "2ba8a70b-c76d-4782-b1b8-6f53a8d5dcf8",
+      "name": "Sticky Note2",
+      "parameters": {
+        "color": 4,
+        "content": "## Getting clean article, creating and filter embedding\n1. Чат ГПТ нода чистит текст от оставшихся лишних знаков и отдает названием игры и готовую статью, фильтруя её по качеству. Если Контент рекламный или оскорбительный, он отсеется в фильтре дальше\n2. Текст передается в HTTP запрос, создавая мэбеддинг\n3. Эмбеддинг с помощью SQL запроса сравнивается с ближайшим и возвращается коэффициент similarity, который фильтруется дальше в if\n4. Код gametag_check проверяет пришедшее название игры, сравнивая его с перечнем возможных. При совпадении возвращает true на следующий фильр\n5. GPT запрос Get_community на основе статьи и ссылки возвращает страны, для которых релевантна статья\n6. Следующий код проверяет все возможные источники изображений, которые могли прийти на этапе обработки запроса и возврашщает тип контента, ссылку и разрешение сторон и через роутер отдает соответствующий тип контента в обработку",
+        "height": 704,
+        "width": 2160
+      },
+      "position": [
+        1792,
+        -288
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "180304f0-7295-4210-b3bf-66fbdca1168b",
+      "name": "Sticky Note4",
+      "parameters": {
+        "color": 5,
+        "content": "## Content type CAROUSEL\n\n\n1. Если пришла карусель, то готовим все данные для лупа с помощью кода и определяем сколько раз луп должен сработать по количесту данных\n2. Запускаем луп: получаем картинки с HTTP GET и сразу закидываем их в ТГ чтобы получить FILE ID\n3. Когда луп заканчивается, готовим данные к записи и заливаем все в БД",
+        "height": 624,
+        "width": 1232
+      },
+      "position": [
+        4624,
+        336
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "15ae02e6-928e-4eb1-8d57-a69e679a8794",
+      "name": "Sticky Note5",
+      "parameters": {
+        "color": 5,
+        "content": "## Content type PICTURE\n\n1. С помощью HTTP запроса делаем get по ссылке картинки и получаем бинарник. Если картинка недоступна – стопаем экзекьюшн\n2. Бинарник передаем в анализ изображения и получаем готовый pic_info в JSON\n3. Парсим инфу от GPT и переводим ее в корректные данные\n4. Если пришел мем – вспоминаем его с помощью кода и загружаем в телеграм, чтобы успеть создать FILE ID на случай если его вдруг удалят. Забираем FILE ID с лучшим качеством с помощью кода и записываем все в БД\n5. Если пришел не мем, то закидываем все сразу в БД",
+        "height": 720,
+        "width": 2224
+      },
+      "position": [
+        4464,
+        -1232
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "22779f35-a4b1-4c11-bbd2-bf6efbb5b9d8",
+      "name": "Stop and Error2",
+      "parameters": {
+        "errorMessage": "Pic Error"
+      },
+      "position": [
+        5264,
+        -784
+      ],
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1
+    },
+    {
+      "id": "843d3244-9353-43c6-b6a2-432df56d8fef",
+      "name": "Switch",
+      "parameters": {
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "c8176459-cf62-43dd-a827-b4595f2a04cb",
+                    "leftValue": "={{ $json.classification }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "MEME"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Meme",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "d9d4dc21-407d-4111-bc97-3411bd28d9a4",
+                    "leftValue": "={{ $json.classification }}",
+                    "operator": {
+                      "operation": "notEquals",
+                      "type": "string"
+                    },
+                    "rightValue": "MEME"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Not meme",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        5840,
+        -880
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3
+    },
+    {
+      "id": "28be3dcf-0e99-4887-91d7-0e43b5c2f1dc",
+      "name": "Switch2",
+      "parameters": {
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "d9790968-e979-4cf3-8705-0089fafa05f6",
+                    "leftValue": "={{ $('Clean_the_article').item.json.message.content.article }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "Disturbing article"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Disturbing article",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "e9e3000b-fd51-4cda-97cf-c6e65213c43f",
+                    "leftValue": "={{ $('Clean_the_article').item.json.message.content.article }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "Commercial article"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Commercial article",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "c53813c2-cb9a-4374-b88d-86b41615265a",
+                    "leftValue": "={{ $('Clean_the_article').item.json.message.content.article }}",
+                    "operator": {
+                      "operation": "notEquals",
+                      "type": "string"
+                    },
+                    "rightValue": "Disturbing article"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Good article",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        2592,
+        -96
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "888c3800-36b4-443a-89c7-22821d417a36",
+      "name": "Switch3",
+      "parameters": {
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "9befe064-3127-4e58-994f-faa8eb78baae",
+                    "leftValue": "={{ $json.URL }}",
+                    "operator": {
+                      "operation": "startsWith",
+                      "type": "string"
+                    },
+                    "rightValue": "https://www.reddit.com"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Reddit",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "fe6b6d61-25a9-4742-8a98-e0aceb1fbfbf",
+                    "leftValue": "={{ $json.URL }}",
+                    "operator": {
+                      "operation": "startsWith",
+                      "type": "string"
+                    },
+                    "rightValue": "=https://t.me"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Telegram / Facebook / VK",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "d6c308ed-ce58-4e79-bdb4-f01e4384beb3",
+                    "leftValue": "={{ $json.URL }}",
+                    "operator": {
+                      "operation": "startsWith",
+                      "type": "string"
+                    },
+                    "rightValue": "https://www.facebook.com"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Facebook",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "5e77e1d9-aa2b-47f2-8e54-a3caa82566ad",
+                    "leftValue": "={{ $json.URL }}",
+                    "operator": {
+                      "operation": "startsWith",
+                      "type": "string"
+                    },
+                    "rightValue": "https://vk.com"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "VK",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "5b77f20f-5afa-43de-b97c-5d695b0b3e45",
+                    "leftValue": "={{ $json.URL }}",
+                    "operator": {
+                      "operation": "exists",
+                      "singleValue": true,
+                      "type": "string"
+                    },
+                    "rightValue": "https://www.reddit.com"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Site",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        128,
+        -96
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "34838dcf-30ce-4d45-a2a1-26f7483b5c55",
+      "name": "Switch4",
+      "parameters": {
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "28355abc-434e-44f9-b1bf-6c7dec1668ad",
+                    "leftValue": "={{ $json.type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "image"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Image",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "4b167ee0-a200-48df-9e23-d5bf128586be",
+                    "leftValue": "={{ $json.type }}",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "video"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Video",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "e878a7ec-e122-493f-87b1-bb6295d625b2",
+                    "leftValue": "={{ $json.type }}",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "gallery"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Gallery",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "anim-cond-1",
+                    "leftValue": "={{ $json.type }}",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "animation"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Animation",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        4560,
+        -96
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3
+    },
+    {
+      "id": "b684b108-130a-4a4b-9af7-147eefc3df16",
+      "name": "Switch5",
+      "parameters": {
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "0adb2a2a-aa84-4859-a6f8-9fd8a298561a",
+                    "leftValue": "={{ $('Extract RSS data').item.json.URL }}",
+                    "operator": {
+                      "operation": "startsWith",
+                      "type": "string"
+                    },
+                    "rightValue": "https://www.reddit.com/"
+                  },
+                  {
+                    "id": "reddit-not-fallback-direct-video",
+                    "leftValue": "={{ String(Boolean($json.reddit_fallback && $json.video_url && !$json.dash_url && !$json.m3u8_url)) }}",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "false"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Reddit",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "or",
+                "conditions": [
+                  {
+                    "id": "24a05af7-d075-4eac-af04-6fe89bee1de1",
+                    "leftValue": "={{ $('Extract RSS data').item.json.URL }}",
+                    "operator": {
+                      "operation": "startsWith",
+                      "type": "string"
+                    },
+                    "rightValue": "https://www.facebook.com/"
+                  },
+                  {
+                    "id": "12a75c64-7280-47f6-a2f8-0c70ab9e63d9",
+                    "leftValue": "={{ $('Extract RSS data').item.json.URL }}",
+                    "operator": {
+                      "operation": "startsWith",
+                      "type": "string"
+                    },
+                    "rightValue": "https://t.me/"
+                  },
+                  {
+                    "id": "reddit-fallback-direct-video",
+                    "leftValue": "={{ String(Boolean($json.reddit_fallback && $json.video_url && !$json.dash_url && !$json.m3u8_url)) }}",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "true"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "Facebook/TG",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        4816,
+        -48
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3
+    },
+    {
+      "id": "a3ccedc3-9521-4907-99b2-21721794a355",
+      "name": "TG parser",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "options": {},
+        "url": "=https://telegram-parser.koka.team/summary?url={{ $('Extract RSS data').item.json.URL }}"
+      },
+      "position": [
+        1216,
+        -64
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "6bbefe6f-28ed-4546-9c99-5c8043835290",
+      "name": "Total_posts_counter",
+      "parameters": {
+        "jsCode": "// n8n Code node (JavaScript)\n// Общий счётчик публикаций в static data (global)\n\nconst data = $getWorkflowStaticData('global');\n\n// инициализация\nif (typeof data.publishedCount !== 'number') {\n  data.publishedCount = 0;\n}\n\n// инкремент\ndata.publishedCount += 1;\n\n// можно вернуть текущее значение\nreturn [{ json: { publishedCount: data.publishedCount } }];\n"
+      },
+      "position": [
+        8784,
+        -192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "b321792c-669d-401a-be95-ce396a672256",
+      "name": "Unite lines",
+      "parameters": {
+        "combineBy": "combineByPosition",
+        "mode": "combine",
+        "options": {}
+      },
+      "position": [
+        6432,
+        -320
+      ],
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "1d2e59d7-09c4-4ecc-b3b5-a75b32283350",
+      "name": "Upload audio",
+      "parameters": {
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "method": "PUT",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        },
+        "sendBody": true,
+        "url": "={{ $('Audio upload link').item.json.upload.url }}"
+      },
+      "position": [
+        6240,
+        -240
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "da0b970e-e53a-4a1d-b5ec-503a035de64a",
+      "name": "Upload video",
+      "parameters": {
+        "contentType": "binaryData",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "inputDataFieldName": "data",
+        "method": "PUT",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "url": "={{ $('Video upload link').item.json.upload.url }}"
+      },
+      "position": [
+        6240,
+        -384
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "ae993f62-eed9-4399-b292-445225de4fe4",
+      "name": "Video upload link",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "<redacted>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"file_name\": \"video\",\n  \"dir_id\": \"{{ $json.directory.id }}\"\n}\n ",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.ffmpeg-api.com/file"
+      },
+      "position": [
+        5440,
+        -320
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "0bd34234-856a-4076-b9cc-4bebdb0bf308",
+      "name": "Wait",
+      "parameters": {
+        "amount": 20
+      },
+      "position": [
+        880,
+        128
+      ],
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "webhookId": "ad56a65e-924c-45b9-a222-9f87e1d3d5cc"
+    },
+    {
+      "id": "b0159fe8-3c7e-4158-a314-38c19c7dab3a",
+      "name": "Wait BrightData Reddit Snapshot",
+      "parameters": {
+        "amount": 60
+      },
+      "position": [
+        976,
+        -592
+      ],
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "webhookId": "de405068-a03d-40f0-945e-4d6e02d8df02"
+    },
+    {
+      "id": "d8692d30-ef66-461e-9ba0-ef33ac6c6d12",
+      "name": "Wait BrightData Reddit Snapshot Retry",
+      "parameters": {
+        "amount": 60
+      },
+      "position": [
+        1488,
+        -608
+      ],
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "webhookId": "590cfebb-6dd1-4632-b00d-ff2fec95c09d"
+    },
+    {
+      "id": "de7bac69-6528-49d6-bd00-474e61f5143c",
+      "name": "Webhook",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "9eee11fb-7cb8-4947-97f9-7616bab48fc9"
+      },
+      "position": [
+        -1248,
+        -80
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "webhookId": "9eee11fb-7cb8-4947-97f9-7616bab48fc9"
+    },
+    {
+      "id": "118a5360-6621-4776-bc87-16ec61dfedbe",
+      "name": "When Executed by Another Workflow",
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "position": [
+        -1008,
+        80
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "efade9f1-5674-480c-bc69-b7bec3d24c59",
+      "name": "get ID1",
+      "parameters": {
+        "jsCode": "const pd = ($items('Extract RSS data', 0, 0)[0]?.json) || {};\nconst link = String(\n  pd.url ?? pd.URL ?? pd.link ?? pd.href ?? pd.permalink ?? pd.PERMALINK ?? pd.body?.data?.items_new?.[0]?.url ?? ''\n).trim();\n\nlet subreddit = null, post_id = null;\n\nlet m = link.match(/reddit\\.com\\/r\\/([^/]+)\\/comments\\/([^/]+)/i);\nif (m) { subreddit = m[1]; post_id = m[2]; }\nelse if ((m = link.match(/redd\\.it\\/([^/]+)/i))) { post_id = m[1]; }\n\nreturn [{ json: { subreddit, post_id, link } }];\n"
+      },
+      "position": [
+        416,
+        -352
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "disabled": true,
+      "id": "a596fcc1-0000-4000-a000-000000000001",
+      "name": "koka video download",
+      "parameters": {
+        "options": {},
+        "url": "={{ $json.url }}"
+      },
+      "position": [
+        7792,
+        896
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "disabled": true,
+      "id": "dc818779-0000-4000-a000-000000000004",
+      "name": "koka video download1",
+      "parameters": {
+        "options": {},
+        "url": "={{ $json.url }}"
+      },
+      "position": [
+        7792,
+        1072
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-09-22T07:59:51.455Z",
+  "versionId": "ec44006e-bf04-4a3c-a77f-14fc8ebdae67"
+}
