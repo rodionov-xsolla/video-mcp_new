@@ -105,16 +105,16 @@ Read-only toward production: no n8n workflow changed or executed, nothing writte
 Local only: nothing was applied to any real database. Tests run in a throwaway Docker container.
 
 ### Done
-- `migrations/V001__tables.sql`:
+- `supabase/migrations/20261113000001_ledger_v001_tables.sql`:
   - schema `ledger` with `items`, `runs` and `steps` and their cost fields;
   - roles `ledger_writer` and `ledger_reader`;
   - RLS on with no policies, and no table grants for anyone.
-- `migrations/V002__record_run.sql`:
+- `supabase/migrations/20261113000002_ledger_v002_record_run.sql`:
   - `ledger.record_run(jsonb)`: idempotent, one transaction, refreshes the cost fields of the run
     and of every item tree it touched;
   - `ledger.recompute_costs()`, which returns what it changed;
   - the service-role-only wrapper `public.ledger_record_run(jsonb)`.
-- `migrations/V003__views.sql`: 16 views for the read API, the Statistics tab, waste, outliers,
+- `supabase/migrations/20261113000003_ledger_v003_views.sql`: 16 views for the read API, the Statistics tab, waste, outliers,
   fan-out and health. `ledger_reader` can read the views and nothing else.
 - `WRITE_API.md`: the payload contract, the cost rules and what each view is for. L2, L3, L4 and L7
   start from it.
@@ -134,12 +134,15 @@ Local only: nothing was applied to any real database. Tests run in a throwaway D
   Orchestrator and the Moderation export. L5 checks them.
 
 ### Decisions
-- **Migrations live in `ledger/migrations/`, not `supabase/migrations/`.**
-  - `supabase/migrations/` belongs to the video project's Supabase (`game_assets`). A routine
-    `supabase db push` there must not create the ledger in the wrong database. Which database the
-    ledger goes into is settled at L5.
-  - Tests run with `ledger/tests/run.sh` (Docker and the `supabase/postgres:17.11.0.011` image),
-    not `supabase test db`. This Mac has no Supabase CLI.
+- **The ledger goes into the Supabase project that already holds the content and video pipeline
+  tables** (user, 2026-11-13). `video-agent/.env` and the MEMES workflow's Supabase URLs name the
+  same project, which is the one `supabase/migrations/` belongs to.
+  - So the three migrations sit in `supabase/migrations/`, after the existing `game_assets` ones.
+    They were first committed under `ledger/migrations/` on the wrong assumption that this folder
+    was a video-only project.
+  - Tests run with `ledger/tests/run.sh`, not `supabase test db`, because this Mac has no
+    Supabase CLI. The script uses Docker and the `supabase/postgres:17.11.0.011` image, and
+    applies every file in `supabase/migrations/` in order before the tests.
 - **Steps are written once** (`ON CONFLICT DO NOTHING`, as the plan says). A re-send with changed
   flags or a late price is skipped, so collectors send a step only once its final state is known.
   If L3 or L4 need corrections, add an update path then.
@@ -172,9 +175,12 @@ Local only: nothing was applied to any real database. Tests run in a throwaway D
   - **L7:** read API, against these views.
   - **L6:** Statistics mocks in these views' shapes.
 - **L4** also needs the n8n API key.
-- **L5** applies V001–V003 to production, with your approval at that step. First confirm which
-  Supabase project holds `xsolla_ai_posted_content_base`, and check its columns and status values
-  against `ledger.link_post_status()`.
+- **L5** applies the three ledger migrations to that project, with your approval at that step:
+  - Check the columns and status values of `xsolla_ai_posted_content_base` against
+    `ledger.link_post_status()`.
+  - The existing migrations were applied by hand, so the CLI's migration history may not list
+    them. Apply the three ledger files by hand (SQL editor or `psql`), or repair the history before
+    any `supabase db push`, so the push doesn't re-run `game_assets`.
 - **Post statuses to check:**
   - the value for an expired ("overtime") post isn't known; until it is, it shows as stage
     `other`;
@@ -182,6 +188,7 @@ Local only: nothing was applied to any real database. Tests run in a throwaway D
 
 ### Checks run
 - `ledger/tests/run.sh`:
-  - the migrations apply cleanly on a fresh database;
+  - all seven migrations in `supabase/migrations/` (four existing, three ledger) apply cleanly on a
+    fresh database;
   - `01_security` 31, `02_record_run` 33, `03_worked_example` 36 and `04_views` 26 checks pass.
 - A deliberately failing check made the runner print `FAIL` and exit 1, so a pass is real.

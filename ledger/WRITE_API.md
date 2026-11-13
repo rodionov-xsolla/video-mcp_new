@@ -1,8 +1,10 @@
 # Ledger write API and views
 
 For the sessions that write to the ledger (L2 existing data, L3 video collector, L4 n8n collector)
-and the one that reads it (L7 read API). Schema: `migrations/V001__tables.sql`. Functions:
-`V002__record_run.sql`. Views: `V003__views.sql`.
+and the one that reads it (L7 read API). The SQL is in `supabase/migrations/`, the folder of the
+Supabase project that already holds the content and video pipeline tables:
+`20261113000001_ledger_v001_tables.sql` (schema), `…02_ledger_v002_record_run.sql` (functions) and
+`…03_ledger_v003_views.sql` (views).
 
 ## Calling it
 
@@ -117,7 +119,7 @@ empty otherwise (fresh local database). If the table is created later, run
 ## Testing
 
 ```bash
-ledger/tests/run.sh        # needs Docker; starts a throwaway supabase/postgres, applies V001–V003, runs pgTAP
+ledger/tests/run.sh        # needs Docker; throwaway supabase/postgres, applies all of supabase/migrations/, runs pgTAP
 ledger/tests/run.sh 03     # one file
 ```
 
