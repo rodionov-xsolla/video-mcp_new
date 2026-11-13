@@ -13,6 +13,8 @@ Supabase. This file is the input for L1 (schema) and L4 (n8n collector).
 | Moderation | `yGyW6dWP3xfu446w` | **Local export only**: `~/Downloads/Xsolla ai content moderation (1).json`, file dated 2026-09-23. May be out of date. Not committed | `c0d60bc6…` |
 | Publisher | `2SSIbhVPbKONRjcN` | **Not read.** No local export | — |
 | Posting | `iJNExgMktpMdK8bk` | **Not read.** No local export. Makes no paid calls, per the plan | — |
+| Art generator | `PpzIpplWiA40Swzq` | **Node names and types only**, from the connector's workflow list on 2026-11-12. Added on 2026-11-13 (section 7); the full export failed because the connector was returning errors | updated 2026-09-15 |
+| Cosplay generator | `8zy4KFc7lc0j39sm` | Same as Art generator | updated 2026-09-15 |
 
 - The connector only exposes workflows whose "Available in MCP" setting is on. Publisher,
   Moderation and Posting answer "Workflow not found". The Moderation export shows
@@ -109,6 +111,37 @@ request. Node names, node types, models and output settings are **unverified**. 
 model` is the same node type as MEMES's `Text creator model1` (likely, since MEMES looks copied
 from Publisher), it keeps no `id` or `usage`.
 
+### Art generator and cosplay generator (node list only)
+
+Both are in the ledger (section 7). The connector lists them, so "Available in MCP" is on and a
+full export should work once the connector stops returning errors. Until then, only node names
+and types are known. Providers, models, endpoints and output settings are **unverified**.
+
+| Workflow | Node | Node type | Likely kind | Purpose (proposed) |
+|---|---|---|---|---|
+| Art generator | `Prompt generating` | `@n8n/n8n-nodes-langchain.openAi` | model call | art_prompt |
+| Art generator | `Text generating` | same | model call | art_text |
+| Art generator | `Style generator` | same | model call | art_style |
+| Art generator | `Embedding` | HTTP Request | embeddings call | embed |
+| Art generator | `PIC Generating` | HTTP Request | image-generation call | image_generate |
+| Cosplay generator | `Prompt gen` | `@n8n/n8n-nodes-langchain.openAi` | model call | art_prompt |
+| Cosplay generator | `Text gen` | same | model call | art_text |
+| Cosplay generator | `Style gen` | same | model call | art_style |
+| Cosplay generator | `Embedding` | HTTP Request | embeddings call | embed |
+| Cosplay generator | `1st pic gen` | HTTP Request | image-generation call | image_generate |
+| Cosplay generator | `Add pic gen`, `Add pic gen1`, `Add pic gen2` | HTTP Request | image-generation calls, up to three more per run | image_generate |
+
+- Both run on a schedule. Art has two Schedule Trigger nodes, and the connector counts one active
+  trigger.
+- The heroes come from Google Sheets (`Hero choose`, `Get all heroes`), and the results go
+  straight to Telegram (`Send a photo message*`). No node suggests they pass through Moderation.
+- `Create a row` (Art) and `Create a row1` (Cosplay) write a Supabase row each. The table is
+  unknown.
+- Cosplay's `Запись картинки в сторедж SUPABASE` is an HTTP upload to Supabase storage, like the two
+  MEMES nodes that carry a hard-coded key. Check it when the workflow is exported.
+- If the six LangChain nodes keep "Simplify Output" on like the others, they also drop `id` and
+  `usage`, which would make it 12 of 15 model nodes.
+
 ### Key finding: most model calls drop their cost
 
 Six of the nine model nodes read so far are `@n8n/n8n-nodes-langchain.openAi` nodes with
@@ -142,6 +175,7 @@ would break. Options:
 | post | `xsolla_ai_posted_content_base` | Publisher: `Create a row` per the plan | Unverified |
 | post (moderation) | `xsolla_ai_posted_content_base` | Moderation `Get Last Moderation Record*` → `row_id` (from `moderation_data`); `Get a row2` → `id` for AI edit | From the Sep export |
 | post (image translation) | `xsolla_ai_posted_content_base` | MEMES `Start trigger` → `json.id`, on the non-MEME branch (`Update a row` filters on it) | Started by Moderation "translate_approved" |
+| art / cosplay post | unknown Supabase table | Art `Create a row`, Cosplay `Create a row1` | No lead or story behind them. Each execution makes one item, so L1 needs an item kind (or a nullable lead/story) for generated posts. Unverified |
 
 **Pairing `Text creator model` calls with their `Create a row` (MEMES, from config):**
 - `Start loop1` is a Loop Over Items node (v3) with no batch size set, so it uses the default of
@@ -191,6 +225,10 @@ would break. Options:
 - States written: `on moderation`, `approved`, `decline`, `posted`, `error`, `translation`,
   `wait moderation`.
 - Run outcome for paid executions: `ai_edit`, `pic_edit` or `moderator_translate`.
+
+### Art generator and cosplay generator
+
+Not read yet. Outcomes come from the full export, in L4 at the latest.
 
 ### Not found anywhere read so far
 
@@ -310,8 +348,13 @@ The same instance runs two more active scheduled workflows that make model and i
 - "XSOLLA cosplay generator pipeline" (`8zy4KFc7lc0j39sm`): `Prompt gen`, `Text gen`,
   `Style gen`, `Embedding`, `1st pic gen`, `Add pic gen` ×3.
 
-**Answer: pending.** Asked on 2026-11-12; the question was cut off when the app closed. Until
-answered, they stay out of the node map and count as known untracked spend.
+**Answer, 2026-11-13: include both.** They are in the ledger, and their nodes are in section 1.
+- What's still missing: full exports and baselines. The connector lists both workflows, but
+  every attempt to read them on 2026-11-13 returned a connector error. Retry with the connector,
+  or use the n8n API key L4 needs anyway.
+- For L1:
+  - these posts have no lead or story behind them (section 2);
+  - the purposes `art_prompt`, `art_text`, `art_style` and `image_generate` are new.
 
 ## 8. Corrections to the plan
 

@@ -27,7 +27,7 @@ Read-only toward production: no n8n workflow changed or executed, nothing writte
   `no_channel` were not found anywhere that could be read.
 - **Fixtures.** The connector has no way to read executions. Nothing was worked around.
 - **No answer from an execution.** The "keeps `id`/`usage.cost`" column comes from config only.
-- **Art/cosplay scope question:** asked, but cut off when the app closed. Still pending.
+- **Art/cosplay scope question:** answered on 2026-11-13, include both (see the addendum).
 
 ### Decisions
 - **Collector (A), not inline nodes (B):**
@@ -46,7 +46,7 @@ Read-only toward production: no n8n workflow changed or executed, nothing writte
 
 ### Next
 1. **You:**
-   - answer the Art/cosplay scope question;
+   - ~~answer the Art/cosplay scope question~~ (done 2026-11-13: include both);
    - create a read-only n8n API key for `workflow.xsolla.com`. It unblocks the three missing
      baselines, the fixtures and L4.
 2. **L4, first step with the key:**
@@ -88,3 +88,14 @@ Read-only toward production: no n8n workflow changed or executed, nothing writte
     2026-11-12 version shows exactly that change and nothing else.
   - INVENTORY sections 1 and 4 are updated, including two collector notes: watermark on
     `stoppedAt` because of the `waiting` time, and up to 15 Get runs per execution.
+- **Art generator (`PpzIpplWiA40Swzq`) and cosplay generator (`8zy4KFc7lc0j39sm`) are in the
+  ledger.** That was the user's answer to the scope question.
+  - INVENTORY now lists their paid nodes, from the node names and types the connector gave on
+    2026-11-12: three LangChain model nodes, one embedding and the image calls in each. See
+    sections 1, 2, 3 and 7.
+  - Not done: their full exports and baselines. The connector lists both, but on 2026-11-13 every
+    attempt to read them failed with a connector error (four tries). Next session: retry
+    `get_workflow_details`, scrub to `baseline/`, then fill in providers, models, output settings
+    and outcomes.
+  - For L1: generated posts have no lead or story behind them, and they bring new purposes
+    (`art_prompt`, `art_text`, `art_style`, `image_generate`).

@@ -20,6 +20,10 @@ Missing: Publisher `2SSIbhVPbKONRjcN`, Moderation `yGyW6dWP3xfu446w` and Posting
 `iJNExgMktpMdK8bk`. The connector cannot see them because their "Available in MCP" setting is off.
 Export them with the n8n API key (see `../INVENTORY.md`, section 5).
 
+Also missing: Art generator `PpzIpplWiA40Swzq` and cosplay generator `8zy4KFc7lc0j39sm`, which
+joined the ledger on 2026-11-13. The connector can see them, but it returned errors on every read
+that day. Export them with the connector or the API key.
+
 ## What the scrub does
 
 `scrub.py` (stdlib, Python 3.9+) keeps only the fields that describe behaviour. It:
