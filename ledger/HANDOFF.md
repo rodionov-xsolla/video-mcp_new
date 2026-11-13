@@ -98,4 +98,90 @@ Read-only toward production: no n8n workflow changed or executed, nothing writte
     `get_workflow_details`, scrub to `baseline/`, then fill in providers, models, output settings
     and outcomes.
   - For L1: generated posts have no lead or story behind them, and they bring new purposes
-    (`art_prompt`, `art_text`, `art_style`, `image_generate`).
+    (`art_prompt`, `art_text`, `art_style`; image calls use the existing `image_gen`).
+
+## Session L1: schema and write API (2026-11-13)
+
+Local only: nothing was applied to any real database. Tests run in a throwaway Docker container.
+
+### Done
+- `migrations/V001__tables.sql`:
+  - schema `ledger` with `items`, `runs` and `steps` and their cost fields;
+  - roles `ledger_writer` and `ledger_reader`;
+  - RLS on with no policies, and no table grants for anyone.
+- `migrations/V002__record_run.sql`:
+  - `ledger.record_run(jsonb)`: idempotent, one transaction, refreshes the cost fields of the run
+    and of every item tree it touched;
+  - `ledger.recompute_costs()`, which returns what it changed;
+  - the service-role-only wrapper `public.ledger_record_run(jsonb)`.
+- `migrations/V003__views.sql`: 16 views for the read API, the Statistics tab, waste, outliers,
+  fan-out and health. `ledger_reader` can read the views and nothing else.
+- `WRITE_API.md`: the payload contract, the cost rules and what each view is for. L2, L3, L4 and L7
+  start from it.
+- `tests/`:
+  - `run.sh` (Docker only) and four pgTAP files, 126 checks, covering everything in the plan's L1
+    row: idempotent re-sends, NULL-not-0, `unpriced_calls`, the worked example to the cent, shares
+    changing when a later Publisher run adds a post, `recompute_costs` matching the incrementally
+    kept fields, and refusal for anon and authenticated;
+  - `fixtures/worked_example.sql` holds the plan's example as payloads.
+
+### Not done
+- **Not applied anywhere real.** Applying to production is L5, and needs your approval at that step.
+- **`ledger_n8n` login role not created.** It needs a password; create it at L4 or L5 and grant
+  it `ledger_writer`.
+- **Not tested against the real `xsolla_ai_posted_content_base`.** The live-status view assumes
+  the columns `id`, `status`, `created_at` and `status_updated_at`, and the status values from the
+  Orchestrator and the Moderation export. L5 checks them.
+
+### Decisions
+- **Migrations live in `ledger/migrations/`, not `supabase/migrations/`.**
+  - `supabase/migrations/` belongs to the video project's Supabase (`game_assets`). A routine
+    `supabase db push` there must not create the ledger in the wrong database. Which database the
+    ledger goes into is settled at L5.
+  - Tests run with `ledger/tests/run.sh` (Docker and the `supabase/postgres:17.11.0.011` image),
+    not `supabase test db`. This Mac has no Supabase CLI.
+- **Steps are written once** (`ON CONFLICT DO NOTHING`, as the plan says). A re-send with changed
+  flags or a late price is skipped, so collectors send a step only once its final state is known.
+  If L3 or L4 need corrections, add an update path then.
+- **"Known part" totals:**
+  - A run whose calls are all unpriced has total 0 and `unpriced_calls` N.
+  - Cost fields are NULL only when nothing was recorded: no run or step for the item, or a run
+    sent with `cost_recorded: false` (legacy copy, L2).
+  - `upstream_share_usd` is NULL for items without a parent, and when the parent's cost is
+    unknown.
+- **Parents:** story under lead, and post under story. Art and cosplay posts and videos have no
+  parent (L0 addendum).
+- **`purpose` is free text with a format check**, not a fixed list, so a new purpose never makes a
+  payload fail. Names used so far are in INVENTORY.md and the plan.
+- **Waste never double counts.** Each wasted cent sits under exactly one reason, tested:
+  - money that bought nothing counts first (`failed_call`, `failed_run`);
+  - dead ends then count their remaining ("clean") cost, including their share of the parent:
+    `rejected:<outcome>`, `declined`, `post_error`.
+- **Video approval** = run outcome `approved_final`, so the views don't depend on
+  `video_agent_runs`. Publication per platform and cost per second of final video are not in the
+  ledger: final duration isn't a column. L3 or L7 decides between adding it and reading
+  `video_agent_runs`.
+- **Health is two views:** `v_run_health_24h` (per workflow) and `v_provider_health_24h` (per
+  provider).
+- **Days are UTC.**
+
+### Next
+- **These can run in parallel now:**
+  - **L2:** existing data.
+  - **L3:** video collector.
+  - **L7:** read API, against these views.
+  - **L6:** Statistics mocks in these views' shapes.
+- **L4** also needs the n8n API key.
+- **L5** applies V001–V003 to production, with your approval at that step. First confirm which
+  Supabase project holds `xsolla_ai_posted_content_base`, and check its columns and status values
+  against `ledger.link_post_status()`.
+- **Post statuses to check:**
+  - the value for an expired ("overtime") post isn't known; until it is, it shows as stage
+    `other`;
+  - add it to `link_post_status()` once known.
+
+### Checks run
+- `ledger/tests/run.sh`:
+  - the migrations apply cleanly on a fresh database;
+  - `01_security` 31, `02_record_run` 33, `03_worked_example` 36 and `04_views` 26 checks pass.
+- A deliberately failing check made the runner print `FAIL` and exit 1, so a pass is real.

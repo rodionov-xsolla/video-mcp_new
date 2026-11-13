@@ -123,13 +123,13 @@ and types are known. Providers, models, endpoints and output settings are **unve
 | Art generator | `Text generating` | same | model call | art_text |
 | Art generator | `Style generator` | same | model call | art_style |
 | Art generator | `Embedding` | HTTP Request | embeddings call | embed |
-| Art generator | `PIC Generating` | HTTP Request | image-generation call | image_generate |
+| Art generator | `PIC Generating` | HTTP Request | image-generation call | image_gen |
 | Cosplay generator | `Prompt gen` | `@n8n/n8n-nodes-langchain.openAi` | model call | art_prompt |
 | Cosplay generator | `Text gen` | same | model call | art_text |
 | Cosplay generator | `Style gen` | same | model call | art_style |
 | Cosplay generator | `Embedding` | HTTP Request | embeddings call | embed |
-| Cosplay generator | `1st pic gen` | HTTP Request | image-generation call | image_generate |
-| Cosplay generator | `Add pic gen`, `Add pic gen1`, `Add pic gen2` | HTTP Request | image-generation calls, up to three more per run | image_generate |
+| Cosplay generator | `1st pic gen` | HTTP Request | image-generation call | image_gen |
+| Cosplay generator | `Add pic gen`, `Add pic gen1`, `Add pic gen2` | HTTP Request | image-generation calls, up to three more per run | image_gen |
 
 - Both run on a schedule. Art has two Schedule Trigger nodes, and the connector counts one active
   trigger.
@@ -354,7 +354,7 @@ The same instance runs two more active scheduled workflows that make model and i
   or use the n8n API key L4 needs anyway.
 - For L1:
   - these posts have no lead or story behind them (section 2);
-  - the purposes `art_prompt`, `art_text`, `art_style` and `image_generate` are new.
+  - the purposes `art_prompt`, `art_text` and `art_style` are new; their image calls use the plan's `image_gen`.
 
 ## 8. Corrections to the plan
 
