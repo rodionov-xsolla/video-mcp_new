@@ -121,6 +121,8 @@ empty otherwise (fresh local database). If the table is created later, run
 ```bash
 ledger/tests/run.sh        # needs Docker; throwaway supabase/postgres, applies all of supabase/migrations/, runs pgTAP
 ledger/tests/run.sh 03     # one file
+ledger/demo/run.sh         # shows it working: sends the worked example step by step and prints the costs
+ledger/demo/run.sh --pause # same, waiting for Enter between steps (for recording)
 ```
 
 `tests/fixtures/worked_example.sql` holds the plan's worked example as payloads, a good starting

@@ -141,6 +141,10 @@ Local only: nothing was applied to any real database. Tests run in a throwaway D
     changing when a later Publisher run adds a post, `recompute_costs` matching the incrementally
     kept fields, and refusal for anon and authenticated;
   - `fixtures/worked_example.sql` holds the plan's example as payloads.
+- `demo/run.sh`: shows the ledger working in about 6 s. It sends the worked example through
+  `record_run` step by step, in a throwaway database, and prints the costs after each step: the
+  shares changing, a re-send counted once, waste by reason and the Statistics row. `--pause`
+  waits for Enter between steps.
 
 ### Not done
 - **Not applied anywhere real.** Applying to production is L5, and needs your approval at that step.
