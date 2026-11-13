@@ -8,7 +8,7 @@ Supabase. This file is the input for L1 (schema) and L4 (n8n collector).
 | Workflow | Id | Source used here | Version |
 |---|---|---|---|
 | Orchestrator | `hLCspmwIoGGalkGGDIIp1` | Live, n8n connector, 2026-11-12 | `dba2e3b2…`, updated 2026-09-15 |
-| Content Provider | `ALobcKHwRGXxTkzG` | Live, n8n connector, 2026-11-12 | `ec44006e…`, updated 2026-09-22 |
+| Content Provider | `ALobcKHwRGXxTkzG` | Live, n8n connector, re-exported 2026-11-13 after the Reddit snapshot change (see below) | `1d4f3543…`, updated 2026-11-13. The 2026-11-12 baseline (`ec44006e…`) is in commit `819de5c` |
 | MEMES GENERATION | `j0vjj8EVv1kKCtzx` | Live, n8n connector, 2026-11-12 | `b28d339e…`, updated 2026-05-04 |
 | Moderation | `yGyW6dWP3xfu446w` | **Local export only**: `~/Downloads/Xsolla ai content moderation (1).json`, file dated 2026-09-23. May be out of date. Not committed | `c0d60bc6…` |
 | Publisher | `2SSIbhVPbKONRjcN` | **Not read.** No local export | — |
@@ -42,7 +42,7 @@ Columns: **keeps id + cost** = does the node's saved output still hold OpenRoute
 | `BrightData Scrape` | HTTP Request v3 → Web Scraper API `datasets/v3/scrape` (sync), dataset `gd_lyclm1571iy3mv57zw` | BrightData | Web Scraper API, used for facebook.com URLs (`Switch3`) | records | n/a | Config | scrape |
 | `BrightData Scrape1`, `BrightData Scrape2` | progress poll and snapshot download, used when the sync scrape returns a `snapshot_id` | BrightData | — | not billed per call (records are billed once) | n/a | Config; billing basis from BrightData's pricing | scrape |
 | `BrightData Reddit Scrape` | HTTP Request → `datasets/v3/trigger` (async), dataset `gd_lvz8ah06191smkebj4` | BrightData | Web Scraper API, reddit.com URLs | records | n/a | Config | scrape |
-| `Get BrightData Reddit Snapshot`, `…Retry` | snapshot polls, after 60 s waits | BrightData | — | not billed per call | n/a | Config | scrape |
+| `Get BrightData Reddit Snapshot` | snapshot poll in a loop: `Wait BrightData Reddit Snapshot` (90 s) → Get → `Is BrightData Snapshot Still Running?` (status `running` or `building` and `$runIndex` < 14) → back to the Wait. Up to 15 runs per execution (runIndex 0–14) | BrightData | — | not billed per call; records are counted from the run that returned them | n/a | Config (version `1d4f3543…`) | scrape |
 | `HTTP Request2` | HTTP Request → `api.brightdata.com/request`, zone `web_unlocker1` | BrightData | Web Unlocker, for other sites | successful requests | n/a | Config | scrape |
 | `TG parser` | HTTP Request → `telegram-parser.koka.team/summary` | koka.team service | t.me URLs | unknown | n/a | Config | scrape |
 | `Create directory`, `Video upload link`, `Audio upload link` | HTTP Request → `api.ffmpeg-api.com` `/directory`, `/file` | ffmpeg-api.com | Reddit DASH video branch | GB-seconds (subscription quota); unknown whether these calls use any | n/a | Config | media_merge |
@@ -55,7 +55,9 @@ Columns: **keeps id + cost** = does the node's saved output still hold OpenRoute
   plain media downloads.
 - Not reachable today: `koka video download`, `koka video download1`, `Get resolution`,
   `Get resolution1`, `Send a video`, `Send a video2` and `Every 30 seconds` are disabled.
-  `Get a post1` and `Stop and Error2` have no incoming connection.
+  `Get a post1` and `Stop and Error2` have no incoming connection. Since version `1d4f3543…`,
+  neither does `Wait BrightData Reddit Snapshot Retry` (and with it
+  `Get BrightData Reddit Snapshot Retry`).
 - The plan's purpose list has no probe or compress category, so all ffmpeg calls map to
   `media_merge` here. L1 may want `media_process` instead.
 
@@ -219,38 +221,45 @@ export. They probably live in Publisher, which L4 has to read.
 | Publisher | unknown | unknown | unknown | unknown | not readable |
 
 - "default" means the workflow does not override anything, so the instance settings apply.
-- Instance settings and pruning are **not visible** through the connector: they are the
-  `EXECUTIONS_DATA_*` environment variables of the self-hosted instance at `workflow.xsolla.com`.
-- n8n's documented defaults:
-  - save on success `all` and on error `all`;
-  - save manual `true`;
-  - prune `true`;
-  - max age 336 h;
-  - **max count 10,000 executions**.
-- The instance is shared with other teams, so a count cap can make retention much shorter than 14
-  days. The Orchestrator alone starts 1,440 executions a day, and every Moderation button press is
-  another.
+- **Instance settings**, read from `workflow.xsolla.com/rest/settings` on 2026-11-13 by the
+  planning session (the connector cannot see them). n8n 2.5.2, queue mode:
 
-**Decision: A, the collector.**
+  | Setting | Value |
+  |---|---|
+  | `saveDataSuccessExecution` | `all` |
+  | `saveDataErrorExecution` | `all` |
+  | `saveManualExecutions` | `true` |
+  | Pruning | on: max age 336 h (14 days), max count 250,000 |
+  | `executionTimeout` / `maxExecutionTimeout` | -1 / 3600 s |
+  | concurrency | -1 |
+
+**Decision: A, the collector.** Rule 1 of the plan is met at instance level.
 - Why:
-  - No workflow turns saving off, and n8n's defaults save both successful and failed executions.
+  - Successful and failed executions are saved with their data, and kept for 14 days.
+  - No workflow read so far overrides saving.
+  - The 250,000-execution cap is far above the instance's daily volume as far as it is known: the
+    Orchestrator's 1,440 executions a day plus the sub-workflows and Moderation presses.
   - The collector is the only option that also captures failed runs and rejected leads.
   - It changes nothing in production.
   - The cost gap in Section 1 hits inline nodes just as hard, so it is no argument for B.
-- Conditions L4 checks first, with the API key:
-  1. Each of the four workflows has executions with status `success` and `error` in
-     `GET /api/v1/executions`. That proves both are saved.
-  2. The oldest retained execution is at least 24 hours old. If it isn't, ask the instance admins
-     for the `EXECUTIONS_DATA_MAX_AGE`/`PRUNE_MAX_COUNT` values, and shorten the collector's
-     cadence. It only needs executions to survive until the next tick.
-  3. If successful executions turn out not to be saved, rule 2 applies. "Save successful production
-     executions" gets turned on in those workflows' settings, with your approval.
-  4. B only if that setting can't be changed.
+- What L4 still checks, with the API key:
+  1. Publisher's own `settings`: it is the one paid workflow not yet read, and a workflow can
+     override the instance default.
+  2. Each of the four workflows has `success` and `error` executions in
+     `GET /api/v1/executions`, and the oldest is about 14 days old.
+  3. If Publisher turns out to override saving, rule 2 applies: "Save successful production
+     executions" gets turned on for it, with your approval. B only if that can't be changed.
 - Collector notes:
   - Sub-workflow executions started by the Orchestrator have mode `integrated`. Skip only
     `manual` executions (and the test webhook), not `integrated`.
   - The Orchestrator, Content Provider, Publisher and Posting calls use
     `waitForSubWorkflow: false`. Each is its own execution, read by `workflowId`.
+  - A Content Provider execution on the Reddit path sits in `waiting` status between snapshot
+    checks: 90 s each, up to 15 checks, so up to about 22 minutes. Read only finished executions
+    (success, error, canceled, crashed), and move the watermark on `stoppedAt`, not `startedAt`.
+    Otherwise a run that started before the watermark and finished after it is skipped.
+  - `Get BrightData Reddit Snapshot` can appear up to 15 times in one execution's `runData`. Map
+    every run, and count records only from the run that returned them.
 
 ## 5. Fixtures: blocked
 

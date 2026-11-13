@@ -33,8 +33,8 @@ Read-only toward production: no n8n workflow changed or executed, nothing writte
 - **Collector (A), not inline nodes (B):**
   - No workflow overrides execution saving, and n8n's defaults save both successful and failed
     executions.
-  - Retention on the shared instance is unknown: n8n's default caps it at 10,000 executions. That
-    is the first thing L4 checks.
+  - Retention was unknown on 2026-11-12. The 2026-11-13 addendum below gives it: 14 days, max
+    250,000 executions.
   - Reason and conditions: `INVENTORY.md`, section 4.
 - **Most model nodes need estimated cost.** Six of the nine model nodes read so far are LangChain
   OpenAI nodes with "Simplify Output" on, so their saved output has no `id` and no `usage`.
@@ -76,3 +76,15 @@ Read-only toward production: no n8n workflow changed or executed, nothing writte
   both MEMES Supabase-storage nodes, read back as `<redacted>`.
 - Sources: the raw connector output for Content Provider is in this session's Claude tool-results
   folder, outside the repo. The Moderation export was read from `~/Downloads` and not copied.
+
+### Addendum, 2026-11-13
+- **Instance settings** came in from the planning session, read from `/rest/settings`. Successful
+  and failed executions are saved with data, kept 14 days, max 250,000. Rule 1 holds at instance
+  level, so the collector decision stands. Only Publisher's own settings are still unread.
+- **Content Provider changed** to version `1d4f3543…`, with the user's approval. The Reddit
+  snapshot check is now a loop of up to 15 checks, 90 s apart, and the `…Retry` nodes are
+  disconnected.
+  - Re-exported and re-scrubbed `baseline/ALobcKHwRGXxTkzG.json`. Its diff against the
+    2026-11-12 version shows exactly that change and nothing else.
+  - INVENTORY sections 1 and 4 are updated, including two collector notes: watermark on
+    `stoppedAt` because of the `waiting` time, and up to 15 Get runs per execution.
