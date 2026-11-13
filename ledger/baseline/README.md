@@ -6,13 +6,18 @@ to prove the production workflows were not changed by the ledger.
 | File | Workflow | versionId | updatedAt | Exported | Source |
 |---|---|---|---|---|---|
 | `hLCspmwIoGGalkGGDIIp1.json` | XSOLLA PIPELINE ORCHESTRATOR | `dba2e3b2-0990-4a6a-91d6-52d620424424` | 2026-09-15T13:07:15Z | 2026-11-12 | n8n connector |
-| `ALobcKHwRGXxTkzG.json` | XSOLLA CONTENT PROVIDER \| FOR UPDATES 3 | `1d4f3543-421d-4514-ad83-9350a197de23` | 2026-11-13T09:46:51Z | 2026-11-13 | n8n connector |
+| `ALobcKHwRGXxTkzG.json` | XSOLLA CONTENT PROVIDER \| FOR UPDATES 3 | `88c60c5d-1e46-4fa7-a4e6-50ccaa84c334` | 2026-11-13T14:25:55Z | 2026-11-13 | n8n connector |
+| `PpzIpplWiA40Swzq.json` | XSOLLA Art generator pipeline | `40c79e15-4931-4543-8d95-45e25fe18e50` | 2026-09-15T13:07:21Z | 2026-11-13 | n8n connector |
 | `j0vjj8EVv1kKCtzx.json` | MEMES GENERATION | `b28d339e-f78e-489a-83d1-c73ccafd4466` | 2026-05-04T10:41:58Z | 2026-11-12 | n8n connector |
 
-Content Provider was changed on purpose on 2026-11-13, with the user's approval: the Reddit
-BrightData snapshot check became a loop of up to 15 checks, 90 s apart. That change is unrelated
-to the ledger. The file was re-exported afterwards; the previous version (`ec44006e…`) is in commit
-`819de5c`. The diff between the two shows only that change, which also shows the recipe below
+Content Provider was changed on purpose twice on 2026-11-13, at the user's request. Neither change
+is related to the ledger, and the file was re-exported after each:
+- `ec44006e…` → `1d4f3543…`: the Reddit BrightData snapshot check became a loop, 90 s apart.
+  The previous file is in commit `819de5c`.
+- `1d4f3543…` → `88c60c5d…`: the loop limit went from `$runIndex < 14` to `< 24`, so up to 25
+  checks. The previous file is in commit `2c224ab`.
+
+Each diff shows exactly the described change and nothing else, which also shows the recipe below
 works. If a workflow changes again for reasons other than the ledger, re-export it before L4 uses
 it as the "unchanged" reference.
 
@@ -20,9 +25,9 @@ Missing: Publisher `2SSIbhVPbKONRjcN`, Moderation `yGyW6dWP3xfu446w` and Posting
 `iJNExgMktpMdK8bk`. The connector cannot see them because their "Available in MCP" setting is off.
 Export them with the n8n API key (see `../INVENTORY.md`, section 5).
 
-Also missing: Art generator `PpzIpplWiA40Swzq` and cosplay generator `8zy4KFc7lc0j39sm`, which
-joined the ledger on 2026-11-13. The connector can see them, but it returned errors on every read
-that day. Export them with the connector or the API key.
+Also missing: cosplay generator `8zy4KFc7lc0j39sm`, which joined the ledger on 2026-11-13 with the
+Art generator. The connector can see it, but it returned errors on every read that day. Export it
+with the connector or the API key.
 
 ## What the scrub does
 

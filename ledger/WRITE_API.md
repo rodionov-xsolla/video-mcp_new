@@ -63,7 +63,7 @@ Response: `{"run_id": 17, "steps_inserted": 3, "steps_skipped": 0, "items": {"le
 - **Items** are matched on `(source_table, source_id)`; `ref` names them only inside this payload.
   Listing an existing item fills its empty fields and updates the descriptive ones. Its `kind` and
   `parent` can't change: a different kind or parent is refused. Allowed parents: story under lead,
-  post under story. Posts with no story (Art and cosplay generators) and videos have no parent.
+  post under story. Stories with no lead (the Art generator's) and videos have no parent.
 - **Runs** are matched on `(workflow, external_id)`. A re-send updates status, outcome and finish
   time. A late `running` never moves a finished run back. A run can't be moved to another item.
 - **Steps** are matched on `idempotency_key`. A key that exists is skipped, unchanged: steps are

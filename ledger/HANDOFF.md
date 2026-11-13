@@ -97,8 +97,25 @@ Read-only toward production: no n8n workflow changed or executed, nothing writte
     attempt to read them failed with a connector error (four tries). Next session: retry
     `get_workflow_details`, scrub to `baseline/`, then fill in providers, models, output settings
     and outcomes.
-  - For L1: generated posts have no lead or story behind them, and they bring new purposes
+  - For L1: generated items have no lead behind them, and they bring new purposes
     (`art_prompt`, `art_text`, `art_style`; image calls use the existing `image_gen`).
+
+- **Content Provider changed again**, to version `88c60c5d…`, at the user's request (reported
+  by the planning session). The only change: the Reddit snapshot loop limit is now
+  `$runIndex < 24`, so up to 25 checks in about 37 minutes.
+  - Re-exported and re-scrubbed `baseline/ALobcKHwRGXxTkzG.json`. The diff against `1d4f3543…`
+    is that one value plus `versionId` and `updatedAt`.
+  - INVENTORY sections 1 and 4 now say 25 runs and about 37 minutes.
+  - **Open for L5:** check that BrightData bills per record only. If it also bills per poll or
+    snapshot download, the collector must price every run of `Get BrightData Reddit Snapshot`.
+- **Art generator exported** (`40c79e15…`) into `baseline/PpzIpplWiA40Swzq.json`; INVENTORY
+  sections 1, 2, 3 and 7 now use its real configuration.
+  - It runs once a week (Wednesdays 00:00) and makes one image per run.
+  - It writes a **story** (`xsolla_ai_content_provider`, status `new`) with no lead, not a post.
+    Publisher then makes the posts. The L1 schema already allows this.
+  - Its three LangChain nodes keep no `id`/`usage`, which makes nine of the fourteen model nodes
+    read so far. `PIC Generating` keeps OpenRouter's `id` and cost.
+- **Cosplay generator** is still not exported: three more connector errors on 2026-11-13.
 
 ## Session L1: schema and write API (2026-11-13)
 
@@ -152,8 +169,8 @@ Local only: nothing was applied to any real database. Tests run in a throwaway D
     sent with `cost_recorded: false` (legacy copy, L2).
   - `upstream_share_usd` is NULL for items without a parent, and when the parent's cost is
     unknown.
-- **Parents:** story under lead, and post under story. Art and cosplay posts and videos have no
-  parent (L0 addendum).
+- **Parents:** story under lead, and post under story. Stories with no lead (the Art
+  generator's) and videos have no parent (L0 addendum).
 - **`purpose` is free text with a format check**, not a fixed list, so a new purpose never makes a
   payload fail. Names used so far are in INVENTORY.md and the plan.
 - **Waste never double counts.** Each wasted cent sits under exactly one reason, tested:

@@ -8,13 +8,13 @@ Supabase. This file is the input for L1 (schema) and L4 (n8n collector).
 | Workflow | Id | Source used here | Version |
 |---|---|---|---|
 | Orchestrator | `hLCspmwIoGGalkGGDIIp1` | Live, n8n connector, 2026-11-12 | `dba2e3b2…`, updated 2026-09-15 |
-| Content Provider | `ALobcKHwRGXxTkzG` | Live, n8n connector, re-exported 2026-11-13 after the Reddit snapshot change (see below) | `1d4f3543…`, updated 2026-11-13. The 2026-11-12 baseline (`ec44006e…`) is in commit `819de5c` |
+| Content Provider | `ALobcKHwRGXxTkzG` | Live, n8n connector, re-exported 2026-11-13 after each change to the Reddit snapshot loop (see below) | `88c60c5d…`, updated 2026-11-13 14:25 UTC. Earlier baselines: `ec44006e…` in commit `819de5c`, `1d4f3543…` in commit `2c224ab` |
 | MEMES GENERATION | `j0vjj8EVv1kKCtzx` | Live, n8n connector, 2026-11-12 | `b28d339e…`, updated 2026-05-04 |
 | Moderation | `yGyW6dWP3xfu446w` | **Local export only**: `~/Downloads/Xsolla ai content moderation (1).json`, file dated 2026-09-23. May be out of date. Not committed | `c0d60bc6…` |
 | Publisher | `2SSIbhVPbKONRjcN` | **Not read.** No local export | — |
 | Posting | `iJNExgMktpMdK8bk` | **Not read.** No local export. Makes no paid calls, per the plan | — |
-| Art generator | `PpzIpplWiA40Swzq` | **Node names and types only**, from the connector's workflow list on 2026-11-12. Added on 2026-11-13 (section 7); the full export failed because the connector was returning errors | updated 2026-09-15 |
-| Cosplay generator | `8zy4KFc7lc0j39sm` | Same as Art generator | updated 2026-09-15 |
+| Art generator | `PpzIpplWiA40Swzq` | Live, n8n connector, 2026-11-13 | `40c79e15…`, updated 2026-09-15 |
+| Cosplay generator | `8zy4KFc7lc0j39sm` | **Node names and types only**, from the connector's workflow list on 2026-11-12. Every attempt at the full export on 2026-11-13 returned a connector error | updated 2026-09-15 |
 
 - The connector only exposes workflows whose "Available in MCP" setting is on. Publisher,
   Moderation and Posting answer "Workflow not found". The Moderation export shows
@@ -44,7 +44,7 @@ Columns: **keeps id + cost** = does the node's saved output still hold OpenRoute
 | `BrightData Scrape` | HTTP Request v3 → Web Scraper API `datasets/v3/scrape` (sync), dataset `gd_lyclm1571iy3mv57zw` | BrightData | Web Scraper API, used for facebook.com URLs (`Switch3`) | records | n/a | Config | scrape |
 | `BrightData Scrape1`, `BrightData Scrape2` | progress poll and snapshot download, used when the sync scrape returns a `snapshot_id` | BrightData | — | not billed per call (records are billed once) | n/a | Config; billing basis from BrightData's pricing | scrape |
 | `BrightData Reddit Scrape` | HTTP Request → `datasets/v3/trigger` (async), dataset `gd_lvz8ah06191smkebj4` | BrightData | Web Scraper API, reddit.com URLs | records | n/a | Config | scrape |
-| `Get BrightData Reddit Snapshot` | snapshot poll in a loop: `Wait BrightData Reddit Snapshot` (90 s) → Get → `Is BrightData Snapshot Still Running?` (status `running` or `building` and `$runIndex` < 14) → back to the Wait. Up to 15 runs per execution (runIndex 0–14) | BrightData | — | not billed per call; records are counted from the run that returned them | n/a | Config (version `1d4f3543…`) | scrape |
+| `Get BrightData Reddit Snapshot` | snapshot poll in a loop: `Wait BrightData Reddit Snapshot` (90 s) → Get → `Is BrightData Snapshot Still Running?` (status `running` or `building` and `$runIndex` < 24) → back to the Wait. Up to 25 runs per execution (runIndex 0–24), about 37 minutes | BrightData | — | not billed per call under BrightData's per-record list pricing; records are counted from the run that returned them. If the bill shows charges per poll or download, count every run instead (check at L5) | n/a | Config (version `88c60c5d…`) | scrape |
 | `HTTP Request2` | HTTP Request → `api.brightdata.com/request`, zone `web_unlocker1` | BrightData | Web Unlocker, for other sites | successful requests | n/a | Config | scrape |
 | `TG parser` | HTTP Request → `telegram-parser.koka.team/summary` | koka.team service | t.me URLs | unknown | n/a | Config | scrape |
 | `Create directory`, `Video upload link`, `Audio upload link` | HTTP Request → `api.ffmpeg-api.com` `/directory`, `/file` | ffmpeg-api.com | Reddit DASH video branch | GB-seconds (subscription quota); unknown whether these calls use any | n/a | Config | media_merge |
@@ -111,19 +111,42 @@ request. Node names, node types, models and output settings are **unverified**. 
 model` is the same node type as MEMES's `Text creator model1` (likely, since MEMES looks copied
 from Publisher), it keeps no `id` or `usage`.
 
-### Art generator and cosplay generator (node list only)
+### Art generator (live)
 
-Both are in the ledger (section 7). The connector lists them, so "Available in MCP" is on and a
-full export should work once the connector stops returning errors. Until then, only node names
-and types are known. Providers, models, endpoints and output settings are **unverified**.
+In the ledger since 2026-11-13 (section 7). From the full export, version `40c79e15…`.
+
+| Node | Node type | Provider | Model | Billing unit | Keeps id + cost | How known | Purpose |
+|---|---|---|---|---|---|---|---|
+| `Style generator` | `@n8n/n8n-nodes-langchain.openAi` v1.8, JSON output | OpenRouter (per the plan; credential not visible) | `gpt-4o-2024-05-13` | tokens | **No** | Config: simplify not set (default on); `Prompt generating` reads `$json.message.content.…` | art_style |
+| `Prompt generating` | same | OpenRouter | `gpt-4o-2024-05-13` | tokens | **No** | Config, same; `Embedding` and `PIC Generating` read `.message.content` | art_prompt |
+| `Text generating` | same, text output | OpenRouter | `gpt-4o-mini` | tokens | **No** | Config, same; `Create a row` reads `.message.content` | art_text |
+| `Embedding` | HTTP Request → `openrouter.ai/api/v1/embeddings` | OpenRouter | `text-embedding-ada-002` | tokens | **Probably**: the full JSON response is kept | Config | embed |
+| `PIC Generating` | HTTP Request → `openrouter.ai/api/v1/chat/completions`, JSON response | OpenRouter | `google/gemini-3-pro-image-preview` | image + tokens | **Yes** (`id`); `usage.cost` per OpenRouter docs | Config | image_gen |
+
+- **Once a week:** `Schedule Trigger` runs at `0 0 * * 3` (Wednesdays 00:00, instance time). Each
+  run makes one image and calls each paid node once.
+- **Path:**
+  - `Random generator` picks the MLBB or ARC RAIDERS sheet, and `Hero choose` and
+    `Set heroes to 1` pick one hero;
+  - then the five paid nodes above;
+  - `Send a photo message` posts the image to `@wnmtest`, to get a Telegram `file_id`;
+  - `Create a row` saves the result.
+- **It makes a story, not a post.** `Create a row` inserts into `xsolla_ai_content_provider`:
+  - `status: new`, `game_tag` from the sheet, `community: Russia`, `pic_type: FILE_ID`, the
+    embedding and the text;
+  - Publisher then turns it into posts like any other story (section 2).
+- **Not reachable:**
+  - `Schedule Trigger1` (every 5 h) and `Update floating` are disabled;
+  - nothing connects into `Get row(s) in sheet` or `Code1`.
+
+### Cosplay generator (node list only)
+
+In the ledger since 2026-11-13 (section 7). The full export still failed on 2026-11-13, so only
+node names and types are known. Providers, models, endpoints and output settings are
+**unverified**.
 
 | Workflow | Node | Node type | Likely kind | Purpose (proposed) |
 |---|---|---|---|---|
-| Art generator | `Prompt generating` | `@n8n/n8n-nodes-langchain.openAi` | model call | art_prompt |
-| Art generator | `Text generating` | same | model call | art_text |
-| Art generator | `Style generator` | same | model call | art_style |
-| Art generator | `Embedding` | HTTP Request | embeddings call | embed |
-| Art generator | `PIC Generating` | HTTP Request | image-generation call | image_gen |
 | Cosplay generator | `Prompt gen` | `@n8n/n8n-nodes-langchain.openAi` | model call | art_prompt |
 | Cosplay generator | `Text gen` | same | model call | art_text |
 | Cosplay generator | `Style gen` | same | model call | art_style |
@@ -131,24 +154,25 @@ and types are known. Providers, models, endpoints and output settings are **unve
 | Cosplay generator | `1st pic gen` | HTTP Request | image-generation call | image_gen |
 | Cosplay generator | `Add pic gen`, `Add pic gen1`, `Add pic gen2` | HTTP Request | image-generation calls, up to three more per run | image_gen |
 
-- Both run on a schedule. Art has two Schedule Trigger nodes, and the connector counts one active
-  trigger.
-- The heroes come from Google Sheets (`Hero choose`, `Get all heroes`), and the results go
-  straight to Telegram (`Send a photo message*`). No node suggests they pass through Moderation.
-- `Create a row` (Art) and `Create a row1` (Cosplay) write a Supabase row each. The table is
-  unknown.
-- Cosplay's `Запись картинки в сторедж SUPABASE` is an HTTP upload to Supabase storage, like the two
-  MEMES nodes that carry a hard-coded key. Check it when the workflow is exported.
-- If the six LangChain nodes keep "Simplify Output" on like the others, they also drop `id` and
-  `usage`, which would make it 12 of 15 model nodes.
+- It runs on a schedule, and its heroes come from Google Sheets (`Get all heroes`).
+- `Create a row1` probably writes a story with status `new`, as Art's `Create a row` does.
+- `Запись картинки в сторедж SUPABASE` is an HTTP upload to Supabase storage, like the two MEMES
+  nodes that carry a hard-coded key. Check it when the workflow is exported.
+- If its three LangChain nodes keep "Simplify Output" on like Art's, they also drop `id` and
+  `usage`.
 
 ### Key finding: most model calls drop their cost
 
-Six of the nine model nodes read so far are `@n8n/n8n-nodes-langchain.openAi` nodes with
-"Simplify Output" on (the default): `Clean_the_article`, `Get_community`, both `Analyze image`
-nodes, `Text creator model1` and Moderation's `Message a model`. Their saved output has no `id`,
-no `usage` and no `model`, so neither a collector nor inline ledger nodes can read their cost.
-Publisher's `Text creator model` is probably the seventh.
+Nine of the fourteen model nodes read so far are `@n8n/n8n-nodes-langchain.openAi` nodes with
+"Simplify Output" on (the default):
+- Content Provider: `Clean_the_article`, `Get_community` and both `Analyze image` nodes;
+- MEMES: `Text creator model1`;
+- Moderation: `Message a model`;
+- Art generator: `Style generator`, `Prompt generating` and `Text generating`.
+
+Their saved output has no `id`, no `usage` and no `model`, so neither a collector nor inline
+ledger nodes can read their cost. Publisher's `Text creator model` and Cosplay's three LangChain
+nodes are probably the same.
 
 Turning "Simplify Output" off is **not** a settings-only change. The output shape moves from
 `message.content` to `choices[0].message.content`, and every downstream expression that reads it
@@ -175,7 +199,7 @@ would break. Options:
 | post | `xsolla_ai_posted_content_base` | Publisher: `Create a row` per the plan | Unverified |
 | post (moderation) | `xsolla_ai_posted_content_base` | Moderation `Get Last Moderation Record*` → `row_id` (from `moderation_data`); `Get a row2` → `id` for AI edit | From the Sep export |
 | post (image translation) | `xsolla_ai_posted_content_base` | MEMES `Start trigger` → `json.id`, on the non-MEME branch (`Update a row` filters on it) | Started by Moderation "translate_approved" |
-| art / cosplay post | unknown Supabase table | Art `Create a row`, Cosplay `Create a row1` | No lead or story behind them. Each execution makes one item, so L1 needs an item kind (or a nullable lead/story) for generated posts. Unverified |
+| story (generated) | `xsolla_ai_content_provider` | Art `Create a row` → `json.id` (status `new`). Cosplay `Create a row1`: probably the same, unverified | A story with no lead. Publisher turns it into posts like any other story. The L1 schema already allows a story without a parent |
 
 **Pairing `Text creator model` calls with their `Create a row` (MEMES, from config):**
 - `Start loop1` is a Loop Over Items node (v3) with no batch size set, so it uses the default of
@@ -226,9 +250,15 @@ would break. Options:
   `wait moderation`.
 - Run outcome for paid executions: `ai_edit`, `pic_edit` or `moderator_translate`.
 
-### Art generator and cosplay generator
+### Art generator (from config)
 
-Not read yet. Outcomes come from the full export, in L4 at the latest.
+| Node reached | Run status | Outcome |
+|---|---|---|
+| `Create a row` | success | `story_saved` |
+| `Send a photo message` fails | success, but no story | `photo_send_failed` (proposed): its error output connects to nothing, so the run ends after every paid call has been made. Waste |
+| any other node error | error | `error` |
+
+Cosplay: not read yet. Its outcomes come from the full export, in L4 at the latest.
 
 ### Not found anywhere read so far
 
@@ -293,11 +323,12 @@ export. They probably live in Publisher, which L4 has to read.
   - The Orchestrator, Content Provider, Publisher and Posting calls use
     `waitForSubWorkflow: false`. Each is its own execution, read by `workflowId`.
   - A Content Provider execution on the Reddit path sits in `waiting` status between snapshot
-    checks: 90 s each, up to 15 checks, so up to about 22 minutes. Read only finished executions
+    checks: 90 s each, up to 25 checks, so up to about 37 minutes (version `88c60c5d…`). Read only finished executions
     (success, error, canceled, crashed), and move the watermark on `stoppedAt`, not `startedAt`.
     Otherwise a run that started before the watermark and finished after it is skipped.
-  - `Get BrightData Reddit Snapshot` can appear up to 15 times in one execution's `runData`. Map
-    every run, and count records only from the run that returned them.
+  - `Get BrightData Reddit Snapshot` can appear up to 25 times in one execution's `runData`. Map
+    every run, and count records only from the run that returned them. If BrightData turns out
+    to bill per poll or download, price every run instead.
 
 ## 5. Fixtures: blocked
 
@@ -349,12 +380,12 @@ The same instance runs two more active scheduled workflows that make model and i
   `Style gen`, `Embedding`, `1st pic gen`, `Add pic gen` ×3.
 
 **Answer, 2026-11-13: include both.** They are in the ledger, and their nodes are in section 1.
-- What's still missing: full exports and baselines. The connector lists both workflows, but
-  every attempt to read them on 2026-11-13 returned a connector error. Retry with the connector,
-  or use the n8n API key L4 needs anyway.
-- For L1:
-  - these posts have no lead or story behind them (section 2);
-  - the purposes `art_prompt`, `art_text` and `art_style` are new; their image calls use the plan's `image_gen`.
+- **Art generator:** exported and baselined on 2026-11-13. It makes a story without a lead, which
+  then goes through Publisher (sections 1 and 2).
+- **Cosplay generator:** the full export is still missing; every read on 2026-11-13 returned a
+  connector error. Retry with the connector, or use the n8n API key L4 needs anyway.
+- **For L1** (done): a story's parent is optional, and the purposes `art_prompt`, `art_text` and
+  `art_style` are new. Their image calls use the plan's `image_gen`.
 
 ## 8. Corrections to the plan
 

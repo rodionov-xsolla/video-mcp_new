@@ -1,0 +1,662 @@
+{
+  "active": true,
+  "connections": {
+    "BASE64 to Binary": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Send a photo message",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Create a row",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        []
+      ]
+    },
+    "Create a row": {
+      "main": [
+        []
+      ]
+    },
+    "Embedding": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "PIC Generating",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Hero choose": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Set heroes to 1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "PIC Generating": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "BASE64 to Binary",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Prompt generating": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Text generating",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Random generator": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Hero choose",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Random generator",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        []
+      ]
+    },
+    "Send a photo message": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code in JavaScript5",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Set heroes to 1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Style generator",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Style generator": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Prompt generating",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Text generating": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Embedding",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Update floating": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2025-08-28T14:46:15.277Z",
+  "id": "PpzIpplWiA40Swzq",
+  "isArchived": false,
+  "name": "XSOLLA Art generator pipeline",
+  "nodes": [
+    {
+      "id": "548ad085-9caf-4765-9875-60157d5244d4",
+      "name": "BASE64 to Binary",
+      "parameters": {
+        "jsCode": "// Берём JSON из предыдущего узла\nconst choices = $json.choices || [];\nif (!choices.length) return [];\n\nconst img = choices[0]?.message?.images?.[0];\nif (!img) return [];\n\nconst dataUrl = img?.image_url?.url || '';\nconst m = dataUrl.match(/^data:(.+);base64,(.*)$/);\nif (!m) return [];\n\nconst mimeType = m[1];\nconst base64 = m[2];\nconst ext = (mimeType.split('/')[1] || 'png').split(';')[0];\nconst fileName = `openrouter_${Date.now()}_1.${ext}`;\n\nreturn [{\n  json: {\n    index: 1,\n    fileName,\n    mimeType,\n    sizeBase64Chars: base64.length\n  },\n  binary: {\n    data: {\n      data: base64,\n      fileName,\n      mimeType\n    }\n  }\n}];\n"
+      },
+      "position": [
+        1008,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "63210b75-dcb2-409a-87e6-62acaa9bcbc6",
+      "name": "Code in JavaScript5",
+      "parameters": {
+        "jsCode": "const res = $('Send a photo message').item.json;\nconst photo = res?.result?.photo;\n\nif (!Array.isArray(photo) || photo.length === 0) {\n  return [{ json: { file_id_max: null, error: 'no photo sizes' } }];\n}\n\n// На всякий: выберем по максимальному file_size, fallback — последний элемент\nconst best = photo.reduce((a, b) => ((a.file_size || 0) >= (b.file_size || 0) ? a : b), photo[photo.length - 1]);\n\nreturn [{ json: { file_id_max: best.file_id } }];\n"
+      },
+      "position": [
+        1424,
+        -64
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "3ac84e28-22a9-42e4-af96-015dacb5fc4b",
+      "name": "Code1",
+      "parameters": {
+        "jsCode": "// Получаем все элементы, которые пришли в узел.\n// Это самый надёжный способ получить данные из предыдущего узла.\nconst items = $input.all();\n\n// Если нет элементов, возвращаем пустой массив, как того требует n8n.\nif (items.length === 0) {\n  return [];\n}\n\n// Выбираем случайный индекс.\nconst randomIndex = Math.floor(Math.random() * items.length);\n\n// Получаем случайный элемент.\nconst randomItem = items[randomIndex];\n\n// Возвращаем его в виде массива с одним элементом.\nreturn [randomItem];"
+      },
+      "position": [
+        128,
+        -464
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "0a0b46d1-ff34-4a8f-878b-4915704e7d7e",
+      "name": "Create a row",
+      "parameters": {
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "game_tag",
+              "fieldValue": "={{ $('Random generator').item.json.sheet }}"
+            },
+            {
+              "fieldId": "community",
+              "fieldValue": "Russia"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "new"
+            },
+            {
+              "fieldId": "pic_type",
+              "fieldValue": "FILE_ID"
+            },
+            {
+              "fieldId": "Embedding",
+              "fieldValue": "={{ JSON.stringify($('Embedding').item.json.data[0].embedding) }}"
+            },
+            {
+              "fieldId": "pic_url",
+              "fieldValue": "={{ $('Code in JavaScript5').item.json.file_id_max }}"
+            },
+            {
+              "fieldId": "Content",
+              "fieldValue": "={{ $('Text generating').item.json.message.content }}"
+            }
+          ]
+        },
+        "tableId": "xsolla_ai_content_provider"
+      },
+      "position": [
+        1632,
+        -64
+      ],
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1
+    },
+    {
+      "id": "13ea04b3-4b41-40f9-a49a-4b65a53be206",
+      "name": "Embedding",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"model\": \"text-embedding-ada-002\",\n  \"input\": \"{{ $('Prompt generating').item.json.message.content }}\" \n}",
+        "method": "POST",
+        "nodeCredentialType": "openAiApi",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://openrouter.ai/api/v1/embeddings"
+      },
+      "position": [
+        656,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "a043e55e-65e2-486c-8b4c-9d8b70a3ad05",
+      "name": "Get row(s) in sheet",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "cachedResultName": "mlbb heroes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/<redacted>/edit?usp=<redacted>",
+          "mode": "list",
+          "value": "<redacted>"
+        },
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "detectAutomatically"
+            }
+          },
+          "returnFirstMatch": false
+        },
+        "sheetName": {
+          "__rl": true,
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/<redacted>/edit#gid=0",
+          "mode": "list",
+          "value": "gid=0"
+        }
+      },
+      "position": [
+        0,
+        -464
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "id": "fdd29c34-212b-4c1c-9336-5eb889652e90",
+      "name": "Hero choose",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "cachedResultName": "mlbb heroes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/<redacted>/edit?usp=<redacted>",
+          "mode": "list",
+          "value": "<redacted>"
+        },
+        "options": {
+          "returnFirstMatch": false
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ $json.sheet }}"
+        }
+      },
+      "position": [
+        -544,
+        0
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "id": "21191e34-6912-48c9-9fd7-96d17096a6e5",
+      "name": "PIC Generating",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "<redacted>"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"model\": \"google/gemini-3-pro-image-preview\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $('Prompt generating').item.json.message.content.prompt }}\"\n    }\n  ],\n  \"modalities\": [\"image\", \"text\"],\n  \"image_config\": {\n    \"aspect_ratio\": \"1:1\"\n  }\n}",
+        "method": "POST",
+        "nodeCredentialType": "openAiApi",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://openrouter.ai/api/v1/chat/completions"
+      },
+      "position": [
+        832,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "a1cfbbbf-978f-4f93-8e5b-27a19ca720af",
+      "name": "Prompt generating",
+      "parameters": {
+        "jsonOutput": true,
+        "messages": {
+          "values": [
+            {
+              "content": "=Generate a specific Digital Artwork based on this Creative Direction.\n\n## Character\nName: {{ $('Set heroes to 1').item.json.Hero }}\nVisual Description: {{ $('Set heroes to 1').item.json.Description }}\n\n## Artistic Parameters\nArt Style: {{ $json.message.content.visual_prompt_modifiers }}\nComposition: {{ $json.message.content.scene_composition }}\nBackground: {{ $json.message.content.background_concept }}\n\n## Critical Interpretation Rules\n1. Extract ONLY visual facts from description: shape, size, color, materials, parts, weapons, movement type\n2. Ignore metaphors, poetic language, and emotional descriptors — convert to concrete visual terms\n3. Preserve the EXACT anatomy described:\n   - If drone/turret/vehicle — NO humanoid features, NO legs, NO arms unless explicitly stated\n   - If humanoid — keep humanoid\n   - If creature — follow creature anatomy as described\n   - If mech — only add limbs if description mentions them\n4. When in doubt, stay LITERAL to the description. Do not add features that are not explicitly mentioned.\n5. Do not \"improve\" or \"complete\" the design — render what is described, nothing more\n\n## Prompt Structure\nBuild prompt in this exact order:\n[SUBJECT]: Literal visual description of character — shape, body type, armor, colors, weapons, how it moves\n[SCENE]: Pose, camera angle, action moment\n[BACKGROUND]: Environment, lighting, atmosphere\n[STYLE]: Art style keywords\n[NEGATIVE]: Anatomy contradictions (e.g., if hovering drone — \"no legs, no arms, no humanoid anatomy\")\n\n## Output\nSingle JSON block only:\n{\"prompt\": \"complete prompt as single string with all sections, ending with negative prompts for anatomy accuracy\"}\n\n## Instructions\n1. Create a stunning {{ $json.message.content.art_style_name }} artwork\n2. Character must match description LITERALLY — do not humanize non-humanoid subjects\n3. NO text, NO borders, NO logos, NO watermarks\n4. Prompt must be JSON-friendly: no line breaks, no special characters\n5. Output as single \"prompt\" block only"
+            }
+          ]
+        },
+        "modelId": {
+          "__rl": true,
+          "cachedResultName": "GPT-4O-2024-05-13",
+          "mode": "list",
+          "value": "gpt-4o-2024-05-13"
+        },
+        "options": {}
+      },
+      "position": [
+        96,
+        0
+      ],
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8
+    },
+    {
+      "id": "171728d8-bc5a-4f99-b8dd-01c77bb5c543",
+      "name": "Random generator",
+      "parameters": {
+        "jsCode": "const sheets = ['MLBB', 'ARC RAIDERS'];\n\n// Рандомный лист\nconst pick = sheets[(Math.random() * sheets.length) | 0];\n\n// Рандомное количество (2..4)\nconst amount = 2 + Math.floor(Math.random() * 3);\n\nreturn [{\n  json: {\n    sheet: pick,\n    amount\n  }\n}];\n"
+      },
+      "position": [
+        -704,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "d2e69e4d-bf8a-4b14-b2ed-c53ea86cfc76",
+      "name": "Schedule Trigger",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "expression": "0 0 * * 3",
+              "field": "cronExpression"
+            }
+          ]
+        }
+      },
+      "position": [
+        -880,
+        0
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "disabled": true,
+      "id": "03fe3640-8875-4341-93ab-e5c96c8d4e3c",
+      "name": "Schedule Trigger1",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 5
+            }
+          ]
+        }
+      },
+      "position": [
+        -480,
+        -288
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "8e69a377-6402-4375-b16f-95245fb1b184",
+      "name": "Send a photo message",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "additionalFields": {
+          "caption": "=",
+          "parse_mode": "HTML"
+        },
+        "binaryData": true,
+        "chatId": "@wnmtest",
+        "operation": "sendPhoto"
+      },
+      "position": [
+        1168,
+        0
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "webhookId": "902955c9-3735-44ed-a742-027c2ae437e8"
+    },
+    {
+      "id": "e6ed5a66-1461-48e1-9f14-55846eac1160",
+      "name": "Set heroes to 1",
+      "parameters": {
+        "jsCode": "// Получаем все элементы, которые пришли в узел.\n// Это самый надёжный способ получить данные из предыдущего узла.\nconst items = $input.all();\n\n// Если нет элементов, возвращаем пустой массив, как того требует n8n.\nif (items.length === 0) {\n  return [];\n}\n\n// Выбираем случайный индекс.\nconst randomIndex = Math.floor(Math.random() * items.length);\n\n// Получаем случайный элемент.\nconst randomItem = items[randomIndex];\n\n// Возвращаем его в виде массива с одним элементом.\nreturn [randomItem];"
+      },
+      "position": [
+        -384,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "89cb7419-d7d4-4b40-82e5-ed282c418f58",
+      "name": "Style generator",
+      "parameters": {
+        "jsonOutput": true,
+        "messages": {
+          "values": [
+            {
+              "content": "=Role: You are a Lead Concept Artist and Cinematographer for AAA Video Games.\nYour task is to design a dramatic, high-budget visual shot for a character.\n\nInput Data:\nHero: {{ $json.Hero }}\nDescription: {{ $json.Description }}\n\n### CONSTRAINTS (STRICT):\n1. **NO EXPERIMENTAL STYLES:** No Pixel Art, No Voxels, No Glitch, No Low Poly, No Vector Flat Art.\n2. **QUALITY TARGET:** The result must look like Official Game Art, High-End Anime Key Visual, or Cinematic CGI.\n3. **VARIETY GOAL:** Focus heavily on distinctive CAMERA ANGLES and POSES.\n\n### RANDOMIZATION MATRIX (Mix 1 from each category):\n\n**A. Visual Style (High-End Digital Only):**\n- Riot Games Splash Art Style (Painterly realism, dramatic lighting, highly detailed)\n- Ufotable Anime Style (Crisp digital lines, heavy particle effects, cinematic post-processing)\n- Souls-like Dark Fantasy (Desaturated, gritty texture, oil-painting influence, mysterious)\n- Overwatch/Valorant Style (Clean cel-shading, vibrant colors, sharp shapes)\n- 90s Cyberpunk Anime (Ghost in the Shell vibe, detailed mechanical parts, hand-drawn feel)\n- Epic High-Fantasy Oil (Magic: The Gathering card art style)\n- Unreal Engine 5 (Arty CGI, raytracing, depth of field)\n\n**B. Camera & Pose (Focus on Action):**\n- **The \"Dutch Angle\":** Tilted camera, character in dynamic motion (running or striking), intense perspective.\n- **\"God's Eye\" View:** Top-down shot, character surrounded by enemies or massive environment.\n- **Extreme Close-Up (Eyes/Weapon):** Focus on a specific detail, background blurred (bokeh).\n- **\"Worm's Eye\" View:** Camera on the ground looking up, making the hero look gigantic and powerful.\n- **The \"Defeat/Rest\" Pose:** Character sitting on ruins, back to camera, looking at the horizon.\n- **Mid-Air Action:** Character frozen in time while jumping/falling, debris floating around.\n- **Wide Atmospheric Shot:** Character is small (10% of screen), focus on the massive landscape/world.\n\n**C. Environment / Lighting:**\n- Neon-lit rainy alleyway (Cyberpunk vibes)\n- Ancient temple ruins during golden hour (God rays)\n- Blizzard/Snowstorm (Whiteout, cold blue tones)\n- Burning city background (Embers, smoke, orange backlight)\n- Deep underwater / Magical forest (Bioluminescence, teal/purple gloom)\n- Tournament Arena (Spotlights, crowd in shadows)\n\nTask:\nCreate a cohesive scene. If you pick a \"Sad\" pose, choose \"Rainy\" lighting. If you pick \"Action\", choose \"Blur\" and \"Particles\".\n\nOutput JSON structure:\n{\n  \"art_style_name\": \"Name of the style (e.g. 'Cinematic Splash Art')\",\n  \"visual_prompt_modifiers\": \"Keywords for the AI generator. Include artist references (e.g. wlop, guweiz, greg rutkowski, studio mappa), rendering engine, and lighting specific to the chosen style.\",\n  \"scene_composition\": \"Detailed description of the Pose and Camera Angle. BE SPECIFIC about where the character is facing and the lens type (e.g. 'Wide angle 24mm lens, shot from below').\",\n  \"background_concept\": \"Description of the environment.\",\n  \"mood_description_for_text\": \"The narrative vibe for the social media post (e.g. 'Epic victory moment' or 'Solitary warrior vibe').\"\n}"
+            }
+          ]
+        },
+        "modelId": {
+          "__rl": true,
+          "cachedResultName": "GPT-4O-2024-05-13",
+          "mode": "list",
+          "value": "gpt-4o-2024-05-13"
+        },
+        "options": {}
+      },
+      "position": [
+        -208,
+        0
+      ],
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8
+    },
+    {
+      "id": "1f6add79-0743-4932-af61-58e6cee6384c",
+      "name": "Text generating",
+      "parameters": {
+        "messages": {
+          "values": [
+            {
+              "content": "=Write ONE single-line post (≤100 characters) for a {{ $('Random generator').item.json.sheet }} game Telegram channel.\nBase it ONLY on the character name below.\n\nWrite it mentioning that you post some good art of characer. End the post with a clear call to action for readers to react (e.g. “Drop a react if you like this look!”). Always call this a art or concept! Dont mention it as new post,etc.\nUse this text mood description to write short text: {{ $('Style generator').item.json.message.content.mood_description_for_text }}\n\nOutput:\n<oneline comment with ask for reaction>\n\nCharacter name:\n{{ $('Set heroes to 1').item.json.Hero }}\nGame name:\n{{ $('Random generator').item.json.sheet }}"
+            }
+          ]
+        },
+        "modelId": {
+          "__rl": true,
+          "cachedResultName": "GPT-4O-MINI",
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "position": [
+        352,
+        0
+      ],
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8
+    },
+    {
+      "disabled": true,
+      "id": "99e673ab-3d96-4dbc-86d6-800b13f777ee",
+      "name": "Update floating",
+      "parameters": {
+        "columns": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Hero",
+              "id": "Hero",
+              "removed": true,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Description",
+              "id": "Description",
+              "removed": true,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Floating",
+              "id": "Floating",
+              "removed": true,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Date",
+              "id": "Date",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Cosplay",
+              "id": "Cosplay",
+              "removed": true,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "row_number",
+              "id": "row_number",
+              "readOnly": true,
+              "removed": false,
+              "required": false,
+              "type": "number"
+            }
+          ],
+          "value": {
+            "Date": "1",
+            "row_number": 2
+          }
+        },
+        "documentId": {
+          "__rl": true,
+          "cachedResultName": "mlbb heroes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/<redacted>/edit?usp=<redacted>",
+          "mode": "list",
+          "value": "<redacted>"
+        },
+        "operation": "update",
+        "options": {},
+        "sheetName": {
+          "__rl": true,
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/<redacted>/edit#gid=0",
+          "mode": "list",
+          "value": "gid=0"
+        }
+      },
+      "position": [
+        496,
+        -480
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-09-15T13:07:21.055Z",
+  "versionId": "40c79e15-4931-4543-8d95-45e25fe18e50"
+}
