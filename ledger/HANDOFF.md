@@ -1,6 +1,6 @@
 # Ledger hand-off notes
 
-One entry per build session (plan: `~/.claude/plans/users-acailic-downloads-xpn-ai-content-deep-wozniak.md`).
+One entry per build session (plan: [`PLAN.md`](PLAN.md)).
 
 ## Session L0: inventory and baseline (2026-11-12)
 
